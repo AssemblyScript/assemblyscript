@@ -2265,10 +2265,6 @@
   i32.eq
   drop
  )
- (func $optional-typeparameters/TestMethodDerived2<f64>#foo (type $i32_i32_=>_none) (param $this i32) (param $v i32)
-  local.get $v
-  call $optional-typeparameters/TestMethodDerived<~lib/string/String>#test<~lib/array/Array<~lib/string/String>>
- )
  (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   global.get $optional-typeparameters/tConcrete
@@ -2334,48 +2330,6 @@
  (func $~lib/array/Array<~lib/string/String>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
- )
- (func $~lib/array/Array<~lib/string/String>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
-  (local $cur i32)
-  (local $end i32)
-  (local $val i32)
-  i32.const 1
-  drop
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:dataStart
-  local.set $cur
-  local.get $cur
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:length_
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $end
-  loop $while-continue|0
-   local.get $cur
-   local.get $end
-   i32.lt_u
-   if
-    local.get $cur
-    i32.load $0
-    local.set $val
-    local.get $val
-    if
-     local.get $val
-     local.get $cookie
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $cur
-    i32.const 4
-    i32.add
-    local.set $cur
-    br $while-continue|0
-   end
-  end
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
  )
  (func $~lib/array/Array<~lib/string/String>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
@@ -2443,6 +2397,180 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $optional-typeparameters/TestDerived<f64,f64>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $optional-typeparameters/TestMethodDerived<~lib/string/String>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 6
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $optional-typeparameters/TestMethodDerived2<f64>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 8
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $optional-typeparameters/TestMethodDerived2<f64>#foo (type $i32_i32_=>_none) (param $this i32) (param $v i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $v
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  call $optional-typeparameters/TestMethodDerived<~lib/string/String>#test<~lib/array/Array<~lib/string/String>>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $start:optional-typeparameters (type $none_=>_none)
   (local $0 i32)
@@ -2534,6 +2662,76 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $~lib/array/Array<~lib/string/String>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  (local $cur i32)
+  (local $end i32)
+  (local $val i32)
+  (local $5 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  i32.const 1
+  drop
+  local.get $this
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
+  local.set $cur
+  local.get $cur
+  local.get $this
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/array/Array<~lib/string/String>#get:length_
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $end
+  loop $while-continue|0
+   local.get $cur
+   local.get $end
+   i32.lt_u
+   if
+    local.get $cur
+    i32.load $0
+    local.set $val
+    local.get $val
+    if
+     local.get $val
+     local.get $cookie
+     call $~lib/rt/itcms/__visit
+    end
+    local.get $cur
+    i32.const 4
+    i32.add
+    local.set $cur
+    br $while-continue|0
+   end
+  end
+  local.get $this
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/array/Array<~lib/string/String>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/object/Object#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2554,138 +2752,6 @@
    local.tee $this
    i32.store $0
   end
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store $0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $optional-typeparameters/TestDerived<f64,f64>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 5
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store $0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $optional-typeparameters/TestMethodDerived<~lib/string/String>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 6
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store $0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $optional-typeparameters/TestMethodDerived2<f64>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 8
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store $0
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

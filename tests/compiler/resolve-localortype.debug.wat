@@ -15,11 +15,6 @@
   local.get $s
   return
  )
- (func $resolve-localortype/test (type $i32_=>_i32) (param $string i32) (result i32)
-  local.get $string
-  call $resolve-localortype/foo<~lib/string/String>
-  return
- )
  (func $~stack_check (type $none_=>_none)
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
@@ -32,6 +27,31 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $resolve-localortype/test (type $i32_=>_i32) (param $string i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $string
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $resolve-localortype/foo<~lib/string/String>
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
  )
  (func $export:resolve-localortype/test (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)

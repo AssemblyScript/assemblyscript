@@ -7,20 +7,20 @@
  (type $none_=>_none (func_subtype func))
  (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_=>_f64 (func_subtype (param i32) (result f64) func))
  (type $i64_i32_=>_i32 (func_subtype (param i64 i32) (result i32) func))
+ (type $i32_=>_f64 (func_subtype (param i32) (result f64) func))
  (type $none_=>_i32 (func_subtype (result i32) func))
+ (type $i32_i64_i32_=>_none (func_subtype (param i32 i64 i32) func))
  (type $i32_i32_=>_f64 (func_subtype (param i32 i32) (result f64) func))
  (type $i32_i32_=>_i64 (func_subtype (param i32 i32) (result i64) func))
- (type $i32_i64_i32_=>_none (func_subtype (param i32 i64 i32) func))
  (type $i32_i32_i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32 i32 i32) (result i32) func))
  (type $f64_i32_=>_f64 (func_subtype (param f64 i32) (result f64) func))
- (type $i32_=>_f32 (func_subtype (param i32) (result f32) func))
  (type $f64_f64_=>_i32 (func_subtype (param f64 f64) (result i32) func))
  (type $i32_i64_i32_i32_=>_none (func_subtype (param i32 i64 i32 i32) func))
  (type $i64_=>_i32 (func_subtype (param i64) (result i32) func))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func_subtype (param i32 i64 i32 i64 i32 i64 i32) (result i32) func))
  (type $i32_f64_=>_i32 (func_subtype (param i32 f64) (result i32) func))
+ (type $i32_=>_f32 (func_subtype (param i32) (result f32) func))
  (type $i32_i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32 i32) (result i32) func))
  (type $f64_=>_i32 (func_subtype (param f64) (result i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -663,134 +663,6 @@
    end
   end
   i32.const 0
-  return
- )
- (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
-  (local $leftLength i32)
-  local.get $left
-  local.get $right
-  i32.eq
-  if
-   i32.const 1
-   return
-  end
-  local.get $left
-  i32.const 0
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $right
-   i32.const 0
-   i32.eq
-  end
-  if
-   i32.const 0
-   return
-  end
-  local.get $left
-  call $~lib/string/String#get:length
-  local.set $leftLength
-  local.get $leftLength
-  local.get $right
-  call $~lib/string/String#get:length
-  i32.ne
-  if
-   i32.const 0
-   return
-  end
-  local.get $left
-  i32.const 0
-  local.get $right
-  i32.const 0
-  local.get $leftLength
-  call $~lib/util/string/compareImpl
-  i32.eqz
-  return
- )
- (func $~lib/string/String#charCodeAt (type $i32_i32_=>_i32) (param $this i32) (param $pos i32) (result i32)
-  local.get $pos
-  local.get $this
-  call $~lib/string/String#get:length
-  i32.ge_u
-  if
-   i32.const -1
-   return
-  end
-  local.get $this
-  local.get $pos
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.load16_u $0
-  return
- )
- (func $~lib/string/String#codePointAt (type $i32_i32_=>_i32) (param $this i32) (param $pos i32) (result i32)
-  (local $len i32)
-  (local $first i32)
-  (local $second i32)
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $pos
-  local.get $len
-  i32.ge_u
-  if
-   i32.const -1
-   return
-  end
-  local.get $this
-  local.get $pos
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.load16_u $0
-  local.set $first
-  local.get $first
-  i32.const 64512
-  i32.and
-  i32.const 55296
-  i32.ne
-  if (result i32)
-   i32.const 1
-  else
-   local.get $pos
-   i32.const 1
-   i32.add
-   local.get $len
-   i32.eq
-  end
-  if
-   local.get $first
-   return
-  end
-  local.get $this
-  local.get $pos
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.load16_u $0 offset=2
-  local.set $second
-  local.get $second
-  i32.const 64512
-  i32.and
-  i32.const 56320
-  i32.ne
-  if
-   local.get $first
-   return
-  end
-  local.get $first
-  i32.const 55296
-  i32.sub
-  i32.const 10
-  i32.shl
-  local.get $second
-  i32.const 56320
-  i32.sub
-  i32.add
-  i32.const 65536
-  i32.add
   return
  )
  (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $nextWithColor i32)
@@ -2986,60 +2858,6 @@
   local.get $ptr
   return
  )
- (func $~lib/string/String#at (type $i32_i32_=>_i32) (param $this i32) (param $pos i32) (result i32)
-  (local $len i32)
-  (local $out i32)
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $pos
-  i32.const 0
-  local.get $len
-  local.get $pos
-  i32.const 0
-  i32.ge_s
-  select
-  i32.add
-  local.set $pos
-  local.get $pos
-  local.get $len
-  i32.ge_u
-  if
-   i32.const 240
-   i32.const 304
-   i32.const 57
-   i32.const 31
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 2
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.set $out
-  local.get $out
-  local.get $this
-  local.get $pos
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.load16_u $0
-  i32.store16 $0
-  local.get $out
-  return
- )
- (func $~lib/string/String.__not (type $i32_=>_i32) (param $str i32) (result i32)
-  local.get $str
-  i32.const 0
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $str
-   call $~lib/string/String#get:length
-   i32.eqz
-  end
-  return
- )
  (func $~lib/string/String.fromCharCode@varargs (type $i32_i32_=>_i32) (param $unit i32) (param $surr i32) (result i32)
   block $1of1
    block $0of1
@@ -3146,209 +2964,9 @@
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/array/Array<i32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  call $~lib/array/Array<i32>#get:length_
-  return
- )
  (func $~lib/array/Array<i32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
- )
- (func $~lib/string/String#startsWith (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
-  (local $len i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $searchStart i32)
-  (local $searchLength i32)
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $start
-  local.tee $4
-  i32.const 0
-  local.tee $5
-  local.get $4
-  local.get $5
-  i32.gt_s
-  select
-  local.tee $6
-  local.get $len
-  local.tee $7
-  local.get $6
-  local.get $7
-  i32.lt_s
-  select
-  local.set $searchStart
-  local.get $search
-  call $~lib/string/String#get:length
-  local.set $searchLength
-  local.get $searchLength
-  local.get $searchStart
-  i32.add
-  local.get $len
-  i32.gt_s
-  if
-   i32.const 0
-   return
-  end
-  local.get $this
-  local.get $searchStart
-  local.get $search
-  i32.const 0
-  local.get $searchLength
-  call $~lib/util/string/compareImpl
-  i32.eqz
-  return
- )
- (func $~lib/string/String#endsWith (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $end i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $searchLength i32)
-  (local $searchStart i32)
-  local.get $end
-  local.tee $3
-  i32.const 0
-  local.tee $4
-  local.get $3
-  local.get $4
-  i32.gt_s
-  select
-  local.tee $5
-  local.get $this
-  call $~lib/string/String#get:length
-  local.tee $6
-  local.get $5
-  local.get $6
-  i32.lt_s
-  select
-  local.set $end
-  local.get $search
-  call $~lib/string/String#get:length
-  local.set $searchLength
-  local.get $end
-  local.get $searchLength
-  i32.sub
-  local.set $searchStart
-  local.get $searchStart
-  i32.const 0
-  i32.lt_s
-  if
-   i32.const 0
-   return
-  end
-  local.get $this
-  local.get $searchStart
-  local.get $search
-  i32.const 0
-  local.get $searchLength
-  call $~lib/util/string/compareImpl
-  i32.eqz
-  return
- )
- (func $~lib/string/String#endsWith@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $end i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/string/String.MAX_LENGTH
-   local.set $end
-  end
-  local.get $this
-  local.get $search
-  local.get $end
-  call $~lib/string/String#endsWith
- )
- (func $~lib/string/String#indexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
-  (local $searchLen i32)
-  (local $len i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $searchStart i32)
-  local.get $search
-  call $~lib/string/String#get:length
-  local.set $searchLen
-  local.get $searchLen
-  i32.eqz
-  if
-   i32.const 0
-   return
-  end
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $len
-  i32.eqz
-  if
-   i32.const -1
-   return
-  end
-  local.get $start
-  local.tee $5
-  i32.const 0
-  local.tee $6
-  local.get $5
-  local.get $6
-  i32.gt_s
-  select
-  local.tee $7
-  local.get $len
-  local.tee $8
-  local.get $7
-  local.get $8
-  i32.lt_s
-  select
-  local.set $searchStart
-  local.get $len
-  local.get $searchLen
-  i32.sub
-  local.set $len
-  loop $for-loop|0
-   local.get $searchStart
-   local.get $len
-   i32.le_s
-   if
-    local.get $this
-    local.get $searchStart
-    local.get $search
-    i32.const 0
-    local.get $searchLen
-    call $~lib/util/string/compareImpl
-    i32.eqz
-    if
-     local.get $searchStart
-     return
-    end
-    local.get $searchStart
-    i32.const 1
-    i32.add
-    local.set $searchStart
-    br $for-loop|0
-   end
-  end
-  i32.const -1
-  return
- )
- (func $~lib/string/String#includes (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
-  local.get $this
-  local.get $search
-  local.get $start
-  call $~lib/string/String#indexOf
-  i32.const -1
-  i32.ne
-  return
  )
  (func $~lib/memory/memory.repeat (type $i32_i32_i32_i32_=>_none) (param $dst i32) (param $src i32) (param $srcLength i32) (param $count i32)
   (local $index i32)
@@ -3377,147 +2995,6 @@
     br $while-continue|0
    end
   end
- )
- (func $~lib/string/String#lastIndexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
-  (local $searchLen i32)
-  (local $len i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $searchStart i32)
-  local.get $search
-  call $~lib/string/String#get:length
-  local.set $searchLen
-  local.get $searchLen
-  i32.eqz
-  if
-   local.get $this
-   call $~lib/string/String#get:length
-   return
-  end
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $len
-  i32.eqz
-  if
-   i32.const -1
-   return
-  end
-  local.get $start
-  local.tee $5
-  i32.const 0
-  local.tee $6
-  local.get $5
-  local.get $6
-  i32.gt_s
-  select
-  local.tee $7
-  local.get $len
-  local.get $searchLen
-  i32.sub
-  local.tee $8
-  local.get $7
-  local.get $8
-  i32.lt_s
-  select
-  local.set $searchStart
-  loop $for-loop|0
-   local.get $searchStart
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $this
-    local.get $searchStart
-    local.get $search
-    i32.const 0
-    local.get $searchLen
-    call $~lib/util/string/compareImpl
-    i32.eqz
-    if
-     local.get $searchStart
-     return
-    end
-    local.get $searchStart
-    i32.const 1
-    i32.sub
-    local.set $searchStart
-    br $for-loop|0
-   end
-  end
-  i32.const -1
-  return
- )
- (func $~lib/string/String#lastIndexOf@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $start
-  end
-  local.get $this
-  local.get $search
-  local.get $start
-  call $~lib/string/String#lastIndexOf
- )
- (func $~lib/string/String#localeCompare (type $i32_i32_=>_i32) (param $this i32) (param $other i32) (result i32)
-  (local $alen i32)
-  (local $blen i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $res i32)
-  local.get $other
-  local.get $this
-  i32.eq
-  if
-   i32.const 0
-   return
-  end
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $alen
-  local.get $other
-  call $~lib/string/String#get:length
-  local.set $blen
-  local.get $this
-  i32.const 0
-  local.get $other
-  i32.const 0
-  local.get $alen
-  local.tee $4
-  local.get $blen
-  local.tee $5
-  local.get $4
-  local.get $5
-  i32.lt_s
-  select
-  call $~lib/util/string/compareImpl
-  local.set $res
-  local.get $res
-  if (result i32)
-   local.get $res
-  else
-   local.get $alen
-   local.get $blen
-   i32.sub
-  end
-  local.set $res
-  local.get $res
-  i32.const 0
-  i32.gt_s
-  local.get $res
-  i32.const 0
-  i32.lt_s
-  i32.sub
-  return
  )
  (func $~lib/util/string/isSpace (type $i32_=>_i32) (param $c i32) (result i32)
   (local $1 i32)
@@ -3604,402 +3081,6 @@
    return
   end
   i32.const 0
-  return
- )
- (func $~lib/util/string/strtob (type $i32_=>_i32) (param $str i32) (result i32)
-  (local $size i32)
-  (local $offset i32)
-  local.get $str
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $size
-  i32.const 0
-  local.set $offset
-  local.get $size
-  i32.const 8
-  i32.gt_u
-  if
-   loop $while-continue|0
-    local.get $size
-    if (result i32)
-     local.get $str
-     local.get $size
-     i32.add
-     i32.const 2
-     i32.sub
-     i32.load16_u $0
-     call $~lib/util/string/isSpace
-    else
-     i32.const 0
-    end
-    if
-     local.get $size
-     i32.const 2
-     i32.sub
-     local.set $size
-     br $while-continue|0
-    end
-   end
-   local.get $size
-   i32.const 8
-   i32.gt_u
-   if
-    loop $while-continue|1
-     local.get $offset
-     local.get $size
-     i32.lt_u
-     if (result i32)
-      local.get $str
-      local.get $offset
-      i32.add
-      i32.load16_u $0
-      call $~lib/util/string/isSpace
-     else
-      i32.const 0
-     end
-     if
-      local.get $offset
-      i32.const 2
-      i32.add
-      local.set $offset
-      br $while-continue|1
-     end
-    end
-    local.get $size
-    local.get $offset
-    i32.sub
-    local.set $size
-   end
-  end
-  local.get $size
-  i32.const 8
-  i32.ne
-  if
-   i32.const 0
-   return
-  end
-  local.get $str
-  local.get $offset
-  i32.add
-  i64.load $0
-  i64.const 28429475166421108
-  i64.eq
-  return
- )
- (func $~lib/util/string/strtol<f64> (type $i32_i32_=>_f64) (param $str i32) (param $radix i32) (result f64)
-  (local $len i32)
-  (local $ptr i32)
-  (local $code i32)
-  (local $sign f64)
-  (local $6 i32)
-  (local $num f64)
-  (local $initial i32)
-  (local $9 i32)
-  local.get $str
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $len
-  i32.eqz
-  if
-   i32.const 1
-   drop
-   f64.const nan:0x8000000000000
-   return
-  end
-  local.get $str
-  local.set $ptr
-  local.get $ptr
-  i32.load16_u $0
-  local.set $code
-  loop $while-continue|0
-   local.get $code
-   call $~lib/util/string/isSpace
-   if
-    local.get $ptr
-    i32.const 2
-    i32.add
-    local.tee $ptr
-    i32.load16_u $0
-    local.set $code
-    local.get $len
-    i32.const 1
-    i32.sub
-    local.set $len
-    br $while-continue|0
-   end
-  end
-  f64.const 1
-  local.set $sign
-  local.get $code
-  i32.const 45
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $code
-   i32.const 43
-   i32.eq
-  end
-  if
-   local.get $len
-   i32.const 1
-   i32.sub
-   local.tee $len
-   i32.eqz
-   if
-    i32.const 1
-    drop
-    f64.const nan:0x8000000000000
-    return
-   end
-   local.get $code
-   i32.const 45
-   i32.eq
-   if
-    f64.const -1
-    local.set $sign
-   end
-   local.get $ptr
-   i32.const 2
-   i32.add
-   local.tee $ptr
-   i32.load16_u $0
-   local.set $code
-  end
-  local.get $radix
-  if
-   local.get $radix
-   i32.const 2
-   i32.lt_s
-   if (result i32)
-    i32.const 1
-   else
-    local.get $radix
-    i32.const 36
-    i32.gt_s
-   end
-   if
-    i32.const 1
-    drop
-    f64.const nan:0x8000000000000
-    return
-   end
-   local.get $radix
-   i32.const 16
-   i32.eq
-   if
-    local.get $len
-    i32.const 2
-    i32.gt_s
-    if (result i32)
-     local.get $code
-     i32.const 48
-     i32.eq
-    else
-     i32.const 0
-    end
-    if (result i32)
-     local.get $ptr
-     i32.load16_u $0 offset=2
-     i32.const 32
-     i32.or
-     i32.const 120
-     i32.eq
-    else
-     i32.const 0
-    end
-    if
-     local.get $ptr
-     i32.const 4
-     i32.add
-     local.set $ptr
-     local.get $len
-     i32.const 2
-     i32.sub
-     local.set $len
-    end
-   end
-  else
-   local.get $code
-   i32.const 48
-   i32.eq
-   if (result i32)
-    local.get $len
-    i32.const 2
-    i32.gt_s
-   else
-    i32.const 0
-   end
-   if
-    block $break|1
-     block $case2|1
-      block $case1|1
-       block $case0|1
-        local.get $ptr
-        i32.load16_u $0 offset=2
-        i32.const 32
-        i32.or
-        local.set $6
-        local.get $6
-        i32.const 98
-        i32.eq
-        br_if $case0|1
-        local.get $6
-        i32.const 111
-        i32.eq
-        br_if $case1|1
-        local.get $6
-        i32.const 120
-        i32.eq
-        br_if $case2|1
-        br $break|1
-       end
-       local.get $ptr
-       i32.const 4
-       i32.add
-       local.set $ptr
-       local.get $len
-       i32.const 2
-       i32.sub
-       local.set $len
-       i32.const 2
-       local.set $radix
-       br $break|1
-      end
-      local.get $ptr
-      i32.const 4
-      i32.add
-      local.set $ptr
-      local.get $len
-      i32.const 2
-      i32.sub
-      local.set $len
-      i32.const 8
-      local.set $radix
-      br $break|1
-     end
-     local.get $ptr
-     i32.const 4
-     i32.add
-     local.set $ptr
-     local.get $len
-     i32.const 2
-     i32.sub
-     local.set $len
-     i32.const 16
-     local.set $radix
-     br $break|1
-    end
-   end
-   local.get $radix
-   i32.eqz
-   if
-    i32.const 10
-    local.set $radix
-   end
-  end
-  f64.const 0
-  local.set $num
-  local.get $len
-  i32.const 1
-  i32.sub
-  local.set $initial
-  block $while-break|2
-   loop $while-continue|2
-    local.get $len
-    local.tee $9
-    i32.const 1
-    i32.sub
-    local.set $len
-    local.get $9
-    if
-     local.get $ptr
-     i32.load16_u $0
-     local.set $code
-     local.get $code
-     i32.const 48
-     i32.sub
-     i32.const 10
-     i32.lt_u
-     if
-      local.get $code
-      i32.const 48
-      i32.sub
-      local.set $code
-     else
-      local.get $code
-      i32.const 65
-      i32.sub
-      i32.const 90
-      i32.const 65
-      i32.sub
-      i32.le_u
-      if
-       local.get $code
-       i32.const 65
-       i32.const 10
-       i32.sub
-       i32.sub
-       local.set $code
-      else
-       local.get $code
-       i32.const 97
-       i32.sub
-       i32.const 122
-       i32.const 97
-       i32.sub
-       i32.le_u
-       if
-        local.get $code
-        i32.const 97
-        i32.const 10
-        i32.sub
-        i32.sub
-        local.set $code
-       end
-      end
-     end
-     local.get $code
-     local.get $radix
-     i32.ge_u
-     if
-      local.get $initial
-      local.get $len
-      i32.eq
-      if
-       i32.const 1
-       drop
-       f64.const nan:0x8000000000000
-       return
-      end
-      br $while-break|2
-     end
-     local.get $num
-     local.get $radix
-     f64.convert_i32_s
-     f64.mul
-     local.get $code
-     f64.convert_i32_u
-     f64.add
-     local.set $num
-     local.get $ptr
-     i32.const 2
-     i32.add
-     local.set $ptr
-     br $while-continue|2
-    end
-   end
-  end
-  local.get $sign
-  local.get $num
-  f64.mul
-  return
- )
- (func $~lib/string/parseInt (type $i32_i32_=>_f64) (param $str i32) (param $radix i32) (result f64)
-  local.get $str
-  local.get $radix
-  call $~lib/util/string/strtol<f64>
   return
  )
  (func $~lib/math/ipow32 (type $i32_i32_=>_i32) (param $x i32) (param $e i32) (result i32)
@@ -4314,1616 +3395,6 @@
   f64.mul
   return
  )
- (func $~lib/util/string/strtod (type $i32_=>_f64) (param $str i32) (result f64)
-  (local $len i32)
-  (local $ptr i32)
-  (local $code i32)
-  (local $sign f64)
-  (local $savedPtr i32)
-  (local $pointed i32)
-  (local $consumed i32)
-  (local $position i32)
-  (local $x i64)
-  (local $noDigits i32)
-  (local $digit i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $ptr|14 i32)
-  (local $len|15 i32)
-  (local $sign|16 i32)
-  (local $magnitude i32)
-  (local $code|18 i32)
-  (local $digit|19 i32)
-  (local $significand i64)
-  (local $exp i32)
-  (local $significandf f64)
-  (local $n i32)
-  (local $24 i32)
-  (local $25 i32)
-  (local $n|26 i32)
-  (local $n|27 i32)
-  (local $significand|28 i64)
-  (local $exp|29 i32)
-  (local $shift i64)
-  (local $q i64)
-  (local $r i64)
-  (local $s i64)
-  (local $b i64)
-  (local $q|35 i64)
-  (local $r|36 i64)
-  (local $s|37 i64)
-  (local $significand|38 i64)
-  (local $exp|39 i32)
-  (local $shift|40 i64)
-  (local $a i64)
-  (local $b|42 i32)
-  (local $low i64)
-  (local $high i64)
-  (local $overflow i32)
-  (local $space i32)
-  (local $revspace i64)
-  (local $a|48 i64)
-  (local $b|49 i32)
-  (local $low|50 i64)
-  (local $high|51 i64)
-  (local $overflow|52 i32)
-  (local $space|53 i32)
-  (local $revspace|54 i64)
-  local.get $str
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $len
-  i32.eqz
-  if
-   f64.const nan:0x8000000000000
-   return
-  end
-  local.get $str
-  local.set $ptr
-  local.get $ptr
-  i32.load16_u $0
-  local.set $code
-  f64.const 1
-  local.set $sign
-  loop $while-continue|0
-   local.get $len
-   if (result i32)
-    local.get $code
-    call $~lib/util/string/isSpace
-   else
-    i32.const 0
-   end
-   if
-    local.get $ptr
-    i32.const 2
-    i32.add
-    local.tee $ptr
-    i32.load16_u $0
-    local.set $code
-    local.get $len
-    i32.const 1
-    i32.sub
-    local.set $len
-    br $while-continue|0
-   end
-  end
-  local.get $len
-  i32.eqz
-  if
-   f64.const nan:0x8000000000000
-   return
-  end
-  local.get $code
-  i32.const 45
-  i32.eq
-  if
-   local.get $len
-   i32.const 1
-   i32.sub
-   local.tee $len
-   i32.eqz
-   if
-    f64.const nan:0x8000000000000
-    return
-   end
-   local.get $ptr
-   i32.const 2
-   i32.add
-   local.tee $ptr
-   i32.load16_u $0
-   local.set $code
-   f64.const -1
-   local.set $sign
-  else
-   local.get $code
-   i32.const 43
-   i32.eq
-   if
-    local.get $len
-    i32.const 1
-    i32.sub
-    local.tee $len
-    i32.eqz
-    if
-     f64.const nan:0x8000000000000
-     return
-    end
-    local.get $ptr
-    i32.const 2
-    i32.add
-    local.tee $ptr
-    i32.load16_u $0
-    local.set $code
-   end
-  end
-  local.get $len
-  i32.const 8
-  i32.ge_s
-  if (result i32)
-   local.get $code
-   i32.const 73
-   i32.eq
-  else
-   i32.const 0
-  end
-  if
-   local.get $ptr
-   i64.load $0
-   i64.const 29555310648492105
-   i64.eq
-   if (result i32)
-    local.get $ptr
-    i64.load $0 offset=8
-    i64.const 34058970405077102
-    i64.eq
-   else
-    i32.const 0
-   end
-   if
-    f64.const inf
-    local.get $sign
-    f64.mul
-    return
-   end
-   f64.const nan:0x8000000000000
-   return
-  end
-  local.get $code
-  i32.const 46
-  i32.ne
-  if (result i32)
-   local.get $code
-   i32.const 48
-   i32.sub
-   i32.const 10
-   i32.ge_u
-  else
-   i32.const 0
-  end
-  if
-   f64.const nan:0x8000000000000
-   return
-  end
-  local.get $ptr
-  local.set $savedPtr
-  loop $while-continue|1
-   local.get $code
-   i32.const 48
-   i32.eq
-   if
-    local.get $ptr
-    i32.const 2
-    i32.add
-    local.tee $ptr
-    i32.load16_u $0
-    local.set $code
-    local.get $len
-    i32.const 1
-    i32.sub
-    local.set $len
-    br $while-continue|1
-   end
-  end
-  local.get $len
-  i32.const 0
-  i32.le_s
-  if
-   f64.const 0
-   local.get $sign
-   f64.mul
-   return
-  end
-  i32.const 0
-  local.set $pointed
-  i32.const 0
-  local.set $consumed
-  i32.const 0
-  local.set $position
-  i64.const 0
-  local.set $x
-  local.get $code
-  i32.const 46
-  i32.eq
-  if
-   local.get $savedPtr
-   local.get $ptr
-   i32.sub
-   i32.eqz
-   local.set $noDigits
-   local.get $ptr
-   i32.const 2
-   i32.add
-   local.set $ptr
-   local.get $len
-   i32.const 1
-   i32.sub
-   local.set $len
-   local.get $len
-   i32.eqz
-   if (result i32)
-    local.get $noDigits
-   else
-    i32.const 0
-   end
-   if
-    f64.const nan:0x8000000000000
-    return
-   end
-   i32.const 1
-   local.set $pointed
-   loop $for-loop|2
-    local.get $ptr
-    i32.load16_u $0
-    local.tee $code
-    i32.const 48
-    i32.eq
-    if
-     local.get $len
-     i32.const 1
-     i32.sub
-     local.set $len
-     local.get $position
-     i32.const 1
-     i32.sub
-     local.set $position
-     local.get $ptr
-     i32.const 2
-     i32.add
-     local.set $ptr
-     br $for-loop|2
-    end
-   end
-   local.get $len
-   i32.const 0
-   i32.le_s
-   if
-    f64.const 0
-    local.get $sign
-    f64.mul
-    return
-   end
-   local.get $position
-   i32.eqz
-   if (result i32)
-    local.get $noDigits
-   else
-    i32.const 0
-   end
-   if (result i32)
-    local.get $code
-    i32.const 48
-    i32.sub
-    i32.const 10
-    i32.ge_u
-   else
-    i32.const 0
-   end
-   if
-    f64.const nan:0x8000000000000
-    return
-   end
-  end
-  local.get $code
-  i32.const 48
-  i32.sub
-  local.set $digit
-  block $for-break3
-   loop $for-loop|3
-    local.get $digit
-    i32.const 10
-    i32.lt_u
-    if (result i32)
-     i32.const 1
-    else
-     local.get $code
-     i32.const 46
-     i32.eq
-     if (result i32)
-      local.get $pointed
-      i32.eqz
-     else
-      i32.const 0
-     end
-    end
-    if
-     local.get $digit
-     i32.const 10
-     i32.lt_u
-     if
-      local.get $consumed
-      i32.const 19
-      i32.lt_s
-      if (result i64)
-       i64.const 10
-       local.get $x
-       i64.mul
-       local.get $digit
-       i64.extend_i32_u
-       i64.add
-      else
-       local.get $x
-       local.get $digit
-       i32.eqz
-       i32.eqz
-       i64.extend_i32_u
-       i64.or
-      end
-      local.set $x
-      local.get $consumed
-      i32.const 1
-      i32.add
-      local.set $consumed
-     else
-      local.get $consumed
-      local.set $position
-      i32.const 1
-      local.set $pointed
-     end
-     local.get $len
-     i32.const 1
-     i32.sub
-     local.tee $len
-     i32.eqz
-     if
-      br $for-break3
-     end
-     local.get $ptr
-     i32.const 2
-     i32.add
-     local.tee $ptr
-     i32.load16_u $0
-     local.set $code
-     local.get $code
-     i32.const 48
-     i32.sub
-     local.set $digit
-     br $for-loop|3
-    end
-   end
-  end
-  local.get $pointed
-  i32.eqz
-  if
-   local.get $consumed
-   local.set $position
-  end
-  block $~lib/util/string/scientific|inlined.0 (result f64)
-   local.get $x
-   local.set $significand
-   local.get $position
-   i32.const 19
-   local.tee $12
-   local.get $consumed
-   local.tee $13
-   local.get $12
-   local.get $13
-   i32.lt_s
-   select
-   i32.sub
-   block $~lib/util/string/parseExp|inlined.0 (result i32)
-    local.get $ptr
-    local.set $ptr|14
-    local.get $len
-    local.set $len|15
-    i32.const 1
-    local.set $sign|16
-    i32.const 0
-    local.set $magnitude
-    local.get $ptr|14
-    i32.load16_u $0
-    local.set $code|18
-    local.get $code|18
-    i32.const 32
-    i32.or
-    i32.const 101
-    i32.ne
-    if
-     i32.const 0
-     br $~lib/util/string/parseExp|inlined.0
-    end
-    local.get $len|15
-    i32.const 1
-    i32.sub
-    local.tee $len|15
-    i32.eqz
-    if
-     i32.const 0
-     br $~lib/util/string/parseExp|inlined.0
-    end
-    local.get $ptr|14
-    i32.const 2
-    i32.add
-    local.tee $ptr|14
-    i32.load16_u $0
-    local.set $code|18
-    local.get $code|18
-    i32.const 45
-    i32.eq
-    if
-     local.get $len|15
-     i32.const 1
-     i32.sub
-     local.tee $len|15
-     i32.eqz
-     if
-      i32.const 0
-      br $~lib/util/string/parseExp|inlined.0
-     end
-     local.get $ptr|14
-     i32.const 2
-     i32.add
-     local.tee $ptr|14
-     i32.load16_u $0
-     local.set $code|18
-     i32.const -1
-     local.set $sign|16
-    else
-     local.get $code|18
-     i32.const 43
-     i32.eq
-     if
-      local.get $len|15
-      i32.const 1
-      i32.sub
-      local.tee $len|15
-      i32.eqz
-      if
-       i32.const 0
-       br $~lib/util/string/parseExp|inlined.0
-      end
-      local.get $ptr|14
-      i32.const 2
-      i32.add
-      local.tee $ptr|14
-      i32.load16_u $0
-      local.set $code|18
-     end
-    end
-    loop $while-continue|4
-     local.get $code|18
-     i32.const 48
-     i32.eq
-     if
-      local.get $len|15
-      i32.const 1
-      i32.sub
-      local.tee $len|15
-      i32.eqz
-      if
-       i32.const 0
-       br $~lib/util/string/parseExp|inlined.0
-      end
-      local.get $ptr|14
-      i32.const 2
-      i32.add
-      local.tee $ptr|14
-      i32.load16_u $0
-      local.set $code|18
-      br $while-continue|4
-     end
-    end
-    local.get $code|18
-    i32.const 48
-    i32.sub
-    local.set $digit|19
-    loop $for-loop|5
-     local.get $len|15
-     if (result i32)
-      local.get $digit|19
-      i32.const 10
-      i32.lt_u
-     else
-      i32.const 0
-     end
-     if
-      local.get $magnitude
-      i32.const 3200
-      i32.ge_s
-      if
-       local.get $sign|16
-       i32.const 3200
-       i32.mul
-       br $~lib/util/string/parseExp|inlined.0
-      end
-      i32.const 10
-      local.get $magnitude
-      i32.mul
-      local.get $digit|19
-      i32.add
-      local.set $magnitude
-      local.get $ptr|14
-      i32.const 2
-      i32.add
-      local.tee $ptr|14
-      i32.load16_u $0
-      local.set $code|18
-      local.get $len|15
-      i32.const 1
-      i32.sub
-      local.set $len|15
-      local.get $code|18
-      i32.const 48
-      i32.sub
-      local.set $digit|19
-      br $for-loop|5
-     end
-    end
-    local.get $sign|16
-    local.get $magnitude
-    i32.mul
-    br $~lib/util/string/parseExp|inlined.0
-   end
-   i32.add
-   local.set $exp
-   local.get $significand
-   i64.const 0
-   i64.ne
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $exp
-    i32.const -342
-    i32.lt_s
-   end
-   if
-    f64.const 0
-    br $~lib/util/string/scientific|inlined.0
-   end
-   local.get $exp
-   i32.const 308
-   i32.gt_s
-   if
-    f64.const inf
-    br $~lib/util/string/scientific|inlined.0
-   end
-   local.get $significand
-   f64.convert_i64_u
-   local.set $significandf
-   local.get $exp
-   i32.eqz
-   if
-    local.get $significandf
-    br $~lib/util/string/scientific|inlined.0
-   end
-   local.get $exp
-   i32.const 22
-   i32.gt_s
-   if (result i32)
-    local.get $exp
-    i32.const 22
-    i32.const 15
-    i32.add
-    i32.le_s
-   else
-    i32.const 0
-   end
-   if
-    local.get $significandf
-    block $~lib/util/string/pow10|inlined.0 (result f64)
-     local.get $exp
-     i32.const 22
-     i32.sub
-     local.set $n
-     i32.const 3648
-     local.get $n
-     i32.const 3
-     i32.shl
-     i32.add
-     f64.load $0
-     br $~lib/util/string/pow10|inlined.0
-    end
-    f64.mul
-    local.set $significandf
-    i32.const 22
-    local.set $exp
-   end
-   local.get $significand
-   i64.const 9007199254740991
-   i64.le_u
-   if (result i32)
-    local.get $exp
-    local.tee $24
-    i32.const 31
-    i32.shr_s
-    local.tee $25
-    local.get $24
-    i32.add
-    local.get $25
-    i32.xor
-    i32.const 22
-    i32.le_s
-   else
-    i32.const 0
-   end
-   if
-    local.get $exp
-    i32.const 0
-    i32.gt_s
-    if
-     local.get $significandf
-     block $~lib/util/string/pow10|inlined.1 (result f64)
-      local.get $exp
-      local.set $n|26
-      i32.const 3648
-      local.get $n|26
-      i32.const 3
-      i32.shl
-      i32.add
-      f64.load $0
-      br $~lib/util/string/pow10|inlined.1
-     end
-     f64.mul
-     br $~lib/util/string/scientific|inlined.0
-    end
-    local.get $significandf
-    block $~lib/util/string/pow10|inlined.2 (result f64)
-     i32.const 0
-     local.get $exp
-     i32.sub
-     local.set $n|27
-     i32.const 3648
-     local.get $n|27
-     i32.const 3
-     i32.shl
-     i32.add
-     f64.load $0
-     br $~lib/util/string/pow10|inlined.2
-    end
-    f64.div
-    br $~lib/util/string/scientific|inlined.0
-   else
-    local.get $exp
-    i32.const 0
-    i32.lt_s
-    if
-     block $~lib/util/string/scaledown|inlined.0 (result f64)
-      local.get $significand
-      local.set $significand|28
-      local.get $exp
-      local.set $exp|29
-      local.get $significand|28
-      i64.clz
-      local.set $shift
-      local.get $significand|28
-      local.get $shift
-      i64.shl
-      local.set $significand|28
-      local.get $exp|29
-      i64.extend_i32_s
-      local.get $shift
-      i64.sub
-      local.set $shift
-      loop $for-loop|6
-       local.get $exp|29
-       i32.const -14
-       i32.le_s
-       if
-        local.get $significand|28
-        i64.const 6103515625
-        i64.div_u
-        local.set $q
-        local.get $significand|28
-        i64.const 6103515625
-        i64.rem_u
-        local.set $r
-        local.get $q
-        i64.clz
-        local.set $s
-        local.get $q
-        local.get $s
-        i64.shl
-        f64.const 0.00004294967296
-        local.get $r
-        local.get $s
-        i64.const 18
-        i64.sub
-        i64.shl
-        f64.convert_i64_u
-        f64.mul
-        f64.nearest
-        i64.trunc_sat_f64_u
-        i64.add
-        local.set $significand|28
-        local.get $shift
-        local.get $s
-        i64.sub
-        local.set $shift
-        local.get $exp|29
-        i32.const 14
-        i32.add
-        local.set $exp|29
-        br $for-loop|6
-       end
-      end
-      i32.const 5
-      i32.const 0
-      local.get $exp|29
-      i32.sub
-      call $~lib/math/ipow32
-      i64.extend_i32_s
-      local.set $b
-      local.get $significand|28
-      local.get $b
-      i64.div_u
-      local.set $q|35
-      local.get $significand|28
-      local.get $b
-      i64.rem_u
-      local.set $r|36
-      local.get $q|35
-      i64.clz
-      local.set $s|37
-      local.get $q|35
-      local.get $s|37
-      i64.shl
-      local.get $r|36
-      f64.convert_i64_u
-      i64.reinterpret_f64
-      local.get $s|37
-      i64.const 52
-      i64.shl
-      i64.add
-      f64.reinterpret_i64
-      local.get $b
-      f64.convert_i64_u
-      f64.div
-      i64.trunc_sat_f64_u
-      i64.add
-      local.set $significand|28
-      local.get $shift
-      local.get $s|37
-      i64.sub
-      local.set $shift
-      local.get $significand|28
-      f64.convert_i64_u
-      local.get $shift
-      i32.wrap_i64
-      call $~lib/math/NativeMath.scalbn
-      br $~lib/util/string/scaledown|inlined.0
-     end
-     br $~lib/util/string/scientific|inlined.0
-    else
-     block $~lib/util/string/scaleup|inlined.0 (result f64)
-      local.get $significand
-      local.set $significand|38
-      local.get $exp
-      local.set $exp|39
-      local.get $significand|38
-      i64.ctz
-      local.set $shift|40
-      local.get $significand|38
-      local.get $shift|40
-      i64.shr_u
-      local.set $significand|38
-      local.get $shift|40
-      local.get $exp|39
-      i64.extend_i32_s
-      i64.add
-      local.set $shift|40
-      local.get $shift|40
-      global.set $~lib/util/string/__fixmulShift
-      loop $for-loop|7
-       local.get $exp|39
-       i32.const 13
-       i32.ge_s
-       if
-        block $~lib/util/string/fixmul|inlined.0 (result i64)
-         local.get $significand|38
-         local.set $a
-         i32.const 1220703125
-         local.set $b|42
-         local.get $a
-         i64.const 4294967295
-         i64.and
-         local.get $b|42
-         i64.extend_i32_u
-         i64.mul
-         local.set $low
-         local.get $a
-         i64.const 32
-         i64.shr_u
-         local.get $b|42
-         i64.extend_i32_u
-         i64.mul
-         local.get $low
-         i64.const 32
-         i64.shr_u
-         i64.add
-         local.set $high
-         local.get $high
-         i64.const 32
-         i64.shr_u
-         i32.wrap_i64
-         local.set $overflow
-         local.get $overflow
-         i32.clz
-         local.set $space
-         i64.const 32
-         local.get $space
-         i64.extend_i32_u
-         i64.sub
-         local.set $revspace
-         global.get $~lib/util/string/__fixmulShift
-         local.get $revspace
-         i64.add
-         global.set $~lib/util/string/__fixmulShift
-         local.get $high
-         local.get $space
-         i64.extend_i32_u
-         i64.shl
-         local.get $low
-         i64.const 4294967295
-         i64.and
-         local.get $revspace
-         i64.shr_u
-         i64.or
-         local.get $low
-         local.get $space
-         i64.extend_i32_u
-         i64.shl
-         i64.const 31
-         i64.shr_u
-         i64.const 1
-         i64.and
-         i64.add
-         br $~lib/util/string/fixmul|inlined.0
-        end
-        local.set $significand|38
-        local.get $exp|39
-        i32.const 13
-        i32.sub
-        local.set $exp|39
-        br $for-loop|7
-       end
-      end
-      block $~lib/util/string/fixmul|inlined.1 (result i64)
-       local.get $significand|38
-       local.set $a|48
-       i32.const 5
-       local.get $exp|39
-       call $~lib/math/ipow32
-       local.set $b|49
-       local.get $a|48
-       i64.const 4294967295
-       i64.and
-       local.get $b|49
-       i64.extend_i32_u
-       i64.mul
-       local.set $low|50
-       local.get $a|48
-       i64.const 32
-       i64.shr_u
-       local.get $b|49
-       i64.extend_i32_u
-       i64.mul
-       local.get $low|50
-       i64.const 32
-       i64.shr_u
-       i64.add
-       local.set $high|51
-       local.get $high|51
-       i64.const 32
-       i64.shr_u
-       i32.wrap_i64
-       local.set $overflow|52
-       local.get $overflow|52
-       i32.clz
-       local.set $space|53
-       i64.const 32
-       local.get $space|53
-       i64.extend_i32_u
-       i64.sub
-       local.set $revspace|54
-       global.get $~lib/util/string/__fixmulShift
-       local.get $revspace|54
-       i64.add
-       global.set $~lib/util/string/__fixmulShift
-       local.get $high|51
-       local.get $space|53
-       i64.extend_i32_u
-       i64.shl
-       local.get $low|50
-       i64.const 4294967295
-       i64.and
-       local.get $revspace|54
-       i64.shr_u
-       i64.or
-       local.get $low|50
-       local.get $space|53
-       i64.extend_i32_u
-       i64.shl
-       i64.const 31
-       i64.shr_u
-       i64.const 1
-       i64.and
-       i64.add
-       br $~lib/util/string/fixmul|inlined.1
-      end
-      local.set $significand|38
-      global.get $~lib/util/string/__fixmulShift
-      local.set $shift|40
-      local.get $significand|38
-      f64.convert_i64_u
-      local.get $shift|40
-      i32.wrap_i64
-      call $~lib/math/NativeMath.scalbn
-      br $~lib/util/string/scaleup|inlined.0
-     end
-     br $~lib/util/string/scientific|inlined.0
-    end
-    unreachable
-   end
-   unreachable
-  end
-  local.get $sign
-  f64.copysign
-  return
- )
- (func $~lib/number/F32.parseFloat (type $i32_=>_f32) (param $value i32) (result f32)
-  local.get $value
-  call $~lib/util/string/strtod
-  f32.demote_f64
-  return
- )
- (func $~lib/number/F64.parseFloat (type $i32_=>_f64) (param $value i32) (result f64)
-  local.get $value
-  call $~lib/util/string/strtod
-  return
- )
- (func $~lib/util/string/strtol<i32> (type $i32_i32_=>_i32) (param $str i32) (param $radix i32) (result i32)
-  (local $len i32)
-  (local $ptr i32)
-  (local $code i32)
-  (local $sign i32)
-  (local $6 i32)
-  (local $num i32)
-  (local $initial i32)
-  (local $9 i32)
-  local.get $str
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $len
-  i32.eqz
-  if
-   i32.const 0
-   drop
-   i32.const 0
-   return
-  end
-  local.get $str
-  local.set $ptr
-  local.get $ptr
-  i32.load16_u $0
-  local.set $code
-  loop $while-continue|0
-   local.get $code
-   call $~lib/util/string/isSpace
-   if
-    local.get $ptr
-    i32.const 2
-    i32.add
-    local.tee $ptr
-    i32.load16_u $0
-    local.set $code
-    local.get $len
-    i32.const 1
-    i32.sub
-    local.set $len
-    br $while-continue|0
-   end
-  end
-  i32.const 1
-  local.set $sign
-  local.get $code
-  i32.const 45
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $code
-   i32.const 43
-   i32.eq
-  end
-  if
-   local.get $len
-   i32.const 1
-   i32.sub
-   local.tee $len
-   i32.eqz
-   if
-    i32.const 0
-    drop
-    i32.const 0
-    return
-   end
-   local.get $code
-   i32.const 45
-   i32.eq
-   if
-    i32.const -1
-    local.set $sign
-   end
-   local.get $ptr
-   i32.const 2
-   i32.add
-   local.tee $ptr
-   i32.load16_u $0
-   local.set $code
-  end
-  local.get $radix
-  if
-   local.get $radix
-   i32.const 2
-   i32.lt_s
-   if (result i32)
-    i32.const 1
-   else
-    local.get $radix
-    i32.const 36
-    i32.gt_s
-   end
-   if
-    i32.const 0
-    drop
-    i32.const 0
-    return
-   end
-   local.get $radix
-   i32.const 16
-   i32.eq
-   if
-    local.get $len
-    i32.const 2
-    i32.gt_s
-    if (result i32)
-     local.get $code
-     i32.const 48
-     i32.eq
-    else
-     i32.const 0
-    end
-    if (result i32)
-     local.get $ptr
-     i32.load16_u $0 offset=2
-     i32.const 32
-     i32.or
-     i32.const 120
-     i32.eq
-    else
-     i32.const 0
-    end
-    if
-     local.get $ptr
-     i32.const 4
-     i32.add
-     local.set $ptr
-     local.get $len
-     i32.const 2
-     i32.sub
-     local.set $len
-    end
-   end
-  else
-   local.get $code
-   i32.const 48
-   i32.eq
-   if (result i32)
-    local.get $len
-    i32.const 2
-    i32.gt_s
-   else
-    i32.const 0
-   end
-   if
-    block $break|1
-     block $case2|1
-      block $case1|1
-       block $case0|1
-        local.get $ptr
-        i32.load16_u $0 offset=2
-        i32.const 32
-        i32.or
-        local.set $6
-        local.get $6
-        i32.const 98
-        i32.eq
-        br_if $case0|1
-        local.get $6
-        i32.const 111
-        i32.eq
-        br_if $case1|1
-        local.get $6
-        i32.const 120
-        i32.eq
-        br_if $case2|1
-        br $break|1
-       end
-       local.get $ptr
-       i32.const 4
-       i32.add
-       local.set $ptr
-       local.get $len
-       i32.const 2
-       i32.sub
-       local.set $len
-       i32.const 2
-       local.set $radix
-       br $break|1
-      end
-      local.get $ptr
-      i32.const 4
-      i32.add
-      local.set $ptr
-      local.get $len
-      i32.const 2
-      i32.sub
-      local.set $len
-      i32.const 8
-      local.set $radix
-      br $break|1
-     end
-     local.get $ptr
-     i32.const 4
-     i32.add
-     local.set $ptr
-     local.get $len
-     i32.const 2
-     i32.sub
-     local.set $len
-     i32.const 16
-     local.set $radix
-     br $break|1
-    end
-   end
-   local.get $radix
-   i32.eqz
-   if
-    i32.const 10
-    local.set $radix
-   end
-  end
-  i32.const 0
-  local.set $num
-  local.get $len
-  i32.const 1
-  i32.sub
-  local.set $initial
-  block $while-break|2
-   loop $while-continue|2
-    local.get $len
-    local.tee $9
-    i32.const 1
-    i32.sub
-    local.set $len
-    local.get $9
-    if
-     local.get $ptr
-     i32.load16_u $0
-     local.set $code
-     local.get $code
-     i32.const 48
-     i32.sub
-     i32.const 10
-     i32.lt_u
-     if
-      local.get $code
-      i32.const 48
-      i32.sub
-      local.set $code
-     else
-      local.get $code
-      i32.const 65
-      i32.sub
-      i32.const 90
-      i32.const 65
-      i32.sub
-      i32.le_u
-      if
-       local.get $code
-       i32.const 65
-       i32.const 10
-       i32.sub
-       i32.sub
-       local.set $code
-      else
-       local.get $code
-       i32.const 97
-       i32.sub
-       i32.const 122
-       i32.const 97
-       i32.sub
-       i32.le_u
-       if
-        local.get $code
-        i32.const 97
-        i32.const 10
-        i32.sub
-        i32.sub
-        local.set $code
-       end
-      end
-     end
-     local.get $code
-     local.get $radix
-     i32.ge_u
-     if
-      local.get $initial
-      local.get $len
-      i32.eq
-      if
-       i32.const 0
-       drop
-       i32.const 0
-       return
-      end
-      br $while-break|2
-     end
-     local.get $num
-     local.get $radix
-     i32.mul
-     local.get $code
-     i32.add
-     local.set $num
-     local.get $ptr
-     i32.const 2
-     i32.add
-     local.set $ptr
-     br $while-continue|2
-    end
-   end
-  end
-  local.get $sign
-  local.get $num
-  i32.mul
-  return
- )
- (func $~lib/number/I32.parseInt (type $i32_i32_=>_i32) (param $value i32) (param $radix i32) (result i32)
-  local.get $value
-  local.get $radix
-  call $~lib/util/string/strtol<i32>
-  return
- )
- (func $~lib/util/string/strtol<i64> (type $i32_i32_=>_i64) (param $str i32) (param $radix i32) (result i64)
-  (local $len i32)
-  (local $ptr i32)
-  (local $code i32)
-  (local $sign i64)
-  (local $6 i32)
-  (local $num i64)
-  (local $initial i32)
-  (local $9 i32)
-  local.get $str
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $len
-  i32.eqz
-  if
-   i32.const 0
-   drop
-   i64.const 0
-   return
-  end
-  local.get $str
-  local.set $ptr
-  local.get $ptr
-  i32.load16_u $0
-  local.set $code
-  loop $while-continue|0
-   local.get $code
-   call $~lib/util/string/isSpace
-   if
-    local.get $ptr
-    i32.const 2
-    i32.add
-    local.tee $ptr
-    i32.load16_u $0
-    local.set $code
-    local.get $len
-    i32.const 1
-    i32.sub
-    local.set $len
-    br $while-continue|0
-   end
-  end
-  i64.const 1
-  local.set $sign
-  local.get $code
-  i32.const 45
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $code
-   i32.const 43
-   i32.eq
-  end
-  if
-   local.get $len
-   i32.const 1
-   i32.sub
-   local.tee $len
-   i32.eqz
-   if
-    i32.const 0
-    drop
-    i64.const 0
-    return
-   end
-   local.get $code
-   i32.const 45
-   i32.eq
-   if
-    i64.const -1
-    local.set $sign
-   end
-   local.get $ptr
-   i32.const 2
-   i32.add
-   local.tee $ptr
-   i32.load16_u $0
-   local.set $code
-  end
-  local.get $radix
-  if
-   local.get $radix
-   i32.const 2
-   i32.lt_s
-   if (result i32)
-    i32.const 1
-   else
-    local.get $radix
-    i32.const 36
-    i32.gt_s
-   end
-   if
-    i32.const 0
-    drop
-    i64.const 0
-    return
-   end
-   local.get $radix
-   i32.const 16
-   i32.eq
-   if
-    local.get $len
-    i32.const 2
-    i32.gt_s
-    if (result i32)
-     local.get $code
-     i32.const 48
-     i32.eq
-    else
-     i32.const 0
-    end
-    if (result i32)
-     local.get $ptr
-     i32.load16_u $0 offset=2
-     i32.const 32
-     i32.or
-     i32.const 120
-     i32.eq
-    else
-     i32.const 0
-    end
-    if
-     local.get $ptr
-     i32.const 4
-     i32.add
-     local.set $ptr
-     local.get $len
-     i32.const 2
-     i32.sub
-     local.set $len
-    end
-   end
-  else
-   local.get $code
-   i32.const 48
-   i32.eq
-   if (result i32)
-    local.get $len
-    i32.const 2
-    i32.gt_s
-   else
-    i32.const 0
-   end
-   if
-    block $break|1
-     block $case2|1
-      block $case1|1
-       block $case0|1
-        local.get $ptr
-        i32.load16_u $0 offset=2
-        i32.const 32
-        i32.or
-        local.set $6
-        local.get $6
-        i32.const 98
-        i32.eq
-        br_if $case0|1
-        local.get $6
-        i32.const 111
-        i32.eq
-        br_if $case1|1
-        local.get $6
-        i32.const 120
-        i32.eq
-        br_if $case2|1
-        br $break|1
-       end
-       local.get $ptr
-       i32.const 4
-       i32.add
-       local.set $ptr
-       local.get $len
-       i32.const 2
-       i32.sub
-       local.set $len
-       i32.const 2
-       local.set $radix
-       br $break|1
-      end
-      local.get $ptr
-      i32.const 4
-      i32.add
-      local.set $ptr
-      local.get $len
-      i32.const 2
-      i32.sub
-      local.set $len
-      i32.const 8
-      local.set $radix
-      br $break|1
-     end
-     local.get $ptr
-     i32.const 4
-     i32.add
-     local.set $ptr
-     local.get $len
-     i32.const 2
-     i32.sub
-     local.set $len
-     i32.const 16
-     local.set $radix
-     br $break|1
-    end
-   end
-   local.get $radix
-   i32.eqz
-   if
-    i32.const 10
-    local.set $radix
-   end
-  end
-  i64.const 0
-  local.set $num
-  local.get $len
-  i32.const 1
-  i32.sub
-  local.set $initial
-  block $while-break|2
-   loop $while-continue|2
-    local.get $len
-    local.tee $9
-    i32.const 1
-    i32.sub
-    local.set $len
-    local.get $9
-    if
-     local.get $ptr
-     i32.load16_u $0
-     local.set $code
-     local.get $code
-     i32.const 48
-     i32.sub
-     i32.const 10
-     i32.lt_u
-     if
-      local.get $code
-      i32.const 48
-      i32.sub
-      local.set $code
-     else
-      local.get $code
-      i32.const 65
-      i32.sub
-      i32.const 90
-      i32.const 65
-      i32.sub
-      i32.le_u
-      if
-       local.get $code
-       i32.const 65
-       i32.const 10
-       i32.sub
-       i32.sub
-       local.set $code
-      else
-       local.get $code
-       i32.const 97
-       i32.sub
-       i32.const 122
-       i32.const 97
-       i32.sub
-       i32.le_u
-       if
-        local.get $code
-        i32.const 97
-        i32.const 10
-        i32.sub
-        i32.sub
-        local.set $code
-       end
-      end
-     end
-     local.get $code
-     local.get $radix
-     i32.ge_u
-     if
-      local.get $initial
-      local.get $len
-      i32.eq
-      if
-       i32.const 0
-       drop
-       i64.const 0
-       return
-      end
-      br $while-break|2
-     end
-     local.get $num
-     local.get $radix
-     i64.extend_i32_s
-     i64.mul
-     local.get $code
-     i64.extend_i32_u
-     i64.add
-     local.set $num
-     local.get $ptr
-     i32.const 2
-     i32.add
-     local.set $ptr
-     br $while-continue|2
-    end
-   end
-  end
-  local.get $sign
-  local.get $num
-  i64.mul
-  return
- )
- (func $~lib/number/I64.parseInt (type $i32_i32_=>_i64) (param $value i32) (param $radix i32) (result i64)
-  local.get $value
-  local.get $radix
-  call $~lib/util/string/strtol<i64>
-  return
- )
- (func $~lib/string/parseFloat (type $i32_=>_f64) (param $str i32) (result f64)
-  local.get $str
-  call $~lib/util/string/strtod
-  return
- )
  (func $~lib/object/Object.is<f64> (type $f64_f64_=>_i32) (param $x f64) (param $y f64) (result i32)
   i32.const 1
   drop
@@ -5944,147 +3415,6 @@
   i64.reinterpret_f64
   i64.eq
   i32.or
-  return
- )
- (func $~lib/string/String.__concat (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
-  local.get $left
-  local.get $right
-  call $~lib/string/String#concat
-  return
- )
- (func $~lib/string/String.__ne (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
-  local.get $left
-  local.get $right
-  call $~lib/string/String.__eq
-  i32.eqz
-  return
- )
- (func $~lib/string/String.__gt (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
-  (local $leftLength i32)
-  (local $rightLength i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $res i32)
-  local.get $left
-  local.get $right
-  i32.eq
-  if
-   i32.const 0
-   return
-  end
-  local.get $left
-  call $~lib/string/String#get:length
-  local.set $leftLength
-  local.get $leftLength
-  i32.eqz
-  if
-   i32.const 0
-   return
-  end
-  local.get $right
-  call $~lib/string/String#get:length
-  local.set $rightLength
-  local.get $rightLength
-  i32.eqz
-  if
-   i32.const 1
-   return
-  end
-  local.get $left
-  i32.const 0
-  local.get $right
-  i32.const 0
-  local.get $leftLength
-  local.tee $4
-  local.get $rightLength
-  local.tee $5
-  local.get $4
-  local.get $5
-  i32.lt_s
-  select
-  call $~lib/util/string/compareImpl
-  local.set $res
-  local.get $res
-  if (result i32)
-   local.get $res
-   i32.const 0
-   i32.gt_s
-  else
-   local.get $leftLength
-   local.get $rightLength
-   i32.gt_s
-  end
-  return
- )
- (func $~lib/string/String.__lt (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
-  (local $rightLength i32)
-  (local $leftLength i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $res i32)
-  local.get $left
-  local.get $right
-  i32.eq
-  if
-   i32.const 0
-   return
-  end
-  local.get $right
-  call $~lib/string/String#get:length
-  local.set $rightLength
-  local.get $rightLength
-  i32.eqz
-  if
-   i32.const 0
-   return
-  end
-  local.get $left
-  call $~lib/string/String#get:length
-  local.set $leftLength
-  local.get $leftLength
-  i32.eqz
-  if
-   i32.const 1
-   return
-  end
-  local.get $left
-  i32.const 0
-  local.get $right
-  i32.const 0
-  local.get $leftLength
-  local.tee $4
-  local.get $rightLength
-  local.tee $5
-  local.get $4
-  local.get $5
-  i32.lt_s
-  select
-  call $~lib/util/string/compareImpl
-  local.set $res
-  local.get $res
-  if (result i32)
-   local.get $res
-   i32.const 0
-   i32.lt_s
-  else
-   local.get $leftLength
-   local.get $rightLength
-   i32.lt_s
-  end
-  return
- )
- (func $~lib/string/String.__gte (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
-  local.get $left
-  local.get $right
-  call $~lib/string/String.__lt
-  i32.eqz
-  return
- )
- (func $~lib/string/String.__lte (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
-  local.get $left
-  local.get $right
-  call $~lib/string/String.__gt
-  i32.eqz
   return
  )
  (func $~lib/rt/itcms/Object#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
@@ -6137,63 +3467,6 @@
   local.get $newPtr
   return
  )
- (func $~lib/string/String#slice@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $end
-  end
-  local.get $this
-  local.get $start
-  local.get $end
-  call $~lib/string/String#slice
- )
- (func $~lib/string/String#substr@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $length i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $length
-  end
-  local.get $this
-  local.get $start
-  local.get $length
-  call $~lib/string/String#substr
- )
- (func $~lib/string/String#substring@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $end
-  end
-  local.get $this
-  local.get $start
-  local.get $end
-  call $~lib/string/String#substring
- )
  (func $~lib/array/Array<~lib/string/String>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
@@ -6206,102 +3479,6 @@
   local.get $this
   i32.load $0
  )
- (func $~lib/array/ensureCapacity (type $i32_i32_i32_i32_=>_none) (param $array i32) (param $newSize i32) (param $alignLog2 i32) (param $canGrow i32)
-  (local $oldCapacity i32)
-  (local $oldData i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $newCapacity i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $newData i32)
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
-  local.set $oldCapacity
-  local.get $newSize
-  local.get $oldCapacity
-  local.get $alignLog2
-  i32.shr_u
-  i32.gt_u
-  if
-   local.get $newSize
-   i32.const 1073741820
-   local.get $alignLog2
-   i32.shr_u
-   i32.gt_u
-   if
-    i32.const 13040
-    i32.const 14640
-    i32.const 19
-    i32.const 48
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $array
-   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-   local.set $oldData
-   local.get $newSize
-   local.tee $6
-   i32.const 8
-   local.tee $7
-   local.get $6
-   local.get $7
-   i32.gt_u
-   select
-   local.get $alignLog2
-   i32.shl
-   local.set $newCapacity
-   local.get $canGrow
-   if
-    local.get $oldCapacity
-    i32.const 1
-    i32.shl
-    local.tee $9
-    i32.const 1073741820
-    local.tee $10
-    local.get $9
-    local.get $10
-    i32.lt_u
-    select
-    local.tee $11
-    local.get $newCapacity
-    local.tee $12
-    local.get $11
-    local.get $12
-    i32.gt_u
-    select
-    local.set $newCapacity
-   end
-   local.get $oldData
-   local.get $newCapacity
-   call $~lib/rt/itcms/__renew
-   local.set $newData
-   i32.const 2
-   global.get $~lib/shared/runtime/Runtime.Incremental
-   i32.ne
-   drop
-   local.get $newData
-   local.get $oldData
-   i32.ne
-   if
-    local.get $array
-    local.get $newData
-    i32.store $0
-    local.get $array
-    local.get $newData
-    i32.store $0 offset=4
-    local.get $array
-    local.get $newData
-    i32.const 0
-    call $~lib/rt/itcms/__link
-   end
-   local.get $array
-   local.get $newCapacity
-   i32.store $0 offset=8
-  end
- )
  (func $~lib/array/Array<~lib/string/String>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
@@ -6310,112 +3487,6 @@
  (func $~lib/array/Array<~lib/string/String>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
- )
- (func $~lib/array/Array<~lib/string/String>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
-  local.get $index
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:length_
-  i32.ge_u
-  if
-   local.get $index
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 240
-    i32.const 14640
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $this
-   local.get $index
-   i32.const 1
-   i32.add
-   i32.const 2
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $this
-   local.get $index
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<~lib/string/String>#set:length_
-  end
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:dataStart
-  local.get $index
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $value
-  i32.store $0
-  i32.const 1
-  drop
-  local.get $this
-  local.get $value
-  i32.const 1
-  call $~lib/rt/itcms/__link
- )
- (func $~lib/array/Array<~lib/string/String>#push (type $i32_i32_=>_i32) (param $this i32) (param $value i32) (result i32)
-  (local $oldLen i32)
-  (local $len i32)
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:length_
-  local.set $oldLen
-  local.get $oldLen
-  i32.const 1
-  i32.add
-  local.set $len
-  local.get $this
-  local.get $len
-  i32.const 2
-  i32.const 1
-  call $~lib/array/ensureCapacity
-  i32.const 1
-  drop
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:dataStart
-  local.get $oldLen
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $value
-  i32.store $0
-  local.get $this
-  local.get $value
-  i32.const 1
-  call $~lib/rt/itcms/__link
-  local.get $this
-  local.get $len
-  call $~lib/array/Array<~lib/string/String>#set:length_
-  local.get $len
-  return
- )
- (func $~lib/string/String#split@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $separator i32) (param $limit i32) (result i32)
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $separator
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $limit
-  end
-  local.get $this
-  local.get $separator
-  local.get $limit
-  call $~lib/string/String#split
- )
- (func $~lib/array/Array<~lib/string/String>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:length_
-  return
  )
  (func $~lib/util/number/decimalCount32 (type $i32_=>_i32) (param $value i32) (result i32)
   local.get $value
@@ -8428,14 +5499,6 @@
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
-  i32.const 0
-  drop
-  local.get $this
-  call $~lib/array/Array<i32>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
- )
  (func $~lib/array/Array<i32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -8447,48 +5510,6 @@
  (func $~lib/array/Array<~lib/string/String>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
- )
- (func $~lib/array/Array<~lib/string/String>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
-  (local $cur i32)
-  (local $end i32)
-  (local $val i32)
-  i32.const 1
-  drop
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:dataStart
-  local.set $cur
-  local.get $cur
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:length_
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $end
-  loop $while-continue|0
-   local.get $cur
-   local.get $end
-   i32.lt_u
-   if
-    local.get $cur
-    i32.load $0
-    local.set $val
-    local.get $val
-    if
-     local.get $val
-     local.get $cookie
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $cur
-    i32.const 4
-    i32.add
-    local.set $cur
-    br $while-continue|0
-   end
-  end
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
  )
  (func $~lib/array/Array<~lib/string/String>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
@@ -8551,6 +5572,5950 @@
    unreachable
   end
  )
+ (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+  (local $leftLength i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $left
+  local.get $right
+  i32.eq
+  if
+   i32.const 1
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
+   return
+  end
+  local.get $left
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $right
+   i32.const 0
+   i32.eq
+  end
+  if
+   i32.const 0
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
+   return
+  end
+  local.get $left
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/string/String#get:length
+  local.set $leftLength
+  local.get $leftLength
+  local.get $right
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
+   return
+  end
+  local.get $left
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  i32.const 0
+  local.get $right
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0 offset=4
+  local.get $3
+  i32.const 0
+  local.get $leftLength
+  call $~lib/util/string/compareImpl
+  i32.eqz
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
+ )
+ (func $~lib/string/String#charCodeAt (type $i32_i32_=>_i32) (param $this i32) (param $pos i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $pos
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  call $~lib/string/String#get:length
+  i32.ge_u
+  if
+   i32.const -1
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $2
+   return
+  end
+  local.get $this
+  local.get $pos
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u $0
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $~lib/string/String#codePointAt (type $i32_i32_=>_i32) (param $this i32) (param $pos i32) (result i32)
+  (local $len i32)
+  (local $first i32)
+  (local $second i32)
+  (local $5 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $pos
+  local.get $len
+  i32.ge_u
+  if
+   i32.const -1
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $5
+   return
+  end
+  local.get $this
+  local.get $pos
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u $0
+  local.set $first
+  local.get $first
+  i32.const 64512
+  i32.and
+  i32.const 55296
+  i32.ne
+  if (result i32)
+   i32.const 1
+  else
+   local.get $pos
+   i32.const 1
+   i32.add
+   local.get $len
+   i32.eq
+  end
+  if
+   local.get $first
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $5
+   return
+  end
+  local.get $this
+  local.get $pos
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u $0 offset=2
+  local.set $second
+  local.get $second
+  i32.const 64512
+  i32.and
+  i32.const 56320
+  i32.ne
+  if
+   local.get $first
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $5
+   return
+  end
+  local.get $first
+  i32.const 55296
+  i32.sub
+  i32.const 10
+  i32.shl
+  local.get $second
+  i32.const 56320
+  i32.sub
+  i32.add
+  i32.const 65536
+  i32.add
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $5
+  return
+ )
+ (func $~lib/string/String#at (type $i32_i32_=>_i32) (param $this i32) (param $pos i32) (result i32)
+  (local $len i32)
+  (local $out i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $pos
+  i32.const 0
+  local.get $len
+  local.get $pos
+  i32.const 0
+  i32.ge_s
+  select
+  i32.add
+  local.set $pos
+  local.get $pos
+  local.get $len
+  i32.ge_u
+  if
+   i32.const 240
+   i32.const 304
+   i32.const 57
+   i32.const 31
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.set $out
+  local.get $out
+  local.get $this
+  local.get $pos
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u $0
+  i32.store16 $0
+  local.get $out
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
+  return
+ )
+ (func $~lib/string/String#charAt (type $i32_i32_=>_i32) (param $this i32) (param $pos i32) (result i32)
+  (local $out i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $pos
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/string/String#get:length
+  i32.ge_u
+  if
+   i32.const 688
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 2
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $out
+  local.get $this
+  local.get $pos
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u $0
+  i32.store16 $0
+  local.get $out
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
+ )
+ (func $~lib/string/String.__not (type $i32_=>_i32) (param $str i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $str
+   local.set $1
+   global.get $~lib/memory/__stack_pointer
+   local.get $1
+   i32.store $0
+   local.get $1
+   call $~lib/string/String#get:length
+   i32.eqz
+  end
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $~lib/array/Array<i32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $~lib/array/Array<i32>#get:length_
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $~lib/string/String.fromCharCodes (type $i32_=>_i32) (param $units i32) (result i32)
+  (local $length i32)
+  (local $out i32)
+  (local $ptr i32)
+  (local $i i32)
+  (local $5 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $units
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/array/Array<i32>#get:length
+  local.set $length
+  global.get $~lib/memory/__stack_pointer
+  local.get $length
+  i32.const 1
+  i32.shl
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $units
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/array/Array<i32>#get:dataStart
+  local.set $ptr
+  i32.const 0
+  local.set $i
+  loop $for-loop|0
+   local.get $i
+   local.get $length
+   i32.lt_s
+   if
+    local.get $out
+    local.get $i
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $ptr
+    local.get $i
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.load $0
+    i32.store16 $0
+    local.get $i
+    i32.const 1
+    i32.add
+    local.set $i
+    br $for-loop|0
+   end
+  end
+  local.get $out
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $5
+  return
+ )
+ (func $~lib/string/String#startsWith (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
+  (local $len i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $searchStart i32)
+  (local $searchLength i32)
+  (local $10 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0
+  local.get $10
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $start
+  local.tee $4
+  i32.const 0
+  local.tee $5
+  local.get $4
+  local.get $5
+  i32.gt_s
+  select
+  local.tee $6
+  local.get $len
+  local.tee $7
+  local.get $6
+  local.get $7
+  i32.lt_s
+  select
+  local.set $searchStart
+  local.get $search
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0
+  local.get $10
+  call $~lib/string/String#get:length
+  local.set $searchLength
+  local.get $searchLength
+  local.get $searchStart
+  i32.add
+  local.get $len
+  i32.gt_s
+  if
+   i32.const 0
+   local.set $10
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $10
+   return
+  end
+  local.get $this
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0
+  local.get $10
+  local.get $searchStart
+  local.get $search
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0 offset=4
+  local.get $10
+  i32.const 0
+  local.get $searchLength
+  call $~lib/util/string/compareImpl
+  i32.eqz
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $10
+  return
+ )
+ (func $~lib/string/String#endsWith (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $end i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $searchLength i32)
+  (local $searchStart i32)
+  (local $9 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $end
+  local.tee $3
+  i32.const 0
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_s
+  select
+  local.tee $5
+  local.get $this
+  local.set $9
+  global.get $~lib/memory/__stack_pointer
+  local.get $9
+  i32.store $0
+  local.get $9
+  call $~lib/string/String#get:length
+  local.tee $6
+  local.get $5
+  local.get $6
+  i32.lt_s
+  select
+  local.set $end
+  local.get $search
+  local.set $9
+  global.get $~lib/memory/__stack_pointer
+  local.get $9
+  i32.store $0
+  local.get $9
+  call $~lib/string/String#get:length
+  local.set $searchLength
+  local.get $end
+  local.get $searchLength
+  i32.sub
+  local.set $searchStart
+  local.get $searchStart
+  i32.const 0
+  i32.lt_s
+  if
+   i32.const 0
+   local.set $9
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $9
+   return
+  end
+  local.get $this
+  local.set $9
+  global.get $~lib/memory/__stack_pointer
+  local.get $9
+  i32.store $0
+  local.get $9
+  local.get $searchStart
+  local.get $search
+  local.set $9
+  global.get $~lib/memory/__stack_pointer
+  local.get $9
+  i32.store $0 offset=4
+  local.get $9
+  i32.const 0
+  local.get $searchLength
+  call $~lib/util/string/compareImpl
+  i32.eqz
+  local.set $9
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $9
+  return
+ )
+ (func $~lib/string/String#endsWith@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $end i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/string/String.MAX_LENGTH
+   local.set $end
+  end
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  local.get $search
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0 offset=4
+  local.get $3
+  local.get $end
+  call $~lib/string/String#endsWith
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+ )
+ (func $~lib/string/String#indexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
+  (local $searchLen i32)
+  (local $len i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $searchStart i32)
+  (local $10 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $search
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0
+  local.get $10
+  call $~lib/string/String#get:length
+  local.set $searchLen
+  local.get $searchLen
+  i32.eqz
+  if
+   i32.const 0
+   local.set $10
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $10
+   return
+  end
+  local.get $this
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0
+  local.get $10
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $len
+  i32.eqz
+  if
+   i32.const -1
+   local.set $10
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $10
+   return
+  end
+  local.get $start
+  local.tee $5
+  i32.const 0
+  local.tee $6
+  local.get $5
+  local.get $6
+  i32.gt_s
+  select
+  local.tee $7
+  local.get $len
+  local.tee $8
+  local.get $7
+  local.get $8
+  i32.lt_s
+  select
+  local.set $searchStart
+  local.get $len
+  local.get $searchLen
+  i32.sub
+  local.set $len
+  loop $for-loop|0
+   local.get $searchStart
+   local.get $len
+   i32.le_s
+   if
+    local.get $this
+    local.set $10
+    global.get $~lib/memory/__stack_pointer
+    local.get $10
+    i32.store $0
+    local.get $10
+    local.get $searchStart
+    local.get $search
+    local.set $10
+    global.get $~lib/memory/__stack_pointer
+    local.get $10
+    i32.store $0 offset=4
+    local.get $10
+    i32.const 0
+    local.get $searchLen
+    call $~lib/util/string/compareImpl
+    i32.eqz
+    if
+     local.get $searchStart
+     local.set $10
+     global.get $~lib/memory/__stack_pointer
+     i32.const 8
+     i32.add
+     global.set $~lib/memory/__stack_pointer
+     local.get $10
+     return
+    end
+    local.get $searchStart
+    i32.const 1
+    i32.add
+    local.set $searchStart
+    br $for-loop|0
+   end
+  end
+  i32.const -1
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $10
+  return
+ )
+ (func $~lib/string/String#includes (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  local.get $search
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0 offset=4
+  local.get $3
+  local.get $start
+  call $~lib/string/String#indexOf
+  i32.const -1
+  i32.ne
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
+ )
+ (func $~lib/string/String#padStart (type $i32_i32_i32_=>_i32) (param $this i32) (param $length i32) (param $pad i32) (result i32)
+  (local $thisSize i32)
+  (local $targetSize i32)
+  (local $padSize i32)
+  (local $prependSize i32)
+  (local $out i32)
+  (local $repeatCount i32)
+  (local $restBase i32)
+  (local $restSize i32)
+  (local $11 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $11
+  global.get $~lib/memory/__stack_pointer
+  local.get $11
+  i32.store $0
+  local.get $11
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $thisSize
+  local.get $length
+  i32.const 1
+  i32.shl
+  local.set $targetSize
+  local.get $pad
+  local.set $11
+  global.get $~lib/memory/__stack_pointer
+  local.get $11
+  i32.store $0
+  local.get $11
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $padSize
+  local.get $targetSize
+  local.get $thisSize
+  i32.lt_u
+  if (result i32)
+   i32.const 1
+  else
+   local.get $padSize
+   i32.eqz
+  end
+  if
+   local.get $this
+   local.set $11
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $11
+   return
+  end
+  local.get $targetSize
+  local.get $thisSize
+  i32.sub
+  local.set $prependSize
+  global.get $~lib/memory/__stack_pointer
+  local.get $targetSize
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $prependSize
+  local.get $padSize
+  i32.gt_u
+  if
+   local.get $prependSize
+   i32.const 2
+   i32.sub
+   local.get $padSize
+   i32.div_u
+   local.set $repeatCount
+   local.get $repeatCount
+   local.get $padSize
+   i32.mul
+   local.set $restBase
+   local.get $prependSize
+   local.get $restBase
+   i32.sub
+   local.set $restSize
+   local.get $out
+   local.get $pad
+   local.get $padSize
+   local.get $repeatCount
+   call $~lib/memory/memory.repeat
+   local.get $out
+   local.get $restBase
+   i32.add
+   local.get $pad
+   local.get $restSize
+   memory.copy $0 $0
+  else
+   local.get $out
+   local.get $pad
+   local.get $prependSize
+   memory.copy $0 $0
+  end
+  local.get $out
+  local.get $prependSize
+  i32.add
+  local.get $this
+  local.get $thisSize
+  memory.copy $0 $0
+  local.get $out
+  local.set $11
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $11
+  return
+ )
+ (func $~lib/string/String#padEnd (type $i32_i32_i32_=>_i32) (param $this i32) (param $length i32) (param $pad i32) (result i32)
+  (local $thisSize i32)
+  (local $targetSize i32)
+  (local $padSize i32)
+  (local $appendSize i32)
+  (local $out i32)
+  (local $repeatCount i32)
+  (local $restBase i32)
+  (local $restSize i32)
+  (local $11 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $11
+  global.get $~lib/memory/__stack_pointer
+  local.get $11
+  i32.store $0
+  local.get $11
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $thisSize
+  local.get $length
+  i32.const 1
+  i32.shl
+  local.set $targetSize
+  local.get $pad
+  local.set $11
+  global.get $~lib/memory/__stack_pointer
+  local.get $11
+  i32.store $0
+  local.get $11
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $padSize
+  local.get $targetSize
+  local.get $thisSize
+  i32.lt_u
+  if (result i32)
+   i32.const 1
+  else
+   local.get $padSize
+   i32.eqz
+  end
+  if
+   local.get $this
+   local.set $11
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $11
+   return
+  end
+  local.get $targetSize
+  local.get $thisSize
+  i32.sub
+  local.set $appendSize
+  global.get $~lib/memory/__stack_pointer
+  local.get $targetSize
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $out
+  local.get $this
+  local.get $thisSize
+  memory.copy $0 $0
+  local.get $appendSize
+  local.get $padSize
+  i32.gt_u
+  if
+   local.get $appendSize
+   i32.const 2
+   i32.sub
+   local.get $padSize
+   i32.div_u
+   local.set $repeatCount
+   local.get $repeatCount
+   local.get $padSize
+   i32.mul
+   local.set $restBase
+   local.get $appendSize
+   local.get $restBase
+   i32.sub
+   local.set $restSize
+   local.get $out
+   local.get $thisSize
+   i32.add
+   local.get $pad
+   local.get $padSize
+   local.get $repeatCount
+   call $~lib/memory/memory.repeat
+   local.get $out
+   local.get $thisSize
+   i32.add
+   local.get $restBase
+   i32.add
+   local.get $pad
+   local.get $restSize
+   memory.copy $0 $0
+  else
+   local.get $out
+   local.get $thisSize
+   i32.add
+   local.get $pad
+   local.get $appendSize
+   memory.copy $0 $0
+  end
+  local.get $out
+  local.set $11
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $11
+  return
+ )
+ (func $~lib/string/String#lastIndexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
+  (local $searchLen i32)
+  (local $len i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $searchStart i32)
+  (local $10 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $search
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0
+  local.get $10
+  call $~lib/string/String#get:length
+  local.set $searchLen
+  local.get $searchLen
+  i32.eqz
+  if
+   local.get $this
+   local.set $10
+   global.get $~lib/memory/__stack_pointer
+   local.get $10
+   i32.store $0
+   local.get $10
+   call $~lib/string/String#get:length
+   local.set $10
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $10
+   return
+  end
+  local.get $this
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0
+  local.get $10
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $len
+  i32.eqz
+  if
+   i32.const -1
+   local.set $10
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $10
+   return
+  end
+  local.get $start
+  local.tee $5
+  i32.const 0
+  local.tee $6
+  local.get $5
+  local.get $6
+  i32.gt_s
+  select
+  local.tee $7
+  local.get $len
+  local.get $searchLen
+  i32.sub
+  local.tee $8
+  local.get $7
+  local.get $8
+  i32.lt_s
+  select
+  local.set $searchStart
+  loop $for-loop|0
+   local.get $searchStart
+   i32.const 0
+   i32.ge_s
+   if
+    local.get $this
+    local.set $10
+    global.get $~lib/memory/__stack_pointer
+    local.get $10
+    i32.store $0
+    local.get $10
+    local.get $searchStart
+    local.get $search
+    local.set $10
+    global.get $~lib/memory/__stack_pointer
+    local.get $10
+    i32.store $0 offset=4
+    local.get $10
+    i32.const 0
+    local.get $searchLen
+    call $~lib/util/string/compareImpl
+    i32.eqz
+    if
+     local.get $searchStart
+     local.set $10
+     global.get $~lib/memory/__stack_pointer
+     i32.const 8
+     i32.add
+     global.set $~lib/memory/__stack_pointer
+     local.get $10
+     return
+    end
+    local.get $searchStart
+    i32.const 1
+    i32.sub
+    local.set $searchStart
+    br $for-loop|0
+   end
+  end
+  i32.const -1
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $10
+  return
+ )
+ (func $~lib/string/String#lastIndexOf@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $start
+  end
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  local.get $search
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0 offset=4
+  local.get $3
+  local.get $start
+  call $~lib/string/String#lastIndexOf
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+ )
+ (func $~lib/string/String#localeCompare (type $i32_i32_=>_i32) (param $this i32) (param $other i32) (result i32)
+  (local $alen i32)
+  (local $blen i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $res i32)
+  (local $7 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $other
+  local.get $this
+  i32.eq
+  if
+   i32.const 0
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $7
+   return
+  end
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/string/String#get:length
+  local.set $alen
+  local.get $other
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/string/String#get:length
+  local.set $blen
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  i32.const 0
+  local.get $other
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0 offset=4
+  local.get $7
+  i32.const 0
+  local.get $alen
+  local.tee $4
+  local.get $blen
+  local.tee $5
+  local.get $4
+  local.get $5
+  i32.lt_s
+  select
+  call $~lib/util/string/compareImpl
+  local.set $res
+  local.get $res
+  if (result i32)
+   local.get $res
+  else
+   local.get $alen
+   local.get $blen
+   i32.sub
+  end
+  local.set $res
+  local.get $res
+  i32.const 0
+  i32.gt_s
+  local.get $res
+  i32.const 0
+  i32.lt_s
+  i32.sub
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $7
+  return
+ )
+ (func $~lib/string/String#trimStart (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $size i32)
+  (local $offset i32)
+  (local $out i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $size
+  i32.const 0
+  local.set $offset
+  loop $while-continue|0
+   local.get $offset
+   local.get $size
+   i32.lt_u
+   if (result i32)
+    local.get $this
+    local.get $offset
+    i32.add
+    i32.load16_u $0
+    call $~lib/util/string/isSpace
+   else
+    i32.const 0
+   end
+   if
+    local.get $offset
+    i32.const 2
+    i32.add
+    local.set $offset
+    br $while-continue|0
+   end
+  end
+  local.get $offset
+  i32.eqz
+  if
+   local.get $this
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $size
+  local.get $offset
+  i32.sub
+  local.set $size
+  local.get $size
+  i32.eqz
+  if
+   i32.const 688
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $size
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $out
+  local.get $this
+  local.get $offset
+  i32.add
+  local.get $size
+  memory.copy $0 $0
+  local.get $out
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
+  return
+ )
+ (func $~lib/string/String#trimEnd (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $originalSize i32)
+  (local $size i32)
+  (local $out i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $originalSize
+  local.get $originalSize
+  local.set $size
+  loop $while-continue|0
+   local.get $size
+   if (result i32)
+    local.get $this
+    local.get $size
+    i32.add
+    i32.const 2
+    i32.sub
+    i32.load16_u $0
+    call $~lib/util/string/isSpace
+   else
+    i32.const 0
+   end
+   if
+    local.get $size
+    i32.const 2
+    i32.sub
+    local.set $size
+    br $while-continue|0
+   end
+  end
+  local.get $size
+  i32.eqz
+  if
+   i32.const 688
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $size
+  local.get $originalSize
+  i32.eq
+  if
+   local.get $this
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $size
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $out
+  local.get $this
+  local.get $size
+  memory.copy $0 $0
+  local.get $out
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
+  return
+ )
+ (func $~lib/string/String#trim (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $len i32)
+  (local $size i32)
+  (local $offset i32)
+  (local $out i32)
+  (local $5 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $len
+  i32.const 1
+  i32.shl
+  local.set $size
+  loop $while-continue|0
+   local.get $size
+   if (result i32)
+    local.get $this
+    local.get $size
+    i32.add
+    i32.const 2
+    i32.sub
+    i32.load16_u $0
+    call $~lib/util/string/isSpace
+   else
+    i32.const 0
+   end
+   if
+    local.get $size
+    i32.const 2
+    i32.sub
+    local.set $size
+    br $while-continue|0
+   end
+  end
+  i32.const 0
+  local.set $offset
+  loop $while-continue|1
+   local.get $offset
+   local.get $size
+   i32.lt_u
+   if (result i32)
+    local.get $this
+    local.get $offset
+    i32.add
+    i32.load16_u $0
+    call $~lib/util/string/isSpace
+   else
+    i32.const 0
+   end
+   if
+    local.get $offset
+    i32.const 2
+    i32.add
+    local.set $offset
+    local.get $size
+    i32.const 2
+    i32.sub
+    local.set $size
+    br $while-continue|1
+   end
+  end
+  local.get $size
+  i32.eqz
+  if
+   i32.const 688
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $5
+   return
+  end
+  local.get $offset
+  i32.eqz
+  if (result i32)
+   local.get $size
+   local.get $len
+   i32.const 1
+   i32.shl
+   i32.eq
+  else
+   i32.const 0
+  end
+  if
+   local.get $this
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $5
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $size
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $out
+  local.get $this
+  local.get $offset
+  i32.add
+  local.get $size
+  memory.copy $0 $0
+  local.get $out
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $5
+  return
+ )
+ (func $~lib/util/string/strtob (type $i32_=>_i32) (param $str i32) (result i32)
+  (local $size i32)
+  (local $offset i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $size
+  i32.const 0
+  local.set $offset
+  local.get $size
+  i32.const 8
+  i32.gt_u
+  if
+   loop $while-continue|0
+    local.get $size
+    if (result i32)
+     local.get $str
+     local.get $size
+     i32.add
+     i32.const 2
+     i32.sub
+     i32.load16_u $0
+     call $~lib/util/string/isSpace
+    else
+     i32.const 0
+    end
+    if
+     local.get $size
+     i32.const 2
+     i32.sub
+     local.set $size
+     br $while-continue|0
+    end
+   end
+   local.get $size
+   i32.const 8
+   i32.gt_u
+   if
+    loop $while-continue|1
+     local.get $offset
+     local.get $size
+     i32.lt_u
+     if (result i32)
+      local.get $str
+      local.get $offset
+      i32.add
+      i32.load16_u $0
+      call $~lib/util/string/isSpace
+     else
+      i32.const 0
+     end
+     if
+      local.get $offset
+      i32.const 2
+      i32.add
+      local.set $offset
+      br $while-continue|1
+     end
+    end
+    local.get $size
+    local.get $offset
+    i32.sub
+    local.set $size
+   end
+  end
+  local.get $size
+  i32.const 8
+  i32.ne
+  if
+   i32.const 0
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
+   return
+  end
+  local.get $str
+  local.get $offset
+  i32.add
+  i64.load $0
+  i64.const 28429475166421108
+  i64.eq
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
+ )
+ (func $~lib/util/string/strtol<f64> (type $i32_i32_=>_f64) (param $str i32) (param $radix i32) (result f64)
+  (local $len i32)
+  (local $ptr i32)
+  (local $code i32)
+  (local $sign f64)
+  (local $6 i32)
+  (local $num f64)
+  (local $initial i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 f64)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0
+  local.get $10
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $len
+  i32.eqz
+  if
+   i32.const 1
+   drop
+   f64.const nan:0x8000000000000
+   local.set $11
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $11
+   return
+  end
+  local.get $str
+  local.set $ptr
+  local.get $ptr
+  i32.load16_u $0
+  local.set $code
+  loop $while-continue|0
+   local.get $code
+   call $~lib/util/string/isSpace
+   if
+    local.get $ptr
+    i32.const 2
+    i32.add
+    local.tee $ptr
+    i32.load16_u $0
+    local.set $code
+    local.get $len
+    i32.const 1
+    i32.sub
+    local.set $len
+    br $while-continue|0
+   end
+  end
+  f64.const 1
+  local.set $sign
+  local.get $code
+  i32.const 45
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $code
+   i32.const 43
+   i32.eq
+  end
+  if
+   local.get $len
+   i32.const 1
+   i32.sub
+   local.tee $len
+   i32.eqz
+   if
+    i32.const 1
+    drop
+    f64.const nan:0x8000000000000
+    local.set $11
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $11
+    return
+   end
+   local.get $code
+   i32.const 45
+   i32.eq
+   if
+    f64.const -1
+    local.set $sign
+   end
+   local.get $ptr
+   i32.const 2
+   i32.add
+   local.tee $ptr
+   i32.load16_u $0
+   local.set $code
+  end
+  local.get $radix
+  if
+   local.get $radix
+   i32.const 2
+   i32.lt_s
+   if (result i32)
+    i32.const 1
+   else
+    local.get $radix
+    i32.const 36
+    i32.gt_s
+   end
+   if
+    i32.const 1
+    drop
+    f64.const nan:0x8000000000000
+    local.set $11
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $11
+    return
+   end
+   local.get $radix
+   i32.const 16
+   i32.eq
+   if
+    local.get $len
+    i32.const 2
+    i32.gt_s
+    if (result i32)
+     local.get $code
+     i32.const 48
+     i32.eq
+    else
+     i32.const 0
+    end
+    if (result i32)
+     local.get $ptr
+     i32.load16_u $0 offset=2
+     i32.const 32
+     i32.or
+     i32.const 120
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $ptr
+     i32.const 4
+     i32.add
+     local.set $ptr
+     local.get $len
+     i32.const 2
+     i32.sub
+     local.set $len
+    end
+   end
+  else
+   local.get $code
+   i32.const 48
+   i32.eq
+   if (result i32)
+    local.get $len
+    i32.const 2
+    i32.gt_s
+   else
+    i32.const 0
+   end
+   if
+    block $break|1
+     block $case2|1
+      block $case1|1
+       block $case0|1
+        local.get $ptr
+        i32.load16_u $0 offset=2
+        i32.const 32
+        i32.or
+        local.set $6
+        local.get $6
+        i32.const 98
+        i32.eq
+        br_if $case0|1
+        local.get $6
+        i32.const 111
+        i32.eq
+        br_if $case1|1
+        local.get $6
+        i32.const 120
+        i32.eq
+        br_if $case2|1
+        br $break|1
+       end
+       local.get $ptr
+       i32.const 4
+       i32.add
+       local.set $ptr
+       local.get $len
+       i32.const 2
+       i32.sub
+       local.set $len
+       i32.const 2
+       local.set $radix
+       br $break|1
+      end
+      local.get $ptr
+      i32.const 4
+      i32.add
+      local.set $ptr
+      local.get $len
+      i32.const 2
+      i32.sub
+      local.set $len
+      i32.const 8
+      local.set $radix
+      br $break|1
+     end
+     local.get $ptr
+     i32.const 4
+     i32.add
+     local.set $ptr
+     local.get $len
+     i32.const 2
+     i32.sub
+     local.set $len
+     i32.const 16
+     local.set $radix
+     br $break|1
+    end
+   end
+   local.get $radix
+   i32.eqz
+   if
+    i32.const 10
+    local.set $radix
+   end
+  end
+  f64.const 0
+  local.set $num
+  local.get $len
+  i32.const 1
+  i32.sub
+  local.set $initial
+  block $while-break|2
+   loop $while-continue|2
+    local.get $len
+    local.tee $9
+    i32.const 1
+    i32.sub
+    local.set $len
+    local.get $9
+    if
+     local.get $ptr
+     i32.load16_u $0
+     local.set $code
+     local.get $code
+     i32.const 48
+     i32.sub
+     i32.const 10
+     i32.lt_u
+     if
+      local.get $code
+      i32.const 48
+      i32.sub
+      local.set $code
+     else
+      local.get $code
+      i32.const 65
+      i32.sub
+      i32.const 90
+      i32.const 65
+      i32.sub
+      i32.le_u
+      if
+       local.get $code
+       i32.const 65
+       i32.const 10
+       i32.sub
+       i32.sub
+       local.set $code
+      else
+       local.get $code
+       i32.const 97
+       i32.sub
+       i32.const 122
+       i32.const 97
+       i32.sub
+       i32.le_u
+       if
+        local.get $code
+        i32.const 97
+        i32.const 10
+        i32.sub
+        i32.sub
+        local.set $code
+       end
+      end
+     end
+     local.get $code
+     local.get $radix
+     i32.ge_u
+     if
+      local.get $initial
+      local.get $len
+      i32.eq
+      if
+       i32.const 1
+       drop
+       f64.const nan:0x8000000000000
+       local.set $11
+       global.get $~lib/memory/__stack_pointer
+       i32.const 4
+       i32.add
+       global.set $~lib/memory/__stack_pointer
+       local.get $11
+       return
+      end
+      br $while-break|2
+     end
+     local.get $num
+     local.get $radix
+     f64.convert_i32_s
+     f64.mul
+     local.get $code
+     f64.convert_i32_u
+     f64.add
+     local.set $num
+     local.get $ptr
+     i32.const 2
+     i32.add
+     local.set $ptr
+     br $while-continue|2
+    end
+   end
+  end
+  local.get $sign
+  local.get $num
+  f64.mul
+  local.set $11
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $11
+  return
+ )
+ (func $~lib/string/parseInt (type $i32_i32_=>_f64) (param $str i32) (param $radix i32) (result f64)
+  (local $2 i32)
+  (local $3 f64)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  local.get $radix
+  call $~lib/util/string/strtol<f64>
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
+ )
+ (func $~lib/util/string/strtod (type $i32_=>_f64) (param $str i32) (result f64)
+  (local $len i32)
+  (local $ptr i32)
+  (local $code i32)
+  (local $sign f64)
+  (local $savedPtr i32)
+  (local $pointed i32)
+  (local $consumed i32)
+  (local $position i32)
+  (local $x i64)
+  (local $noDigits i32)
+  (local $digit i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $ptr|14 i32)
+  (local $len|15 i32)
+  (local $sign|16 i32)
+  (local $magnitude i32)
+  (local $code|18 i32)
+  (local $digit|19 i32)
+  (local $significand i64)
+  (local $exp i32)
+  (local $significandf f64)
+  (local $n i32)
+  (local $24 i32)
+  (local $25 i32)
+  (local $n|26 i32)
+  (local $n|27 i32)
+  (local $significand|28 i64)
+  (local $exp|29 i32)
+  (local $shift i64)
+  (local $q i64)
+  (local $r i64)
+  (local $s i64)
+  (local $b i64)
+  (local $q|35 i64)
+  (local $r|36 i64)
+  (local $s|37 i64)
+  (local $significand|38 i64)
+  (local $exp|39 i32)
+  (local $shift|40 i64)
+  (local $a i64)
+  (local $b|42 i32)
+  (local $low i64)
+  (local $high i64)
+  (local $overflow i32)
+  (local $space i32)
+  (local $revspace i64)
+  (local $a|48 i64)
+  (local $b|49 i32)
+  (local $low|50 i64)
+  (local $high|51 i64)
+  (local $overflow|52 i32)
+  (local $space|53 i32)
+  (local $revspace|54 i64)
+  (local $55 i32)
+  (local $56 f64)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $len
+  i32.eqz
+  if
+   f64.const nan:0x8000000000000
+   local.set $56
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $56
+   return
+  end
+  local.get $str
+  local.set $ptr
+  local.get $ptr
+  i32.load16_u $0
+  local.set $code
+  f64.const 1
+  local.set $sign
+  loop $while-continue|0
+   local.get $len
+   if (result i32)
+    local.get $code
+    call $~lib/util/string/isSpace
+   else
+    i32.const 0
+   end
+   if
+    local.get $ptr
+    i32.const 2
+    i32.add
+    local.tee $ptr
+    i32.load16_u $0
+    local.set $code
+    local.get $len
+    i32.const 1
+    i32.sub
+    local.set $len
+    br $while-continue|0
+   end
+  end
+  local.get $len
+  i32.eqz
+  if
+   f64.const nan:0x8000000000000
+   local.set $56
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $56
+   return
+  end
+  local.get $code
+  i32.const 45
+  i32.eq
+  if
+   local.get $len
+   i32.const 1
+   i32.sub
+   local.tee $len
+   i32.eqz
+   if
+    f64.const nan:0x8000000000000
+    local.set $56
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $56
+    return
+   end
+   local.get $ptr
+   i32.const 2
+   i32.add
+   local.tee $ptr
+   i32.load16_u $0
+   local.set $code
+   f64.const -1
+   local.set $sign
+  else
+   local.get $code
+   i32.const 43
+   i32.eq
+   if
+    local.get $len
+    i32.const 1
+    i32.sub
+    local.tee $len
+    i32.eqz
+    if
+     f64.const nan:0x8000000000000
+     local.set $56
+     global.get $~lib/memory/__stack_pointer
+     i32.const 4
+     i32.add
+     global.set $~lib/memory/__stack_pointer
+     local.get $56
+     return
+    end
+    local.get $ptr
+    i32.const 2
+    i32.add
+    local.tee $ptr
+    i32.load16_u $0
+    local.set $code
+   end
+  end
+  local.get $len
+  i32.const 8
+  i32.ge_s
+  if (result i32)
+   local.get $code
+   i32.const 73
+   i32.eq
+  else
+   i32.const 0
+  end
+  if
+   local.get $ptr
+   i64.load $0
+   i64.const 29555310648492105
+   i64.eq
+   if (result i32)
+    local.get $ptr
+    i64.load $0 offset=8
+    i64.const 34058970405077102
+    i64.eq
+   else
+    i32.const 0
+   end
+   if
+    f64.const inf
+    local.get $sign
+    f64.mul
+    local.set $56
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $56
+    return
+   end
+   f64.const nan:0x8000000000000
+   local.set $56
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $56
+   return
+  end
+  local.get $code
+  i32.const 46
+  i32.ne
+  if (result i32)
+   local.get $code
+   i32.const 48
+   i32.sub
+   i32.const 10
+   i32.ge_u
+  else
+   i32.const 0
+  end
+  if
+   f64.const nan:0x8000000000000
+   local.set $56
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $56
+   return
+  end
+  local.get $ptr
+  local.set $savedPtr
+  loop $while-continue|1
+   local.get $code
+   i32.const 48
+   i32.eq
+   if
+    local.get $ptr
+    i32.const 2
+    i32.add
+    local.tee $ptr
+    i32.load16_u $0
+    local.set $code
+    local.get $len
+    i32.const 1
+    i32.sub
+    local.set $len
+    br $while-continue|1
+   end
+  end
+  local.get $len
+  i32.const 0
+  i32.le_s
+  if
+   f64.const 0
+   local.get $sign
+   f64.mul
+   local.set $56
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $56
+   return
+  end
+  i32.const 0
+  local.set $pointed
+  i32.const 0
+  local.set $consumed
+  i32.const 0
+  local.set $position
+  i64.const 0
+  local.set $x
+  local.get $code
+  i32.const 46
+  i32.eq
+  if
+   local.get $savedPtr
+   local.get $ptr
+   i32.sub
+   i32.eqz
+   local.set $noDigits
+   local.get $ptr
+   i32.const 2
+   i32.add
+   local.set $ptr
+   local.get $len
+   i32.const 1
+   i32.sub
+   local.set $len
+   local.get $len
+   i32.eqz
+   if (result i32)
+    local.get $noDigits
+   else
+    i32.const 0
+   end
+   if
+    f64.const nan:0x8000000000000
+    local.set $56
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $56
+    return
+   end
+   i32.const 1
+   local.set $pointed
+   loop $for-loop|2
+    local.get $ptr
+    i32.load16_u $0
+    local.tee $code
+    i32.const 48
+    i32.eq
+    if
+     local.get $len
+     i32.const 1
+     i32.sub
+     local.set $len
+     local.get $position
+     i32.const 1
+     i32.sub
+     local.set $position
+     local.get $ptr
+     i32.const 2
+     i32.add
+     local.set $ptr
+     br $for-loop|2
+    end
+   end
+   local.get $len
+   i32.const 0
+   i32.le_s
+   if
+    f64.const 0
+    local.get $sign
+    f64.mul
+    local.set $56
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $56
+    return
+   end
+   local.get $position
+   i32.eqz
+   if (result i32)
+    local.get $noDigits
+   else
+    i32.const 0
+   end
+   if (result i32)
+    local.get $code
+    i32.const 48
+    i32.sub
+    i32.const 10
+    i32.ge_u
+   else
+    i32.const 0
+   end
+   if
+    f64.const nan:0x8000000000000
+    local.set $56
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $56
+    return
+   end
+  end
+  local.get $code
+  i32.const 48
+  i32.sub
+  local.set $digit
+  block $for-break3
+   loop $for-loop|3
+    local.get $digit
+    i32.const 10
+    i32.lt_u
+    if (result i32)
+     i32.const 1
+    else
+     local.get $code
+     i32.const 46
+     i32.eq
+     if (result i32)
+      local.get $pointed
+      i32.eqz
+     else
+      i32.const 0
+     end
+    end
+    if
+     local.get $digit
+     i32.const 10
+     i32.lt_u
+     if
+      local.get $consumed
+      i32.const 19
+      i32.lt_s
+      if (result i64)
+       i64.const 10
+       local.get $x
+       i64.mul
+       local.get $digit
+       i64.extend_i32_u
+       i64.add
+      else
+       local.get $x
+       local.get $digit
+       i32.eqz
+       i32.eqz
+       i64.extend_i32_u
+       i64.or
+      end
+      local.set $x
+      local.get $consumed
+      i32.const 1
+      i32.add
+      local.set $consumed
+     else
+      local.get $consumed
+      local.set $position
+      i32.const 1
+      local.set $pointed
+     end
+     local.get $len
+     i32.const 1
+     i32.sub
+     local.tee $len
+     i32.eqz
+     if
+      br $for-break3
+     end
+     local.get $ptr
+     i32.const 2
+     i32.add
+     local.tee $ptr
+     i32.load16_u $0
+     local.set $code
+     local.get $code
+     i32.const 48
+     i32.sub
+     local.set $digit
+     br $for-loop|3
+    end
+   end
+  end
+  local.get $pointed
+  i32.eqz
+  if
+   local.get $consumed
+   local.set $position
+  end
+  block $~lib/util/string/scientific|inlined.0 (result f64)
+   local.get $x
+   local.set $significand
+   local.get $position
+   i32.const 19
+   local.tee $12
+   local.get $consumed
+   local.tee $13
+   local.get $12
+   local.get $13
+   i32.lt_s
+   select
+   i32.sub
+   block $~lib/util/string/parseExp|inlined.0 (result i32)
+    local.get $ptr
+    local.set $ptr|14
+    local.get $len
+    local.set $len|15
+    i32.const 1
+    local.set $sign|16
+    i32.const 0
+    local.set $magnitude
+    local.get $ptr|14
+    i32.load16_u $0
+    local.set $code|18
+    local.get $code|18
+    i32.const 32
+    i32.or
+    i32.const 101
+    i32.ne
+    if
+     i32.const 0
+     br $~lib/util/string/parseExp|inlined.0
+    end
+    local.get $len|15
+    i32.const 1
+    i32.sub
+    local.tee $len|15
+    i32.eqz
+    if
+     i32.const 0
+     br $~lib/util/string/parseExp|inlined.0
+    end
+    local.get $ptr|14
+    i32.const 2
+    i32.add
+    local.tee $ptr|14
+    i32.load16_u $0
+    local.set $code|18
+    local.get $code|18
+    i32.const 45
+    i32.eq
+    if
+     local.get $len|15
+     i32.const 1
+     i32.sub
+     local.tee $len|15
+     i32.eqz
+     if
+      i32.const 0
+      br $~lib/util/string/parseExp|inlined.0
+     end
+     local.get $ptr|14
+     i32.const 2
+     i32.add
+     local.tee $ptr|14
+     i32.load16_u $0
+     local.set $code|18
+     i32.const -1
+     local.set $sign|16
+    else
+     local.get $code|18
+     i32.const 43
+     i32.eq
+     if
+      local.get $len|15
+      i32.const 1
+      i32.sub
+      local.tee $len|15
+      i32.eqz
+      if
+       i32.const 0
+       br $~lib/util/string/parseExp|inlined.0
+      end
+      local.get $ptr|14
+      i32.const 2
+      i32.add
+      local.tee $ptr|14
+      i32.load16_u $0
+      local.set $code|18
+     end
+    end
+    loop $while-continue|4
+     local.get $code|18
+     i32.const 48
+     i32.eq
+     if
+      local.get $len|15
+      i32.const 1
+      i32.sub
+      local.tee $len|15
+      i32.eqz
+      if
+       i32.const 0
+       br $~lib/util/string/parseExp|inlined.0
+      end
+      local.get $ptr|14
+      i32.const 2
+      i32.add
+      local.tee $ptr|14
+      i32.load16_u $0
+      local.set $code|18
+      br $while-continue|4
+     end
+    end
+    local.get $code|18
+    i32.const 48
+    i32.sub
+    local.set $digit|19
+    loop $for-loop|5
+     local.get $len|15
+     if (result i32)
+      local.get $digit|19
+      i32.const 10
+      i32.lt_u
+     else
+      i32.const 0
+     end
+     if
+      local.get $magnitude
+      i32.const 3200
+      i32.ge_s
+      if
+       local.get $sign|16
+       i32.const 3200
+       i32.mul
+       br $~lib/util/string/parseExp|inlined.0
+      end
+      i32.const 10
+      local.get $magnitude
+      i32.mul
+      local.get $digit|19
+      i32.add
+      local.set $magnitude
+      local.get $ptr|14
+      i32.const 2
+      i32.add
+      local.tee $ptr|14
+      i32.load16_u $0
+      local.set $code|18
+      local.get $len|15
+      i32.const 1
+      i32.sub
+      local.set $len|15
+      local.get $code|18
+      i32.const 48
+      i32.sub
+      local.set $digit|19
+      br $for-loop|5
+     end
+    end
+    local.get $sign|16
+    local.get $magnitude
+    i32.mul
+    br $~lib/util/string/parseExp|inlined.0
+   end
+   i32.add
+   local.set $exp
+   local.get $significand
+   i64.const 0
+   i64.ne
+   i32.eqz
+   if (result i32)
+    i32.const 1
+   else
+    local.get $exp
+    i32.const -342
+    i32.lt_s
+   end
+   if
+    f64.const 0
+    br $~lib/util/string/scientific|inlined.0
+   end
+   local.get $exp
+   i32.const 308
+   i32.gt_s
+   if
+    f64.const inf
+    br $~lib/util/string/scientific|inlined.0
+   end
+   local.get $significand
+   f64.convert_i64_u
+   local.set $significandf
+   local.get $exp
+   i32.eqz
+   if
+    local.get $significandf
+    br $~lib/util/string/scientific|inlined.0
+   end
+   local.get $exp
+   i32.const 22
+   i32.gt_s
+   if (result i32)
+    local.get $exp
+    i32.const 22
+    i32.const 15
+    i32.add
+    i32.le_s
+   else
+    i32.const 0
+   end
+   if
+    local.get $significandf
+    block $~lib/util/string/pow10|inlined.0 (result f64)
+     local.get $exp
+     i32.const 22
+     i32.sub
+     local.set $n
+     i32.const 3648
+     local.get $n
+     i32.const 3
+     i32.shl
+     i32.add
+     f64.load $0
+     br $~lib/util/string/pow10|inlined.0
+    end
+    f64.mul
+    local.set $significandf
+    i32.const 22
+    local.set $exp
+   end
+   local.get $significand
+   i64.const 9007199254740991
+   i64.le_u
+   if (result i32)
+    local.get $exp
+    local.tee $24
+    i32.const 31
+    i32.shr_s
+    local.tee $25
+    local.get $24
+    i32.add
+    local.get $25
+    i32.xor
+    i32.const 22
+    i32.le_s
+   else
+    i32.const 0
+   end
+   if
+    local.get $exp
+    i32.const 0
+    i32.gt_s
+    if
+     local.get $significandf
+     block $~lib/util/string/pow10|inlined.1 (result f64)
+      local.get $exp
+      local.set $n|26
+      i32.const 3648
+      local.get $n|26
+      i32.const 3
+      i32.shl
+      i32.add
+      f64.load $0
+      br $~lib/util/string/pow10|inlined.1
+     end
+     f64.mul
+     br $~lib/util/string/scientific|inlined.0
+    end
+    local.get $significandf
+    block $~lib/util/string/pow10|inlined.2 (result f64)
+     i32.const 0
+     local.get $exp
+     i32.sub
+     local.set $n|27
+     i32.const 3648
+     local.get $n|27
+     i32.const 3
+     i32.shl
+     i32.add
+     f64.load $0
+     br $~lib/util/string/pow10|inlined.2
+    end
+    f64.div
+    br $~lib/util/string/scientific|inlined.0
+   else
+    local.get $exp
+    i32.const 0
+    i32.lt_s
+    if
+     block $~lib/util/string/scaledown|inlined.0 (result f64)
+      local.get $significand
+      local.set $significand|28
+      local.get $exp
+      local.set $exp|29
+      local.get $significand|28
+      i64.clz
+      local.set $shift
+      local.get $significand|28
+      local.get $shift
+      i64.shl
+      local.set $significand|28
+      local.get $exp|29
+      i64.extend_i32_s
+      local.get $shift
+      i64.sub
+      local.set $shift
+      loop $for-loop|6
+       local.get $exp|29
+       i32.const -14
+       i32.le_s
+       if
+        local.get $significand|28
+        i64.const 6103515625
+        i64.div_u
+        local.set $q
+        local.get $significand|28
+        i64.const 6103515625
+        i64.rem_u
+        local.set $r
+        local.get $q
+        i64.clz
+        local.set $s
+        local.get $q
+        local.get $s
+        i64.shl
+        f64.const 0.00004294967296
+        local.get $r
+        local.get $s
+        i64.const 18
+        i64.sub
+        i64.shl
+        f64.convert_i64_u
+        f64.mul
+        f64.nearest
+        i64.trunc_sat_f64_u
+        i64.add
+        local.set $significand|28
+        local.get $shift
+        local.get $s
+        i64.sub
+        local.set $shift
+        local.get $exp|29
+        i32.const 14
+        i32.add
+        local.set $exp|29
+        br $for-loop|6
+       end
+      end
+      i32.const 5
+      i32.const 0
+      local.get $exp|29
+      i32.sub
+      call $~lib/math/ipow32
+      i64.extend_i32_s
+      local.set $b
+      local.get $significand|28
+      local.get $b
+      i64.div_u
+      local.set $q|35
+      local.get $significand|28
+      local.get $b
+      i64.rem_u
+      local.set $r|36
+      local.get $q|35
+      i64.clz
+      local.set $s|37
+      local.get $q|35
+      local.get $s|37
+      i64.shl
+      local.get $r|36
+      f64.convert_i64_u
+      i64.reinterpret_f64
+      local.get $s|37
+      i64.const 52
+      i64.shl
+      i64.add
+      f64.reinterpret_i64
+      local.get $b
+      f64.convert_i64_u
+      f64.div
+      i64.trunc_sat_f64_u
+      i64.add
+      local.set $significand|28
+      local.get $shift
+      local.get $s|37
+      i64.sub
+      local.set $shift
+      local.get $significand|28
+      f64.convert_i64_u
+      local.get $shift
+      i32.wrap_i64
+      call $~lib/math/NativeMath.scalbn
+      br $~lib/util/string/scaledown|inlined.0
+     end
+     br $~lib/util/string/scientific|inlined.0
+    else
+     block $~lib/util/string/scaleup|inlined.0 (result f64)
+      local.get $significand
+      local.set $significand|38
+      local.get $exp
+      local.set $exp|39
+      local.get $significand|38
+      i64.ctz
+      local.set $shift|40
+      local.get $significand|38
+      local.get $shift|40
+      i64.shr_u
+      local.set $significand|38
+      local.get $shift|40
+      local.get $exp|39
+      i64.extend_i32_s
+      i64.add
+      local.set $shift|40
+      local.get $shift|40
+      global.set $~lib/util/string/__fixmulShift
+      loop $for-loop|7
+       local.get $exp|39
+       i32.const 13
+       i32.ge_s
+       if
+        block $~lib/util/string/fixmul|inlined.0 (result i64)
+         local.get $significand|38
+         local.set $a
+         i32.const 1220703125
+         local.set $b|42
+         local.get $a
+         i64.const 4294967295
+         i64.and
+         local.get $b|42
+         i64.extend_i32_u
+         i64.mul
+         local.set $low
+         local.get $a
+         i64.const 32
+         i64.shr_u
+         local.get $b|42
+         i64.extend_i32_u
+         i64.mul
+         local.get $low
+         i64.const 32
+         i64.shr_u
+         i64.add
+         local.set $high
+         local.get $high
+         i64.const 32
+         i64.shr_u
+         i32.wrap_i64
+         local.set $overflow
+         local.get $overflow
+         i32.clz
+         local.set $space
+         i64.const 32
+         local.get $space
+         i64.extend_i32_u
+         i64.sub
+         local.set $revspace
+         global.get $~lib/util/string/__fixmulShift
+         local.get $revspace
+         i64.add
+         global.set $~lib/util/string/__fixmulShift
+         local.get $high
+         local.get $space
+         i64.extend_i32_u
+         i64.shl
+         local.get $low
+         i64.const 4294967295
+         i64.and
+         local.get $revspace
+         i64.shr_u
+         i64.or
+         local.get $low
+         local.get $space
+         i64.extend_i32_u
+         i64.shl
+         i64.const 31
+         i64.shr_u
+         i64.const 1
+         i64.and
+         i64.add
+         br $~lib/util/string/fixmul|inlined.0
+        end
+        local.set $significand|38
+        local.get $exp|39
+        i32.const 13
+        i32.sub
+        local.set $exp|39
+        br $for-loop|7
+       end
+      end
+      block $~lib/util/string/fixmul|inlined.1 (result i64)
+       local.get $significand|38
+       local.set $a|48
+       i32.const 5
+       local.get $exp|39
+       call $~lib/math/ipow32
+       local.set $b|49
+       local.get $a|48
+       i64.const 4294967295
+       i64.and
+       local.get $b|49
+       i64.extend_i32_u
+       i64.mul
+       local.set $low|50
+       local.get $a|48
+       i64.const 32
+       i64.shr_u
+       local.get $b|49
+       i64.extend_i32_u
+       i64.mul
+       local.get $low|50
+       i64.const 32
+       i64.shr_u
+       i64.add
+       local.set $high|51
+       local.get $high|51
+       i64.const 32
+       i64.shr_u
+       i32.wrap_i64
+       local.set $overflow|52
+       local.get $overflow|52
+       i32.clz
+       local.set $space|53
+       i64.const 32
+       local.get $space|53
+       i64.extend_i32_u
+       i64.sub
+       local.set $revspace|54
+       global.get $~lib/util/string/__fixmulShift
+       local.get $revspace|54
+       i64.add
+       global.set $~lib/util/string/__fixmulShift
+       local.get $high|51
+       local.get $space|53
+       i64.extend_i32_u
+       i64.shl
+       local.get $low|50
+       i64.const 4294967295
+       i64.and
+       local.get $revspace|54
+       i64.shr_u
+       i64.or
+       local.get $low|50
+       local.get $space|53
+       i64.extend_i32_u
+       i64.shl
+       i64.const 31
+       i64.shr_u
+       i64.const 1
+       i64.and
+       i64.add
+       br $~lib/util/string/fixmul|inlined.1
+      end
+      local.set $significand|38
+      global.get $~lib/util/string/__fixmulShift
+      local.set $shift|40
+      local.get $significand|38
+      f64.convert_i64_u
+      local.get $shift|40
+      i32.wrap_i64
+      call $~lib/math/NativeMath.scalbn
+      br $~lib/util/string/scaleup|inlined.0
+     end
+     br $~lib/util/string/scientific|inlined.0
+    end
+    unreachable
+   end
+   unreachable
+  end
+  local.get $sign
+  f64.copysign
+  local.set $56
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $56
+  return
+ )
+ (func $~lib/number/F32.parseFloat (type $i32_=>_f32) (param $value i32) (result f32)
+  (local $1 i32)
+  (local $2 f32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $value
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $~lib/util/string/strtod
+  f32.demote_f64
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $~lib/number/F64.parseFloat (type $i32_=>_f64) (param $value i32) (result f64)
+  (local $1 i32)
+  (local $2 f64)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $value
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $~lib/util/string/strtod
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $~lib/util/string/strtol<i32> (type $i32_i32_=>_i32) (param $str i32) (param $radix i32) (result i32)
+  (local $len i32)
+  (local $ptr i32)
+  (local $code i32)
+  (local $sign i32)
+  (local $6 i32)
+  (local $num i32)
+  (local $initial i32)
+  (local $9 i32)
+  (local $10 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0
+  local.get $10
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $len
+  i32.eqz
+  if
+   i32.const 0
+   drop
+   i32.const 0
+   local.set $10
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $10
+   return
+  end
+  local.get $str
+  local.set $ptr
+  local.get $ptr
+  i32.load16_u $0
+  local.set $code
+  loop $while-continue|0
+   local.get $code
+   call $~lib/util/string/isSpace
+   if
+    local.get $ptr
+    i32.const 2
+    i32.add
+    local.tee $ptr
+    i32.load16_u $0
+    local.set $code
+    local.get $len
+    i32.const 1
+    i32.sub
+    local.set $len
+    br $while-continue|0
+   end
+  end
+  i32.const 1
+  local.set $sign
+  local.get $code
+  i32.const 45
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $code
+   i32.const 43
+   i32.eq
+  end
+  if
+   local.get $len
+   i32.const 1
+   i32.sub
+   local.tee $len
+   i32.eqz
+   if
+    i32.const 0
+    drop
+    i32.const 0
+    local.set $10
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $10
+    return
+   end
+   local.get $code
+   i32.const 45
+   i32.eq
+   if
+    i32.const -1
+    local.set $sign
+   end
+   local.get $ptr
+   i32.const 2
+   i32.add
+   local.tee $ptr
+   i32.load16_u $0
+   local.set $code
+  end
+  local.get $radix
+  if
+   local.get $radix
+   i32.const 2
+   i32.lt_s
+   if (result i32)
+    i32.const 1
+   else
+    local.get $radix
+    i32.const 36
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    drop
+    i32.const 0
+    local.set $10
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $10
+    return
+   end
+   local.get $radix
+   i32.const 16
+   i32.eq
+   if
+    local.get $len
+    i32.const 2
+    i32.gt_s
+    if (result i32)
+     local.get $code
+     i32.const 48
+     i32.eq
+    else
+     i32.const 0
+    end
+    if (result i32)
+     local.get $ptr
+     i32.load16_u $0 offset=2
+     i32.const 32
+     i32.or
+     i32.const 120
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $ptr
+     i32.const 4
+     i32.add
+     local.set $ptr
+     local.get $len
+     i32.const 2
+     i32.sub
+     local.set $len
+    end
+   end
+  else
+   local.get $code
+   i32.const 48
+   i32.eq
+   if (result i32)
+    local.get $len
+    i32.const 2
+    i32.gt_s
+   else
+    i32.const 0
+   end
+   if
+    block $break|1
+     block $case2|1
+      block $case1|1
+       block $case0|1
+        local.get $ptr
+        i32.load16_u $0 offset=2
+        i32.const 32
+        i32.or
+        local.set $6
+        local.get $6
+        i32.const 98
+        i32.eq
+        br_if $case0|1
+        local.get $6
+        i32.const 111
+        i32.eq
+        br_if $case1|1
+        local.get $6
+        i32.const 120
+        i32.eq
+        br_if $case2|1
+        br $break|1
+       end
+       local.get $ptr
+       i32.const 4
+       i32.add
+       local.set $ptr
+       local.get $len
+       i32.const 2
+       i32.sub
+       local.set $len
+       i32.const 2
+       local.set $radix
+       br $break|1
+      end
+      local.get $ptr
+      i32.const 4
+      i32.add
+      local.set $ptr
+      local.get $len
+      i32.const 2
+      i32.sub
+      local.set $len
+      i32.const 8
+      local.set $radix
+      br $break|1
+     end
+     local.get $ptr
+     i32.const 4
+     i32.add
+     local.set $ptr
+     local.get $len
+     i32.const 2
+     i32.sub
+     local.set $len
+     i32.const 16
+     local.set $radix
+     br $break|1
+    end
+   end
+   local.get $radix
+   i32.eqz
+   if
+    i32.const 10
+    local.set $radix
+   end
+  end
+  i32.const 0
+  local.set $num
+  local.get $len
+  i32.const 1
+  i32.sub
+  local.set $initial
+  block $while-break|2
+   loop $while-continue|2
+    local.get $len
+    local.tee $9
+    i32.const 1
+    i32.sub
+    local.set $len
+    local.get $9
+    if
+     local.get $ptr
+     i32.load16_u $0
+     local.set $code
+     local.get $code
+     i32.const 48
+     i32.sub
+     i32.const 10
+     i32.lt_u
+     if
+      local.get $code
+      i32.const 48
+      i32.sub
+      local.set $code
+     else
+      local.get $code
+      i32.const 65
+      i32.sub
+      i32.const 90
+      i32.const 65
+      i32.sub
+      i32.le_u
+      if
+       local.get $code
+       i32.const 65
+       i32.const 10
+       i32.sub
+       i32.sub
+       local.set $code
+      else
+       local.get $code
+       i32.const 97
+       i32.sub
+       i32.const 122
+       i32.const 97
+       i32.sub
+       i32.le_u
+       if
+        local.get $code
+        i32.const 97
+        i32.const 10
+        i32.sub
+        i32.sub
+        local.set $code
+       end
+      end
+     end
+     local.get $code
+     local.get $radix
+     i32.ge_u
+     if
+      local.get $initial
+      local.get $len
+      i32.eq
+      if
+       i32.const 0
+       drop
+       i32.const 0
+       local.set $10
+       global.get $~lib/memory/__stack_pointer
+       i32.const 4
+       i32.add
+       global.set $~lib/memory/__stack_pointer
+       local.get $10
+       return
+      end
+      br $while-break|2
+     end
+     local.get $num
+     local.get $radix
+     i32.mul
+     local.get $code
+     i32.add
+     local.set $num
+     local.get $ptr
+     i32.const 2
+     i32.add
+     local.set $ptr
+     br $while-continue|2
+    end
+   end
+  end
+  local.get $sign
+  local.get $num
+  i32.mul
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $10
+  return
+ )
+ (func $~lib/number/I32.parseInt (type $i32_i32_=>_i32) (param $value i32) (param $radix i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $value
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  local.get $radix
+  call $~lib/util/string/strtol<i32>
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $~lib/util/string/strtol<i64> (type $i32_i32_=>_i64) (param $str i32) (param $radix i32) (result i64)
+  (local $len i32)
+  (local $ptr i32)
+  (local $code i32)
+  (local $sign i64)
+  (local $6 i32)
+  (local $num i64)
+  (local $initial i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i64)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.set $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.store $0
+  local.get $10
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $len
+  i32.eqz
+  if
+   i32.const 0
+   drop
+   i64.const 0
+   local.set $11
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $11
+   return
+  end
+  local.get $str
+  local.set $ptr
+  local.get $ptr
+  i32.load16_u $0
+  local.set $code
+  loop $while-continue|0
+   local.get $code
+   call $~lib/util/string/isSpace
+   if
+    local.get $ptr
+    i32.const 2
+    i32.add
+    local.tee $ptr
+    i32.load16_u $0
+    local.set $code
+    local.get $len
+    i32.const 1
+    i32.sub
+    local.set $len
+    br $while-continue|0
+   end
+  end
+  i64.const 1
+  local.set $sign
+  local.get $code
+  i32.const 45
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $code
+   i32.const 43
+   i32.eq
+  end
+  if
+   local.get $len
+   i32.const 1
+   i32.sub
+   local.tee $len
+   i32.eqz
+   if
+    i32.const 0
+    drop
+    i64.const 0
+    local.set $11
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $11
+    return
+   end
+   local.get $code
+   i32.const 45
+   i32.eq
+   if
+    i64.const -1
+    local.set $sign
+   end
+   local.get $ptr
+   i32.const 2
+   i32.add
+   local.tee $ptr
+   i32.load16_u $0
+   local.set $code
+  end
+  local.get $radix
+  if
+   local.get $radix
+   i32.const 2
+   i32.lt_s
+   if (result i32)
+    i32.const 1
+   else
+    local.get $radix
+    i32.const 36
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    drop
+    i64.const 0
+    local.set $11
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $11
+    return
+   end
+   local.get $radix
+   i32.const 16
+   i32.eq
+   if
+    local.get $len
+    i32.const 2
+    i32.gt_s
+    if (result i32)
+     local.get $code
+     i32.const 48
+     i32.eq
+    else
+     i32.const 0
+    end
+    if (result i32)
+     local.get $ptr
+     i32.load16_u $0 offset=2
+     i32.const 32
+     i32.or
+     i32.const 120
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $ptr
+     i32.const 4
+     i32.add
+     local.set $ptr
+     local.get $len
+     i32.const 2
+     i32.sub
+     local.set $len
+    end
+   end
+  else
+   local.get $code
+   i32.const 48
+   i32.eq
+   if (result i32)
+    local.get $len
+    i32.const 2
+    i32.gt_s
+   else
+    i32.const 0
+   end
+   if
+    block $break|1
+     block $case2|1
+      block $case1|1
+       block $case0|1
+        local.get $ptr
+        i32.load16_u $0 offset=2
+        i32.const 32
+        i32.or
+        local.set $6
+        local.get $6
+        i32.const 98
+        i32.eq
+        br_if $case0|1
+        local.get $6
+        i32.const 111
+        i32.eq
+        br_if $case1|1
+        local.get $6
+        i32.const 120
+        i32.eq
+        br_if $case2|1
+        br $break|1
+       end
+       local.get $ptr
+       i32.const 4
+       i32.add
+       local.set $ptr
+       local.get $len
+       i32.const 2
+       i32.sub
+       local.set $len
+       i32.const 2
+       local.set $radix
+       br $break|1
+      end
+      local.get $ptr
+      i32.const 4
+      i32.add
+      local.set $ptr
+      local.get $len
+      i32.const 2
+      i32.sub
+      local.set $len
+      i32.const 8
+      local.set $radix
+      br $break|1
+     end
+     local.get $ptr
+     i32.const 4
+     i32.add
+     local.set $ptr
+     local.get $len
+     i32.const 2
+     i32.sub
+     local.set $len
+     i32.const 16
+     local.set $radix
+     br $break|1
+    end
+   end
+   local.get $radix
+   i32.eqz
+   if
+    i32.const 10
+    local.set $radix
+   end
+  end
+  i64.const 0
+  local.set $num
+  local.get $len
+  i32.const 1
+  i32.sub
+  local.set $initial
+  block $while-break|2
+   loop $while-continue|2
+    local.get $len
+    local.tee $9
+    i32.const 1
+    i32.sub
+    local.set $len
+    local.get $9
+    if
+     local.get $ptr
+     i32.load16_u $0
+     local.set $code
+     local.get $code
+     i32.const 48
+     i32.sub
+     i32.const 10
+     i32.lt_u
+     if
+      local.get $code
+      i32.const 48
+      i32.sub
+      local.set $code
+     else
+      local.get $code
+      i32.const 65
+      i32.sub
+      i32.const 90
+      i32.const 65
+      i32.sub
+      i32.le_u
+      if
+       local.get $code
+       i32.const 65
+       i32.const 10
+       i32.sub
+       i32.sub
+       local.set $code
+      else
+       local.get $code
+       i32.const 97
+       i32.sub
+       i32.const 122
+       i32.const 97
+       i32.sub
+       i32.le_u
+       if
+        local.get $code
+        i32.const 97
+        i32.const 10
+        i32.sub
+        i32.sub
+        local.set $code
+       end
+      end
+     end
+     local.get $code
+     local.get $radix
+     i32.ge_u
+     if
+      local.get $initial
+      local.get $len
+      i32.eq
+      if
+       i32.const 0
+       drop
+       i64.const 0
+       local.set $11
+       global.get $~lib/memory/__stack_pointer
+       i32.const 4
+       i32.add
+       global.set $~lib/memory/__stack_pointer
+       local.get $11
+       return
+      end
+      br $while-break|2
+     end
+     local.get $num
+     local.get $radix
+     i64.extend_i32_s
+     i64.mul
+     local.get $code
+     i64.extend_i32_u
+     i64.add
+     local.set $num
+     local.get $ptr
+     i32.const 2
+     i32.add
+     local.set $ptr
+     br $while-continue|2
+    end
+   end
+  end
+  local.get $sign
+  local.get $num
+  i64.mul
+  local.set $11
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $11
+  return
+ )
+ (func $~lib/number/I64.parseInt (type $i32_i32_=>_i64) (param $value i32) (param $radix i32) (result i64)
+  (local $2 i32)
+  (local $3 i64)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $value
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  local.get $radix
+  call $~lib/util/string/strtol<i64>
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
+ )
+ (func $~lib/string/parseFloat (type $i32_=>_f64) (param $str i32) (result f64)
+  (local $1 i32)
+  (local $2 f64)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $~lib/util/string/strtod
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $~lib/string/String#concat (type $i32_i32_=>_i32) (param $this i32) (param $other i32) (result i32)
+  (local $thisSize i32)
+  (local $otherSize i32)
+  (local $outSize i32)
+  (local $out i32)
+  (local $6 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0
+  local.get $6
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $thisSize
+  local.get $other
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0
+  local.get $6
+  call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
+  local.set $otherSize
+  local.get $thisSize
+  local.get $otherSize
+  i32.add
+  local.set $outSize
+  local.get $outSize
+  i32.const 0
+  i32.eq
+  if
+   i32.const 688
+   local.set $6
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $6
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $outSize
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $out
+  local.get $this
+  local.get $thisSize
+  memory.copy $0 $0
+  local.get $out
+  local.get $thisSize
+  i32.add
+  local.get $other
+  local.get $otherSize
+  memory.copy $0 $0
+  local.get $out
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $6
+  return
+ )
+ (func $~lib/string/String.__concat (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $left
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  local.get $right
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  call $~lib/string/String#concat
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $~lib/string/String.__ne (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $left
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  local.get $right
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  call $~lib/string/String.__eq
+  i32.eqz
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $~lib/string/String.__gt (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+  (local $leftLength i32)
+  (local $rightLength i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $res i32)
+  (local $7 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $left
+  local.get $right
+  i32.eq
+  if
+   i32.const 0
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $7
+   return
+  end
+  local.get $left
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/string/String#get:length
+  local.set $leftLength
+  local.get $leftLength
+  i32.eqz
+  if
+   i32.const 0
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $7
+   return
+  end
+  local.get $right
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/string/String#get:length
+  local.set $rightLength
+  local.get $rightLength
+  i32.eqz
+  if
+   i32.const 1
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $7
+   return
+  end
+  local.get $left
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  i32.const 0
+  local.get $right
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0 offset=4
+  local.get $7
+  i32.const 0
+  local.get $leftLength
+  local.tee $4
+  local.get $rightLength
+  local.tee $5
+  local.get $4
+  local.get $5
+  i32.lt_s
+  select
+  call $~lib/util/string/compareImpl
+  local.set $res
+  local.get $res
+  if (result i32)
+   local.get $res
+   i32.const 0
+   i32.gt_s
+  else
+   local.get $leftLength
+   local.get $rightLength
+   i32.gt_s
+  end
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $7
+  return
+ )
+ (func $~lib/string/String.__lt (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+  (local $rightLength i32)
+  (local $leftLength i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $res i32)
+  (local $7 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $left
+  local.get $right
+  i32.eq
+  if
+   i32.const 0
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $7
+   return
+  end
+  local.get $right
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/string/String#get:length
+  local.set $rightLength
+  local.get $rightLength
+  i32.eqz
+  if
+   i32.const 0
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $7
+   return
+  end
+  local.get $left
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/string/String#get:length
+  local.set $leftLength
+  local.get $leftLength
+  i32.eqz
+  if
+   i32.const 1
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $7
+   return
+  end
+  local.get $left
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  i32.const 0
+  local.get $right
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0 offset=4
+  local.get $7
+  i32.const 0
+  local.get $leftLength
+  local.tee $4
+  local.get $rightLength
+  local.tee $5
+  local.get $4
+  local.get $5
+  i32.lt_s
+  select
+  call $~lib/util/string/compareImpl
+  local.set $res
+  local.get $res
+  if (result i32)
+   local.get $res
+   i32.const 0
+   i32.lt_s
+  else
+   local.get $leftLength
+   local.get $rightLength
+   i32.lt_s
+  end
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $7
+  return
+ )
+ (func $~lib/string/String.__gte (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $left
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  local.get $right
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  call $~lib/string/String.__lt
+  i32.eqz
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $~lib/string/String.__lte (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $left
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  local.get $right
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  call $~lib/string/String.__gt
+  i32.eqz
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $~lib/string/String#repeat (type $i32_i32_=>_i32) (param $this i32) (param $count i32) (result i32)
+  (local $length i32)
+  (local $out i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/String#get:length
+  local.set $length
+  local.get $count
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   i32.const 1
+  else
+   local.get $length
+   i64.extend_i32_s
+   local.get $count
+   i64.extend_i32_s
+   i64.mul
+   i64.const 1
+   i64.const 28
+   i64.shl
+   i64.gt_u
+  end
+  if
+   i32.const 13040
+   i32.const 304
+   i32.const 334
+   i32.const 7
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $count
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $length
+   i32.eqz
+  end
+  if
+   i32.const 688
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $count
+  i32.const 1
+  i32.eq
+  if
+   local.get $this
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $length
+  local.get $count
+  i32.mul
+  i32.const 1
+  i32.shl
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $out
+  local.get $this
+  local.get $length
+  i32.const 1
+  i32.shl
+  local.get $count
+  call $~lib/memory/memory.repeat
+  local.get $out
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
+  return
+ )
+ (func $~lib/string/String#replace (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $replacement i32) (result i32)
+  (local $len i32)
+  (local $slen i32)
+  (local $index i32)
+  (local $rlen i32)
+  (local $olen i32)
+  (local $out i32)
+  (local $9 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
+  local.get $this
+  local.set $9
+  global.get $~lib/memory/__stack_pointer
+  local.get $9
+  i32.store $0
+  local.get $9
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $search
+  local.set $9
+  global.get $~lib/memory/__stack_pointer
+  local.get $9
+  i32.store $0
+  local.get $9
+  call $~lib/string/String#get:length
+  local.set $slen
+  local.get $len
+  local.get $slen
+  i32.le_u
+  if
+   local.get $len
+   local.get $slen
+   i32.lt_u
+   if (result i32)
+    local.get $this
+   else
+    local.get $replacement
+    local.get $this
+    local.get $search
+    local.set $9
+    global.get $~lib/memory/__stack_pointer
+    local.get $9
+    i32.store $0
+    local.get $9
+    local.get $this
+    local.set $9
+    global.get $~lib/memory/__stack_pointer
+    local.get $9
+    i32.store $0 offset=4
+    local.get $9
+    call $~lib/string/String.__eq
+    select
+   end
+   local.set $9
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $9
+   return
+  end
+  local.get $this
+  local.set $9
+  global.get $~lib/memory/__stack_pointer
+  local.get $9
+  i32.store $0
+  local.get $9
+  local.get $search
+  local.set $9
+  global.get $~lib/memory/__stack_pointer
+  local.get $9
+  i32.store $0 offset=4
+  local.get $9
+  i32.const 0
+  call $~lib/string/String#indexOf
+  local.set $index
+  local.get $index
+  i32.const -1
+  i32.xor
+  if
+   local.get $replacement
+   local.set $9
+   global.get $~lib/memory/__stack_pointer
+   local.get $9
+   i32.store $0
+   local.get $9
+   call $~lib/string/String#get:length
+   local.set $rlen
+   local.get $len
+   local.get $slen
+   i32.sub
+   local.set $len
+   local.get $len
+   local.get $rlen
+   i32.add
+   local.set $olen
+   local.get $olen
+   if
+    global.get $~lib/memory/__stack_pointer
+    local.get $olen
+    i32.const 1
+    i32.shl
+    i32.const 2
+    call $~lib/rt/itcms/__new
+    local.tee $out
+    i32.store $0 offset=8
+    local.get $out
+    local.get $this
+    local.get $index
+    i32.const 1
+    i32.shl
+    memory.copy $0 $0
+    local.get $out
+    local.get $index
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $replacement
+    local.get $rlen
+    i32.const 1
+    i32.shl
+    memory.copy $0 $0
+    local.get $out
+    local.get $index
+    local.get $rlen
+    i32.add
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $this
+    local.get $index
+    local.get $slen
+    i32.add
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $len
+    local.get $index
+    i32.sub
+    i32.const 1
+    i32.shl
+    memory.copy $0 $0
+    local.get $out
+    local.set $9
+    global.get $~lib/memory/__stack_pointer
+    i32.const 12
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $9
+    return
+   end
+  end
+  local.get $this
+  local.set $9
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $9
+  return
+ )
+ (func $~lib/string/String#replaceAll (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $replacement i32) (result i32)
+  (local $thisLen i32)
+  (local $searchLen i32)
+  (local $replaceLen i32)
+  (local $out i32)
+  (local $offset i32)
+  (local $i i32)
+  (local $9 i32)
+  (local $prev i32)
+  (local $next i32)
+  (local $outSize i32)
+  (local $out|13 i32)
+  (local $out|14 i32)
+  (local $offset|15 i32)
+  (local $outSize|16 i32)
+  (local $chunk i32)
+  (local $rest i32)
+  (local $19 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 20
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.const 20
+  memory.fill $0
+  local.get $this
+  local.set $19
+  global.get $~lib/memory/__stack_pointer
+  local.get $19
+  i32.store $0
+  local.get $19
+  call $~lib/string/String#get:length
+  local.set $thisLen
+  local.get $search
+  local.set $19
+  global.get $~lib/memory/__stack_pointer
+  local.get $19
+  i32.store $0
+  local.get $19
+  call $~lib/string/String#get:length
+  local.set $searchLen
+  local.get $thisLen
+  local.get $searchLen
+  i32.le_u
+  if
+   local.get $thisLen
+   local.get $searchLen
+   i32.lt_u
+   if (result i32)
+    local.get $this
+   else
+    local.get $replacement
+    local.get $this
+    local.get $search
+    local.set $19
+    global.get $~lib/memory/__stack_pointer
+    local.get $19
+    i32.store $0
+    local.get $19
+    local.get $this
+    local.set $19
+    global.get $~lib/memory/__stack_pointer
+    local.get $19
+    i32.store $0 offset=4
+    local.get $19
+    call $~lib/string/String.__eq
+    select
+   end
+   local.set $19
+   global.get $~lib/memory/__stack_pointer
+   i32.const 20
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $19
+   return
+  end
+  local.get $replacement
+  local.set $19
+  global.get $~lib/memory/__stack_pointer
+  local.get $19
+  i32.store $0
+  local.get $19
+  call $~lib/string/String#get:length
+  local.set $replaceLen
+  local.get $searchLen
+  i32.eqz
+  if
+   local.get $replaceLen
+   i32.eqz
+   if
+    local.get $this
+    local.set $19
+    global.get $~lib/memory/__stack_pointer
+    i32.const 20
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $19
+    return
+   end
+   global.get $~lib/memory/__stack_pointer
+   local.get $thisLen
+   local.get $thisLen
+   i32.const 1
+   i32.add
+   local.get $replaceLen
+   i32.mul
+   i32.add
+   i32.const 1
+   i32.shl
+   i32.const 2
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0 offset=8
+   local.get $out
+   local.get $replacement
+   local.get $replaceLen
+   i32.const 1
+   i32.shl
+   memory.copy $0 $0
+   local.get $replaceLen
+   local.set $offset
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
+    local.get $i
+    local.get $thisLen
+    i32.lt_u
+    if
+     local.get $out
+     local.get $offset
+     local.tee $9
+     i32.const 1
+     i32.add
+     local.set $offset
+     local.get $9
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $this
+     local.get $i
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_u $0
+     i32.store16 $0
+     local.get $out
+     local.get $offset
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $replacement
+     local.get $replaceLen
+     i32.const 1
+     i32.shl
+     memory.copy $0 $0
+     local.get $offset
+     local.get $replaceLen
+     i32.add
+     local.set $offset
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
+   end
+   local.get $out
+   local.set $19
+   global.get $~lib/memory/__stack_pointer
+   i32.const 20
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $19
+   return
+  end
+  i32.const 0
+  local.set $prev
+  i32.const 0
+  local.set $next
+  local.get $searchLen
+  local.get $replaceLen
+  i32.eq
+  if
+   local.get $thisLen
+   i32.const 1
+   i32.shl
+   local.set $outSize
+   global.get $~lib/memory/__stack_pointer
+   local.get $outSize
+   i32.const 2
+   call $~lib/rt/itcms/__new
+   local.tee $out|13
+   i32.store $0 offset=12
+   local.get $out|13
+   local.get $this
+   local.get $outSize
+   memory.copy $0 $0
+   loop $while-continue|1
+    local.get $this
+    local.set $19
+    global.get $~lib/memory/__stack_pointer
+    local.get $19
+    i32.store $0
+    local.get $19
+    local.get $search
+    local.set $19
+    global.get $~lib/memory/__stack_pointer
+    local.get $19
+    i32.store $0 offset=4
+    local.get $19
+    local.get $prev
+    call $~lib/string/String#indexOf
+    local.tee $next
+    i32.const -1
+    i32.xor
+    if
+     local.get $out|13
+     local.get $next
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $replacement
+     local.get $replaceLen
+     i32.const 1
+     i32.shl
+     memory.copy $0 $0
+     local.get $next
+     local.get $searchLen
+     i32.add
+     local.set $prev
+     br $while-continue|1
+    end
+   end
+   local.get $out|13
+   local.set $19
+   global.get $~lib/memory/__stack_pointer
+   i32.const 20
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $19
+   return
+  end
+  i32.const 0
+  local.set $out|14
+  i32.const 0
+  local.set $offset|15
+  local.get $thisLen
+  local.set $outSize|16
+  loop $while-continue|2
+   local.get $this
+   local.set $19
+   global.get $~lib/memory/__stack_pointer
+   local.get $19
+   i32.store $0
+   local.get $19
+   local.get $search
+   local.set $19
+   global.get $~lib/memory/__stack_pointer
+   local.get $19
+   i32.store $0 offset=4
+   local.get $19
+   local.get $prev
+   call $~lib/string/String#indexOf
+   local.tee $next
+   i32.const -1
+   i32.xor
+   if
+    local.get $out|14
+    local.set $19
+    global.get $~lib/memory/__stack_pointer
+    local.get $19
+    i32.store $0
+    local.get $19
+    call $~lib/string/String.__not
+    if
+     global.get $~lib/memory/__stack_pointer
+     local.get $thisLen
+     i32.const 1
+     i32.shl
+     i32.const 2
+     call $~lib/rt/itcms/__new
+     local.tee $out|14
+     i32.store $0 offset=16
+    end
+    local.get $next
+    local.get $prev
+    i32.sub
+    local.set $chunk
+    local.get $offset|15
+    local.get $chunk
+    i32.add
+    local.get $replaceLen
+    i32.add
+    local.get $outSize|16
+    i32.gt_u
+    if
+     local.get $outSize|16
+     i32.const 1
+     i32.shl
+     local.set $outSize|16
+     global.get $~lib/memory/__stack_pointer
+     local.get $out|14
+     local.get $outSize|16
+     i32.const 1
+     i32.shl
+     call $~lib/rt/itcms/__renew
+     local.tee $out|14
+     i32.store $0 offset=16
+    end
+    local.get $out|14
+    local.get $offset|15
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $this
+    local.get $prev
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $chunk
+    i32.const 1
+    i32.shl
+    memory.copy $0 $0
+    local.get $offset|15
+    local.get $chunk
+    i32.add
+    local.set $offset|15
+    local.get $out|14
+    local.get $offset|15
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $replacement
+    local.get $replaceLen
+    i32.const 1
+    i32.shl
+    memory.copy $0 $0
+    local.get $offset|15
+    local.get $replaceLen
+    i32.add
+    local.set $offset|15
+    local.get $next
+    local.get $searchLen
+    i32.add
+    local.set $prev
+    br $while-continue|2
+   end
+  end
+  local.get $out|14
+  if
+   local.get $thisLen
+   local.get $prev
+   i32.sub
+   local.set $rest
+   local.get $offset|15
+   local.get $rest
+   i32.add
+   local.get $outSize|16
+   i32.gt_u
+   if
+    local.get $outSize|16
+    i32.const 1
+    i32.shl
+    local.set $outSize|16
+    global.get $~lib/memory/__stack_pointer
+    local.get $out|14
+    local.get $outSize|16
+    i32.const 1
+    i32.shl
+    call $~lib/rt/itcms/__renew
+    local.tee $out|14
+    i32.store $0 offset=16
+   end
+   local.get $rest
+   if
+    local.get $out|14
+    local.get $offset|15
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $this
+    local.get $prev
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $rest
+    i32.const 1
+    i32.shl
+    memory.copy $0 $0
+   end
+   local.get $rest
+   local.get $offset|15
+   i32.add
+   local.set $rest
+   local.get $outSize|16
+   local.get $rest
+   i32.gt_u
+   if
+    global.get $~lib/memory/__stack_pointer
+    local.get $out|14
+    local.get $rest
+    i32.const 1
+    i32.shl
+    call $~lib/rt/itcms/__renew
+    local.tee $out|14
+    i32.store $0 offset=16
+   end
+   local.get $out|14
+   local.set $19
+   global.get $~lib/memory/__stack_pointer
+   i32.const 20
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $19
+   return
+  end
+  local.get $this
+  local.set $19
+  global.get $~lib/memory/__stack_pointer
+  i32.const 20
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $19
+  return
+ )
+ (func $~lib/string/String#slice (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
+  (local $len i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $out i32)
+  (local $13 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $13
+  global.get $~lib/memory/__stack_pointer
+  local.get $13
+  i32.store $0
+  local.get $13
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $start
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $start
+   local.get $len
+   i32.add
+   local.tee $4
+   i32.const 0
+   local.tee $5
+   local.get $4
+   local.get $5
+   i32.gt_s
+   select
+  else
+   local.get $start
+   local.tee $6
+   local.get $len
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.lt_s
+   select
+  end
+  local.set $start
+  local.get $end
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $end
+   local.get $len
+   i32.add
+   local.tee $8
+   i32.const 0
+   local.tee $9
+   local.get $8
+   local.get $9
+   i32.gt_s
+   select
+  else
+   local.get $end
+   local.tee $10
+   local.get $len
+   local.tee $11
+   local.get $10
+   local.get $11
+   i32.lt_s
+   select
+  end
+  local.set $end
+  local.get $end
+  local.get $start
+  i32.sub
+  local.set $len
+  local.get $len
+  i32.const 0
+  i32.le_s
+  if
+   i32.const 688
+   local.set $13
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $13
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $len
+  i32.const 1
+  i32.shl
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $out
+  local.get $this
+  local.get $start
+  i32.const 1
+  i32.shl
+  i32.add
+  local.get $len
+  i32.const 1
+  i32.shl
+  memory.copy $0 $0
+  local.get $out
+  local.set $13
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $13
+  return
+ )
+ (func $~lib/string/String#slice@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  local.get $start
+  local.get $end
+  call $~lib/string/String#slice
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+ )
+ (func $~lib/string/String#substr (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $length i32) (result i32)
+  (local $intStart i32)
+  (local $end i32)
+  (local $len i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $size i32)
+  (local $out i32)
+  (local $14 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $start
+  local.set $intStart
+  local.get $length
+  local.set $end
+  local.get $this
+  local.set $14
+  global.get $~lib/memory/__stack_pointer
+  local.get $14
+  i32.store $0
+  local.get $14
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $intStart
+  i32.const 0
+  i32.lt_s
+  if
+   local.get $len
+   local.get $intStart
+   i32.add
+   local.tee $6
+   i32.const 0
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.gt_s
+   select
+   local.set $intStart
+  end
+  local.get $end
+  local.tee $8
+  i32.const 0
+  local.tee $9
+  local.get $8
+  local.get $9
+  i32.gt_s
+  select
+  local.tee $10
+  local.get $len
+  local.get $intStart
+  i32.sub
+  local.tee $11
+  local.get $10
+  local.get $11
+  i32.lt_s
+  select
+  i32.const 1
+  i32.shl
+  local.set $size
+  local.get $size
+  i32.const 0
+  i32.le_s
+  if
+   i32.const 688
+   local.set $14
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $14
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $size
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $out
+  local.get $this
+  local.get $intStart
+  i32.const 1
+  i32.shl
+  i32.add
+  local.get $size
+  memory.copy $0 $0
+  local.get $out
+  local.set $14
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $14
+  return
+ )
+ (func $~lib/string/String#substr@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $length i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $length
+  end
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  local.get $start
+  local.get $length
+  call $~lib/string/String#substr
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+ )
+ (func $~lib/string/String#substring (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
+  (local $len i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $finalStart i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $finalEnd i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $fromPos i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $toPos i32)
+  (local $size i32)
+  (local $out i32)
+  (local $22 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  local.set $22
+  global.get $~lib/memory/__stack_pointer
+  local.get $22
+  i32.store $0
+  local.get $22
+  call $~lib/string/String#get:length
+  local.set $len
+  local.get $start
+  local.tee $4
+  i32.const 0
+  local.tee $5
+  local.get $4
+  local.get $5
+  i32.gt_s
+  select
+  local.tee $6
+  local.get $len
+  local.tee $7
+  local.get $6
+  local.get $7
+  i32.lt_s
+  select
+  local.set $finalStart
+  local.get $end
+  local.tee $9
+  i32.const 0
+  local.tee $10
+  local.get $9
+  local.get $10
+  i32.gt_s
+  select
+  local.tee $11
+  local.get $len
+  local.tee $12
+  local.get $11
+  local.get $12
+  i32.lt_s
+  select
+  local.set $finalEnd
+  local.get $finalStart
+  local.tee $14
+  local.get $finalEnd
+  local.tee $15
+  local.get $14
+  local.get $15
+  i32.lt_s
+  select
+  i32.const 1
+  i32.shl
+  local.set $fromPos
+  local.get $finalStart
+  local.tee $17
+  local.get $finalEnd
+  local.tee $18
+  local.get $17
+  local.get $18
+  i32.gt_s
+  select
+  i32.const 1
+  i32.shl
+  local.set $toPos
+  local.get $toPos
+  local.get $fromPos
+  i32.sub
+  local.set $size
+  local.get $size
+  i32.eqz
+  if
+   i32.const 688
+   local.set $22
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $22
+   return
+  end
+  local.get $fromPos
+  i32.eqz
+  if (result i32)
+   local.get $toPos
+   local.get $len
+   i32.const 1
+   i32.shl
+   i32.eq
+  else
+   i32.const 0
+  end
+  if
+   local.get $this
+   local.set $22
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $22
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $size
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $out
+  i32.store $0 offset=4
+  local.get $out
+  local.get $this
+  local.get $fromPos
+  i32.add
+  local.get $size
+  memory.copy $0 $0
+  local.get $out
+  local.set $22
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $22
+  return
+ )
+ (func $~lib/string/String#substring@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  local.get $start
+  local.get $end
+  call $~lib/string/String#substring
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+ )
+ (func $~lib/array/ensureCapacity (type $i32_i32_i32_i32_=>_none) (param $array i32) (param $newSize i32) (param $alignLog2 i32) (param $canGrow i32)
+  (local $oldCapacity i32)
+  (local $oldData i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $newCapacity i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $newData i32)
+  (local $14 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $array
+  local.set $14
+  global.get $~lib/memory/__stack_pointer
+  local.get $14
+  i32.store $0
+  local.get $14
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
+  local.set $oldCapacity
+  local.get $newSize
+  local.get $oldCapacity
+  local.get $alignLog2
+  i32.shr_u
+  i32.gt_u
+  if
+   local.get $newSize
+   i32.const 1073741820
+   local.get $alignLog2
+   i32.shr_u
+   i32.gt_u
+   if
+    i32.const 13040
+    i32.const 14640
+    i32.const 19
+    i32.const 48
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $array
+   local.set $14
+   global.get $~lib/memory/__stack_pointer
+   local.get $14
+   i32.store $0
+   local.get $14
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $oldData
+   local.get $newSize
+   local.tee $6
+   i32.const 8
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.gt_u
+   select
+   local.get $alignLog2
+   i32.shl
+   local.set $newCapacity
+   local.get $canGrow
+   if
+    local.get $oldCapacity
+    i32.const 1
+    i32.shl
+    local.tee $9
+    i32.const 1073741820
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_u
+    select
+    local.tee $11
+    local.get $newCapacity
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_u
+    select
+    local.set $newCapacity
+   end
+   local.get $oldData
+   local.get $newCapacity
+   call $~lib/rt/itcms/__renew
+   local.set $newData
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Incremental
+   i32.ne
+   drop
+   local.get $newData
+   local.get $oldData
+   i32.ne
+   if
+    local.get $array
+    local.get $newData
+    i32.store $0
+    local.get $array
+    local.get $newData
+    i32.store $0 offset=4
+    local.get $array
+    local.get $newData
+    i32.const 0
+    call $~lib/rt/itcms/__link
+   end
+   local.get $array
+   local.get $newCapacity
+   i32.store $0 offset=8
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<~lib/string/String>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $index
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/array/Array<~lib/string/String>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 240
+    i32.const 14640
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 2
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   local.get $3
+   i32.store $0
+   local.get $3
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<~lib/string/String>#set:length_
+  end
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
+  local.get $index
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $value
+  i32.store $0
+  i32.const 1
+  drop
+  local.get $this
+  local.get $value
+  i32.const 1
+  call $~lib/rt/itcms/__link
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<~lib/string/String>#push (type $i32_i32_=>_i32) (param $this i32) (param $value i32) (result i32)
+  (local $oldLen i32)
+  (local $len i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/array/Array<~lib/string/String>#get:length_
+  local.set $oldLen
+  local.get $oldLen
+  i32.const 1
+  i32.add
+  local.set $len
+  local.get $this
+  local.get $len
+  i32.const 2
+  i32.const 1
+  call $~lib/array/ensureCapacity
+  i32.const 1
+  drop
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
+  local.get $oldLen
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $value
+  i32.store $0
+  local.get $this
+  local.get $value
+  i32.const 1
+  call $~lib/rt/itcms/__link
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $len
+  call $~lib/array/Array<~lib/string/String>#set:length_
+  local.get $len
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
+  return
+ )
  (func $~lib/string/String#split (type $i32_i32_i32_=>_i32) (param $this i32) (param $separator i32) (param $limit i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -8573,13 +11538,13 @@
   (local $out|21 i32)
   (local $22 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 36
+  i32.const 40
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.const 36
+  i32.const 40
   memory.fill $0
   local.get $limit
   i32.eqz
@@ -8591,7 +11556,7 @@
    call $~lib/rt/__newArray
    local.set $22
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 40
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $22
@@ -8621,16 +11586,26 @@
    local.get $3
    local.set $22
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 40
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $22
    return
   end
   local.get $this
+  local.set $22
+  global.get $~lib/memory/__stack_pointer
+  local.get $22
+  i32.store $0 offset=8
+  local.get $22
   call $~lib/string/String#get:length
   local.set $length
   local.get $separator
+  local.set $22
+  global.get $~lib/memory/__stack_pointer
+  local.get $22
+  i32.store $0 offset=8
+  local.get $22
   call $~lib/string/String#get:length
   local.set $sepLen
   local.get $limit
@@ -8653,7 +11628,7 @@
     call $~lib/rt/__newArray
     local.set $22
     global.get $~lib/memory/__stack_pointer
-    i32.const 36
+    i32.const 40
     i32.add
     global.set $~lib/memory/__stack_pointer
     local.get $22
@@ -8675,8 +11650,13 @@
    i32.const 0
    call $~lib/rt/__newArray
    local.tee $result
-   i32.store $0 offset=8
+   i32.store $0 offset=12
    local.get $result
+   local.set $22
+   global.get $~lib/memory/__stack_pointer
+   local.get $22
+   i32.store $0 offset=8
+   local.get $22
    call $~lib/array/Array<~lib/string/String>#get:dataStart
    local.set $resultStart
    i32.const 0
@@ -8691,7 +11671,7 @@
      i32.const 2
      call $~lib/rt/itcms/__new
      local.tee $charStr
-     i32.store $0 offset=12
+     i32.store $0 offset=16
      local.get $charStr
      local.get $this
      local.get $i
@@ -8721,7 +11701,7 @@
    local.get $result
    local.set $22
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 40
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $22
@@ -8737,15 +11717,20 @@
     i32.const 0
     call $~lib/rt/__newArray
     local.tee $result|13
-    i32.store $0 offset=16
+    i32.store $0 offset=20
     local.get $result|13
+    local.set $22
+    global.get $~lib/memory/__stack_pointer
+    local.get $22
+    i32.store $0 offset=8
+    local.get $22
     call $~lib/array/Array<~lib/string/String>#get:dataStart
     i32.const 688
     i32.store $0
     local.get $result|13
     local.set $22
     global.get $~lib/memory/__stack_pointer
-    i32.const 36
+    i32.const 40
     i32.add
     global.set $~lib/memory/__stack_pointer
     local.get $22
@@ -8759,7 +11744,7 @@
   i32.const 0
   call $~lib/rt/__newArray
   local.tee $result|14
-  i32.store $0 offset=20
+  i32.store $0 offset=24
   i32.const 0
   local.set $end
   i32.const 0
@@ -8768,7 +11753,17 @@
   local.set $i|17
   loop $while-continue|1
    local.get $this
+   local.set $22
+   global.get $~lib/memory/__stack_pointer
+   local.get $22
+   i32.store $0 offset=8
+   local.get $22
    local.get $separator
+   local.set $22
+   global.get $~lib/memory/__stack_pointer
+   local.get $22
+   i32.store $0 offset=28
+   local.get $22
    local.get $start
    call $~lib/string/String#indexOf
    local.tee $end
@@ -8790,7 +11785,7 @@
      i32.const 2
      call $~lib/rt/itcms/__new
      local.tee $out
-     i32.store $0 offset=24
+     i32.store $0 offset=32
      local.get $out
      local.get $this
      local.get $start
@@ -8802,11 +11797,26 @@
      i32.shl
      memory.copy $0 $0
      local.get $result|14
+     local.set $22
+     global.get $~lib/memory/__stack_pointer
+     local.get $22
+     i32.store $0 offset=8
+     local.get $22
      local.get $out
+     local.set $22
+     global.get $~lib/memory/__stack_pointer
+     local.get $22
+     i32.store $0 offset=28
+     local.get $22
      call $~lib/array/Array<~lib/string/String>#push
      drop
     else
      local.get $result|14
+     local.set $22
+     global.get $~lib/memory/__stack_pointer
+     local.get $22
+     i32.store $0 offset=8
+     local.get $22
      i32.const 688
      local.set $22
      global.get $~lib/memory/__stack_pointer
@@ -8826,7 +11836,7 @@
      local.get $result|14
      local.set $22
      global.get $~lib/memory/__stack_pointer
-     i32.const 36
+     i32.const 40
      i32.add
      global.set $~lib/memory/__stack_pointer
      local.get $22
@@ -8843,13 +11853,23 @@
   i32.eqz
   if
    local.get $result|14
+   local.set $22
+   global.get $~lib/memory/__stack_pointer
+   local.get $22
+   i32.store $0 offset=8
+   local.get $22
    local.get $this
+   local.set $22
+   global.get $~lib/memory/__stack_pointer
+   local.get $22
+   i32.store $0 offset=28
+   local.get $22
    call $~lib/array/Array<~lib/string/String>#push
    drop
    local.get $result|14
    local.set $22
    global.get $~lib/memory/__stack_pointer
-   i32.const 36
+   i32.const 40
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $22
@@ -8870,7 +11890,7 @@
    i32.const 2
    call $~lib/rt/itcms/__new
    local.tee $out|21
-   i32.store $0 offset=32
+   i32.store $0 offset=36
    local.get $out|21
    local.get $this
    local.get $start
@@ -8882,11 +11902,26 @@
    i32.shl
    memory.copy $0 $0
    local.get $result|14
+   local.set $22
+   global.get $~lib/memory/__stack_pointer
+   local.get $22
+   i32.store $0 offset=8
+   local.get $22
    local.get $out|21
+   local.set $22
+   global.get $~lib/memory/__stack_pointer
+   local.get $22
+   i32.store $0 offset=28
+   local.get $22
    call $~lib/array/Array<~lib/string/String>#push
    drop
   else
    local.get $result|14
+   local.set $22
+   global.get $~lib/memory/__stack_pointer
+   local.get $22
+   i32.store $0 offset=8
+   local.get $22
    i32.const 688
    local.set $22
    global.get $~lib/memory/__stack_pointer
@@ -8899,10 +11934,148 @@
   local.get $result|14
   local.set $22
   global.get $~lib/memory/__stack_pointer
-  i32.const 36
+  i32.const 40
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $22
+  return
+ )
+ (func $~lib/string/String#split@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $separator i32) (param $limit i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $separator
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $limit
+  end
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  local.get $separator
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0 offset=4
+  local.get $3
+  local.get $limit
+  call $~lib/string/String#split
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+ )
+ (func $~lib/array/Array<~lib/string/String>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $~lib/array/Array<~lib/string/String>#get:length_
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $~lib/array/Array<~lib/string/String>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
+  (local $value i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $index
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/array/Array<~lib/string/String>#get:length_
+  i32.ge_u
+  if
+   i32.const 240
+   i32.const 14640
+   i32.const 114
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
+  local.get $index
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load $0
+  local.tee $value
+  i32.store $0 offset=4
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  local.get $value
+  i32.eqz
+  if
+   i32.const 14688
+   i32.const 14640
+   i32.const 118
+   i32.const 40
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $value
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
   return
  )
  (func $start:std/string (type $none_=>_none)
@@ -11359,6 +14532,11 @@
    local.tee $6
    i32.store $0 offset=20
    local.get $6
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    call $~lib/util/string/strtob
    br $~lib/builtins/bool.parse|inlined.0
   end
@@ -11381,6 +14559,11 @@
    local.tee $7
    i32.store $0 offset=24
    local.get $7
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    call $~lib/util/string/strtob
    br $~lib/builtins/bool.parse|inlined.1
   end
@@ -11403,6 +14586,11 @@
    local.tee $8
    i32.store $0 offset=28
    local.get $8
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    call $~lib/util/string/strtob
    br $~lib/builtins/bool.parse|inlined.2
   end
@@ -11425,6 +14613,11 @@
    local.tee $9
    i32.store $0 offset=32
    local.get $9
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    call $~lib/util/string/strtob
    br $~lib/builtins/bool.parse|inlined.3
   end
@@ -11447,6 +14640,11 @@
    local.tee $10
    i32.store $0 offset=36
    local.get $10
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    call $~lib/util/string/strtob
    br $~lib/builtins/bool.parse|inlined.4
   end
@@ -11469,6 +14667,11 @@
    local.tee $11
    i32.store $0 offset=40
    local.get $11
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    call $~lib/util/string/strtob
    br $~lib/builtins/bool.parse|inlined.5
   end
@@ -11491,6 +14694,11 @@
    local.tee $12
    i32.store $0 offset=44
    local.get $12
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    call $~lib/util/string/strtob
    br $~lib/builtins/bool.parse|inlined.6
   end
@@ -12296,6 +15504,11 @@
    local.tee $22
    i32.store $0 offset=48
    local.get $22
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    call $~lib/util/string/strtod
    f32.demote_f64
    br $~lib/builtins/f32.parse|inlined.0
@@ -12318,6 +15531,11 @@
    local.tee $24
    i32.store $0 offset=52
    local.get $24
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    call $~lib/util/string/strtod
    br $~lib/builtins/f64.parse|inlined.0
   end
@@ -12360,6 +15578,11 @@
    i32.const 0
    local.set $27
    local.get $26
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    local.get $27
    call $~lib/util/string/strtol<i32>
    br $~lib/builtins/i32.parse|inlined.0
@@ -12402,6 +15625,11 @@
    i32.const 0
    local.set $29
    local.get $28
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0
+   local.get $55
    local.get $29
    call $~lib/util/string/strtol<i64>
    br $~lib/builtins/i64.parse|inlined.0
@@ -15179,6 +18407,11 @@
   local.tee $51
   i32.store $0 offset=80
   local.get $51
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   i32.const 12368
   local.set $55
   global.get $~lib/memory/__stack_pointer
@@ -15196,6 +18429,11 @@
    unreachable
   end
   local.get $51
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   i32.const 784
   local.set $55
   global.get $~lib/memory/__stack_pointer
@@ -16275,7 +19513,17 @@
   local.tee $53
   i32.store $0 offset=88
   local.get $52
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   local.get $53
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0 offset=4
+  local.get $55
   call $~lib/string/String.__gt
   i32.eqz
   if
@@ -18930,11 +22178,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -18981,6 +22239,11 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 0
   i32.eq
@@ -19013,11 +22276,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19064,11 +22337,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19115,11 +22398,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19139,6 +22432,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19158,6 +22456,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19204,11 +22507,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19228,6 +22541,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19247,6 +22565,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19293,11 +22616,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19317,6 +22650,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19336,6 +22674,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19355,6 +22698,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19401,11 +22749,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19425,6 +22783,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19444,6 +22807,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19463,6 +22831,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19509,11 +22882,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19533,6 +22916,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19552,6 +22940,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19571,6 +22964,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19617,11 +23015,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19641,6 +23049,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19660,6 +23073,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19704,6 +23122,11 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 0
   i32.eq
@@ -19734,11 +23157,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19783,11 +23216,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19832,11 +23275,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19856,6 +23309,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19875,6 +23333,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19919,11 +23382,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19943,6 +23416,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -19962,6 +23440,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -20006,11 +23489,21 @@
   local.tee $54
   i32.store $0 offset=92
   local.get $54
+  local.set $55
+  global.get $~lib/memory/__stack_pointer
+  local.get $55
+  i32.store $0
+  local.get $55
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -20030,6 +23523,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -20049,6 +23547,11 @@
   end
   if (result i32)
    local.get $54
+   local.set $55
+   global.get $~lib/memory/__stack_pointer
+   local.get $55
+   i32.store $0 offset=8
+   local.get $55
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $55
@@ -24920,9 +28423,8 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/string/String#charAt (type $i32_i32_=>_i32) (param $this i32) (param $pos i32) (result i32)
-  (local $out i32)
-  (local $3 i32)
+ (func $~lib/array/Array<i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -24931,42 +28433,91 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $pos
+  i32.const 0
+  drop
   local.get $this
-  call $~lib/string/String#get:length
-  i32.ge_u
-  if
-   i32.const 688
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  i32.const 2
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
+  local.get $2
   i32.store $0
-  local.get $out
-  local.get $this
-  local.get $pos
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.load16_u $0
-  i32.store16 $0
-  local.get $out
-  local.set $3
+  local.get $2
+  call $~lib/array/Array<i32>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $3
-  return
+ )
+ (func $~lib/array/Array<~lib/string/String>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  (local $cur i32)
+  (local $end i32)
+  (local $val i32)
+  (local $5 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  i32.const 1
+  drop
+  local.get $this
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
+  local.set $cur
+  local.get $cur
+  local.get $this
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/array/Array<~lib/string/String>#get:length_
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $end
+  loop $while-continue|0
+   local.get $cur
+   local.get $end
+   i32.lt_u
+   if
+    local.get $cur
+    i32.load $0
+    local.set $val
+    local.get $val
+    if
+     local.get $val
+     local.get $cookie
+     call $~lib/rt/itcms/__visit
+    end
+    local.get $cur
+    i32.const 4
+    i32.add
+    local.set $cur
+    br $while-continue|0
+   end
+  end
+  local.get $this
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/array/Array<~lib/string/String>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/string/String.fromCharCode (type $i32_i32_=>_i32) (param $unit i32) (param $surr i32) (result i32)
   (local $hasSur i32)
@@ -25063,69 +28614,6 @@
   local.get $7
   return
  )
- (func $~lib/string/String.fromCharCodes (type $i32_=>_i32) (param $units i32) (result i32)
-  (local $length i32)
-  (local $out i32)
-  (local $ptr i32)
-  (local $i i32)
-  (local $5 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $units
-  call $~lib/array/Array<i32>#get:length
-  local.set $length
-  global.get $~lib/memory/__stack_pointer
-  local.get $length
-  i32.const 1
-  i32.shl
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $units
-  call $~lib/array/Array<i32>#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   local.get $length
-   i32.lt_s
-   if
-    local.get $out
-    local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0
-    i32.store16 $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
-   end
-  end
-  local.get $out
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $5
-  return
- )
  (func $~lib/string/String.fromCodePoint (type $i32_=>_i32) (param $code i32) (result i32)
   (local $hasSur i32)
   (local $out i32)
@@ -25202,1622 +28690,6 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $5
-  return
- )
- (func $~lib/string/String#padStart (type $i32_i32_i32_=>_i32) (param $this i32) (param $length i32) (param $pad i32) (result i32)
-  (local $thisSize i32)
-  (local $targetSize i32)
-  (local $padSize i32)
-  (local $prependSize i32)
-  (local $out i32)
-  (local $repeatCount i32)
-  (local $restBase i32)
-  (local $restSize i32)
-  (local $11 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $thisSize
-  local.get $length
-  i32.const 1
-  i32.shl
-  local.set $targetSize
-  local.get $pad
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $padSize
-  local.get $targetSize
-  local.get $thisSize
-  i32.lt_u
-  if (result i32)
-   i32.const 1
-  else
-   local.get $padSize
-   i32.eqz
-  end
-  if
-   local.get $this
-   local.set $11
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $11
-   return
-  end
-  local.get $targetSize
-  local.get $thisSize
-  i32.sub
-  local.set $prependSize
-  global.get $~lib/memory/__stack_pointer
-  local.get $targetSize
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $prependSize
-  local.get $padSize
-  i32.gt_u
-  if
-   local.get $prependSize
-   i32.const 2
-   i32.sub
-   local.get $padSize
-   i32.div_u
-   local.set $repeatCount
-   local.get $repeatCount
-   local.get $padSize
-   i32.mul
-   local.set $restBase
-   local.get $prependSize
-   local.get $restBase
-   i32.sub
-   local.set $restSize
-   local.get $out
-   local.get $pad
-   local.get $padSize
-   local.get $repeatCount
-   call $~lib/memory/memory.repeat
-   local.get $out
-   local.get $restBase
-   i32.add
-   local.get $pad
-   local.get $restSize
-   memory.copy $0 $0
-  else
-   local.get $out
-   local.get $pad
-   local.get $prependSize
-   memory.copy $0 $0
-  end
-  local.get $out
-  local.get $prependSize
-  i32.add
-  local.get $this
-  local.get $thisSize
-  memory.copy $0 $0
-  local.get $out
-  local.set $11
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $11
-  return
- )
- (func $~lib/string/String#padEnd (type $i32_i32_i32_=>_i32) (param $this i32) (param $length i32) (param $pad i32) (result i32)
-  (local $thisSize i32)
-  (local $targetSize i32)
-  (local $padSize i32)
-  (local $appendSize i32)
-  (local $out i32)
-  (local $repeatCount i32)
-  (local $restBase i32)
-  (local $restSize i32)
-  (local $11 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $thisSize
-  local.get $length
-  i32.const 1
-  i32.shl
-  local.set $targetSize
-  local.get $pad
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $padSize
-  local.get $targetSize
-  local.get $thisSize
-  i32.lt_u
-  if (result i32)
-   i32.const 1
-  else
-   local.get $padSize
-   i32.eqz
-  end
-  if
-   local.get $this
-   local.set $11
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $11
-   return
-  end
-  local.get $targetSize
-  local.get $thisSize
-  i32.sub
-  local.set $appendSize
-  global.get $~lib/memory/__stack_pointer
-  local.get $targetSize
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $this
-  local.get $thisSize
-  memory.copy $0 $0
-  local.get $appendSize
-  local.get $padSize
-  i32.gt_u
-  if
-   local.get $appendSize
-   i32.const 2
-   i32.sub
-   local.get $padSize
-   i32.div_u
-   local.set $repeatCount
-   local.get $repeatCount
-   local.get $padSize
-   i32.mul
-   local.set $restBase
-   local.get $appendSize
-   local.get $restBase
-   i32.sub
-   local.set $restSize
-   local.get $out
-   local.get $thisSize
-   i32.add
-   local.get $pad
-   local.get $padSize
-   local.get $repeatCount
-   call $~lib/memory/memory.repeat
-   local.get $out
-   local.get $thisSize
-   i32.add
-   local.get $restBase
-   i32.add
-   local.get $pad
-   local.get $restSize
-   memory.copy $0 $0
-  else
-   local.get $out
-   local.get $thisSize
-   i32.add
-   local.get $pad
-   local.get $appendSize
-   memory.copy $0 $0
-  end
-  local.get $out
-  local.set $11
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $11
-  return
- )
- (func $~lib/string/String#trimStart (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $size i32)
-  (local $offset i32)
-  (local $out i32)
-  (local $4 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $size
-  i32.const 0
-  local.set $offset
-  loop $while-continue|0
-   local.get $offset
-   local.get $size
-   i32.lt_u
-   if (result i32)
-    local.get $this
-    local.get $offset
-    i32.add
-    i32.load16_u $0
-    call $~lib/util/string/isSpace
-   else
-    i32.const 0
-   end
-   if
-    local.get $offset
-    i32.const 2
-    i32.add
-    local.set $offset
-    br $while-continue|0
-   end
-  end
-  local.get $offset
-  i32.eqz
-  if
-   local.get $this
-   local.set $4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $4
-   return
-  end
-  local.get $size
-  local.get $offset
-  i32.sub
-  local.set $size
-  local.get $size
-  i32.eqz
-  if
-   i32.const 688
-   local.set $4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $4
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $size
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $this
-  local.get $offset
-  i32.add
-  local.get $size
-  memory.copy $0 $0
-  local.get $out
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $4
-  return
- )
- (func $~lib/string/String#trimEnd (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $originalSize i32)
-  (local $size i32)
-  (local $out i32)
-  (local $4 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $originalSize
-  local.get $originalSize
-  local.set $size
-  loop $while-continue|0
-   local.get $size
-   if (result i32)
-    local.get $this
-    local.get $size
-    i32.add
-    i32.const 2
-    i32.sub
-    i32.load16_u $0
-    call $~lib/util/string/isSpace
-   else
-    i32.const 0
-   end
-   if
-    local.get $size
-    i32.const 2
-    i32.sub
-    local.set $size
-    br $while-continue|0
-   end
-  end
-  local.get $size
-  i32.eqz
-  if
-   i32.const 688
-   local.set $4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $4
-   return
-  end
-  local.get $size
-  local.get $originalSize
-  i32.eq
-  if
-   local.get $this
-   local.set $4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $4
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $size
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $this
-  local.get $size
-  memory.copy $0 $0
-  local.get $out
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $4
-  return
- )
- (func $~lib/string/String#trim (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $len i32)
-  (local $size i32)
-  (local $offset i32)
-  (local $out i32)
-  (local $5 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $len
-  i32.const 1
-  i32.shl
-  local.set $size
-  loop $while-continue|0
-   local.get $size
-   if (result i32)
-    local.get $this
-    local.get $size
-    i32.add
-    i32.const 2
-    i32.sub
-    i32.load16_u $0
-    call $~lib/util/string/isSpace
-   else
-    i32.const 0
-   end
-   if
-    local.get $size
-    i32.const 2
-    i32.sub
-    local.set $size
-    br $while-continue|0
-   end
-  end
-  i32.const 0
-  local.set $offset
-  loop $while-continue|1
-   local.get $offset
-   local.get $size
-   i32.lt_u
-   if (result i32)
-    local.get $this
-    local.get $offset
-    i32.add
-    i32.load16_u $0
-    call $~lib/util/string/isSpace
-   else
-    i32.const 0
-   end
-   if
-    local.get $offset
-    i32.const 2
-    i32.add
-    local.set $offset
-    local.get $size
-    i32.const 2
-    i32.sub
-    local.set $size
-    br $while-continue|1
-   end
-  end
-  local.get $size
-  i32.eqz
-  if
-   i32.const 688
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $5
-   return
-  end
-  local.get $offset
-  i32.eqz
-  if (result i32)
-   local.get $size
-   local.get $len
-   i32.const 1
-   i32.shl
-   i32.eq
-  else
-   i32.const 0
-  end
-  if
-   local.get $this
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $5
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $size
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $this
-  local.get $offset
-  i32.add
-  local.get $size
-  memory.copy $0 $0
-  local.get $out
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $5
-  return
- )
- (func $~lib/string/String#concat (type $i32_i32_=>_i32) (param $this i32) (param $other i32) (result i32)
-  (local $thisSize i32)
-  (local $otherSize i32)
-  (local $outSize i32)
-  (local $out i32)
-  (local $6 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $thisSize
-  local.get $other
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.set $otherSize
-  local.get $thisSize
-  local.get $otherSize
-  i32.add
-  local.set $outSize
-  local.get $outSize
-  i32.const 0
-  i32.eq
-  if
-   i32.const 688
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $6
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $outSize
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $this
-  local.get $thisSize
-  memory.copy $0 $0
-  local.get $out
-  local.get $thisSize
-  i32.add
-  local.get $other
-  local.get $otherSize
-  memory.copy $0 $0
-  local.get $out
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $6
-  return
- )
- (func $~lib/string/String#repeat (type $i32_i32_=>_i32) (param $this i32) (param $count i32) (result i32)
-  (local $length i32)
-  (local $out i32)
-  (local $4 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $length
-  local.get $count
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $length
-   i64.extend_i32_s
-   local.get $count
-   i64.extend_i32_s
-   i64.mul
-   i64.const 1
-   i64.const 28
-   i64.shl
-   i64.gt_u
-  end
-  if
-   i32.const 13040
-   i32.const 304
-   i32.const 334
-   i32.const 7
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $count
-  i32.const 0
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $length
-   i32.eqz
-  end
-  if
-   i32.const 688
-   local.set $4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $4
-   return
-  end
-  local.get $count
-  i32.const 1
-  i32.eq
-  if
-   local.get $this
-   local.set $4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $4
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $length
-  local.get $count
-  i32.mul
-  i32.const 1
-  i32.shl
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $this
-  local.get $length
-  i32.const 1
-  i32.shl
-  local.get $count
-  call $~lib/memory/memory.repeat
-  local.get $out
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $4
-  return
- )
- (func $~lib/string/String#replace (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $replacement i32) (result i32)
-  (local $len i32)
-  (local $slen i32)
-  (local $index i32)
-  (local $rlen i32)
-  (local $olen i32)
-  (local $out i32)
-  (local $9 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $search
-  call $~lib/string/String#get:length
-  local.set $slen
-  local.get $len
-  local.get $slen
-  i32.le_u
-  if
-   local.get $len
-   local.get $slen
-   i32.lt_u
-   if (result i32)
-    local.get $this
-   else
-    local.get $replacement
-    local.get $this
-    local.get $search
-    local.get $this
-    call $~lib/string/String.__eq
-    select
-   end
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $9
-   return
-  end
-  local.get $this
-  local.get $search
-  i32.const 0
-  call $~lib/string/String#indexOf
-  local.set $index
-  local.get $index
-  i32.const -1
-  i32.xor
-  if
-   local.get $replacement
-   call $~lib/string/String#get:length
-   local.set $rlen
-   local.get $len
-   local.get $slen
-   i32.sub
-   local.set $len
-   local.get $len
-   local.get $rlen
-   i32.add
-   local.set $olen
-   local.get $olen
-   if
-    global.get $~lib/memory/__stack_pointer
-    local.get $olen
-    i32.const 1
-    i32.shl
-    i32.const 2
-    call $~lib/rt/itcms/__new
-    local.tee $out
-    i32.store $0
-    local.get $out
-    local.get $this
-    local.get $index
-    i32.const 1
-    i32.shl
-    memory.copy $0 $0
-    local.get $out
-    local.get $index
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $replacement
-    local.get $rlen
-    i32.const 1
-    i32.shl
-    memory.copy $0 $0
-    local.get $out
-    local.get $index
-    local.get $rlen
-    i32.add
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $this
-    local.get $index
-    local.get $slen
-    i32.add
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $len
-    local.get $index
-    i32.sub
-    i32.const 1
-    i32.shl
-    memory.copy $0 $0
-    local.get $out
-    local.set $9
-    global.get $~lib/memory/__stack_pointer
-    i32.const 4
-    i32.add
-    global.set $~lib/memory/__stack_pointer
-    local.get $9
-    return
-   end
-  end
-  local.get $this
-  local.set $9
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $9
-  return
- )
- (func $~lib/string/String#replaceAll (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $replacement i32) (result i32)
-  (local $thisLen i32)
-  (local $searchLen i32)
-  (local $replaceLen i32)
-  (local $out i32)
-  (local $offset i32)
-  (local $i i32)
-  (local $9 i32)
-  (local $prev i32)
-  (local $next i32)
-  (local $outSize i32)
-  (local $out|13 i32)
-  (local $out|14 i32)
-  (local $offset|15 i32)
-  (local $outSize|16 i32)
-  (local $chunk i32)
-  (local $rest i32)
-  (local $19 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0 offset=8
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $thisLen
-  local.get $search
-  call $~lib/string/String#get:length
-  local.set $searchLen
-  local.get $thisLen
-  local.get $searchLen
-  i32.le_u
-  if
-   local.get $thisLen
-   local.get $searchLen
-   i32.lt_u
-   if (result i32)
-    local.get $this
-   else
-    local.get $replacement
-    local.get $this
-    local.get $search
-    local.get $this
-    call $~lib/string/String.__eq
-    select
-   end
-   local.set $19
-   global.get $~lib/memory/__stack_pointer
-   i32.const 12
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $19
-   return
-  end
-  local.get $replacement
-  call $~lib/string/String#get:length
-  local.set $replaceLen
-  local.get $searchLen
-  i32.eqz
-  if
-   local.get $replaceLen
-   i32.eqz
-   if
-    local.get $this
-    local.set $19
-    global.get $~lib/memory/__stack_pointer
-    i32.const 12
-    i32.add
-    global.set $~lib/memory/__stack_pointer
-    local.get $19
-    return
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $thisLen
-   local.get $thisLen
-   i32.const 1
-   i32.add
-   local.get $replaceLen
-   i32.mul
-   i32.add
-   i32.const 1
-   i32.shl
-   i32.const 2
-   call $~lib/rt/itcms/__new
-   local.tee $out
-   i32.store $0
-   local.get $out
-   local.get $replacement
-   local.get $replaceLen
-   i32.const 1
-   i32.shl
-   memory.copy $0 $0
-   local.get $replaceLen
-   local.set $offset
-   i32.const 0
-   local.set $i
-   loop $for-loop|0
-    local.get $i
-    local.get $thisLen
-    i32.lt_u
-    if
-     local.get $out
-     local.get $offset
-     local.tee $9
-     i32.const 1
-     i32.add
-     local.set $offset
-     local.get $9
-     i32.const 1
-     i32.shl
-     i32.add
-     local.get $this
-     local.get $i
-     i32.const 1
-     i32.shl
-     i32.add
-     i32.load16_u $0
-     i32.store16 $0
-     local.get $out
-     local.get $offset
-     i32.const 1
-     i32.shl
-     i32.add
-     local.get $replacement
-     local.get $replaceLen
-     i32.const 1
-     i32.shl
-     memory.copy $0 $0
-     local.get $offset
-     local.get $replaceLen
-     i32.add
-     local.set $offset
-     local.get $i
-     i32.const 1
-     i32.add
-     local.set $i
-     br $for-loop|0
-    end
-   end
-   local.get $out
-   local.set $19
-   global.get $~lib/memory/__stack_pointer
-   i32.const 12
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $19
-   return
-  end
-  i32.const 0
-  local.set $prev
-  i32.const 0
-  local.set $next
-  local.get $searchLen
-  local.get $replaceLen
-  i32.eq
-  if
-   local.get $thisLen
-   i32.const 1
-   i32.shl
-   local.set $outSize
-   global.get $~lib/memory/__stack_pointer
-   local.get $outSize
-   i32.const 2
-   call $~lib/rt/itcms/__new
-   local.tee $out|13
-   i32.store $0 offset=4
-   local.get $out|13
-   local.get $this
-   local.get $outSize
-   memory.copy $0 $0
-   loop $while-continue|1
-    local.get $this
-    local.get $search
-    local.get $prev
-    call $~lib/string/String#indexOf
-    local.tee $next
-    i32.const -1
-    i32.xor
-    if
-     local.get $out|13
-     local.get $next
-     i32.const 1
-     i32.shl
-     i32.add
-     local.get $replacement
-     local.get $replaceLen
-     i32.const 1
-     i32.shl
-     memory.copy $0 $0
-     local.get $next
-     local.get $searchLen
-     i32.add
-     local.set $prev
-     br $while-continue|1
-    end
-   end
-   local.get $out|13
-   local.set $19
-   global.get $~lib/memory/__stack_pointer
-   i32.const 12
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $19
-   return
-  end
-  i32.const 0
-  local.set $out|14
-  i32.const 0
-  local.set $offset|15
-  local.get $thisLen
-  local.set $outSize|16
-  loop $while-continue|2
-   local.get $this
-   local.get $search
-   local.get $prev
-   call $~lib/string/String#indexOf
-   local.tee $next
-   i32.const -1
-   i32.xor
-   if
-    local.get $out|14
-    call $~lib/string/String.__not
-    if
-     global.get $~lib/memory/__stack_pointer
-     local.get $thisLen
-     i32.const 1
-     i32.shl
-     i32.const 2
-     call $~lib/rt/itcms/__new
-     local.tee $out|14
-     i32.store $0 offset=8
-    end
-    local.get $next
-    local.get $prev
-    i32.sub
-    local.set $chunk
-    local.get $offset|15
-    local.get $chunk
-    i32.add
-    local.get $replaceLen
-    i32.add
-    local.get $outSize|16
-    i32.gt_u
-    if
-     local.get $outSize|16
-     i32.const 1
-     i32.shl
-     local.set $outSize|16
-     global.get $~lib/memory/__stack_pointer
-     local.get $out|14
-     local.get $outSize|16
-     i32.const 1
-     i32.shl
-     call $~lib/rt/itcms/__renew
-     local.tee $out|14
-     i32.store $0 offset=8
-    end
-    local.get $out|14
-    local.get $offset|15
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $this
-    local.get $prev
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $chunk
-    i32.const 1
-    i32.shl
-    memory.copy $0 $0
-    local.get $offset|15
-    local.get $chunk
-    i32.add
-    local.set $offset|15
-    local.get $out|14
-    local.get $offset|15
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $replacement
-    local.get $replaceLen
-    i32.const 1
-    i32.shl
-    memory.copy $0 $0
-    local.get $offset|15
-    local.get $replaceLen
-    i32.add
-    local.set $offset|15
-    local.get $next
-    local.get $searchLen
-    i32.add
-    local.set $prev
-    br $while-continue|2
-   end
-  end
-  local.get $out|14
-  if
-   local.get $thisLen
-   local.get $prev
-   i32.sub
-   local.set $rest
-   local.get $offset|15
-   local.get $rest
-   i32.add
-   local.get $outSize|16
-   i32.gt_u
-   if
-    local.get $outSize|16
-    i32.const 1
-    i32.shl
-    local.set $outSize|16
-    global.get $~lib/memory/__stack_pointer
-    local.get $out|14
-    local.get $outSize|16
-    i32.const 1
-    i32.shl
-    call $~lib/rt/itcms/__renew
-    local.tee $out|14
-    i32.store $0 offset=8
-   end
-   local.get $rest
-   if
-    local.get $out|14
-    local.get $offset|15
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $this
-    local.get $prev
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $rest
-    i32.const 1
-    i32.shl
-    memory.copy $0 $0
-   end
-   local.get $rest
-   local.get $offset|15
-   i32.add
-   local.set $rest
-   local.get $outSize|16
-   local.get $rest
-   i32.gt_u
-   if
-    global.get $~lib/memory/__stack_pointer
-    local.get $out|14
-    local.get $rest
-    i32.const 1
-    i32.shl
-    call $~lib/rt/itcms/__renew
-    local.tee $out|14
-    i32.store $0 offset=8
-   end
-   local.get $out|14
-   local.set $19
-   global.get $~lib/memory/__stack_pointer
-   i32.const 12
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $19
-   return
-  end
-  local.get $this
-  local.set $19
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $19
-  return
- )
- (func $~lib/string/String#slice (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
-  (local $len i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $out i32)
-  (local $13 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $start
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $start
-   local.get $len
-   i32.add
-   local.tee $4
-   i32.const 0
-   local.tee $5
-   local.get $4
-   local.get $5
-   i32.gt_s
-   select
-  else
-   local.get $start
-   local.tee $6
-   local.get $len
-   local.tee $7
-   local.get $6
-   local.get $7
-   i32.lt_s
-   select
-  end
-  local.set $start
-  local.get $end
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $end
-   local.get $len
-   i32.add
-   local.tee $8
-   i32.const 0
-   local.tee $9
-   local.get $8
-   local.get $9
-   i32.gt_s
-   select
-  else
-   local.get $end
-   local.tee $10
-   local.get $len
-   local.tee $11
-   local.get $10
-   local.get $11
-   i32.lt_s
-   select
-  end
-  local.set $end
-  local.get $end
-  local.get $start
-  i32.sub
-  local.set $len
-  local.get $len
-  i32.const 0
-  i32.le_s
-  if
-   i32.const 688
-   local.set $13
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $13
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 1
-  i32.shl
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $this
-  local.get $start
-  i32.const 1
-  i32.shl
-  i32.add
-  local.get $len
-  i32.const 1
-  i32.shl
-  memory.copy $0 $0
-  local.get $out
-  local.set $13
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $13
-  return
- )
- (func $~lib/string/String#substr (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $length i32) (result i32)
-  (local $intStart i32)
-  (local $end i32)
-  (local $len i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $size i32)
-  (local $out i32)
-  (local $14 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $start
-  local.set $intStart
-  local.get $length
-  local.set $end
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $intStart
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   local.get $intStart
-   i32.add
-   local.tee $6
-   i32.const 0
-   local.tee $7
-   local.get $6
-   local.get $7
-   i32.gt_s
-   select
-   local.set $intStart
-  end
-  local.get $end
-  local.tee $8
-  i32.const 0
-  local.tee $9
-  local.get $8
-  local.get $9
-  i32.gt_s
-  select
-  local.tee $10
-  local.get $len
-  local.get $intStart
-  i32.sub
-  local.tee $11
-  local.get $10
-  local.get $11
-  i32.lt_s
-  select
-  i32.const 1
-  i32.shl
-  local.set $size
-  local.get $size
-  i32.const 0
-  i32.le_s
-  if
-   i32.const 688
-   local.set $14
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $14
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $size
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $this
-  local.get $intStart
-  i32.const 1
-  i32.shl
-  i32.add
-  local.get $size
-  memory.copy $0 $0
-  local.get $out
-  local.set $14
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $14
-  return
- )
- (func $~lib/string/String#substring (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
-  (local $len i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $finalStart i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $finalEnd i32)
-  (local $14 i32)
-  (local $15 i32)
-  (local $fromPos i32)
-  (local $17 i32)
-  (local $18 i32)
-  (local $toPos i32)
-  (local $size i32)
-  (local $out i32)
-  (local $22 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  call $~lib/string/String#get:length
-  local.set $len
-  local.get $start
-  local.tee $4
-  i32.const 0
-  local.tee $5
-  local.get $4
-  local.get $5
-  i32.gt_s
-  select
-  local.tee $6
-  local.get $len
-  local.tee $7
-  local.get $6
-  local.get $7
-  i32.lt_s
-  select
-  local.set $finalStart
-  local.get $end
-  local.tee $9
-  i32.const 0
-  local.tee $10
-  local.get $9
-  local.get $10
-  i32.gt_s
-  select
-  local.tee $11
-  local.get $len
-  local.tee $12
-  local.get $11
-  local.get $12
-  i32.lt_s
-  select
-  local.set $finalEnd
-  local.get $finalStart
-  local.tee $14
-  local.get $finalEnd
-  local.tee $15
-  local.get $14
-  local.get $15
-  i32.lt_s
-  select
-  i32.const 1
-  i32.shl
-  local.set $fromPos
-  local.get $finalStart
-  local.tee $17
-  local.get $finalEnd
-  local.tee $18
-  local.get $17
-  local.get $18
-  i32.gt_s
-  select
-  i32.const 1
-  i32.shl
-  local.set $toPos
-  local.get $toPos
-  local.get $fromPos
-  i32.sub
-  local.set $size
-  local.get $size
-  i32.eqz
-  if
-   i32.const 688
-   local.set $22
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $22
-   return
-  end
-  local.get $fromPos
-  i32.eqz
-  if (result i32)
-   local.get $toPos
-   local.get $len
-   i32.const 1
-   i32.shl
-   i32.eq
-  else
-   i32.const 0
-  end
-  if
-   local.get $this
-   local.set $22
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $22
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $size
-  i32.const 2
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $this
-  local.get $fromPos
-  i32.add
-  local.get $size
-  memory.copy $0 $0
-  local.get $out
-  local.set $22
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $22
-  return
- )
- (func $~lib/array/Array<~lib/string/String>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
-  (local $value i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $index
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:length_
-  i32.ge_u
-  if
-   i32.const 240
-   i32.const 14640
-   i32.const 114
-   i32.const 42
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  call $~lib/array/Array<~lib/string/String>#get:dataStart
-  local.get $index
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0
-  local.tee $value
-  i32.store $0
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  local.get $value
-  i32.eqz
-  if
-   i32.const 14688
-   i32.const 14640
-   i32.const 118
-   i32.const 40
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $value
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
   return
  )
  (func $~lib/util/number/itoa32 (type $i32_i32_=>_i32) (param $value i32) (param $radix i32) (result i32)

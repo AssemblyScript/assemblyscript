@@ -2355,13 +2355,16 @@
  (func $std/new/AClass#constructor (type $i32_f32_=>_i32) (param $this i32) (param $value f32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.store $0 offset=8
   local.get $this
   i32.eqz
   if
@@ -2373,24 +2376,49 @@
    i32.store $0
   end
   local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
   i32.const 1
   call $std/new/AClass#set:aField
   local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
   f32.const 2
   call $std/new/AClass#set:anotherField
   local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
   local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=8
+  local.get $2
   call $std/new/AClass#get:aField
   i32.const 1
   i32.add
   call $std/new/AClass#set:aField
   local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
   local.get $value
   call $std/new/AClass#set:anotherField
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2

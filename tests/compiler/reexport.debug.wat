@@ -2285,11 +2285,6 @@
   local.get $this
   i32.load $0
  )
- (func $exports/Car#get:numDoors (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  call $exports/Car#get:doors
-  return
- )
  (func $export/sub (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
@@ -2375,6 +2370,75 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $exports/Car#constructor (type $i32_i32_=>_i32) (param $this i32) (param $doors i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  local.get $doors
+  call $exports/Car#set:doors
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  local.get $doors
+  call $exports/Car#set:doors
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
+ (func $exports/Car#get:numDoors (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $exports/Car#get:doors
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
  )
  (func $start:reexport (type $none_=>_none)
   (local $0 i32)
@@ -2465,39 +2529,5 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
- )
- (func $exports/Car#constructor (type $i32_i32_=>_i32) (param $this i32) (param $doors i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  local.get $this
-  local.get $doors
-  call $exports/Car#set:doors
-  local.get $this
-  local.get $doors
-  call $exports/Car#set:doors
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
  )
 )

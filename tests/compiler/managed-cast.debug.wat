@@ -2240,112 +2240,8 @@
  (func $managed-cast/Animal#tame (type $i32_=>_none) (param $this i32)
   nop
  )
- (func $managed-cast/testUpcast (type $i32_=>_none) (param $cat i32)
-  local.get $cat
-  call $managed-cast/Animal#tame
- )
- (func $managed-cast/testUpcastToNullable (type $i32_=>_none) (param $cat i32)
-  (local $maybeAnimal i32)
-  local.get $cat
-  local.set $maybeAnimal
-  local.get $maybeAnimal
-  if
-   local.get $maybeAnimal
-   call $managed-cast/Animal#tame
-  end
- )
- (func $managed-cast/testUpcastFromToNullable (type $i32_=>_none) (param $cat i32)
-  (local $maybeAnimal i32)
-  local.get $cat
-  local.set $maybeAnimal
-  local.get $maybeAnimal
-  if
-   local.get $maybeAnimal
-   call $managed-cast/Animal#tame
-  end
- )
  (func $managed-cast/Cat#meow (type $i32_=>_none) (param $this i32)
   nop
- )
- (func $managed-cast/testDowncastToNullable (type $i32_=>_none) (param $animal i32)
-  (local $1 i32)
-  (local $maybeCat i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $animal
-  local.tee $1
-  call $~instanceof|managed-cast/Cat
-  if (result i32)
-   local.get $1
-  else
-   i32.const 624
-   i32.const 560
-   i32.const 41
-   i32.const 30
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.tee $maybeCat
-  i32.store $0
-  local.get $maybeCat
-  if
-   local.get $maybeCat
-   call $managed-cast/Cat#meow
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $managed-cast/testDowncastFromToNullable (type $i32_=>_none) (param $animal i32)
-  (local $1 i32)
-  (local $maybeCat i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $animal
-  local.tee $1
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $1
-   call $~instanceof|managed-cast/Cat
-   if (result i32)
-    local.get $1
-   else
-    i32.const 624
-    i32.const 560
-    i32.const 47
-    i32.const 30
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  local.tee $maybeCat
-  i32.store $0
-  local.get $maybeCat
-  if
-   local.get $maybeCat
-   call $managed-cast/Cat#meow
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/rt/itcms/__collect (type $none_=>_none)
   i32.const 0
@@ -2483,9 +2379,84 @@
    unreachable
   end
  )
- (func $managed-cast/testUpcastFromNullable (type $i32_=>_none) (param $cat i32)
+ (func $managed-cast/Animal#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $managed-cast/Cat#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $managed-cast/Animal#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $managed-cast/testUpcast (type $i32_=>_none) (param $cat i32)
+  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2495,7 +2466,33 @@
   i32.const 0
   i32.store $0
   local.get $cat
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $managed-cast/Animal#tame
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $managed-cast/testUpcastFromNullable (type $i32_=>_none) (param $cat i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $cat
   local.tee $1
+  i32.store $0 offset=4
+  local.get $1
   if (result i32)
    local.get $1
   else
@@ -2513,7 +2510,67 @@
   local.get $2
   call $managed-cast/Animal#tame
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $managed-cast/testUpcastToNullable (type $i32_=>_none) (param $cat i32)
+  (local $maybeAnimal i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $cat
+  local.tee $maybeAnimal
+  i32.store $0
+  local.get $maybeAnimal
+  if
+   local.get $maybeAnimal
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.store $0 offset=4
+   local.get $2
+   call $managed-cast/Animal#tame
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $managed-cast/testUpcastFromToNullable (type $i32_=>_none) (param $cat i32)
+  (local $maybeAnimal i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $cat
+  local.tee $maybeAnimal
+  i32.store $0
+  local.get $maybeAnimal
+  if
+   local.get $maybeAnimal
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.store $0 offset=4
+   local.get $2
+   call $managed-cast/Animal#tame
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -2521,15 +2578,18 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
   local.get $animal
   local.tee $1
+  i32.store $0 offset=4
+  local.get $1
   call $~instanceof|managed-cast/Cat
   if (result i32)
    local.get $1
@@ -2548,7 +2608,7 @@
   local.get $2
   call $managed-cast/Cat#meow
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -2557,7 +2617,7 @@
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
@@ -2565,8 +2625,14 @@
   i64.const 0
   i64.store $0
   global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
   local.get $animal
   local.tee $1
+  i32.store $0 offset=4
+  local.get $1
   if (result i32)
    local.get $1
   else
@@ -2578,7 +2644,7 @@
    unreachable
   end
   local.tee $2
-  i32.store $0 offset=4
+  i32.store $0 offset=8
   local.get $2
   call $~instanceof|managed-cast/Cat
   if (result i32)
@@ -2598,7 +2664,111 @@
   local.get $3
   call $managed-cast/Cat#meow
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $managed-cast/testDowncastToNullable (type $i32_=>_none) (param $animal i32)
+  (local $1 i32)
+  (local $maybeCat i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  local.get $animal
+  local.tee $1
+  i32.store $0
+  local.get $1
+  call $~instanceof|managed-cast/Cat
+  if (result i32)
+   local.get $1
+  else
+   i32.const 624
+   i32.const 560
+   i32.const 41
+   i32.const 30
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.tee $maybeCat
+  i32.store $0 offset=4
+  local.get $maybeCat
+  if
+   local.get $maybeCat
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   local.get $3
+   i32.store $0 offset=8
+   local.get $3
+   call $managed-cast/Cat#meow
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $managed-cast/testDowncastFromToNullable (type $i32_=>_none) (param $animal i32)
+  (local $1 i32)
+  (local $maybeCat i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  local.get $animal
+  local.tee $1
+  i32.store $0
+  local.get $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $1
+   call $~instanceof|managed-cast/Cat
+   if (result i32)
+    local.get $1
+   else
+    i32.const 624
+    i32.const 560
+    i32.const 47
+    i32.const 30
+    call $~lib/builtins/abort
+    unreachable
+   end
+  end
+  local.tee $maybeCat
+  i32.store $0 offset=4
+  local.get $maybeCat
+  if
+   local.get $maybeCat
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   local.get $3
+   i32.store $0 offset=8
+   local.get $3
+   call $managed-cast/Cat#meow
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -2721,72 +2891,6 @@
    local.tee $this
    i32.store $0
   end
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $managed-cast/Animal#constructor (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 5
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store $0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $managed-cast/Cat#constructor (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  call $managed-cast/Animal#constructor
-  local.tee $this
-  i32.store $0
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

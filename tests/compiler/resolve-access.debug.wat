@@ -10,11 +10,11 @@
  (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
  (type $i32_i64_i32_=>_none (func_subtype (param i32 i64 i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_i32_=>_i64 (func_subtype (param i32 i32) (result i64) func))
  (type $i64_=>_i32 (func_subtype (param i64) (result i32) func))
  (type $i32_i64_i32_i32_=>_none (func_subtype (param i32 i64 i32 i32) func))
  (type $i32_i64_=>_none (func_subtype (param i32 i64) func))
  (type $i32_=>_i64 (func_subtype (param i32) (result i64) func))
+ (type $i32_i32_=>_i64 (func_subtype (param i32 i32) (result i64) func))
  (type $i32_i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32 i32) (result i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
@@ -2347,33 +2347,6 @@
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<u64>#__get (type $i32_i32_=>_i64) (param $this i32) (param $index i32) (result i64)
-  (local $value i64)
-  local.get $index
-  local.get $this
-  call $~lib/array/Array<u64>#get:length_
-  i32.ge_u
-  if
-   i32.const 256
-   i32.const 464
-   i32.const 114
-   i32.const 42
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $this
-  call $~lib/array/Array<u64>#get:dataStart
-  local.get $index
-  i32.const 3
-  i32.shl
-  i32.add
-  i64.load $0
-  local.set $value
-  i32.const 0
-  drop
-  local.get $value
-  return
- )
  (func $~lib/util/number/decimalCount32 (type $i32_=>_i32) (param $value i32) (result i32)
   local.get $value
   i32.const 100000
@@ -2978,12 +2951,6 @@
   local.get $this
   i64.load $0
  )
- (func $resolve-access/Container#toU32 (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  call $resolve-access/Container#get:foo
-  i32.wrap_i64
-  return
- )
  (func $~lib/number/U32#toString (type $i32_i32_=>_i32) (param $this i32) (param $radix i32) (result i32)
   local.get $this
   local.get $radix
@@ -3026,14 +2993,6 @@
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<u64>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
-  i32.const 0
-  drop
-  local.get $this
-  call $~lib/array/Array<u64>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
- )
  (func $~lib/array/Array<u64>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -3045,14 +3004,6 @@
  (func $~lib/array/Array<i32>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
- )
- (func $~lib/array/Array<i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
-  i32.const 0
-  drop
-  local.get $this
-  call $~lib/array/Array<i32>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
  )
  (func $~lib/array/Array<i32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
@@ -3133,6 +3084,304 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $~lib/array/Array<u64>#__get (type $i32_i32_=>_i64) (param $this i32) (param $index i32) (result i64)
+  (local $value i64)
+  (local $3 i32)
+  (local $4 i64)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $index
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/array/Array<u64>#get:length_
+  i32.ge_u
+  if
+   i32.const 256
+   i32.const 464
+   i32.const 114
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/array/Array<u64>#get:dataStart
+  local.get $index
+  i32.const 3
+  i32.shl
+  i32.add
+  i64.load $0
+  local.set $value
+  i32.const 0
+  drop
+  local.get $value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
+  return
+ )
+ (func $resolve-access/arrayAccess (type $none_=>_i32) (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  (local $arr i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1
+  i32.const 3
+  i32.const 4
+  i32.const 32
+  call $~lib/rt/__newArray
+  local.tee $arr
+  i32.store $0
+  local.get $arr
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0 offset=4
+  local.get $3
+  i32.const 0
+  call $~lib/array/Array<u64>#__get
+  i32.const 10
+  call $~lib/number/U64#toString
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
+ )
+ (func $resolve-access/Container#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.const 6
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  i64.const 0
+  call $resolve-access/Container#set:foo
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $resolve-access/fieldAccess (type $none_=>_i32) (result i32)
+  (local $container i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $resolve-access/Container#constructor
+  local.tee $container
+  i32.store $0
+  local.get $container
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  i64.const 1
+  call $resolve-access/Container#set:foo
+  local.get $container
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $resolve-access/Container#get:foo
+  i32.const 10
+  call $~lib/number/U64#toString
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $resolve-access/Container#toU32 (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $resolve-access/Container#get:foo
+  i32.wrap_i64
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $resolve-access/propertyAccess (type $none_=>_i32) (result i32)
+  (local $container i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $resolve-access/Container#constructor
+  local.tee $container
+  i32.store $0
+  local.get $container
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  i64.const 1
+  call $resolve-access/Container#set:foo
+  local.get $container
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $resolve-access/Container#toU32
+  i32.const 10
+  call $~lib/number/U32#toString
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $~lib/array/Array<u64>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  call $~lib/array/Array<u64>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  call $~lib/array/Array<i32>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/rt/__newArray (type $i32_i32_i32_i32_=>_i32) (param $length i32) (param $alignLog2 i32) (param $id i32) (param $data i32) (result i32)
   (local $bufferSize i32)
@@ -3374,40 +3623,6 @@
   local.get $17
   return
  )
- (func $resolve-access/arrayAccess (type $none_=>_i32) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  (local $arr i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1
-  i32.const 3
-  i32.const 4
-  i32.const 32
-  call $~lib/rt/__newArray
-  local.tee $arr
-  i32.store $0
-  local.get $arr
-  i32.const 0
-  call $~lib/array/Array<u64>#__get
-  i32.const 10
-  call $~lib/number/U64#toString
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
-  return
- )
  (func $~lib/object/Object#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3435,73 +3650,6 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
- )
- (func $resolve-access/Container#constructor (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 6
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store $0
-  local.get $this
-  i64.const 0
-  call $resolve-access/Container#set:foo
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $resolve-access/fieldAccess (type $none_=>_i32) (result i32)
-  (local $container i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $resolve-access/Container#constructor
-  local.tee $container
-  i32.store $0
-  local.get $container
-  i64.const 1
-  call $resolve-access/Container#set:foo
-  local.get $container
-  call $resolve-access/Container#get:foo
-  i32.const 10
-  call $~lib/number/U64#toString
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
  )
  (func $~lib/util/number/utoa32 (type $i32_i32_=>_i32) (param $value i32) (param $radix i32) (result i32)
   (local $out i32)
@@ -3648,37 +3796,6 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $12
-  return
- )
- (func $resolve-access/propertyAccess (type $none_=>_i32) (result i32)
-  (local $container i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $resolve-access/Container#constructor
-  local.tee $container
-  i32.store $0
-  local.get $container
-  i64.const 1
-  call $resolve-access/Container#set:foo
-  local.get $container
-  call $resolve-access/Container#toU32
-  i32.const 10
-  call $~lib/number/U32#toString
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
   return
  )
 )
