@@ -59,6 +59,12 @@
     },
     "./*": "./*"
   },
+  "imports": {
+    "#rtrace": {
+      "import": "./lib/rtrace/index.js",
+      "types": "./lib/rtrace/index.d.ts"
+    }
+  },
   "bin": {
     "asc": "./bin/asc.js",
     "asinit": "./bin/asinit.js"
