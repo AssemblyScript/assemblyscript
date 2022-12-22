@@ -603,7 +603,7 @@ export class JSBuilder extends ExportsWalker {
           // object. Use sensible defaults and substitute the original import.
           map.push("  ((rtrace) => {\n");
           map.push("    delete imports.rtrace;\n");
-          map.push("    new rtrace.Rtrace({ getMemory() { return memory; }, onerror() { console.log(`RTRACE: ${err.stack}`); } }).install(imports);\n");
+          map.push("    new rtrace.Rtrace({ getMemory() { return memory; }, onerror(err) { console.log(`RTRACE: ${err.stack}`); } }).install(imports);\n");
           map.push("  })(imports.rtrace);\n");
         }
         map.push("  const __module");
