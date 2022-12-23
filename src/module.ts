@@ -94,7 +94,7 @@ export namespace HeapTypeRef {
   //         |                      |          |
   //     __ eq __          ?     noextern    (...)
   //    /    |   \         |                   |
-  // i31  struct  array  string              nofunc
+  // i32  struct  array  string              nofunc
   //  |      |      |      |
   // none  (...)  (...)    ?
   //         |      |
