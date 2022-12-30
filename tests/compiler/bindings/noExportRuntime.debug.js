@@ -54,23 +54,23 @@ async function instantiate(module, imports = {}) {
       // bindings/noExportRuntime/isArrayOfBasic: ~lib/array/Array<i32>
       valueOf() { return this.value; },
       get value() {
-        return __liftArray(pointer => new Int32Array(memory.buffer)[pointer >>> 2], 2, exports.isArrayOfBasic.value >>> 0);
+        return __liftArray(pointer => __getI32(pointer), 2, exports.isArrayOfBasic.value >>> 0);
       }
     },
     returnsArrayOfBasic() {
       // bindings/noExportRuntime/returnsArrayOfBasic() => ~lib/array/Array<i32>
-      return __liftArray(pointer => new Int32Array(memory.buffer)[pointer >>> 2], 2, exports.returnsArrayOfBasic() >>> 0);
+      return __liftArray(pointer => __getI32(pointer), 2, exports.returnsArrayOfBasic() >>> 0);
     },
     isArrayOfArray: {
       // bindings/noExportRuntime/isArrayOfArray: ~lib/array/Array<~lib/array/Array<i32>>
       valueOf() { return this.value; },
       get value() {
-        return __liftArray(pointer => __liftArray(pointer => new Int32Array(memory.buffer)[pointer >>> 2], 2, new Uint32Array(memory.buffer)[pointer >>> 2]), 2, exports.isArrayOfArray.value >>> 0);
+        return __liftArray(pointer => __liftArray(pointer => __getI32(pointer), 2, __getU32(pointer)), 2, exports.isArrayOfArray.value >>> 0);
       }
     },
     returnsArrayOfArray() {
       // bindings/noExportRuntime/returnsArrayOfArray() => ~lib/array/Array<~lib/array/Array<i32>>
-      return __liftArray(pointer => __liftArray(pointer => new Int32Array(memory.buffer)[pointer >>> 2], 2, new Uint32Array(memory.buffer)[pointer >>> 2]), 2, exports.returnsArrayOfArray() >>> 0);
+      return __liftArray(pointer => __liftArray(pointer => __getI32(pointer), 2, __getU32(pointer)), 2, exports.returnsArrayOfArray() >>> 0);
     },
     takesNonPlainObject(obj) {
       // bindings/noExportRuntime/takesNonPlainObject(bindings/noExportRuntime/NonPlainObject) => void
@@ -101,20 +101,18 @@ async function instantiate(module, imports = {}) {
   function __liftArray(liftElement, align, pointer) {
     if (!pointer) return null;
     const
-      memoryU32 = new Uint32Array(memory.buffer),
-      dataStart = memoryU32[pointer + 4 >>> 2],
-      length = memoryU32[pointer + 12 >>> 2],
+      dataStart = __getU32(pointer + 4),
+      length = __dataview.getUint32(pointer + 12, true),
       values = new Array(length);
     for (let i = 0; i < length; ++i) values[i] = liftElement(dataStart + (i << align >>> 0));
     return values;
   }
   function __liftTypedArray(constructor, pointer) {
     if (!pointer) return null;
-    const memoryU32 = new Uint32Array(memory.buffer);
     return new constructor(
       memory.buffer,
-      memoryU32[pointer + 4 >>> 2],
-      memoryU32[pointer + 8 >>> 2] / constructor.BYTES_PER_ELEMENT
+      __getU32(pointer + 4),
+      __dataview.getUint32(pointer + 8, true) / constructor.BYTES_PER_ELEMENT
     ).slice();
   }
   class Internref extends Number {}
@@ -125,6 +123,23 @@ async function instantiate(module, imports = {}) {
   }
   function __notnull() {
     throw TypeError("value must not be null");
+  }
+  let __dataview = new DataView(memory.buffer);
+  function __getI32(pointer) {
+    try {
+      return __dataview.getInt32(pointer, true);
+    } catch {
+      __dataview = new DataView(memory.buffer);
+      return __dataview.getInt32(pointer, true);
+    }
+  }
+  function __getU32(pointer) {
+    try {
+      return __dataview.getUint32(pointer, true);
+    } catch {
+      __dataview = new DataView(memory.buffer);
+      return __dataview.getUint32(pointer, true);
+    }
   }
   exports._start();
   return adaptedExports;

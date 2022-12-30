@@ -120,12 +120,19 @@ declare namespace __AdaptedExports {
    */
   export function arrayFunction(a: Array<number>, b: Array<number>): Array<number>;
   /**
+   * bindings/esm/arrayOfStringsFunction
+   * @param a `~lib/array/Array<~lib/string/String>`
+   * @param b `~lib/array/Array<~lib/string/String>`
+   * @returns `~lib/array/Array<~lib/string/String>`
+   */
+  export function arrayOfStringsFunction(a: Array<string>, b: Array<string>): Array<string>;
+  /**
    * bindings/esm/objectFunction
    * @param a `bindings/esm/PlainObject`
    * @param b `bindings/esm/PlainObject`
    * @returns `bindings/esm/PlainObject`
    */
-  export function objectFunction(a: __Record12<undefined>, b: __Record12<undefined>): __Record12<never>;
+  export function objectFunction(a: __Record13<undefined>, b: __Record13<undefined>): __Record13<never>;
   /**
    * bindings/esm/newInternref
    * @returns `bindings/esm/NonPlainObject`
@@ -151,7 +158,7 @@ declare namespace __AdaptedExports {
   };
 }
 /** bindings/esm/PlainObject */
-declare interface __Record12<TOmittable> {
+declare interface __Record13<TOmittable> {
   /** @type `i8` */
   a: number | TOmittable;
   /** @type `i16` */

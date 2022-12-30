@@ -64,6 +64,8 @@ export async function postInstantiate(instance) {
 
   assert.deepStrictEqual(exports.arrayFunction([1, 2, 3], [4, 5, 6]), [1, 2, 3, 4, 5, 6]);
 
+  assert.deepStrictEqual(exports.arrayOfStringsFunction(["1", "2", "3"], ["4", "5", "6"]), ["1", "2", "3", "4", "5", "6"]);
+
   {
     let obj = exports.objectFunction({ a: 1, b: 2 }, { a: 3, b: 4 });
     assert.strictEqual(obj.a, 4);
