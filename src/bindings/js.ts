@@ -1265,7 +1265,7 @@ export class JSBuilder extends ExportsWalker {
   }
 
   /** Lifts a WebAssembly memory address to a JavaScript value, as a call. */
-  makeLiftFromMemoryCall(valueType: Type, sb: string[] = this.sb, pointerExpr: string): void {
+  makeLiftFromMemoryCall(valueType: Type, sb: string[] = this.sb, pointerExpr: string = "pointer"): void {
     let fn = this.ensureLiftFromMemoryFn(valueType);
     if (valueType.isInternalReference) {
       this.makeLiftFromValue(`${fn}(${pointerExpr})`, valueType, sb);
