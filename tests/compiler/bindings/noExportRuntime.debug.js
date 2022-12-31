@@ -54,23 +54,23 @@ async function instantiate(module, imports = {}) {
       // bindings/noExportRuntime/isArrayOfBasic: ~lib/array/Array<i32>
       valueOf() { return this.value; },
       get value() {
-        return __liftArray(pointer => __getI32(pointer), 2, exports.isArrayOfBasic.value >>> 0);
+        return __liftArray(__getI32, 2, exports.isArrayOfBasic.value >>> 0);
       }
     },
     returnsArrayOfBasic() {
       // bindings/noExportRuntime/returnsArrayOfBasic() => ~lib/array/Array<i32>
-      return __liftArray(pointer => __getI32(pointer), 2, exports.returnsArrayOfBasic() >>> 0);
+      return __liftArray(__getI32, 2, exports.returnsArrayOfBasic() >>> 0);
     },
     isArrayOfArray: {
       // bindings/noExportRuntime/isArrayOfArray: ~lib/array/Array<~lib/array/Array<i32>>
       valueOf() { return this.value; },
       get value() {
-        return __liftArray(pointer => __liftArray(pointer => __getI32(pointer), 2, __getU32(pointer)), 2, exports.isArrayOfArray.value >>> 0);
+        return __liftArray(pointer => __liftArray(__getI32, 2, __getU32(pointer)), 2, exports.isArrayOfArray.value >>> 0);
       }
     },
     returnsArrayOfArray() {
       // bindings/noExportRuntime/returnsArrayOfArray() => ~lib/array/Array<~lib/array/Array<i32>>
-      return __liftArray(pointer => __liftArray(pointer => __getI32(pointer), 2, __getU32(pointer)), 2, exports.returnsArrayOfArray() >>> 0);
+      return __liftArray(pointer => __liftArray(__getI32, 2, __getU32(pointer)), 2, exports.returnsArrayOfArray() >>> 0);
     },
     takesNonPlainObject(obj) {
       // bindings/noExportRuntime/takesNonPlainObject(bindings/noExportRuntime/NonPlainObject) => void

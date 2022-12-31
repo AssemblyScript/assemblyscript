@@ -1259,9 +1259,17 @@ export class JSBuilder extends ExportsWalker {
   /** Lifts a WebAssembly memory address to a JavaScript value, as a function. */
   makeLiftFromMemoryFunc(valueType: Type, sb: string[] = this.sb): void {
     let fn = this.ensureLiftFromMemoryFn(valueType);
-    sb.push("pointer => ");
-    this.makeLiftFromValue(`${fn}(pointer)`, valueType, sb);
-    // TODO: Can sometimes omit the arrow function
+    if (
+      // Compound or with coercion, see makeLiftFromValue
+      valueType.isInternalReference ||
+      valueType == Type.bool ||
+      (valueType.isUnsignedIntegerValue && valueType.size >= 32)
+    ) {
+      sb.push("pointer => ");
+      this.makeLiftFromValue(`${fn}(pointer)`, valueType, sb);
+    } else {
+      sb.push(fn);
+    }
   }
 
   /** Lifts a WebAssembly memory address to a JavaScript value, as a call. */
@@ -1277,7 +1285,7 @@ export class JSBuilder extends ExportsWalker {
       if (valueType == Type.bool) {
         sb.push(" != 0");
       }
-      // BigInt already lifts as either signed or unsigned
+      // Other integers are known to be coerced here by loading from a view
     }
   }
 

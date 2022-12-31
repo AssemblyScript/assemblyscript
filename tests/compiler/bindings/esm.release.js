@@ -140,7 +140,7 @@ async function instantiate(module, imports = {}) {
       a = __retain(__lowerStaticArray(__setU32, 8, 2, a, Int32Array) || __notnull());
       b = __lowerStaticArray(__setU32, 8, 2, b, Int32Array) || __notnull();
       try {
-        return __liftStaticArray(pointer => __getI32(pointer), 2, exports.staticarrayFunction(a, b) >>> 0);
+        return __liftStaticArray(__getI32, 2, exports.staticarrayFunction(a, b) >>> 0);
       } finally {
         __release(a);
       }
@@ -148,19 +148,19 @@ async function instantiate(module, imports = {}) {
     staticarrayU16(a) {
       // bindings/esm/staticarrayU16(~lib/staticarray/StaticArray<u16>) => ~lib/staticarray/StaticArray<u16>
       a = __lowerStaticArray(__setU16, 9, 1, a, Uint16Array) || __notnull();
-      return __liftStaticArray(pointer => __getU16(pointer), 1, exports.staticarrayU16(a) >>> 0);
+      return __liftStaticArray(__getU16, 1, exports.staticarrayU16(a) >>> 0);
     },
     staticarrayI64(a) {
       // bindings/esm/staticarrayI64(~lib/staticarray/StaticArray<i64>) => ~lib/staticarray/StaticArray<i64>
       a = __lowerStaticArray(__setU64, 10, 3, a, BigInt64Array) || __notnull();
-      return __liftStaticArray(pointer => __getI64(pointer), 3, exports.staticarrayI64(a) >>> 0);
+      return __liftStaticArray(__getI64, 3, exports.staticarrayI64(a) >>> 0);
     },
     arrayFunction(a, b) {
       // bindings/esm/arrayFunction(~lib/array/Array<i32>, ~lib/array/Array<i32>) => ~lib/array/Array<i32>
       a = __retain(__lowerArray(__setU32, 11, 2, a) || __notnull());
       b = __lowerArray(__setU32, 11, 2, b) || __notnull();
       try {
-        return __liftArray(pointer => __getI32(pointer), 2, exports.arrayFunction(a, b) >>> 0);
+        return __liftArray(__getI32, 2, exports.arrayFunction(a, b) >>> 0);
       } finally {
         __release(a);
       }
