@@ -217,22 +217,22 @@ export async function instantiate(module, imports = {}) {
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
     const pointer = exports.__pin(exports.__new(68, 13));
-    __setU8(pointer + 0,value.a);
-    __setU16(pointer + 2,value.b);
-    __setU32(pointer + 4,value.c);
-    __setU64(pointer + 8,value.d || 0n);
-    __setU8(pointer + 16,value.e);
-    __setU16(pointer + 18,value.f);
-    __setU32(pointer + 20,value.g);
-    __setU64(pointer + 24,value.h || 0n);
-    __setU32(pointer + 32,value.i);
-    __setU32(pointer + 36,value.j);
-    __setU8(pointer + 40,value.k ? 1 : 0);
-    __setF32(pointer + 44,value.l);
-    __setF64(pointer + 48,value.m);
-    __setU32(pointer + 56,__lowerString(value.n));
-    __setU32(pointer + 60,__lowerTypedArray(Uint8Array, 14, 0, value.o));
-    __setU32(pointer + 64,__lowerArray((pointer, value) => { __setU32(pointer, __lowerString(value) || __notnull()); }, 12, 2, value.p));
+    __setU8(pointer + 0, value.a);
+    __setU16(pointer + 2, value.b);
+    __setU32(pointer + 4, value.c);
+    __setU64(pointer + 8, value.d || 0n);
+    __setU8(pointer + 16, value.e);
+    __setU16(pointer + 18, value.f);
+    __setU32(pointer + 20, value.g);
+    __setU64(pointer + 24, value.h || 0n);
+    __setU32(pointer + 32, value.i);
+    __setU32(pointer + 36, value.j);
+    __setU8(pointer + 40, value.k ? 1 : 0);
+    __setF32(pointer + 44, value.l);
+    __setF64(pointer + 48, value.m);
+    __setU32(pointer + 56, __lowerString(value.n));
+    __setU32(pointer + 60, __lowerTypedArray(Uint8Array, 14, 0, value.o));
+    __setU32(pointer + 64, __lowerArray((pointer, value) => { __setU32(pointer, __lowerString(value) || __notnull()); }, 12, 2, value.p));
     exports.__unpin(pointer);
     return pointer;
   }

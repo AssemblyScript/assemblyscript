@@ -1346,7 +1346,7 @@ export class JSBuilder extends ExportsWalker {
     sb.push(fn);
     sb.push("(");
     sb.push(pointerExpr);
-    sb.push(",");
+    sb.push(", ");
     this.makeLowerToValue(valueExpr, valueType, sb);
     sb.push(")");
   }
