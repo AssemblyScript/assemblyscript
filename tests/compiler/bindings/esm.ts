@@ -92,6 +92,17 @@ export function arrayFunction(a: Array<i32>, b: Array<i32>): Array<i32> {
   return c;
 }
 
+export function arrayOfStringsFunction(a: Array<string>, b: Array<string>): Array<string> {
+  var c = new Array<string>(a.length + b.length);
+  for (let i = 0; i < a.length; ++i) {
+    c[i] = a[i];
+  }
+  for (let i = 0; i < b.length; ++i) {
+    c[a.length + i] = b[i];
+  }
+  return c;
+}
+
 class PlainObject {
   a: i8;
   b: i16;

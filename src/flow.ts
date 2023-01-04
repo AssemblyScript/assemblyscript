@@ -79,6 +79,10 @@ import {
 } from "./common";
 
 import {
+  UncheckedBehavior
+} from "./compiler";
+
+import {
   DiagnosticCode
 } from "./diagnostics";
 
@@ -203,6 +207,9 @@ export class Flow {
     if (targetFunction.is(CommonFlags.Constructor)) {
       flow.initThisFieldFlags();
     }
+    if (targetFunction.program.options.uncheckedBehavior === UncheckedBehavior.Always) {
+      flow.set(FlowFlags.UncheckedContext);
+    }
     return flow;
   }
 
@@ -214,6 +221,9 @@ export class Flow {
     flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
     if (inlineFunction.is(CommonFlags.Constructor)) {
       flow.initThisFieldFlags();
+    }
+    if (targetFunction.program.options.uncheckedBehavior === UncheckedBehavior.Always) {
+      flow.set(FlowFlags.UncheckedContext);
     }
     return flow;
   }

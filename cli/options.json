@@ -98,6 +98,22 @@
     ],
     "type": "s"
   },
+  "uncheckedBehavior": {
+    "category": "Debugging",
+    "description": [
+      "Changes the behavior of unchecked() expressions.",
+      "Using this option can potentially cause breakage.",
+      "",
+      "  default  The default behavior: unchecked operations are",
+      "           only used inside of unchecked().",
+      "  never    Unchecked operations are never used, even when",
+      "           inside of unchecked().",
+      "  always   Unchecked operations are always used if possible,",
+      "           whether or not unchecked() is used."
+    ],
+    "type": "s",
+    "default": "default"
+  },
   "debug": {
     "category": "Debugging",
     "description": "Enables debug information in emitted binaries.",

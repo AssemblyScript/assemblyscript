@@ -245,6 +245,8 @@ export class Options {
   exportTable: bool = false;
   /** If true, generates information necessary for source maps. */
   sourceMap: bool = false;
+  /** Unchecked behavior. Defaults to only using unchecked operations inside unchecked(). */
+  uncheckedBehavior: UncheckedBehavior = UncheckedBehavior.Default;
   /** If given, exports the start function instead of calling it implicitly. */
   exportStart: string | null = null;
   /** Static memory start offset. */
@@ -313,6 +315,16 @@ export class Options {
   hasFeature(feature: Feature): bool {
     return (this.features & feature) != 0;
   }
+}
+
+/** Behaviors regarding unchecked operations. */
+export const enum UncheckedBehavior {
+  /** Only use unchecked operations inside unchecked(). */
+  Default = 0,
+  /** Never use unchecked operations. */
+  Never = 1,
+  /** Always use unchecked operations if possible. */
+  Always = 2
 }
 
 /** Various constraints in expression compilation. */
