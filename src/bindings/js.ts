@@ -131,7 +131,22 @@ export class JSBuilder extends ExportsWalker {
   private needsRetain: bool = false;
   private needsRelease: bool = false;
   private needsNotNull: bool = false;
-  private needsStoreRef: bool = false;
+  private needsSetU8: bool = false;
+  private needsSetU16: bool = false;
+  private needsSetU32: bool = false;
+  private needsSetU64: bool = false;
+  private needsSetF32: bool = false;
+  private needsSetF64: bool = false;
+  private needsGetI8: bool = false;
+  private needsGetU8: bool = false;
+  private needsGetI16: bool = false;
+  private needsGetU16: bool = false;
+  private needsGetI32: bool = false;
+  private needsGetU32: bool = false;
+  private needsGetI64: bool = false;
+  private needsGetU64: bool = false;
+  private needsGetF32: bool = false;
+  private needsGetF64: bool = false;
 
   private deferredLifts: Set<Element> = new Set();
   private deferredLowers: Set<Element> = new Set();
@@ -718,12 +733,12 @@ export class JSBuilder extends ExportsWalker {
     if (this.needsLiftArray) {
       let dataStartOffset = program.arrayBufferViewInstance.offsetof("dataStart");
       let lengthOffset = program.arrayBufferViewInstance.nextMemoryOffset;
+      this.needsGetU32 = true;
       sb.push(`  function __liftArray(liftElement, align, pointer) {
     if (!pointer) return null;
     const
-      memoryU32 = new Uint32Array(memory.buffer),
-      dataStart = memoryU32[pointer + ${dataStartOffset} >>> 2],
-      length = memoryU32[pointer + ${lengthOffset} >>> 2],
+      dataStart = __getU32(pointer + ${dataStartOffset}),
+      length = __dataview.getUint32(pointer + ${lengthOffset}, true),
       values = new Array(length);
     for (let i = 0; i < length; ++i) values[i] = liftElement(dataStart + (i << align >>> 0));
     return values;
@@ -738,17 +753,17 @@ export class JSBuilder extends ExportsWalker {
       let dataStartOffset = arrayBufferViewInstance.offsetof("dataStart");
       let byteLengthOffset = arrayBufferViewInstance.offsetof("byteLength");
       let lengthOffset = byteLengthOffset + 4;
+      this.needsSetU32 = true;
       sb.push(`  function __lowerArray(lowerElement, id, align, values) {
     if (values == null) return 0;
     const
       length = values.length,
       buffer = exports.__pin(exports.__new(length << align, ${arrayBufferId})) >>> 0,
-      header = exports.__pin(exports.__new(${arraySize}, id)) >>> 0,
-      memoryU32 = new Uint32Array(memory.buffer);
-    memoryU32[header + ${bufferOffset} >>> 2] = buffer;
-    memoryU32[header + ${dataStartOffset} >>> 2] = buffer;
-    memoryU32[header + ${byteLengthOffset} >>> 2] = length << align;
-    memoryU32[header + ${lengthOffset} >>> 2] = length;
+      header = exports.__pin(exports.__new(${arraySize}, id)) >>> 0;
+    __setU32(header + ${bufferOffset}, buffer);
+    __dataview.setUint32(header + ${dataStartOffset}, buffer, true);
+    __dataview.setUint32(header + ${byteLengthOffset}, length << align, true);
+    __dataview.setUint32(header + ${lengthOffset}, length, true);
     for (let i = 0; i < length; ++i) lowerElement(buffer + (i << align >>> 0), values[i]);
     exports.__unpin(buffer);
     exports.__unpin(header);
@@ -760,13 +775,13 @@ export class JSBuilder extends ExportsWalker {
       let arrayBufferViewInstance = program.arrayBufferViewInstance;
       let dataStartOffset = arrayBufferViewInstance.offsetof("dataStart");
       let byteLengthOffset = arrayBufferViewInstance.offsetof("byteLength");
+      this.needsGetU32 = true;
       sb.push(`  function __liftTypedArray(constructor, pointer) {
     if (!pointer) return null;
-    const memoryU32 = new Uint32Array(memory.buffer);
     return new constructor(
       memory.buffer,
-      memoryU32[pointer + ${dataStartOffset} >>> 2],
-      memoryU32[pointer + ${byteLengthOffset} >>> 2] / constructor.BYTES_PER_ELEMENT
+      __getU32(pointer + ${dataStartOffset}),
+      __dataview.getUint32(pointer + ${byteLengthOffset}, true) / constructor.BYTES_PER_ELEMENT
     ).slice();
   }
 `);
@@ -778,16 +793,16 @@ export class JSBuilder extends ExportsWalker {
       let bufferOffset = arrayBufferViewInstance.offsetof("buffer");
       let dataStartOffset = arrayBufferViewInstance.offsetof("dataStart");
       let byteLengthOffset = arrayBufferViewInstance.offsetof("byteLength");
+      this.needsSetU32 = true;
       sb.push(`  function __lowerTypedArray(constructor, id, align, values) {
     if (values == null) return 0;
     const
       length = values.length,
       buffer = exports.__pin(exports.__new(length << align, ${arrayBufferId})) >>> 0,
-      header = exports.__new(${size}, id) >>> 0,
-      memoryU32 = new Uint32Array(memory.buffer);
-    memoryU32[header + ${bufferOffset} >>> 2] = buffer;
-    memoryU32[header + ${dataStartOffset} >>> 2] = buffer;
-    memoryU32[header + ${byteLengthOffset} >>> 2] = length << align;
+      header = exports.__new(${size}, id) >>> 0;
+    __setU32(header + ${bufferOffset}, buffer);
+    __dataview.setUint32(header + ${dataStartOffset}, buffer, true);
+    __dataview.setUint32(header + ${byteLengthOffset}, length << align, true);
     new constructor(memory.buffer, buffer, length).set(values);
     exports.__unpin(buffer);
     return header;
@@ -797,10 +812,11 @@ export class JSBuilder extends ExportsWalker {
     if (this.needsLiftStaticArray) {
       let objectInstance = program.OBJECTInstance;
       let rtSizeOffset = objectInstance.offsetof("rtSize") - objectInstance.nextMemoryOffset;
+      this.needsGetU32 = true;
       sb.push(`  function __liftStaticArray(liftElement, align, pointer) {
     if (!pointer) return null;
     const
-      length = new Uint32Array(memory.buffer)[pointer - ${-rtSizeOffset} >>> 2] >>> align,
+      length = __getU32(pointer - ${-rtSizeOffset}) >>> align,
       values = new Array(length);
     for (let i = 0; i < length; ++i) values[i] = liftElement(pointer + (i << align >>> 0));
     return values;
@@ -878,12 +894,42 @@ export class JSBuilder extends ExportsWalker {
   }
 `);
     }
-    if (this.needsStoreRef) {
-      sb.push(`  function __store_ref(pointer, value) {
-    new Uint32Array(memory.buffer)[pointer >>> 2] = value;
-  }
-`);
+    if (
+      this.needsSetU8 ||
+      this.needsSetU16 ||
+      this.needsSetU32 ||
+      this.needsSetU64 ||
+      this.needsSetF32 ||
+      this.needsSetF64 ||
+      this.needsGetI8 ||
+      this.needsGetU8 ||
+      this.needsGetI16 ||
+      this.needsGetU16 ||
+      this.needsGetI32 ||
+      this.needsGetU32 ||
+      this.needsGetI64 ||
+      this.needsGetU64 ||
+      this.needsGetF32 ||
+      this.needsGetF64
+    ) {
+      sb.push("  let __dataview = new DataView(memory.buffer);\n");
     }
+    if (this.needsSetU8) sb.push(makeCheckedSetter("U8", "setUint8"));
+    if (this.needsSetU16) sb.push(makeCheckedSetter("U16", "setUint16"));
+    if (this.needsSetU32) sb.push(makeCheckedSetter("U32", "setUint32"));
+    if (this.needsSetU64) sb.push(makeCheckedSetter("U64", "setBigUint64"));
+    if (this.needsSetF32) sb.push(makeCheckedSetter("F32", "setFloat32"));
+    if (this.needsSetF64) sb.push(makeCheckedSetter("F64", "setFloat64"));
+    if (this.needsGetI8) sb.push(makeCheckedGetter("I8", "getInt8"));
+    if (this.needsGetU8) sb.push(makeCheckedGetter("U8", "getUint8"));
+    if (this.needsGetI16) sb.push(makeCheckedGetter("I16", "getInt16"));
+    if (this.needsGetU16) sb.push(makeCheckedGetter("U16", "getUint16"));
+    if (this.needsGetI32) sb.push(makeCheckedGetter("I32", "getInt32"));
+    if (this.needsGetU32) sb.push(makeCheckedGetter("U32", "getUint32"));
+    if (this.needsGetI64) sb.push(makeCheckedGetter("I64", "getBigInt64"));
+    if (this.needsGetU64) sb.push(makeCheckedGetter("U64", "getBigUint64"));
+    if (this.needsGetF32) sb.push(makeCheckedGetter("F32", "getFloat32"));
+    if (this.needsGetF64) sb.push(makeCheckedGetter("F64", "getFloat64"));
 
     let exportStart = options.exportStart;
     if (exportStart) {
@@ -971,8 +1017,8 @@ export class JSBuilder extends ExportsWalker {
     return moduleId;
   }
 
-  /** Lifts a WebAssembly value to a JavaScript value. */
-  makeLiftFromValue(name: string, type: Type, sb: string[] = this.sb): void {
+  /** Lifts a WebAssembly value to a JavaScript value, as an expression. */
+  makeLiftFromValue(valueExpr: string, type: Type, sb: string[] = this.sb): void {
     if (type.isInternalReference) {
       // Lift reference types
       const clazz = assert(type.getClassOrWrapper(this.program));
@@ -985,7 +1031,7 @@ export class JSBuilder extends ExportsWalker {
       } else if (clazz.extendsPrototype(this.program.arrayPrototype)) {
         let valueType = clazz.getArrayValueType();
         sb.push("__liftArray(");
-        this.makeLiftFromMemory(valueType, sb);
+        this.makeLiftFromMemoryFunc(valueType, sb);
         sb.push(", ");
         sb.push(valueType.alignLog2.toString());
         sb.push(", ");
@@ -993,7 +1039,7 @@ export class JSBuilder extends ExportsWalker {
       } else if (clazz.extendsPrototype(this.program.staticArrayPrototype)) {
         let valueType = clazz.getArrayValueType();
         sb.push("__liftStaticArray(");
-        this.makeLiftFromMemory(valueType, sb);
+        this.makeLiftFromMemoryFunc(valueType, sb);
         sb.push(", ");
         sb.push(valueType.alignLog2.toString());
         sb.push(", ");
@@ -1024,26 +1070,30 @@ export class JSBuilder extends ExportsWalker {
         sb.push("__liftInternref(");
         this.needsLiftInternref = true;
       }
-      sb.push(name);
-      if (!name.startsWith("new Uint32Array(")) {
+      sb.push(valueExpr);
+      if (!valueExpr.startsWith("__get")) {
         // no need to coerce when lifting with indirection
         sb.push(" >>> 0");
       }
       sb.push(")");
     } else {
-      // Lift basic plain types
-      if (type == Type.bool) {
-        sb.push(`${name} != 0`);
+      // Lift and coerce basic values (from a Wasm export)
+      if (type == Type.bool) { // i32 to boolean
+        sb.push(`${valueExpr} != 0`);
       } else if (type.isUnsignedIntegerValue && type.size >= 32) {
-        sb.push(type.size == 64 ? `BigInt.asUintN(64, ${name})` : `${name} >>> 0`);
+        if (type.size == 64) { // i64 to unsigned bigint
+          sb.push(`BigInt.asUintN(64, ${valueExpr})`);
+        } else { // i32 to unsigned
+          sb.push(`${valueExpr} >>> 0`);
+        }
       } else {
-        sb.push(name);
+        sb.push(valueExpr);
       }
     }
   }
 
-  /** Lowers a JavaScript value to a WebAssembly value. */
-  makeLowerToValue(name: string, type: Type, sb: string[] = this.sb): void {
+  /** Lowers a JavaScript value to a WebAssembly value, as an expression. */
+  makeLowerToValue(valueExpr: string, type: Type, sb: string[] = this.sb): void {
     if (type.isInternalReference) {
       // Lower reference types
       const clazz = assert(type.getClassOrWrapper(this.program));
@@ -1056,7 +1106,7 @@ export class JSBuilder extends ExportsWalker {
       } else if (clazz.extendsPrototype(this.program.arrayPrototype)) {
         let valueType = clazz.getArrayValueType();
         sb.push("__lowerArray(");
-        this.makeLowerToMemory(valueType, sb);
+        this.makeLowerToMemoryFunc(valueType, sb);
         sb.push(", ");
         sb.push(clazz.id.toString());
         sb.push(", ");
@@ -1066,7 +1116,7 @@ export class JSBuilder extends ExportsWalker {
       } else if (clazz.extendsPrototype(this.program.staticArrayPrototype)) {
         let valueType = clazz.getArrayValueType();
         sb.push("__lowerStaticArray(");
-        this.makeLowerToMemory(valueType, sb);
+        this.makeLowerToMemoryFunc(valueType, sb);
         sb.push(", ");
         sb.push(clazz.id.toString());
         sb.push(", ");
@@ -1104,7 +1154,7 @@ export class JSBuilder extends ExportsWalker {
         sb.push("__lowerInternref(");
         this.needsLowerInternref = true;
       }
-      sb.push(name);
+      sb.push(valueExpr);
       if (clazz.extendsPrototype(this.program.staticArrayPrototype)) {
         // optional last argument for __lowerStaticArray
         let valueType = clazz.getArrayValueType();
@@ -1143,7 +1193,7 @@ export class JSBuilder extends ExportsWalker {
       }
     } else {
       // Lower basic types
-      sb.push(name); // basic value
+      sb.push(valueExpr); // basic value
       if (type.isIntegerValue && type.size == 64) {
         sb.push(" || 0n");
       } else if (type == Type.bool) {
@@ -1153,108 +1203,152 @@ export class JSBuilder extends ExportsWalker {
     }
   }
 
-  /** Lifts a WebAssembly memory address to a JavaScript value. */
-  makeLiftFromMemory(valueType: Type, sb: string[] = this.sb, target: string | null = null): void {
-    if (!target) {
-      sb.push("pointer => ");
-      target = "pointer";
-    }
+  ensureLiftFromMemoryFn(valueType: Type): string {
     if (valueType.isInternalReference) {
-      let expr = new Array<string>();
-      expr.push("new Uint32Array(memory.buffer)[");
-      expr.push(target);
-      expr.push(" >>> 2]");
-      this.makeLiftFromValue(expr.join(""), valueType, sb);
-    } else {
-      if (valueType == Type.i8) {
-        sb.push("new Int8Array(memory.buffer)[");
-      } else if (valueType == Type.u8 || valueType == Type.bool) {
-        sb.push("new Uint8Array(memory.buffer)[");
-      } else if (valueType == Type.i16) {
-        sb.push("new Int16Array(memory.buffer)[");
-      } else if (valueType == Type.u16) {
-        sb.push("new Uint16Array(memory.buffer)[");
-      } else if (valueType == Type.i32 || valueType == Type.isize32) {
-        sb.push("new Int32Array(memory.buffer)[");
-      } else if (valueType == Type.u32 || valueType == Type.usize32) {
-        sb.push("new Uint32Array(memory.buffer)[");
-      } else if (valueType == Type.i64 || valueType == Type.isize64) {
-        sb.push("new BigInt64Array(memory.buffer)[");
-      } else if (valueType == Type.u64 || valueType == Type.usize64) {
-        sb.push("new BigUint64Array(memory.buffer)[");
-      } else if (valueType == Type.f32) {
-        sb.push("new Float32Array(memory.buffer)[");
-      } else if (valueType == Type.f64) {
-        sb.push("new Float64Array(memory.buffer)[");
+      if (this.program.options.isWasm64) {
+        this.needsGetU64 = true;
+        return "__getU64";
       } else {
-        sb.push("{ throw Error(\"unsupported type\"); }");
-        return;
+        this.needsGetU32 = true;
+        return "__getU32";
       }
-      sb.push(target);
-      sb.push(" >>> ");
-      sb.push(valueType.alignLog2.toString());
-      sb.push("]");
-      if (valueType == Type.bool) {
-        sb.push(" != 0");
-      }
+    }
+    if (valueType == Type.i8) {
+      this.needsGetI8 = true;
+      return "__getI8";
+    }
+    if (valueType == Type.u8 || valueType == Type.bool) {
+      this.needsGetU8 = true;
+      return "__getU8";
+    }
+    if (valueType == Type.i16) {
+      this.needsGetI16 = true;
+      return "__getI16";
+    }
+    if (valueType == Type.u16) {
+      this.needsGetU16 = true;
+      return "__getU16";
+    }
+    if (valueType == Type.i32 || valueType == Type.isize32) {
+      this.needsGetI32 = true;
+      return "__getI32";
+    }
+    if (valueType == Type.u32 || valueType == Type.usize32) {
+      this.needsGetU32 = true;
+      return "__getU32";
+    }
+    if (valueType == Type.i64 || valueType == Type.isize64) {
+      this.needsGetI64 = true;
+      return "__getI64";
+    }
+    if (valueType == Type.u64 || valueType == Type.usize64) {
+      this.needsGetU64 = true;
+      return "__getU64";
+    }
+    if (valueType == Type.f32) {
+      this.needsGetF32 = true;
+      return "__getF32";
+    }
+    if (valueType == Type.f64) {
+      this.needsGetF64 = true;
+      return "__getF64";
+    }
+    return "(() => { throw Error(\"unsupported type\"); })";
+  }
+
+  /** Lifts a WebAssembly memory address to a JavaScript value, as a function. */
+  makeLiftFromMemoryFunc(valueType: Type, sb: string[] = this.sb): void {
+    let fn = this.ensureLiftFromMemoryFn(valueType);
+    if (
+      // Compound or with coercion, see makeLiftFromValue
+      valueType.isInternalReference ||
+      valueType == Type.bool ||
+      (valueType.isUnsignedIntegerValue && valueType.size >= 32)
+    ) {
+      sb.push("pointer => ");
+      this.makeLiftFromValue(`${fn}(pointer)`, valueType, sb);
+    } else {
+      sb.push(fn);
     }
   }
 
-  /** Lowers a JavaScript value to a WebAssembly memory address. */
-  makeLowerToMemory(valueType: Type, sb: string[] = this.sb, targetName: string | null = null, valueName: string | null = null): void {
-    let skipTail = true;
-    if (!targetName  || !valueName) {
-      sb.push("(pointer, value) => { ");
-      targetName = "pointer";
-      valueName = "value";
-      skipTail = false;
-    }
+  /** Lifts a WebAssembly memory address to a JavaScript value, as a call. */
+  makeLiftFromMemoryCall(valueType: Type, sb: string[] = this.sb, pointerExpr: string = "pointer"): void {
+    let fn = this.ensureLiftFromMemoryFn(valueType);
     if (valueType.isInternalReference) {
-      // The RHS is typically another lowering to memory, which may trigger
-      // memory growth. Use a helper closure to delay evaluation of `memory`.
-      this.needsStoreRef = true;
-      sb.push("__store_ref(");
-      sb.push(targetName);
-      sb.push(", ");
-      this.makeLowerToValue(valueName, valueType, sb);
-      sb.push(")");
-      if (!skipTail) sb.push("; }");
-      return;
-    }
-    if (valueType == Type.i8) {
-      sb.push("new Int8Array(memory.buffer)[");
-    } else if (valueType == Type.u8 || valueType == Type.bool) {
-      sb.push("new Uint8Array(memory.buffer)[");
-    } else if (valueType == Type.i16) {
-      sb.push("new Int16Array(memory.buffer)[");
-    } else if (valueType == Type.u16) {
-      sb.push("new Uint16Array(memory.buffer)[");
-    } else if (valueType == Type.i32 || valueType == Type.isize32) {
-      sb.push("new Int32Array(memory.buffer)[");
-    } else if (valueType == Type.u32 || valueType == Type.usize32) {
-      sb.push("new Uint32Array(memory.buffer)[");
-    } else if (valueType == Type.i64 || valueType == Type.isize64) {
-      sb.push("new BigInt64Array(memory.buffer)[");
-    } else if (valueType == Type.u64 || valueType == Type.usize64) {
-      sb.push("new BigUint64Array(memory.buffer)[");
-    } else if (valueType == Type.f32) {
-      sb.push("new Float32Array(memory.buffer)[");
-    } else if (valueType == Type.f64) {
-      sb.push("new Float64Array(memory.buffer)[");
+      this.makeLiftFromValue(`${fn}(${pointerExpr})`, valueType, sb);
     } else {
-      if (skipTail) {
-        sb.push("(() => { throw Error(\"unsupported type\") })()");
-      } else {
-        sb.push("throw Error(\"unsupported type\"); }");
+      sb.push(fn);
+      sb.push("(");
+      sb.push(pointerExpr);
+      sb.push(")");
+      if (valueType == Type.bool) {
+        sb.push(" != 0");
       }
-      return;
+      // Other integers are known to be coerced here by loading from a view
     }
-    sb.push(targetName);
-    sb.push(" >>> ");
-    sb.push(valueType.alignLog2.toString());
-    sb.push("] = ");
-    this.makeLowerToValue(valueName, valueType, sb);
-    if (!skipTail) sb.push("; }");
+  }
+
+  ensureLowerToMemoryFn(valueType: Type): string {
+    if (valueType.isInternalReference) {
+      if (this.program.options.isWasm64) {
+        this.needsSetU64 = true;
+        return "__setU64";
+      } else {
+        this.needsSetU32 = true;
+        return "__setU32";
+      }
+    }
+    if (valueType == Type.i8 || valueType == Type.u8 || valueType == Type.bool) {
+      this.needsSetU8 = true;
+      return "__setU8";
+    }
+    if (valueType == Type.i16 || valueType == Type.u16) {
+      this.needsSetU16 = true;
+      return "__setU16";
+    }
+    if (valueType == Type.i32 || valueType == Type.u32 || valueType == Type.isize32 || valueType == Type.usize32) {
+      this.needsSetU32 = true;
+      return "__setU32";
+    }
+    if (valueType == Type.i64 || valueType == Type.u64 || valueType == Type.isize64 || valueType == Type.usize64) {
+      this.needsSetU64 = true;
+      return "__setU64";
+    }
+    if (valueType == Type.f32) {
+      this.needsSetF32 = true;
+      return "__setF32";
+    }
+    if (valueType == Type.f64) {
+      this.needsSetF64 = true;
+      return "__setF64";
+    }
+    return "(() => { throw Error(\"unsupported type\") })";
+  }
+
+  /** Lowers a JavaScript value to a WebAssembly memory address, as a function. */
+  makeLowerToMemoryFunc(valueType: Type, sb: string[] = this.sb): void {
+    let fn = this.ensureLowerToMemoryFn(valueType);
+    if (valueType.isInternalReference) {
+      sb.push("(pointer, value) => { ");
+      sb.push(fn);
+      sb.push("(pointer, ");
+      this.makeLowerToValue("value", valueType, sb);
+      sb.push("); }");
+    } else {
+      sb.push(fn);
+    }
+  }
+
+  /** Lowers a JavaScript value to a WebAssembly memory address, as a call. */
+  makeLowerToMemoryCall(valueType: Type, sb: string[] = this.sb, pointerExpr: string = "pointer", valueExpr: string = "value"): void {
+    let fn = this.ensureLowerToMemoryFn(valueType);
+    sb.push(fn);
+    sb.push("(");
+    sb.push(pointerExpr);
+    sb.push(", ");
+    this.makeLowerToValue(valueExpr, valueType, sb);
+    sb.push(")");
   }
 
   makeLiftRecord(clazz: Class): string {
@@ -1286,7 +1380,7 @@ export class JSBuilder extends ExportsWalker {
         indent(sb, this.indentLevel);
         sb.push(property.name);
         sb.push(": ");
-        this.makeLiftFromMemory(property.type, sb, "pointer + " + property.memoryOffset.toString());
+        this.makeLiftFromMemoryCall(property.type, sb, `pointer + ${property.memoryOffset}`);
         sb.push(",\n");
       }
     }
@@ -1328,7 +1422,7 @@ export class JSBuilder extends ExportsWalker {
         if (!property || !property.isField) continue;
         assert(property.memoryOffset >= 0);
         indent(sb, this.indentLevel);
-        this.makeLowerToMemory(property.type, sb, "pointer + " + property.memoryOffset.toString(), "value." + memberName);
+        this.makeLowerToMemoryCall(property.type, sb, `pointer + ${property.memoryOffset}`, `value.${memberName}`);
         sb.push(";\n");
       }
     }
@@ -1465,4 +1559,30 @@ export function lowerRequiresExportRuntime(type: Type): bool {
   // complex objects lower via internref by reference,
   // while plain objects lower using __new
   return isPlainObject(clazz);
+}
+
+/** Makes a checked setter function to memory for the given basic type. */
+function makeCheckedSetter(type: string, fn: string): string {
+  return `  function __set${type}(pointer, value) {
+    try {
+      __dataview.${fn}(pointer, value, true);
+    } catch {
+      __dataview = new DataView(memory.buffer);
+      __dataview.${fn}(pointer, value, true);
+    }
+  }
+`;
+}
+
+/** Makes a checked getter function from memory for the given basic type. */
+function makeCheckedGetter(type: string, fn: string): string {
+  return `  function __get${type}(pointer) {
+    try {
+      return __dataview.${fn}(pointer, true);
+    } catch {
+      __dataview = new DataView(memory.buffer);
+      return __dataview.${fn}(pointer, true);
+    }
+  }
+`;
 }

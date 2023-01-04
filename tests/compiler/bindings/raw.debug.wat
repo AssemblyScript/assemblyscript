@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (type $i32_=>_none (func_subtype (param i32) func))
  (type $none_=>_none (func_subtype func))
@@ -54,10 +54,10 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 1056))
- (global $~lib/memory/__data_end i32 (i32.const 1124))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33892))
- (global $~lib/memory/__heap_base i32 (i32.const 33892))
+ (global $~lib/rt/__rtti_base i32 (i32.const 1184))
+ (global $~lib/memory/__data_end i32 (i32.const 1252))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34020))
+ (global $~lib/memory/__heap_base i32 (i32.const 34020))
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\00a\00\00\00\00\00\00\00\00\00\00\00")
@@ -79,9 +79,10 @@
  (data (i32.const 748) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 812) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00&\00\00\00~\00l\00i\00b\00/\00s\00t\00a\00t\00i\00c\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00\00\00\00\00")
  (data (i32.const 876) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 924) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d\00\00\00")
- (data (i32.const 988) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00")
- (data (i32.const 1056) "\10\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\00\00\00\00\81\08\00\00\01\19\00\00\01\02\00\00$\t\00\00\a4\00\00\00$\n\00\00\02\t\00\00\00\00\00\00A\00\00\00\02A\00\00 \00\00\00")
+ (data (i32.const 924) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1052) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d\00\00\00")
+ (data (i32.const 1116) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00")
+ (data (i32.const 1184) "\10\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\00\00\00\00\81\08\00\00\01\19\00\00\01\02\00\00$\t\00\00\a4\00\00\00$\n\00\00\02\t\00\00\02A\00\00\00\00\00\00A\00\00\00 \00\00\00")
  (table $0 2 2 funcref)
  (elem $0 (i32.const 1) $start:bindings/esm~anonymous|0)
  (export "plainGlobal" (global $bindings/esm/plainGlobal))
@@ -116,6 +117,7 @@
  (export "staticarrayU16" (func $export:bindings/esm/staticarrayU16))
  (export "staticarrayI64" (func $export:bindings/esm/staticarrayI64))
  (export "arrayFunction" (func $export:bindings/esm/arrayFunction))
+ (export "arrayOfStringsFunction" (func $export:bindings/esm/arrayOfStringsFunction))
  (export "objectFunction" (func $export:bindings/esm/objectFunction))
  (export "internrefFunction" (func $export:bindings/esm/internrefFunction))
  (export "functionFunction" (func $export:bindings/esm/functionFunction))
@@ -2567,6 +2569,38 @@
   local.get $newPtr
   return
  )
+ (func $~lib/array/Array<~lib/string/String>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+  local.get $this
+  local.get $buffer
+  i32.store $0
+  local.get $this
+  local.get $buffer
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $~lib/array/Array<~lib/string/String>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+  local.get $this
+  local.get $dataStart
+  i32.store $0 offset=4
+ )
+ (func $~lib/array/Array<~lib/string/String>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+  local.get $this
+  local.get $byteLength
+  i32.store $0 offset=8
+ )
+ (func $~lib/array/Array<~lib/string/String>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+  local.get $this
+  local.get $length_
+  i32.store $0 offset=12
+ )
+ (func $~lib/array/Array<~lib/string/String>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/array/Array<~lib/string/String>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
  (func $bindings/esm/PlainObject#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
   local.get $a
@@ -2693,7 +2727,7 @@
    i32.const 3
    i32.eq
    if
-    i32.const 944
+    i32.const 1072
     i32.const 400
     i32.const 338
     i32.const 7
@@ -2726,7 +2760,7 @@
   i32.const 3
   i32.ne
   if
-   i32.const 1008
+   i32.const 1136
    i32.const 400
    i32.const 352
    i32.const 5
@@ -2802,13 +2836,16 @@
   i32.const 224
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 336
-  local.get $0
-  call $~lib/rt/itcms/__visit
   i32.const 944
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 1008
+  i32.const 336
+  local.get $0
+  call $~lib/rt/itcms/__visit
+  i32.const 1072
+  local.get $0
+  call $~lib/rt/itcms/__visit
+  i32.const 1136
   local.get $0
   call $~lib/rt/itcms/__visit
   global.get $bindings/esm/stringGlobal
@@ -2882,6 +2919,18 @@
   local.get $1
   call $~lib/array/Array<i32>#__visit
  )
+ (func $~lib/array/Array<~lib/string/String>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $~lib/array/Array<~lib/string/String>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/string/String>#__visit
+ )
  (func $bindings/esm/PlainObject~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -2917,32 +2966,12 @@
   local.get $1
   call $~lib/arraybuffer/ArrayBufferView~visit
  )
- (func $~lib/array/Array<~lib/string/String>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=4
- )
- (func $~lib/array/Array<~lib/string/String>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
- )
- (func $~lib/array/Array<~lib/string/String>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0
- )
- (func $~lib/array/Array<~lib/string/String>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<~lib/string/String>#__visit
- )
  (func $~lib/rt/__visit_members (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   block $invalid
    block $bindings/esm/NonPlainObject
-    block $~lib/array/Array<~lib/string/String>
-     block $~lib/typedarray/Uint8Array
-      block $bindings/esm/PlainObject
+    block $~lib/typedarray/Uint8Array
+     block $bindings/esm/PlainObject
+      block $~lib/array/Array<~lib/string/String>
        block $~lib/array/Array<i32>
         block $~lib/staticarray/StaticArray<i64>
          block $~lib/staticarray/StaticArray<u16>
@@ -2959,7 +2988,7 @@
                    i32.const 8
                    i32.sub
                    i32.load $0
-                   br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28%29=>void> $~lib/typedarray/Int16Array $~lib/typedarray/Float32Array $~lib/typedarray/Uint64Array $~lib/staticarray/StaticArray<i32> $~lib/staticarray/StaticArray<u16> $~lib/staticarray/StaticArray<i64> $~lib/array/Array<i32> $bindings/esm/PlainObject $~lib/typedarray/Uint8Array $~lib/array/Array<~lib/string/String> $bindings/esm/NonPlainObject $invalid
+                   br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28%29=>void> $~lib/typedarray/Int16Array $~lib/typedarray/Float32Array $~lib/typedarray/Uint64Array $~lib/staticarray/StaticArray<i32> $~lib/staticarray/StaticArray<u16> $~lib/staticarray/StaticArray<i64> $~lib/array/Array<i32> $~lib/array/Array<~lib/string/String> $bindings/esm/PlainObject $~lib/typedarray/Uint8Array $bindings/esm/NonPlainObject $invalid
                   end
                   return
                  end
@@ -3005,17 +3034,17 @@
       end
       local.get $0
       local.get $1
-      call $bindings/esm/PlainObject~visit
+      call $~lib/array/Array<~lib/string/String>~visit
       return
      end
      local.get $0
      local.get $1
-     call $~lib/typedarray/Uint8Array~visit
+     call $bindings/esm/PlainObject~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/array/Array<~lib/string/String>~visit
+    call $~lib/typedarray/Uint8Array~visit
     return
    end
    return
@@ -3057,8 +3086,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 33920
-   i32.const 33968
+   i32.const 34048
+   i32.const 34096
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -4600,6 +4629,444 @@
   local.get $5
   return
  )
+ (func $~lib/array/Array<~lib/string/String>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $bufferSize i32)
+  (local $buffer i32)
+  (local $6 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 16
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0 offset=8
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 16
+   i32.const 12
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0 offset=4
+  local.get $6
+  i32.const 0
+  call $~lib/array/Array<~lib/string/String>#set:buffer
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0 offset=4
+  local.get $6
+  i32.const 0
+  call $~lib/array/Array<~lib/string/String>#set:dataStart
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0 offset=4
+  local.get $6
+  i32.const 0
+  call $~lib/array/Array<~lib/string/String>#set:byteLength
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0 offset=4
+  local.get $6
+  i32.const 0
+  call $~lib/array/Array<~lib/string/String>#set:length_
+  local.get $length
+  i32.const 1073741820
+  i32.const 2
+  i32.shr_u
+  i32.gt_u
+  if
+   i32.const 224
+   i32.const 896
+   i32.const 70
+   i32.const 60
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $length
+  local.tee $2
+  i32.const 8
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.gt_u
+  select
+  i32.const 2
+  i32.shl
+  local.set $bufferSize
+  global.get $~lib/memory/__stack_pointer
+  local.get $bufferSize
+  i32.const 1
+  call $~lib/rt/itcms/__new
+  local.tee $buffer
+  i32.store $0 offset=8
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0 offset=4
+  local.get $6
+  local.get $buffer
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0 offset=12
+  local.get $6
+  call $~lib/array/Array<~lib/string/String>#set:buffer
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0 offset=4
+  local.get $6
+  local.get $buffer
+  call $~lib/array/Array<~lib/string/String>#set:dataStart
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0 offset=4
+  local.get $6
+  local.get $bufferSize
+  call $~lib/array/Array<~lib/string/String>#set:byteLength
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.store $0 offset=4
+  local.get $6
+  local.get $length
+  call $~lib/array/Array<~lib/string/String>#set:length_
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  i32.const 16
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $6
+ )
+ (func $~lib/array/Array<~lib/string/String>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $~lib/array/Array<~lib/string/String>#get:length_
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $~lib/array/Array<~lib/string/String>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
+  (local $value i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $index
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/array/Array<~lib/string/String>#get:length_
+  i32.ge_u
+  if
+   i32.const 528
+   i32.const 896
+   i32.const 114
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
+  local.get $index
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load $0
+  local.tee $value
+  i32.store $0 offset=4
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  local.get $value
+  i32.eqz
+  if
+   i32.const 944
+   i32.const 896
+   i32.const 118
+   i32.const 40
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $value
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
+ )
+ (func $~lib/array/Array<~lib/string/String>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $index
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/array/Array<~lib/string/String>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 528
+    i32.const 896
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 2
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   local.get $3
+   i32.store $0
+   local.get $3
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<~lib/string/String>#set:length_
+  end
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
+  local.get $index
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $value
+  i32.store $0
+  i32.const 1
+  drop
+  local.get $this
+  local.get $value
+  i32.const 1
+  call $~lib/rt/itcms/__link
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $bindings/esm/arrayOfStringsFunction (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
+  (local $c i32)
+  (local $i i32)
+  (local $i|4 i32)
+  (local $5 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  local.get $a
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/array/Array<~lib/string/String>#get:length
+  local.get $b
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $~lib/array/Array<~lib/string/String>#get:length
+  i32.add
+  call $~lib/array/Array<~lib/string/String>#constructor
+  local.tee $c
+  i32.store $0 offset=4
+  i32.const 0
+  local.set $i
+  loop $for-loop|0
+   local.get $i
+   local.get $a
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   local.get $5
+   i32.store $0
+   local.get $5
+   call $~lib/array/Array<~lib/string/String>#get:length
+   i32.lt_s
+   if
+    local.get $c
+    local.set $5
+    global.get $~lib/memory/__stack_pointer
+    local.get $5
+    i32.store $0
+    local.get $5
+    local.get $i
+    local.get $a
+    local.set $5
+    global.get $~lib/memory/__stack_pointer
+    local.get $5
+    i32.store $0 offset=8
+    local.get $5
+    local.get $i
+    call $~lib/array/Array<~lib/string/String>#__get
+    local.set $5
+    global.get $~lib/memory/__stack_pointer
+    local.get $5
+    i32.store $0 offset=8
+    local.get $5
+    call $~lib/array/Array<~lib/string/String>#__set
+    local.get $i
+    i32.const 1
+    i32.add
+    local.set $i
+    br $for-loop|0
+   end
+  end
+  i32.const 0
+  local.set $i|4
+  loop $for-loop|1
+   local.get $i|4
+   local.get $b
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   local.get $5
+   i32.store $0
+   local.get $5
+   call $~lib/array/Array<~lib/string/String>#get:length
+   i32.lt_s
+   if
+    local.get $c
+    local.set $5
+    global.get $~lib/memory/__stack_pointer
+    local.get $5
+    i32.store $0
+    local.get $5
+    local.get $a
+    local.set $5
+    global.get $~lib/memory/__stack_pointer
+    local.get $5
+    i32.store $0 offset=8
+    local.get $5
+    call $~lib/array/Array<~lib/string/String>#get:length
+    local.get $i|4
+    i32.add
+    local.get $b
+    local.set $5
+    global.get $~lib/memory/__stack_pointer
+    local.get $5
+    i32.store $0 offset=8
+    local.get $5
+    local.get $i|4
+    call $~lib/array/Array<~lib/string/String>#__get
+    local.set $5
+    global.get $~lib/memory/__stack_pointer
+    local.get $5
+    i32.store $0 offset=8
+    local.get $5
+    call $~lib/array/Array<~lib/string/String>#__set
+    local.get $i|4
+    i32.const 1
+    i32.add
+    local.set $i|4
+    br $for-loop|1
+   end
+  end
+  local.get $c
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $5
+  return
+ )
  (func $bindings/esm/PlainObject#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -4615,7 +5082,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 68
-   i32.const 12
+   i32.const 13
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store $0
@@ -5272,6 +5739,29 @@
   local.get $0
   local.get $1
   call $bindings/esm/arrayFunction
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
+ (func $export:bindings/esm/arrayOfStringsFunction (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $0
+  local.get $1
+  call $bindings/esm/arrayOfStringsFunction
   local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 8
