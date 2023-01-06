@@ -931,11 +931,6 @@ export class JSBuilder extends ExportsWalker {
     if (this.needsGetF32) sb.push(makeCheckedGetter("F32", "getFloat32"));
     if (this.needsGetF64) sb.push(makeCheckedGetter("F64", "getFloat64"));
 
-    let exportStart = options.exportStart;
-    if (exportStart) {
-      sb.push(`  exports.${exportStart}();\n`);
-    }
-
     if (hasAdaptedExports) {
       sb.push("  return adaptedExports;\n}\n");
     } else {

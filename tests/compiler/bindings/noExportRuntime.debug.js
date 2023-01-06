@@ -141,7 +141,6 @@ async function instantiate(module, imports = {}) {
       return __dataview.getUint32(pointer, true);
     }
   }
-  exports._start();
   return adaptedExports;
 }
 export const {
