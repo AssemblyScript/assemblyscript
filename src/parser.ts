@@ -797,6 +797,7 @@ export class Parser extends DiagnosticEmitter {
           }
         } else {
           if (isSignature) {
+            if (tn.peek() == Token.CloseParen) break; // allow trailing comma
             this.error(
               DiagnosticCode.Identifier_expected,
               tn.range()
