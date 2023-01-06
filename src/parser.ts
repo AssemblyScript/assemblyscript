@@ -795,9 +795,8 @@ export class Parser extends DiagnosticEmitter {
               firstParamKind = kind;
             }
           }
-        } else if (parameters && parameters.length && tn.peek() == Token.CloseParen) { // allow trailing comma
-          isSignature = true;
-          tn.discard(state);
+        } else if (parameters && tn.peek() == Token.CloseParen) { // allow trailing comma
+          assert(isSignature && parameters.length);
           break;
         } else {
           if (isSignature) {
