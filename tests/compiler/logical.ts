@@ -91,5 +91,23 @@ function testContextualBoolOr(someObj: Obj, someInt: i32): bool {
 }
 assert(testContextualBoolOr(new Obj(), 0));
 
-__stack_pointer = __heap_base;
-__collect();
+// Common type
+
+class A {}
+class B extends A {}
+class C extends A {}
+
+let b = new B();
+let c = new C();
+
+function commonOr(b: B | null): A {
+  return b || c;
+}
+assert(commonOr(b) == b);
+assert(commonOr(null) == c);
+
+function commonAnd(b: B | null): A | null {
+  return b && c;
+}
+assert(commonAnd(b) == c);
+assert(commonAnd(null) == null);

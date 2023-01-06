@@ -128,6 +128,46 @@ export namespace HeapTypeRef {
   export function isSubtype(ht: HeapTypeRef, superHt: HeapTypeRef): bool {
     return binaryen._BinaryenHeapTypeIsSubType(ht, superHt);
   }
+
+  export function leastUpperBound(a: HeapTypeRef, b: HeapTypeRef): HeapTypeRef {
+    // see binaryen/src/wasm/wasm-type.cpp
+    if (a == b) return a;
+    if (getBottom(a) != getBottom(b)) return -1;
+    if (isBottom(a)) return b;
+    if (isBottom(b)) return a;
+    if (a > b) {
+      let t = a;
+      a = b;
+      b = t;
+    }
+    switch (a) {
+      case HeapTypeRef.Extern:
+      case HeapTypeRef.Func: return -1;
+      case HeapTypeRef.Any: return a;
+      case HeapTypeRef.Eq: {
+        return b == HeapTypeRef.I31 || b == HeapTypeRef.Data || b == HeapTypeRef.Array
+          ? HeapTypeRef.Eq
+          : HeapTypeRef.Any;
+      }
+      case HeapTypeRef.I31: {
+        return b == HeapTypeRef.Data || b == HeapTypeRef.Array
+          ? HeapTypeRef.Eq
+          : HeapTypeRef.Any;
+      }
+      case HeapTypeRef.Data: {
+        return b == HeapTypeRef.Array
+          ? HeapTypeRef.Data
+          : HeapTypeRef.Any;
+      }
+      case HeapTypeRef.Array:
+      case HeapTypeRef.String:
+      case HeapTypeRef.StringviewWTF8:
+      case HeapTypeRef.StringviewWTF16:
+      case HeapTypeRef.StringviewIter: return HeapTypeRef.Any;
+    }
+    assert(false);
+    return -1;
+  }
 }
 
 /** Packed array element respectively struct field types. */
