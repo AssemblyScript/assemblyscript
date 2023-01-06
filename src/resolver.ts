@@ -1329,7 +1329,7 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.Local: { // someVar.prop
         let variableLikeElement = <VariableLikeElement>target;
         let type = variableLikeElement.type;
-        assert(type != Type.void);
+        if (type == Type.void) return null; // errored earlier
         let classReference = type.getClassOrWrapper(this.program);
         if (!classReference) {
           if (reportMode == ReportMode.Report) {
