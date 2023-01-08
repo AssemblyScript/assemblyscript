@@ -939,7 +939,7 @@ export class Parser extends DiagnosticEmitter {
     } while (tn.skip(Token.Comma));
 
     let ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
-    this.checkRuleCompleted(tn, isFor);
+    if (!tn.skip(Token.Semicolon) && !isFor) this.checkRuleCompleted(tn, isFor);
     return ret;
   }
 
@@ -1122,7 +1122,7 @@ export class Parser extends DiagnosticEmitter {
     }
 
     let ret = Node.createReturnStatement(expr, tn.range(startPos, tn.pos));
-    this.checkRuleCompleted(tn);
+    if (!tn.skip(Token.Semicolon)) this.checkRuleCompleted(tn);
     return ret;
   }
 
@@ -3417,7 +3417,7 @@ export class Parser extends DiagnosticEmitter {
     let expression = this.parseExpression(tn);
     if (!expression) return null;
     let ret = Node.createThrowStatement(expression, tn.range(startPos, tn.pos));
-    this.checkRuleCompleted(tn);
+    if (!tn.skip(Token.Semicolon)) this.checkRuleCompleted(tn);
     return ret;
   }
 
@@ -4402,10 +4402,9 @@ export class Parser extends DiagnosticEmitter {
   }
 
   private checkRuleCompleted(
-    tn: Tokenizer,
-    isFor: bool = false
+    tn: Tokenizer
   ): void {
-    if (!tn.skip(Token.Semicolon) && !isFor && tn.checkOffendingToken()) {
+    if (tn.checkOffendingToken()) {
       this.error(
         DiagnosticCode.Unexpected_token,
         tn.range()
