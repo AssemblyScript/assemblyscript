@@ -938,7 +938,7 @@ export class Parser extends DiagnosticEmitter {
       declarations.push(declaration);
     } while (tn.skip(Token.Comma));
 
-    var ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
+    let  ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
     this.checkRuleCompleted(tn, isFor);
     return ret;
   }
@@ -1121,7 +1121,7 @@ export class Parser extends DiagnosticEmitter {
       if (!(expr = this.parseExpression(tn))) return null;
     }
 
-    var ret = Node.createReturnStatement(expr, tn.range(startPos, tn.pos));
+    let ret = Node.createReturnStatement(expr, tn.range(startPos, tn.pos));
     this.checkRuleCompleted(tn);
     return ret;
   }
@@ -3416,7 +3416,7 @@ export class Parser extends DiagnosticEmitter {
     let startPos = tn.tokenPos;
     let expression = this.parseExpression(tn);
     if (!expression) return null;
-    var ret = Node.createThrowStatement(expression, tn.range(startPos, tn.pos));
+    let ret = Node.createThrowStatement(expression, tn.range(startPos, tn.pos));
     this.checkRuleCompleted(tn);
     return ret;
   }
