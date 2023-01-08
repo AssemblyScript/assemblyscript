@@ -938,7 +938,7 @@ export class Parser extends DiagnosticEmitter {
       declarations.push(declaration);
     } while (tn.skip(Token.Comma));
 
-    let  ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
+    let ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
     this.checkRuleCompleted(tn, isFor);
     return ret;
   }
