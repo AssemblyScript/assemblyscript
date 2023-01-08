@@ -17,6 +17,6 @@ function successCloseBrace(): i32 {
 function successCloseParen(): i32 {
   return (123);
 }
-// ERROR 1012: "Unexpected token." in trailing-exps-separated-by-space.ts(2,11+1)
-// ERROR 1012: "Unexpected token." in trailing-exps-separated-by-space.ts(7,10+3)
-// ERROR 1012: "Unexpected token." in trailing-exps-separated-by-space.ts(11,9+3)
+// ERROR 1012: "Unexpected token." in trailing-exps-separated-by-space.ts(2,13+0)
+// ERROR 1012: "Unexpected token." in trailing-exps-separated-by-space.ts(7,14+0)
+// ERROR 1012: "Unexpected token." in trailing-exps-separated-by-space.ts(11,13+0)

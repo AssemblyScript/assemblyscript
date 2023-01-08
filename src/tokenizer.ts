@@ -1710,17 +1710,6 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.readHexadecimalEscape(4, startIfTaggedTemplate);
   }
 
-  checkOffendingToken(): bool {
-    let pos = this.pos;
-    while (pos < this.end) {
-      const c = this.source.text.charCodeAt(pos);
-      if (isLineBreak(c) || c === CharCode.CloseBrace || c === CharCode.CloseParen) return false;
-      if (!isWhiteSpace(c)) break;
-      pos++;
-    }
-    return pos !== this.end;
-  }
-
   private readExtendedUnicodeEscape(startIfTaggedTemplate: i32 = -1): string {
     let start = this.pos;
     let value = this.readHexInteger();
