@@ -939,7 +939,7 @@ export class Parser extends DiagnosticEmitter {
     } while (tn.skip(Token.Comma));
 
     let ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
-    tn.skip(Token.Semicolon);
+    if (!tn.skip(Token.Semicolon) && !isFor) this.checkASI(tn);
     return ret;
   }
 
@@ -1122,7 +1122,7 @@ export class Parser extends DiagnosticEmitter {
     }
 
     let ret = Node.createReturnStatement(expr, tn.range(startPos, tn.pos));
-    tn.skip(Token.Semicolon);
+    if (!tn.skip(Token.Semicolon)) this.checkASI(tn);
     return ret;
   }
 
@@ -3009,7 +3009,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     let ret = Node.createBlockStatement(statements, tn.range(startPos, tn.pos));
-    tn.skip(Token.Semicolon);
+    if (topLevel) tn.skip(Token.Semicolon);
     return ret;
   }
 
@@ -3417,7 +3417,7 @@ export class Parser extends DiagnosticEmitter {
     let expression = this.parseExpression(tn);
     if (!expression) return null;
     let ret = Node.createThrowStatement(expression, tn.range(startPos, tn.pos));
-    tn.skip(Token.Semicolon);
+    if (!tn.skip(Token.Semicolon)) this.checkASI(tn);
     return ret;
   }
 
@@ -4399,6 +4399,18 @@ export class Parser extends DiagnosticEmitter {
       potentiallyGeneric = false;
     }
     return expr;
+  }
+
+  private checkASI(
+    tn: Tokenizer
+  ): void {
+    // see: https://tc39.es/ecma262/#sec-automatic-semicolon-insertion
+    let token = tn.peek(true);
+    if (tn.nextTokenOnNewLine || token == Token.EndOfFile || token == Token.CloseBrace) return;
+    this.error(
+      DiagnosticCode.Unexpected_token,
+      tn.range(tn.nextTokenPos)
+    );
   }
 
   /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */
