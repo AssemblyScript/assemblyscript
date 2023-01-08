@@ -2,7 +2,7 @@ import { utoa32, itoa32, utoa64, itoa64, dtoa } from "util/number";
 
 // preliminary
 var str: string = "hi, I'm a string";
-var nullStr: string;
+var nullStr: string | null = null;
 
 // exactly once in static memory
 assert(changetype<usize>(str) == changetype<usize>("hi, I'm a string"));
@@ -85,9 +85,13 @@ assert("a".localeCompare("") == 1);
 assert("".localeCompare("a") == -1);
 assert("null".localeCompare("null") == 0);
 assert("abc".localeCompare("abd") == -1);
+assert("abc".localeCompare("abf") == -1);
 assert("abd".localeCompare("abc") == 1);
+assert("abz".localeCompare("abc") == 1);
 assert("abcd".localeCompare("abc") == 1);
+assert("abz".localeCompare("abdd") == 1);
 assert("abc".localeCompare("abcd") == -1);
+assert("abdd".localeCompare("abz") == -1);
 assert("".localeCompare("   ") == -1);
 assert("\0".localeCompare("") == 1);
 
@@ -102,6 +106,15 @@ assert(" \n\t\rabc \t\r ".trimEnd() == " \n\t\rabc");
 assert("".trim() == "");
 assert("ab c".trim() == "ab c");
 assert(" \n\t\rabc \t\r ".trim() == "abc");
+
+// assert(bool.parse("true") == true);
+assert(bool.parse("\t\n true") == true);
+assert(bool.parse("\t\n true\n\r ") == true);
+assert(bool.parse("  trueabc") == false);
+assert(bool.parse("") == false);
+assert(bool.parse("tru") == false);
+assert(bool.parse("True") == false);
+assert(bool.parse("false") == false);
 
 assert(parseInt("0") == 0);
 assert(parseInt("000") == 0);
@@ -142,11 +155,15 @@ assert(isNaN(parseInt("+")));
 assert(isNaN(parseInt("123", 37)));
 assert(isNaN(parseInt("🔥")));
 assert(isNaN(parseInt("badnum")));
-assert(isNaN(F32.parseInt("badnum")));
-assert(isNaN(F64.parseInt("badnum")));
+assert(isNaN(F32.parseFloat("badnum")));
+assert(isNaN(F64.parseFloat("badnum")));
+assert(isNaN(f32.parse("badnum")));
+assert(isNaN(f64.parse("badnum")));
 
 assert(I32.parseInt("0x7FFFFFFF") == I32.MAX_VALUE);
+assert(i32.parse("0x7FFFFFFF") == I32.MAX_VALUE);
 assert(I64.parseInt("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
+assert(i64.parse("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
 
 // quick draft tests
 assert(parseFloat("0") == 0);
@@ -185,7 +202,6 @@ assert(parseFloat("1e60") == 1e+60);
 
 // special cases
 assert(parseFloat("123.4e") == 123.4);
-assert(parseFloat("-.00000") == -0.0);
 assert(parseFloat("1x") == 1.0);
 assert(parseFloat("-11e-1string") == -1.1);
 assert(parseFloat("01e1string") == 10);
@@ -224,10 +240,11 @@ assert(parseFloat("0.a") == 0.0);
 assert(parseFloat("1..1") == 1.0);
 assert(parseFloat("0.1.1") == 0.1);
 assert(parseFloat("0. 1") == +0.0);
-assert(parseFloat("+0.0") == +0.0);
-assert(parseFloat("-0.0") == -0.0);
-assert(parseFloat("+0") == +0);
-assert(parseFloat("-0") == -0);
+assert(Object.is(parseFloat("+0.0"), +0.0));
+assert(Object.is(parseFloat("-0.0"), -0.0));
+assert(Object.is(parseFloat("+0"), +0.0));
+assert(Object.is(parseFloat("-0"), -0.0));
+assert(Object.is(parseFloat("-.00000"), -0.0));
 assert(isNaN(parseFloat("+")));
 assert(isNaN(parseFloat("-")));
 assert(isNaN(parseFloat("--0")));
@@ -560,6 +577,10 @@ assert(itoa32(0x7fffffff, 10) == "2147483647");
 assert(itoa32(0x80000000, 10) == "-2147483648");
 assert(itoa32(0xffffffff, 10) == "-1");
 
+assert(itoa32(i8.MIN_VALUE,  10) == "-128");
+assert(itoa32(i16.MIN_VALUE, 10) == "-32768");
+assert(itoa32(i32.MIN_VALUE, 10) == "-2147483648");
+
 assert(utoa32(0, 10) == "0");
 assert(utoa32(1000, 10) == "1000");
 assert(utoa32(0x7fffffff, 10) == "2147483647");
@@ -789,6 +810,13 @@ assert("".concat("") == "");
 export function getString(): string {
   return str;
 }
+
+// Unicode escapes
+
+assert("\u{c0}\u{c8}" == "ÀÈ");
+assert("\u{00c0}\u{00c8}" == "ÀÈ");
+assert("\u{53D8}\u{91CF}" == "变量");
+assert("\u{2070E}\u{20731}" == "𠜎𠜱");
 
 // Unleak globals
 

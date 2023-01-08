@@ -17,6 +17,7 @@ export class Invalid<T> {
   declare declareField: i32;
   declare declareInitializer: i32 = 0;
   declare declareMethod(): i32 {}
+  overrideMethod(): void {}
 }
 // ERROR 1092: "Type parameters cannot appear on a constructor declaration." in class.ts(15,14+3)
 // ERROR 1110: "Type expected." in class.ts(18,21+0)
@@ -31,3 +32,4 @@ export class Invalid<T> {
 // ERROR 1039: "Initializers are not allowed in ambient contexts." in class.ts(35,35+1)
 // ERROR 1031: "'declare' modifier cannot appear on class elements of this kind." in class.ts(39,3+7)
 // ERROR 1183: "An implementation cannot be declared in ambient contexts." in class.ts(39,32+1)
+// ERROR 1042: "'override' modifier cannot be used here." in class.ts(42,3+8)

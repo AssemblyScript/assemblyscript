@@ -1,21 +1,21 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "declare" "externalConstant" (global $declare/externalConstant i32))
  (import "declare" "my.externalConstant" (global $declare/my.externalConstant i32))
  (import "declare" "externalFunction" (func $declare/externalFunction))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "declare" "my.externalFunction" (func $declare/my.externalFunction))
  (global $~lib/memory/__data_end i32 (i32.const 60))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
- (global $~lib/memory/__heap_base i32 (i32.const 16444))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
+ (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:declare
+ (func $start:declare (type $none_=>_none)
   call $declare/externalFunction
   global.get $declare/externalConstant
   i32.const 1
@@ -43,7 +43,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:declare
  )
 )

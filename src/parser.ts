@@ -16,13 +16,13 @@ import {
 import {
   Tokenizer,
   Token,
-  Range,
   CommentHandler,
   IdentifierHandling,
   isIllegalVariableIdentifier
 } from "./tokenizer";
 
 import {
+  Range,
   DiagnosticCode,
   DiagnosticEmitter,
   DiagnosticMessage
@@ -122,10 +122,10 @@ export class Parser extends DiagnosticEmitter {
   /** Constructs a new parser. */
   constructor(
     diagnostics: DiagnosticMessage[] | null = null,
-    sources: Source[] | null = null
+    sources: Source[] = []
   ) {
     super(diagnostics);
-    this.sources = sources ? sources : new Array<Source>();
+    this.sources = sources;
   }
 
   /** Parses a file and adds its definitions to the program. */
@@ -138,8 +138,8 @@ export class Parser extends DiagnosticEmitter {
     isEntry: bool
   ): void {
     // the frontend gives us paths with file extensions
-    var normalizedPath = normalizePath(path);
-    var internalPath = mangleInternalPath(normalizedPath);
+    let normalizedPath = normalizePath(path);
+    let internalPath = mangleInternalPath(normalizedPath);
 
     // check if already processed
     if (this.donelog.has(internalPath)) return;
@@ -162,14 +162,14 @@ export class Parser extends DiagnosticEmitter {
     }
 
     // create the source element
-    var source = new Source(
+    let source = new Source(
       isEntry
-        ? SourceKind.USER_ENTRY
+        ? SourceKind.UserEntry
         : path.startsWith(LIBRARY_PREFIX)
           ? path.indexOf(PATH_DELIMITER, LIBRARY_PREFIX.length) < 0
-            ? SourceKind.LIBRARY_ENTRY
-            : SourceKind.LIBRARY
-          : SourceKind.USER,
+            ? SourceKind.LibraryEntry
+            : SourceKind.Library
+          : SourceKind.User,
       normalizedPath,
       text
     );
@@ -179,10 +179,10 @@ export class Parser extends DiagnosticEmitter {
     this.currentModuleName = null;
 
     // tokenize and parse
-    var tn = new Tokenizer(source, this.diagnostics);
+    let tn = new Tokenizer(source, this.diagnostics);
     tn.onComment = this.onComment;
-    var statements = source.statements;
-    while (!tn.skip(Token.ENDOFFILE)) {
+    let statements = source.statements;
+    while (!tn.skip(Token.EndOfFile)) {
       let statement = this.parseTopLevelStatement(tn, null);
       if (statement) {
         statements.push(statement);
@@ -197,12 +197,12 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     namespace: NamespaceDeclaration | null = null
   ): Statement | null {
-    var flags = namespace ? namespace.flags & CommonFlags.AMBIENT : CommonFlags.NONE;
-    var startPos = -1;
+    let flags = namespace ? namespace.flags & CommonFlags.Ambient : CommonFlags.None;
+    let startPos = -1;
 
     // check decorators
-    var decorators: DecoratorNode[] | null = null;
-    while (tn.skip(Token.AT)) {
+    let decorators: DecoratorNode[] | null = null;
+    while (tn.skip(Token.At)) {
       if (startPos < 0) startPos = tn.tokenPos;
       let decorator = this.parseDecorator(tn);
       if (!decorator) {
@@ -214,25 +214,25 @@ export class Parser extends DiagnosticEmitter {
     }
 
     // check modifiers
-    var exportStart = 0;
-    var exportEnd = 0;
-    var defaultStart = 0;
-    var defaultEnd = 0;
-    if (tn.skip(Token.EXPORT)) {
+    let exportStart = 0;
+    let exportEnd = 0;
+    let defaultStart = 0;
+    let defaultEnd = 0;
+    if (tn.skip(Token.Export)) {
       if (startPos < 0) startPos = tn.tokenPos;
-      flags |= CommonFlags.EXPORT;
+      flags |= CommonFlags.Export;
       exportStart = tn.tokenPos;
       exportEnd = tn.pos;
-      if (tn.skip(Token.DEFAULT)) {
+      if (tn.skip(Token.Default)) {
         defaultStart = tn.tokenPos;
         defaultEnd = tn.pos;
       }
     }
 
-    var declareStart = 0;
-    var declareEnd = 0;
-    var contextIsAmbient = namespace != null && namespace.is(CommonFlags.AMBIENT);
-    if (tn.skip(Token.DECLARE)) {
+    let declareStart = 0;
+    let declareEnd = 0;
+    let contextIsAmbient = namespace != null && namespace.is(CommonFlags.Ambient);
+    if (tn.skip(Token.Declare)) {
       if (contextIsAmbient) {
         this.error(
           DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
@@ -242,23 +242,23 @@ export class Parser extends DiagnosticEmitter {
         if (startPos < 0) startPos = tn.tokenPos;
         declareStart = startPos;
         declareEnd = tn.pos;
-        flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
+        flags |= CommonFlags.Declare | CommonFlags.Ambient;
       }
     } else if (contextIsAmbient) {
-      flags |= CommonFlags.AMBIENT;
+      flags |= CommonFlags.Ambient;
     }
 
     // parse the statement
-    var statement: Statement | null = null;
+    let statement: Statement | null = null;
 
     // handle declarations
-    var first = tn.peek();
+    let first = tn.peek();
     if (startPos < 0) startPos = tn.nextTokenPos;
     switch (first) {
-      case Token.CONST: {
+      case Token.Const: {
         tn.next();
-        flags |= CommonFlags.CONST;
-        if (tn.skip(Token.ENUM)) {
+        flags |= CommonFlags.Const;
+        if (tn.skip(Token.Enum)) {
           statement = this.parseEnum(tn, flags, decorators, startPos);
         } else {
           statement = this.parseVariable(tn, flags, decorators, startPos);
@@ -266,26 +266,26 @@ export class Parser extends DiagnosticEmitter {
         decorators = null;
         break;
       }
-      case Token.LET: flags |= CommonFlags.LET;
-      case Token.VAR: {
+      case Token.Let: flags |= CommonFlags.Let;
+      case Token.Var: {
         tn.next();
         statement = this.parseVariable(tn, flags, decorators, startPos);
         decorators = null;
         break;
       }
-      case Token.ENUM: {
+      case Token.Enum: {
         tn.next();
         statement = this.parseEnum(tn, flags, decorators, startPos);
         decorators = null;
         break;
       }
-      case Token.FUNCTION: {
+      case Token.Function: {
         tn.next();
         statement = this.parseFunction(tn, flags, decorators, startPos);
         decorators = null;
         break;
       }
-      case Token.ABSTRACT: {
+      case Token.Abstract: {
         let state = tn.mark();
         tn.next();
         let abstractStart = tn.tokenPos;
@@ -296,8 +296,8 @@ export class Parser extends DiagnosticEmitter {
           statement = this.parseStatement(tn, true);
           break;
         }
-        if (next != Token.CLASS) {
-          if (next == Token.INTERFACE) {
+        if (next != Token.Class) {
+          if (next == Token.Interface) {
             this.error(
               DiagnosticCode._abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration,
               tn.range(abstractStart, abstractEnd)
@@ -309,20 +309,20 @@ export class Parser extends DiagnosticEmitter {
         } else {
           tn.discard(state);
         }
-        flags |= CommonFlags.ABSTRACT;
+        flags |= CommonFlags.Abstract;
         // fall through
       }
-      case Token.CLASS:
-      case Token.INTERFACE: {
+      case Token.Class:
+      case Token.Interface: {
         tn.next();
         statement = this.parseClassOrInterface(tn, flags, decorators, startPos);
         decorators = null;
         break;
       }
-      case Token.NAMESPACE: {
+      case Token.Namespace: {
         let state = tn.mark();
         tn.next();
-        if (tn.peek(false, IdentifierHandling.PREFER) == Token.IDENTIFIER) {
+        if (tn.peek(false, IdentifierHandling.Prefer) == Token.Identifier) {
           tn.discard(state);
           statement = this.parseNamespace(tn, flags, decorators, startPos);
           decorators = null;
@@ -332,20 +332,20 @@ export class Parser extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.IMPORT: {
+      case Token.Import: {
         tn.next();
-        flags |= CommonFlags.IMPORT;
-        if (flags & CommonFlags.EXPORT) {
+        flags |= CommonFlags.Import;
+        if (flags & CommonFlags.Export) {
           statement = this.parseExportImport(tn, startPos);
         } else {
           statement = this.parseImport(tn);
         }
         break;
       }
-      case Token.TYPE: { // also identifier
+      case Token.Type: { // also identifier
         let state = tn.mark();
         tn.next();
-        if (tn.peek(false, IdentifierHandling.PREFER) == Token.IDENTIFIER) {
+        if (tn.peek(false, IdentifierHandling.Prefer) == Token.Identifier) {
           tn.discard(state);
           statement = this.parseTypeDeclaration(tn, flags, decorators, startPos);
           decorators = null;
@@ -355,10 +355,10 @@ export class Parser extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.MODULE: { // also identifier
+      case Token.Module: { // also identifier
         let state = tn.mark();
         tn.next();
-        if (tn.peek(true) == Token.STRINGLITERAL && !tn.nextTokenOnNewLine) {
+        if (tn.peek(true) == Token.StringLiteral && !tn.nextTokenOnNewLine) {
           tn.discard(state);
           statement = this.parseModuleDeclaration(tn, flags);
         } else {
@@ -370,8 +370,8 @@ export class Parser extends DiagnosticEmitter {
       default: {
 
         // handle plain exports
-        if (flags & CommonFlags.EXPORT) {
-          if (defaultEnd && tn.skipIdentifier(IdentifierHandling.PREFER)) {
+        if (flags & CommonFlags.Export) {
+          if (defaultEnd && tn.skipIdentifier(IdentifierHandling.Prefer)) {
             if (declareEnd) {
               this.error(
                 DiagnosticCode.An_export_assignment_cannot_have_modifiers,
@@ -381,7 +381,7 @@ export class Parser extends DiagnosticEmitter {
             statement = this.parseExportDefaultAlias(tn, startPos, defaultStart, defaultEnd);
             defaultStart = defaultEnd = 0; // consume
           } else {
-            statement = this.parseExport(tn, startPos, (flags & CommonFlags.DECLARE) != 0);
+            statement = this.parseExport(tn, startPos, (flags & CommonFlags.Declare) != 0);
           }
 
         // handle non-declaration statements
@@ -419,11 +419,11 @@ export class Parser extends DiagnosticEmitter {
     // check if this an `export default` declaration
     if (defaultEnd && statement != null) {
       switch (statement.kind) {
-        case NodeKind.ENUMDECLARATION:
-        case NodeKind.FUNCTIONDECLARATION:
-        case NodeKind.CLASSDECLARATION:
-        case NodeKind.INTERFACEDECLARATION:
-        case NodeKind.NAMESPACEDECLARATION: {
+        case NodeKind.EnumDeclaration:
+        case NodeKind.FunctionDeclaration:
+        case NodeKind.ClassDeclaration:
+        case NodeKind.InterfaceDeclaration:
+        case NodeKind.NamespaceDeclaration: {
           return Node.createExportDefaultStatement(<DeclarationStatement>statement, tn.range(startPos, tn.pos));
         }
         default: {
@@ -439,13 +439,13 @@ export class Parser extends DiagnosticEmitter {
 
   /** Obtains the next file to parse. */
   nextFile(): string | null {
-    var backlog = this.backlog;
+    let backlog = this.backlog;
     return backlog.length ? assert(backlog.shift()) : null;
   }
 
   /** Obtains the path of the dependee of the given imported file. */
   getDependee(dependent: string): string | null {
-    var dependees = this.dependees;
+    let dependees = this.dependees;
     if (dependees.has(dependent)) {
       let dependee = assert(dependees.get(dependent));
       return dependee.source.internalPath;
@@ -471,10 +471,10 @@ export class Parser extends DiagnosticEmitter {
 
     // at: Identifier ('.' Identifier)*
 
-    var first = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
-    var current = first;
-    while (tn.skip(Token.DOT)) {
-      if (tn.skip(Token.IDENTIFIER)) {
+    let first = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
+    let current = first;
+    while (tn.skip(Token.Dot)) {
+      if (tn.skip(Token.Identifier)) {
         let next = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
         current.next = next;
         current = next;
@@ -499,35 +499,35 @@ export class Parser extends DiagnosticEmitter {
     // before: Type
 
     // NOTE: this parses our limited subset
-    var token = tn.next();
-    var startPos = tn.tokenPos;
+    let token = tn.next();
+    let startPos = tn.tokenPos;
 
-    var type: TypeNode;
+    let type: TypeNode;
 
     // '(' ...
-    if (token == Token.OPENPAREN) {
+    if (token == Token.OpenParen) {
 
       // '(' FunctionSignature ')' '|' 'null'?
-      let isNullableSignature = tn.skip(Token.OPENPAREN);
+      let isNullableSignature = tn.skip(Token.OpenParen);
       // FunctionSignature?
       let signature = this.tryParseFunctionType(tn);
       if (signature) {
         if (isNullableSignature) {
-          if (!tn.skip(Token.CLOSEPAREN)) {
+          if (!tn.skip(Token.CloseParen)) {
             this.error(
               DiagnosticCode._0_expected,
               tn.range(), ")"
             );
             return null;
           }
-          if (!tn.skip(Token.BAR)) {
+          if (!tn.skip(Token.Bar)) {
             this.error(
               DiagnosticCode._0_expected,
               tn.range(), "|"
             );
             return null;
           }
-          if (!tn.skip(Token.NULL)) {
+          if (!tn.skip(Token.Null)) {
             this.error(
               DiagnosticCode._0_expected,
               tn.range(), "null"
@@ -548,7 +548,7 @@ export class Parser extends DiagnosticEmitter {
       if (acceptParenthesized) {
         let innerType = this.parseType(tn, false, suppressErrors);
         if (!innerType) return null;
-        if (!tn.skip(Token.CLOSEPAREN)) {
+        if (!tn.skip(Token.CloseParen)) {
           if (!suppressErrors) {
             this.error(
               DiagnosticCode._0_expected,
@@ -569,51 +569,51 @@ export class Parser extends DiagnosticEmitter {
       }
 
     // 'void'
-    } else if (token == Token.VOID) {
+    } else if (token == Token.Void) {
       type = Node.createNamedType(
         Node.createSimpleTypeName("void", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // 'this'
-    } else if (token == Token.THIS) {
+    } else if (token == Token.This) {
       type = Node.createNamedType(
         Node.createSimpleTypeName("this", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // 'true'
-    } else if (token == Token.TRUE || token == Token.FALSE) {
+    } else if (token == Token.True || token == Token.False) {
       type = Node.createNamedType(
         Node.createSimpleTypeName("bool", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // 'null'
-    } else if (token == Token.NULL) {
+    } else if (token == Token.Null) {
       type = Node.createNamedType(
         Node.createSimpleTypeName("null", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // StringLiteral
-    } else if (token == Token.STRINGLITERAL) {
+    } else if (token == Token.StringLiteral) {
       tn.readString();
       type = Node.createNamedType(
         Node.createSimpleTypeName("string", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // Identifier
-    } else if (token == Token.IDENTIFIER) {
+    } else if (token == Token.Identifier) {
       let name = this.parseTypeName(tn);
       if (!name) return null;
       let parameters: TypeNode[] | null = null;
 
       // Name<T>
-      if (tn.skip(Token.LESSTHAN)) {
+      if (tn.skip(Token.LessThan)) {
         do {
           let parameter = this.parseType(tn, true, suppressErrors);
           if (!parameter) return null;
           if (!parameters) parameters = [ parameter ];
           else parameters.push(parameter);
-        } while (tn.skip(Token.COMMA));
-        if (!tn.skip(Token.GREATERTHAN)) {
+        } while (tn.skip(Token.Comma));
+        if (!tn.skip(Token.GreaterThan)) {
           if (!suppressErrors) {
             this.error(
               DiagnosticCode._0_expected,
@@ -635,8 +635,8 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
     // ... | null
-    while (tn.skip(Token.BAR)) {
-      if (tn.skip(Token.NULL)) {
+    while (tn.skip(Token.Bar)) {
+      if (tn.skip(Token.Null)) {
         type.isNullable = true;
       } else {
         let notNullStart = tn.pos;
@@ -651,9 +651,9 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     // ... [][]
-    while (tn.skip(Token.OPENBRACKET)) {
+    while (tn.skip(Token.OpenBracket)) {
       let bracketStart = tn.tokenPos;
-      if (!tn.skip(Token.CLOSEBRACKET)) {
+      if (!tn.skip(Token.CloseBracket)) {
         if (!suppressErrors) {
           this.error(
             DiagnosticCode._0_expected,
@@ -666,8 +666,8 @@ export class Parser extends DiagnosticEmitter {
 
       // ...[] | null
       let nullable = false;
-      if (tn.skip(Token.BAR)) {
-        if (tn.skip(Token.NULL)) {
+      if (tn.skip(Token.Bar)) {
+        if (tn.skip(Token.Null)) {
           nullable = true;
         } else {
           if (!suppressErrors) {
@@ -701,15 +701,15 @@ export class Parser extends DiagnosticEmitter {
 
     // at '(': ('...'? Identifier '?'? ':' Type (','  '...'? Identifier '?'? ':' Type)* )? ')' '=>' Type
 
-    var state = tn.mark();
-    var startPos = tn.tokenPos;
-    var parameters: ParameterNode[] | null = null;
-    var thisType: NamedTypeNode | null = null;
-    var isSignature: bool = false;
-    var firstParamNameNoType: IdentifierExpression | null = null;
-    var firstParamKind: ParameterKind = ParameterKind.DEFAULT;
+    let state = tn.mark();
+    let startPos = tn.tokenPos;
+    let parameters: ParameterNode[] | null = null;
+    let thisType: NamedTypeNode | null = null;
+    let isSignature: bool = false;
+    let firstParamNameNoType: IdentifierExpression | null = null;
+    let firstParamKind: ParameterKind = ParameterKind.Default;
 
-    if (tn.skip(Token.CLOSEPAREN)) {
+    if (tn.skip(Token.CloseParen)) {
       isSignature = true;
       tn.discard(state);
       parameters = [];
@@ -718,21 +718,21 @@ export class Parser extends DiagnosticEmitter {
       isSignature = false; // not yet known
       do {
         let paramStart = -1;
-        let kind = ParameterKind.DEFAULT;
-        if (tn.skip(Token.DOT_DOT_DOT)) {
+        let kind = ParameterKind.Default;
+        if (tn.skip(Token.Dot_Dot_Dot)) {
           paramStart = tn.tokenPos;
           isSignature = true;
           tn.discard(state);
-          kind = ParameterKind.REST;
+          kind = ParameterKind.Rest;
         }
-        if (tn.skip(Token.THIS)) {
+        if (tn.skip(Token.This)) {
           if (paramStart < 0) paramStart = tn.tokenPos;
-          if (tn.skip(Token.COLON)) {
+          if (tn.skip(Token.Colon)) {
             isSignature = true;
             tn.discard(state);
             let type = this.parseType(tn, false);
             if (!type) return null;
-            if (type.kind != NodeKind.NAMEDTYPE) {
+            if (type.kind != NodeKind.NamedType) {
               this.error(
                 DiagnosticCode.Identifier_expected,
                 type.range
@@ -749,19 +749,19 @@ export class Parser extends DiagnosticEmitter {
         } else if (tn.skipIdentifier()) {
           if (paramStart < 0) paramStart = tn.tokenPos;
           let name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range(tn.tokenPos, tn.pos));
-          if (tn.skip(Token.QUESTION)) {
+          if (tn.skip(Token.Question)) {
             isSignature = true;
             tn.discard(state);
-            if (kind == ParameterKind.REST) {
+            if (kind == ParameterKind.Rest) {
               this.error(
                 DiagnosticCode.A_rest_parameter_cannot_be_optional,
                 tn.range()
               ); // recoverable
             } else {
-              kind = ParameterKind.OPTIONAL;
+              kind = ParameterKind.Optional;
             }
           }
-          if (tn.skip(Token.COLON)) {
+          if (tn.skip(Token.Colon)) {
             isSignature = true;
             tn.discard(state);
             let type = this.parseType(tn); // not suppressing errors because known
@@ -774,7 +774,7 @@ export class Parser extends DiagnosticEmitter {
             else parameters.push(param);
           } else {
             if (!isSignature) {
-              if (tn.peek() == Token.COMMA) {
+              if (tn.peek() == Token.Comma) {
                 isSignature = true;
                 tn.discard(state);
               }
@@ -797,6 +797,7 @@ export class Parser extends DiagnosticEmitter {
           }
         } else {
           if (isSignature) {
+            if (tn.peek() == Token.CloseParen) break; // allow trailing comma
             this.error(
               DiagnosticCode.Identifier_expected,
               tn.range()
@@ -807,8 +808,8 @@ export class Parser extends DiagnosticEmitter {
           this.tryParseSignatureIsSignature = isSignature;
           return null;
         }
-      } while (tn.skip(Token.COMMA));
-      if (!tn.skip(Token.CLOSEPAREN)) {
+      } while (tn.skip(Token.Comma));
+      if (!tn.skip(Token.CloseParen)) {
         if (isSignature) {
           this.error(
             DiagnosticCode._0_expected,
@@ -822,8 +823,8 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    var returnType: TypeNode | null;
-    if (tn.skip(Token.EQUALS_GREATERTHAN)) {
+    let returnType: TypeNode | null;
+    if (tn.skip(Token.Equals_GreaterThan)) {
       if (!isSignature) {
         isSignature = true;
         tn.discard(state);
@@ -881,12 +882,12 @@ export class Parser extends DiagnosticEmitter {
 
     // at '@': Identifier ('.' Identifier)* '(' Arguments
 
-    var startPos = tn.tokenPos;
+    let startPos = tn.tokenPos;
     if (tn.skipIdentifier()) {
       let name = tn.readIdentifier();
       let expression: Expression = Node.createIdentifierExpression(name, tn.range(startPos, tn.pos));
-      while (tn.skip(Token.DOT)) {
-        if (tn.skipIdentifier(IdentifierHandling.PREFER)) {
+      while (tn.skip(Token.Dot)) {
+        if (tn.skipIdentifier(IdentifierHandling.Prefer)) {
           name = tn.readIdentifier();
           expression = Node.createPropertyAccessExpression(
             expression,
@@ -902,7 +903,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
       let args: Expression[] | null;
-      if (tn.skip(Token.OPENPAREN)) {
+      if (tn.skip(Token.OpenParen)) {
         args = this.parseArguments(tn);
         if (args) {
           return Node.createDecorator(expression, args, tn.range(startPos, tn.pos));
@@ -929,13 +930,13 @@ export class Parser extends DiagnosticEmitter {
 
     // at ('const' | 'let' | 'var'): VariableDeclaration (',' VariableDeclaration)* ';'?
 
-    var declarations = new Array<VariableDeclaration>();
+    let declarations = new Array<VariableDeclaration>();
     do {
       let declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);
       if (!declaration) return null;
       declaration.overriddenModuleName = this.currentModuleName;
       declarations.push(declaration);
-    } while (tn.skip(Token.COMMA));
+    } while (tn.skip(Token.Comma));
 
     var ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
     this.checkRuleCompleted(tn, isFor);
@@ -958,36 +959,42 @@ export class Parser extends DiagnosticEmitter {
       );
       return null;
     }
-    var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     if (isIllegalVariableIdentifier(identifier.text)) {
       this.error(
         DiagnosticCode.Identifier_expected,
         identifier.range
       );
     }
-    var flags = parentFlags;
-    if (tn.skip(Token.EXCLAMATION)) {
-      flags |= CommonFlags.DEFINITELY_ASSIGNED;
+    let flags = parentFlags;
+    if (tn.skip(Token.Exclamation)) {
+      flags |= CommonFlags.DefinitelyAssigned;
     }
 
-    var type: TypeNode | null = null;
-    if (tn.skip(Token.COLON)) {
+    let type: TypeNode | null = null;
+    if (tn.skip(Token.Colon)) {
       type = this.parseType(tn, true);
     }
 
-    var initializer: Expression | null = null;
-    if (tn.skip(Token.EQUALS)) {
-      if (flags & CommonFlags.AMBIENT) {
+    let initializer: Expression | null = null;
+    if (tn.skip(Token.Equals)) {
+      if (flags & CommonFlags.Ambient) {
         this.error(
           DiagnosticCode.Initializers_are_not_allowed_in_ambient_contexts,
           tn.range()
         ); // recoverable
       }
-      initializer = this.parseExpression(tn, Precedence.COMMA + 1);
+      initializer = this.parseExpression(tn, Precedence.Comma + 1);
       if (!initializer) return null;
+      if (flags & CommonFlags.DefinitelyAssigned) {
+        this.error(
+          DiagnosticCode.Declarations_with_initializers_cannot_also_have_definite_assignment_assertions,
+          initializer.range
+        );
+      }
     } else if (!isFor) {
-      if (flags & CommonFlags.CONST) {
-        if (!(flags & CommonFlags.AMBIENT)) {
+      if (flags & CommonFlags.Const) {
+        if (!(flags & CommonFlags.Ambient)) {
           this.error(
             DiagnosticCode._const_declarations_must_be_initialized,
             identifier.range
@@ -1000,8 +1007,8 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
     }
-    var range = Range.join(identifier.range, tn.range());
-    if (initializer && (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0) {
+    let range = Range.join(identifier.range, tn.range());
+    if ((flags & CommonFlags.DefinitelyAssigned) != 0 && (flags & CommonFlags.Ambient) != 0) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
         range
@@ -1026,28 +1033,28 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'enum': Identifier '{' (EnumValueDeclaration (',' EnumValueDeclaration )*)? '}' ';'?
 
-    if (tn.next() != Token.IDENTIFIER) {
+    if (tn.next() != Token.Identifier) {
       this.error(
         DiagnosticCode.Identifier_expected,
         tn.range()
       );
       return null;
     }
-    var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-    if (tn.next() != Token.OPENBRACE) {
+    let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    if (tn.next() != Token.OpenBrace) {
       this.error(
         DiagnosticCode._0_expected,
         tn.range(), "{"
       );
       return null;
     }
-    var members = new Array<EnumValueDeclaration>();
-    while (!tn.skip(Token.CLOSEBRACE)) {
-      let member = this.parseEnumValue(tn, CommonFlags.NONE);
+    let members = new Array<EnumValueDeclaration>();
+    while (!tn.skip(Token.CloseBrace)) {
+      let member = this.parseEnumValue(tn, CommonFlags.None);
       if (!member) return null;
       members.push(member);
-      if (!tn.skip(Token.COMMA)) {
-        if (tn.skip(Token.CLOSEBRACE)) {
+      if (!tn.skip(Token.Comma)) {
+        if (tn.skip(Token.CloseBrace)) {
           break;
         } else {
           this.error(
@@ -1058,7 +1065,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
     }
-    var ret = Node.createEnumDeclaration(
+    let ret = Node.createEnumDeclaration(
       identifier,
       decorators,
       flags,
@@ -1066,7 +1073,7 @@ export class Parser extends DiagnosticEmitter {
       tn.range(startPos, tn.pos)
     );
     ret.overriddenModuleName = this.currentModuleName;
-    tn.skip(Token.SEMICOLON);
+    tn.skip(Token.Semicolon);
     return ret;
   }
 
@@ -1084,10 +1091,10 @@ export class Parser extends DiagnosticEmitter {
       );
       return null;
     }
-    var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-    var value: Expression | null = null;
-    if (tn.skip(Token.EQUALS)) {
-      value = this.parseExpression(tn, Precedence.COMMA + 1);
+    let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    let value: Expression | null = null;
+    if (tn.skip(Token.Equals)) {
+      value = this.parseExpression(tn, Precedence.Comma + 1);
       if (!value) return null;
     }
     return Node.createEnumValueDeclaration(
@@ -1104,11 +1111,11 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'return': Expression | (';' | '}' | ...'\n')
 
-    var startPos = tn.tokenPos;
-    var expr: Expression | null = null;
+    let startPos = tn.tokenPos;
+    let expr: Expression | null = null;
     if (
-      tn.peek(true) != Token.SEMICOLON &&
-      tn.nextToken != Token.CLOSEBRACE &&
+      tn.peek(true) != Token.Semicolon &&
+      tn.nextToken != Token.CloseBrace &&
       !tn.nextTokenOnNewLine
     ) {
       if (!(expr = this.parseExpression(tn))) return null;
@@ -1125,10 +1132,10 @@ export class Parser extends DiagnosticEmitter {
 
     // at '<': TypeParameter (',' TypeParameter)* '>'
 
-    var typeParameters = new Array<TypeParameterNode>();
-    var seenOptional = false;
-    var start = tn.tokenPos;
-    while (!tn.skip(Token.GREATERTHAN)) {
+    let typeParameters = new Array<TypeParameterNode>();
+    let seenOptional = false;
+    let start = tn.tokenPos;
+    while (!tn.skip(Token.GreaterThan)) {
       let typeParameter = this.parseTypeParameter(tn);
       if (!typeParameter) return null;
       if (typeParameter.defaultType) {
@@ -1141,8 +1148,8 @@ export class Parser extends DiagnosticEmitter {
         typeParameter.defaultType = null;
       }
       typeParameters.push(typeParameter);
-      if (!tn.skip(Token.COMMA)) {
-        if (tn.skip(Token.GREATERTHAN)) {
+      if (!tn.skip(Token.Comma)) {
+        if (tn.skip(Token.GreaterThan)) {
           break;
         } else {
           this.error(
@@ -1168,16 +1175,16 @@ export class Parser extends DiagnosticEmitter {
 
     // before: Identifier ('extends' Type)? ('=' Type)?
 
-    if (tn.next() == Token.IDENTIFIER) {
+    if (tn.next() == Token.Identifier) {
       let identifier = Node.createIdentifierExpression(
         tn.readIdentifier(),
         tn.range()
       );
       let extendsType: NamedTypeNode | null = null;
-      if (tn.skip(Token.EXTENDS)) {
+      if (tn.skip(Token.Extends)) {
         let type = this.parseType(tn);
         if (!type) return null;
-        if (type.kind != NodeKind.NAMEDTYPE) {
+        if (type.kind != NodeKind.NamedType) {
           this.error(
             DiagnosticCode.Identifier_expected,
             type.range
@@ -1187,10 +1194,10 @@ export class Parser extends DiagnosticEmitter {
         extendsType = <NamedTypeNode>type;
       }
       let defaultType: NamedTypeNode | null = null;
-      if (tn.skip(Token.EQUALS)) {
+      if (tn.skip(Token.Equals)) {
         let type = this.parseType(tn);
         if (!type) return null;
-        if (type.kind != NodeKind.NAMEDTYPE) {
+        if (type.kind != NodeKind.NamedType) {
           this.error(
             DiagnosticCode.Identifier_expected,
             type.range
@@ -1223,19 +1230,19 @@ export class Parser extends DiagnosticEmitter {
 
     // at '(': (Parameter (',' Parameter)*)? ')'
 
-    var parameters = new Array<ParameterNode>();
-    var seenRest: ParameterNode | null = null;
-    var seenOptional = false;
-    var reportedRest = false;
-    var thisType: TypeNode | null = null;
+    let parameters = new Array<ParameterNode>();
+    let seenRest: ParameterNode | null = null;
+    let seenOptional = false;
+    let reportedRest = false;
+    let thisType: TypeNode | null = null;
 
     // check if there is a leading `this` parameter
     this.parseParametersThis = null;
-    if (tn.skip(Token.THIS)) {
-      if (tn.skip(Token.COLON)) {
+    if (tn.skip(Token.This)) {
+      if (tn.skip(Token.Colon)) {
         thisType = this.parseType(tn); // reports
         if (!thisType) return null;
-        if (thisType.kind == NodeKind.NAMEDTYPE) {
+        if (thisType.kind == NodeKind.NamedType) {
           this.parseParametersThis = <NamedTypeNode>thisType;
         } else {
           this.error(
@@ -1250,8 +1257,8 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
-      if (!tn.skip(Token.COMMA)) {
-        if (tn.skip(Token.CLOSEPAREN)) {
+      if (!tn.skip(Token.Comma)) {
+        if (tn.skip(Token.CloseParen)) {
           return parameters;
         } else {
           this.error(
@@ -1263,7 +1270,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    while (!tn.skip(Token.CLOSEPAREN)) {
+    while (!tn.skip(Token.CloseParen)) {
       let param = this.parseParameter(tn, isConstructor); // reports
       if (!param) return null;
       if (seenRest && !reportedRest) {
@@ -1283,18 +1290,18 @@ export class Parser extends DiagnosticEmitter {
           }
           break;
         }
-        case ParameterKind.OPTIONAL: {
+        case ParameterKind.Optional: {
           seenOptional = true;
           break;
         }
-        case ParameterKind.REST: {
+        case ParameterKind.Rest: {
           seenRest = param;
           break;
         }
       }
       parameters.push(param);
-      if (!tn.skip(Token.COMMA)) {
-        if (tn.skip(Token.CLOSEPAREN)) {
+      if (!tn.skip(Token.Comma)) {
+        if (tn.skip(Token.CloseParen)) {
           break;
         } else {
           this.error(
@@ -1315,34 +1322,34 @@ export class Parser extends DiagnosticEmitter {
 
     // before: ('public' | 'private' | 'protected' | '...')? Identifier '?'? (':' Type)? ('=' Expression)?
 
-    var isRest = false;
-    var isOptional = false;
-    var startRange: Range | null = null;
-    var accessFlags: CommonFlags = CommonFlags.NONE;
+    let isRest = false;
+    let isOptional = false;
+    let startRange: Range | null = null;
+    let accessFlags: CommonFlags = CommonFlags.None;
     if (isConstructor) {
-      if (tn.skip(Token.PUBLIC)) {
+      if (tn.skip(Token.Public)) {
         startRange = tn.range();
-        accessFlags |= CommonFlags.PUBLIC;
-      } else if (tn.skip(Token.PROTECTED)) {
+        accessFlags |= CommonFlags.Public;
+      } else if (tn.skip(Token.Protected)) {
         startRange = tn.range();
-        accessFlags |= CommonFlags.PROTECTED;
-      } else if (tn.skip(Token.PRIVATE)) {
+        accessFlags |= CommonFlags.Protected;
+      } else if (tn.skip(Token.Private)) {
         startRange = tn.range();
-        accessFlags |= CommonFlags.PRIVATE;
+        accessFlags |= CommonFlags.Private;
       }
-      if (tn.peek() == Token.READONLY) {
+      if (tn.peek() == Token.Readonly) {
         let state = tn.mark();
         tn.next();
-        if (tn.peek() != Token.COLON) { // modifier
+        if (tn.peek() != Token.Colon) { // modifier
           tn.discard(state);
           if (!startRange) startRange = tn.range();
-          accessFlags |= CommonFlags.READONLY;
+          accessFlags |= CommonFlags.Readonly;
         } else { // identifier
           tn.reset(state);
         }
       }
     }
-    if (tn.skip(Token.DOT_DOT_DOT)) {
+    if (tn.skip(Token.Dot_Dot_Dot)) {
       if (accessFlags) {
         this.error(
           DiagnosticCode.A_parameter_property_cannot_be_declared_using_a_rest_parameter,
@@ -1357,7 +1364,7 @@ export class Parser extends DiagnosticEmitter {
       if (!isRest) startRange = tn.range();
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       let type: TypeNode | null = null;
-      if (isOptional = tn.skip(Token.QUESTION)) {
+      if (isOptional = tn.skip(Token.Question)) {
         if (isRest) {
           this.error(
             DiagnosticCode.A_rest_parameter_cannot_be_optional,
@@ -1365,14 +1372,14 @@ export class Parser extends DiagnosticEmitter {
           );
         }
       }
-      if (tn.skip(Token.COLON)) {
+      if (tn.skip(Token.Colon)) {
         type = this.parseType(tn);
         if (!type) return null;
       } else {
         type = Node.createOmittedType(tn.range(tn.pos));
       }
       let initializer: Expression | null = null;
-      if (tn.skip(Token.EQUALS)) {
+      if (tn.skip(Token.Equals)) {
         if (isRest) {
           this.error(
             DiagnosticCode.A_rest_parameter_cannot_have_an_initializer,
@@ -1387,15 +1394,15 @@ export class Parser extends DiagnosticEmitter {
         } else {
           isOptional = true;
         }
-        initializer = this.parseExpression(tn, Precedence.COMMA + 1);
+        initializer = this.parseExpression(tn, Precedence.Comma + 1);
         if (!initializer) return null;
       }
       let param = Node.createParameter(
         isRest
-          ? ParameterKind.REST
+          ? ParameterKind.Rest
           : isOptional
-            ? ParameterKind.OPTIONAL
-            : ParameterKind.DEFAULT,
+            ? ParameterKind.Optional
+            : ParameterKind.Default,
         identifier,
         type,
         initializer,
@@ -1434,18 +1441,18 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
 
-    var name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-    var signatureStart = -1;
+    let name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    let signatureStart = -1;
 
-    var typeParameters: TypeParameterNode[] | null = null;
-    if (tn.skip(Token.LESSTHAN)) {
+    let typeParameters: TypeParameterNode[] | null = null;
+    if (tn.skip(Token.LessThan)) {
       signatureStart = tn.tokenPos;
       typeParameters = this.parseTypeParameters(tn);
       if (!typeParameters) return null;
-      flags |= CommonFlags.GENERIC;
+      flags |= CommonFlags.Generic;
     }
 
-    if (!tn.skip(Token.OPENPAREN)) {
+    if (!tn.skip(Token.OpenParen)) {
       this.error(
         DiagnosticCode._0_expected,
         tn.range(tn.pos), "("
@@ -1457,11 +1464,11 @@ export class Parser extends DiagnosticEmitter {
       signatureStart = tn.tokenPos;
     }
 
-    var parameters = this.parseParameters(tn);
+    let parameters = this.parseParameters(tn);
     if (!parameters) return null;
-    var thisType = this.parseParametersThis;
+    let thisType = this.parseParametersThis;
 
-    var isSetter = (flags & CommonFlags.SET) != 0;
+    let isSetter = (flags & CommonFlags.Set) != 0;
     if (isSetter) {
       if (parameters.length != 1) {
         this.error(
@@ -1477,7 +1484,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    if (flags & CommonFlags.GET) {
+    if (flags & CommonFlags.Get) {
       if (parameters.length) {
         this.error(
           DiagnosticCode.A_get_accessor_cannot_have_parameters,
@@ -1486,8 +1493,8 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    var returnType: TypeNode | null = null;
-    if (tn.skip(Token.COLON)) {
+    let returnType: TypeNode | null = null;
+    if (tn.skip(Token.Colon)) {
       returnType = this.parseType(tn, true, isSetter);
       if (!returnType) return null;
     }
@@ -1504,7 +1511,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    var signature = Node.createFunctionType(
+    let signature = Node.createFunctionType(
       parameters,
       returnType,
       thisType,
@@ -1512,9 +1519,9 @@ export class Parser extends DiagnosticEmitter {
       tn.range(signatureStart, tn.pos)
     );
 
-    var body: Statement | null = null;
-    if (tn.skip(Token.OPENBRACE)) {
-      if (flags & CommonFlags.AMBIENT) {
+    let body: Statement | null = null;
+    if (tn.skip(Token.OpenBrace)) {
+      if (flags & CommonFlags.Ambient) {
         this.error(
           DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts,
           tn.range()
@@ -1523,45 +1530,45 @@ export class Parser extends DiagnosticEmitter {
 
       body = this.parseBlockStatement(tn, false);
       if (!body) return null;
-    } else if (!(flags & CommonFlags.AMBIENT)) {
+    } else if (!(flags & CommonFlags.Ambient)) {
       this.error(
         DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
         tn.range(tn.pos)
       );
     }
 
-    var ret = Node.createFunctionDeclaration(
+    let ret = Node.createFunctionDeclaration(
       name,
       decorators,
       flags,
       typeParameters,
       signature,
       body,
-      ArrowKind.NONE,
+      ArrowKind.None,
       tn.range(startPos, tn.pos)
     );
     ret.overriddenModuleName = this.currentModuleName;
-    tn.skip(Token.SEMICOLON);
+    tn.skip(Token.Semicolon);
     return ret;
   }
 
   parseFunctionExpression(tn: Tokenizer): FunctionExpression | null {
-    var startPos = tn.tokenPos;
-    var name: IdentifierExpression;
-    var arrowKind = ArrowKind.NONE;
+    let startPos = tn.tokenPos;
+    let name: IdentifierExpression;
+    let arrowKind = ArrowKind.None;
 
     // either at 'function':
     //  Identifier?
     //  '(' Parameters (':' Type)?
     //  Statement
 
-    if (tn.token == Token.FUNCTION) {
+    if (tn.token == Token.Function) {
       if (tn.skipIdentifier()) {
         name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       } else { // empty name
         name = Node.createEmptyIdentifierExpression(tn.range(tn.pos));
       }
-      if (!tn.skip(Token.OPENPAREN)) {
+      if (!tn.skip(Token.OpenParen)) {
         this.error(
           DiagnosticCode._0_expected,
           tn.range(tn.pos), "("
@@ -1574,15 +1581,15 @@ export class Parser extends DiagnosticEmitter {
       //  Statement
 
     } else {
-      arrowKind = ArrowKind.ARROW_PARENTHESIZED;
-      assert(tn.token == Token.OPENPAREN);
+      arrowKind = ArrowKind.Parenthesized;
+      assert(tn.token == Token.OpenParen);
       name = Node.createEmptyIdentifierExpression(tn.range(tn.tokenPos));
     }
 
     // TODO: type parameters? doesn't seem worth it.
 
-    var signatureStart = tn.pos;
-    var parameters = this.parseParameters(tn);
+    let signatureStart = tn.pos;
+    let parameters = this.parseParameters(tn);
     if (!parameters) return null;
 
     return this.parseFunctionExpressionCommon(tn, name, parameters, this.parseParametersThis, arrowKind, startPos, signatureStart);
@@ -1600,8 +1607,8 @@ export class Parser extends DiagnosticEmitter {
     if (startPos < 0) startPos = name.range.start;
     if (signatureStart < 0) signatureStart = startPos;
 
-    var returnType: TypeNode | null = null;
-    if (arrowKind != ArrowKind.ARROW_SINGLE && tn.skip(Token.COLON)) {
+    let returnType: TypeNode | null = null;
+    if (arrowKind != ArrowKind.Single && tn.skip(Token.Colon)) {
       returnType = this.parseType(tn);
       if (!returnType) return null;
     } else {
@@ -1609,7 +1616,7 @@ export class Parser extends DiagnosticEmitter {
     }
 
     if (arrowKind) {
-      if (!tn.skip(Token.EQUALS_GREATERTHAN)) {
+      if (!tn.skip(Token.Equals_GreaterThan)) {
         this.error(
           DiagnosticCode._0_expected,
           tn.range(tn.pos), "=>"
@@ -1618,7 +1625,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    var signature = Node.createFunctionType(
+    let signature = Node.createFunctionType(
       parameters,
       returnType,
       explicitThis,
@@ -1626,16 +1633,16 @@ export class Parser extends DiagnosticEmitter {
       tn.range(signatureStart, tn.pos)
     );
 
-    var body: Statement | null = null;
+    let body: Statement | null = null;
     if (arrowKind) {
-      if (tn.skip(Token.OPENBRACE)) {
+      if (tn.skip(Token.OpenBrace)) {
         body = this.parseBlockStatement(tn, false);
       } else {
-        let bodyExpression = this.parseExpression(tn, Precedence.COMMA + 1);
+        let bodyExpression = this.parseExpression(tn, Precedence.Comma + 1);
         if (bodyExpression) body = Node.createExpressionStatement(bodyExpression);
       }
     } else {
-      if (!tn.skip(Token.OPENBRACE)) {
+      if (!tn.skip(Token.OpenBrace)) {
         this.error(
           DiagnosticCode._0_expected,
           tn.range(tn.pos), "{"
@@ -1646,10 +1653,10 @@ export class Parser extends DiagnosticEmitter {
     }
     if (!body) return null;
 
-    var declaration = Node.createFunctionDeclaration(
+    let declaration = Node.createFunctionDeclaration(
       name,
       null,
-      CommonFlags.NONE,
+      CommonFlags.None,
       null,
       signature,
       body,
@@ -1673,7 +1680,7 @@ export class Parser extends DiagnosticEmitter {
     //   ('implements' Type (',' Type)*)?
     //   '{' ClassMember* '}'
 
-    var isInterface = tn.token == Token.INTERFACE;
+    let isInterface = tn.token == Token.Interface;
 
     if (!tn.skipIdentifier()) {
       this.error(
@@ -1683,23 +1690,23 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
 
-    var identifier = Node.createIdentifierExpression(
+    let identifier = Node.createIdentifierExpression(
       tn.readIdentifier(),
       tn.range()
     );
 
-    var typeParameters: TypeParameterNode[] | null = null;
-    if (tn.skip(Token.LESSTHAN)) {
+    let typeParameters: TypeParameterNode[] | null = null;
+    if (tn.skip(Token.LessThan)) {
       typeParameters = this.parseTypeParameters(tn);
       if (!typeParameters) return null;
-      flags |= CommonFlags.GENERIC;
+      flags |= CommonFlags.Generic;
     }
 
-    var extendsType: NamedTypeNode | null = null;
-    if (tn.skip(Token.EXTENDS)) {
+    let extendsType: NamedTypeNode | null = null;
+    if (tn.skip(Token.Extends)) {
       let type = this.parseType(tn);
       if (!type) return null;
-      if (type.kind != NodeKind.NAMEDTYPE) {
+      if (type.kind != NodeKind.NamedType) {
         this.error(
           DiagnosticCode.Identifier_expected,
           type.range
@@ -1709,8 +1716,8 @@ export class Parser extends DiagnosticEmitter {
       extendsType = <NamedTypeNode>type;
     }
 
-    var implementsTypes: NamedTypeNode[] | null = null;
-    if (tn.skip(Token.IMPLEMENTS)) {
+    let implementsTypes: NamedTypeNode[] | null = null;
+    if (tn.skip(Token.Implements)) {
       if (isInterface) {
         this.error(
           DiagnosticCode.Interface_declaration_cannot_have_implements_clause,
@@ -1720,7 +1727,7 @@ export class Parser extends DiagnosticEmitter {
       do {
         let type = this.parseType(tn);
         if (!type) return null;
-        if (type.kind != NodeKind.NAMEDTYPE) {
+        if (type.kind != NodeKind.NamedType) {
           this.error(
             DiagnosticCode.Identifier_expected,
             type.range
@@ -1731,10 +1738,10 @@ export class Parser extends DiagnosticEmitter {
           if (!implementsTypes) implementsTypes = [];
           implementsTypes.push(<NamedTypeNode>type);
         }
-      } while (tn.skip(Token.COMMA));
+      } while (tn.skip(Token.Comma));
     }
 
-    if (!tn.skip(Token.OPENBRACE)) {
+    if (!tn.skip(Token.OpenBrace)) {
       this.error(
         DiagnosticCode._0_expected,
         tn.range(), "{"
@@ -1742,8 +1749,8 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
 
-    var members = new Array<DeclarationStatement>();
-    var declaration: ClassDeclaration;
+    let members = new Array<DeclarationStatement>();
+    let declaration: ClassDeclaration;
     if (isInterface) {
       assert(!implementsTypes);
       declaration = Node.createInterfaceDeclaration(
@@ -1768,11 +1775,11 @@ export class Parser extends DiagnosticEmitter {
         tn.range(startPos, tn.pos)
       );
     }
-    if (!tn.skip(Token.CLOSEBRACE)) {
+    if (!tn.skip(Token.CloseBrace)) {
       do {
         let member = this.parseClassMember(tn, declaration);
         if (member) {
-          if (member.kind == NodeKind.INDEXSIGNATURE) {
+          if (member.kind == NodeKind.IndexSignature) {
             declaration.indexSignature = <IndexSignatureNode>member;
           } else {
             assert(member instanceof DeclarationStatement);
@@ -1780,7 +1787,7 @@ export class Parser extends DiagnosticEmitter {
           }
         } else {
           this.skipStatement(tn);
-          if (tn.skip(Token.ENDOFFILE)) {
+          if (tn.skip(Token.EndOfFile)) {
             this.error(
               DiagnosticCode._0_expected,
               tn.range(), "}"
@@ -1788,7 +1795,7 @@ export class Parser extends DiagnosticEmitter {
             return null;
           }
         }
-      } while (!tn.skip(Token.CLOSEBRACE));
+      } while (!tn.skip(Token.CloseBrace));
     }
     declaration.range.end = tn.pos;
     declaration.overriddenModuleName = this.currentModuleName;
@@ -1799,8 +1806,8 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'class': Identifier? '{' ... '}'
 
-    var startPos = tn.tokenPos;
-    var name: IdentifierExpression;
+    let startPos = tn.tokenPos;
+    let name: IdentifierExpression;
 
     if (tn.skipIdentifier()) {
       name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
@@ -1808,7 +1815,7 @@ export class Parser extends DiagnosticEmitter {
       name = Node.createEmptyIdentifierExpression(tn.range(tn.pos));
     }
 
-    if (!tn.skip(Token.OPENBRACE)) {
+    if (!tn.skip(Token.OpenBrace)) {
       this.error(
         DiagnosticCode._0_expected,
         tn.range(tn.pos), "{"
@@ -1816,22 +1823,22 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
 
-    var members = new Array<DeclarationStatement>();
-    var declaration = Node.createClassDeclaration(
+    let members = new Array<DeclarationStatement>();
+    let declaration = Node.createClassDeclaration(
       name,
       null,
-      CommonFlags.NONE,
+      CommonFlags.None,
       null,
       null,
       null,
       members,
       tn.range(startPos, tn.pos)
     );
-    if (!tn.skip(Token.CLOSEBRACE)) {
+    if (!tn.skip(Token.CloseBrace)) {
       do {
         let member = this.parseClassMember(tn, declaration);
         if (member) {
-          if (member.kind == NodeKind.INDEXSIGNATURE) {
+          if (member.kind == NodeKind.IndexSignature) {
             declaration.indexSignature = <IndexSignatureNode>member;
           } else {
             assert(declaration instanceof DeclarationStatement);
@@ -1839,7 +1846,7 @@ export class Parser extends DiagnosticEmitter {
           }
         } else {
           this.skipStatement(tn);
-          if (tn.skip(Token.ENDOFFILE)) {
+          if (tn.skip(Token.EndOfFile)) {
             this.error(
               DiagnosticCode._0_expected,
               tn.range(), "}"
@@ -1847,7 +1854,7 @@ export class Parser extends DiagnosticEmitter {
             return null;
           }
         }
-      } while (!tn.skip(Token.CLOSEBRACE));
+      } while (!tn.skip(Token.CloseBrace));
     }
     declaration.range.end = tn.pos;
     return Node.createClassExpression(declaration);
@@ -1862,21 +1869,22 @@ export class Parser extends DiagnosticEmitter {
     //   'declare'?
     //   ('public' | 'private' | 'protected')?
     //   ('static' | 'abstract')?
+    //   'override'?
     //   'readonly'?
     //   ('get' | 'set')?
     //   Identifier ...
 
-    var isInterface = parent.kind == NodeKind.INTERFACEDECLARATION;
-    var startPos = 0;
-    var decorators: DecoratorNode[] | null = null;
-    if (tn.skip(Token.AT)) {
+    let isInterface = parent.kind == NodeKind.InterfaceDeclaration;
+    let startPos = 0;
+    let decorators: DecoratorNode[] | null = null;
+    if (tn.skip(Token.At)) {
       startPos = tn.tokenPos;
       do {
         let decorator = this.parseDecorator(tn);
         if (!decorator) break;
         if (!decorators) decorators = new Array();
         decorators.push(decorator);
-      } while (tn.skip(Token.AT));
+      } while (tn.skip(Token.At));
       if (isInterface && decorators) {
         this.error(
           DiagnosticCode.Decorators_are_not_valid_here,
@@ -1886,15 +1894,15 @@ export class Parser extends DiagnosticEmitter {
     }
 
     // inherit ambient status
-    var flags = parent.flags & CommonFlags.AMBIENT;
+    let flags = parent.flags & CommonFlags.Ambient;
 
-    // implemented methods are virtual
-    if (isInterface) flags |= CommonFlags.VIRTUAL;
+    // interface methods are always overridden if used
+    if (isInterface) flags |= CommonFlags.Overridden;
 
-    var declareStart = 0;
-    var declareEnd = 0;
-    var contextIsAmbient = parent.is(CommonFlags.AMBIENT);
-    if (tn.skip(Token.DECLARE)) {
+    let declareStart = 0;
+    let declareEnd = 0;
+    let contextIsAmbient = parent.is(CommonFlags.Ambient);
+    if (tn.skip(Token.Declare)) {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
@@ -1907,98 +1915,114 @@ export class Parser extends DiagnosticEmitter {
             tn.range()
           ); // recoverable
         } else {
-          flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
+          flags |= CommonFlags.Declare | CommonFlags.Ambient;
           declareStart = tn.tokenPos;
           declareEnd = tn.pos;
         }
       }
       if (!startPos) startPos = tn.tokenPos;
     } else if (contextIsAmbient) {
-      flags |= CommonFlags.AMBIENT;
+      flags |= CommonFlags.Ambient;
     }
 
-    var accessStart = 0;
-    var accessEnd = 0;
-    if (tn.skip(Token.PUBLIC)) {
+    let accessStart = 0;
+    let accessEnd = 0;
+    if (tn.skip(Token.Public)) {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(), "public"
         );
       } else {
-        flags |= CommonFlags.PUBLIC;
+        flags |= CommonFlags.Public;
         accessStart = tn.tokenPos;
         accessEnd = tn.pos;
       }
       if (!startPos) startPos = tn.tokenPos;
-    } else if (tn.skip(Token.PRIVATE)) {
+    } else if (tn.skip(Token.Private)) {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(), "private"
         );
       } else {
-        flags |= CommonFlags.PRIVATE;
+        flags |= CommonFlags.Private;
         accessStart = tn.tokenPos;
         accessEnd = tn.pos;
       }
       if (!startPos) startPos = tn.tokenPos;
-    } else if (tn.skip(Token.PROTECTED)) {
+    } else if (tn.skip(Token.Protected)) {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(), "protected"
         );
       } else {
-        flags |= CommonFlags.PROTECTED;
+        flags |= CommonFlags.Protected;
         accessStart = tn.tokenPos;
         accessEnd = tn.pos;
       }
       if (!startPos) startPos = tn.tokenPos;
     }
 
-    var staticStart = 0;
-    var staticEnd = 0;
-    var abstractStart = 0;
-    var abstractEnd = 0;
-    if (tn.skip(Token.STATIC)) {
+    let staticStart = 0;
+    let staticEnd = 0;
+    let abstractStart = 0;
+    let abstractEnd = 0;
+    if (tn.skip(Token.Static)) {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(), "static"
         );
       } else {
-        flags |= CommonFlags.STATIC;
+        flags |= CommonFlags.Static;
         staticStart = tn.tokenPos;
         staticEnd = tn.pos;
       }
       if (!startPos) startPos = tn.tokenPos;
     } else {
-      flags |= CommonFlags.INSTANCE;
-      if (tn.skip(Token.ABSTRACT)) {
-        if (isInterface || !parent.is(CommonFlags.ABSTRACT)) {
+      flags |= CommonFlags.Instance;
+      if (tn.skip(Token.Abstract)) {
+        if (isInterface || !parent.is(CommonFlags.Abstract)) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(), "abstract"
           );
         } else {
-          flags |= CommonFlags.ABSTRACT;
+          flags |= CommonFlags.Abstract;
           abstractStart = tn.tokenPos;
           abstractEnd = tn.pos;
         }
         if (!startPos) startPos = tn.tokenPos;
       }
-      if (parent.flags & CommonFlags.GENERIC) flags |= CommonFlags.GENERIC_CONTEXT;
+      if (parent.flags & CommonFlags.Generic) flags |= CommonFlags.GenericContext;
     }
 
-    var readonlyStart = 0;
-    var readonlyEnd = 0;
-    if (tn.peek() == Token.READONLY) {
+    let overrideStart = 0;
+    let overrideEnd = 0;
+    if (tn.skip(Token.Override)) {
+      if (isInterface || parent.extendsType == null) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "override"
+        );
+      } else {
+        flags |= CommonFlags.Override;
+        overrideStart = tn.tokenPos;
+        overrideEnd = tn.pos;
+      }
+      if (!startPos) startPos = tn.tokenPos;
+    }
+
+    let readonlyStart = 0;
+    let readonlyEnd = 0;
+    if (tn.peek() == Token.Readonly) {
       let state = tn.mark();
       tn.next();
-      if (tn.peek() != Token.COLON) { // modifier
+      if (tn.peek() != Token.Colon) { // modifier
         tn.discard(state);
-        flags |= CommonFlags.READONLY;
+        flags |= CommonFlags.Readonly;
         readonlyStart = tn.tokenPos;
         readonlyEnd = tn.pos;
         if (!startPos) startPos = readonlyStart;
@@ -2008,23 +2032,23 @@ export class Parser extends DiagnosticEmitter {
     }
 
     // check if accessor: ('get' | 'set') ^\n Identifier
-    var state = tn.mark();
-    var isConstructor = false;
-    var isGetter = false;
-    var getStart = 0;
-    var getEnd = 0;
-    var isSetter = false;
-    var setStart = 0;
-    var setEnd = 0;
+    let state = tn.mark();
+    let isConstructor = false;
+    let isGetter = false;
+    let getStart = 0;
+    let getEnd = 0;
+    let isSetter = false;
+    let setStart = 0;
+    let setEnd = 0;
     if (!isInterface) {
-      if (tn.skip(Token.GET)) {
-        if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-          flags |= CommonFlags.GET;
+      if (tn.skip(Token.Get)) {
+        if (tn.peek(true, IdentifierHandling.Prefer) == Token.Identifier && !tn.nextTokenOnNewLine) {
+          flags |= CommonFlags.Get;
           isGetter = true;
           getStart = tn.tokenPos;
           getEnd = tn.pos;
           if (!startPos) startPos = getStart;
-          if (flags & CommonFlags.READONLY) {
+          if (flags & CommonFlags.Readonly) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
               tn.range(readonlyStart, readonlyEnd), "readonly"
@@ -2033,14 +2057,14 @@ export class Parser extends DiagnosticEmitter {
         } else {
           tn.reset(state);
         }
-      } else if (tn.skip(Token.SET)) {
-        if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-          flags |= CommonFlags.SET;
+      } else if (tn.skip(Token.Set)) {
+        if (tn.peek(true, IdentifierHandling.Prefer) == Token.Identifier && !tn.nextTokenOnNewLine) {
+          flags |= CommonFlags.Set;
           isSetter = true;
           setStart = tn.tokenPos;
           setEnd = tn.pos;
           if (!startPos) startPos = setStart;
-          if (flags & CommonFlags.READONLY) {
+          if (flags & CommonFlags.Readonly) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
               tn.range(readonlyStart, readonlyEnd), "readonly"
@@ -2049,23 +2073,23 @@ export class Parser extends DiagnosticEmitter {
         } else {
           tn.reset(state);
         }
-      } else if (tn.skip(Token.CONSTRUCTOR)) {
-        flags |= CommonFlags.CONSTRUCTOR;
+      } else if (tn.skip(Token.Constructor)) {
+        flags |= CommonFlags.Constructor;
         isConstructor = true;
         if (!startPos) startPos = tn.tokenPos;
-        if (flags & CommonFlags.STATIC) {
+        if (flags & CommonFlags.Static) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(staticStart, staticEnd), "static"
           ); // recoverable
         }
-        if (flags & CommonFlags.ABSTRACT) {
+        if (flags & CommonFlags.Abstract) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(abstractStart, abstractEnd), "abstract"
           ); // recoverable
         }
-        if (flags & CommonFlags.READONLY) {
+        if (flags & CommonFlags.Readonly) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(readonlyStart, readonlyEnd), "readonly"
@@ -2074,37 +2098,43 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    var isGetterOrSetter = isGetter || isSetter;
-    var name: IdentifierExpression;
+    let isGetterOrSetter = isGetter || isSetter;
+    let name: IdentifierExpression;
     if (isConstructor) {
       name = Node.createConstructorExpression(tn.range());
     } else {
-      if (!isGetterOrSetter && tn.skip(Token.OPENBRACKET)) {
+      if (!isGetterOrSetter && tn.skip(Token.OpenBracket)) {
         if (!startPos) startPos = tn.tokenPos;
         // TODO: also handle symbols, which might have some of these modifiers
-        if (flags & CommonFlags.PUBLIC) {
+        if (flags & CommonFlags.Public) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(accessStart, accessEnd), "public"
           ); // recoverable
-        } else if (flags & CommonFlags.PROTECTED) {
+        } else if (flags & CommonFlags.Protected) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(accessStart, accessEnd), "protected"
           ); // recoverable
-        } else if (flags & CommonFlags.PRIVATE) {
+        } else if (flags & CommonFlags.Private) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(accessStart, accessEnd), "protected"
+            tn.range(accessStart, accessEnd), "private"
           ); // recoverable
         }
-        if (flags & CommonFlags.STATIC) {
+        if (flags & CommonFlags.Static) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(staticStart, staticEnd), "static"
           ); // recoverable
         }
-        if (flags & CommonFlags.ABSTRACT) {
+        if (flags & CommonFlags.Override) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(overrideStart, overrideEnd), "override"
+          );
+        }
+        if (flags & CommonFlags.Abstract) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(abstractStart, abstractEnd), "abstract"
@@ -2112,7 +2142,7 @@ export class Parser extends DiagnosticEmitter {
         }
         let retIndex = this.parseIndexSignature(tn, flags, decorators);
         if (!retIndex) {
-          if (flags & CommonFlags.READONLY) {
+          if (flags & CommonFlags.Readonly) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
               tn.range(readonlyStart, readonlyEnd), "readonly"
@@ -2120,10 +2150,10 @@ export class Parser extends DiagnosticEmitter {
           }
           return null;
         }
-        tn.skip(Token.SEMICOLON);
+        tn.skip(Token.Semicolon);
         return retIndex;
       }
-      if (!tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
+      if (!tn.skipIdentifier(IdentifierHandling.Always)) {
         this.error(
           DiagnosticCode.Identifier_expected,
           tn.range()
@@ -2133,8 +2163,8 @@ export class Parser extends DiagnosticEmitter {
       if (!startPos) startPos = tn.tokenPos;
       name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
-    var typeParameters: TypeParameterNode[] | null = null;
-    if (tn.skip(Token.LESSTHAN)) {
+    let typeParameters: TypeParameterNode[] | null = null;
+    if (tn.skip(Token.LessThan)) {
       let typeParametersStart = tn.tokenPos;
       typeParameters = this.parseTypeParameters(tn);
       if (!typeParameters) return null;
@@ -2149,13 +2179,13 @@ export class Parser extends DiagnosticEmitter {
           tn.range(typeParametersStart, tn.pos)
         ); // recoverable
       } else {
-        flags |= CommonFlags.GENERIC;
+        flags |= CommonFlags.Generic;
       }
     }
 
     // method: '(' Parameters (':' Type)? '{' Statement* '}' ';'?
-    if (tn.skip(Token.OPENPAREN)) {
-      if (flags & CommonFlags.DECLARE) {
+    if (tn.skip(Token.OpenParen)) {
+      if (flags & CommonFlags.Declare) {
         this.error(
           DiagnosticCode._0_modifier_cannot_appear_on_class_elements_of_this_kind,
           tn.range(declareStart, declareEnd), "declare"
@@ -2170,15 +2200,15 @@ export class Parser extends DiagnosticEmitter {
         for (let i = 0, k = parameters.length; i < k; ++i) {
           let parameter = parameters[i];
           if (parameter.isAny(
-            CommonFlags.PUBLIC |
-            CommonFlags.PROTECTED |
-            CommonFlags.PRIVATE |
-            CommonFlags.READONLY
+            CommonFlags.Public |
+            CommonFlags.Protected |
+            CommonFlags.Private |
+            CommonFlags.Readonly
           )) {
             let implicitFieldDeclaration = Node.createFieldDeclaration(
               parameter.name,
               null,
-              parameter.flags | CommonFlags.INSTANCE,
+              parameter.flags | CommonFlags.Instance,
               parameter.type,
               null, // initialized via parameter
               parameter.range
@@ -2216,8 +2246,8 @@ export class Parser extends DiagnosticEmitter {
       }
 
       let returnType: TypeNode | null = null;
-      if (tn.skip(Token.COLON)) {
-        if (name.kind == NodeKind.CONSTRUCTOR) {
+      if (tn.skip(Token.Colon)) {
+        if (name.kind == NodeKind.Constructor) {
           this.error(
             DiagnosticCode.Type_annotation_cannot_appear_on_a_constructor_declaration,
             tn.range()
@@ -2228,11 +2258,11 @@ export class Parser extends DiagnosticEmitter {
             tn.range()
           );
         }
-        returnType = this.parseType(tn, isSetter || name.kind == NodeKind.CONSTRUCTOR);
+        returnType = this.parseType(tn, isSetter || name.kind == NodeKind.Constructor);
         if (!returnType) return null;
       } else {
         returnType = Node.createOmittedType(tn.range(tn.pos));
-        if (!isSetter && name.kind != NodeKind.CONSTRUCTOR) {
+        if (!isSetter && name.kind != NodeKind.Constructor) {
           this.error(
             DiagnosticCode.Type_expected,
             returnType.range
@@ -2249,13 +2279,13 @@ export class Parser extends DiagnosticEmitter {
       );
 
       let body: Statement | null = null;
-      if (tn.skip(Token.OPENBRACE)) {
-        if (flags & CommonFlags.AMBIENT) {
+      if (tn.skip(Token.OpenBrace)) {
+        if (flags & CommonFlags.Ambient) {
           this.error(
             DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts,
             tn.range()
           ); // recoverable
-        } else if (flags & CommonFlags.ABSTRACT) {
+        } else if (flags & CommonFlags.Abstract) {
           this.error(
             DiagnosticCode.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract,
             tn.range(), name.text
@@ -2268,7 +2298,7 @@ export class Parser extends DiagnosticEmitter {
         }
         body = this.parseBlockStatement(tn, false);
         if (!body) return null;
-      } else if (!isInterface && !(flags & (CommonFlags.AMBIENT | CommonFlags.ABSTRACT))) {
+      } else if (!isInterface && !(flags & (CommonFlags.Ambient | CommonFlags.Abstract))) {
         this.error(
           DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
           tn.range()
@@ -2284,8 +2314,8 @@ export class Parser extends DiagnosticEmitter {
         body,
         tn.range(startPos, tn.pos)
       );
-      if (!(isInterface && tn.skip(Token.COMMA))) {
-        tn.skip(Token.SEMICOLON);
+      if (!(isInterface && tn.skip(Token.Comma))) {
+        tn.skip(Token.Semicolon);
       }
       return retMethod;
 
@@ -2303,28 +2333,28 @@ export class Parser extends DiagnosticEmitter {
 
     // field: (':' Type)? ('=' Expression)? ';'?
     } else {
-      if (flags & CommonFlags.DECLARE) {
+      if (flags & CommonFlags.Declare) {
         this.error(
           DiagnosticCode.Not_implemented_0,
           tn.range(declareStart, declareEnd), "Ambient fields"
         ); // recoverable
       }
 
-      if (flags & CommonFlags.ABSTRACT) {
+      if (flags & CommonFlags.Abstract) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(abstractStart, abstractEnd), "abstract"
         ); // recoverable
       }
 
-      if (flags & CommonFlags.GET) {
+      if (flags & CommonFlags.Get) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(getStart, getEnd), "get"
         ); // recoverable
       }
 
-      if (flags & CommonFlags.SET) {
+      if (flags & CommonFlags.Set) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(setStart, setEnd), "set"
@@ -2332,16 +2362,16 @@ export class Parser extends DiagnosticEmitter {
       }
 
       let type: TypeNode | null = null;
-      if (tn.skip(Token.QUESTION)) {
+      if (tn.skip(Token.Question)) {
         this.error(
           DiagnosticCode.Optional_properties_are_not_supported,
           tn.range(startPos, tn.pos)
         );
       }
-      if (tn.skip(Token.EXCLAMATION)) {
-        flags |= CommonFlags.DEFINITELY_ASSIGNED;
+      if (tn.skip(Token.Exclamation)) {
+        flags |= CommonFlags.DefinitelyAssigned;
       }
-      if (tn.skip(Token.COLON)) {
+      if (tn.skip(Token.Colon)) {
         type = this.parseType(tn);
         if (!type) return null;
       } else {
@@ -2351,8 +2381,8 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
       let initializer: Expression | null = null;
-      if (tn.skip(Token.EQUALS)) {
-        if (flags & CommonFlags.AMBIENT) {
+      if (tn.skip(Token.Equals)) {
+        if (flags & CommonFlags.Ambient) {
           this.error(
             DiagnosticCode.Initializers_are_not_allowed_in_ambient_contexts,
             tn.range()
@@ -2360,12 +2390,15 @@ export class Parser extends DiagnosticEmitter {
         }
         initializer = this.parseExpression(tn);
         if (!initializer) return null;
+        if (flags & CommonFlags.DefinitelyAssigned) {
+          this.error(
+            DiagnosticCode.Declarations_with_initializers_cannot_also_have_definite_assignment_assertions,
+            name.range
+          );
+        }
       }
       let range = tn.range(startPos, tn.pos);
-      if (
-        (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0 &&
-        (isInterface || initializer || (flags & CommonFlags.STATIC) != 0)
-      ) {
+      if ((flags & CommonFlags.DefinitelyAssigned) != 0 && (isInterface || (flags & CommonFlags.Ambient) != 0)) {
         this.error(
           DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
           range
@@ -2379,8 +2412,8 @@ export class Parser extends DiagnosticEmitter {
         initializer,
         range
       );
-      if (!(isInterface && tn.skip(Token.COMMA))) {
-        tn.skip(Token.SEMICOLON);
+      if (!(isInterface && tn.skip(Token.Comma))) {
+        tn.skip(Token.Semicolon);
       }
       return retField;
     }
@@ -2402,25 +2435,25 @@ export class Parser extends DiagnosticEmitter {
       ); // recoverable
     }
 
-    var start = tn.tokenPos;
+    let start = tn.tokenPos;
     if (tn.skipIdentifier()) {
       let id = tn.readIdentifier();
       if (id == "key") {
-        if (tn.skip(Token.COLON)) {
+        if (tn.skip(Token.Colon)) {
           let keyType = this.parseType(tn);
           if (!keyType) return null;
-          if (keyType.kind != NodeKind.NAMEDTYPE) {
+          if (keyType.kind != NodeKind.NamedType) {
             this.error(
               DiagnosticCode.Type_expected,
               tn.range()
             );
             return null;
           }
-          if (tn.skip(Token.CLOSEBRACKET)) {
-            if (tn.skip(Token.COLON)) {
+          if (tn.skip(Token.CloseBracket)) {
+            if (tn.skip(Token.Colon)) {
               let valueType = this.parseType(tn);
               if (!valueType) return null;
-              if (valueType.kind != NodeKind.NAMEDTYPE) {
+              if (valueType.kind != NodeKind.NamedType) {
                 this.error(
                   DiagnosticCode.Identifier_expected,
                   valueType.range
@@ -2472,7 +2505,7 @@ export class Parser extends DiagnosticEmitter {
 
     if (tn.skipIdentifier()) {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      if (tn.skip(Token.OPENBRACE)) {
+      if (tn.skip(Token.OpenBrace)) {
         let members = new Array<Statement>();
         let declaration = Node.createNamespaceDeclaration(
           identifier,
@@ -2481,12 +2514,20 @@ export class Parser extends DiagnosticEmitter {
           members,
           tn.range(startPos, tn.pos)
         );
-        while (!tn.skip(Token.CLOSEBRACE)) {
+        while (!tn.skip(Token.CloseBrace)) {
           let member = this.parseTopLevelStatement(tn, declaration);
-          if (member) members.push(member);
-          else {
+          if (member) {
+            if (member.kind == NodeKind.Export) {
+              this.error(
+                DiagnosticCode.A_default_export_can_only_be_used_in_a_module,
+                member.range,
+              );
+              return null;
+            }
+            members.push(member);
+          } else {
             this.skipStatement(tn);
-            if (tn.skip(Token.ENDOFFILE)) {
+            if (tn.skip(Token.EndOfFile)) {
               this.error(
                 DiagnosticCode._0_expected,
                 tn.range(), "}"
@@ -2497,7 +2538,7 @@ export class Parser extends DiagnosticEmitter {
         }
         declaration.range.end = tn.pos;
         declaration.overriddenModuleName = this.currentModuleName;
-        tn.skip(Token.SEMICOLON);
+        tn.skip(Token.Semicolon);
         return declaration;
       } else {
         this.error(
@@ -2522,16 +2563,16 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'export': '{' ExportMember (',' ExportMember)* }' ('from' StringLiteral)? ';'?
 
-    var path: StringLiteralExpression | null = null;
-    var currentSource = assert(this.currentSource);
-    if (tn.skip(Token.OPENBRACE)) {
+    let path: StringLiteralExpression | null = null;
+    let currentSource = assert(this.currentSource);
+    if (tn.skip(Token.OpenBrace)) {
       let members = new Array<ExportMember>();
-      while (!tn.skip(Token.CLOSEBRACE)) {
+      while (!tn.skip(Token.CloseBrace)) {
         let member = this.parseExportMember(tn);
         if (!member) return null;
         members.push(member);
-        if (!tn.skip(Token.COMMA)) {
-          if (tn.skip(Token.CLOSEBRACE)) {
+        if (!tn.skip(Token.Comma)) {
+          if (tn.skip(Token.CloseBrace)) {
             break;
           } else {
             this.error(
@@ -2542,8 +2583,8 @@ export class Parser extends DiagnosticEmitter {
           }
         }
       }
-      if (tn.skip(Token.FROM)) {
-        if (tn.skip(Token.STRINGLITERAL)) {
+      if (tn.skip(Token.From)) {
+        if (tn.skip(Token.StringLiteral)) {
           path = Node.createStringLiteralExpression(tn.readString(), tn.range());
         } else {
           this.error(
@@ -2562,11 +2603,11 @@ export class Parser extends DiagnosticEmitter {
           this.seenlog.add(internalPath);
         }
       }
-      tn.skip(Token.SEMICOLON);
+      tn.skip(Token.Semicolon);
       return ret;
-    } else if (tn.skip(Token.ASTERISK)) {
-      if (tn.skip(Token.FROM)) {
-        if (tn.skip(Token.STRINGLITERAL)) {
+    } else if (tn.skip(Token.Asterisk)) {
+      if (tn.skip(Token.From)) {
+        if (tn.skip(Token.StringLiteral)) {
           path = Node.createStringLiteralExpression(tn.readString(), tn.range());
           let ret = Node.createExportStatement(null, path, isDeclare, tn.range(startPos, tn.pos));
           let internalPath = assert(ret.internalPath);
@@ -2578,7 +2619,7 @@ export class Parser extends DiagnosticEmitter {
             this.dependees.set(internalPath, new Dependee(currentSource, path));
             this.backlog.push(internalPath);
           }
-          tn.skip(Token.SEMICOLON);
+          tn.skip(Token.Semicolon);
           return ret;
         } else {
           this.error(
@@ -2607,11 +2648,11 @@ export class Parser extends DiagnosticEmitter {
 
     // before: Identifier ('as' Identifier)?
 
-    if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
+    if (tn.skipIdentifier(IdentifierHandling.Always)) {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       let asIdentifier: IdentifierExpression | null = null;
-      if (tn.skip(Token.AS)) {
-        if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
+      if (tn.skip(Token.As)) {
+        if (tn.skipIdentifier(IdentifierHandling.Always)) {
           asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
         } else {
           this.error(
@@ -2651,16 +2692,16 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'export' 'default': [Known-To-Be-]Identifier
 
-    var name = tn.readIdentifier();
-    var range = tn.range();
-    var ret = Node.createExportStatement([
+    let name = tn.readIdentifier();
+    let range = tn.range();
+    let ret = Node.createExportStatement([
       Node.createExportMember(
         Node.createIdentifierExpression(name, range),
         Node.createIdentifierExpression("default", tn.range(defaultStart, defaultEnd)),
         range
       )
     ], null, false, tn.range(startPos, tn.pos));
-    tn.skip(Token.SEMICOLON);
+    tn.skip(Token.Semicolon);
     return ret;
   }
 
@@ -2672,18 +2713,18 @@ export class Parser extends DiagnosticEmitter {
     //  ('{' (ImportMember (',' ImportMember)* '}') | ('*' 'as' Identifier)?
     //  'from' StringLiteral ';'?
 
-    var startPos = tn.tokenPos;
-    var members: ImportDeclaration[] | null = null;
-    var namespaceName: IdentifierExpression | null = null;
-    var skipFrom = false;
-    if (tn.skip(Token.OPENBRACE)) { // import { ... } from "file"
+    let startPos = tn.tokenPos;
+    let members: ImportDeclaration[] | null = null;
+    let namespaceName: IdentifierExpression | null = null;
+    let skipFrom = false;
+    if (tn.skip(Token.OpenBrace)) { // import { ... } from "file"
       members = new Array();
-      while (!tn.skip(Token.CLOSEBRACE)) {
+      while (!tn.skip(Token.CloseBrace)) {
         let member = this.parseImportDeclaration(tn);
         if (!member) return null;
         members.push(member);
-        if (!tn.skip(Token.COMMA)) {
-          if (tn.skip(Token.CLOSEBRACE)) {
+        if (!tn.skip(Token.Comma)) {
+          if (tn.skip(Token.CloseBrace)) {
             break;
           } else {
             this.error(
@@ -2694,8 +2735,8 @@ export class Parser extends DiagnosticEmitter {
           }
         }
       }
-    } else if (tn.skip(Token.ASTERISK)) { // import * from "file"
-      if (tn.skip(Token.AS)) {
+    } else if (tn.skip(Token.Asterisk)) { // import * from "file"
+      if (tn.skip(Token.As)) {
         if (tn.skipIdentifier()) {
           namespaceName = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
         } else {
@@ -2712,7 +2753,7 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
-    } else if (tn.skip(Token.IDENTIFIER, IdentifierHandling.PREFER)) { // import Name from "file"
+    } else if (tn.skip(Token.Identifier, IdentifierHandling.Prefer)) { // import Name from "file"
       let name = tn.readIdentifier();
       let range = tn.range();
       members = [
@@ -2722,7 +2763,7 @@ export class Parser extends DiagnosticEmitter {
           range
         )
       ];
-      if (tn.skip(Token.COMMA)) {
+      if (tn.skip(Token.Comma)) {
         // TODO: default + star, default + members
         this.error(
           DiagnosticCode.Not_implemented_0,
@@ -2735,8 +2776,8 @@ export class Parser extends DiagnosticEmitter {
       skipFrom = true;
     }
 
-    if (skipFrom || tn.skip(Token.FROM)) {
-      if (tn.skip(Token.STRINGLITERAL)) {
+    if (skipFrom || tn.skip(Token.From)) {
+      if (tn.skip(Token.StringLiteral)) {
         let path = Node.createStringLiteralExpression(tn.readString(), tn.range());
         let ret: ImportStatement;
         if (namespaceName) {
@@ -2750,7 +2791,7 @@ export class Parser extends DiagnosticEmitter {
           this.dependees.set(internalPath, new Dependee(assert(this.currentSource), path));
           this.backlog.push(internalPath);
         }
-        tn.skip(Token.SEMICOLON);
+        tn.skip(Token.Semicolon);
         return ret;
       } else {
         this.error(
@@ -2773,10 +2814,10 @@ export class Parser extends DiagnosticEmitter {
 
     // before: Identifier ('as' Identifier)?
 
-    if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
+    if (tn.skipIdentifier(IdentifierHandling.Always)) {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       let asIdentifier: IdentifierExpression | null = null;
-      if (tn.skip(Token.AS)) {
+      if (tn.skip(Token.As)) {
         if (tn.skipIdentifier()) {
           asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
         } else {
@@ -2817,11 +2858,11 @@ export class Parser extends DiagnosticEmitter {
 
     if (tn.skipIdentifier()) {
       let asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      if (tn.skip(Token.EQUALS)) {
+      if (tn.skip(Token.Equals)) {
         if (tn.skipIdentifier()) {
           let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
           let ret = Node.createExportImportStatement(identifier, asIdentifier, tn.range(startPos, tn.pos));
-          tn.skip(Token.SEMICOLON);
+          tn.skip(Token.Semicolon);
           return ret;
         } else {
           this.error(
@@ -2851,47 +2892,47 @@ export class Parser extends DiagnosticEmitter {
 
     // at previous token
 
-    var state = tn.mark();
-    var token = tn.next();
-    var statement: Statement | null = null;
+    let state = tn.mark();
+    let token = tn.next();
+    let statement: Statement | null = null;
     switch (token) {
-      case Token.BREAK: {
+      case Token.Break: {
         statement = this.parseBreak(tn);
         break;
       }
-      case Token.CONST: {
-        statement = this.parseVariable(tn, CommonFlags.CONST, null, tn.tokenPos);
+      case Token.Const: {
+        statement = this.parseVariable(tn, CommonFlags.Const, null, tn.tokenPos);
         break;
       }
-      case Token.CONTINUE: {
+      case Token.Continue: {
         statement = this.parseContinue(tn);
         break;
       }
-      case Token.DO: {
+      case Token.Do: {
         statement = this.parseDoStatement(tn);
         break;
       }
-      case Token.FOR: {
+      case Token.For: {
         statement = this.parseForStatement(tn);
         break;
       }
-      case Token.IF: {
+      case Token.If: {
         statement = this.parseIfStatement(tn);
         break;
       }
-      case Token.LET: {
-        statement = this.parseVariable(tn, CommonFlags.LET, null, tn.tokenPos);
+      case Token.Let: {
+        statement = this.parseVariable(tn, CommonFlags.Let, null, tn.tokenPos);
         break;
       }
-      case Token.VAR: {
-        statement = this.parseVariable(tn, CommonFlags.NONE, null, tn.tokenPos);
+      case Token.Var: {
+        statement = this.parseVariable(tn, CommonFlags.None, null, tn.tokenPos);
         break;
       }
-      case Token.OPENBRACE: {
+      case Token.OpenBrace: {
         statement = this.parseBlockStatement(tn, topLevel);
         break;
       }
-      case Token.RETURN: {
+      case Token.Return: {
         if (topLevel) {
           this.error(
             DiagnosticCode.A_return_statement_can_only_be_used_within_a_function_body,
@@ -2901,32 +2942,32 @@ export class Parser extends DiagnosticEmitter {
         statement = this.parseReturn(tn);
         break;
       }
-      case Token.SEMICOLON: {
+      case Token.Semicolon: {
         return Node.createEmptyStatement(tn.range(tn.tokenPos));
       }
-      case Token.SWITCH: {
+      case Token.Switch: {
         statement = this.parseSwitchStatement(tn);
         break;
       }
-      case Token.THROW: {
+      case Token.Throw: {
         statement = this.parseThrowStatement(tn);
         break;
       }
-      case Token.TRY: {
+      case Token.Try: {
         statement = this.parseTryStatement(tn);
         break;
       }
-      case Token.VOID: {
+      case Token.Void: {
         statement = this.parseVoidStatement(tn);
         break;
       }
-      case Token.WHILE: {
+      case Token.While: {
         statement = this.parseWhileStatement(tn);
         break;
       }
-      case Token.TYPE: { // also identifier
-        if (tn.peek(false, IdentifierHandling.PREFER) == Token.IDENTIFIER) {
-          statement = this.parseTypeDeclaration(tn, CommonFlags.NONE, null, tn.tokenPos);
+      case Token.Type: { // also identifier
+        if (tn.peek(false, IdentifierHandling.Prefer) == Token.Identifier) {
+          statement = this.parseTypeDeclaration(tn, CommonFlags.None, null, tn.tokenPos);
           break;
         }
         // fall-through
@@ -2953,13 +2994,13 @@ export class Parser extends DiagnosticEmitter {
 
     // at '{': Statement* '}' ';'?
 
-    var startPos = tn.tokenPos;
-    var statements = new Array<Statement>();
-    while (!tn.skip(Token.CLOSEBRACE)) {
+    let startPos = tn.tokenPos;
+    let statements = new Array<Statement>();
+    while (!tn.skip(Token.CloseBrace)) {
       let state = tn.mark();
       let statement = this.parseStatement(tn, topLevel);
       if (!statement) {
-        if (tn.token == Token.ENDOFFILE) return null;
+        if (tn.token == Token.EndOfFile) return null;
         tn.reset(state);
         this.skipStatement(tn);
       } else {
@@ -2967,8 +3008,8 @@ export class Parser extends DiagnosticEmitter {
         statements.push(statement);
       }
     }
-    var ret = Node.createBlockStatement(statements, tn.range(startPos, tn.pos));
-    tn.skip(Token.SEMICOLON);
+    let ret = Node.createBlockStatement(statements, tn.range(startPos, tn.pos));
+    tn.skip(Token.Semicolon);
     return ret;
   }
 
@@ -2978,13 +3019,13 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'break': Identifier? ';'?
 
-    var identifier: IdentifierExpression | null = null;
-    if (tn.peek(true) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-      tn.next(IdentifierHandling.PREFER);
+    let identifier: IdentifierExpression | null = null;
+    if (tn.peek(true) == Token.Identifier && !tn.nextTokenOnNewLine) {
+      tn.next(IdentifierHandling.Prefer);
       identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
-    var ret = Node.createBreakStatement(identifier, tn.range());
-    tn.skip(Token.SEMICOLON);
+    let ret = Node.createBreakStatement(identifier, tn.range());
+    tn.skip(Token.Semicolon);
     return ret;
   }
 
@@ -2994,13 +3035,13 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'continue': Identifier? ';'?
 
-    var identifier: IdentifierExpression | null = null;
-    if (tn.peek(true) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-      tn.next(IdentifierHandling.PREFER);
+    let identifier: IdentifierExpression | null = null;
+    if (tn.peek(true) == Token.Identifier && !tn.nextTokenOnNewLine) {
+      tn.next(IdentifierHandling.Prefer);
       identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
-    var ret = Node.createContinueStatement(identifier, tn.range());
-    tn.skip(Token.SEMICOLON);
+    let ret = Node.createContinueStatement(identifier, tn.range());
+    tn.skip(Token.Semicolon);
     return ret;
   }
 
@@ -3010,19 +3051,19 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'do': Statement 'while' '(' Expression ')' ';'?
 
-    var startPos = tn.tokenPos;
-    var statement = this.parseStatement(tn);
+    let startPos = tn.tokenPos;
+    let statement = this.parseStatement(tn);
     if (!statement) return null;
 
-    if (tn.skip(Token.WHILE)) {
+    if (tn.skip(Token.While)) {
 
-      if (tn.skip(Token.OPENPAREN)) {
+      if (tn.skip(Token.OpenParen)) {
         let condition = this.parseExpression(tn);
         if (!condition) return null;
 
-        if (tn.skip(Token.CLOSEPAREN)) {
+        if (tn.skip(Token.CloseParen)) {
           let ret = Node.createDoStatement(statement, condition, tn.range(startPos, tn.pos));
-          tn.skip(Token.SEMICOLON);
+          tn.skip(Token.Semicolon);
           return ret;
         } else {
           this.error(
@@ -3051,11 +3092,11 @@ export class Parser extends DiagnosticEmitter {
 
     // at previous token
 
-    var expr = this.parseExpression(tn);
+    let expr = this.parseExpression(tn);
     if (!expr) return null;
 
-    var ret = Node.createExpressionStatement(expr);
-    tn.skip(Token.SEMICOLON);
+    let ret = Node.createExpressionStatement(expr);
+    tn.skip(Token.Semicolon);
     return ret;
   }
 
@@ -3065,28 +3106,28 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'for': '(' Statement? Expression? ';' Expression? ')' Statement
 
-    var startPos = tn.tokenPos;
+    let startPos = tn.tokenPos;
 
-    if (tn.skip(Token.OPENPAREN)) {
+    if (tn.skip(Token.OpenParen)) {
       let initializer: Statement | null = null;
 
-      if (tn.skip(Token.CONST)) {
-        initializer = this.parseVariable(tn, CommonFlags.CONST, null, tn.tokenPos, true);
-      } else if (tn.skip(Token.LET)) {
-        initializer = this.parseVariable(tn, CommonFlags.LET, null, tn.tokenPos, true);
-      } else if (tn.skip(Token.VAR)) {
-        initializer = this.parseVariable(tn, CommonFlags.NONE, null, tn.tokenPos, true);
+      if (tn.skip(Token.Const)) {
+        initializer = this.parseVariable(tn, CommonFlags.Const, null, tn.tokenPos, true);
+      } else if (tn.skip(Token.Let)) {
+        initializer = this.parseVariable(tn, CommonFlags.Let, null, tn.tokenPos, true);
+      } else if (tn.skip(Token.Var)) {
+        initializer = this.parseVariable(tn, CommonFlags.None, null, tn.tokenPos, true);
 
-      } else if (!tn.skip(Token.SEMICOLON)) {
+      } else if (!tn.skip(Token.Semicolon)) {
         initializer = this.parseExpressionStatement(tn);
         if (!initializer) return null;
       }
 
       if (initializer) {
-        if (tn.skip(Token.OF)) {
+        if (tn.skip(Token.Of)) {
           // TODO: for (let [key, val] of ...)
-          if (initializer.kind == NodeKind.EXPRESSION) {
-            if ((<ExpressionStatement>initializer).expression.kind != NodeKind.IDENTIFIER) {
+          if (initializer.kind == NodeKind.Expression) {
+            if ((<ExpressionStatement>initializer).expression.kind != NodeKind.Identifier) {
               this.error(
                 DiagnosticCode.Identifier_expected,
                 initializer.range
@@ -3095,7 +3136,7 @@ export class Parser extends DiagnosticEmitter {
             }
             return this.parseForOfStatement(tn, startPos, initializer);
           }
-          if (initializer.kind == NodeKind.VARIABLE) {
+          if (initializer.kind == NodeKind.Variable) {
             let declarations = (<VariableStatement>initializer).declarations;
             for (let i = 0, k = declarations.length; i < k; ++i) {
               let declaration = declarations[i];
@@ -3116,12 +3157,12 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
         // non-for..of needs type or initializer
-        if (initializer.kind == NodeKind.VARIABLE) {
+        if (initializer.kind == NodeKind.Variable) {
           let declarations = (<VariableStatement>initializer).declarations;
           for (let i = 0, k = declarations.length; i < k; ++i) {
             let declaration = declarations[i];
             if (!declaration.initializer) {
-              if (declaration.flags & CommonFlags.CONST) {
+              if (declaration.flags & CommonFlags.Const) {
                 this.error(
                   DiagnosticCode._const_declarations_must_be_initialized,
                   declaration.name.range
@@ -3137,20 +3178,20 @@ export class Parser extends DiagnosticEmitter {
         }
       }
 
-      if (tn.token == Token.SEMICOLON) {
+      if (tn.token == Token.Semicolon) {
         let condition: ExpressionStatement | null = null;
-        if (!tn.skip(Token.SEMICOLON)) {
+        if (!tn.skip(Token.Semicolon)) {
           condition = this.parseExpressionStatement(tn);
           if (!condition) return null;
         }
 
-        if (tn.token == Token.SEMICOLON) {
+        if (tn.token == Token.Semicolon) {
           let incrementor: Expression | null = null;
-          if (!tn.skip(Token.CLOSEPAREN)) {
+          if (!tn.skip(Token.CloseParen)) {
             incrementor = this.parseExpression(tn);
             if (!incrementor) return null;
 
-            if (!tn.skip(Token.CLOSEPAREN)) {
+            if (!tn.skip(Token.CloseParen)) {
               this.error(
                 DiagnosticCode._0_expected,
                 tn.range(), ")"
@@ -3201,10 +3242,10 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'of': Expression ')' Statement
 
-    var iterable = this.parseExpression(tn);
+    let iterable = this.parseExpression(tn);
     if (!iterable) return null;
 
-    if (!tn.skip(Token.CLOSEPAREN)) {
+    if (!tn.skip(Token.CloseParen)) {
       this.error(
         DiagnosticCode._0_expected,
         tn.range(), ")"
@@ -3212,7 +3253,7 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
 
-    var statement = this.parseStatement(tn);
+    let statement = this.parseStatement(tn);
     if (!statement) return null;
 
     return Node.createForOfStatement(
@@ -3229,15 +3270,15 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'if': '(' Expression ')' Statement ('else' Statement)?
 
-    var startPos = tn.tokenPos;
-    if (tn.skip(Token.OPENPAREN)) {
+    let startPos = tn.tokenPos;
+    if (tn.skip(Token.OpenParen)) {
       let condition = this.parseExpression(tn);
       if (!condition) return null;
-      if (tn.skip(Token.CLOSEPAREN)) {
+      if (tn.skip(Token.CloseParen)) {
         let statement = this.parseStatement(tn);
         if (!statement) return null;
         let elseStatement: Statement | null = null;
-        if (tn.skip(Token.ELSE)) {
+        if (tn.skip(Token.Else)) {
           elseStatement = this.parseStatement(tn);
           if (!elseStatement) return null;
         }
@@ -3268,20 +3309,20 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'switch': '(' Expression ')' '{' SwitchCase* '}' ';'?
 
-    var startPos = tn.tokenPos;
-    if (tn.skip(Token.OPENPAREN)) {
+    let startPos = tn.tokenPos;
+    if (tn.skip(Token.OpenParen)) {
       let condition = this.parseExpression(tn);
       if (!condition) return null;
-      if (tn.skip(Token.CLOSEPAREN)) {
-        if (tn.skip(Token.OPENBRACE)) {
+      if (tn.skip(Token.CloseParen)) {
+        if (tn.skip(Token.OpenBrace)) {
           let switchCases = new Array<SwitchCase>();
-          while (!tn.skip(Token.CLOSEBRACE)) {
+          while (!tn.skip(Token.CloseBrace)) {
             let switchCase = this.parseSwitchCase(tn);
             if (!switchCase) return null;
             switchCases.push(switchCase);
           }
           let ret = Node.createSwitchStatement(condition, switchCases, tn.range(startPos, tn.pos));
-          tn.skip(Token.SEMICOLON);
+          tn.skip(Token.Semicolon);
           return ret;
         } else {
           this.error(
@@ -3308,21 +3349,21 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer
   ): SwitchCase | null {
 
-    var startPos = tn.tokenPos;
-    var statements: Statement[],
+    let startPos = tn.tokenPos;
+    let statements: Statement[],
         statement: Statement | null;
 
     // 'case' Expression ':' Statement*
 
-    if (tn.skip(Token.CASE)) {
+    if (tn.skip(Token.Case)) {
       let label = this.parseExpression(tn);
       if (!label) return null;
-      if (tn.skip(Token.COLON)) {
+      if (tn.skip(Token.Colon)) {
         statements = new Array<Statement>();
         while (
-          tn.peek() != Token.CASE &&
-          tn.nextToken != Token.DEFAULT &&
-          tn.nextToken != Token.CLOSEBRACE
+          tn.peek() != Token.Case &&
+          tn.nextToken != Token.Default &&
+          tn.nextToken != Token.CloseBrace
         ) {
           statement = this.parseStatement(tn);
           if (!statement) return null;
@@ -3338,13 +3379,13 @@ export class Parser extends DiagnosticEmitter {
 
       // 'default' ':' Statement*
 
-    } else if (tn.skip(Token.DEFAULT)) {
-      if (tn.skip(Token.COLON)) {
+    } else if (tn.skip(Token.Default)) {
+      if (tn.skip(Token.Colon)) {
         statements = new Array<Statement>();
         while (
-          tn.peek() != Token.CASE &&
-          tn.nextToken != Token.DEFAULT &&
-          tn.nextToken != Token.CLOSEBRACE
+          tn.peek() != Token.Case &&
+          tn.nextToken != Token.Default &&
+          tn.nextToken != Token.CloseBrace
         ) {
           statement = this.parseStatement(tn);
           if (!statement) return null;
@@ -3372,8 +3413,8 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'throw': Expression ';'?
 
-    var startPos = tn.tokenPos;
-    var expression = this.parseExpression(tn);
+    let startPos = tn.tokenPos;
+    let expression = this.parseExpression(tn);
     if (!expression) return null;
     var ret = Node.createThrowStatement(expression, tn.range(startPos, tn.pos));
     this.checkRuleCompleted(tn);
@@ -3389,20 +3430,20 @@ export class Parser extends DiagnosticEmitter {
     //   ('catch' '(' VariableMember ')' '{' Statement* '}')?
     //   ('finally' '{' Statement* '}'? ';'?
 
-    var startPos = tn.tokenPos;
-    var stmt: Statement | null;
-    if (tn.skip(Token.OPENBRACE)) {
-      let statements = new Array<Statement>();
-      while (!tn.skip(Token.CLOSEBRACE)) {
+    let startPos = tn.tokenPos;
+    let stmt: Statement | null;
+    if (tn.skip(Token.OpenBrace)) {
+      let bodyStatements = new Array<Statement>();
+      while (!tn.skip(Token.CloseBrace)) {
         stmt = this.parseStatement(tn);
         if (!stmt) return null;
-        statements.push(stmt);
+        bodyStatements.push(stmt);
       }
       let catchVariable: IdentifierExpression | null = null;
       let catchStatements: Statement[] | null = null;
       let finallyStatements: Statement[] | null = null;
-      if (tn.skip(Token.CATCH)) {
-        if (!tn.skip(Token.OPENPAREN)) {
+      if (tn.skip(Token.Catch)) {
+        if (!tn.skip(Token.OpenParen)) {
           this.error(
             DiagnosticCode._0_expected,
             tn.range(), "("
@@ -3417,14 +3458,14 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
         catchVariable = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-        if (!tn.skip(Token.CLOSEPAREN)) {
+        if (!tn.skip(Token.CloseParen)) {
           this.error(
             DiagnosticCode._0_expected,
             tn.range(), ")"
           );
           return null;
         }
-        if (!tn.skip(Token.OPENBRACE)) {
+        if (!tn.skip(Token.OpenBrace)) {
           this.error(
             DiagnosticCode._0_expected,
             tn.range(), "{"
@@ -3432,14 +3473,14 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
         catchStatements = [];
-        while (!tn.skip(Token.CLOSEBRACE)) {
+        while (!tn.skip(Token.CloseBrace)) {
           stmt = this.parseStatement(tn);
           if (!stmt) return null;
           catchStatements.push(stmt);
         }
       }
-      if (tn.skip(Token.FINALLY)) {
-        if (!tn.skip(Token.OPENBRACE)) {
+      if (tn.skip(Token.Finally)) {
+        if (!tn.skip(Token.OpenBrace)) {
           this.error(
             DiagnosticCode._0_expected,
             tn.range(), "{"
@@ -3447,7 +3488,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
         finallyStatements = [];
-        while (!tn.skip(Token.CLOSEBRACE)) {
+        while (!tn.skip(Token.CloseBrace)) {
           stmt = this.parseStatement(tn);
           if (!stmt) return null;
           finallyStatements.push(stmt);
@@ -3461,13 +3502,13 @@ export class Parser extends DiagnosticEmitter {
         return null;
       }
       let ret = Node.createTryStatement(
-        statements,
+        bodyStatements,
         catchVariable,
         catchStatements,
         finallyStatements,
         tn.range(startPos, tn.pos)
       );
-      tn.skip(Token.SEMICOLON);
+      tn.skip(Token.Semicolon);
       return ret;
     } else {
       this.error(
@@ -3476,6 +3517,40 @@ export class Parser extends DiagnosticEmitter {
       );
     }
     return null;
+  }
+
+  private getRecursiveDepthForTypeDeclaration(
+    identifierName: string,
+    type: TypeNode,
+    depth: i32 = 0
+  ): i32 {
+    switch (type.kind) {
+      case NodeKind.NamedType: {
+        let typeArguments = (<NamedTypeNode>type).typeArguments;
+        if (typeArguments) {
+          for (let i = 0, k = typeArguments.length; i < k; i++) {
+            let res = this.getRecursiveDepthForTypeDeclaration(identifierName, typeArguments[i], depth + 1);
+            if (res != -1) return res;
+          }
+        }
+        if ((<NamedTypeNode>type).name.identifier.text == identifierName) {
+          return depth;
+        }
+        break;
+      }
+      case NodeKind.FunctionType: {
+        let fnType = <FunctionTypeNode>type;
+        let res = this.getRecursiveDepthForTypeDeclaration(identifierName, fnType.returnType, depth + 1);
+        if (res != -1) return res;
+        let params = fnType.parameters;
+        for (let i = 0, k = params.length; i < k; i++) {
+          res = this.getRecursiveDepthForTypeDeclaration(identifierName, params[i].type, depth + 1);
+          if (res != -1) return res;
+        }
+        break;
+      }
+    }
+    return -1;
   }
 
   parseTypeDeclaration(
@@ -3490,15 +3565,30 @@ export class Parser extends DiagnosticEmitter {
     if (tn.skipIdentifier()) {
       let name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       let typeParameters: TypeParameterNode[] | null = null;
-      if (tn.skip(Token.LESSTHAN)) {
+      if (tn.skip(Token.LessThan)) {
         typeParameters = this.parseTypeParameters(tn);
         if (!typeParameters) return null;
-        flags |= CommonFlags.GENERIC;
+        flags |= CommonFlags.Generic;
       }
-      if (tn.skip(Token.EQUALS)) {
-        tn.skip(Token.BAR);
+      if (tn.skip(Token.Equals)) {
+        tn.skip(Token.Bar);
         let type = this.parseType(tn);
         if (!type) return null;
+        let depth = this.getRecursiveDepthForTypeDeclaration(name.text, type);
+        if (depth >= 0) {
+          if (depth == 0) {
+            this.error(
+              DiagnosticCode.Type_alias_0_circularly_references_itself,
+              tn.range(), name.text
+            );
+          } else {
+            this.error(
+              DiagnosticCode.Not_implemented_0,
+              tn.range(), "Recursion in type aliases"
+            );
+          }
+          return null;
+        }
         let ret = Node.createTypeDeclaration(
           name,
           decorators,
@@ -3507,7 +3597,7 @@ export class Parser extends DiagnosticEmitter {
           type,
           tn.range(startPos, tn.pos)
         );
-        tn.skip(Token.SEMICOLON);
+        tn.skip(Token.Semicolon);
         ret.overriddenModuleName = this.currentModuleName;
         return ret;
       } else {
@@ -3532,12 +3622,12 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'module': StringLiteral ';'?
 
-    var startPos = tn.tokenPos;
-    assert(tn.next() == Token.STRINGLITERAL); // checked earlier
-    var moduleName = tn.readString();
-    var ret = Node.createModuleDeclaration(moduleName, flags, tn.range(startPos, tn.pos));
+    let startPos = tn.tokenPos;
+    assert(tn.next() == Token.StringLiteral); // checked earlier
+    let moduleName = tn.readString();
+    let ret = Node.createModuleDeclaration(moduleName, flags, tn.range(startPos, tn.pos));
     this.currentModuleName = moduleName;
-    tn.skip(Token.SEMICOLON);
+    tn.skip(Token.Semicolon);
     return ret;
   }
 
@@ -3547,11 +3637,11 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'void': Expression ';'?
 
-    var startPos = tn.tokenPos;
-    var expression = this.parseExpression(tn, Precedence.GROUPING);
+    let startPos = tn.tokenPos;
+    let expression = this.parseExpression(tn, Precedence.Grouping);
     if (!expression) return null;
-    var ret = Node.createVoidStatement(expression, tn.range(startPos, tn.pos));
-    tn.skip(Token.SEMICOLON);
+    let ret = Node.createVoidStatement(expression, tn.range(startPos, tn.pos));
+    tn.skip(Token.Semicolon);
     return ret;
   }
 
@@ -3561,15 +3651,15 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'while': '(' Expression ')' Statement ';'?
 
-    var startPos = tn.tokenPos;
-    if (tn.skip(Token.OPENPAREN)) {
+    let startPos = tn.tokenPos;
+    if (tn.skip(Token.OpenParen)) {
       let expression = this.parseExpression(tn);
       if (!expression) return null;
-      if (tn.skip(Token.CLOSEPAREN)) {
+      if (tn.skip(Token.CloseParen)) {
         let statement = this.parseStatement(tn);
         if (!statement) return null;
         let ret = Node.createWhileStatement(expression, statement, tn.range(startPos, tn.pos));
-        tn.skip(Token.SEMICOLON);
+        tn.skip(Token.Semicolon);
         return ret;
       } else {
         this.error(
@@ -3591,34 +3681,34 @@ export class Parser extends DiagnosticEmitter {
   parseExpressionStart(
     tn: Tokenizer
   ): Expression | null {
-    var token = tn.next(IdentifierHandling.PREFER);
-    var startPos = tn.tokenPos;
+    let token = tn.next(IdentifierHandling.Prefer);
+    let startPos = tn.tokenPos;
     switch (token) {
 
       // TODO: SpreadExpression, YieldExpression
-      case Token.DOT_DOT_DOT:
-      case Token.YIELD: // fallthrough to unsupported UnaryPrefixExpression
+      case Token.Dot_Dot_Dot:
+      case Token.Yield: // fallthrough to unsupported UnaryPrefixExpression
 
       // UnaryPrefixExpression
-      case Token.EXCLAMATION:
-      case Token.TILDE:
-      case Token.PLUS:
-      case Token.MINUS:
-      case Token.TYPEOF:
-      case Token.VOID:
-      case Token.DELETE: {
-        let operand = this.parseExpression(tn, Precedence.UNARY_PREFIX);
+      case Token.Exclamation:
+      case Token.Tilde:
+      case Token.Plus:
+      case Token.Minus:
+      case Token.TypeOf:
+      case Token.Void:
+      case Token.Delete: {
+        let operand = this.parseExpression(tn, Precedence.UnaryPrefix);
         if (!operand) return null;
         return Node.createUnaryPrefixExpression(token, operand, tn.range(startPos, tn.pos));
       }
-      case Token.PLUS_PLUS:
-      case Token.MINUS_MINUS: {
-        let operand = this.parseExpression(tn, Precedence.UNARY_PREFIX);
+      case Token.Plus_Plus:
+      case Token.Minus_Minus: {
+        let operand = this.parseExpression(tn, Precedence.UnaryPrefix);
         if (!operand) return null;
         switch (operand.kind) {
-          case NodeKind.IDENTIFIER:
-          case NodeKind.ELEMENTACCESS:
-          case NodeKind.PROPERTYACCESS: break;
+          case NodeKind.Identifier:
+          case NodeKind.ElementAccess:
+          case NodeKind.PropertyAccess: break;
           default: {
             this.error(
               DiagnosticCode.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access,
@@ -3630,7 +3720,7 @@ export class Parser extends DiagnosticEmitter {
       }
 
       // NewExpression
-      case Token.NEW: {
+      case Token.New: {
         if (!tn.skipIdentifier()) {
           this.error(
             DiagnosticCode.Identifier_expected,
@@ -3643,7 +3733,7 @@ export class Parser extends DiagnosticEmitter {
         let typeArguments: TypeNode[] | null = null;
         let arguments_: Expression[] | null = null;
         if (
-          tn.skip(Token.OPENPAREN) ||
+          tn.skip(Token.OpenParen) ||
           (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn))
         ) {
           arguments_ = this.parseArguments(tn);
@@ -3660,45 +3750,45 @@ export class Parser extends DiagnosticEmitter {
       }
 
       // Special IdentifierExpression
-      case Token.NULL: return Node.createNullExpression(tn.range());
-      case Token.TRUE: return Node.createTrueExpression(tn.range());
-      case Token.FALSE: return Node.createFalseExpression(tn.range());
-      case Token.THIS: return Node.createThisExpression(tn.range());
-      case Token.CONSTRUCTOR: return Node.createConstructorExpression(tn.range());
+      case Token.Null: return Node.createNullExpression(tn.range());
+      case Token.True: return Node.createTrueExpression(tn.range());
+      case Token.False: return Node.createFalseExpression(tn.range());
+      case Token.This: return Node.createThisExpression(tn.range());
+      case Token.Constructor: return Node.createConstructorExpression(tn.range());
 
       // ParenthesizedExpression or FunctionExpression
-      case Token.OPENPAREN: {
+      case Token.OpenParen: {
 
         // determine whether this is a function expression
-        if (tn.skip(Token.CLOSEPAREN)) { // must be a function expression (fast route)
+        if (tn.skip(Token.CloseParen)) { // must be a function expression (fast route)
           return this.parseFunctionExpressionCommon(
             tn,
             Node.createEmptyIdentifierExpression(tn.range(startPos)),
             [],
             null,
-            ArrowKind.ARROW_PARENTHESIZED
+            ArrowKind.Parenthesized
           );
         }
         let state = tn.mark();
         let again = true;
         do {
-          switch (tn.next(IdentifierHandling.PREFER)) {
+          switch (tn.next(IdentifierHandling.Prefer)) {
 
             // function expression
-            case Token.DOT_DOT_DOT: {
+            case Token.Dot_Dot_Dot: {
               tn.reset(state);
               return this.parseFunctionExpression(tn);
             }
             // can be both
-            case Token.IDENTIFIER: {
+            case Token.Identifier: {
               tn.readIdentifier();
               switch (tn.next()) {
 
                 // if we got here, check for arrow
-                case Token.CLOSEPAREN: {
+                case Token.CloseParen: {
                   if (
-                    !tn.skip(Token.COLON) &&
-                    !tn.skip(Token.EQUALS_GREATERTHAN)
+                    !tn.skip(Token.Colon) &&
+                    !tn.skip(Token.Equals_GreaterThan)
                   ) {
                     again = false;
                     break;
@@ -3706,16 +3796,16 @@ export class Parser extends DiagnosticEmitter {
                   // fall-through
                 }
                 // function expression
-                case Token.COLON: {    // type annotation
+                case Token.Colon: {    // type annotation
                   tn.reset(state);
                   return this.parseFunctionExpression(tn);
                 }
                 // optional parameter or parenthesized
-                case Token.QUESTION: {
+                case Token.Question: {
                   if (
-                    tn.skip(Token.COLON) ||   // optional parameter with type
-                    tn.skip(Token.COMMA) ||   // optional parameter without type
-                    tn.skip(Token.CLOSEPAREN) // last optional parameter without type
+                    tn.skip(Token.Colon) ||   // optional parameter with type
+                    tn.skip(Token.Comma) ||   // optional parameter without type
+                    tn.skip(Token.CloseParen) // last optional parameter without type
                   ) {
                     tn.reset(state);
                     return this.parseFunctionExpression(tn);
@@ -3723,7 +3813,7 @@ export class Parser extends DiagnosticEmitter {
                   again = false; // parenthesized
                   break;
                 }
-                case Token.COMMA: {
+                case Token.Comma: {
                   break; // continue
                 }
                 // parenthesized expression
@@ -3747,7 +3837,7 @@ export class Parser extends DiagnosticEmitter {
         // parse parenthesized
         let inner = this.parseExpression(tn);
         if (!inner) return null;
-        if (!tn.skip(Token.CLOSEPAREN)) {
+        if (!tn.skip(Token.CloseParen)) {
           this.error(
             DiagnosticCode._0_expected,
             tn.range(), ")"
@@ -3758,19 +3848,19 @@ export class Parser extends DiagnosticEmitter {
         return this.maybeParseCallExpression(tn, inner);
       }
       // ArrayLiteralExpression
-      case Token.OPENBRACKET: {
+      case Token.OpenBracket: {
         let elementExpressions = new Array<Expression>();
-        while (!tn.skip(Token.CLOSEBRACKET)) {
+        while (!tn.skip(Token.CloseBracket)) {
           let expr: Expression | null;
-          if (tn.peek() == Token.COMMA) {
+          if (tn.peek() == Token.Comma) {
             expr = Node.createOmittedExpression(tn.range(tn.pos));
           } else {
-            expr = this.parseExpression(tn, Precedence.COMMA + 1);
+            expr = this.parseExpression(tn, Precedence.Comma + 1);
             if (!expr) return null;
           }
           elementExpressions.push(expr);
-          if (!tn.skip(Token.COMMA)) {
-            if (tn.skip(Token.CLOSEBRACKET)) {
+          if (!tn.skip(Token.Comma)) {
+            if (tn.skip(Token.CloseBracket)) {
               break;
             } else {
               this.error(
@@ -3784,14 +3874,14 @@ export class Parser extends DiagnosticEmitter {
         return Node.createArrayLiteralExpression(elementExpressions, tn.range(startPos, tn.pos));
       }
       // ObjectLiteralExpression
-      case Token.OPENBRACE: {
+      case Token.OpenBrace: {
         let startPos = tn.tokenPos;
         let names = new Array<IdentifierExpression>();
         let values = new Array<Expression>();
         let name: IdentifierExpression;
-        while (!tn.skip(Token.CLOSEBRACE)) {
+        while (!tn.skip(Token.CloseBrace)) {
           if (!tn.skipIdentifier()) {
-            if (!tn.skip(Token.STRINGLITERAL)) {
+            if (!tn.skip(Token.StringLiteral)) {
               this.error(
                 DiagnosticCode.Identifier_expected,
                 tn.range(),
@@ -3804,8 +3894,8 @@ export class Parser extends DiagnosticEmitter {
             name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
           }
           names.push(name);
-          if (tn.skip(Token.COLON)) {
-            let value = this.parseExpression(tn, Precedence.COMMA + 1);
+          if (tn.skip(Token.Colon)) {
+            let value = this.parseExpression(tn, Precedence.Comma + 1);
             if (!value) return null;
             values.push(value);
           } else if (!name.isQuoted) {
@@ -3817,8 +3907,8 @@ export class Parser extends DiagnosticEmitter {
             );
             return null;
           }
-          if (!tn.skip(Token.COMMA)) {
-            if (tn.skip(Token.CLOSEBRACE)) {
+          if (!tn.skip(Token.Comma)) {
+            if (tn.skip(Token.CloseBrace)) {
               break;
             } else {
               this.error(
@@ -3832,39 +3922,39 @@ export class Parser extends DiagnosticEmitter {
         return Node.createObjectLiteralExpression(names, values, tn.range(startPos, tn.pos));
       }
       // AssertionExpression (unary prefix)
-      case Token.LESSTHAN: {
+      case Token.LessThan: {
         let toType = this.parseType(tn);
         if (!toType) return null;
-        if (!tn.skip(Token.GREATERTHAN)) {
+        if (!tn.skip(Token.GreaterThan)) {
           this.error(
             DiagnosticCode._0_expected,
             tn.range(), ">"
           );
           return null;
         }
-        let expr = this.parseExpression(tn, Precedence.CALL);
+        let expr = this.parseExpression(tn, Precedence.Call);
         if (!expr) return null;
         return Node.createAssertionExpression(
-          AssertionKind.PREFIX,
+          AssertionKind.Prefix,
           expr,
           toType,
           tn.range(startPos, tn.pos)
         );
       }
-      case Token.IDENTIFIER: {
+      case Token.Identifier: {
         let identifierText = tn.readIdentifier();
         if (identifierText == "null") return Node.createNullExpression(tn.range()); // special
         let identifier = Node.createIdentifierExpression(identifierText, tn.range(startPos, tn.pos));
-        if (tn.skip(Token.TEMPLATELITERAL)) {
+        if (tn.skip(Token.TemplateLiteral)) {
           return this.parseTemplateLiteral(tn, identifier);
         }
-        if (tn.peek(true) == Token.EQUALS_GREATERTHAN && !tn.nextTokenOnNewLine) {
+        if (tn.peek(true) == Token.Equals_GreaterThan && !tn.nextTokenOnNewLine) {
           return this.parseFunctionExpressionCommon(
             tn,
             Node.createEmptyIdentifierExpression(tn.range(startPos)),
             [
               Node.createParameter(
-                ParameterKind.DEFAULT,
+                ParameterKind.Default,
                 identifier,
                 Node.createOmittedType(identifier.range.atEnd),
                 null,
@@ -3872,14 +3962,14 @@ export class Parser extends DiagnosticEmitter {
               )
             ],
             null,
-            ArrowKind.ARROW_SINGLE,
+            ArrowKind.Single,
             startPos
           );
         }
         return this.maybeParseCallExpression(tn, identifier, true);
       }
-      case Token.SUPER: {
-        if (tn.peek() != Token.DOT && tn.nextToken != Token.OPENPAREN) {
+      case Token.Super: {
+        if (tn.peek() != Token.Dot && tn.nextToken != Token.OpenParen) {
           this.error(
             DiagnosticCode._super_must_be_followed_by_an_argument_list_or_member_access,
             tn.range()
@@ -3888,27 +3978,27 @@ export class Parser extends DiagnosticEmitter {
         let expr = Node.createSuperExpression(tn.range(startPos, tn.pos));
         return this.maybeParseCallExpression(tn, expr);
       }
-      case Token.STRINGLITERAL: {
+      case Token.StringLiteral: {
         return Node.createStringLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
       }
-      case Token.TEMPLATELITERAL: {
+      case Token.TemplateLiteral: {
         return this.parseTemplateLiteral(tn);
       }
-      case Token.INTEGERLITERAL: {
+      case Token.IntegerLiteral: {
         let value = tn.readInteger();
         tn.checkForIdentifierStartAfterNumericLiteral();
         return Node.createIntegerLiteralExpression(value, tn.range(startPos, tn.pos));
       }
-      case Token.FLOATLITERAL: {
+      case Token.FloatLiteral: {
         let value = tn.readFloat();
         tn.checkForIdentifierStartAfterNumericLiteral();
         return Node.createFloatLiteralExpression(value, tn.range(startPos, tn.pos));
       }
       // RegexpLiteralExpression
       // note that this also continues on invalid ones so the surrounding AST remains intact
-      case Token.SLASH: {
+      case Token.Slash: {
         let regexpPattern = tn.readRegexpPattern(); // also reports
-        if (!tn.skip(Token.SLASH)) {
+        if (!tn.skip(Token.Slash)) {
           this.error(
             DiagnosticCode._0_expected,
             tn.range(), "/"
@@ -3921,16 +4011,16 @@ export class Parser extends DiagnosticEmitter {
           tn.range(startPos, tn.pos)
         );
       }
-      case Token.FUNCTION: {
+      case Token.Function: {
         let expr = this.parseFunctionExpression(tn);
         if (!expr) return null;
         return this.maybeParseCallExpression(tn, expr);
       }
-      case Token.CLASS: {
+      case Token.Class: {
         return this.parseClassExpression(tn);
       }
       default: {
-        if (token == Token.ENDOFFILE) {
+        if (token == Token.EndOfFile) {
           this.error(
             DiagnosticCode.Unexpected_end_of_text,
             tn.range(startPos)
@@ -3952,12 +4042,12 @@ export class Parser extends DiagnosticEmitter {
 
     // at '<': Type (',' Type)* '>' '('
 
-    var state = tn.mark();
-    if (!tn.skip(Token.LESSTHAN)) return null;
-    var start = tn.tokenPos;
-    var typeArguments: TypeNode[] | null = null;
+    let state = tn.mark();
+    if (!tn.skip(Token.LessThan)) return null;
+    let start = tn.tokenPos;
+    let typeArguments: TypeNode[] | null = null;
     do {
-      if (tn.peek() == Token.GREATERTHAN) {
+      if (tn.peek() == Token.GreaterThan) {
         break;
       }
       let type = this.parseType(tn, true, true);
@@ -3967,10 +4057,10 @@ export class Parser extends DiagnosticEmitter {
       }
       if (!typeArguments) typeArguments = [ type ];
       else typeArguments.push(type);
-    } while (tn.skip(Token.COMMA));
-    if (tn.skip(Token.GREATERTHAN)) {
+    } while (tn.skip(Token.Comma));
+    if (tn.skip(Token.GreaterThan)) {
       let end = tn.pos;
-      if (tn.skip(Token.OPENPAREN)) {
+      if (tn.skip(Token.OpenParen)) {
         if (!typeArguments) {
           this.error(
             DiagnosticCode.Type_argument_list_cannot_be_empty,
@@ -3990,13 +4080,13 @@ export class Parser extends DiagnosticEmitter {
 
     // at '(': (Expression (',' Expression)*)? ')'
 
-    var args = new Array<Expression>();
-    while (!tn.skip(Token.CLOSEPAREN)) {
-      let expr = this.parseExpression(tn, Precedence.COMMA + 1);
+    let args = new Array<Expression>();
+    while (!tn.skip(Token.CloseParen)) {
+      let expr = this.parseExpression(tn, Precedence.Comma + 1);
       if (!expr) return null;
       args.push(expr);
-      if (!tn.skip(Token.COMMA)) {
-        if (tn.skip(Token.CLOSEPAREN)) {
+      if (!tn.skip(Token.Comma)) {
+        if (tn.skip(Token.CloseParen)) {
           break;
         } else {
           this.error(
@@ -4012,16 +4102,16 @@ export class Parser extends DiagnosticEmitter {
 
   parseExpression(
     tn: Tokenizer,
-    precedence: Precedence = Precedence.COMMA
+    precedence: Precedence = Precedence.Comma
   ): Expression | null {
-    assert(precedence != Precedence.NONE);
-    var expr = this.parseExpressionStart(tn);
+    assert(precedence != Precedence.None);
+    let expr = this.parseExpressionStart(tn);
     if (!expr) return null;
-    var startPos = expr.range.start;
+    let startPos = expr.range.start;
 
     // precedence climbing
     // see: http://www.engr.mun.ca/~theo/Misc/exp_parsing.htm#climbing
-    var nextPrecedence: Precedence;
+    let nextPrecedence: Precedence;
     while (
       (nextPrecedence = determinePrecedence(tn.peek())) >= precedence
     ) {
@@ -4029,10 +4119,10 @@ export class Parser extends DiagnosticEmitter {
       switch (token) {
 
         // AssertionExpression
-        case Token.AS: {
-          if (tn.skip(Token.CONST)) {
+        case Token.As: {
+          if (tn.skip(Token.Const)) {
             expr = Node.createAssertionExpression(
-              AssertionKind.CONST,
+              AssertionKind.Const,
               expr,
               null,
               tn.range(startPos, tn.pos)
@@ -4041,7 +4131,7 @@ export class Parser extends DiagnosticEmitter {
             let toType = this.parseType(tn); // reports
             if (!toType) return null;
             expr = Node.createAssertionExpression(
-              AssertionKind.AS,
+              AssertionKind.As,
               expr,
               toType,
               tn.range(startPos, tn.pos)
@@ -4049,9 +4139,9 @@ export class Parser extends DiagnosticEmitter {
           }
           break;
         }
-        case Token.EXCLAMATION: {
+        case Token.Exclamation: {
           expr = Node.createAssertionExpression(
-            AssertionKind.NONNULL,
+            AssertionKind.NonNull,
             expr,
             null,
             tn.range(startPos, tn.pos)
@@ -4060,7 +4150,7 @@ export class Parser extends DiagnosticEmitter {
           break;
         }
         // InstanceOfExpression
-        case Token.INSTANCEOF: {
+        case Token.InstanceOf: {
           let isType = this.parseType(tn); // reports
           if (!isType) return null;
           expr = Node.createInstanceOfExpression(
@@ -4071,10 +4161,10 @@ export class Parser extends DiagnosticEmitter {
           break;
         }
         // ElementAccessExpression
-        case Token.OPENBRACKET: {
+        case Token.OpenBracket: {
           let next = this.parseExpression(tn); // reports
           if (!next) return null;
-          if (!tn.skip(Token.CLOSEBRACKET)) {
+          if (!tn.skip(Token.CloseBracket)) {
             this.error(
               DiagnosticCode._0_expected,
               tn.range(), "]"
@@ -4090,12 +4180,12 @@ export class Parser extends DiagnosticEmitter {
           break;
         }
         // UnaryPostfixExpression
-        case Token.PLUS_PLUS:
-        case Token.MINUS_MINUS: {
+        case Token.Plus_Plus:
+        case Token.Minus_Minus: {
           if (
-            expr.kind != NodeKind.IDENTIFIER &&
-            expr.kind != NodeKind.ELEMENTACCESS &&
-            expr.kind != NodeKind.PROPERTYACCESS
+            expr.kind != NodeKind.Identifier &&
+            expr.kind != NodeKind.ElementAccess &&
+            expr.kind != NodeKind.PropertyAccess
           ) {
             this.error(
               DiagnosticCode.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access,
@@ -4110,19 +4200,19 @@ export class Parser extends DiagnosticEmitter {
           break;
         }
         // TernaryExpression
-        case Token.QUESTION: {
+        case Token.Question: {
           let ifThen = this.parseExpression(tn);
           if (!ifThen) return null;
-          if (!tn.skip(Token.COLON)) {
+          if (!tn.skip(Token.Colon)) {
             this.error(
               DiagnosticCode._0_expected,
               tn.range(), ":"
             );
             return null;
           }
-          let ifElse = this.parseExpression(tn, precedence > Precedence.COMMA
-            ? Precedence.COMMA + 1
-            : Precedence.COMMA
+          let ifElse = this.parseExpression(tn, precedence > Precedence.Comma
+            ? Precedence.Comma + 1
+            : Precedence.Comma
           );
           if (!ifElse) return null;
           expr = Node.createTernaryExpression(
@@ -4134,19 +4224,19 @@ export class Parser extends DiagnosticEmitter {
           break;
         }
         // CommaExpression
-        case Token.COMMA: {
+        case Token.Comma: {
           let commaExprs: Expression[] = [ expr ];
           do {
-            expr = this.parseExpression(tn, Precedence.COMMA + 1);
+            expr = this.parseExpression(tn, Precedence.Comma + 1);
             if (!expr) return null;
             commaExprs.push(expr);
-          } while (tn.skip(Token.COMMA));
+          } while (tn.skip(Token.Comma));
           expr = Node.createCommaExpression(commaExprs, tn.range(startPos, tn.pos));
           break;
         }
         // PropertyAccessExpression
-        case Token.DOT: {
-          if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) { // expr '.' Identifier
+        case Token.Dot: {
+          if (tn.skipIdentifier(IdentifierHandling.Always)) { // expr '.' Identifier
             let next = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
             expr = Node.createPropertyAccessExpression(
               expr,
@@ -4156,7 +4246,7 @@ export class Parser extends DiagnosticEmitter {
           } else {
             let next = this.parseExpression(tn, nextPrecedence + 1);
             if (!next) return null;
-            if (next.kind == NodeKind.CALL) { // expr '.' CallExpression
+            if (next.kind == NodeKind.Call) { // expr '.' CallExpression
               expr = this.joinPropertyCall(tn, startPos, expr, <CallExpression>next);
               if (!expr) return null;
             } else {
@@ -4167,7 +4257,7 @@ export class Parser extends DiagnosticEmitter {
               return null;
             }
           }
-          if (tn.skip(Token.TEMPLATELITERAL)) {
+          if (tn.skip(Token.TemplateLiteral)) {
             expr = this.parseTemplateLiteral(tn, expr);
             if (!expr) return null;
           } else {
@@ -4176,47 +4266,47 @@ export class Parser extends DiagnosticEmitter {
           break;
         }
         // BinaryExpression (right associative)
-        case Token.EQUALS:
-        case Token.PLUS_EQUALS:
-        case Token.MINUS_EQUALS:
-        case Token.ASTERISK_ASTERISK_EQUALS:
-        case Token.ASTERISK_EQUALS:
-        case Token.SLASH_EQUALS:
-        case Token.PERCENT_EQUALS:
-        case Token.LESSTHAN_LESSTHAN_EQUALS:
-        case Token.GREATERTHAN_GREATERTHAN_EQUALS:
-        case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
-        case Token.AMPERSAND_EQUALS:
-        case Token.CARET_EQUALS:
-        case Token.BAR_EQUALS:
-        case Token.ASTERISK_ASTERISK: {
+        case Token.Equals:
+        case Token.Plus_Equals:
+        case Token.Minus_Equals:
+        case Token.Asterisk_Asterisk_Equals:
+        case Token.Asterisk_Equals:
+        case Token.Slash_Equals:
+        case Token.Percent_Equals:
+        case Token.LessThan_LessThan_Equals:
+        case Token.GreaterThan_GreaterThan_Equals:
+        case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
+        case Token.Ampersand_Equals:
+        case Token.Caret_Equals:
+        case Token.Bar_Equals:
+        case Token.Asterisk_Asterisk: {
           let next = this.parseExpression(tn, nextPrecedence);
           if (!next) return null;
           expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
           break;
         }
         // BinaryExpression
-        case Token.LESSTHAN:
-        case Token.GREATERTHAN:
-        case Token.LESSTHAN_EQUALS:
-        case Token.GREATERTHAN_EQUALS:
-        case Token.EQUALS_EQUALS:
-        case Token.EQUALS_EQUALS_EQUALS:
-        case Token.EXCLAMATION_EQUALS_EQUALS:
-        case Token.EXCLAMATION_EQUALS:
-        case Token.PLUS:
-        case Token.MINUS:
-        case Token.ASTERISK:
-        case Token.SLASH:
-        case Token.PERCENT:
-        case Token.LESSTHAN_LESSTHAN:
-        case Token.GREATERTHAN_GREATERTHAN:
-        case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
-        case Token.AMPERSAND:
-        case Token.BAR:
-        case Token.CARET:
-        case Token.AMPERSAND_AMPERSAND:
-        case Token.BAR_BAR: {
+        case Token.LessThan:
+        case Token.GreaterThan:
+        case Token.LessThan_Equals:
+        case Token.GreaterThan_Equals:
+        case Token.Equals_Equals:
+        case Token.Equals_Equals_Equals:
+        case Token.Exclamation_Equals_Equals:
+        case Token.Exclamation_Equals:
+        case Token.Plus:
+        case Token.Minus:
+        case Token.Asterisk:
+        case Token.Slash:
+        case Token.Percent:
+        case Token.LessThan_LessThan:
+        case Token.GreaterThan_GreaterThan:
+        case Token.GreaterThan_GreaterThan_GreaterThan:
+        case Token.Ampersand:
+        case Token.Bar:
+        case Token.Caret:
+        case Token.Ampersand_Ampersand:
+        case Token.Bar_Bar: {
           let next = this.parseExpression(tn, nextPrecedence + 1);
           if (!next) return null;
           expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
@@ -4230,24 +4320,24 @@ export class Parser extends DiagnosticEmitter {
 
   private parseTemplateLiteral(tn: Tokenizer, tag: Expression | null = null): Expression | null {
     // at '`': ... '`'
-    var startPos = tag ? tag.range.start : tn.tokenPos;
-    var parts = new Array<string>();
-    var rawParts = new Array<string>();
-    var exprs = new Array<Expression>();
+    let startPos = tag ? tag.range.start : tn.tokenPos;
+    let parts = new Array<string>();
+    let rawParts = new Array<string>();
+    let exprs = new Array<Expression>();
     parts.push(tn.readString(0, tag != null));
     rawParts.push(tn.source.text.substring(tn.readStringStart, tn.readStringEnd));
     while (tn.readingTemplateString) {
       let expr = this.parseExpression(tn);
       if (!expr) return null;
       exprs.push(expr);
-      if (!tn.skip(Token.CLOSEBRACE)) {
+      if (!tn.skip(Token.CloseBrace)) {
         this.error(
           DiagnosticCode._0_expected,
           tn.range(), "}"
         );
         return null;
       }
-      parts.push(tn.readString(CharCode.BACKTICK, tag != null));
+      parts.push(tn.readString(CharCode.Backtick, tag != null));
       rawParts.push(tn.source.text.substring(tn.readStringStart, tn.readStringEnd));
     }
     return Node.createTemplateLiteralExpression(tag, parts, rawParts, exprs, tn.range(startPos, tn.pos));
@@ -4259,9 +4349,9 @@ export class Parser extends DiagnosticEmitter {
     expr: Expression,
     call: CallExpression
   ): Expression | null {
-    var callee = call.expression;
+    let callee = call.expression;
     switch (callee.kind) {
-      case NodeKind.IDENTIFIER: { // join property access and use as call target
+      case NodeKind.Identifier: { // join property access and use as call target
         call.expression = Node.createPropertyAccessExpression(
           expr,
           <IdentifierExpression>callee,
@@ -4269,7 +4359,7 @@ export class Parser extends DiagnosticEmitter {
         );
         break;
       }
-      case NodeKind.CALL: { // join call target und wrap the original call around it
+      case NodeKind.Call: { // join call target und wrap the original call around it
         let inner = this.joinPropertyCall(tn, startPos, expr, <CallExpression>callee);
         if (!inner) return null;
         call.expression = inner;
@@ -4292,9 +4382,9 @@ export class Parser extends DiagnosticEmitter {
     expr: Expression,
     potentiallyGeneric: bool = false
   ): Expression {
-    var typeArguments: TypeNode[] | null = null;
+    let typeArguments: TypeNode[] | null = null;
     while (
-      tn.skip(Token.OPENPAREN) ||
+      tn.skip(Token.OpenParen) ||
       potentiallyGeneric &&
       (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn))
     ) {
@@ -4315,7 +4405,7 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     isFor: bool = false
   ): void {
-    if (!tn.skip(Token.SEMICOLON) && !isFor && tn.checkOffendingToken()) {
+    if (!tn.skip(Token.Semicolon) && !isFor && tn.checkOffendingToken()) {
       this.error(
         DiagnosticCode.Unexpected_token,
         tn.range()
@@ -4330,34 +4420,34 @@ export class Parser extends DiagnosticEmitter {
     do {
       let nextToken = tn.peek(true);
       if (
-        nextToken == Token.ENDOFFILE ||   // next step should handle this
-        nextToken == Token.SEMICOLON      // end of the statement for sure
+        nextToken == Token.EndOfFile ||   // next step should handle this
+        nextToken == Token.Semicolon      // end of the statement for sure
       ) {
         tn.next();
         break;
       }
       if (tn.nextTokenOnNewLine) break;   // end of the statement maybe
       switch (tn.next()) {
-        case Token.IDENTIFIER: {
+        case Token.Identifier: {
           tn.readIdentifier();
           break;
         }
-        case Token.STRINGLITERAL:
-        case Token.TEMPLATELITERAL: {
+        case Token.StringLiteral:
+        case Token.TemplateLiteral: {
           tn.readString();
           break;
         }
-        case Token.INTEGERLITERAL: {
+        case Token.IntegerLiteral: {
           tn.readInteger();
           tn.checkForIdentifierStartAfterNumericLiteral();
           break;
         }
-        case Token.FLOATLITERAL: {
+        case Token.FloatLiteral: {
           tn.readFloat();
           tn.checkForIdentifierStartAfterNumericLiteral();
           break;
         }
-        case Token.OPENBRACE: {
+        case Token.OpenBrace: {
           this.skipBlock(tn);
           break;
         }
@@ -4369,11 +4459,11 @@ export class Parser extends DiagnosticEmitter {
   /** Skips over a block on errors in an attempt to reduce unnecessary diagnostic noise. */
   skipBlock(tn: Tokenizer): void {
     // at '{': ... '}'
-    var depth = 1;
-    var again = true;
+    let depth = 1;
+    let again = true;
     do {
       switch (tn.next()) {
-        case Token.ENDOFFILE: {
+        case Token.EndOfFile: {
           this.error(
             DiagnosticCode._0_expected,
             tn.range(), "}"
@@ -4381,37 +4471,37 @@ export class Parser extends DiagnosticEmitter {
           again = false;
           break;
         }
-        case Token.OPENBRACE: {
+        case Token.OpenBrace: {
           ++depth;
           break;
         }
-        case Token.CLOSEBRACE: {
+        case Token.CloseBrace: {
           --depth;
           if (!depth) again = false;
           break;
         }
-        case Token.IDENTIFIER: {
+        case Token.Identifier: {
           tn.readIdentifier();
           break;
         }
-        case Token.STRINGLITERAL:{
+        case Token.StringLiteral:{
           tn.readString();
           break;
         }
-        case Token.TEMPLATELITERAL: {
+        case Token.TemplateLiteral: {
           tn.readString();
           while(tn.readingTemplateString){
             this.skipBlock(tn);
-            tn.readString(CharCode.BACKTICK);
+            tn.readString(CharCode.Backtick);
           }
           break;
         }
-        case Token.INTEGERLITERAL: {
+        case Token.IntegerLiteral: {
           tn.readInteger();
           tn.checkForIdentifierStartAfterNumericLiteral();
           break;
         }
-        case Token.FLOATLITERAL: {
+        case Token.FloatLiteral: {
           tn.readFloat();
           tn.checkForIdentifierStartAfterNumericLiteral();
           break;
@@ -4423,78 +4513,78 @@ export class Parser extends DiagnosticEmitter {
 
 /** Operator precedence from least to largest. */
 export const enum Precedence {
-  NONE,
-  COMMA,
-  SPREAD,
-  YIELD,
-  ASSIGNMENT,
-  CONDITIONAL,
-  LOGICAL_OR,
-  LOGICAL_AND,
-  BITWISE_OR,
-  BITWISE_XOR,
-  BITWISE_AND,
-  EQUALITY,
-  RELATIONAL,
-  SHIFT,
-  ADDITIVE,
-  MULTIPLICATIVE,
-  EXPONENTIATED,
-  UNARY_PREFIX,
-  UNARY_POSTFIX,
-  CALL,
-  MEMBERACCESS,
-  GROUPING
+  None,
+  Comma,
+  Spread,
+  Yield,
+  Assignment,
+  Conditional,
+  LogicalOr,
+  LogicalAnd,
+  BitwiseOr,
+  BitwiseXor,
+  BitwiseAnd,
+  Equality,
+  Relational,
+  Shift,
+  Additive,
+  Multiplicative,
+  Exponentiated,
+  UnaryPrefix,
+  UnaryPostfix,
+  Call,
+  MemberAccess,
+  Grouping
 }
 
 /** Determines the precende of a non-starting token. */
 function determinePrecedence(kind: Token): Precedence {
   switch (kind) {
-    case Token.COMMA: return Precedence.COMMA;
-    case Token.EQUALS:
-    case Token.PLUS_EQUALS:
-    case Token.MINUS_EQUALS:
-    case Token.ASTERISK_ASTERISK_EQUALS:
-    case Token.ASTERISK_EQUALS:
-    case Token.SLASH_EQUALS:
-    case Token.PERCENT_EQUALS:
-    case Token.LESSTHAN_LESSTHAN_EQUALS:
-    case Token.GREATERTHAN_GREATERTHAN_EQUALS:
-    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
-    case Token.AMPERSAND_EQUALS:
-    case Token.CARET_EQUALS:
-    case Token.BAR_EQUALS: return Precedence.ASSIGNMENT;
-    case Token.QUESTION: return Precedence.CONDITIONAL;
-    case Token.BAR_BAR: return Precedence.LOGICAL_OR;
-    case Token.AMPERSAND_AMPERSAND: return Precedence.LOGICAL_AND;
-    case Token.BAR: return Precedence.BITWISE_OR;
-    case Token.CARET: return Precedence.BITWISE_XOR;
-    case Token.AMPERSAND: return Precedence.BITWISE_AND;
-    case Token.EQUALS_EQUALS:
-    case Token.EXCLAMATION_EQUALS:
-    case Token.EQUALS_EQUALS_EQUALS:
-    case Token.EXCLAMATION_EQUALS_EQUALS: return Precedence.EQUALITY;
-    case Token.AS:
-    case Token.IN:
-    case Token.INSTANCEOF:
-    case Token.LESSTHAN:
-    case Token.GREATERTHAN:
-    case Token.LESSTHAN_EQUALS:
-    case Token.GREATERTHAN_EQUALS: return Precedence.RELATIONAL;
-    case Token.LESSTHAN_LESSTHAN:
-    case Token.GREATERTHAN_GREATERTHAN:
-    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: return Precedence.SHIFT;
-    case Token.PLUS:
-    case Token.MINUS: return Precedence.ADDITIVE;
-    case Token.ASTERISK:
-    case Token.SLASH:
-    case Token.PERCENT: return Precedence.MULTIPLICATIVE;
-    case Token.ASTERISK_ASTERISK: return Precedence.EXPONENTIATED;
-    case Token.PLUS_PLUS:
-    case Token.MINUS_MINUS: return Precedence.UNARY_POSTFIX;
-    case Token.DOT:
-    case Token.OPENBRACKET:
-    case Token.EXCLAMATION: return Precedence.MEMBERACCESS;
+    case Token.Comma: return Precedence.Comma;
+    case Token.Equals:
+    case Token.Plus_Equals:
+    case Token.Minus_Equals:
+    case Token.Asterisk_Asterisk_Equals:
+    case Token.Asterisk_Equals:
+    case Token.Slash_Equals:
+    case Token.Percent_Equals:
+    case Token.LessThan_LessThan_Equals:
+    case Token.GreaterThan_GreaterThan_Equals:
+    case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
+    case Token.Ampersand_Equals:
+    case Token.Caret_Equals:
+    case Token.Bar_Equals: return Precedence.Assignment;
+    case Token.Question: return Precedence.Conditional;
+    case Token.Bar_Bar: return Precedence.LogicalOr;
+    case Token.Ampersand_Ampersand: return Precedence.LogicalAnd;
+    case Token.Bar: return Precedence.BitwiseOr;
+    case Token.Caret: return Precedence.BitwiseXor;
+    case Token.Ampersand: return Precedence.BitwiseAnd;
+    case Token.Equals_Equals:
+    case Token.Exclamation_Equals:
+    case Token.Equals_Equals_Equals:
+    case Token.Exclamation_Equals_Equals: return Precedence.Equality;
+    case Token.As:
+    case Token.In:
+    case Token.InstanceOf:
+    case Token.LessThan:
+    case Token.GreaterThan:
+    case Token.LessThan_Equals:
+    case Token.GreaterThan_Equals: return Precedence.Relational;
+    case Token.LessThan_LessThan:
+    case Token.GreaterThan_GreaterThan:
+    case Token.GreaterThan_GreaterThan_GreaterThan: return Precedence.Shift;
+    case Token.Plus:
+    case Token.Minus: return Precedence.Additive;
+    case Token.Asterisk:
+    case Token.Slash:
+    case Token.Percent: return Precedence.Multiplicative;
+    case Token.Asterisk_Asterisk: return Precedence.Exponentiated;
+    case Token.Plus_Plus:
+    case Token.Minus_Minus: return Precedence.UnaryPostfix;
+    case Token.Dot:
+    case Token.OpenBracket:
+    case Token.Exclamation: return Precedence.MemberAccess;
   }
-  return Precedence.NONE;
+  return Precedence.None;
 }

@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "declare" "externalConstant" (global $declare/externalConstant i32))
  (import "declare" "my.externalConstant" (global $declare/my.externalConstant i32))
  (import "declare" "externalFunction" (func $declare/externalFunction))
@@ -8,10 +8,10 @@
  (import "declare" "my.externalFunction" (func $declare/my.externalFunction))
  (memory $0 1)
  (data (i32.const 1036) ",")
- (data (i32.const 1048) "\01\00\00\00\14\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00\14\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
- (func $~start
+ (func $~start (type $none_=>_none)
   call $declare/externalFunction
   global.get $declare/externalConstant
   i32.const 1

@@ -134,10 +134,10 @@ const diagnosticsPlugin = {
       out.push("/** Enum of available diagnostic codes. */\n");
       out.push("export enum DiagnosticCode {\n");
 
-      var first = true;
+      let first = true;
       const messages = JSON.parse(fs.readFileSync(path.join(dirname, "..", "src", "diagnosticMessages.json")));
       Object.keys(messages).forEach(text => {
-        var key = makeKey(text);
+        let key = makeKey(text);
         if (first)
           first = false;
         else {
@@ -145,17 +145,17 @@ const diagnosticsPlugin = {
         }
         out.push("  " + key + " = " + messages[text]);
       });
-      
+
       out.push("\n}\n\n");
       out.push("/** Translates a diagnostic code to its respective string. */\n");
       out.push("export function diagnosticCodeToString(code: DiagnosticCode): string {\n  switch (code) {\n");
-      
+
       Object.keys(messages).forEach(text => {
         out.push("    case " + messages[text] + ": return " + JSON.stringify(text) + ";\n");
       });
-      
+
       out.push("    default: return \"\";\n  }\n}\n");
-      
+
       const generated = out.join("");
       fs.writeFileSync(path.join(dirname, "..", "src", "diagnosticMessages.generated.ts"), generated);
       return {
@@ -233,7 +233,7 @@ const cliBuild = esbuild.build({
 
 // Optionally build definitions (takes a while)
 
-var buildingDefinitions = false;
+let buildingDefinitions = false;
 
 function buildDefinitions() {
   const startTime = Date.now();

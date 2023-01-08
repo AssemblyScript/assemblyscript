@@ -1,7 +1,7 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
@@ -16,21 +16,21 @@
  (global $retain-i32/ui (mut i32) (i32.const 0))
  (global $retain-i32/ri (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 60))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
- (global $~lib/memory/__heap_base i32 (i32.const 16444))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
+ (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00\00\00")
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1a\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $retain-i32/test (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $retain-i32/test (type $i32_i32_=>_none) (param $a i32) (param $b i32)
+  local.get $a
+  local.get $b
   i32.add
   i32.extend8_s
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.add
   i32.extend8_s
   i32.eq
@@ -43,12 +43,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.sub
   i32.extend8_s
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.sub
   i32.extend8_s
   i32.eq
@@ -61,12 +61,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.mul
   i32.extend8_s
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.mul
   i32.extend8_s
   i32.eq
@@ -79,12 +79,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.and
   i32.extend8_s
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.and
   i32.extend8_s
   i32.eq
@@ -97,12 +97,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.or
   i32.extend8_s
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.or
   i32.extend8_s
   i32.eq
@@ -115,12 +115,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.xor
   i32.extend8_s
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.xor
   i32.extend8_s
   i32.eq
@@ -133,14 +133,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.const 7
   i32.and
   i32.shl
   i32.extend8_s
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.const 7
   i32.and
   i32.shl
@@ -155,13 +155,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.add
   i32.const 255
   i32.and
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.add
   i32.const 255
   i32.and
@@ -175,13 +175,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.sub
   i32.const 255
   i32.and
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.sub
   i32.const 255
   i32.and
@@ -195,13 +195,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.mul
   i32.const 255
   i32.and
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.mul
   i32.const 255
   i32.and
@@ -215,13 +215,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.and
   i32.const 255
   i32.and
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.and
   i32.const 255
   i32.and
@@ -235,13 +235,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.or
   i32.const 255
   i32.and
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.or
   i32.const 255
   i32.and
@@ -255,13 +255,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.xor
   i32.const 255
   i32.and
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.xor
   i32.const 255
   i32.and
@@ -275,15 +275,15 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.const 7
   i32.and
   i32.shl
   i32.const 255
   i32.and
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   i32.const 7
   i32.and
   i32.shl
@@ -300,17 +300,16 @@
    unreachable
   end
  )
- (func $retain-i32/testLocalRetain
-  (local $0 i32)
+ (func $retain-i32/testLocalRetain (type $none_=>_none)
+  (local $ri i32)
   i32.const 0
-  i32.load8_s
-  local.set $0
+  i32.load8_s $0
+  local.set $ri
   i32.const 1
   drop
  )
- (func $start:retain-i32
-  (local $0 i32)
-  (local $1 i32)
+ (func $start:retain-i32 (type $none_=>_none)
+  (local $i i32)
   i32.const 0
   global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
@@ -381,54 +380,52 @@
   global.get $~lib/builtins/u8.MAX_VALUE
   call $retain-i32/test
   global.get $~lib/builtins/i8.MIN_VALUE
-  local.set $0
+  local.set $i
   loop $for-loop|0
-   local.get $0
+   local.get $i
    global.get $~lib/builtins/u8.MAX_VALUE
    i32.le_s
-   local.set $1
-   local.get $1
    if
     i32.const 0
-    local.get $0
+    local.get $i
     call $retain-i32/test
     i32.const 1
-    local.get $0
+    local.get $i
     call $retain-i32/test
     i32.const -1
-    local.get $0
+    local.get $i
     call $retain-i32/test
     global.get $~lib/builtins/i8.MIN_VALUE
-    local.get $0
+    local.get $i
     call $retain-i32/test
     global.get $~lib/builtins/i8.MAX_VALUE
-    local.get $0
+    local.get $i
     call $retain-i32/test
     global.get $~lib/builtins/u8.MAX_VALUE
-    local.get $0
+    local.get $i
     call $retain-i32/test
     global.get $~lib/builtins/i16.MIN_VALUE
-    local.get $0
+    local.get $i
     call $retain-i32/test
     global.get $~lib/builtins/i16.MAX_VALUE
-    local.get $0
+    local.get $i
     call $retain-i32/test
     global.get $~lib/builtins/u16.MAX_VALUE
-    local.get $0
+    local.get $i
     call $retain-i32/test
     global.get $~lib/builtins/i32.MAX_VALUE
-    local.get $0
+    local.get $i
     call $retain-i32/test
     global.get $~lib/builtins/i32.MIN_VALUE
-    local.get $0
+    local.get $i
     call $retain-i32/test
     global.get $~lib/builtins/u32.MAX_VALUE
-    local.get $0
+    local.get $i
     call $retain-i32/test
-    local.get $0
+    local.get $i
     i32.const 1
     i32.add
-    local.set $0
+    local.set $i
     br $for-loop|0
    end
   end
@@ -744,13 +741,13 @@
    unreachable
   end
   i32.const 0
-  i32.load8_s
+  i32.load8_s $0
   global.set $retain-i32/ri
   i32.const 1
   drop
   call $retain-i32/testLocalRetain
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:retain-i32
  )
 )

@@ -1558,31 +1558,31 @@ assert(test_exp2(reinterpret<f64>(0x3FE8C5DB097F7442), reinterpret<f64>(0x3FFB5C
 assert(test_exp2(reinterpret<f64>(0xBFE5B86EA8118A0E), reinterpret<f64>(0x3FE3FD8BA33216B9), reinterpret<f64>(0xBFD3F71A00000000), INEXACT));
 
 // special
-assert(test_exp2(                                   0, reinterpret<f64>(0x3FF0000000000000),                                    0, 0));
-assert(test_exp2(                                  -0, reinterpret<f64>(0x3FF0000000000000),                                    0, 0));
-assert(test_exp2(                                   1, reinterpret<f64>(0x4000000000000000),                                    0, 0));
-assert(test_exp2(                                  -1, reinterpret<f64>(0x3FE0000000000000),                                    0, 0));
+assert(test_exp2(                                 0.0, reinterpret<f64>(0x3FF0000000000000),                                    0, 0));
+assert(test_exp2(                                -0.0, reinterpret<f64>(0x3FF0000000000000),                                    0, 0));
+assert(test_exp2(                                 1.0, reinterpret<f64>(0x4000000000000000),                                    0, 0));
+assert(test_exp2(                                -1.0, reinterpret<f64>(0x3FE0000000000000),                                    0, 0));
 assert(test_exp2(                            Infinity,                             Infinity,                                    0, 0));
 assert(test_exp2(                           -Infinity,                                    0,                                    0, 0));
 assert(test_exp2(                                 NaN,                                  NaN,                                    0, 0));
 assert(test_exp2(reinterpret<f64>(0x3FFFF80000000000), reinterpret<f64>(0x400FF4EACA4391B6), reinterpret<f64>(0x3FC2E60C60000000), INEXACT));
-assert(test_exp2(reinterpret<f64>(0xC08FEF3333333333), reinterpret<f64>(0x1125FBEE2506B0),   reinterpret<f64>(0xBFCC612EC0000000), INEXACT));
-assert(test_exp2(reinterpret<f64>(0xC08FF00000000000), reinterpret<f64>(0x10000000000000),                                      0, 0));
-assert(test_exp2(reinterpret<f64>(0xC08FF0CCCCCCCCCD), reinterpret<f64>(0xEEDB4008BD547),    reinterpret<f64>(0x3FC966DFC0000000), INEXACT | UNDERFLOW));
-assert(test_exp2(reinterpret<f64>(0xC08FF80000000000), reinterpret<f64>(0x8000000000000),                                       0, 0));
+assert(test_exp2(reinterpret<f64>(0xC08FEF3333333333), reinterpret<f64>(0x001125FBEE2506B0), reinterpret<f64>(0xBFCC612EC0000000), INEXACT));
+assert(test_exp2(reinterpret<f64>(0xC08FF00000000000), reinterpret<f64>(0x0010000000000000),                                    0, 0));
+assert(test_exp2(reinterpret<f64>(0xC08FF0CCCCCCCCCD), reinterpret<f64>(0x000EEDB4008BD547), reinterpret<f64>(0x3FC966DFC0000000), INEXACT | UNDERFLOW));
+assert(test_exp2(reinterpret<f64>(0xC08FF80000000000), reinterpret<f64>(0x0008000000000000),                                    0, 0));
 assert(test_exp2(reinterpret<f64>(0x408FFF3333333333), reinterpret<f64>(0x7FEDDB680117AA8E), reinterpret<f64>(0x3FD966DFC0000000), INEXACT));
 assert(test_exp2(reinterpret<f64>(0x4090000000000000),                             Infinity,                                    0, INEXACT | UNDERFLOW));
 assert(test_exp2(reinterpret<f64>(0x4090006666666666),                             Infinity,                                    0, INEXACT | UNDERFLOW));
 assert(test_exp2(reinterpret<f64>(0x40091EB851EB851F), reinterpret<f64>(0x4021A167423FC31C), reinterpret<f64>(0x3FD9287B80000000), INEXACT));
-assert(test_exp2(reinterpret<f64>(0xC08FF40000000000), reinterpret<f64>(0xB504F333F9DE6),    reinterpret<f64>(0xBFD2116600000000), INEXACT | UNDERFLOW));
-assert(test_exp2(reinterpret<f64>(0xC08FF80000000000), reinterpret<f64>(0x8000000000000),                                       0, 0));
-assert(test_exp2(reinterpret<f64>(0xC08FFC0000000000), reinterpret<f64>(0x5A827999FCEF3),    reinterpret<f64>(0xBFC2116600000000), INEXACT | UNDERFLOW));
-assert(test_exp2(reinterpret<f64>(0xC090000000000000), reinterpret<f64>(0x4000000000000),                                       0, 0));
-assert(test_exp2(reinterpret<f64>(0xC090040000000000), reinterpret<f64>(0x2000000000000),                                       0, 0));
-assert(test_exp2(reinterpret<f64>(0xC090C80000000000),               reinterpret<f64>(0x1),                                     0, 0));
-assert(test_exp2(reinterpret<f64>(0xC090CA0000000000),               reinterpret<f64>(0x1),  reinterpret<f64>(0x3FD2BEC340000000), INEXACT | UNDERFLOW));
-assert(test_exp2(reinterpret<f64>(0xC090CC0000000000),                                   0,  reinterpret<f64>(0xBFE0000000000000), INEXACT | UNDERFLOW));
-assert(test_exp2(reinterpret<f64>(0xC0A0000000000000),                                   0,                                     0, INEXACT | UNDERFLOW));
+assert(test_exp2(reinterpret<f64>(0xC08FF40000000000), reinterpret<f64>(0x000B504F333F9DE6), reinterpret<f64>(0xBFD2116600000000), INEXACT | UNDERFLOW));
+assert(test_exp2(reinterpret<f64>(0xC08FF80000000000), reinterpret<f64>(0x0008000000000000),                                    0, 0));
+assert(test_exp2(reinterpret<f64>(0xC08FFC0000000000), reinterpret<f64>(0x0005A827999FCEF3), reinterpret<f64>(0xBFC2116600000000), INEXACT | UNDERFLOW));
+assert(test_exp2(reinterpret<f64>(0xC090000000000000), reinterpret<f64>(0x0004000000000000),                                    0, 0));
+assert(test_exp2(reinterpret<f64>(0xC090040000000000), reinterpret<f64>(0x0002000000000000),                                    0, 0));
+assert(test_exp2(reinterpret<f64>(0xC090C80000000000),                  reinterpret<f64>(1),                                    0, 0));
+assert(test_exp2(reinterpret<f64>(0xC090CA0000000000),                  reinterpret<f64>(1), reinterpret<f64>(0x3FD2BEC340000000), INEXACT | UNDERFLOW));
+assert(test_exp2(reinterpret<f64>(0xC090CC0000000000),                                    0, reinterpret<f64>(0xBFE0000000000000), INEXACT | UNDERFLOW));
+assert(test_exp2(reinterpret<f64>(0xC0A0000000000000),                                    0,                                    0, INEXACT | UNDERFLOW));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Mathf.exp2
@@ -2695,8 +2695,8 @@ assert(NativeMath.pow(+Infinity, 0.0) == 1.0);
 assert(NativeMath.pow(-Infinity, 0.0) == 1.0);
 assert(NativeMath.pow(NaN, 0.0) == 1.0);
 
-assert(NativeMath.pow(+0.0,+1.0) == +0.0);
-assert(NativeMath.pow(-0.0,+1.0) == -0.0);
+assert(Object.is(NativeMath.pow(+0.0,+1.0), +0.0));
+assert(Object.is(NativeMath.pow(-0.0,+1.0), -0.0));
 assert(NativeMath.pow(-1.0, 1.0) == -1.0);
 assert(NativeMath.pow(+Infinity, 1.0) == +Infinity);
 assert(NativeMath.pow(-Infinity, 1.0) == -Infinity);
@@ -2707,8 +2707,8 @@ assert(NativeMath.pow(-0.0,-1.0) == -Infinity);
 assert(NativeMath.pow(-1.0,-1.0) == -1.0);
 assert(NativeMath.pow( 0.5,-1.0) == +2.0);
 assert(NativeMath.pow( 1.0,-1.0) == +1.0);
-assert(NativeMath.pow(+Infinity,-1.0) == +0.0);
-assert(NativeMath.pow(-Infinity,-1.0) == -0.0);
+assert(Object.is(NativeMath.pow(+Infinity,-1.0), +0.0));
+assert(Object.is(NativeMath.pow(-Infinity,-1.0), -0.0));
 assert(isNaN(NativeMath.pow(NaN,-1.0)));
 
 assert(NativeMath.pow(+0.0, 2.0) == +0.0);
@@ -4131,3 +4131,20 @@ assert(0 ** 0.5 == 0.0);
 assert(0 ** -1.0 == Infinity);
 assert(0.0 ** 0 == 1.0);
 assert(1.0 ** 1 == 1.0);
+
+// Special cases for test constant fold correctness
+assert(10.0 ** +308 == 1e+308);
+assert(10.0 ** -308 == 1e-308);
+assert(10.0 ** -323 == 1e-323);
+assert(10.0 ** +208 == 1e+208);
+assert(10.0 ** +64 == 1e+64);
+assert(10.0 ** -64 == 1e-64);
+assert(10.0 ** +53 == 1e+53);
+assert(10.0 ** -53 == 1e-53);
+assert(10.0 **  0 == 1e+0);
+assert(10.0 ** +5 == 1e+5);
+assert(10.0 ** -5 == 1e-5);
+assert(10.0 ** +3 == 1e+3);
+assert(10.0 ** -3 == 1e-3);
+assert(f32(10) ** 38 == f32(1e38));
+assert(f32(10) ** -5 == f32(1e-5));

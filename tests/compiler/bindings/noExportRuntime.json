@@ -1,0 +1,6 @@
+{
+  "asc_flags": [
+    "--exportStart _start",
+    "--bindings esm"
+  ]
+}

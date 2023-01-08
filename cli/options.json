@@ -98,6 +98,22 @@
     ],
     "type": "s"
   },
+  "uncheckedBehavior": {
+    "category": "Debugging",
+    "description": [
+      "Changes the behavior of unchecked() expressions.",
+      "Using this option can potentially cause breakage.",
+      "",
+      "  default  The default behavior: unchecked operations are",
+      "           only used inside of unchecked().",
+      "  never    Unchecked operations are never used, even when",
+      "           inside of unchecked().",
+      "  always   Unchecked operations are always used if possible,",
+      "           whether or not unchecked() is used."
+    ],
+    "type": "s",
+    "default": "default"
+  },
   "debug": {
     "category": "Debugging",
     "description": "Enables debug information in emitted binaries.",
@@ -157,8 +173,8 @@
     "category": "Features",
     "description": [
       "Exports the start function using the specified name instead",
-      "of calling it implicitly. Useful for WASI or to obtain the",
-      "exported memory before executing any code accessing it."
+      "of calling it implicitly. Useful to obtain the exported memory",
+      "before executing any code accessing it."
     ],
     "type": "s"
   },
@@ -178,7 +194,10 @@
   },
   "exportRuntime": {
     "category": "Features",
-    "description": "Exports the runtime helpers (__new, __collect etc.).",
+    "description": [
+      "Always exports the runtime helpers (__new, __collect, __pin etc.).",
+      "Automatically determined when generation of --bindings is enabled."
+    ],
     "type": "b",
     "default": false
   },
@@ -187,7 +206,7 @@
     "description": [
       "Overrides the stack size. Only relevant for incremental GC",
       "or when using a custom runtime that requires stack space.",
-      "Defaults to 0 without and to 16384 with incremental GC."
+      "Defaults to 0 without and to 32768 with incremental GC."
     ],
     "default": 0,
     "type": "i"
@@ -201,6 +220,7 @@
       " simd                SIMD types and operations.",
       " reference-types     Reference types and operations.",
       " gc                  Garbage collection (WIP).",
+      " stringref           String reference types.",
       ""
     ],
     "TODO_doesNothingYet": [
@@ -208,7 +228,6 @@
       " tail-calls          Tail call operations.",
       " multi-value         Multi value types.",
       " memory64            Memory64 operations.",
-      " function-references Function reference types.",
       " relaxed-simd        Relaxed SIMD operations.",
       " extended-const      Extended const expressions."
     ],
@@ -282,7 +301,7 @@
   },
   "runPasses": {
     "category": "Binaryen",
-    "description":  [
+    "description": [
       "Specifies additional Binaryen passes to run after other",
       "optimizations, if any. See: Binaryen/src/passes/pass.cpp"
     ],
@@ -312,6 +331,13 @@
     ],
     "type": "b",
     "default": false
+  },
+  "disableWarning": {
+    "description": [
+      "Disables warnings matching the given diagnostic code.",
+      "If no diagnostic code is given, all warnings are disabled."
+    ],
+    "type": "I"
   },
   "noEmit": {
     "description": "Performs compilation as usual but does not emit code.",

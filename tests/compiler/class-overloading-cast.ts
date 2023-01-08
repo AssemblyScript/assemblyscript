@@ -2,14 +2,23 @@ class A<T> {
   foo(a: T): string {
     return "A";
   }
+  bar(a: T): string {
+    return "A";
+  }
 }
 class B<T, V> extends A<T> {
-  foo(a: T): string {
+  override foo(a: T): string {
     return "B";
   }
 }
 
-class C extends A<string>{}
+class C extends A<string> {}
+
+class D extends B<f32, f64> {
+  override bar(a: f32): string {
+    return "D";
+  }
+}
 
 let v = new B<i32, f64>();
 let v2 = new B<i32, string>();
@@ -22,3 +31,5 @@ let c = new C();
 
 assert(c.foo("a") == "A");
 assert((<A<string>>c).foo("a") == "A");
+
+assert(new D().bar(2.5) == "D");

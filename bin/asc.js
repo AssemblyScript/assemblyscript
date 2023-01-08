@@ -19,15 +19,17 @@ if ((!hasSourceMaps || ~posCustomArgs) && !isDeno) {
     nodeArgs.push(...args.slice(posCustomArgs + 1));
     args.length = posCustomArgs;
   }
-  (await import("child_process")).spawnSync(
+  const { status, signal } = (await import("child_process")).spawnSync(
     nodePath,
     [...nodeArgs, thisPath, ...args],
     { stdio: "inherit" }
   );
+  if (status || signal) process.exitCode = 1;
 } else {
-  const { error } = (await import("../dist/asc.js")).main(process.argv.slice(2), {
+  const apiResult = (await import("../dist/asc.js")).main(process.argv.slice(2), {
     stdout: process.stdout,
     stderr: process.stderr
   });
+  const { error }  = await apiResult;
   if (error) process.exitCode = 1;
 }

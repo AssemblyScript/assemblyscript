@@ -1,15 +1,15 @@
 (module
- (type $none_=>_i32 (func (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func_subtype (result i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memory/ptr (mut i32) (i32.const 80))
  (global $~lib/memory/__data_end i32 (i32.const 212))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16596))
- (global $~lib/memory/__heap_base i32 (i32.const 16596))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32980))
+ (global $~lib/memory/__heap_base i32 (i32.const 32980))
  (memory $0 1)
  (data (i32.const 16) "\00\00\00\00")
- (data (i32.const 28) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 28) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 80) "\00")
  (data (i32.const 96) "\00")
  (data (i32.const 104) "\00")
@@ -37,34 +37,40 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $memory/test (result i32)
-  (local $0 i32)
+ (func $memory/test (type $none_=>_i32) (result i32)
+  (local $value i32)
   i32.const 16
-  i32.load
-  local.set $0
+  i32.load $0
+  local.set $value
   i32.const 16
-  local.get $0
+  local.get $value
   i32.const 1
   i32.add
-  i32.store
-  local.get $0
+  i32.store $0
+  local.get $value
+  return
  )
- (func $memory/testGeneric<v128> (result i32)
+ (func $memory/testGeneric<v128> (type $none_=>_i32) (result i32)
   i32.const 144
+  return
  )
- (func $memory/testGeneric<i64> (result i32)
+ (func $memory/testGeneric<i64> (type $none_=>_i32) (result i32)
   i32.const 152
+  return
  )
- (func $memory/testGeneric<i32> (result i32)
+ (func $memory/testGeneric<i32> (type $none_=>_i32) (result i32)
   i32.const 156
+  return
  )
- (func $memory/testGeneric<i16> (result i32)
+ (func $memory/testGeneric<i16> (type $none_=>_i32) (result i32)
   i32.const 158
+  return
  )
- (func $memory/testGeneric<i8> (result i32)
+ (func $memory/testGeneric<i8> (type $none_=>_i32) (result i32)
   i32.const 159
+  return
  )
- (func $start:memory
+ (func $start:memory (type $none_=>_none)
   call $memory/test
   i32.const 0
   i32.eq
@@ -294,7 +300,7 @@
   i32.const 161
   global.set $memory/ptr
   global.get $memory/ptr
-  i32.load8_u
+  i32.load8_u $0
   i32.const 1
   i32.eq
   i32.eqz
@@ -307,7 +313,7 @@
    unreachable
   end
   global.get $memory/ptr
-  i32.load8_u offset=1
+  i32.load8_u $0 offset=1
   i32.const 2
   i32.eq
   i32.eqz
@@ -320,7 +326,7 @@
    unreachable
   end
   global.get $memory/ptr
-  i32.load8_u offset=2
+  i32.load8_u $0 offset=2
   i32.const 3
   i32.eq
   i32.eqz
@@ -335,7 +341,7 @@
   i32.const 164
   global.set $memory/ptr
   global.get $memory/ptr
-  f32.load
+  f32.load $0
   f32.const 1.5
   f32.eq
   i32.eqz
@@ -348,7 +354,7 @@
    unreachable
   end
   global.get $memory/ptr
-  f32.load offset=4
+  f32.load $0 offset=4
   f32.const 2.5
   f32.eq
   i32.eqz
@@ -361,7 +367,7 @@
    unreachable
   end
   global.get $memory/ptr
-  f32.load offset=8
+  f32.load $0 offset=8
   f32.const 3.5
   f32.eq
   i32.eqz
@@ -470,7 +476,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:memory
  )
 )

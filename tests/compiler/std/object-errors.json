@@ -1,0 +1,11 @@
+{
+  "stderr": [
+    "TS2335: 'super' can only be referenced in a derived class.",
+    "super(); // TS2335",
+    "TS2339: Property 'is' does not exist on type 'std/object-errors/ImplicitWithSuper'.",
+    "ImplicitWithSuper.is(1, 1); // TS2339",
+    "TS2377: Constructors for derived classes must contain a 'super' call.",
+    "constructor() {} // TS2377",
+    "EOF"
+  ]
+}

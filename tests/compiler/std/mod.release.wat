@@ -1,18 +1,18 @@
 (module
- (type $none_=>_none (func))
- (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $f64_f64_f64_=>_i32 (func (param f64 f64 f64) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $f32_f32_f32_=>_i32 (func (param f32 f32 f32) (result i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $f64_f64_=>_f64 (func_subtype (param f64 f64) (result f64) func))
+ (type $f64_f64_f64_=>_i32 (func_subtype (param f64 f64 f64) (result i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $f32_f32_f32_=>_i32 (func_subtype (param f32 f32 f32) (result i32) func))
  (import "mod" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1036) ",")
- (data (i32.const 1048) "\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s")
  (export "mod" (func $std/mod/mod))
  (export "memory" (memory $0))
  (start $~start)
- (func $std/mod/test_fmod (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $std/mod/test_fmod (type $f64_f64_f64_=>_i32) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   (local $3 i64)
   (local $4 f64)
   (local $5 i64)
@@ -71,12 +71,12 @@
      f64.div
      br $__inlined_func$~lib/math/NativeMath.mod
     end
-    local.get $5
     local.get $7
     i64.const 1
     i64.shl
     local.tee $3
-    i64.ge_u
+    local.get $5
+    i64.le_u
     if
      local.get $0
      local.get $3
@@ -189,10 +189,8 @@
     i64.sub
     local.set $5
     local.get $7
-    i64.const 63
-    i64.shr_u
-    i64.const 63
-    i64.shl
+    i64.const -9223372036854775808
+    i64.and
     local.get $3
     local.get $6
     i64.shl
@@ -272,7 +270,7 @@
    i32.const 0
   end
  )
- (func $std/mod/test_fmodf (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/mod/test_fmodf (type $f32_f32_f32_=>_i32) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -301,10 +299,11 @@
     i32.const 255
     i32.and
     local.set $7
+    local.get $5
     i32.const 1
-    local.get $1
-    local.get $1
-    f32.ne
+    i32.shl
+    local.tee $4
+    i32.eqz
     local.get $0
     i32.reinterpret_f32
     local.tee $6
@@ -315,13 +314,11 @@
     local.tee $8
     i32.const 255
     i32.eq
-    i32.const 1
-    local.get $5
-    i32.const 1
-    i32.shl
-    local.tee $4
-    select
-    select
+    i32.or
+    local.get $1
+    local.get $1
+    f32.ne
+    i32.or
     if
      local.get $0
      local.get $1
@@ -331,12 +328,12 @@
      f32.div
      br $__inlined_func$~lib/math/NativeMathf.mod
     end
-    local.get $4
     local.get $6
     i32.const 1
     i32.shl
     local.tee $3
-    i32.ge_u
+    local.get $4
+    i32.le_u
     if
      local.get $0
      local.get $3
@@ -496,7 +493,7 @@
    f32.eq
   end
  )
- (func $start:std/mod
+ (func $start:std/mod (type $none_=>_none)
   f64.const 3
   f64.const 2
   f64.const 1
@@ -2253,7 +2250,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:std/mod
  )
 )

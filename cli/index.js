@@ -37,7 +37,7 @@ import binaryen from "../lib/binaryen.js";
 import * as assemblyscriptJS from "assemblyscript";
 
 // Use the TS->JS variant by default
-var assemblyscript = assemblyscriptJS;
+let assemblyscript = assemblyscriptJS;
 
 // Use the AS->Wasm variant as an option (experimental)
 const wasmPos = process.argv.indexOf("--wasm");
@@ -60,6 +60,10 @@ const extension_re_except_d = new RegExp("^(?!.*\\.d\\" + extension + "$).*\\" +
 
 function toUpperSnakeCase(str) {
   return str.replace(/-/g, "_").toUpperCase();
+}
+
+function isNonEmptyString(value) {
+  return typeof value === "string" && value !== "";
 }
 
 /** Ensures that an object is a wrapper class instead of just a pointer. */
@@ -111,7 +115,7 @@ export function configToArguments(options, argv = []) {
 /** Convenience function that parses and compiles source strings directly. */
 export async function compileString(sources, config = {}) {
   if (typeof sources === "string") sources = { [`input${extension}`]: sources };
-  var argv = [
+  let argv = [
     "--outFile", "binary",
     "--textFile", "text",
   ];
@@ -178,11 +182,11 @@ export async function main(argv, options) {
     );
   }
 
-  var module = null;
-  var binaryenModule = null;
+  let module = null;
+  let binaryenModule = null;
 
   // Prepares the result object
-  var prepareResult = (error, result = {}) => {
+  let prepareResult = (error, result = {}) => {
     if (error) {
       stderr.write(`${stderrColors.red("FAILURE ")}${error.stack.replace(/^ERROR: /i, "")}${EOL}`);
     }
@@ -209,8 +213,8 @@ export async function main(argv, options) {
 
   // Print the help message if requested or no source files are provided
   if (opts.help || (!argv.length && !configHasEntries)) {
-    var out = opts.help ? stdout : stderr;
-    var colors = opts.help ? stdoutColors : stderrColors;
+    let out = opts.help ? stdout : stderr;
+    let colors = opts.help ? stdoutColors : stderrColors;
     out.write([
       colors.white("SYNTAX"),
       "  " + colors.cyan("asc") + " [entryFile ...] [options]",
@@ -291,7 +295,7 @@ export async function main(argv, options) {
   }
 
   // Set up options
-  var program, runtime;
+  let program, runtime, uncheckedBehavior;
   const compilerOptions = assemblyscript.newOptions();
   switch (opts.runtime) {
     case "stub": runtime = 0; break;
@@ -299,7 +303,14 @@ export async function main(argv, options) {
     /* incremental */
     default: runtime = 2; break;
   }
+  switch (opts.uncheckedBehavior) {
+    /* default */
+    default: uncheckedBehavior = 0; break;
+    case "never": uncheckedBehavior = 1; break;
+    case "always": uncheckedBehavior = 2; break;
+  }
   assemblyscript.setTarget(compilerOptions, 0);
+  assemblyscript.setDebugInfo(compilerOptions, !!opts.debug);
   assemblyscript.setRuntime(compilerOptions, runtime);
   assemblyscript.setNoAssert(compilerOptions, opts.noAssert);
   assemblyscript.setExportMemory(compilerOptions, !opts.noExportMemory);
@@ -309,19 +320,23 @@ export async function main(argv, options) {
   assemblyscript.setSharedMemory(compilerOptions, opts.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, opts.importTable);
   assemblyscript.setExportTable(compilerOptions, opts.exportTable);
-  assemblyscript.setExportStart(compilerOptions, typeof opts.exportStart === "string" ? opts.exportStart : null);
+  if (opts.exportStart != null) {
+    assemblyscript.setExportStart(compilerOptions, isNonEmptyString(opts.exportStart) ? opts.exportStart : "_start");
+  }
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
   assemblyscript.setTableBase(compilerOptions, opts.tableBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, opts.sourceMap != null);
+  assemblyscript.setUncheckedBehavior(compilerOptions, uncheckedBehavior);
   assemblyscript.setNoUnsafe(compilerOptions, opts.noUnsafe);
   assemblyscript.setPedantic(compilerOptions, opts.pedantic);
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
   assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
   assemblyscript.setBundleVersion(compilerOptions, bundleMajorVersion, bundleMinorVersion, bundlePatchVersion);
-  if (!opts.stackSize && opts.runtime == "incremental") {
+  if (!opts.stackSize && runtime === 2 /* incremental */) {
     opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
   }
   assemblyscript.setStackSize(compilerOptions, opts.stackSize);
+  assemblyscript.setBindingsHint(compilerOptions, opts.bindings && opts.bindings.length > 0);
 
   // Instrument callback to perform GC
   // prepareResult = (original => {
@@ -350,7 +365,7 @@ export async function main(argv, options) {
   }
 
   // Disable default features if specified
-  var features;
+  let features;
   if ((features = opts.disable) != null) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
@@ -373,8 +388,8 @@ export async function main(argv, options) {
   }
 
   // Set up optimization levels
-  var optimizeLevel = 0;
-  var shrinkLevel = 0;
+  let optimizeLevel = 0;
+  let shrinkLevel = 0;
   if (opts.optimize) {
     optimizeLevel = defaultOptimizeLevel;
     shrinkLevel = defaultShrinkLevel;
@@ -510,8 +525,8 @@ export async function main(argv, options) {
 
   // Gets the file matching the specified source path, imported at the given dependee path
   async function getFile(internalPath, dependeePath) {
-    var sourceText = null; // text reported back to the compiler
-    var sourcePath = null; // path reported back to the compiler
+    let sourceText = null; // text reported back to the compiler
+    let sourcePath = null; // path reported back to the compiler
 
     // Try file.ext, file/index.ext, file.d.ext
     if (!internalPath.startsWith(libraryPrefix)) {
@@ -594,7 +609,7 @@ export async function main(argv, options) {
 
   // Parses the backlog of imported files after including entry files
   async function parseBacklog() {
-    var backlog;
+    let backlog;
     while ((backlog = getBacklog()).length) {
       let files = [];
       for (let internalPath of backlog) {
@@ -615,7 +630,7 @@ export async function main(argv, options) {
         stats.parseTime += stats.end(begin);
       }
     }
-    const numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, stderrColors.enabled);
+    const numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
     if (numErrors) {
       const err = Error(`${numErrors} parse error(s)`);
       err.stack = err.message; // omit stack
@@ -631,7 +646,7 @@ export async function main(argv, options) {
     if (runtimeText == null) {
       runtimePath = runtimeName;
       runtimeText = await readFile(runtimePath + extension, baseDir);
-      if (runtimeText == null) return prepareResult(Error(`Runtime '${runtimeName}' not found.`));
+      if (runtimeText == null) return prepareResult(Error(`Runtime '${path.resolve(baseDir, runtimePath + extension)}' is not found.`));
     } else {
       runtimePath = `~lib/${runtimePath}`;
     }
@@ -643,17 +658,18 @@ export async function main(argv, options) {
 
   // Include entry files
   for (let i = 0, k = argv.length; i < k; ++i) {
-    const filename = argv[i];
-    let sourcePath = String(filename)
-      .replace(/\\/g, "/")
-      .replace(extension_re, "")
-      .replace(/[\\/]$/, "");
+    const filename = String(argv[i]);
 
     // Setting the path to relative path
-    sourcePath = path.isAbsolute(sourcePath)
-      ? path.relative(baseDir, sourcePath).replace(/\\/g, "/")
-      : sourcePath;
+    let sourcePath = path.isAbsolute(filename)
+      ? path.relative(baseDir, filename)
+      : path.normalize(filename);
 
+    sourcePath = sourcePath
+      .replace(/\\/g, "/")
+      .replace(extension_re, "")
+      .replace(/\/$/, "");
+    
     // Try entryPath.ext, then entryPath/index.ext
     let sourceText = await readFile(sourcePath + extension, baseDir);
     if (sourceText == null) {
@@ -724,7 +740,7 @@ export async function main(argv, options) {
       ? assemblyscript.getBinaryenModuleRef(module)
       : module.ref
   );
-  var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, stderrColors.enabled);
+  let numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
   if (numErrors) {
     const err = Error(`${numErrors} compile error(s)`);
     err.stack = err.message; // omit stack
@@ -737,7 +753,7 @@ export async function main(argv, options) {
     if (error) return prepareResult(error);
   }
 
-  numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, stderrColors.enabled);
+  numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
   if (numErrors) {
     const err = Error(`${numErrors} afterCompile error(s)`);
     err.stack = err.message; // omit stack
@@ -835,7 +851,7 @@ export async function main(argv, options) {
         }
         if (next.length >= last.length) {
           if (next.length > last.length) {
-            stderr.write(`Last converge was suboptimial.${EOL}`);
+            stderr.write(`Last converge was suboptimal.${EOL}`);
           }
           break;
         }
@@ -849,6 +865,10 @@ export async function main(argv, options) {
 
   // Prepare output
   if (!opts.noEmit) {
+    if (opts.binaryFile) {
+      // We catched lagacy field for binary output (before 0.20)
+      return prepareResult(Error("Usage of the --binaryFile compiler option is no longer supported. Use --outFile instead."));
+    }
     let bindings = opts.bindings || [];
     let hasStdout = false;
     let hasOutFile = opts.outFile != null;
@@ -1117,17 +1137,22 @@ async function getConfig(file, baseDir, readFile) {
 }
 
 /** Checks diagnostics emitted so far for errors. */
-export function checkDiagnostics(program, stderr, reportDiagnostic, useColors) {
+export function checkDiagnostics(program, stderr, disableWarning, reportDiagnostic, useColors) {
   if (typeof useColors === "undefined" && stderr) useColors = stderr.isTTY;
-  var numErrors = 0;
+  let numErrors = 0;
   do {
     let diagnostic = assemblyscript.nextDiagnostic(program);
     if (!diagnostic) break;
     if (stderr) {
-      stderr.write(
-        assemblyscript.formatDiagnostic(diagnostic, useColors, true) +
-        EOL + EOL
-      );
+      const isDisabledWarning = (diagnostic) => {
+        if (disableWarning == null) return false;
+        if (!disableWarning.length) return true;
+        const code = assemblyscript.getDiagnosticCode(diagnostic);
+        return disableWarning.includes(code);
+      };
+      if (assemblyscript.isError(diagnostic) || !isDisabledWarning(diagnostic)) {
+        stderr.write(assemblyscript.formatDiagnostic(diagnostic, useColors, true) + EOL + EOL);
+      }
     }
     if (reportDiagnostic) {
       function wrapRange(range) {
@@ -1206,13 +1231,13 @@ export class Stats {
   }
 }
 
-var allocBuffer = typeof global !== "undefined" && global.Buffer
+let allocBuffer = typeof global !== "undefined" && global.Buffer
   ? global.Buffer.allocUnsafe || (len => new global.Buffer(len))
   : len => new Uint8Array(len);
 
 /** Creates a memory stream that can be used in place of stdout/stderr. */
 export function createMemoryStream(fn) {
-  var stream = [];
+  let stream = [];
   stream.write = function(chunk) {
     if (fn) fn(chunk);
     if (typeof chunk === "string") {
@@ -1226,9 +1251,9 @@ export function createMemoryStream(fn) {
     stream.length = 0;
   };
   stream.toBuffer = function() {
-    var offset = 0, i = 0, k = this.length;
+    let offset = 0, i = 0, k = this.length;
     while (i < k) offset += this[i++].length;
-    var buffer = allocBuffer(offset);
+    let buffer = allocBuffer(offset);
     offset = i = 0;
     while (i < k) {
       buffer.set(this[i], offset);
@@ -1238,7 +1263,7 @@ export function createMemoryStream(fn) {
     return buffer;
   };
   stream.toString = function() {
-    var buffer = this.toBuffer();
+    let buffer = this.toBuffer();
     return utf8.read(buffer, 0, buffer.length);
   };
   return stream;

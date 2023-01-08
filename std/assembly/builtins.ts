@@ -1,12 +1,6 @@
+import { strtol, strtod, strtob } from "./util/string";
+
 type auto = i32;
-
-// @ts-ignore: decorator
-@builtin
-export declare function isInteger<T>(value?: T): bool;
-
-// @ts-ignore: decorator
-@builtin
-export declare function isFloat<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
@@ -14,7 +8,19 @@ export declare function isBoolean<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
+export declare function isInteger<T>(value?: T): bool;
+
+// @ts-ignore: decorator
+@builtin
 export declare function isSigned<T>(value?: T): bool;
+
+// @ts-ignore: decorator
+@builtin
+export declare function isFloat<T>(value?: T): bool;
+
+// @ts-ignore: decorator
+@builtin
+export declare function isVector<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
@@ -59,6 +65,10 @@ export declare function isVoid<T>(): bool;
 // @ts-ignore
 @builtin
 export declare function lengthof<T>(func?: T): i32;
+
+// @ts-ignore
+@builtin
+export declare function bswap<T>(value: T): T;
 
 // @ts-ignore: decorator
 @builtin
@@ -135,6 +145,18 @@ export declare function mul<T>(left: T, right: T): T;
 // @ts-ignore: decorator
 @builtin
 export declare function div<T>(left: T, right: T): T;
+
+// @ts-ignore: decorator
+@builtin
+export declare function eq<T>(left: T, right: T): i32;
+
+// @ts-ignore: decorator
+@builtin
+export declare function ne<T>(left: T, right: T): i32;
+
+// @ts-ignore: decorator
+@builtin
+export declare function rem<T>(left: T, right: T): T;
 
 // @ts-ignore: decorator
 @unsafe @builtin
@@ -263,6 +285,12 @@ export namespace i8 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: i8 =  127;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): i8 {
+    return <i8>strtol<i32>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -278,6 +306,12 @@ export namespace i16 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: i16 =  32767;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): i16 {
+    return <i16>strtol<i32>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -293,6 +327,12 @@ export namespace i32 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: i32 =  2147483647;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): i32 {
+    return strtol<i32>(value, radix);
+  }
 
   // @ts-ignore: decorator
   @builtin
@@ -333,6 +373,22 @@ export namespace i32 {
   // @ts-ignore: decorator
   @builtin
   export declare function rotr(value: i32, shift: i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function eq(left: i32, right:i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function ne(left: i32, right:i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rem_s(left: i32, right: i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rem_u(left: u32, right: u32): u32;
 
   // @ts-ignore: decorator
   @builtin
@@ -510,6 +566,12 @@ export namespace i64 {
   export const MAX_VALUE: i64 =  9223372036854775807;
 
   // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): i64 {
+    return strtol<i64>(value, radix);
+  }
+
+  // @ts-ignore: decorator
   @builtin
   export declare function clz(value: i64): i64;
 
@@ -576,6 +638,22 @@ export namespace i64 {
   // @ts-ignore: decorator
   @builtin
   export declare function rotr(value: i64, shift: i64): i64;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function eq(left: i64, right:i64): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function ne(left: i64, right:i64): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rem_s(left: i64, right: i64): i64;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rem_u(left: u64, right: u64): u64;
 
   // @ts-ignore: decorator
   @builtin
@@ -778,6 +856,12 @@ export namespace isize {
   export const MAX_VALUE: isize = sizeof<i32>() == sizeof<isize>()
     ? 2147483647
     : <isize>9223372036854775807;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): isize {
+    return <isize>strtol<i64>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -793,6 +877,12 @@ export namespace u8 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: u8 = 255;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): u8 {
+    return <u8>strtol<i32>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -808,6 +898,12 @@ export namespace u16 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: u16 = 65535;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): u16 {
+    return <u16>strtol<i32>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -823,6 +919,12 @@ export namespace u32 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: u32 = 4294967295;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): u32 {
+    return <u32>strtol<i32>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -838,6 +940,12 @@ export namespace u64 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: u64 = 18446744073709551615;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): u64 {
+    return <u64>strtol<i64>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -855,6 +963,12 @@ export namespace usize {
   export const MAX_VALUE: usize = sizeof<u32>() == sizeof<usize>()
     ? 4294967295
     : <usize>18446744073709551615;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): usize {
+    return <usize>strtol<i64>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -870,6 +984,12 @@ export namespace bool {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: bool = true;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string): bool {
+    return strtob(value);
+  }
 }
 
 // @ts-ignore: decorator
@@ -913,6 +1033,12 @@ export namespace f32 {
   // @ts-ignore: decorator
   @lazy
   export const NaN: f32 = 0.0 / 0.0;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string): f32 {
+    return <f32>strtod(value);
+  }
 
   // @ts-ignore: decorator
   @builtin
@@ -977,6 +1103,14 @@ export namespace f32 {
   // @ts-ignore: decorator
   @builtin
   export declare function div(left: f32, right: f32): f32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function eq(left: f32, right: f32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function ne(left: f32, right: f32): i32;
 }
 
 // @ts-ignore: decorator
@@ -1020,6 +1154,12 @@ export namespace f64 {
   // @ts-ignore: decorator
   @lazy
   export const NaN: f64 = 0.0 / 0.0;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string): f64 {
+    return strtod(value);
+  }
 
   // @ts-ignore: decorator
   @builtin
@@ -1084,6 +1224,14 @@ export namespace f64 {
   // @ts-ignore: decorator
   @builtin
   export declare function div(left: f64, right: f64): f64;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function eq(left: f64, right: f64): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function ne(left: f64, right: f64): i32;
 }
 
 // @ts-ignore: decorator
@@ -1113,7 +1261,7 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function swizzle(a: v128, s: v128): v128;
+  export declare function swizzle(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @unsafe @builtin
@@ -1583,7 +1731,7 @@ export namespace i8x16 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function swizzle(a: v128, s: v128): v128;
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1775,6 +1923,17 @@ export namespace i16x8 {
   // @ts-ignore: decorator
   @builtin
   export declare function extmul_high_i8x16_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(
+    a: v128, b: v128,
+    l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8
+  ): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1950,6 +2109,14 @@ export namespace i32x4 {
   // @ts-ignore: decorator
   @builtin
   export declare function extmul_high_i16x8_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2065,6 +2232,14 @@ export namespace i64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function extmul_high_i32x4_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2180,6 +2355,14 @@ export namespace f32x4 {
   // @ts-ignore: decorator
   @builtin
   export declare function demote_f64x2_zero(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2295,6 +2478,14 @@ export namespace f64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function promote_low_f32x4(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 @final

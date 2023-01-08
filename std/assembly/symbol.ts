@@ -1,13 +1,13 @@
 import { Map } from "./map";
 
 // @ts-ignore: decorator
-@lazy var stringToId: Map<string, usize>;
+@lazy let stringToId: Map<string, usize> = new Map();
 
 // @ts-ignore: decorator
-@lazy var idToString: Map<usize, string>;
+@lazy let idToString: Map<usize, string> = new Map();
 
 // @ts-ignore: decorator
-@lazy var nextId: usize = 12; // Symbol.unscopables + 1
+@lazy let nextId: usize = 12; // Symbol.unscopables + 1
 
 @unmanaged @final abstract class _Symbol {
 
@@ -64,9 +64,8 @@ import { Map } from "./map";
   static readonly unscopables: symbol = changetype<symbol>(11);
 
   static for(key: string): symbol {
-    if (!stringToId) { stringToId = new Map(); idToString = new Map(); }
-    else if (stringToId.has(key)) return changetype<symbol>(stringToId.get(key));
-    var id = nextId++;
+    if (stringToId.has(key)) return changetype<symbol>(stringToId.get(key));
+    let id = nextId++;
     if (!id) unreachable(); // out of ids
     stringToId.set(key, id);
     idToString.set(id, key);
@@ -74,14 +73,14 @@ import { Map } from "./map";
   }
 
   static keyFor(sym: symbol): string | null {
-    return idToString != null && idToString.has(changetype<usize>(sym))
+    return idToString.has(changetype<usize>(sym))
       ? idToString.get(changetype<usize>(sym))
       : null;
   }
 
   toString(): string {
-    var id = changetype<usize>(this);
-    var str = "";
+    let id = changetype<usize>(this);
+    let str = "";
     switch (<u32>id) {
       case 1:  { str = "hasInstance"; break; }
       case 2:  { str = "isConcatSpreadable"; break; }
@@ -104,7 +103,7 @@ import { Map } from "./map";
 }
 
 export function Symbol(description: string | null = null): symbol {
-  var id = nextId++;
+  let id = nextId++;
   if (!id) unreachable(); // out of ids
   return changetype<symbol>(id);
 }

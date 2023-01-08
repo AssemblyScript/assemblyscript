@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $none_=>_none (func_subtype func))
  (global $unary/i (mut i32) (i32.const 0))
  (global $unary/I (mut i64) (i64.const 0))
  (global $unary/f (mut f32) (f32.const 0))
@@ -7,7 +7,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $~start)
- (func $~start
+ (func $~start (type $none_=>_none)
   (local $0 i32)
   (local $1 i64)
   global.get $unary/i
@@ -99,16 +99,16 @@
   f32.add
   global.set $unary/f
   global.get $unary/f
-  f32.const 1
-  f32.sub
+  f32.const -1
+  f32.add
   global.set $unary/f
   global.get $unary/f
   f32.const 1
   f32.add
   global.set $unary/f
   global.get $unary/f
-  f32.const 1
-  f32.sub
+  f32.const -1
+  f32.add
   global.set $unary/f
   f32.const 1.25
   global.set $unary/f
@@ -139,16 +139,16 @@
   f64.add
   global.set $unary/F
   global.get $unary/F
-  f64.const 1
-  f64.sub
+  f64.const -1
+  f64.add
   global.set $unary/F
   global.get $unary/F
   f64.const 1
   f64.add
   global.set $unary/F
   global.get $unary/F
-  f64.const 1
-  f64.sub
+  f64.const -1
+  f64.add
   global.set $unary/F
   f64.const 1.25
   global.set $unary/F

@@ -7,7 +7,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const file = process.argv.length > 2 ? process.argv[2] : path.join(dirname, "..", "src", "tokenizer.ts");
 const text = fs.readFileSync(file).toString();
-const source = new Source(SourceKind.ENTRY, "compiler.ts", text);
+const source = new Source(SourceKind.ENTRY, "tokenizer.ts", text);
 const tn = new Tokenizer(source);
 
 do {

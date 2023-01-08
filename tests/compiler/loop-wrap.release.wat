@@ -1,12 +1,12 @@
 (module
- (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_=>_none (func_subtype (param i32) func))
  (memory $0 0)
  (export "testAlwaysWrapped" (func $loop-wrap/testAlwaysWrapped))
  (export "testFirstWrapped" (func $loop-wrap/testFirstWrapped))
  (export "testSubsequentWrapped" (func $loop-wrap/testSubsequentWrapped))
  (export "memory" (memory $0))
- (func $loop-wrap/testAlwaysWrapped
+ (func $loop-wrap/testAlwaysWrapped (type $none_=>_none)
   (local $0 i32)
   loop $do-loop|0
    local.get $0
@@ -23,7 +23,7 @@
    end
   end
  )
- (func $loop-wrap/testFirstWrapped
+ (func $loop-wrap/testFirstWrapped (type $none_=>_none)
   (local $0 i32)
   loop $do-loop|1
    local.get $0
@@ -42,7 +42,7 @@
    end
   end
  )
- (func $loop-wrap/testSubsequentWrapped (param $0 i32)
+ (func $loop-wrap/testSubsequentWrapped (type $i32_=>_none) (param $0 i32)
   loop $do-loop|0
    local.get $0
    i32.const 255

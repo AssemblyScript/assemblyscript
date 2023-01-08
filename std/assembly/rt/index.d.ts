@@ -12,7 +12,6 @@ declare function __collect(): void;
 
 // Runtime type info
 declare function __typeinfo(id: u32): u32;
-declare function __instanceof(ptr: usize, superId: u32): bool;
 
 // Visitors
 declare function __visit(ptr: usize, cookie: i32): void;

@@ -7,8 +7,6 @@
 // │                             count                             │
 // ╞═══════════════════════════════════════════════════════════════╡ ┐
 // │                      Typeinfo#flags [id=0]                    │ id < count
-// ├ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┤
-// │                      Typeinfo#base  [id=0]                    │
 // ├───────────────────────────────────────────────────────────────┤
 // │                              ...                              │
 
@@ -17,8 +15,6 @@
 export class Typeinfo {
   /** Flags describing the shape of this class type. */
   flags: TypeinfoFlags = TypeinfoFlags.NONE;
-  /** Base class id or `0` if none. */
-  base: u32 = 0;
 }
 
 /** Runtime type information flags. */

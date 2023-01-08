@@ -1,14 +1,14 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 76))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16460))
- (global $~lib/memory/__heap_base i32 (i32.const 16460))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32844))
+ (global $~lib/memory/__heap_base i32 (i32.const 32844))
  (memory $0 1)
- (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00i\00f\00.\00t\00s\00\00\00")
- (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00e\00r\00r\00o\00r\00\00\00")
+ (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\n\00\00\00i\00f\00.\00t\00s\00\00\00")
+ (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\n\00\00\00e\00r\00r\00o\00r\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "ifThenElse" (func $if/ifThenElse))
@@ -17,8 +17,8 @@
  (export "ifAlwaysReturns" (func $if/ifAlwaysReturns))
  (export "memory" (memory $0))
  (start $~start)
- (func $if/ifThenElse (param $0 i32) (result i32)
-  local.get $0
+ (func $if/ifThenElse (type $i32_=>_i32) (param $n i32) (result i32)
+  local.get $n
   if
    i32.const 1
    return
@@ -28,16 +28,17 @@
   end
   unreachable
  )
- (func $if/ifThen (param $0 i32) (result i32)
-  local.get $0
+ (func $if/ifThen (type $i32_=>_i32) (param $n i32) (result i32)
+  local.get $n
   if
    i32.const 1
    return
   end
   i32.const 0
+  return
  )
- (func $if/ifThenElseBlock (param $0 i32) (result i32)
-  local.get $0
+ (func $if/ifThenElseBlock (type $i32_=>_i32) (param $n i32) (result i32)
+  local.get $n
   if
    i32.const 1
    return
@@ -47,7 +48,7 @@
   end
   unreachable
  )
- (func $start:if
+ (func $start:if (type $none_=>_none)
   i32.const 0
   call $if/ifThenElse
   i32.const 0
@@ -127,8 +128,8 @@
    unreachable
   end
  )
- (func $if/ifAlwaysReturns (param $0 i32) (result i32)
-  local.get $0
+ (func $if/ifAlwaysReturns (type $i32_=>_i32) (param $n i32) (result i32)
+  local.get $n
   if
    i32.const 1
    return
@@ -142,7 +143,7 @@
   end
   unreachable
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:if
  )
 )

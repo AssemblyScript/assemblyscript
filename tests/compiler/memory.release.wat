@@ -1,11 +1,11 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memory/ptr (mut i32) (i32.const 1088))
  (memory $0 1)
  (data (i32.const 1036) ",")
- (data (i32.const 1048) "\01\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s")
  (data (i32.const 1169) "\01\02\03")
  (data (i32.const 1174) "\c0?\00\00 @\00\00`@")
  (data (i32.const 1200) "\01")
@@ -16,15 +16,15 @@
  (data (i32.const 1216) "\01")
  (export "memory" (memory $0))
  (start $~start)
- (func $start:memory
+ (func $start:memory (type $none_=>_none)
   (local $0 i32)
   i32.const 1024
   i32.const 1024
-  i32.load
+  i32.load $0
   local.tee $0
   i32.const 1
   i32.add
-  i32.store
+  i32.store $0
   local.get $0
   if
    i32.const 0
@@ -36,11 +36,11 @@
   end
   i32.const 1024
   i32.const 1024
-  i32.load
+  i32.load $0
   local.tee $0
   i32.const 1
   i32.add
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 1
   i32.ne
@@ -54,11 +54,11 @@
   end
   i32.const 1024
   i32.const 1024
-  i32.load
+  i32.load $0
   local.tee $0
   i32.const 1
   i32.add
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 2
   i32.ne
@@ -73,8 +73,10 @@
   global.get $memory/ptr
   i32.const 16
   i32.add
+  local.set $0
   i32.const 1104
   global.set $memory/ptr
+  local.get $0
   i32.const 1104
   i32.ne
   if
@@ -88,8 +90,10 @@
   global.get $memory/ptr
   i32.const 8
   i32.add
+  local.set $0
   i32.const 1112
   global.set $memory/ptr
+  local.get $0
   i32.const 1112
   i32.ne
   if
@@ -103,8 +107,10 @@
   global.get $memory/ptr
   i32.const 4
   i32.add
+  local.set $0
   i32.const 1116
   global.set $memory/ptr
+  local.get $0
   i32.const 1116
   i32.ne
   if
@@ -118,8 +124,10 @@
   global.get $memory/ptr
   i32.const 2
   i32.add
+  local.set $0
   i32.const 1118
   global.set $memory/ptr
+  local.get $0
   i32.const 1118
   i32.ne
   if
@@ -133,8 +141,10 @@
   global.get $memory/ptr
   i32.const 1
   i32.add
+  local.set $0
   i32.const 1119
   global.set $memory/ptr
+  local.get $0
   i32.const 1119
   i32.ne
   if
@@ -171,7 +181,7 @@
   i32.const 1169
   global.set $memory/ptr
   i32.const 1169
-  i32.load8_u
+  i32.load8_u $0
   i32.const 1
   i32.ne
   if
@@ -183,7 +193,7 @@
    unreachable
   end
   global.get $memory/ptr
-  i32.load8_u offset=1
+  i32.load8_u $0 offset=1
   i32.const 2
   i32.ne
   if
@@ -195,7 +205,7 @@
    unreachable
   end
   global.get $memory/ptr
-  i32.load8_u offset=2
+  i32.load8_u $0 offset=2
   i32.const 3
   i32.ne
   if
@@ -209,7 +219,7 @@
   i32.const 1172
   global.set $memory/ptr
   i32.const 1172
-  f32.load
+  f32.load $0
   f32.const 1.5
   f32.ne
   if
@@ -221,7 +231,7 @@
    unreachable
   end
   global.get $memory/ptr
-  f32.load offset=4
+  f32.load $0 offset=4
   f32.const 2.5
   f32.ne
   if
@@ -233,7 +243,7 @@
    unreachable
   end
   global.get $memory/ptr
-  f32.load offset=8
+  f32.load $0 offset=8
   f32.const 3.5
   f32.ne
   if
@@ -257,7 +267,7 @@
   i32.const 1215
   global.set $memory/ptr
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:memory
  )
 )

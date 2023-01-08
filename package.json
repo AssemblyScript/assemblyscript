@@ -19,8 +19,13 @@
   "bugs": {
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "engineStrict": true,
   "dependencies": {
-    "binaryen": "106.0.0-nightly.20220320",
+    "binaryen": "110.0.0-nightly.20221105",
     "long": "^5.2.0"
   },
   "devDependencies": {
@@ -28,10 +33,10 @@
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "diff": "^5.0.0",
-    "esbuild": "^0.14.1",
+    "esbuild": "^0.14.50",
     "eslint": "^8.2.0",
     "glob": "^7.2.0",
-    "typescript": "~4.5.2"
+    "typescript": "~4.7.4"
   },
   "type": "module",
   "exports": {
@@ -54,6 +59,12 @@
     },
     "./*": "./*"
   },
+  "imports": {
+    "#rtrace": {
+      "import": "./lib/rtrace/index.js",
+      "types": "./lib/rtrace/index.d.ts"
+    }
+  },
   "bin": {
     "asc": "./bin/asc.js",
     "asinit": "./bin/asinit.js"
@@ -65,9 +76,10 @@
     "lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
     "build": "node scripts/build",
     "watch": "node scripts/build --watch",
+    "coverage": "npx c8 -- npm test",
     "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:browser && npm run test:asconfig && npm run test:transform",
     "test:parser": "node --enable-source-maps tests/parser",
-    "test:compiler": "node --enable-source-maps --experimental-wasi-unstable-preview1 --no-warnings tests/compiler",
+    "test:compiler": "node --enable-source-maps --no-warnings tests/compiler",
     "test:browser": "node --enable-source-maps tests/browser",
     "test:asconfig": "cd tests/asconfig && npm run test",
     "test:transform": "npm run test:transform:esm && npm run test:transform:cjs",

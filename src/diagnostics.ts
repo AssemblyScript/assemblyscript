@@ -4,10 +4,6 @@
  */
 
 import {
-  Range
-} from "./tokenizer";
-
-import {
   Source
 } from "./ast";
 
@@ -18,13 +14,15 @@ import {
 
 import {
   isLineBreak,
+  isWhiteSpace,
   COLOR_CYAN,
   COLOR_YELLOW,
   COLOR_RED,
   COLOR_MAGENTA,
   COLOR_RESET,
   isColorsEnabled,
-  setColorsEnabled
+  setColorsEnabled,
+  CharCode
 } from "./util";
 
 export {
@@ -33,24 +31,66 @@ export {
 } from "./diagnosticMessages.generated";
 
 /** Indicates the category of a {@link DiagnosticMessage}. */
-export enum DiagnosticCategory {
+export const enum DiagnosticCategory {
   /** Overly pedantic message. */
-  PEDANTIC,
+  Pedantic,
   /** Informatory message. */
-  INFO,
+  Info,
   /** Warning message. */
-  WARNING,
+  Warning,
   /** Error message. */
-  ERROR
+  Error
+}
+
+export class Range {
+
+  source!: Source;
+  debugInfoRef: usize = 0;
+
+  constructor(public start: i32, public end: i32) {}
+
+  static join(a: Range, b: Range): Range {
+    if (a.source != b.source) throw new Error("source mismatch");
+    let range = new Range(
+      a.start < b.start ? a.start : b.start,
+      a.end > b.end ? a.end : b.end
+    );
+    range.source = a.source;
+    return range;
+  }
+
+  equals(other: Range): bool {
+    return (
+      this.source == other.source &&
+      this.start == other.start &&
+      this.end == other.end
+    );
+  }
+
+  get atStart(): Range {
+    let range = new Range(this.start, this.start);
+    range.source = this.source;
+    return range;
+  }
+
+  get atEnd(): Range {
+    let range = new Range(this.end, this.end);
+    range.source = this.source;
+    return range;
+  }
+
+  toString(): string {
+    return this.source.text.substring(this.start, this.end);
+  }
 }
 
 /** Returns the string representation of the specified diagnostic category. */
 export function diagnosticCategoryToString(category: DiagnosticCategory): string {
   switch (category) {
-    case DiagnosticCategory.PEDANTIC: return "PEDANTIC";
-    case DiagnosticCategory.INFO: return "INFO";
-    case DiagnosticCategory.WARNING: return "WARNING";
-    case DiagnosticCategory.ERROR: return "ERROR";
+    case DiagnosticCategory.Pedantic: return "PEDANTIC";
+    case DiagnosticCategory.Info: return "INFO";
+    case DiagnosticCategory.Warning: return "WARNING";
+    case DiagnosticCategory.Error: return "ERROR";
     default: {
       assert(false);
       return "";
@@ -61,10 +101,10 @@ export function diagnosticCategoryToString(category: DiagnosticCategory): string
 /** Returns the ANSI escape sequence for the specified category. */
 export function diagnosticCategoryToColor(category: DiagnosticCategory): string {
   switch (category) {
-    case DiagnosticCategory.PEDANTIC: return COLOR_MAGENTA;
-    case DiagnosticCategory.INFO: return COLOR_CYAN;
-    case DiagnosticCategory.WARNING: return COLOR_YELLOW;
-    case DiagnosticCategory.ERROR: return COLOR_RED;
+    case DiagnosticCategory.Pedantic: return COLOR_MAGENTA;
+    case DiagnosticCategory.Info: return COLOR_CYAN;
+    case DiagnosticCategory.Warning: return COLOR_YELLOW;
+    case DiagnosticCategory.Error: return COLOR_RED;
     default: {
       assert(false);
       return "";
@@ -101,7 +141,7 @@ export class DiagnosticMessage {
     arg1: string | null = null,
     arg2: string | null = null
   ): DiagnosticMessage {
-    var message = diagnosticCodeToString(code);
+    let message = diagnosticCodeToString(code);
     if (arg0 != null) message = message.replace("{0}", arg0);
     if (arg1 != null) message = message.replace("{1}", arg1);
     if (arg2 != null) message = message.replace("{2}", arg2);
@@ -111,15 +151,15 @@ export class DiagnosticMessage {
   /** Tests if this message equals the specified. */
   equals(other: DiagnosticMessage): bool {
     if (this.code != other.code) return false;
-    var thisRange = this.range;
-    var otherRange = other.range;
+    let thisRange = this.range;
+    let otherRange = other.range;
     if (thisRange) {
       if (!otherRange || !thisRange.equals(otherRange)) return false;
     } else if (otherRange) {
       return false;
     }
-    var thisRelatedRange = this.relatedRange;
-    var otherRelatedRange = other.relatedRange;
+    let thisRelatedRange = this.relatedRange;
+    let otherRelatedRange = other.relatedRange;
     if (thisRelatedRange) {
       if (!otherRelatedRange || !thisRelatedRange.equals(otherRelatedRange)) return false;
     } else if (otherRelatedRange) {
@@ -142,33 +182,19 @@ export class DiagnosticMessage {
 
   /** Converts this message to a string. */
   toString(): string {
-    var range = this.range;
+    let category = diagnosticCategoryToString(this.category);
+    let range = this.range;
+    let code = this.code;
+    let message = this.message;
     if (range) {
       let source = range.source;
-      return (
-        diagnosticCategoryToString(this.category) +
-        " " +
-        this.code.toString() +
-        ": \"" +
-        this.message +
-        "\" in " +
-        source.normalizedPath +
-        "(" +
-        source.lineAt(range.start).toString() +
-        "," +
-        source.columnAt().toString() +
-        "+" +
-        (range.end - range.start).toString() +
-        ")"
-      );
+      let path = source.normalizedPath;
+      let line = source.lineAt(range.start);
+      let column = source.columnAt();
+      let len = range.end - range.start;
+      return `${category} ${code}: "${message}" in ${path}(${line},${column}+${len})`;
     }
-    return (
-      diagnosticCategoryToString(this.category) +
-      " " +
-      this.code.toString() +
-      ": " +
-      this.message
-    );
+    return `${category} ${code}: ${message}`;
   }
 }
 
@@ -178,10 +204,10 @@ export function formatDiagnosticMessage(
   useColors: bool = false,
   showContext: bool = false
 ): string {
-  var wasColorsEnabled = setColorsEnabled(useColors);
+  let wasColorsEnabled = setColorsEnabled(useColors);
 
   // general information
-  var sb: string[] = [];
+  let sb: string[] = [];
   if (isColorsEnabled()) sb.push(diagnosticCategoryToColor(message.category));
   sb.push(diagnosticCategoryToString(message.category));
   if (isColorsEnabled()) sb.push(COLOR_RESET);
@@ -191,34 +217,39 @@ export function formatDiagnosticMessage(
   sb.push(message.message);
 
   // include range information if available
-  var range = message.range;
+  let range = message.range;
   if (range) {
     let source = range.source;
+    let relatedRange = message.relatedRange;
+    let minLine = 0;
+    if (relatedRange) {
+      // Justify context indentation when multiple ranges are present
+      minLine = max(source.lineAt(range.start), relatedRange.source.lineAt(relatedRange.start));
+    }
 
     // include context information if requested
     if (showContext) {
       sb.push("\n");
-      sb.push(formatDiagnosticContext(range));
+      sb.push(formatDiagnosticContext(range, minLine));
+    } else {
+      sb.push("\n in ");
+      sb.push(source.normalizedPath);
     }
-    sb.push("\n");
-    sb.push(" in ");
-    sb.push(source.normalizedPath);
     sb.push("(");
     sb.push(source.lineAt(range.start).toString());
     sb.push(",");
     sb.push(source.columnAt().toString());
     sb.push(")");
 
-    let relatedRange = message.relatedRange;
     if (relatedRange) {
       let relatedSource = relatedRange.source;
       if (showContext) {
         sb.push("\n");
-        sb.push(formatDiagnosticContext(relatedRange));
+        sb.push(formatDiagnosticContext(relatedRange, minLine));
+      } else {
+        sb.push("\n in ");
+        sb.push(relatedSource.normalizedPath);
       }
-      sb.push("\n");
-      sb.push(" in ");
-      sb.push(relatedSource.normalizedPath);
       sb.push("(");
       sb.push(relatedSource.lineAt(relatedRange.start).toString());
       sb.push(",");
@@ -231,35 +262,64 @@ export function formatDiagnosticMessage(
 }
 
 /** Formats the diagnostic context for the specified range, optionally with terminal colors. */
-function formatDiagnosticContext(range: Range): string {
-  var text = range.source.text;
-  var len = text.length;
-  var start = range.start;
-  var end = range.end;
+function formatDiagnosticContext(range: Range, minLine: i32 = 0): string {
+  let source = range.source;
+  let text = source.text;
+  let len = text.length;
+  let start = range.start;
+  let end = start;
+  let lineNumber = source.lineAt(start).toString();
+  let lineNumberLength = minLine
+    ? max(minLine.toString().length, lineNumber.length)
+    : lineNumber.length;
+  let lineSpace = " ".repeat(lineNumberLength);
+  // Find preceeding line break
   while (start > 0 && !isLineBreak(text.charCodeAt(start - 1))) start--;
+  // Skip leading whitespace (assume no supplementary whitespaces)
+  while (start < len && isWhiteSpace(text.charCodeAt(start))) start++;
+  // Find next line break
   while (end < len && !isLineBreak(text.charCodeAt(end))) end++;
-  var sb: string[] = [
+  let sb: string[] = [
+    lineSpace,
+    "  :\n ",
+    " ".repeat(lineNumberLength - lineNumber.length),
+    lineNumber,
+    " │ ",
+    text.substring(start, end).replaceAll("\t", "  "),
     "\n ",
-    text.substring(start, end),
-    "\n "
+    lineSpace,
+    " │ "
   ];
   while (start < range.start) {
-    sb.push(" ");
-    start++;
+    if (text.charCodeAt(start) == CharCode.Tab) {
+      sb.push("  ");
+      start += 2;
+    } else {
+      sb.push(" ");
+      start++;
+    }
   }
   if (isColorsEnabled()) sb.push(COLOR_RED);
   if (range.start == range.end) {
     sb.push("^");
   } else {
     while (start++ < range.end) {
-      if (isLineBreak(text.charCodeAt(start))) {
+      let cc = text.charCodeAt(start);
+      if (cc == CharCode.Tab) {
+        sb.push("~~");
+      } else if (isLineBreak(cc)) {
         sb.push(start == range.start + 1 ? "^" : "~");
         break;
+      } else {
+        sb.push("~");
       }
-      sb.push("~");
     }
   }
   if (isColorsEnabled()) sb.push(COLOR_RESET);
+  sb.push("\n ");
+  sb.push(lineSpace);
+  sb.push(" └─ in ");
+  sb.push(source.normalizedPath);
   return sb.join("");
 }
 
@@ -287,7 +347,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2);
+    let message = DiagnosticMessage.create(code, category, arg0, arg1, arg2);
     if (range) message = message.withRange(range);
     if (relatedRange) message.relatedRange = relatedRange;
     // It is possible that the same diagnostic is emitted twice, for example
@@ -326,7 +386,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.PEDANTIC, range, null, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Pedantic, range, null, arg0, arg1, arg2);
   }
 
   /** Emits an overly pedantic diagnostic message with a related range. */
@@ -338,7 +398,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.PEDANTIC, range, relatedRange, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Pedantic, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits an informatory diagnostic message. */
@@ -349,7 +409,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, null, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Info, range, null, arg0, arg1, arg2);
   }
 
   /** Emits an informatory diagnostic message with a related range. */
@@ -361,7 +421,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, relatedRange, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Info, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits a warning diagnostic message. */
@@ -372,7 +432,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, null, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Warning, range, null, arg0, arg1, arg2);
   }
 
   /** Emits a warning diagnostic message with a related range. */
@@ -384,7 +444,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, relatedRange, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Warning, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits an error diagnostic message. */
@@ -395,7 +455,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, null, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Error, range, null, arg0, arg1, arg2);
   }
 
   /** Emits an error diagnostic message with a related range. */
@@ -407,6 +467,6 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, relatedRange, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Error, range, relatedRange, arg0, arg1, arg2);
   }
 }

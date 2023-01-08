@@ -1,21 +1,21 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $portable-conversions/i (mut i32) (i32.const 1))
  (global $portable-conversions/I (mut i64) (i64.const 1))
  (global $portable-conversions/f (mut f32) (f32.const 1))
  (global $portable-conversions/F (mut f64) (f64.const 1))
  (global $~lib/memory/__data_end i32 (i32.const 92))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
- (global $~lib/memory/__heap_base i32 (i32.const 16476))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32860))
+ (global $~lib/memory/__heap_base i32 (i32.const 32860))
  (memory $0 1)
- (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00.\00\00\00p\00o\00r\00t\00a\00b\00l\00e\00-\00c\00o\00n\00v\00e\00r\00s\00i\00o\00n\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00.\00\00\00p\00o\00r\00t\00a\00b\00l\00e\00-\00c\00o\00n\00v\00e\00r\00s\00i\00o\00n\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:portable-conversions
+ (func $start:portable-conversions (type $none_=>_none)
   global.get $portable-conversions/i
   i32.extend8_s
   i32.eqz
@@ -623,7 +623,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:portable-conversions
  )
 )

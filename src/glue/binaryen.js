@@ -4,24 +4,61 @@
  */
 
 import binaryen from "../../lib/binaryen.js";
-import { Module } from "../module.ts";
-
-Module.prototype.toText = function toText(watFormat = true) {
-  if (watFormat) {
-    // NOTE: Conversion to StackIR can yield conversion artifacts like sequences
-    // of unreachable statements not actually emitted by the compiler. Optimizing
-    // StackIR removes these again, but may also suppress useless code emitted by
-    // the compiler that's then no longer visible in tests. Both not ideal.
-    return binaryen.wrapModule(this.ref).emitStackIR(/* optimize-stack-ir */ true);
-  } else {
-    return binaryen.wrapModule(this.ref).emitText();
-  }
-};
 
 export const {
   _BinaryenTypeCreate,
   _BinaryenTypeArity,
   _BinaryenTypeExpand,
+  _BinaryenTypeGetHeapType,
+  _BinaryenTypeFromHeapType,
+  _BinaryenTypeIsNullable,
+
+  _BinaryenTypeFuncref,
+  _BinaryenTypeExternref,
+  _BinaryenTypeAnyref,
+  _BinaryenTypeEqref,
+  _BinaryenTypeI31ref,
+  _BinaryenTypeDataref,
+  _BinaryenTypeArrayref,
+  _BinaryenTypeStringref,
+  _BinaryenTypeStringviewWTF8,
+  _BinaryenTypeStringviewWTF16,
+  _BinaryenTypeStringviewIter,
+  _BinaryenTypeNullref,
+  _BinaryenTypeNullExternref,
+  _BinaryenTypeNullFuncref,
+
+  _BinaryenHeapTypeFunc,
+  _BinaryenHeapTypeExt,
+  _BinaryenHeapTypeAny,
+  _BinaryenHeapTypeEq,
+  _BinaryenHeapTypeI31,
+  _BinaryenHeapTypeData,
+  _BinaryenHeapTypeArray,
+  _BinaryenHeapTypeString,
+  _BinaryenHeapTypeStringviewWTF8,
+  _BinaryenHeapTypeStringviewWTF16,
+  _BinaryenHeapTypeStringviewIter,
+  _BinaryenHeapTypeNone,
+  _BinaryenHeapTypeNoext,
+  _BinaryenHeapTypeNofunc,
+
+  _BinaryenHeapTypeIsBasic,
+  _BinaryenHeapTypeIsSignature,
+  _BinaryenHeapTypeIsStruct,
+  _BinaryenHeapTypeIsArray,
+  _BinaryenHeapTypeIsBottom,
+  _BinaryenHeapTypeGetBottom,
+  _BinaryenHeapTypeIsSubType,
+  _BinaryenStructTypeGetNumFields,
+  _BinaryenStructTypeGetFieldType,
+  _BinaryenStructTypeGetFieldPackedType,
+  _BinaryenStructTypeIsFieldMutable,
+  _BinaryenArrayTypeGetElementType,
+  _BinaryenArrayTypeGetElementPackedType,
+  _BinaryenArrayTypeIsElementMutable,
+  _BinaryenSignatureTypeGetParams,
+  _BinaryenSignatureTypeGetResults,
 
   _BinaryenModuleCreate,
   _BinaryenModuleDispose,
@@ -34,14 +71,14 @@ export const {
   _BinaryenLiteralVec128,
   _BinaryenLiteralFloat32Bits,
   _BinaryenLiteralFloat64Bits,
-  
+
   _BinaryenExpressionGetId,
   _BinaryenExpressionGetType,
   _BinaryenExpressionSetType,
   _BinaryenExpressionPrint,
   _BinaryenExpressionCopy,
   _BinaryenExpressionFinalize,
-  
+
   _BinaryenBlock,
   _BinaryenBlockGetName,
   _BinaryenBlockSetName,
@@ -51,7 +88,7 @@ export const {
   _BinaryenBlockAppendChild,
   _BinaryenBlockInsertChildAt,
   _BinaryenBlockRemoveChildAt,
-  
+
   _BinaryenIf,
   _BinaryenIfGetCondition,
   _BinaryenIfSetCondition,
@@ -59,13 +96,13 @@ export const {
   _BinaryenIfSetIfTrue,
   _BinaryenIfGetIfFalse,
   _BinaryenIfSetIfFalse,
-  
+
   _BinaryenLoop,
   _BinaryenLoopGetName,
   _BinaryenLoopSetName,
   _BinaryenLoopGetBody,
   _BinaryenLoopSetBody,
-  
+
   _BinaryenBreak,
   _BinaryenBreakGetName,
   _BinaryenBreakSetName,
@@ -73,7 +110,7 @@ export const {
   _BinaryenBreakSetCondition,
   _BinaryenBreakGetValue,
   _BinaryenBreakSetValue,
-  
+
   _BinaryenSwitch,
   _BinaryenSwitchGetNumNames,
   _BinaryenSwitchGetNameAt,
@@ -87,7 +124,7 @@ export const {
   _BinaryenSwitchSetCondition,
   _BinaryenSwitchGetValue,
   _BinaryenSwitchSetValue,
-  
+
   _BinaryenCall,
   _BinaryenCallGetTarget,
   _BinaryenCallSetTarget,
@@ -100,7 +137,7 @@ export const {
   _BinaryenCallIsReturn,
   _BinaryenCallSetReturn,
   _BinaryenReturnCall,
-  
+
   _BinaryenCallIndirect,
   _BinaryenCallIndirectGetTable,
   _BinaryenCallIndirectSetTable,
@@ -115,11 +152,11 @@ export const {
   _BinaryenCallIndirectIsReturn,
   _BinaryenCallIndirectSetReturn,
   _BinaryenReturnCallIndirect,
-  
+
   _BinaryenLocalGet,
   _BinaryenLocalGetGetIndex,
   _BinaryenLocalGetSetIndex,
-  
+
   _BinaryenLocalSet,
   _BinaryenLocalSetIsTee,
   _BinaryenLocalSetGetIndex,
@@ -127,23 +164,23 @@ export const {
   _BinaryenLocalSetGetValue,
   _BinaryenLocalSetSetValue,
   _BinaryenLocalTee,
-  
+
   _BinaryenGlobalGet,
   _BinaryenGlobalGetGetName,
   _BinaryenGlobalGetSetName,
-  
+
   _BinaryenGlobalSet,
   _BinaryenGlobalSetGetName,
   _BinaryenGlobalSetSetName,
   _BinaryenGlobalSetGetValue,
   _BinaryenGlobalSetSetValue,
-  
+
   _BinaryenMemorySize,
-  
+
   _BinaryenMemoryGrow,
   _BinaryenMemoryGrowGetDelta,
   _BinaryenMemoryGrowSetDelta,
-  
+
   _BinaryenLoad,
   _BinaryenLoadIsAtomic,
   _BinaryenLoadSetAtomic,
@@ -158,7 +195,7 @@ export const {
   _BinaryenLoadGetPtr,
   _BinaryenLoadSetPtr,
   _BinaryenAtomicLoad,
-  
+
   _BinaryenStore,
   _BinaryenStoreIsAtomic,
   _BinaryenStoreSetAtomic,
@@ -175,7 +212,7 @@ export const {
   _BinaryenStoreGetValueType,
   _BinaryenStoreSetValueType,
   _BinaryenAtomicStore,
-  
+
   _BinaryenConst,
   _BinaryenConstGetValueI32,
   _BinaryenConstSetValueI32,
@@ -189,13 +226,13 @@ export const {
   _BinaryenConstSetValueF64,
   _BinaryenConstGetValueV128,
   _BinaryenConstSetValueV128,
-  
+
   _BinaryenUnary,
   _BinaryenUnaryGetOp,
   _BinaryenUnarySetOp,
   _BinaryenUnaryGetValue,
   _BinaryenUnarySetValue,
-  
+
   _BinaryenBinary,
   _BinaryenBinaryGetOp,
   _BinaryenBinarySetOp,
@@ -203,7 +240,7 @@ export const {
   _BinaryenBinarySetLeft,
   _BinaryenBinaryGetRight,
   _BinaryenBinarySetRight,
-  
+
   _BinaryenSelect,
   _BinaryenSelectGetIfTrue,
   _BinaryenSelectSetIfTrue,
@@ -211,19 +248,19 @@ export const {
   _BinaryenSelectSetIfFalse,
   _BinaryenSelectGetCondition,
   _BinaryenSelectSetCondition,
-  
+
   _BinaryenDrop,
   _BinaryenDropGetValue,
   _BinaryenDropSetValue,
-  
+
   _BinaryenReturn,
   _BinaryenReturnGetValue,
   _BinaryenReturnSetValue,
-  
+
   _BinaryenNop,
-  
+
   _BinaryenUnreachable,
-  
+
   _BinaryenAtomicRMW,
   _BinaryenAtomicRMWGetOp,
   _BinaryenAtomicRMWSetOp,
@@ -235,7 +272,7 @@ export const {
   _BinaryenAtomicRMWSetPtr,
   _BinaryenAtomicRMWGetValue,
   _BinaryenAtomicRMWSetValue,
-  
+
   _BinaryenAtomicCmpxchg,
   _BinaryenAtomicCmpxchgGetBytes,
   _BinaryenAtomicCmpxchgSetBytes,
@@ -247,7 +284,7 @@ export const {
   _BinaryenAtomicCmpxchgSetExpected,
   _BinaryenAtomicCmpxchgGetReplacement,
   _BinaryenAtomicCmpxchgSetReplacement,
-  
+
   _BinaryenAtomicWait,
   _BinaryenAtomicWaitGetPtr,
   _BinaryenAtomicWaitSetPtr,
@@ -257,17 +294,17 @@ export const {
   _BinaryenAtomicWaitSetTimeout,
   _BinaryenAtomicWaitGetExpectedType,
   _BinaryenAtomicWaitSetExpectedType,
-  
+
   _BinaryenAtomicNotify,
   _BinaryenAtomicNotifyGetPtr,
   _BinaryenAtomicNotifySetPtr,
   _BinaryenAtomicNotifyGetNotifyCount,
   _BinaryenAtomicNotifySetNotifyCount,
-  
+
   _BinaryenAtomicFence,
   _BinaryenAtomicFenceGetOrder,
   _BinaryenAtomicFenceSetOrder,
-  
+
   _BinaryenSIMDExtract,
   _BinaryenSIMDExtractGetOp,
   _BinaryenSIMDExtractSetOp,
@@ -275,7 +312,7 @@ export const {
   _BinaryenSIMDExtractSetVec,
   _BinaryenSIMDExtractGetIndex,
   _BinaryenSIMDExtractSetIndex,
-  
+
   _BinaryenSIMDReplace,
   _BinaryenSIMDReplaceGetOp,
   _BinaryenSIMDReplaceSetOp,
@@ -285,7 +322,7 @@ export const {
   _BinaryenSIMDReplaceSetIndex,
   _BinaryenSIMDReplaceGetValue,
   _BinaryenSIMDReplaceSetValue,
-  
+
   _BinaryenSIMDShuffle,
   _BinaryenSIMDShuffleGetLeft,
   _BinaryenSIMDShuffleSetLeft,
@@ -293,7 +330,7 @@ export const {
   _BinaryenSIMDShuffleSetRight,
   _BinaryenSIMDShuffleGetMask,
   _BinaryenSIMDShuffleSetMask,
-  
+
   _BinaryenSIMDTernary,
   _BinaryenSIMDTernaryGetOp,
   _BinaryenSIMDTernarySetOp,
@@ -303,7 +340,7 @@ export const {
   _BinaryenSIMDTernarySetB,
   _BinaryenSIMDTernaryGetC,
   _BinaryenSIMDTernarySetC,
-  
+
   _BinaryenSIMDShift,
   _BinaryenSIMDShiftGetOp,
   _BinaryenSIMDShiftSetOp,
@@ -311,7 +348,7 @@ export const {
   _BinaryenSIMDShiftSetVec,
   _BinaryenSIMDShiftGetShift,
   _BinaryenSIMDShiftSetShift,
-  
+
   _BinaryenSIMDLoad,
   _BinaryenSIMDLoadGetOp,
   _BinaryenSIMDLoadSetOp,
@@ -321,7 +358,7 @@ export const {
   _BinaryenSIMDLoadSetAlign,
   _BinaryenSIMDLoadGetPtr,
   _BinaryenSIMDLoadSetPtr,
-  
+
   _BinaryenSIMDLoadStoreLane,
   _BinaryenSIMDLoadStoreLaneGetOp,
   _BinaryenSIMDLoadStoreLaneSetOp,
@@ -336,7 +373,7 @@ export const {
   _BinaryenSIMDLoadStoreLaneGetVec,
   _BinaryenSIMDLoadStoreLaneSetVec,
   _BinaryenSIMDLoadStoreLaneIsStore,
-  
+
   _BinaryenMemoryInit,
   _BinaryenMemoryInitGetSegment,
   _BinaryenMemoryInitSetSegment,
@@ -346,11 +383,11 @@ export const {
   _BinaryenMemoryInitSetOffset,
   _BinaryenMemoryInitGetSize,
   _BinaryenMemoryInitSetSize,
-  
+
   _BinaryenDataDrop,
   _BinaryenDataDropGetSegment,
   _BinaryenDataDropSetSegment,
-  
+
   _BinaryenMemoryCopy,
   _BinaryenMemoryCopyGetDest,
   _BinaryenMemoryCopySetDest,
@@ -358,7 +395,7 @@ export const {
   _BinaryenMemoryCopySetSource,
   _BinaryenMemoryCopyGetSize,
   _BinaryenMemoryCopySetSize,
-  
+
   _BinaryenMemoryFill,
   _BinaryenMemoryFillGetDest,
   _BinaryenMemoryFillSetDest,
@@ -366,37 +403,37 @@ export const {
   _BinaryenMemoryFillSetValue,
   _BinaryenMemoryFillGetSize,
   _BinaryenMemoryFillSetSize,
-  
+
   _BinaryenRefNull,
-  
+
   _BinaryenRefIs,
   _BinaryenRefIsGetOp,
   _BinaryenRefIsSetOp,
   _BinaryenRefIsGetValue,
   _BinaryenRefIsSetValue,
-  
+
   _BinaryenRefAs,
   _BinaryenRefAsGetOp,
   _BinaryenRefAsSetOp,
   _BinaryenRefAsGetValue,
   _BinaryenRefAsSetValue,
-  
+
   _BinaryenRefFunc,
   _BinaryenRefFuncGetFunc,
   _BinaryenRefFuncSetFunc,
-  
+
   _BinaryenRefEq,
   _BinaryenRefEqGetLeft,
   _BinaryenRefEqSetLeft,
   _BinaryenRefEqGetRight,
   _BinaryenRefEqSetRight,
-  
+
   _BinaryenTableGet,
   _BinaryenTableGetGetTable,
   _BinaryenTableGetSetTable,
   _BinaryenTableGetGetIndex,
   _BinaryenTableGetSetIndex,
-  
+
   _BinaryenTableSet,
   _BinaryenTableSetGetTable,
   _BinaryenTableSetSetTable,
@@ -404,11 +441,11 @@ export const {
   _BinaryenTableSetSetIndex,
   _BinaryenTableSetGetValue,
   _BinaryenTableSetSetValue,
-  
+
   _BinaryenTableSize,
   _BinaryenTableSizeGetTable,
   _BinaryenTableSizeSetTable,
-  
+
   _BinaryenTableGrow,
   _BinaryenTableGrowGetTable,
   _BinaryenTableGrowSetTable,
@@ -416,7 +453,7 @@ export const {
   _BinaryenTableGrowSetValue,
   _BinaryenTableGrowGetDelta,
   _BinaryenTableGrowSetDelta,
-  
+
   _BinaryenTry,
   _BinaryenTryGetName,
   _BinaryenTrySetName,
@@ -438,7 +475,7 @@ export const {
   _BinaryenTryGetDelegateTarget,
   _BinaryenTrySetDelegateTarget,
   _BinaryenTryIsDelegate,
-  
+
   _BinaryenThrow,
   _BinaryenThrowGetTag,
   _BinaryenThrowSetTag,
@@ -448,11 +485,11 @@ export const {
   _BinaryenThrowAppendOperand,
   _BinaryenThrowInsertOperandAt,
   _BinaryenThrowRemoveOperandAt,
-  
+
   _BinaryenRethrow,
   _BinaryenRethrowGetTarget,
   _BinaryenRethrowSetDepth,
-  
+
   _BinaryenTupleMake,
   _BinaryenTupleMakeGetNumOperands,
   _BinaryenTupleMakeGetOperandAt,
@@ -460,31 +497,227 @@ export const {
   _BinaryenTupleMakeAppendOperand,
   _BinaryenTupleMakeInsertOperandAt,
   _BinaryenTupleMakeRemoveOperandAt,
-  
+
   _BinaryenTupleExtract,
   _BinaryenTupleExtractGetTuple,
   _BinaryenTupleExtractSetTuple,
   _BinaryenTupleExtractGetIndex,
   _BinaryenTupleExtractSetIndex,
-  
+
   _BinaryenPop,
-  
+
   _BinaryenI31New,
   _BinaryenI31NewGetValue,
   _BinaryenI31NewSetValue,
-  
+
   _BinaryenI31Get,
   _BinaryenI31GetGetI31,
   _BinaryenI31GetSetI31,
   _BinaryenI31GetIsSigned,
   _BinaryenI31GetSetSigned,
-  
+
+  _BinaryenCallRef,
+  _BinaryenCallRefGetNumOperands,
+  _BinaryenCallRefGetOperandAt,
+  _BinaryenCallRefSetOperandAt,
+  _BinaryenCallRefAppendOperand,
+  _BinaryenCallRefInsertOperandAt,
+  _BinaryenCallRefRemoveOperandAt,
+  _BinaryenCallRefGetTarget,
+  _BinaryenCallRefSetTarget,
+  _BinaryenCallRefIsReturn,
+  _BinaryenCallRefSetReturn,
+
+  _BinaryenRefTest,
+  _BinaryenRefTestGetRef,
+  _BinaryenRefTestSetRef,
+  _BinaryenRefTestGetIntendedType,
+  _BinaryenRefTestSetIntendedType,
+
+  _BinaryenRefCast,
+  _BinaryenRefCastGetRef,
+  _BinaryenRefCastSetRef,
+  _BinaryenRefCastGetIntendedType,
+  _BinaryenRefCastSetIntendedType,
+
+  _BinaryenBrOn,
+  _BinaryenBrOnGetOp,
+  _BinaryenBrOnSetOp,
+  _BinaryenBrOnGetName,
+  _BinaryenBrOnSetName,
+  _BinaryenBrOnGetRef,
+  _BinaryenBrOnSetRef,
+  _BinaryenBrOnGetIntendedType,
+  _BinaryenBrOnSetIntendedType,
+
+  _BinaryenStructNew,
+  _BinaryenStructNewGetNumOperands,
+  _BinaryenStructNewGetOperandAt,
+  _BinaryenStructNewSetOperandAt,
+  _BinaryenStructNewAppendOperand,
+  _BinaryenStructNewInsertOperandAt,
+  _BinaryenStructNewRemoveOperandAt,
+
+  _BinaryenStructGet,
+  _BinaryenStructGetGetIndex,
+  _BinaryenStructGetSetIndex,
+  _BinaryenStructGetGetRef,
+  _BinaryenStructGetSetRef,
+  _BinaryenStructGetIsSigned,
+  _BinaryenStructGetSetSigned,
+
+  _BinaryenStructSet,
+  _BinaryenStructSetGetIndex,
+  _BinaryenStructSetSetIndex,
+  _BinaryenStructSetGetRef,
+  _BinaryenStructSetSetRef,
+  _BinaryenStructSetGetValue,
+  _BinaryenStructSetSetValue,
+
+  _BinaryenArrayNew,
+  _BinaryenArrayNewGetInit,
+  _BinaryenArrayNewSetInit,
+  _BinaryenArrayNewGetSize,
+  _BinaryenArrayNewSetSize,
+
+  _BinaryenArrayInit,
+  _BinaryenArrayInitGetNumValues,
+  _BinaryenArrayInitGetValueAt,
+  _BinaryenArrayInitSetValueAt,
+  _BinaryenArrayInitAppendValue,
+  _BinaryenArrayInitInsertValueAt,
+  _BinaryenArrayInitRemoveValueAt,
+
+  _BinaryenArrayGet,
+  _BinaryenArrayGetGetRef,
+  _BinaryenArrayGetSetRef,
+  _BinaryenArrayGetGetIndex,
+  _BinaryenArrayGetSetIndex,
+  _BinaryenArrayGetIsSigned,
+  _BinaryenArrayGetSetSigned,
+
+  _BinaryenArraySet,
+  _BinaryenArraySetGetRef,
+  _BinaryenArraySetSetRef,
+  _BinaryenArraySetGetIndex,
+  _BinaryenArraySetSetIndex,
+  _BinaryenArraySetGetValue,
+  _BinaryenArraySetSetValue,
+
+  _BinaryenArrayLen,
+  _BinaryenArrayLenGetRef,
+  _BinaryenArrayLenSetRef,
+
+  _BinaryenArrayCopy,
+  _BinaryenArrayCopyGetDestRef,
+  _BinaryenArrayCopySetDestRef,
+  _BinaryenArrayCopyGetDestIndex,
+  _BinaryenArrayCopySetDestIndex,
+  _BinaryenArrayCopyGetSrcRef,
+  _BinaryenArrayCopySetSrcRef,
+  _BinaryenArrayCopyGetSrcIndex,
+  _BinaryenArrayCopySetSrcIndex,
+  _BinaryenArrayCopyGetLength,
+  _BinaryenArrayCopySetLength,
+
+  _BinaryenStringNew,
+  _BinaryenStringNewGetOp,
+  _BinaryenStringNewSetOp,
+  _BinaryenStringNewGetPtr,
+  _BinaryenStringNewSetPtr,
+  _BinaryenStringNewGetLength,
+  _BinaryenStringNewSetLength,
+  _BinaryenStringNewGetStart,
+  _BinaryenStringNewSetStart,
+  _BinaryenStringNewGetEnd,
+  _BinaryenStringNewSetEnd,
+
+  _BinaryenStringConst,
+  _BinaryenStringConstGetString,
+  _BinaryenStringConstSetString,
+
+  _BinaryenStringMeasure,
+  _BinaryenStringMeasureGetOp,
+  _BinaryenStringMeasureSetOp,
+  _BinaryenStringMeasureGetRef,
+  _BinaryenStringMeasureSetRef,
+
+  _BinaryenStringEncode,
+  _BinaryenStringEncodeGetOp,
+  _BinaryenStringEncodeSetOp,
+  _BinaryenStringEncodeGetRef,
+  _BinaryenStringEncodeSetRef,
+  _BinaryenStringEncodeGetPtr,
+  _BinaryenStringEncodeSetPtr,
+  _BinaryenStringEncodeGetStart,
+  _BinaryenStringEncodeSetStart,
+
+  _BinaryenStringConcat,
+  _BinaryenStringConcatGetLeft,
+  _BinaryenStringConcatSetLeft,
+  _BinaryenStringConcatGetRight,
+  _BinaryenStringConcatSetRight,
+
+  _BinaryenStringEq,
+  _BinaryenStringEqGetLeft,
+  _BinaryenStringEqSetLeft,
+  _BinaryenStringEqGetRight,
+  _BinaryenStringEqSetRight,
+
+  _BinaryenStringAs,
+  _BinaryenStringAsGetOp,
+  _BinaryenStringAsSetOp,
+  _BinaryenStringAsGetRef,
+  _BinaryenStringAsSetRef,
+
+  _BinaryenStringWTF8Advance,
+  _BinaryenStringWTF8AdvanceGetRef,
+  _BinaryenStringWTF8AdvanceSetRef,
+  _BinaryenStringWTF8AdvanceGetPos,
+  _BinaryenStringWTF8AdvanceSetPos,
+  _BinaryenStringWTF8AdvanceGetBytes,
+  _BinaryenStringWTF8AdvanceSetBytes,
+
+  _BinaryenStringWTF16Get,
+  _BinaryenStringWTF16GetGetRef,
+  _BinaryenStringWTF16GetSetRef,
+  _BinaryenStringWTF16GetGetPos,
+  _BinaryenStringWTF16GetSetPos,
+
+  _BinaryenStringIterNext,
+  _BinaryenStringIterNextGetRef,
+  _BinaryenStringIterNextSetRef,
+
+  _BinaryenStringIterMove,
+  _BinaryenStringIterMoveGetOp,
+  _BinaryenStringIterMoveSetOp,
+  _BinaryenStringIterMoveGetRef,
+  _BinaryenStringIterMoveSetRef,
+  _BinaryenStringIterMoveGetNum,
+  _BinaryenStringIterMoveSetNum,
+
+  _BinaryenStringSliceWTF,
+  _BinaryenStringSliceWTFGetOp,
+  _BinaryenStringSliceWTFSetOp,
+  _BinaryenStringSliceWTFGetRef,
+  _BinaryenStringSliceWTFSetRef,
+  _BinaryenStringSliceWTFGetStart,
+  _BinaryenStringSliceWTFSetStart,
+  _BinaryenStringSliceWTFGetEnd,
+  _BinaryenStringSliceWTFSetEnd,
+
+  _BinaryenStringSliceIter,
+  _BinaryenStringSliceIterGetRef,
+  _BinaryenStringSliceIterSetRef,
+  _BinaryenStringSliceIterGetNum,
+  _BinaryenStringSliceIterSetNum,
+
   _BinaryenAddFunction,
   _BinaryenGetFunction,
   _BinaryenRemoveFunction,
   _BinaryenGetNumFunctions,
   _BinaryenGetFunctionByIndex,
-  
+
   _BinaryenFunctionGetName,
   _BinaryenFunctionGetParams,
   _BinaryenFunctionGetResults,
@@ -499,13 +732,13 @@ export const {
   _BinaryenFunctionOptimize,
   _BinaryenFunctionRunPasses,
   _BinaryenFunctionSetDebugLocation,
-  
+
   _BinaryenAddFunctionImport,
   _BinaryenAddTableImport,
   _BinaryenAddMemoryImport,
   _BinaryenAddGlobalImport,
   _BinaryenAddTagImport,
-  
+
   _BinaryenAddFunctionExport,
   _BinaryenAddTableExport,
   _BinaryenAddMemoryExport,
@@ -518,32 +751,32 @@ export const {
   _BinaryenExportGetKind,
   _BinaryenExportGetName,
   _BinaryenExportGetValue,
-  
+
   _BinaryenAddGlobal,
   _BinaryenGetGlobal,
   _BinaryenRemoveGlobal,
   _BinaryenGetNumGlobals,
   _BinaryenGetGlobalByIndex,
-  
+
   _BinaryenGlobalGetName,
   _BinaryenGlobalGetType,
   _BinaryenGlobalIsMutable,
   _BinaryenGlobalGetInitExpr,
-  
+
   _BinaryenAddTag,
   _BinaryenGetTag,
   _BinaryenRemoveTag,
-  
+
   _BinaryenTagGetName,
   _BinaryenTagGetParams,
   _BinaryenTagGetResults,
-  
+
   _BinaryenAddTable,
   _BinaryenRemoveTable,
   _BinaryenGetNumTables,
   _BinaryenGetTable,
   _BinaryenGetTableByIndex,
-  
+
   _BinaryenTableGetName,
   _BinaryenTableSetName,
   _BinaryenTableGetInitial,
@@ -551,22 +784,22 @@ export const {
   _BinaryenTableHasMax,
   _BinaryenTableGetMax,
   _BinaryenTableSetMax,
-  
+
   _BinaryenAddActiveElementSegment,
   _BinaryenAddPassiveElementSegment,
   _BinaryenRemoveElementSegment,
   _BinaryenGetNumElementSegments,
   _BinaryenGetElementSegment,
   _BinaryenGetElementSegmentByIndex,
-  
+
   _BinaryenSetMemory,
   _BinaryenGetNumMemorySegments,
   _BinaryenGetMemorySegmentByteOffset,
   _BinaryenGetMemorySegmentByteLength,
   _BinaryenCopyMemorySegmentData,
-  
+
   _BinaryenSetStart,
-  
+
   _BinaryenModuleParse,
   _BinaryenModulePrint,
   _BinaryenModulePrintAsmjs,
@@ -574,30 +807,51 @@ export const {
   _BinaryenModuleOptimize,
   _BinaryenModuleRunPasses,
   _BinaryenModuleAutoDrop,
+  _BinaryenSizeofAllocateAndWriteResult,
   _BinaryenModuleAllocateAndWrite,
+  _BinaryenModuleAllocateAndWriteText,
+  _BinaryenModuleAllocateAndWriteStackIR,
   _BinaryenModuleRead,
   _BinaryenModuleInterpret,
   _BinaryenModuleAddDebugInfoFileName,
   _BinaryenModuleGetDebugInfoFileName,
   _BinaryenModuleGetFeatures,
   _BinaryenModuleSetFeatures,
-  
+
   _BinaryenAddCustomSection,
-  
+
   _BinaryenExpressionGetSideEffects,
-  
+
   _RelooperCreate,
   _RelooperAddBlock,
   _RelooperAddBranch,
   _RelooperAddBlockWithSwitch,
   _RelooperAddBranchForSwitch,
   _RelooperRenderAndDispose,
-  
+
   _ExpressionRunnerCreate,
   _ExpressionRunnerSetLocalValue,
   _ExpressionRunnerSetGlobalValue,
   _ExpressionRunnerRunAndDispose,
-  
+
+  _TypeBuilderCreate,
+  _TypeBuilderGrow,
+  _TypeBuilderGetSize,
+  _TypeBuilderSetBasicHeapType,
+  _TypeBuilderSetSignatureType,
+  _TypeBuilderSetStructType,
+  _TypeBuilderSetArrayType,
+  _TypeBuilderIsBasic,
+  _TypeBuilderGetBasic,
+  _TypeBuilderGetTempHeapType,
+  _TypeBuilderGetTempTupleType,
+  _TypeBuilderGetTempRefType,
+  _TypeBuilderSetSubType,
+  _TypeBuilderCreateRecGroup,
+  _TypeBuilderBuildAndDispose,
+  _BinaryenModuleSetTypeName,
+  _BinaryenModuleSetFieldName,
+
   _BinaryenGetOptimizeLevel,
   _BinaryenSetOptimizeLevel,
   _BinaryenGetShrinkLevel,
@@ -621,9 +875,11 @@ export const {
   _BinaryenSetOneCallerInlineMaxSize,
   _BinaryenGetAllowInliningFunctionsWithLoops,
   _BinaryenSetAllowInliningFunctionsWithLoops,
-  
+  _BinaryenGetTypeSystem,
+  _BinaryenSetTypeSystem,
+
   // Helpers
-  
+
   _malloc,
   _free,
   __i32_store8,
@@ -638,7 +894,7 @@ export const {
   __i32_load,
   __f32_load,
   __f64_load
-  
+
 } = binaryen;
 
 export default binaryen;

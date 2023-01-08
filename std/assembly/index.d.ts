@@ -47,6 +47,16 @@ declare type eqref = object | null;
 declare type i31ref = object | null;
 /** Data reference. */
 declare type dataref = object | null;
+/** Array reference. */
+declare type arrayref = object | null;
+/** String reference. */
+declare type stringref = object | null;
+/** WTF-8 string view. */
+declare type stringview_wtf8 = object | null;
+/** WTF-16 string view. */
+declare type stringview_wtf16 = object | null;
+/** String iterator. */
+declare type stringview_iter = object | null;
 
 // Compiler hints
 
@@ -92,12 +102,12 @@ declare const ASC_FEATURE_MULTI_VALUE: bool;
 declare const ASC_FEATURE_GC: bool;
 /** Whether the memory64 feature is enabled. */
 declare const ASC_FEATURE_MEMORY64: bool;
-/** Whether the function references feature is enabled. */
-declare const ASC_FEATURE_FUNCTION_REFERENCES: bool;
 /** Whether the relaxed SIMD feature is enabled. */
 declare const ASC_FEATURE_RELAXED_SIMD: bool;
 /** Whether the extended const expression feature is enabled. */
 declare const ASC_FEATURE_EXTENDED_CONST: bool;
+/** Whether the string references feature is enabled. */
+declare const ASC_FEATURE_STRINGREF: bool;
 /** Major version of the compiler. */
 declare const ASC_VERSION_MAJOR: i32;
 /** Minor version of the compiler. */
@@ -107,6 +117,8 @@ declare const ASC_VERSION_PATCH: i32;
 
 // Builtins
 
+/** Performs the sign-agnostic reverse bytes **/
+declare function bswap<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
 /** Performs the sign-agnostic count leading zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered leading if the value is zero. */
 declare function clz<T extends i32 | i64>(value: T): T;
 /** Performs the sign-agnostic count tailing zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered trailing if the value is zero. */
@@ -147,6 +159,12 @@ declare function sub<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
 declare function mul<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
 /** Computes the quotient of two integers or floats. */
 declare function div<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
+/** Return 1 if two numbers are equal to each other, 0 otherwise. */
+declare function eq<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
+/** Return 0 if two numbers are equal to each other, 1 otherwise. */
+declare function ne<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
+/** Computes the remainder of two integers. */
+declare function rem<T extends i32 | i64>(left: T, right: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
@@ -161,7 +179,7 @@ declare const Infinity: f32 | f64;
 /** Data end offset. */
 declare const __data_end: usize;
 /** Stack pointer offset. */
-declare var __stack_pointer: usize;
+declare let __stack_pointer: usize;
 /** Heap base offset. */
 declare const __heap_base: usize;
 /** Determines the byte size of the specified underlying core type. Compiles to a constant. */
@@ -190,14 +208,16 @@ declare function instantiate<T>(...args: any[]): T;
 declare function isNaN<T extends f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
 declare function isFinite<T extends f32 | f64>(value: T): bool;
-/** Tests if the specified type *or* expression is of an integer type and not a reference. Compiles to a constant. */
-declare function isInteger<T>(value?: any): value is number;
-/** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
-declare function isFloat<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression is of a boolean type. */
 declare function isBoolean<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of an integer type and not a reference. Compiles to a constant. */
+declare function isInteger<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression can represent negative numbers. Compiles to a constant. */
 declare function isSigned<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
+declare function isFloat<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a v128 type. Compiles to a constant. */
+declare function isVector<T>(value?: any): value is v128;
 /** Tests if the specified type *or* expression is of a reference type. Compiles to a constant. */
 declare function isReference<T>(value?: any): value is object | string;
 /** Tests if the specified type *or* expression can be used as a string. Compiles to a constant. */
@@ -300,6 +320,8 @@ declare namespace i32 {
   export const MIN_VALUE: i32;
   /** Largest representable value. */
   export const MAX_VALUE: i32;
+  /** Converts a string to an i32 of this type. */
+  export function parse(value: string, radix?: i32): i32;
   /** Loads an 8-bit signed integer value from memory and returns it as a 32-bit integer. */
   export function load8_s(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -338,6 +360,15 @@ declare namespace i32 {
   export function div_s(left: i32, right: i32): i32;
   /** Computes the unsigned quotient of two 32-bit integers. */
   export function div_u(left: i32, right: i32): i32;
+  /** Return 1 if two 32-bit integers are equal to each other, 0 otherwise. */
+  export function eq(left: i32, right: i32): i32;
+  /** Return 0 if two 32-bit integers are equal to each other, 1 otherwise. */
+  export function ne(left: i32, right: i32): i32;
+  /** Computes the signed remainder of two 32-bit integers. */
+  export function rem_s(left: i32, right: i32): i32;
+  /** Computes the unsigned remainder of two 32-bit integers. */
+  export function rem_u(left: u32, right: u32): u32;
+
   /** Atomic 32-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -414,6 +445,8 @@ declare namespace i64 {
   export const MIN_VALUE: i64;
   /** Largest representable value. */
   export const MAX_VALUE: i64;
+  /** Converts a string to an i64 of this type. */
+  export function parse(value: string, radix?: i32): i64;
   /** Loads an 8-bit signed integer value from memory and returns it as a 64-bit integer. */
   export function load8_s(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -458,6 +491,15 @@ declare namespace i64 {
   export function div_s(left: i64, right: i64): i64;
   /** Computes the unsigned quotient of two 64-bit integers. */
   export function div_u(left: i64, right: i64): i64;
+  /** Return 1 if two 64-bit integers are equal to each other, 0 otherwise. */
+  export function eq(left: i64, right: i64): i32;
+  /** Return 0 if two 64-bit integers are equal to each other, 1 otherwise. */
+  export function ne(left: i64, right: i64): i32;
+  /** Computes the signed remainder of two 64-bit integers. */
+  export function rem_s(left: i64, right: i64): i64;
+  /** Computes the unsigned remainder of two 64-bit integers. */
+  export function rem_u(left: u64, right: u64): u64;
+
   /** Atomic 64-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -549,7 +591,7 @@ declare namespace i64 {
   }
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
-declare var isize: typeof i32 | typeof i64;
+declare let isize: typeof i32 | typeof i64;
 /** Converts any other numeric value to an 8-bit unsigned integer. */
 declare function u8(value: any): u8;
 declare namespace u8 {
@@ -557,6 +599,8 @@ declare namespace u8 {
   export const MIN_VALUE: u8;
   /** Largest representable value. */
   export const MAX_VALUE: u8;
+  /** Converts a string to an u8 of this type. */
+  export function parse(value: string, radix?: i32): u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
 declare function u16(value: any): u16;
@@ -565,6 +609,8 @@ declare namespace u16 {
   export const MIN_VALUE: u16;
   /** Largest representable value. */
   export const MAX_VALUE: u16;
+  /** Converts a string to an u16 of this type. */
+  export function parse(value: string, radix?: i32): u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
 declare function u32(value: any): u32;
@@ -573,6 +619,8 @@ declare namespace u32 {
   export const MIN_VALUE: u32;
   /** Largest representable value. */
   export const MAX_VALUE: u32;
+  /** Converts a string to an u32 of this type. */
+  export function parse(value: string, radix?: i32): u32;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
 declare function u64(value: any): u64;
@@ -581,9 +629,11 @@ declare namespace u64 {
   export const MIN_VALUE: u64;
   /** Largest representable value. */
   export const MAX_VALUE: u64;
+  /** Converts a string to an u64 of this type. */
+  export function parse(value: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
-declare var usize: typeof u32 | typeof u64;
+declare let usize: typeof u32 | typeof u64;
 /** Converts any other numeric value to a 1-bit unsigned integer. */
 declare function bool(value: any): bool;
 declare namespace bool {
@@ -591,6 +641,8 @@ declare namespace bool {
   export const MIN_VALUE: bool;
   /** Largest representable value. */
   export const MAX_VALUE: bool;
+  /** Converts a string to an bool of this type. */
+  export function parse(value: string): bool;
 }
 /** Converts any other numeric value to a 32-bit float. */
 declare function f32(value: any): f32;
@@ -613,6 +665,8 @@ declare namespace f32 {
   export const NaN: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
+  /** Converts a string to an f32 of this type. */
+  export function parse(value: string, radix?: i32): f32;
   /** Loads a 32-bit float from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
@@ -625,6 +679,10 @@ declare namespace f32 {
   export function mul(left: f32, right: f32): f32;
   /** Computes the quotient of two 32-bit floats. */
   export function div(left: f32, right: f32): f32;
+  /** Return 1 two 32-bit floats are equal to each other, 0 otherwise. */
+  export function eq(left: f32, right: f32): i32;
+  /** Return 0 two 32-bit floats are equal to each other, 1 otherwise. */
+  export function ne(left: f32, right: f32): i32;
   /** Computes the absolute value of a 32-bit float. */
   export function abs(value: f32): f32;
   /** Determines the maximum of two 32-bit floats. If either operand is `NaN`, returns `NaN`. */
@@ -667,6 +725,8 @@ declare namespace f64 {
   export const NaN: f64;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
+  /** Converts a string to an f64 of this type. */
+  export function parse(value: string, radix?: i32): f64;
   /** Loads a 64-bit float from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
@@ -679,6 +739,10 @@ declare namespace f64 {
   export function mul(left: f64, right: f64): f64;
   /** Computes the quotient of two 64-bit floats. */
   export function div(left: f64, right: f64): f64;
+  /** Return 1 two 64-bit floats are equal to each other, 0 otherwise. */
+  export function eq(left: f64, right: f64): i32;
+  /** Return 0 two 32-bit floats are equal to each other, 1 otherwise. */
+  export function ne(left: f64, right: f64): i32;
   /** Computes the absolute value of a 64-bit float. */
   export function abs(value: f64): f64;
   /** Determines the maximum of two 64-bit floats. If either operand is `NaN`, returns `NaN`. */
@@ -810,9 +874,9 @@ declare namespace v128 {
   /** Computes the maximum of each lane. */
   export function max<T>(a: v128, b: v128): v128;
   /** Computes the pseudo-minimum of each lane. */
-  export function pmin<T>(a: v128, b: v128): v128;
+  export function pmin<T extends f32 | f64>(a: v128, b: v128): v128;
   /** Computes the pseudo-maximum of each lane. */
-  export function pmax<T>(a: v128, b: v128): v128;
+  export function pmax<T extends f32 | f64>(a: v128, b: v128): v128;
   /** Computes the dot product of two lanes each, yielding lanes one size wider than the input. */
   export function dot<T extends i16>(a: v128, b: v128): v128;
   /** Computes the average of each lane. */
@@ -1041,6 +1105,10 @@ declare namespace i16x8 {
   export function extmul_high_i8x16_s(a: v128, b: v128): v128;
   /** Performs the lane-wise 8-bit unsigned integer extended multiplication of the eight higher lanes producing twice wider 16-bit integer results. */
   export function extmul_high_i8x16_u(a: v128, b: v128): v128;
+  /** Selects 16-bit lanes from either vector according to the specified [0-7] respectively [8-15] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -1129,6 +1197,10 @@ declare namespace i32x4 {
   export function extmul_high_i16x8_s(a: v128, b: v128): v128;
   /** Performs the lane-wise 16-bit unsigned integer extended multiplication of the four higher lanes producing twice wider 32-bit integer results. */
   export function extmul_high_i16x8_u(a: v128, b: v128): v128;
+  /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
@@ -1187,6 +1259,10 @@ declare namespace i64x2 {
   export function extmul_high_i32x4_s(a: v128, b: v128): v128;
   /** Performs the lane-wise 32-bit unsigned integer extended multiplication of the two higher lanes producing twice wider 64-bit integer results. */
   export function extmul_high_i32x4_u(a: v128, b: v128): v128;
+  /** Selects 64-bit lanes from either vector according to the specified [0-1] respectively [2-3] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -1245,6 +1321,10 @@ declare namespace f32x4 {
   export function convert_i32x4_u(a: v128): v128;
   /** Demotes each 64-bit float lane of a vector to single-precision. The higher lanes of the result are initialized to zero. */
   export function demote_f64x2_zero(a: v128): v128;
+  /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
 declare function f64x2(a: f64, b: f64): v128;
@@ -1303,6 +1383,10 @@ declare namespace f64x2 {
   export function convert_low_i32x4_u(a: v128): v128;
   /** Promotes the low 32-bit float lanes of a vector to double-precision. */
   export function promote_low_f32x4(a: v128): v128;
+  /** Selects 64-bit lanes from either vector according to the specified [0-1] respectively [2-3] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 
 declare abstract class i31 {
@@ -1315,9 +1399,9 @@ declare abstract class i31 {
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
 /** Special type evaluating the indexed access index type. */
-declare type indexof<T extends unknown[]> = keyof T;
+declare type indexof<T extends ArrayLike<unknown>> = keyof T;
 /** Special type evaluating the indexed access value type. */
-declare type valueof<T extends unknown[]> = T[0];
+declare type valueof<T extends ArrayLike<unknown>> = T[0];
 /** A special type evaluated to the return type of T if T is a callable function. */
 declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
 /** A special type evaluated to the return type of T if T is a callable function. */
@@ -1334,7 +1418,7 @@ declare class _Integer {
   static readonly MIN_VALUE: number;
   /** Largest representable value. */
   static readonly MAX_VALUE: number;
-  /** Converts a string to an integer of this type. */
+  /** @deprecated Converts a string to an integer of this type. Please use "i32.parse" method. */
   static parseInt(value: string, radix?: number): number;
   /** Converts this integer to a string. */
   toString(radix?: number): string;
@@ -1367,9 +1451,9 @@ declare class _Float {
   static isSafeInteger(value: f32 | f64): bool;
   /** Returns true if the value passed is an integer, false otherwise. */
   static isInteger(value: f32 | f64): bool;
-  /** Converts a string to an integer. */
+  /** @deprecated Converts a string to an integer. Please use "i32.parse" / "i64.parse" methods. */
   static parseInt(value: string, radix?: i32): f32 | f64;
-  /** Converts a string to a floating-point number. */
+  /** @deprecated Converts a string to a floating-point number. Please use "f32.parse" / "f64.parse" methods. */
   static parseFloat(value: string): f32 | f64;
   /** Converts this floating-point number to a string. */
   toString(radix?: number): string;
@@ -1405,6 +1489,7 @@ declare const F32: typeof _Float;
 declare const F64: typeof _Float;
 /** Alias of F64. */
 declare const Number: typeof F64;
+declare type Number = _Float;
 
 // User-defined diagnostic macros
 
@@ -1414,13 +1499,6 @@ declare function ERROR(message?: any): never;
 declare function WARNING(message?: any): void;
 /** Emits a user-defined diagnostic info when encountered. */
 declare function INFO(message?: any): void;
-
-// Polyfills
-
-/** Performs the sign-agnostic reverse bytes **/
-declare function bswap<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
-/** Performs the sign-agnostic reverse bytes only for last 16-bit **/
-declare function bswap16<T extends i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
 
 // Standard library
 
@@ -1631,7 +1709,7 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
   join(separator?: string): string;
   /** The set() method stores multiple values in the typed array, reading input values from a specified array. */
-  set<U extends ArrayBufferView>(source: U, offset?: i32): void
+  set<U extends ArrayLike<number>>(source: U, offset?: i32): void
   /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
   toString(): string;
 }
@@ -1725,7 +1803,7 @@ declare class Array<T> {
   some(callbackfn: (value: T, index: i32, array: Array<T>) => bool): bool;
   shift(): T;
   unshift(element: T): i32;
-  slice(from: i32, to?: i32): Array<T>;
+  slice(from?: i32, to?: i32): Array<T>;
   splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
@@ -1739,7 +1817,9 @@ declare class Array<T> {
 declare class StaticArray<T> {
   [key: number]: T;
   static fromArray<T>(source: Array<T>): StaticArray<T>;
+  /** @deprecated */
   static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T>;
+  /** @deprecated */
   static slice<T>(source: StaticArray<T>, start?: i32, end?: i32): StaticArray<T>;
   readonly length: i32;
   constructor(length?: i32);
@@ -1759,7 +1839,9 @@ declare class StaticArray<T> {
   every(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   some(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   concat(items: Array<T>): Array<T>;
-  slice(from: i32, to?: i32): Array<T>;
+  concat<U extends ArrayLike<T>>(other: U): U;
+  slice(from?: i32, to?: i32): Array<T>;
+  slice<U extends ArrayLike<T>>(from?: i32, to?: i32): U;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): this;
@@ -1769,7 +1851,7 @@ declare class StaticArray<T> {
 /** Class representing a sequence of characters. */
 declare class String {
   static fromCharCode(ls: i32, hs?: i32): string;
-  static fromCharCodes(arr: u16[]): string;
+  static fromCharCodes(arr: i32[]): string;
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
   static raw(parts: TemplateStringsArray, ...args: any[]): string;
@@ -2121,7 +2203,7 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 /** Environmental seeding function. */
 declare function seed(): f64;
 
-/** Node-like process on top of WASI. */
+/** Node-like process. */
 declare namespace process {
   /** String representing the CPU architecture for which the binary was compiled. Either `wasm32` or `wasm64`. */
   export const arch: string;
@@ -2131,10 +2213,10 @@ declare namespace process {
   export const argv: string[];
   /** Map of variables in the binary's user environment. */
   export const env: Map<string,string>;
-  /** Process exit code to use when the process exits gracefully. Defaults to `0`. */
-  export var exitCode: i32;
   /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
   export function exit(code?: i32): void;
+  /** `exit()`’s default value. Defaults to `0`. */
+  export let exitCode: i32;
   /** Stream connected to `stdin` (fd `0`). */
   export const stdin: ReadableStream;
   /** Stream connected to `stdout` (fd `1`). */
@@ -2160,7 +2242,7 @@ declare namespace process {
   }
 }
 
-/** Browser-like console on top of WASI. */
+/** Browser-like console. */
 declare namespace console {
   /** Logs `message` to console if `assertion` is false-ish. */
   export function assert<T>(assertion: T, message?: string): void;
@@ -2182,7 +2264,7 @@ declare namespace console {
   export function timeEnd(label?: string): void;
 }
 
-/** Browser-like crypto utilities on top of WASI. */
+/** Browser-like crypto utilities. */
 declare namespace crypto {
   /** Fills `array` with cryptographically strong random values. */
   export function getRandomValues(array: Uint8Array): void;
@@ -2198,6 +2280,10 @@ interface TypedPropertyDescriptor<T> {
   get?(): T;
   set?(value: T): void;
 }
+
+type Constructor =
+  (new (...args: any[]) => unknown)
+  | (abstract new (...args: any[]) => unknown);
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
 declare function operator(token:
@@ -2237,10 +2323,10 @@ declare namespace operator {
 declare function global(...args: any[]): any;
 
 /** Annotates a class as being unmanaged with limited capabilities. */
-declare function unmanaged(constructor: Function): void;
+declare function unmanaged(constructor: Constructor): void;
 
 /** Annotates a class as being final / non-derivable. */
-declare function final(constructor: Function): void;
+declare function final(constructor: Constructor): void;
 
 /** Annotates a method, function or constant global as always inlined. */
 declare function inline(...args: any[]): any;

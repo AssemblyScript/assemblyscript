@@ -1,29 +1,26 @@
 (module
- (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_none (func_subtype (param i32) func))
  (global $~lib/memory/__data_end i32 (i32.const 8))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
- (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
+ (global $~lib/memory/__heap_base i32 (i32.const 32776))
  (memory $0 0)
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "testInherit" (func $continue/testInherit))
  (export "memory" (memory $0))
- (func $continue/testInherit (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
+ (func $continue/testInherit (type $i32_=>_none) (param $b i32)
+  (local $i i32)
   i32.const 0
-  local.set $1
+  local.set $i
   loop $for-loop|0
-   local.get $1
+   local.get $i
    i32.const 10
    i32.lt_s
-   local.set $2
-   local.get $2
    if
     block $for-continue|0
-     local.get $0
+     local.get $b
      if
-      local.get $1
+      local.get $i
       i32.const 5
       i32.eq
       if
@@ -31,10 +28,10 @@
       end
      end
     end
-    local.get $1
+    local.get $i
     i32.const 1
     i32.add
-    local.set $1
+    local.set $i
     br $for-loop|0
    end
   end

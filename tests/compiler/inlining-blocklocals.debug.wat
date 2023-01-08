@@ -1,51 +1,53 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $inlining-blocklocals/b (mut i32) (i32.const 2))
  (global $inlining-blocklocals/theCall_a (mut i32) (i32.const 0))
  (global $inlining-blocklocals/theCall_b (mut i32) (i32.const 0))
  (global $inlining-blocklocals/theCall_c (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 92))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
- (global $~lib/memory/__heap_base i32 (i32.const 16476))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32860))
+ (global $~lib/memory/__heap_base i32 (i32.const 32860))
  (memory $0 1)
- (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00.\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00-\00b\00l\00o\00c\00k\00l\00o\00c\00a\00l\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00.\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00-\00b\00l\00o\00c\00k\00l\00o\00c\00a\00l\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $inlining-blocklocals/test
-  (local $0 i32)
+ (func $inlining-blocklocals/test (type $none_=>_none)
+  (local $a i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
+  (local $a|3 i32)
+  (local $b i32)
+  (local $c i32)
   i32.const 1
-  local.set $0
-  local.get $0
+  local.set $a
+  local.get $a
   local.tee $1
   i32.const 1
   i32.add
-  local.set $0
+  local.set $a
   local.get $1
-  local.set $3
+  local.set $a|3
   global.get $inlining-blocklocals/b
-  local.tee $1
+  local.tee $2
   i32.const 1
   i32.add
   global.set $inlining-blocklocals/b
-  local.get $1
-  local.set $2
-  local.get $0
+  local.get $2
+  local.set $b
+  local.get $a
   i32.const 1
   i32.add
-  local.tee $0
-  local.set $1
-  local.get $3
+  local.tee $a
+  local.set $c
+  local.get $a|3
   global.set $inlining-blocklocals/theCall_a
-  local.get $2
+  local.get $b
   global.set $inlining-blocklocals/theCall_b
-  local.get $1
+  local.get $c
   global.set $inlining-blocklocals/theCall_c
   global.get $inlining-blocklocals/theCall_a
   i32.const 1
@@ -83,7 +85,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $a
   i32.const 3
   i32.eq
   i32.eqz
@@ -96,10 +98,10 @@
    unreachable
   end
  )
- (func $start:inlining-blocklocals
+ (func $start:inlining-blocklocals (type $none_=>_none)
   call $inlining-blocklocals/test
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:inlining-blocklocals
  )
 )

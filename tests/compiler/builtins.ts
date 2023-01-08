@@ -52,6 +52,10 @@ l = add<i8>(1, 2); assert(l == 3);
 l = sub<i8>(2, 1); assert(l == 1);
 l = mul<i8>(1, 2); assert(l == 2);
 l = div<i8>(6, 2); assert(l == 3);
+i = eq<i8>(1, 1); assert(i == 1);
+i = eq<i8>(1, 0); assert(i == 0);
+i = ne<i8>(1, 1); assert(i == 0);
+i = ne<i8>(1, 0); assert(i == 1);
 
 var v: u8;
 v = rotl<u8>(<u8>0b10001111, 3); assert(v == 0b01111100);
@@ -73,6 +77,19 @@ add<i32>(1, 2);
 sub<i32>(2, 1);
 mul<i32>(1, 2);
 div<i32>(6, 2);
+eq<i32>(1, 0);
+ne<i32>(1, 0);
+
+i32.clz(1);
+i32.ctz(1);
+i32.popcnt(1);
+i32.rotl(1, 1);
+i32.rotr(1, 1);
+i32.add(1, 2);
+i32.sub(2, 1);
+i32.mul(1, 2);
+i32.eq(1, 0);
+i32.ne(1, 0);
 
 i = clz<i32>(1);
 i = ctz<i32>(1);
@@ -86,6 +103,12 @@ i = add<i32>(1, 2); assert(i == 3);
 i = sub<i32>(2, 1); assert(i == 1);
 i = mul<i32>(2, 3); assert(i == 6);
 i = div<i32>(6, 2); assert(i == 3);
+i = eq<i32>(1, 1); assert(i == 1);
+i = eq<i32>(1, 0); assert(i == 0);
+i = ne<i32>(1, 1); assert(i == 0);
+i = ne<i32>(1, 0); assert(i == 1);
+i = rem<i32>(1, 3); assert(i == 1);
+i = rem<i32>(15, 4); assert(i == 3);
 
 var I: i64;
 
@@ -95,6 +118,16 @@ popcnt<i64>(1);
 rotl<i64>(1, 1);
 rotr<i64>(1, 1);
 abs<i64>(-42);
+eq<i64>(1, 0);
+ne<i64>(1, 0);
+
+i64.clz(1);
+i64.ctz(1);
+i64.popcnt(1);
+i64.rotl(1, 1);
+i64.rotr(1, 1);
+i64.eq(1, 0);
+i64.ne(1, 0);
 
 I = clz<i64>(1);
 I = ctz<i64>(1);
@@ -108,6 +141,12 @@ I = add<i64>(1, 2); assert(I == 3);
 I = sub<i64>(2, 1); assert(I == 1);
 I = mul<i64>(2, 3); assert(I == 6);
 I = div<i64>(6, 2); assert(I == 3);
+i = eq<i64>(1, 1); assert(i == 1);
+i = eq<i64>(1, 0); assert(i == 0);
+i = ne<i64>(1, 1); assert(i == 0);
+i = ne<i64>(1, 0); assert(i == 1);
+I = rem<i64>(1, 3); assert(I == 1);
+I = rem<i64>(15, 4); assert(I == 3);
 
 // floats
 
@@ -128,12 +167,30 @@ min<f32>(1.25, 2.5);
 nearest<f32>(1.25);
 sqrt<f32>(1.25);
 trunc<f32>(1.25);
+eq<f32>(1.5, 2.5);
+ne<f32>(1.5, 2.5);
 assert(isNaN<f32>(1.25) == false);
 assert(isNaN<f32>(NaN) == true);
 assert(isFinite<f32>(1.25) == true);
 assert(isFinite<f32>(Infinity) == false);
 assert(isFinite<f32>(-Infinity) == false);
 assert(isFinite<f32>(NaN) == false);
+f32.NaN;
+f32.abs(1.25);
+f32.ceil(1.25);
+f32.copysign(1.25, 2.5);
+f32.floor(1.25);
+f32.add(1.5, 2.5);
+f32.sub(2.5, 1.5);
+f32.mul(1.5, 2.0);
+f32.div(1.5, 0.5);
+f32.max(1.25, 2.5);
+f32.min(1.25, 2.5);
+f32.nearest(1.25);
+f32.sqrt(1.25);
+f32.trunc(1.25);
+f32.eq(1.5, 2.5);
+f32.ne(1.5, 2.5);
 
 f = NaN;
 f = Infinity;
@@ -150,6 +207,10 @@ f = min<f32>(1.25, 2.5);
 f = nearest<f32>(1.25);
 f = sqrt<f32>(1.25);
 f = trunc<f32>(1.25);
+i = eq<f32>(1.5, 1.5); assert(i == 1);
+i = eq<f32>(1.5, 2.5); assert(i == 0);
+i = ne<f32>(1.5, 1.5); assert(i == 0);
+i = ne<f32>(1.5, 2.5); assert(i == 1);
 b = isNaN<f32>(1.25);
 b = isFinite<f32>(1.25);
 
@@ -172,12 +233,32 @@ min<f64>(1.25, 2.5);
 nearest<f64>(1.25);
 sqrt<f64>(1.25);
 trunc<f64>(1.25);
+eq<f64>(1.5, 1.5);
+eq<f64>(1.5, 2.5);
+ne<f64>(1.5, 1.5);
+ne<f64>(1.5, 2.5);
 assert(isNaN<f64>(1.25) == false);
 assert(isNaN<f64>(NaN) == true);
 assert(isFinite<f64>(1.25) == true);
 assert(isFinite<f64>(Infinity) == false);
 assert(isFinite<f64>(-Infinity) == false);
 assert(isFinite<f64>(NaN) == false);
+f64.NaN;
+f64.abs(1.25);
+f64.ceil(1.25);
+f64.copysign(1.25, 2.5);
+f64.floor(1.25);
+f64.add(1.5, 2.5);
+f64.sub(2.5, 1.5);
+f64.mul(1.5, 2.0);
+f64.div(1.5, 0.5);
+f64.max(1.25, 2.5);
+f64.min(1.25, 2.5);
+f64.nearest(1.25);
+f64.sqrt(1.25);
+f64.trunc(1.25);
+f64.eq(1.5, 2.5);
+f64.ne(1.5, 2.5);
 
 F = NaN;
 F = Infinity;
@@ -194,6 +275,10 @@ F = min<f64>(1.25, 2.5);
 F = nearest<f64>(1.25);
 F = sqrt<f64>(1.25);
 F = trunc<f64>(1.25);
+i = eq<f64>(1.5, 1.5); assert(i == 1);
+i = eq<f64>(1.5, 2.5); assert(i == 0);
+i = ne<f64>(1.5, 1.5); assert(i == 0);
+i = ne<f64>(1.5, 2.5); assert(i == 1);
 b = isNaN<f64>(1.25);
 b = isFinite<f64>(1.25);
 
@@ -255,6 +340,8 @@ I = load<i16>(8);
 I = load<i32>(8);
 I = load<i64>(8);
 
+u = i32.rem_u(15, 4); assert(u == 3);
+
 var U: u64;
 U = load<u8>(8);
 U = load<u16>(8);
@@ -271,6 +358,8 @@ store<i32>(8, <i64>1);
 store<i64>(8, <i64>1);
 
 store<i64>(8, <i32>1); // must extend
+
+U = i64.rem_u(15, 4); assert(U == 3);
 
 // reinterpretation
 
@@ -588,3 +677,25 @@ function rotr3(a: i8, b: i8, c: i8): i32 {
   return rotr(a, rotr(b, c));
 }
 assert(rotr3(48, 8, 1) == 3);
+
+// bswap tests
+
+// check bswap<T> for i8/u8
+assert(bswap<u8>(<u8>0xaa) == <u8>0xaa);
+assert(bswap<i8>(<i8>0xaa) == <i8>0xaa);
+
+// check bswap<T> for i16/u16
+assert(bswap<u16>(<u16>0xaabb) == <u16>0xbbaa);
+assert(bswap<i16>(<i16>0xaabb) == <i16>0xbbaa);
+
+// check bswap<T> for i32/u32
+assert(bswap<u32>(<u32>0xaabbccdd) == <u32>0xddccbbaa);
+assert(bswap<i32>(<i32>0xaabbccdd) == <i32>0xddccbbaa);
+
+// check bswap<T> for i64/u64
+assert(bswap<u64>(<u64>0x00112233aabbccdd) == <u64>0xddccbbaa33221100);
+assert(bswap<i64>(<i64>0x00112233aabbccdd) == <i64>0xddccbbaa33221100);
+
+// check bswap<T> for isize/usize
+assert(bswap<usize>(<usize>0xaabbccdd) == <usize>0xddccbbaa);
+assert(bswap<isize>(<isize>0xaabbccdd) == <isize>0xddccbbaa);

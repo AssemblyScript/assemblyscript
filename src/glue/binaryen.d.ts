@@ -9,6 +9,8 @@
  */
 module "binaryen";
 
+type Ref = usize;
+
 export type Index = u32;
 export type ExpressionId = i32;
 export type FeatureFlags = u32;
@@ -16,10 +18,13 @@ export type Op = i32;
 export type ExternalKind = u32;
 export type SideEffects = u32;
 export type ExpressionRunnerFlags = u32;
-type Ref = usize;
+
 export type StringRef = Ref;
+export type Pointer<T> = Ref;
 export type ArrayRef<T> = Ref;
 export type TypeRef = Ref;
+export type HeapTypeRef = Ref;
+export type PackedType = u32;
 export type ModuleRef = Ref;
 export type LiteralRef = Ref;
 export type ExpressionRef = Ref;
@@ -33,10 +38,64 @@ export type ElementSegmentRef = Ref;
 export type RelooperRef = Ref;
 export type RelooperBlockRef = Ref;
 export type ExpressionRunnerRef = Ref;
+export type BinaryenModuleAllocateAndWriteResultRef = Ref;
+export type TypeBuilderRef = Ref;
+export type TypeBuilderErrorReason = u32;
+export type TypeSystem = u32;
 
 export declare function _BinaryenTypeCreate(types: ArrayRef<TypeRef>, numTypes: u32): TypeRef;
 export declare function _BinaryenTypeArity(type: TypeRef): u32;
 export declare function _BinaryenTypeExpand(type: TypeRef, typesOut: ArrayRef<TypeRef>): void;
+export declare function _BinaryenTypeGetHeapType(type: TypeRef): HeapTypeRef;
+export declare function _BinaryenTypeFromHeapType(heapType: HeapTypeRef, nullable: bool): TypeRef;
+export declare function _BinaryenTypeIsNullable(type: TypeRef): bool;
+
+export declare function _BinaryenTypeFuncref(): TypeRef;
+export declare function _BinaryenTypeExternref(): TypeRef;
+export declare function _BinaryenTypeAnyref(): TypeRef;
+export declare function _BinaryenTypeEqref(): TypeRef;
+export declare function _BinaryenTypeI31ref(): TypeRef;
+export declare function _BinaryenTypeDataref(): TypeRef;
+export declare function _BinaryenTypeArrayref(): TypeRef;
+export declare function _BinaryenTypeStringref(): TypeRef;
+export declare function _BinaryenTypeStringviewWTF8(): TypeRef;
+export declare function _BinaryenTypeStringviewWTF16(): TypeRef;
+export declare function _BinaryenTypeStringviewIter(): TypeRef;
+export declare function _BinaryenTypeNullref(): TypeRef;
+export declare function _BinaryenTypeNullExternref(): TypeRef;
+export declare function _BinaryenTypeNullFuncref(): TypeRef;
+
+export declare function _BinaryenHeapTypeFunc(): HeapTypeRef;
+export declare function _BinaryenHeapTypeExt(): HeapTypeRef;
+export declare function _BinaryenHeapTypeAny(): HeapTypeRef;
+export declare function _BinaryenHeapTypeEq(): HeapTypeRef;
+export declare function _BinaryenHeapTypeI31(): HeapTypeRef;
+export declare function _BinaryenHeapTypeData(): HeapTypeRef;
+export declare function _BinaryenHeapTypeArray(): HeapTypeRef;
+export declare function _BinaryenHeapTypeString(): HeapTypeRef;
+export declare function _BinaryenHeapTypeStringviewWTF8(): HeapTypeRef;
+export declare function _BinaryenHeapTypeStringviewWTF16(): HeapTypeRef;
+export declare function _BinaryenHeapTypeStringviewIter(): HeapTypeRef;
+export declare function _BinaryenHeapTypeNone(): HeapTypeRef;
+export declare function _BinaryenHeapTypeNoext(): HeapTypeRef;
+export declare function _BinaryenHeapTypeNofunc(): HeapTypeRef;
+
+export declare function _BinaryenHeapTypeIsBasic(heapType: HeapTypeRef): bool;
+export declare function _BinaryenHeapTypeIsSignature(heapType: HeapTypeRef): bool;
+export declare function _BinaryenHeapTypeIsStruct(heapType: HeapTypeRef): bool;
+export declare function _BinaryenHeapTypeIsArray(heapType: HeapTypeRef): bool;
+export declare function _BinaryenHeapTypeIsBottom(heapType: HeapTypeRef): bool;
+export declare function _BinaryenHeapTypeGetBottom(heapType: HeapTypeRef): HeapTypeRef;
+export declare function _BinaryenHeapTypeIsSubType(left: HeapTypeRef, right: HeapTypeRef): bool;
+export declare function _BinaryenStructTypeGetNumFields(heapType: HeapTypeRef): Index;
+export declare function _BinaryenStructTypeGetFieldType(heapType: HeapTypeRef, index: Index): TypeRef;
+export declare function _BinaryenStructTypeGetFieldPackedType(heapType: HeapTypeRef, index: Index): PackedType;
+export declare function _BinaryenStructTypeIsFieldMutable(heapType: HeapTypeRef, index: Index): bool;
+export declare function _BinaryenArrayTypeGetElementType(heapType: HeapTypeRef): TypeRef;
+export declare function _BinaryenArrayTypeGetElementPackedType(heapType: HeapTypeRef): PackedType;
+export declare function _BinaryenArrayTypeIsElementMutable(heapType: HeapTypeRef): bool;
+export declare function _BinaryenSignatureTypeGetParams(heapType: HeapTypeRef): TypeRef;
+export declare function _BinaryenSignatureTypeGetResults(heapType: HeapTypeRef): TypeRef;
 
 export declare function _BinaryenModuleCreate(): ModuleRef;
 export declare function _BinaryenModuleDispose(module: ModuleRef): void;
@@ -156,13 +215,13 @@ export declare function _BinaryenGlobalSetSetName(expr: ExpressionRef, name: Str
 export declare function _BinaryenGlobalSetGetValue(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenGlobalSetSetValue(expr: ExpressionRef, valueExpr: ExpressionRef): void;
 
-export declare function _BinaryenMemorySize(module: ModuleRef): ExpressionRef;
+export declare function _BinaryenMemorySize(module: ModuleRef, memoryName: StringRef, memoryIs64: bool): ExpressionRef;
 
-export declare function _BinaryenMemoryGrow(module: ModuleRef, delta: ExpressionRef): ExpressionRef;
+export declare function _BinaryenMemoryGrow(module: ModuleRef, delta: ExpressionRef, memoryName: StringRef, memoryIs64: bool): ExpressionRef;
 export declare function _BinaryenMemoryGrowGetDelta(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenMemoryGrowSetDelta(expr: ExpressionRef, delta: ExpressionRef): void;
 
-export declare function _BinaryenLoad(module: ModuleRef, bytes: u32, signed: bool, offset: u32, align: u32, type: TypeRef, ptrExpr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenLoad(module: ModuleRef, bytes: u32, signed: bool, offset: u32, align: u32, type: TypeRef, ptrExpr: ExpressionRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenLoadIsAtomic(expr: ExpressionRef): bool;
 export declare function _BinaryenLoadSetAtomic(expr: ExpressionRef, isAtomic: bool): void;
 export declare function _BinaryenLoadIsSigned(expr: ExpressionRef): bool;
@@ -176,9 +235,9 @@ export declare function _BinaryenLoadSetAlign(expr: ExpressionRef, align: u32): 
 export declare function _BinaryenLoadGetPtr(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenLoadSetPtr(expr: ExpressionRef, ptrExpr: ExpressionRef): void;
 // ^ with atomic = true
-export declare function _BinaryenAtomicLoad(module: ModuleRef, bytes: Index, offset: Index, type: TypeRef, ptrExpr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenAtomicLoad(module: ModuleRef, bytes: Index, offset: Index, type: TypeRef, ptrExpr: ExpressionRef, memoryName: StringRef): ExpressionRef;
 
-export declare function _BinaryenStore(module: ModuleRef, bytes: u32, offset: u32, align: u32, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef): ExpressionRef;
+export declare function _BinaryenStore(module: ModuleRef, bytes: u32, offset: u32, align: u32, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenStoreIsAtomic(expr: ExpressionRef): bool;
 export declare function _BinaryenStoreSetAtomic(expr: ExpressionRef, isAtomic: bool): void;
 export declare function _BinaryenStoreGetBytes(expr: ExpressionRef): u32;
@@ -194,7 +253,7 @@ export declare function _BinaryenStoreSetValue(expr: ExpressionRef, valueExpr: E
 export declare function _BinaryenStoreGetValueType(expr: ExpressionRef): TypeRef;
 export declare function _BinaryenStoreSetValueType(expr: ExpressionRef, valueType: TypeRef): void;
 // ^ with atomic = true
-export declare function _BinaryenAtomicStore(module: ModuleRef, bytes: Index, offset: Index, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef): ExpressionRef;
+export declare function _BinaryenAtomicStore(module: ModuleRef, bytes: Index, offset: Index, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef, memoryName: StringRef): ExpressionRef;
 
 export declare function _BinaryenConst(module: ModuleRef, value: LiteralRef): ExpressionRef;
 export declare function _BinaryenConstGetValueI32(expr: ExpressionRef): i32;
@@ -244,7 +303,7 @@ export declare function _BinaryenNop(module: ModuleRef): ExpressionRef;
 
 export declare function _BinaryenUnreachable(module: ModuleRef): ExpressionRef;
 
-export declare function _BinaryenAtomicRMW(module: ModuleRef, op: Op, bytes: u32, offset: u32, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef): ExpressionRef;
+export declare function _BinaryenAtomicRMW(module: ModuleRef, op: Op, bytes: u32, offset: u32, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenAtomicRMWGetOp(expr: ExpressionRef): Op;
 export declare function _BinaryenAtomicRMWSetOp(expr: ExpressionRef, op: Op): void;
 export declare function _BinaryenAtomicRMWGetBytes(expr: ExpressionRef): u32;
@@ -256,7 +315,7 @@ export declare function _BinaryenAtomicRMWSetPtr(expr: ExpressionRef, ptrExpr: E
 export declare function _BinaryenAtomicRMWGetValue(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenAtomicRMWSetValue(expr: ExpressionRef, valueExpr: ExpressionRef): void;
 
-export declare function _BinaryenAtomicCmpxchg(module: ModuleRef, bytes: u32, offset: u32, ptrExpr: ExpressionRef, expectedExpr: ExpressionRef, replacementExpr: ExpressionRef, type: TypeRef): ExpressionRef;
+export declare function _BinaryenAtomicCmpxchg(module: ModuleRef, bytes: u32, offset: u32, ptrExpr: ExpressionRef, expectedExpr: ExpressionRef, replacementExpr: ExpressionRef, type: TypeRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenAtomicCmpxchgGetBytes(expr: ExpressionRef): u32;
 export declare function _BinaryenAtomicCmpxchgSetBytes(expr: ExpressionRef, bytes: u32): void;
 export declare function _BinaryenAtomicCmpxchgGetOffset(expr: ExpressionRef): u32;
@@ -268,7 +327,7 @@ export declare function _BinaryenAtomicCmpxchgSetExpected(expr: ExpressionRef, e
 export declare function _BinaryenAtomicCmpxchgGetReplacement(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenAtomicCmpxchgSetReplacement(expr: ExpressionRef, replacementExpr: ExpressionRef): void;
 
-export declare function _BinaryenAtomicWait(module: ModuleRef, ptrExpr: ExpressionRef, expectedExpr: ExpressionRef, timeoutExpr: ExpressionRef, expectedType: TypeRef): ExpressionRef;
+export declare function _BinaryenAtomicWait(module: ModuleRef, ptrExpr: ExpressionRef, expectedExpr: ExpressionRef, timeoutExpr: ExpressionRef, expectedType: TypeRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenAtomicWaitGetPtr(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenAtomicWaitSetPtr(expr: ExpressionRef, ptrExpr: ExpressionRef): void;
 export declare function _BinaryenAtomicWaitGetExpected(expr: ExpressionRef): ExpressionRef;
@@ -278,15 +337,15 @@ export declare function _BinaryenAtomicWaitSetTimeout(expr: ExpressionRef, timeo
 export declare function _BinaryenAtomicWaitGetExpectedType(expr: ExpressionRef): TypeRef;
 export declare function _BinaryenAtomicWaitSetExpectedType(expr: ExpressionRef, expectedType: TypeRef): void;
 
-export declare function _BinaryenAtomicNotify(module: ModuleRef, ptrExpr: ExpressionRef, notifyCountExpr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenAtomicNotify(module: ModuleRef, ptrExpr: ExpressionRef, notifyCountExpr: ExpressionRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenAtomicNotifyGetPtr(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenAtomicNotifySetPtr(expr: ExpressionRef, ptrExpr: ExpressionRef): void;
 export declare function _BinaryenAtomicNotifyGetNotifyCount(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenAtomicNotifySetNotifyCount(expr: ExpressionRef, notifyCountExpr: ExpressionRef): void;
 
-export declare function _BinaryenAtomicFence(module: ModuleRef): ExpressionRef;
-export declare function _BinaryenAtomicFenceGetOrder(expr: ExportRef): u8; // unused
-export declare function _BinaryenAtomicFenceSetOrder(expr: ExportRef, order: u8): void; // unused
+export declare function _BinaryenAtomicFence(module: ModuleRef, memoryName: StringRef): ExpressionRef;
+export declare function _BinaryenAtomicFenceGetOrder(expr: ExpressionRef): u8; // unused
+export declare function _BinaryenAtomicFenceSetOrder(expr: ExpressionRef, order: u8): void; // unused
 
 export declare function _BinaryenSIMDExtract(module: ModuleRef, op: Op, vecExpr: ExpressionRef, index: u8): ExpressionRef;
 export declare function _BinaryenSIMDExtractGetOp(expr: ExpressionRef): Op;
@@ -332,7 +391,7 @@ export declare function _BinaryenSIMDShiftSetVec(expr: ExpressionRef, vecExpr: E
 export declare function _BinaryenSIMDShiftGetShift(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenSIMDShiftSetShift(expr: ExpressionRef, shiftExpr: ExpressionRef): void;
 
-export declare function _BinaryenSIMDLoad(module: ModuleRef, op: Op, offset: u32, align: u32, ptrExpr: ExportRef): ExpressionRef;
+export declare function _BinaryenSIMDLoad(module: ModuleRef, op: Op, offset: u32, align: u32, ptrExpr: ExpressionRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenSIMDLoadGetOp(expr: ExpressionRef): Op;
 export declare function _BinaryenSIMDLoadSetOp(expr: ExpressionRef, op: Op): void;
 export declare function _BinaryenSIMDLoadGetOffset(expr: ExpressionRef): u32;
@@ -342,7 +401,7 @@ export declare function _BinaryenSIMDLoadSetAlign(expr: ExpressionRef, align: u3
 export declare function _BinaryenSIMDLoadGetPtr(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenSIMDLoadSetPtr(expr: ExpressionRef, ptrExpr: ExpressionRef): void;
 
-export declare function _BinaryenSIMDLoadStoreLane(module: ModuleRef, op: Op, offset: u32, align: u32, index: u8, ptr: ExpressionRef, vec: ExpressionRef): ExpressionRef;
+export declare function _BinaryenSIMDLoadStoreLane(module: ModuleRef, op: Op, offset: u32, align: u32, index: u8, ptr: ExpressionRef, vec: ExpressionRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenSIMDLoadStoreLaneGetOp(expr: ExpressionRef): Op;
 export declare function _BinaryenSIMDLoadStoreLaneSetOp(expr: ExpressionRef, op: Op): void;
 export declare function _BinaryenSIMDLoadStoreLaneGetOffset(expr: ExpressionRef): u32;
@@ -357,7 +416,7 @@ export declare function _BinaryenSIMDLoadStoreLaneGetVec(expr: ExpressionRef): E
 export declare function _BinaryenSIMDLoadStoreLaneSetVec(expr: ExpressionRef, vecExpr: ExpressionRef): void;
 export declare function _BinaryenSIMDLoadStoreLaneIsStore(expr: ExpressionRef): bool;
 
-export declare function _BinaryenMemoryInit(module: ModuleRef, segmentIndex: u32, destExpr: ExpressionRef, offsetExpr: ExpressionRef, sizeExpr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenMemoryInit(module: ModuleRef, segmentIndex: u32, destExpr: ExpressionRef, offsetExpr: ExpressionRef, sizeExpr: ExpressionRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenMemoryInitGetSegment(expr: ExpressionRef): u32;
 export declare function _BinaryenMemoryInitSetSegment(expr: ExpressionRef, segmentIndex: u32): void;
 export declare function _BinaryenMemoryInitGetDest(expr: ExpressionRef): ExpressionRef;
@@ -371,7 +430,7 @@ export declare function _BinaryenDataDrop(module: ModuleRef, segmentIndex: u32):
 export declare function _BinaryenDataDropGetSegment(expr: ExpressionRef): u32;
 export declare function _BinaryenDataDropSetSegment(expr: ExpressionRef, segmentIndex: u32): void;
 
-export declare function _BinaryenMemoryCopy(module: ModuleRef, destExpr: ExpressionRef, sourceExpr: ExpressionRef, sizeExpr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenMemoryCopy(module: ModuleRef, destExpr: ExpressionRef, sourceExpr: ExpressionRef, sizeExpr: ExpressionRef, destMemoryName: StringRef, sourceMemoryName: StringRef): ExpressionRef;
 export declare function _BinaryenMemoryCopyGetDest(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenMemoryCopySetDest(expr: ExpressionRef, destExpr: ExpressionRef): void;
 export declare function _BinaryenMemoryCopyGetSource(expr: ExpressionRef): ExpressionRef;
@@ -379,7 +438,7 @@ export declare function _BinaryenMemoryCopySetSource(expr: ExpressionRef, source
 export declare function _BinaryenMemoryCopyGetSize(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenMemoryCopySetSize(expr: ExpressionRef, sizeExpr: ExpressionRef): void;
 
-export declare function _BinaryenMemoryFill(module: ModuleRef, destExpr: ExpressionRef, valueExpr: ExpressionRef, sizeExpr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenMemoryFill(module: ModuleRef, destExpr: ExpressionRef, valueExpr: ExpressionRef, sizeExpr: ExpressionRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenMemoryFillGetDest(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenMemoryFillSetDest(expr: ExpressionRef, destExpr: ExpressionRef): void;
 export declare function _BinaryenMemoryFillGetValue(expr: ExpressionRef): ExpressionRef;
@@ -499,6 +558,202 @@ export declare function _BinaryenI31GetSetI31(expr: ExpressionRef, i31Expr: Expr
 export declare function _BinaryenI31GetIsSigned(expr: ExpressionRef): bool;
 export declare function _BinaryenI31GetSetSigned(expr: ExpressionRef, signed: bool): void;
 
+export declare function _BinaryenCallRef(module: ModuleRef, target: ExpressionRef, operands: ArrayRef<ExpressionRef>, numOperands: Index, type: TypeRef, isReturn: bool): ExpressionRef;
+export declare function _BinaryenCallRefGetNumOperands(expr: ExpressionRef): Index;
+export declare function _BinaryenCallRefGetOperandAt(expr: ExpressionRef, index: Index): ExpressionRef;
+export declare function _BinaryenCallRefSetOperandAt(expr: ExpressionRef, index: Index, operandExpr: ExpressionRef): void;
+export declare function _BinaryenCallRefAppendOperand(expr: ExpressionRef, operandExpr: ExpressionRef): Index;
+export declare function _BinaryenCallRefInsertOperandAt(expr: ExpressionRef, index: Index, operandExpr: ExpressionRef): void;
+export declare function _BinaryenCallRefRemoveOperandAt(expr: ExpressionRef, index: Index): ExpressionRef;
+export declare function _BinaryenCallRefGetTarget(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenCallRefSetTarget(expr: ExpressionRef, targetExpr: ExpressionRef): void;
+export declare function _BinaryenCallRefIsReturn(expr: ExpressionRef): bool;
+export declare function _BinaryenCallRefSetReturn(expr: ExpressionRef, isReturn: bool): void;
+
+export declare function _BinaryenRefTest(module: ModuleRef, refExpr: ExpressionRef, intendedType: HeapTypeRef): ExpressionRef;
+export declare function _BinaryenRefTestGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenRefTestSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenRefTestGetIntendedType(expr: ExpressionRef): HeapTypeRef;
+export declare function _BinaryenRefTestSetIntendedType(expr: ExpressionRef, intendedType: HeapTypeRef): void;
+
+export declare function _BinaryenRefCast(module: ModuleRef, refExpr: ExpressionRef, intendedType: HeapTypeRef): ExpressionRef;
+export declare function _BinaryenRefCastGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenRefCastSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenRefCastGetIntendedType(expr: ExpressionRef): HeapTypeRef;
+export declare function _BinaryenRefCastSetIntendedType(expr: ExpressionRef, intendedType: HeapTypeRef): void;
+
+export declare function _BinaryenBrOn(module: ModuleRef, op: Op, name: StringRef, ref: ExpressionRef, intendedType: HeapTypeRef): ExpressionRef;
+export declare function _BinaryenBrOnGetOp(expr: ExpressionRef): Op;
+export declare function _BinaryenBrOnSetOp(expr: ExpressionRef, op: Op): void;
+export declare function _BinaryenBrOnGetName(expr: ExpressionRef): StringRef;
+export declare function _BinaryenBrOnSetName(expr: ExpressionRef, nameStr: StringRef): void;
+export declare function _BinaryenBrOnGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenBrOnSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenBrOnGetIntendedType(expr: ExpressionRef): HeapTypeRef;
+export declare function _BinaryenBrOnSetIntendedType(expr: ExpressionRef, intendedType: HeapTypeRef): void;
+
+export declare function _BinaryenStructNew(module: ModuleRef, operands: ArrayRef<ExpressionRef>, numOperands: Index, type: HeapTypeRef): ExpressionRef;
+export declare function _BinaryenStructNewGetNumOperands(expr: ExpressionRef): Index;
+export declare function _BinaryenStructNewGetOperandAt(expr: ExpressionRef, index: Index): ExpressionRef;
+export declare function _BinaryenStructNewSetOperandAt(expr: ExpressionRef, index: Index, operandExpr: ExpressionRef): void;
+export declare function _BinaryenStructNewAppendOperand(expr: ExpressionRef, operandExpr: ExpressionRef): Index;
+export declare function _BinaryenStructNewInsertOperandAt(expr: ExpressionRef, index: Index, operandExpr: ExpressionRef): void;
+export declare function _BinaryenStructNewRemoveOperandAt(expr: ExpressionRef, index: Index): ExpressionRef;
+
+export declare function _BinaryenStructGet(module: ModuleRef, index: Index, ref: ExpressionRef, type: TypeRef, signed: bool): ExpressionRef;
+export declare function _BinaryenStructGetGetIndex(expr: ExpressionRef): Index;
+export declare function _BinaryenStructGetSetIndex(expr: ExpressionRef, index: Index): void;
+export declare function _BinaryenStructGetGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStructGetSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenStructGetIsSigned(expr: ExpressionRef): bool;
+export declare function _BinaryenStructGetSetSigned(expr: ExpressionRef, signed: bool): void;
+
+export declare function _BinaryenStructSet(module: ModuleRef, index: Index, ref: ExpressionRef, value: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStructSetGetIndex(expr: ExpressionRef): Index;
+export declare function _BinaryenStructSetSetIndex(expr: ExpressionRef, index: Index): void;
+export declare function _BinaryenStructSetGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStructSetSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenStructSetGetValue(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStructSetSetValue(expr: ExpressionRef, valueExpr: ExpressionRef): void;
+
+export declare function _BinaryenArrayNew(module: ModuleRef, type: HeapTypeRef, size: ExpressionRef, init: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayNewGetInit(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayNewSetInit(expr: ExpressionRef, initExpr: ExpressionRef): void;
+export declare function _BinaryenArrayNewGetSize(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayNewSetSize(expr: ExpressionRef, sizeExpr: ExpressionRef): void;
+
+export declare function _BinaryenArrayInit(module: ModuleRef, type: HeapTypeRef, values: ArrayRef<ExpressionRef>, numValues: Index): ExpressionRef;
+export declare function _BinaryenArrayInitGetNumValues(expr: ExpressionRef): Index;
+export declare function _BinaryenArrayInitGetValueAt(expr: ExpressionRef, index: Index): ExpressionRef;
+export declare function _BinaryenArrayInitSetValueAt(expr: ExpressionRef, index: Index, valueExpr: ExpressionRef): void;
+export declare function _BinaryenArrayInitAppendValue(expr: ExpressionRef, valueExpr: ExpressionRef): Index;
+export declare function _BinaryenArrayInitInsertValueAt(expr: ExpressionRef, index: Index, valueExpr: ExpressionRef): void;
+export declare function _BinaryenArrayInitRemoveValueAt(expr: ExpressionRef, index: Index): ExpressionRef;
+
+export declare function _BinaryenArrayGet(module: ModuleRef, ref: ExpressionRef, index: ExpressionRef, type: TypeRef, signed: bool): ExpressionRef;
+export declare function _BinaryenArrayGetGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayGetSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenArrayGetGetIndex(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayGetSetIndex(expr: ExpressionRef, indexExpr: ExpressionRef): void;
+export declare function _BinaryenArrayGetIsSigned(expr: ExpressionRef): bool;
+export declare function _BinaryenArrayGetSetSigned(expr: ExpressionRef, signed: bool): void;
+
+export declare function _BinaryenArraySet(module: ModuleRef, ref: ExpressionRef, index: ExpressionRef, value: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArraySetGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArraySetSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenArraySetGetIndex(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArraySetSetIndex(expr: ExpressionRef, indexExpr: ExpressionRef): void;
+export declare function _BinaryenArraySetGetValue(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArraySetSetValue(expr: ExpressionRef, valueExpr: ExpressionRef): void;
+
+export declare function _BinaryenArrayLen(module: ModuleRef, ref: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayLenGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayLenSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+
+export declare function _BinaryenArrayCopy(module: ModuleRef, destRef: ExpressionRef, destIndex: ExpressionRef, srcRef: ExpressionRef, srcIndex: ExpressionRef, length: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayCopyGetDestRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayCopySetDestRef(expr: ExpressionRef, destRefExpr: ExpressionRef): void;
+export declare function _BinaryenArrayCopyGetDestIndex(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayCopySetDestIndex(expr: ExpressionRef, destIndexExpr: ExpressionRef): void;
+export declare function _BinaryenArrayCopyGetSrcRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayCopySetSrcRef(expr: ExpressionRef, srcRefExpr: ExpressionRef): void;
+export declare function _BinaryenArrayCopyGetSrcIndex(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayCopySetSrcIndex(expr: ExpressionRef, srcIndexExpr: ExpressionRef): void;
+export declare function _BinaryenArrayCopyGetLength(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenArrayCopySetLength(expr: ExpressionRef, lengthExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringNew(module: ModuleRef, op: Op, ptr: ExpressionRef, length: ExpressionRef, start: ExpressionRef, end: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringNewGetOp(expr: ExpressionRef): Op;
+export declare function _BinaryenStringNewSetOp(expr: ExpressionRef, op: Op): void;
+export declare function _BinaryenStringNewGetPtr(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringNewSetPtr(expr: ExpressionRef, ptrExpr: ExpressionRef): void;
+export declare function _BinaryenStringNewGetLength(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringNewSetLength(expr: ExpressionRef, lengthExpr: ExpressionRef): void;
+export declare function _BinaryenStringNewGetStart(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringNewSetStart(expr: ExpressionRef, startExpr: ExpressionRef): void;
+export declare function _BinaryenStringNewGetEnd(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringNewSetEnd(expr: ExpressionRef, endExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringConst(module: ExpressionRef, name: StringRef): ExpressionRef;
+export declare function _BinaryenStringConstGetString(expr: ExpressionRef): StringRef;
+export declare function _BinaryenStringConstSetString(expr: ExpressionRef, string: StringRef): void;
+
+export declare function _BinaryenStringMeasure(module: ExpressionRef, op: Op, ref: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringMeasureGetOp(expr: ExpressionRef): Op;
+export declare function _BinaryenStringMeasureSetOp(expr: ExpressionRef, op: Op): void;
+export declare function _BinaryenStringMeasureGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringMeasureSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringEncode(module: ExpressionRef, op: Op, ref: ExpressionRef, ptr: ExpressionRef, start: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringEncodeGetOp(expr: ExpressionRef): Op;
+export declare function _BinaryenStringEncodeSetOp(expr: ExpressionRef, op: Op): void;
+export declare function _BinaryenStringEncodeGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringEncodeSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenStringEncodeGetPtr(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringEncodeSetPtr(expr: ExpressionRef, ptrExpr: ExpressionRef): void;
+export declare function _BinaryenStringEncodeGetStart(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringEncodeSetStart(expr: ExpressionRef, startExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringConcat(module: ExpressionRef, left: ExpressionRef, right: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringConcatGetLeft(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringConcatSetLeft(expr: ExpressionRef, leftExpr: ExpressionRef): void;
+export declare function _BinaryenStringConcatGetRight(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringConcatSetRight(expr: ExpressionRef, rightExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringEq(module: ExpressionRef, left: ExpressionRef, right: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringEqGetLeft(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringEqSetLeft(expr: ExpressionRef, leftExpr: ExpressionRef): void;
+export declare function _BinaryenStringEqGetRight(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringEqSetRight(expr: ExpressionRef, rightExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringAs(module: ExpressionRef, op: Op, ref: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringAsGetOp(expr: ExpressionRef): Op;
+export declare function _BinaryenStringAsSetOp(expr: ExpressionRef, op: Op): void;
+export declare function _BinaryenStringAsGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringAsSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringWTF8Advance(module: ExpressionRef, ref: ExpressionRef, pos: ExpressionRef, bytes: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringWTF8AdvanceGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringWTF8AdvanceSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenStringWTF8AdvanceGetPos(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringWTF8AdvanceSetPos(expr: ExpressionRef, posExpr: ExpressionRef): void;
+export declare function _BinaryenStringWTF8AdvanceGetBytes(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringWTF8AdvanceSetBytes(expr: ExpressionRef, bytesExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringWTF16Get(module: ExpressionRef, ref: ExpressionRef, pos: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringWTF16GetGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringWTF16GetSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenStringWTF16GetGetPos(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringWTF16GetSetPos(expr: ExpressionRef, posExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringIterNext(module: ExpressionRef, ref: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringIterNextGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringIterNextSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringIterMove(module: ExpressionRef, op: Op, ref: ExpressionRef, num: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringIterMoveGetOp(expr: ExpressionRef): Op;
+export declare function _BinaryenStringIterMoveSetOp(expr: ExpressionRef, op: Op): void;
+export declare function _BinaryenStringIterMoveGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringIterMoveSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenStringIterMoveGetNum(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringIterMoveSetNum(expr: ExpressionRef, numExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringSliceWTF(module: ExpressionRef, op: Op, ref: ExpressionRef, start: ExpressionRef, end: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringSliceWTFGetOp(expr: ExpressionRef): Op;
+export declare function _BinaryenStringSliceWTFSetOp(expr: ExpressionRef, op: Op): void;
+export declare function _BinaryenStringSliceWTFGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringSliceWTFSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenStringSliceWTFGetStart(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringSliceWTFSetStart(expr: ExpressionRef, startExpr: ExpressionRef): void;
+export declare function _BinaryenStringSliceWTFGetEnd(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringSliceWTFSetEnd(expr: ExpressionRef, endExpr: ExpressionRef): void;
+
+export declare function _BinaryenStringSliceIter(module: ExpressionRef, ref: ExpressionRef, num: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringSliceIterGetRef(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringSliceIterSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
+export declare function _BinaryenStringSliceIterGetNum(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringSliceIterSetNum(expr: ExpressionRef, numExpr: ExpressionRef): void;
+
 export declare function _BinaryenAddFunction(module: ModuleRef, name: StringRef, params: TypeRef, results: TypeRef, varTypes: ArrayRef<TypeRef>, numVarTypes: Index, body: ExpressionRef): FunctionRef;
 export declare function _BinaryenGetFunction(module: ModuleRef, name: StringRef): FunctionRef;
 export declare function _BinaryenRemoveFunction(module: ModuleRef, name: StringRef): void;
@@ -579,7 +834,7 @@ export declare function _BinaryenGetNumElementSegments(module: ModuleRef, name: 
 export declare function _BinaryenGetElementSegment(module: ModuleRef, name: StringRef): ElementSegmentRef;
 export declare function _BinaryenGetElementSegmentByIndex(module: ModuleRef, index: Index): ElementSegmentRef;
 
-export declare function _BinaryenSetMemory(module: ModuleRef, initial: Index, maximum: Index, exportName: StringRef, segments: ArrayRef<ArrayRef<u8>>, segmentPassive: ArrayRef<bool>, segmentOffsets: ArrayRef<usize>, segmentSizes: ArrayRef<u32>, numSegments: Index, shared: bool): void;
+export declare function _BinaryenSetMemory(module: ModuleRef, initial: Index, maximum: Index, exportName: StringRef, segments: ArrayRef<ArrayRef<u8>>, segmentPassive: ArrayRef<bool>, segmentOffsets: ArrayRef<usize>, segmentSizes: ArrayRef<u32>, numSegments: Index, shared: bool, memory64: bool, name: StringRef): void;
 export declare function _BinaryenGetNumMemorySegments(module: ModuleRef): Index;
 export declare function _BinaryenGetMemorySegmentByteOffset(module: ModuleRef, index: Index): u32;
 export declare function _BinaryenGetMemorySegmentByteLength(module: ModuleRef, id: Index): usize;
@@ -594,7 +849,10 @@ export declare function _BinaryenModuleValidate(module: ModuleRef): i32;
 export declare function _BinaryenModuleOptimize(module: ModuleRef): void;
 export declare function _BinaryenModuleRunPasses(module: ModuleRef, passes: ArrayRef<StringRef>, numPasses: Index): void;
 export declare function _BinaryenModuleAutoDrop(module: ModuleRef): void;
-export declare function _BinaryenModuleAllocateAndWrite(out: ArrayRef<u8>, module: ModuleRef, sourceMapUrl: StringRef): void;
+export declare function _BinaryenSizeofAllocateAndWriteResult(): i32;
+export declare function _BinaryenModuleAllocateAndWrite(resultOut: BinaryenModuleAllocateAndWriteResultRef, module: ModuleRef, sourceMapUrl: StringRef): void;
+export declare function _BinaryenModuleAllocateAndWriteText(module: ModuleRef): StringRef;
+export declare function _BinaryenModuleAllocateAndWriteStackIR(module: ModuleRef, optimize: bool): StringRef;
 export declare function _BinaryenModuleRead(input: ArrayRef<u8>, inputSize: usize): ModuleRef;
 export declare function _BinaryenModuleInterpret(module: ModuleRef): void;
 export declare function _BinaryenModuleAddDebugInfoFileName(module: ModuleRef, filename: StringRef): Index;
@@ -617,6 +875,24 @@ export declare function _ExpressionRunnerCreate(module: ModuleRef, flags: Expres
 export declare function _ExpressionRunnerSetLocalValue(runner: ExpressionRunnerRef, index: Index, value: ExpressionRef): bool;
 export declare function _ExpressionRunnerSetGlobalValue(runner: ExpressionRunnerRef, name: StringRef, value: ExpressionRef): bool;
 export declare function _ExpressionRunnerRunAndDispose(runner: ExpressionRunnerRef, expr: ExpressionRef): ExpressionRef;
+
+export declare function _TypeBuilderCreate(size: Index): TypeBuilderRef;
+export declare function _TypeBuilderGrow(builder: TypeBuilderRef, count: Index): void;
+export declare function _TypeBuilderGetSize(builder: TypeBuilderRef): Index;
+export declare function _TypeBuilderSetBasicHeapType(builder: TypeBuilderRef, index: Index, basicHeapType: HeapTypeRef): void;
+export declare function _TypeBuilderSetSignatureType(builder: TypeBuilderRef, index: Index, paramTypes: TypeRef, resultTypes: TypeRef): void;
+export declare function _TypeBuilderSetStructType(builder: TypeBuilderRef, index: Index, fieldTypes: ArrayRef<TypeRef>, fieldPackedTypes: ArrayRef<PackedType>, fieldMutables: ArrayRef<bool>, numFields: i32): void;
+export declare function _TypeBuilderSetArrayType(builder: TypeBuilderRef, index: Index, elementType: TypeRef, elementPackedTyype: PackedType, elementMutable: bool): void;
+export declare function _TypeBuilderIsBasic(builder: TypeBuilderRef, index: Index): bool;
+export declare function _TypeBuilderGetBasic(builder: TypeBuilderRef, index: Index): HeapTypeRef;
+export declare function _TypeBuilderGetTempHeapType(builder: TypeBuilderRef, index: Index): HeapTypeRef;
+export declare function _TypeBuilderGetTempTupleType(builder: TypeBuilderRef, types: ArrayRef<TypeRef>, numTypes: Index): TypeRef;
+export declare function _TypeBuilderGetTempRefType(builder: TypeBuilderRef, heapType: HeapTypeRef, nullable: bool): TypeRef;
+export declare function _TypeBuilderSetSubType(builder: TypeBuilderRef, index: Index, superType: HeapTypeRef): void;
+export declare function _TypeBuilderCreateRecGroup(builder: TypeBuilderRef, index: Index, length: Index): void;
+export declare function _TypeBuilderBuildAndDispose(builder: TypeBuilderRef, heapTypes: ArrayRef<HeapTypeRef>, errorIndex: Pointer<Index>, errorReason: Pointer<TypeBuilderErrorReason>): bool;
+export declare function _BinaryenModuleSetTypeName(module: ModuleRef, heapType: HeapTypeRef, name: StringRef): void;
+export declare function _BinaryenModuleSetFieldName(module: ModuleRef, heapType: HeapTypeRef, index: Index, name: StringRef): void;
 
 export declare function _BinaryenGetOptimizeLevel(): i32;
 export declare function _BinaryenSetOptimizeLevel(level: i32): void;
@@ -641,6 +917,8 @@ export declare function _BinaryenGetOneCallerInlineMaxSize(): Index;
 export declare function _BinaryenSetOneCallerInlineMaxSize(size: Index): void;
 export declare function _BinaryenGetAllowInliningFunctionsWithLoops(): bool;
 export declare function _BinaryenSetAllowInliningFunctionsWithLoops(enabled: bool): void;
+export declare function _BinaryenGetTypeSystem(): TypeSystem;
+export declare function _BinaryenSetTypeSystem(typeSystem: TypeSystem): void;
 
 // Helpers
 

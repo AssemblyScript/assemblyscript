@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $none_=>_i32 (func_subtype (result i32) func))
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
  (global $enum/Implicit.TWO i32 (i32.const 2))
@@ -33,8 +33,8 @@
  (global $enum/SelfReferenceConst.ONE i32 (i32.const 1))
  (global $enum/enumType (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 8))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
- (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
+ (global $~lib/memory/__heap_base i32 (i32.const 32776))
  (memory $0 0)
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
@@ -68,10 +68,11 @@
  (export "SelfReferenceConst.ONE" (global $enum/SelfReferenceConst.ONE))
  (export "memory" (memory $0))
  (start $~start)
- (func $enum/getZero (result i32)
+ (func $enum/getZero (type $none_=>_i32) (result i32)
   i32.const 0
+  return
  )
- (func $start:enum
+ (func $start:enum (type $none_=>_none)
   call $enum/getZero
   global.set $enum/NonConstant.ZERO
   call $enum/getZero
@@ -83,7 +84,7 @@
   global.get $enum/NonConstant.ONE
   drop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:enum
  )
 )

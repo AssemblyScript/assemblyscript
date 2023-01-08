@@ -39,6 +39,12 @@ assert(sizeof<indexof<Float32Array>>() == 4); // i32
 assert(isInteger<valueof<Uint8ClampedArray>>());
 assert(!isSigned<valueof<Uint8ClampedArray>>());
 assert(sizeof<valueof<Uint8ClampedArray>>() == 1);
+assert(isFloat<valueof<Float32Array>>());
+assert(!isInteger<valueof<Float32Array>>());
+assert(sizeof<valueof<Float32Array>>() == 4);
+assert(isInteger<valueof<Int64Array>>());
+assert(isSigned<valueof<Int64Array>>());
+assert(sizeof<valueof<Int64Array>>() == 8);
 
 // map indexes
 assert(isInteger<indexof<Map<i32,i32>>>());

@@ -14,13 +14,32 @@
  * When compiling to WebAssembly `glue/wasm/index.ts` must be included.
  */
 
-import { Target, Runtime, Feature } from "./common";
-import { Compiler, Options } from "./compiler";
-import { TSDBuilder, JSBuilder } from "./bindings";
-import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
+import {
+  Target,
+  Runtime,
+  Feature
+} from "./common";
+
+import {
+  Compiler,
+  Options,
+  UncheckedBehavior
+} from "./compiler";
+
+import {
+  TSDBuilder,
+  JSBuilder
+} from "./bindings";
+
+import {
+  Range,
+  DiagnosticMessage,
+  DiagnosticCategory,
+  formatDiagnosticMessage
+} from "./diagnostics";
+
 import { Module } from "./module";
 import { Program } from "./program";
-import { Range } from "./tokenizer";
 import { Source } from "./ast";
 
 // Options
@@ -84,6 +103,11 @@ export function setSourceMap(options: Options, sourceMap: bool): void {
   options.sourceMap = sourceMap;
 }
 
+/** Sets the `uncheckedBehavior` option. */
+export function setUncheckedBehavior(options: Options, uncheckedBehavior: UncheckedBehavior): void {
+  options.uncheckedBehavior = uncheckedBehavior;
+}
+
 /** Sets the `memoryBase` option. */
 export function setMemoryBase(options: Options, memoryBase: u32): void {
   options.memoryBase = memoryBase;
@@ -96,14 +120,14 @@ export function setTableBase(options: Options, tableBase: u32): void {
 
 /** Adds a 'globalAliases' value. */
 export function addGlobalAlias(options: Options, alias: string, name: string): void {
-  var globalAliases = options.globalAliases;
+  let globalAliases = options.globalAliases;
   if (!globalAliases) options.globalAliases = globalAliases = new Map();
   globalAliases.set(alias, name);
 }
 
 /** Removes a 'globalAliases' value. */
 export function removeGlobalAlias(options: Options, alias: string): void {
-  var globalAliases = options.globalAliases;
+  let globalAliases = options.globalAliases;
   if (globalAliases) globalAliases.delete(alias);
 }
 
@@ -128,7 +152,7 @@ export function setExportRuntime(options: Options, exportRuntime: bool): void {
 }
 
 /** Default stack size. */
-export const DEFAULT_STACK_SIZE = 16384;
+export const DEFAULT_STACK_SIZE = 32768;
 
 /** Sets the `stackSize` option. */
 export function setStackSize(options: Options, stackSize: i32): void {
@@ -148,35 +172,35 @@ export function setBundleVersion(
 }
 
 /** Sign extension operations. */
-export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
+export const FEATURE_SIGN_EXTENSION = Feature.SignExtension;
 /** Mutable global imports and exports. */
-export const FEATURE_MUTABLE_GLOBALS = Feature.MUTABLE_GLOBALS;
+export const FEATURE_MUTABLE_GLOBALS = Feature.MutableGlobals;
 /** Non-trapping float to int conversion operations. */
-export const FEATURE_NONTRAPPING_F2I = Feature.NONTRAPPING_F2I;
+export const FEATURE_NONTRAPPING_F2I = Feature.NontrappingF2I;
 /** Bulk memory operations. */
-export const FEATURE_BULK_MEMORY = Feature.BULK_MEMORY;
+export const FEATURE_BULK_MEMORY = Feature.BulkMemory;
 /** SIMD types and operations. */
-export const FEATURE_SIMD = Feature.SIMD;
+export const FEATURE_SIMD = Feature.Simd;
 /** Threading and atomic operations. */
-export const FEATURE_THREADS = Feature.THREADS;
+export const FEATURE_THREADS = Feature.Threads;
 /** Exception handling operations. */
-export const FEATURE_EXCEPTION_HANDLING = Feature.EXCEPTION_HANDLING;
+export const FEATURE_EXCEPTION_HANDLING = Feature.ExceptionHandling;
 /** Tail call operations. */
-export const FEATURE_TAIL_CALLS = Feature.TAIL_CALLS;
+export const FEATURE_TAIL_CALLS = Feature.TailCalls;
 /** Reference types. */
-export const FEATURE_REFERENCE_TYPES = Feature.REFERENCE_TYPES;
+export const FEATURE_REFERENCE_TYPES = Feature.ReferenceTypes;
 /** Multi value types. */
-export const FEATURE_MULTI_VALUE = Feature.MULTI_VALUE;
+export const FEATURE_MULTI_VALUE = Feature.MultiValue;
 /** Garbage collection. */
 export const FEATURE_GC = Feature.GC;
 /** Memory64. */
-export const FEATURE_MEMORY64 = Feature.MEMORY64;
-/** Function references. */
-export const FEATURE_FUNCTION_REFERENCES = Feature.FUNCTION_REFERENCES;
+export const FEATURE_MEMORY64 = Feature.Memory64;
 /** Relaxed SIMD. */
-export const FEATURE_RELAXED_SIMD = Feature.RELAXED_SIMD;
+export const FEATURE_RELAXED_SIMD = Feature.RelaxedSimd;
 /** Extended const expressions. */
-export const FEATURE_EXTENDED_CONST = Feature.EXTENDED_CONST;
+export const FEATURE_EXTENDED_CONST = Feature.ExtendedConst;
+/** String references. */
+export const FEATURE_STRINGREF = Feature.Stringref;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {
@@ -199,9 +223,18 @@ export function setBasenameHint(options: Options, basename: string): void {
   options.basenameHint = basename;
 }
 
+/** Gives the compiler a hint that bindings will be generated. */
+export function setBindingsHint(options: Options, bindings: bool): void {
+  options.bindingsHint = bindings;
+}
+
 /** Sets the `pedantic` option. */
 export function setPedantic(options: Options, pedantic: bool): void {
   options.pedantic = pedantic;
+}
+
+export function setDebugInfo(options: Options, debug: bool): void {
+  options.debugInfo = debug;
 }
 
 // Program
@@ -273,17 +306,17 @@ export function getSourceNormalizedPath(source: Source): string {
 
 /** Tests whether a diagnostic is informatory. */
 export function isInfo(message: DiagnosticMessage): bool {
-  return message.category == DiagnosticCategory.INFO;
+  return message.category == DiagnosticCategory.Info;
 }
 
 /** Tests whether a diagnostic is a warning. */
 export function isWarning(message: DiagnosticMessage): bool {
-  return message.category == DiagnosticCategory.WARNING;
+  return message.category == DiagnosticCategory.Warning;
 }
 
 /** Tests whether a diagnostic is an error. */
 export function isError(message: DiagnosticMessage): bool {
-  return message.category == DiagnosticCategory.ERROR;
+  return message.category == DiagnosticCategory.Error;
 }
 
 // Parser

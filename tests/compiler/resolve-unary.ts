@@ -168,3 +168,7 @@ assert(
   ==
   "i--"
 );
+
+(typeof 1).length;
+function generic<T>(v: T): void {}
+generic(typeof ((): void => {}));

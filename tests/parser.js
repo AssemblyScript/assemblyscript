@@ -42,7 +42,7 @@ if (args.help) {
 const basedir = path.join(dirname, "parser");
 
 // Get a list of all tests
-var tests = glob.sync("**/!(_*).ts", { cwd: basedir });
+let tests = glob.sync("**/!(_*).ts", { cwd: basedir });
 
 // Run specific tests only if arguments are provided
 if (argv.length) {
@@ -53,7 +53,7 @@ if (argv.length) {
   }
 }
 
-var failures = 0;
+let failures = 0;
 
 for (const filename of tests) {
   if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts")) continue;

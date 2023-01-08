@@ -82,8 +82,6 @@ export interface ASUtil {
   /** Gets a function from poiner which contain table's index. */
   __getFunction(ptr: number): ((...args: unknown[]) => unknown) | null;
 
-  /** Tests whether a managed object is an instance of the class represented by the specified base id. */
-  __instanceof(ptr: number, baseId: number): boolean;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
   __newString(str: string): number;
   /** Allocates a new ArrayBuffer in the module's memory and returns a reference (pointer) to it. */

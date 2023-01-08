@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $none_=>_none (func_subtype func))
  (global $merge/globalType i32 (i32.const 2))
  (global $merge/globalType_test (mut i32) (i32.const 0))
  (global $merge/typeGlobal i32 (i32.const 3))
@@ -11,62 +11,62 @@
  (global $merge/enumNamespace.val i32 (i32.const 1))
  (global $merge/namespaceEnum.val i32 (i32.const 2))
  (global $~lib/memory/__data_end i32 (i32.const 8))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
- (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
+ (global $~lib/memory/__heap_base i32 (i32.const 32776))
  (memory $0 0)
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $merge/namespaceType.test
+ (func $merge/namespaceType.test (type $none_=>_none)
   nop
  )
- (func $merge/typeNamespace.test
+ (func $merge/typeNamespace.test (type $none_=>_none)
   nop
  )
- (func $merge/functionType
+ (func $merge/functionType (type $none_=>_none)
   nop
  )
- (func $merge/typeFunction
+ (func $merge/typeFunction (type $none_=>_none)
   nop
  )
- (func $merge/classNamespace.test1
+ (func $merge/classNamespace.test1 (type $none_=>_none)
   nop
  )
- (func $merge/classNamespace.test2
+ (func $merge/classNamespace.test2 (type $none_=>_none)
   nop
  )
- (func $merge/namespaceClass.test1
+ (func $merge/namespaceClass.test1 (type $none_=>_none)
   nop
  )
- (func $merge/namespaceClass.test2
+ (func $merge/namespaceClass.test2 (type $none_=>_none)
   nop
  )
- (func $merge/functionNamespace
+ (func $merge/functionNamespace (type $none_=>_none)
   nop
  )
- (func $merge/functionNamespace.test
+ (func $merge/functionNamespace.test (type $none_=>_none)
   nop
  )
- (func $merge/namespaceFunction.test
+ (func $merge/namespaceFunction.test (type $none_=>_none)
   nop
  )
- (func $merge/namespaceFunction
+ (func $merge/namespaceFunction (type $none_=>_none)
   nop
  )
- (func $merge/enumNamespace.test
+ (func $merge/enumNamespace.test (type $none_=>_none)
   nop
  )
- (func $merge/namespaceEnum.test
+ (func $merge/namespaceEnum.test (type $none_=>_none)
   nop
  )
- (func $merge/namespaceNamespace.test1
+ (func $merge/namespaceNamespace.test1 (type $none_=>_none)
   nop
  )
- (func $merge/namespaceNamespace.test2
+ (func $merge/namespaceNamespace.test2 (type $none_=>_none)
   nop
  )
- (func $start:merge
+ (func $start:merge (type $none_=>_none)
   global.get $merge/globalType
   drop
   global.get $merge/typeGlobal
@@ -92,7 +92,7 @@
   call $merge/namespaceNamespace.test1
   call $merge/namespaceNamespace.test2
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:merge
  )
 )

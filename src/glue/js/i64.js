@@ -10,6 +10,8 @@ import Long from "long";
 globalThis.i64_zero    = Long.ZERO;
 globalThis.i64_one     = Long.ONE;
 globalThis.i64_neg_one = Long.fromInt(-1);
+globalThis.i64_minimum = Long.MIN_VALUE;
+globalThis.i64_maximum = Long.MAX_VALUE;
 
 globalThis.i64_is = function i64_is(value) {
   return Long.isLong(value);
@@ -29,6 +31,10 @@ globalThis.i64_high = function i64_high(value) {
 
 globalThis.i64_not = function i64_not(value) {
   return value.not();
+};
+
+globalThis.i64_neg = function i64_neg(value) {
+  return value.neg();
 };
 
 globalThis.i64_clz = function i64_clz(value) {
@@ -52,8 +58,8 @@ globalThis.i64_mul = function i64_mul(left, right) {
 };
 
 globalThis.i64_pow = function i64_pow(left, right) {
-  var rightLo = right.low;
-  var rightHi = right.high;
+  let rightLo = right.low;
+  let rightHi = right.high;
   if (rightHi <= 0) {
     if (rightHi < 0) {
       if (left.eq(globalThis.i64_neg_one)) {
@@ -65,7 +71,7 @@ globalThis.i64_pow = function i64_pow(left, right) {
     if (rightLo == 1) return left;
     if (rightLo == 2) return left.mul(left);
   }
-  var result = Long.ONE;
+  let result = Long.ONE;
   while (rightLo | rightHi) {
     if (rightLo & 1) result = result.mul(left);
     right = right.shru(1);
@@ -124,14 +130,46 @@ globalThis.i64_ne = function i64_ne(left, right) {
   return left.ne(right);
 };
 
+globalThis.i64_ge = function i64_ge(left, right) {
+  return left.ge(right);
+};
+
+globalThis.i64_ge_u = function i64_ge_u(left, right) {
+  return left.toUnsigned().ge(right.toUnsigned());
+};
+
 globalThis.i64_gt = function i64_gt(left, right) {
   return left.gt(right);
 };
 
+globalThis.i64_gt_u = function i64_gt_u(left, right) {
+  return left.toUnsigned().gt(right.toUnsigned());
+};
+
+globalThis.i64_le = function i64_le(left, right) {
+  return left.le(right);
+};
+
+globalThis.i64_le_u = function i64_le_u(left, right) {
+  return left.toUnsigned().le(right.toUnsigned());
+};
+
+globalThis.i64_lt = function i64_lt(left, right) {
+  return left.lt(right);
+};
+
+globalThis.i64_lt_u = function i64_lt_u(left, right) {
+  return left.toUnsigned().lt(right.toUnsigned());
+};
+
 globalThis.i64_align = function i64_align(value, alignment) {
   assert(alignment && (alignment & (alignment - 1)) == 0);
-  var mask = Long.fromInt(alignment - 1);
+  let mask = Long.fromInt(alignment - 1);
   return value.add(mask).and(mask.not());
+};
+
+globalThis.i64_signbit = function i64_signbit(value) {
+  return Boolean(value.high >>> 31);
 };
 
 globalThis.i64_is_i8 = function i64_is_i8(value) {
@@ -189,4 +227,8 @@ globalThis.i64_to_f64 = function i64_to_f64(value) {
 
 globalThis.i64_to_string = function i64_to_string(value, unsigned) {
   return unsigned ? value.toUnsigned().toString() : value.toString();
+};
+
+globalThis.i64_clone = function i64_clone(value) {
+  return Long.fromBits(value.low, value.high, value.unsigned);
 };

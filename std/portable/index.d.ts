@@ -52,6 +52,8 @@ declare const ASC_FEATURE_SIGN_EXTENSION: bool;
 
 // Builtins
 
+/** Performs the sign-agnostic reverse bytes **/
+declare function bswap<T = i32 | u32 | isize | usize>(value: T): T;
 /** Performs the sign-agnostic count leading zero bits operation on a 32-bit integer. All zero bits are considered leading if the value is zero. */
 declare function clz<T = i32>(value: T): T;
 /** Performs the sign-agnostic count tailing zero bits operation on a 32-bit integer. All zero bits are considered trailing if the value is zero. */
@@ -295,13 +297,6 @@ declare namespace f64 {
   export function parseInt(string: string, radix?: i32): f64;
 }
 
-// Polyfills
-
-/** [Polyfill] Performs the sign-agnostic reverse bytes **/
-declare function bswap<T = i32 | u32 | isize | usize>(value: T): T;
-/** [Polyfill] Performs the sign-agnostic reverse bytes only for last 16-bit **/
-declare function bswap16<T = i16 | u16 | i32 | u32>(value: T): T;
-
 // Standard library
 
 declare const Mathf: typeof Math;
@@ -309,7 +304,7 @@ declare const JSMath: typeof Math;
 
 declare interface StringConstructor {
   /** Equivalent to calling `String.fromCharCode` with multiple arguments. */
-  fromCharCodes(arr: u16[]): string;
+  fromCharCodes(arr: i32[]): string;
   /** Equivalent to calling `String.fromCodePoint` with multiple arguments. */
   fromCodePoints(arr: i32[]): string;
 }
