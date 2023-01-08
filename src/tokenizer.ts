@@ -1714,7 +1714,7 @@ export class Tokenizer extends DiagnosticEmitter {
     let pos = this.pos;
     while (pos < this.end) {
       const c = this.source.text.charCodeAt(pos);
-      if (isLineBreak(c) || c === CharCode.CLOSEBRACE || c === CharCode.CLOSEPAREN) return false;
+      if (isLineBreak(c) || c === CharCode.CloseBrace || c === CharCode.CloseParen) return false;
       if (!isWhiteSpace(c)) break;
       pos++;
     }
