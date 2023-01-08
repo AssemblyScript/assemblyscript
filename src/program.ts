@@ -1501,6 +1501,7 @@ export class Program extends DiagnosticEmitter {
     let thisInstanceMembers = thisPrototype.instanceMembers;
     if (thisInstanceMembers) {
       let thisMembers = Map_values(thisInstanceMembers);
+      let seen: Set<ClassPrototype> | null = null;
       do {
         let baseInstanceMembers = basePrototype.instanceMembers;
         if (baseInstanceMembers) {
@@ -1525,6 +1526,11 @@ export class Program extends DiagnosticEmitter {
         }
         let nextPrototype = basePrototype.basePrototype;
         if (!nextPrototype) break;
+        // Break on circular inheritance. Is diagnosed later, when resolved.
+        if (!seen) seen = new Set();
+        seen.add(basePrototype);
+        if (seen.has(nextPrototype)) break;
+        // Otherwise traverse to next base prototype.
         basePrototype = nextPrototype;
       } while (true);
     }
