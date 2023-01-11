@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34076))
  (memory $0 1)
@@ -14,6 +14,7 @@
  (data (i32.const 1276) "\1c")
  (data (i32.const 1288) "\02")
  (table $0 1 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $export:std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $export:std/array-access/stringArrayPropertyAccess))
@@ -21,7 +22,7 @@
  (export "stringArrayArrayPropertyAccess" (func $export:std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $export:std/array-access/stringArrayArrayMethodCall))
  (export "functionArrayElementCall" (func $export:std/array-access/functionArrayElementCall))
- (func $~lib/array/Array<~lib/array/Array<i32>>#__get (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -87,7 +88,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $0
  )
- (func $~lib/string/String#startsWith (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $~lib/string/String#startsWith (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -227,7 +228,7 @@
   local.get $2
   i32.eqz
  )
- (func $export:std/array-access/i32ArrayArrayElementAccess (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $export:std/array-access/i32ArrayArrayElementAccess (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -321,7 +322,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $export:std/array-access/stringArrayPropertyAccess (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $export:std/array-access/stringArrayPropertyAccess (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -383,7 +384,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $export:std/array-access/stringArrayMethodCall (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $export:std/array-access/stringArrayMethodCall (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -447,7 +448,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $export:std/array-access/stringArrayArrayPropertyAccess (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $export:std/array-access/stringArrayArrayPropertyAccess (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -519,7 +520,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $export:std/array-access/stringArrayArrayMethodCall (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $export:std/array-access/stringArrayArrayMethodCall (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -590,7 +591,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $export:std/array-access/functionArrayElementCall (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $export:std/array-access/functionArrayElementCall (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4

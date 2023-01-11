@@ -1,9 +1,9 @@
 (module
- (type $f32_=>_f32 (func_subtype (param f32) (result f32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $f64_=>_f64 (func_subtype (param f64) (result f64) func))
+ (type $f32_=>_f32 (func (param f32) (result f32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $f64_=>_f64 (func (param f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 76))
@@ -15,23 +15,23 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $call-inferred/foo<i32> (type $i32_=>_i32) (param $a i32) (result i32)
+ (func $call-inferred/foo<i32> (param $a i32) (result i32)
   local.get $a
   return
  )
- (func $call-inferred/foo<f64> (type $f64_=>_f64) (param $a f64) (result f64)
+ (func $call-inferred/foo<f64> (param $a f64) (result f64)
   local.get $a
   return
  )
- (func $call-inferred/foo<f32> (type $f32_=>_f32) (param $a f32) (result f32)
+ (func $call-inferred/foo<f32> (param $a f32) (result f32)
   local.get $a
   return
  )
- (func $call-inferred/bar<f32> (type $f32_=>_f32) (param $a f32) (result f32)
+ (func $call-inferred/bar<f32> (param $a f32) (result f32)
   local.get $a
   return
  )
- (func $call-inferred/bar<f32>@varargs (type $f32_=>_f32) (param $a f32) (result f32)
+ (func $call-inferred/bar<f32>@varargs (param $a f32) (result f32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -46,7 +46,7 @@
   local.get $a
   call $call-inferred/bar<f32>
  )
- (func $start:call-inferred (type $none_=>_none)
+ (func $start:call-inferred
   i32.const 42
   call $call-inferred/foo<i32>
   i32.const 42
@@ -102,7 +102,7 @@
    unreachable
   end
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:call-inferred
  )
 )

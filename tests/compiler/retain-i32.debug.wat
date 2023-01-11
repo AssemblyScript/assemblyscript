@@ -1,7 +1,7 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
@@ -24,7 +24,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $retain-i32/test (type $i32_i32_=>_none) (param $a i32) (param $b i32)
+ (func $retain-i32/test (param $a i32) (param $b i32)
   local.get $a
   local.get $b
   i32.add
@@ -300,7 +300,7 @@
    unreachable
   end
  )
- (func $retain-i32/testLocalRetain (type $none_=>_none)
+ (func $retain-i32/testLocalRetain
   (local $ri i32)
   i32.const 0
   i32.load8_s $0
@@ -308,7 +308,7 @@
   i32.const 1
   drop
  )
- (func $start:retain-i32 (type $none_=>_none)
+ (func $start:retain-i32
   (local $i i32)
   i32.const 0
   global.get $~lib/builtins/i8.MAX_VALUE
@@ -747,7 +747,7 @@
   drop
   call $retain-i32/testLocalRetain
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:retain-i32
  )
 )

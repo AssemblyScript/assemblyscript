@@ -43,12 +43,12 @@ declare type externref = object | null;
 declare type anyref = object | null;
 /** Equatable reference. */
 declare type eqref = object | null;
-/** 31-bit integer reference. */
-declare type i31ref = object | null;
-/** Data reference. */
-declare type dataref = object | null;
+/** Struct reference. */
+declare type structref = object | null;
 /** Array reference. */
 declare type arrayref = object | null;
+/** 31-bit integer reference. */
+declare type i31ref = object | null;
 /** String reference. */
 declare type stringref = object | null;
 /** WTF-8 string view. */

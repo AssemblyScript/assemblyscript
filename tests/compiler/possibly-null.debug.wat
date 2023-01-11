@@ -1,9 +1,9 @@
 (module
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $none_=>_none (func_subtype func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
@@ -30,14 +30,14 @@
  (export "testLogicalOrMulti" (func $export:possibly-null/testLogicalOrMulti))
  (export "testAssign" (func $export:possibly-null/testAssign))
  (export "testNeverNull" (func $export:possibly-null/testNeverNull))
- (func $possibly-null/testTrue (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testTrue (param $a i32)
   local.get $a
   if
    i32.const 0
    drop
   end
  )
- (func $possibly-null/testFalseElse (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testFalseElse (param $a i32)
   local.get $a
   i32.eqz
   if
@@ -47,7 +47,7 @@
    drop
   end
  )
- (func $possibly-null/testFalseContinuation (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testFalseContinuation (param $a i32)
   local.get $a
   i32.eqz
   if
@@ -56,7 +56,7 @@
   i32.const 0
   drop
  )
- (func $possibly-null/testNeNull (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testNeNull (param $a i32)
   local.get $a
   i32.const 0
   i32.ne
@@ -65,7 +65,7 @@
    drop
   end
  )
- (func $possibly-null/testEqNullElse (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testEqNullElse (param $a i32)
   local.get $a
   i32.const 0
   i32.eq
@@ -76,7 +76,7 @@
    drop
   end
  )
- (func $possibly-null/testEqNullContinuation (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testEqNullContinuation (param $a i32)
   local.get $a
   i32.const 0
   i32.eq
@@ -86,7 +86,7 @@
   i32.const 0
   drop
  )
- (func $possibly-null/testNotEqNull (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testNotEqNull (param $a i32)
   local.get $a
   i32.const 0
   i32.eq
@@ -96,7 +96,7 @@
    drop
   end
  )
- (func $possibly-null/testNotNeNullElse (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testNotNeNullElse (param $a i32)
   local.get $a
   i32.const 0
   i32.ne
@@ -108,7 +108,7 @@
    drop
   end
  )
- (func $possibly-null/testNotNeNullContinuation (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testNotNeNullContinuation (param $a i32)
   local.get $a
   i32.const 0
   i32.ne
@@ -119,7 +119,7 @@
   i32.const 0
   drop
  )
- (func $possibly-null/testWhile (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testWhile (param $a i32)
   loop $while-continue|0
    local.get $a
    if
@@ -134,7 +134,7 @@
    end
   end
  )
- (func $possibly-null/testWhile2 (type $i32_i32_=>_none) (param $a i32) (param $b i32)
+ (func $possibly-null/testWhile2 (param $a i32) (param $b i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -163,7 +163,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $possibly-null/testWhile3 (type $i32_i32_=>_none) (param $a i32) (param $b i32)
+ (func $possibly-null/testWhile3 (param $a i32) (param $b i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -194,11 +194,11 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $possibly-null/requireNonNull (type $i32_=>_i32) (param $a i32) (result i32)
+ (func $possibly-null/requireNonNull (param $a i32) (result i32)
   local.get $a
   return
  )
- (func $possibly-null/testLogicalAndMulti (type $i32_i32_=>_none) (param $a i32) (param $b i32)
+ (func $possibly-null/testLogicalAndMulti (param $a i32) (param $b i32)
   local.get $a
   if (result i32)
    local.get $b
@@ -219,7 +219,7 @@
    drop
   end
  )
- (func $possibly-null/testLogicalOrMulti (type $i32_i32_=>_none) (param $a i32) (param $b i32)
+ (func $possibly-null/testLogicalOrMulti (param $a i32) (param $b i32)
   local.get $a
   i32.eqz
   if (result i32)
@@ -242,7 +242,7 @@
    drop
   end
  )
- (func $possibly-null/testAssign (type $i32_i32_=>_none) (param $a i32) (param $b i32)
+ (func $possibly-null/testAssign (param $a i32) (param $b i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -262,14 +262,14 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $possibly-null/testNeverNull (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testNeverNull (param $a i32)
   local.get $a
   if
    local.get $a
    drop
   end
  )
- (func $~stack_check (type $none_=>_none)
+ (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -282,7 +282,7 @@
    unreachable
   end
  )
- (func $possibly-null/testLogicalAnd (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testLogicalAnd (param $a i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -310,7 +310,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $possibly-null/testLogicalOr (type $i32_=>_none) (param $a i32)
+ (func $possibly-null/testLogicalOr (param $a i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -341,7 +341,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testTrue (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testTrue (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -357,7 +357,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testFalseElse (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testFalseElse (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -373,7 +373,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testFalseContinuation (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testFalseContinuation (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -389,7 +389,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testNeNull (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testNeNull (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -405,7 +405,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testEqNullElse (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testEqNullElse (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -421,7 +421,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testEqNullContinuation (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testEqNullContinuation (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -437,7 +437,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testNotEqNull (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testNotEqNull (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -453,7 +453,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testNotNeNullElse (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testNotNeNullElse (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -469,7 +469,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testNotNeNullContinuation (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testNotNeNullContinuation (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -485,7 +485,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testWhile (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testWhile (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -501,7 +501,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testWhile2 (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $export:possibly-null/testWhile2 (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -521,7 +521,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testWhile3 (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $export:possibly-null/testWhile3 (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -541,7 +541,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testLogicalAnd (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testLogicalAnd (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -557,7 +557,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testLogicalOr (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testLogicalOr (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -573,7 +573,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testLogicalAndMulti (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $export:possibly-null/testLogicalAndMulti (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -593,7 +593,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testLogicalOrMulti (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $export:possibly-null/testLogicalOrMulti (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -613,7 +613,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testAssign (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $export:possibly-null/testAssign (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -633,7 +633,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testNeverNull (type $i32_=>_none) (param $0 i32)
+ (func $export:possibly-null/testNeverNull (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub

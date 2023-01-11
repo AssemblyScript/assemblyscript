@@ -1,11 +1,11 @@
 (module
- (type $none_=>_none (func_subtype func))
+ (type $none_=>_none (func))
  (memory $0 0)
  (export "testFor" (func $unify-local-flags/testFor))
  (export "testWhile" (func $unify-local-flags/testWhile))
  (export "testDo" (func $unify-local-flags/testDo))
  (export "memory" (memory $0))
- (func $unify-local-flags/testFor (type $none_=>_none)
+ (func $unify-local-flags/testFor
   (local $0 i32)
   loop $for-loop|0
    local.get $0
@@ -20,7 +20,7 @@
    end
   end
  )
- (func $unify-local-flags/testWhile (type $none_=>_none)
+ (func $unify-local-flags/testWhile
   (local $0 i32)
   loop $while-continue|2
    local.get $0
@@ -37,7 +37,7 @@
    end
   end
  )
- (func $unify-local-flags/testDo (type $none_=>_none)
+ (func $unify-local-flags/testDo
   (local $0 i32)
   loop $do-loop|2
    local.get $0

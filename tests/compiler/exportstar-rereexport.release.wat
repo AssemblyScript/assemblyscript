@@ -1,11 +1,11 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $none_=>_i32 (func_subtype (result i32) func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
@@ -47,7 +47,7 @@
  (export "renamed_default" (func $export-default/theDefault))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/itcms/visitRoots (type $none_=>_none)
+ (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
   (local $1 i32)
   i32.const 1296
@@ -110,7 +110,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/Object#makeGray (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -242,7 +242,7 @@
   local.get $0
   i32.store $0 offset=8
  )
- (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -395,7 +395,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -641,7 +641,7 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -753,7 +753,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/initialize (type $none_=>_none)
+ (func $~lib/rt/tlsf/initialize
   (local $0 i32)
   (local $1 i32)
   memory.size $0
@@ -832,7 +832,7 @@
   i32.const 34336
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
+ (func $~lib/rt/itcms/step (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1099,7 +1099,7 @@
   end
   i32.const 0
  )
- (func $~lib/rt/tlsf/searchBlock (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1156,7 +1156,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/__new (type $none_=>_i32) (result i32)
+ (func $~lib/rt/itcms/__new (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1388,10 +1388,10 @@
   i32.store $0 align=1
   local.get $0
  )
- (func $export-default/theDefault (type $none_=>_none)
+ (func $export-default/theDefault
   nop
  )
- (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid
    block $exports/Car
     block $~lib/arraybuffer/ArrayBufferView
@@ -1423,7 +1423,7 @@
   end
   unreachable
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   (local $0 i32)
   block $__inlined_func$start:exportstar-rereexport
    global.get $~lib/memory/__stack_pointer
@@ -1554,7 +1554,7 @@
    unreachable
   end
  )
- (func $exports/Car#constructor (type $none_=>_i32) (result i32)
+ (func $exports/Car#constructor (result i32)
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -1599,7 +1599,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $0
  )
- (func $exports/Car#get:numDoors (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $exports/Car#get:numDoors (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1632,7 +1632,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $0
  )
- (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   global.get $~lib/rt/itcms/white
   local.get $0
   i32.const 20

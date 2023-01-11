@@ -1,8 +1,8 @@
 (module
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func_subtype (param i32 i32 f64 f64 f64 f64 f64) func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (global $builtins/i (mut i32) (i32.const 0))
@@ -70,21 +70,21 @@
  (export "test" (func $start:builtins~anonymous|1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:builtins~anonymous|0 (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:builtins~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $start:builtins~anonymous|1 (type $none_=>_none)
+ (func $start:builtins~anonymous|1
   nop
  )
- (func $start:builtins~anonymous|2 (type $i32_i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $start:builtins~anonymous|2 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   nop
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:builtins
  )
- (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -244,7 +244,7 @@
   global.set $~lib/memory/__stack_pointer
   i32.const 0
  )
- (func $start:builtins (type $none_=>_none)
+ (func $start:builtins
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12

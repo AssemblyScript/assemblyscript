@@ -1,7 +1,7 @@
 (module
- (type $none_=>_i32 (func_subtype (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_i32 (func (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33836))
  (memory $0 1)
@@ -9,7 +9,7 @@
  (data (i32.const 1048) "\02")
  (export "memory" (memory $0))
  (start $~start)
- (func $~start (type $none_=>_none)
+ (func $~start
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -137,7 +137,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/string/String.__eq (type $none_=>_i32) (result i32)
+ (func $~lib/string/String.__eq (result i32)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -164,7 +164,7 @@
   global.set $~lib/memory/__stack_pointer
   i32.const 0
  )
- (func $~lib/string/String.__ne (type $none_=>_i32) (result i32)
+ (func $~lib/string/String.__ne (result i32)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8

@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 60))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
@@ -12,7 +12,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $switch/doSwitch (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $switch/doSwitch (param $n i32) (result i32)
   (local $1 i32)
   block $case4|0
    block $case3|0
@@ -50,7 +50,7 @@
   i32.const 23
   return
  )
- (func $switch/doSwitchDefaultOmitted (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $switch/doSwitchDefaultOmitted (param $n i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case2|0
@@ -82,7 +82,7 @@
   i32.const 0
   return
  )
- (func $switch/doSwitchBreakCase (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $switch/doSwitchBreakCase (param $n i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case1|0
@@ -103,7 +103,7 @@
   i32.const 1
   return
  )
- (func $switch/doSwitchBreakDefault (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $switch/doSwitchBreakDefault (param $n i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case1|0
@@ -124,7 +124,7 @@
   i32.const 2
   return
  )
- (func $switch/doSwitchFallThroughCase (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $switch/doSwitchFallThroughCase (param $n i32) (result i32)
   (local $1 i32)
   block $case1|0
    block $case0|0
@@ -142,7 +142,7 @@
   i32.const 1
   return
  )
- (func $switch/doSwitchFallThroughDefault (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $switch/doSwitchFallThroughDefault (param $n i32) (result i32)
   (local $1 i32)
   block $case1|0
    block $case0|0
@@ -160,13 +160,13 @@
   i32.const 2
   return
  )
- (func $switch/doSwitchEmpty (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $switch/doSwitchEmpty (param $n i32) (result i32)
   local.get $n
   drop
   i32.const 2
   return
  )
- (func $start:switch (type $none_=>_none)
+ (func $start:switch
   i32.const 0
   call $switch/doSwitch
   i32.const 0
@@ -558,7 +558,7 @@
    unreachable
   end
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:switch
  )
 )

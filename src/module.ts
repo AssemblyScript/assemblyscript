@@ -74,9 +74,9 @@ export namespace TypeRef {
   export const Externref = binaryen._BinaryenTypeExternref();
   export const Anyref = binaryen._BinaryenTypeAnyref();
   export const Eqref = binaryen._BinaryenTypeEqref();
-  export const I31ref = binaryen._BinaryenTypeI31ref();
-  export const Dataref = binaryen._BinaryenTypeDataref();
+  export const Structref = binaryen._BinaryenTypeStructref();
   export const Arrayref = binaryen._BinaryenTypeArrayref();
+  export const I31ref = binaryen._BinaryenTypeI31ref();
   export const Stringref = binaryen._BinaryenTypeStringref();
   export const StringviewWTF8 = binaryen._BinaryenTypeStringviewWTF8();
   export const StringviewWTF16 = binaryen._BinaryenTypeStringviewWTF16();
@@ -107,7 +107,7 @@ export namespace HeapTypeRef {
   export const Any: HeapTypeRef = 2 /* _BinaryenHeapTypeAny */;
   export const Eq: HeapTypeRef = 3 /* _BinaryenHeapTypeEq */;
   export const I31: HeapTypeRef = 4 /* _BinaryenHeapTypeI31 */;
-  export const Data: HeapTypeRef = 5 /* _BinaryenHeapTypeData */;
+  export const Struct: HeapTypeRef = 5 /* _BinaryenHeapTypeStruct */;
   export const Array: HeapTypeRef = 6 /* _BinaryenHeapTypeArray */;
   export const String: HeapTypeRef = 7 /* _BinaryenHeapTypeString */;
   export const StringviewWTF8: HeapTypeRef = 8 /* _BinaryenHeapTypeStringviewWTF8 */;
@@ -145,18 +145,18 @@ export namespace HeapTypeRef {
       case HeapTypeRef.Func: return -1;
       case HeapTypeRef.Any: return a;
       case HeapTypeRef.Eq: {
-        return b == HeapTypeRef.I31 || b == HeapTypeRef.Data || b == HeapTypeRef.Array
+        return b == HeapTypeRef.I31 || b == HeapTypeRef.Struct || b == HeapTypeRef.Array
           ? HeapTypeRef.Eq
           : HeapTypeRef.Any;
       }
       case HeapTypeRef.I31: {
-        return b == HeapTypeRef.Data || b == HeapTypeRef.Array
+        return b == HeapTypeRef.Struct || b == HeapTypeRef.Array
           ? HeapTypeRef.Eq
           : HeapTypeRef.Any;
       }
-      case HeapTypeRef.Data: {
+      case HeapTypeRef.Struct: {
         return b == HeapTypeRef.Array
-          ? HeapTypeRef.Data
+          ? HeapTypeRef.Eq
           : HeapTypeRef.Any;
       }
       case HeapTypeRef.Array:
@@ -205,9 +205,8 @@ export namespace TypeBuilderErrorReason {
 /** Type system constants. */
 export type TypeSystem = binaryen.TypeSystem;
 export namespace TypeSystem {
-  export const Equirecursive: TypeSystem = 0 /* _BinaryenTypeSystemEquirecursive */;
+  export const Isorecursive: TypeSystem = 0 /* _BinaryenTypeSystemIsorecursive */;
   export const Nominal: TypeSystem = 1 /* _BinaryenTypeSystemNominal */;
-  export const Isorecursive: TypeSystem = 2 /* _BinaryenTypeSystemIsorecursive */;
 }
 
 /** Binaryen feature constants. */
@@ -276,7 +275,7 @@ export const enum ExpressionId {
   MemoryFill = 39 /* _BinaryenMemoryFillId */,
   Pop = 40 /* _BinaryenPopId */,
   RefNull = 41 /* _BinaryenRefNullId */,
-  RefIs = 42 /* _BinaryenRefIsId */,
+  RefIsNull = 42 /* _BinaryenRefIsNullId */,
   RefFunc = 43 /* _BinaryenRefFuncId */,
   RefEq = 44 /* _BinaryenRefEqId */,
   TableGet = 45 /* _BinaryenTableGetId */,
@@ -298,25 +297,26 @@ export const enum ExpressionId {
   StructGet = 61 /* _BinaryenStructGetId */,
   StructSet = 62 /* _BinaryenStructSetId */,
   ArrayNew = 63 /* _BinaryenArrayNewId */,
-  ArrayInit = 64 /* _BinaryenArrayInitId */,
-  ArrayGet = 65 /* _BinaryenArrayGetId */,
-  ArraySet = 66 /* _BinaryenArraySetId */,
-  ArrayLen = 67 /* _BinaryenArrayLenId */,
-  ArrayCopy = 68 /* _BinaryenArrayCopyId */,
-  RefAs = 69 /* _BinaryenRefAsId */,
-  StringNew = 70 /* _BinaryenStringNewId */,
-  StringConst = 71 /* _BinaryenStringConstId */,
-  StringMeasure = 72 /* _BinaryenStringMeasureId */,
-  StringEncode = 73 /* _BinaryenStringEncodeId */,
-  StringConcat = 74 /* _BinaryenStringConcatId */,
-  StringEq = 75 /* _BinaryenStringEqId */,
-  StringAs = 76 /* _BinaryenStringAsId */,
-  StringWTF8Advance = 77 /* _BinaryenStringWTF8AdvanceId */,
-  StringWTF16Get = 78 /* _BinaryenStringWTF16GetId */,
-  StringIterNext = 79 /* _BinaryenStringIterNextId */,
-  StringIterMove = 80 /* _BinaryenStringIterMoveId */,
-  StringSliceWTF = 81 /* _BinaryenStringSliceWTFId */,
-  StringSliceIter = 82 /* _BinaryenStringSliceIterId */
+  ArrayNewSeg = 64 /* TODO_BinaryenArraySegId */,
+  ArrayInit = 65 /* _BinaryenArrayInitId */,
+  ArrayGet = 66 /* _BinaryenArrayGetId */,
+  ArraySet = 67 /* _BinaryenArraySetId */,
+  ArrayLen = 68 /* _BinaryenArrayLenId */,
+  ArrayCopy = 69 /* _BinaryenArrayCopyId */,
+  RefAs = 70 /* _BinaryenRefAsId */,
+  StringNew = 71 /* _BinaryenStringNewId */,
+  StringConst = 72 /* _BinaryenStringConstId */,
+  StringMeasure = 73 /* _BinaryenStringMeasureId */,
+  StringEncode = 74 /* _BinaryenStringEncodeId */,
+  StringConcat = 75 /* _BinaryenStringConcatId */,
+  StringEq = 76 /* _BinaryenStringEqId */,
+  StringAs = 77 /* _BinaryenStringAsId */,
+  StringWTF8Advance = 78 /* _BinaryenStringWTF8AdvanceId */,
+  StringWTF16Get = 79 /* _BinaryenStringWTF16GetId */,
+  StringIterNext = 80 /* _BinaryenStringIterNextId */,
+  StringIterMove = 81 /* _BinaryenStringIterMoveId */,
+  StringSliceWTF = 82 /* _BinaryenStringSliceWTFId */,
+  StringSliceIter = 83 /* _BinaryenStringSliceIterId */
 }
 
 /** Binaryen external kind constants. */
@@ -1192,32 +1192,14 @@ export const enum SIMDTernaryOp {
   Bitselect = 0 /* _BinaryenBitselectVec128 */
 }
 
-/** Binaryen RefIs operation constants. */
-export const enum RefIsOp {
-  /** ref.is_null */
-  Null = 0 /* _BinaryenRefIsNull */,
-  /** ref.is_func */
-  Func = 1 /* _BinaryenRefIsFunc */,
-  /** ref.is_data */
-  Data = 2 /* _BinaryenRefIsData */,
-  /** ref.is_i31 */
-  I31 = 3 /* _BinaryenRefIsI31 */
-}
-
 /** Binaryen RefAs operation constants. */
 export const enum RefAsOp {
   /** ref.as_non_null */
   NonNull = 0 /* _BinaryenRefAsNonNull */,
-  /** ref.as_func */
-  Func = 1 /* _BinaryenRefAsFunc */,
-  /** ref.as_data */
-  Data = 2 /* _BinaryenRefAsData */,
-  /** ref.as_i31 */
-  I31 = 3 /* _BinaryenRefAsI31 */,
   /** extern.internalize */
-  ExternInternalize = 4 /* _BinaryenRefAsExternInternalize */,
+  ExternInternalize = 1 /* _BinaryenRefAsExternInternalize */,
   /** extern.externalize */
-  ExternExternalize = 5 /* _BinaryenRefAsExternExternalize */
+  ExternExternalize = 2 /* _BinaryenRefAsExternExternalize */
 }
 
 /** Binaryen BrOn operation constants. */
@@ -1229,19 +1211,7 @@ export const enum BrOnOp {
   /** br_on_cast */
   Cast = 2 /* _BinaryenBrOnCast */,
   /** br_on_cast_fail */
-  CastFail = 3 /* _BinaryenBrOnCastFail */,
-  /** br_on_func */
-  Func = 4 /* _BinaryenBrOnFunc */,
-  /** br_on_non_func */
-  NonFunc = 5 /* _BinaryenBrOnNonFunc */,
-  /** br_on_data */
-  Data = 6 /* _BinaryenBrOnData */,
-  /** br_on_non_data */
-  NonData = 7 /* _BinaryenBrOnNonData */,
-  /** br_on_i31 */
-  I31 = 8 /* _BinaryenBrOnI31 */,
-  /** br_on_non_i32 */
-  NonI31 = 9 /* _BinaryenBrOnNonI31 */
+  CastFail = 3 /* _BinaryenBrOnCastFail */
 }
 
 /** Binaryen StringNew operation constants. */
@@ -2057,21 +2027,10 @@ export class Module {
 
   // reference types / gc
 
-  ref_is(
-    op: RefIsOp,
-    expr: ExpressionRef
-  ): ExpressionRef {
-    return binaryen._BinaryenRefIs(this.ref, op, expr);
-  }
-
   ref_is_null(
     expr: ExpressionRef
   ): ExpressionRef {
-    if (isNullableType(getExpressionType(expr))) {
-      return binaryen._BinaryenRefIs(this.ref, RefIsOp.Null, expr);
-    } else {
-      return this.i32(0); // false literal
-    }
+    return binaryen._BinaryenRefIsNull(this.ref, expr);
   }
 
   ref_as(
@@ -3775,14 +3734,14 @@ function tryEnsureBasicType(type: Type): TypeRef {
     case TypeKind.Eqref: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Eq, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.I31ref: {
-      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, type.is(TypeFlags.Nullable));
-    }
-    case TypeKind.Dataref: {
-      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Data, type.is(TypeFlags.Nullable));
+    case TypeKind.Structref: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Struct, type.is(TypeFlags.Nullable));
     }
     case TypeKind.Arrayref: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Array, type.is(TypeFlags.Nullable));
+    }
+    case TypeKind.I31ref: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, type.is(TypeFlags.Nullable));
     }
     case TypeKind.Stringref: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, type.is(TypeFlags.Nullable));

@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func_subtype func))
+ (type $none_=>_none (func))
  (global $~lib/native/ASC_FEATURE_THREADS i32 (i32.const 1))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
@@ -9,7 +9,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $features/threads/testAtomic (type $none_=>_none)
+ (func $features/threads/testAtomic
   i32.const 0
   i32.atomic.load8_u $0
   drop
@@ -291,7 +291,7 @@
   i64.atomic.rmw.cmpxchg $0 offset=8
   drop
  )
- (func $features/threads/testAtomicAsm (type $none_=>_none)
+ (func $features/threads/testAtomicAsm
   i32.const 0
   i32.atomic.load8_u $0
   drop
@@ -538,13 +538,13 @@
   i64.atomic.rmw.cmpxchg $0
   drop
  )
- (func $start:features/threads (type $none_=>_none)
+ (func $start:features/threads
   i32.const 1
   drop
   call $features/threads/testAtomic
   call $features/threads/testAtomicAsm
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:features/threads
  )
 )

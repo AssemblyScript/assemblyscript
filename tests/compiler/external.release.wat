@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func_subtype func))
+ (type $none_=>_none (func))
  (import "foo" "var" (global $external/var_ i32))
  (import "external" "foo" (func $external/foo))
  (import "external" "bar" (func $external/two))

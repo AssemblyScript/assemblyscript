@@ -1,8 +1,8 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $none_=>_i32 (func_subtype (result i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_none (func))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 124))
@@ -15,11 +15,11 @@
  (elem $0 (i32.const 1) $class-static-function/Example.staticFunc)
  (export "memory" (memory $0))
  (start $~start)
- (func $class-static-function/Example.staticFunc (type $none_=>_i32) (result i32)
+ (func $class-static-function/Example.staticFunc (result i32)
   i32.const 42
   return
  )
- (func $class-static-function/call (type $i32_=>_i32) (param $func i32) (result i32)
+ (func $class-static-function/call (param $func i32) (result i32)
   i32.const 0
   global.set $~argumentsLength
   local.get $func
@@ -27,10 +27,10 @@
   call_indirect $0 (type $none_=>_i32)
   return
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:class-static-function
  )
- (func $~stack_check (type $none_=>_none)
+ (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -43,7 +43,7 @@
    unreachable
   end
  )
- (func $start:class-static-function (type $none_=>_none)
+ (func $start:class-static-function
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4

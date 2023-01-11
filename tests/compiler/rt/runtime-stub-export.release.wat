@@ -1,9 +1,9 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $i32_=>_none (func_subtype (param i32) func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1168))
@@ -20,7 +20,7 @@
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__new (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -130,16 +130,16 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/stub/__pin (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__pin (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__unpin (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/stub/__unpin (param $0 i32)
   nop
  )
- (func $~lib/rt/stub/__collect (type $none_=>_none)
+ (func $~lib/rt/stub/__collect
   nop
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   i32.const 1196
   global.set $~lib/rt/stub/offset
  )

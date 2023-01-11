@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $i64_=>_i64 (func_subtype (param i64) (result i64) func))
+ (type $none_=>_none (func))
+ (type $i64_=>_i64 (func (param i64) (result i64)))
  (global $const-folding/w (mut i32) (i32.const 0))
  (global $const-folding/x (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 8))
@@ -13,7 +13,7 @@
  (export "test" (func $const-folding/test))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:const-folding (type $none_=>_none)
+ (func $start:const-folding
   i32.const 42
   i32.const 1
   i32.shr_s
@@ -29,7 +29,7 @@
   global.get $const-folding/w
   global.set $const-folding/x
  )
- (func $const-folding/test (type $i64_=>_i64) (param $value i64) (result i64)
+ (func $const-folding/test (param $value i64) (result i64)
   (local $mod1 i64)
   (local $mod2 i64)
   (local $rlo i64)
@@ -67,7 +67,7 @@
   i64.add
   return
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:const-folding
  )
 )

@@ -1,9 +1,9 @@
 (module
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $f32_=>_i32 (func_subtype (param f32) (result i32) func))
- (type $f64_=>_i32 (func_subtype (param f64) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $f32_=>_i32 (func (param f32) (result i32)))
+ (type $f64_=>_i32 (func (param f64) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -26,11 +26,11 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/common/OBJECT#get:rtSize (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/string/String#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/string/String#get:length (param $this i32) (result i32)
   local.get $this
   i32.const 20
   i32.sub
@@ -39,11 +39,11 @@
   i32.shr_u
   return
  )
- (func $std/hash/check (type $i32_=>_i32) (param $hash i32) (result i32)
+ (func $std/hash/check (param $hash i32) (result i32)
   i32.const 1
   return
  )
- (func $~lib/util/hash/HASH<f32> (type $f32_=>_i32) (param $key f32) (result i32)
+ (func $~lib/util/hash/HASH<f32> (param $key f32) (result i32)
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
@@ -112,7 +112,7 @@
   end
   return
  )
- (func $~lib/util/hash/HASH<f64> (type $f64_=>_i32) (param $key f64) (result i32)
+ (func $~lib/util/hash/HASH<f64> (param $key f64) (result i32)
   (local $key|1 i64)
   (local $h i32)
   i32.const 0
@@ -198,10 +198,10 @@
   end
   return
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:std/hash
  )
- (func $~stack_check (type $none_=>_none)
+ (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -214,7 +214,7 @@
    unreachable
   end
  )
- (func $~lib/util/hash/HASH<~lib/string/String|null> (type $i32_=>_i32) (param $key i32) (result i32)
+ (func $~lib/util/hash/HASH<~lib/string/String|null> (param $key i32) (result i32)
   (local $key|1 i32)
   (local $h i32)
   (local $len i32)
@@ -503,7 +503,7 @@
   local.get $19
   return
  )
- (func $~lib/util/hash/HASH<~lib/string/String> (type $i32_=>_i32) (param $key i32) (result i32)
+ (func $~lib/util/hash/HASH<~lib/string/String> (param $key i32) (result i32)
   (local $key|1 i32)
   (local $h i32)
   (local $len i32)
@@ -792,7 +792,7 @@
   local.get $19
   return
  )
- (func $start:std/hash (type $none_=>_none)
+ (func $start:std/hash
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4

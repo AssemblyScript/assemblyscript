@@ -1,8 +1,8 @@
 (module
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/pointer/one (mut i32) (i32.const 0))
  (global $std/pointer/two (mut i32) (i32.const 0))
@@ -19,25 +19,25 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $std/pointer/Entry#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
+ (func $std/pointer/Entry#set:key (param $this i32) (param $key i32)
   local.get $this
   local.get $key
   i32.store $0
  )
- (func $std/pointer/Entry#set:val (type $i32_i32_=>_none) (param $this i32) (param $val i32)
+ (func $std/pointer/Entry#set:val (param $this i32) (param $val i32)
   local.get $this
   local.get $val
   i32.store $0 offset=4
  )
- (func $std/pointer/Entry#get:key (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $std/pointer/Entry#get:key (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $std/pointer/Entry#get:val (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $std/pointer/Entry#get:val (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $start:std/pointer (type $none_=>_none)
+ (func $start:std/pointer
   (local $this i32)
   (local $offset i32)
   (local $this|2 i32)
@@ -778,7 +778,7 @@
    unreachable
   end
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:std/pointer
  )
 )

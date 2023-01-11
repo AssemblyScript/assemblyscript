@@ -1,12 +1,12 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $i32_=>_none (func_subtype (param i32) func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $localinit/initInIf (type $none_=>_none)
+ (func $localinit/initInIf
   (local $a i32)
   i32.const 1
   local.tee $a
@@ -18,7 +18,7 @@
   local.get $a
   drop
  )
- (func $localinit/initInIfElse (type $none_=>_none)
+ (func $localinit/initInIfElse
   (local $a i32)
   i32.const 1
   local.tee $a
@@ -30,7 +30,7 @@
   local.get $a
   drop
  )
- (func $localinit/initInIfAnd (type $i32_=>_none) (param $cond i32)
+ (func $localinit/initInIfAnd (param $cond i32)
   (local $a i32)
   (local $b i32)
   local.get $cond
@@ -53,7 +53,7 @@
    drop
   end
  )
- (func $localinit/initInIfOr (type $i32_=>_none) (param $cond i32)
+ (func $localinit/initInIfOr (param $cond i32)
   (local $a i32)
   (local $b i32)
   local.get $cond
@@ -77,7 +77,7 @@
   local.get $b
   drop
  )
- (func $localinit/initInDo (type $i32_=>_none) (param $cond i32)
+ (func $localinit/initInDo (param $cond i32)
   (local $a i32)
   loop $do-loop|0
    i32.const 1
@@ -88,7 +88,7 @@
   local.get $a
   drop
  )
- (func $localinit/initInWhile (type $none_=>_none)
+ (func $localinit/initInWhile
   (local $a i32)
   block $while-break|0
    loop $while-continue|0
@@ -104,7 +104,7 @@
   local.get $a
   drop
  )
- (func $localinit/initInWhileAnd (type $i32_=>_none) (param $cond i32)
+ (func $localinit/initInWhileAnd (param $cond i32)
   (local $a i32)
   loop $while-continue|0
    local.get $cond
@@ -121,7 +121,7 @@
    end
   end
  )
- (func $localinit/initInWhileOr (type $i32_=>_none) (param $cond i32)
+ (func $localinit/initInWhileOr (param $cond i32)
   (local $a i32)
   (local $b i32)
   loop $while-continue|0
@@ -147,7 +147,7 @@
   local.get $b
   drop
  )
- (func $start:localinit (type $none_=>_none)
+ (func $start:localinit
   call $localinit/initInIf
   call $localinit/initInIfElse
   i32.const 1
@@ -162,7 +162,7 @@
   i32.const 1
   call $localinit/initInWhileOr
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:localinit
  )
 )

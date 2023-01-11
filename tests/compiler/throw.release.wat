@@ -1,8 +1,8 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
@@ -45,7 +45,7 @@
  (export "doThrow" (func $throw/doThrow))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/itcms/visitRoots (type $none_=>_none)
+ (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/rt/itcms/white
@@ -100,7 +100,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/Object#makeGray (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -232,7 +232,7 @@
   local.get $0
   i32.store $0 offset=8
  )
- (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -385,7 +385,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -631,7 +631,7 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/itcms/step (type $none_=>_none)
+ (func $~lib/rt/itcms/step
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1052,7 +1052,7 @@
    global.set $~lib/rt/itcms/state
   end
  )
- (func $throw/doThrow (type $none_=>_none)
+ (func $throw/doThrow
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1083,7 +1083,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid
    block $~lib/arraybuffer/ArrayBufferView
     block $~lib/string/String
@@ -1112,7 +1112,7 @@
   end
   unreachable
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   (local $0 i32)
   (local $1 i32)
   block $__inlined_func$start:throw
@@ -1253,7 +1253,7 @@
    unreachable
   end
  )
- (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   global.get $~lib/rt/itcms/white
   local.get $0
   i32.const 20

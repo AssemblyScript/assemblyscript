@@ -1,9 +1,9 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $none_=>_i32 (func_subtype (result i32) func))
- (type $none_=>_i64 (func_subtype (result i64) func))
- (type $none_=>_f32 (func_subtype (result f32) func))
- (type $none_=>_f64 (func_subtype (result f64) func))
+ (type $none_=>_none (func))
+ (type $none_=>_i32 (func (result i32)))
+ (type $none_=>_i64 (func (result i64)))
+ (type $none_=>_f32 (func (result f32)))
+ (type $none_=>_f64 (func (result f64)))
  (global $infer-type/i i32 (i32.const 10))
  (global $infer-type/I i64 (i64.const 4294967296))
  (global $infer-type/F f64 (f64.const 1.5))
@@ -21,7 +21,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $infer-type/locals (type $none_=>_none)
+ (func $infer-type/locals
   (local $li i32)
   (local $lI i64)
   (local $lF f64)
@@ -41,23 +41,23 @@
   global.get $infer-type/F
   local.set $aF
  )
- (func $infer-type/reti (type $none_=>_i32) (result i32)
+ (func $infer-type/reti (result i32)
   i32.const 0
   return
  )
- (func $infer-type/retI (type $none_=>_i64) (result i64)
+ (func $infer-type/retI (result i64)
   i64.const 0
   return
  )
- (func $infer-type/retf (type $none_=>_f32) (result f32)
+ (func $infer-type/retf (result f32)
   f32.const 0
   return
  )
- (func $infer-type/refF (type $none_=>_f64) (result f64)
+ (func $infer-type/refF (result f64)
   f64.const 0
   return
  )
- (func $start:infer-type (type $none_=>_none)
+ (func $start:infer-type
   (local $a i32)
   (local $b i32)
   global.get $infer-type/i
@@ -105,7 +105,7 @@
   i32.const 1
   drop
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:infer-type
  )
 )

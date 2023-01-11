@@ -1,7 +1,7 @@
 (module
- (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func_subtype (param i32 i32 f64 f64 f64 f64 f64) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34188))
@@ -25,7 +25,7 @@
  (data (i32.const 1384) "\02\00\00\00\10\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $~start (type $none_=>_none)
+ (func $~start
   (local $0 i32)
   global.get $~started
   if

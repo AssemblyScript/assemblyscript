@@ -14,5 +14,5 @@ export const globalExtern: externref = null;
 export const globalAny: anyref = null;
 export const globalEq: eqref = null;
 export const globalI31: i31ref = null;
-export const globalData: dataref = null;
+export const globalStruct: structref = null;
 export const globalArray: arrayref = null;

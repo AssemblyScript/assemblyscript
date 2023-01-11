@@ -1,7 +1,7 @@
 (module
- (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 96))
@@ -15,7 +15,7 @@
  (elem $0 (i32.const 1) $call-optional/opt@varargs)
  (export "memory" (memory $0))
  (start $~start)
- (func $call-optional/opt (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
+ (func $call-optional/opt (param $a i32) (param $b i32) (param $c i32) (result i32)
   local.get $a
   local.get $b
   i32.add
@@ -23,7 +23,7 @@
   i32.add
   return
  )
- (func $call-optional/opt@varargs (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
+ (func $call-optional/opt@varargs (param $a i32) (param $b i32) (param $c i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -46,7 +46,7 @@
   local.get $c
   call $call-optional/opt
  )
- (func $start:call-optional (type $none_=>_none)
+ (func $start:call-optional
   i32.const 3
   i32.const 0
   i32.const 1
@@ -154,7 +154,7 @@
    unreachable
   end
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:call-optional
  )
 )

@@ -1,10 +1,10 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $i32_i32_i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32 i32 i32) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -25,11 +25,11 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/common/OBJECT#get:rtSize (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/string/String#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/string/String#get:length (param $this i32) (result i32)
   local.get $this
   i32.const 20
   i32.sub
@@ -38,7 +38,7 @@
   i32.shr_u
   return
  )
- (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $7 i32)
@@ -142,10 +142,10 @@
   i32.const 0
   return
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:NonNullable
  )
- (func $~stack_check (type $none_=>_none)
+ (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -158,7 +158,7 @@
    unreachable
   end
  )
- (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+ (func $~lib/string/String.__eq (param $left i32) (param $right i32) (result i32)
   (local $leftLength i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -254,7 +254,7 @@
   local.get $3
   return
  )
- (func $~lib/string/String.__ne (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+ (func $~lib/string/String.__ne (param $left i32) (param $right i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -286,7 +286,7 @@
   local.get $2
   return
  )
- (func $NonNullable/assertNonNull<~lib/string/String> (type $i32_=>_none) (param $t i32)
+ (func $NonNullable/assertNonNull<~lib/string/String> (param $t i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -321,7 +321,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $NonNullable/safetyCheck<~lib/string/String|null> (type $i32_=>_none) (param $t i32)
+ (func $NonNullable/safetyCheck<~lib/string/String|null> (param $t i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -353,7 +353,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $start:NonNullable (type $none_=>_none)
+ (func $start:NonNullable
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer

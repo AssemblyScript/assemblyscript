@@ -1,7 +1,7 @@
 (module
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $resolve-nested/Outer.Inner.a (mut i32) (i32.const 0))
  (global $resolve-nested/Outer.Inner.b (mut i32) (i32.const 0))
@@ -25,10 +25,10 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "outer" (func $export:resolve-nested/outer))
- (func $resolve-nested/outer (type $i32_i32_i32_=>_none) (param $a i32) (param $b i32) (param $c i32)
+ (func $resolve-nested/outer (param $a i32) (param $b i32) (param $c i32)
   nop
  )
- (func $~stack_check (type $none_=>_none)
+ (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -41,7 +41,7 @@
    unreachable
   end
  )
- (func $export:resolve-nested/outer (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $export:resolve-nested/outer (param $0 i32) (param $1 i32) (param $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
