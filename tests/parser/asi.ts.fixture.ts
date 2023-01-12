@@ -17,6 +17,10 @@ function successCloseBrace(): i32 {
 function successCloseParen(): i32 {
   return (123);
 }
+function successAfterLet(): i32 {
+  let a = 0;
+  return a;
+}
 // ERROR 1012: "Unexpected token." in asi.ts(2,13+0)
 // ERROR 1012: "Unexpected token." in asi.ts(7,14+0)
 // ERROR 1012: "Unexpected token." in asi.ts(11,13+0)

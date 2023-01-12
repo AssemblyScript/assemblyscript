@@ -973,18 +973,18 @@ export class Tokenizer extends DiagnosticEmitter {
       while (nextToken == Token.Invalid);
       this.nextToken = nextToken;
       this.nextTokenPos = this.tokenPos;
-      if (checkOnNewLine) {
-        this.nextTokenOnNewLine = false;
-        for (let pos = posBefore, end = this.nextTokenPos; pos < end; ++pos) {
-          if (isLineBreak(text.charCodeAt(pos))) {
-            this.nextTokenOnNewLine = true;
-            break;
-          }
-        }
-      }
       this.pos = posBefore;
       this.token = tokenBefore;
       this.tokenPos = tokenPosBefore;
+    }
+    if (checkOnNewLine) {
+      this.nextTokenOnNewLine = false;
+      for (let pos = this.pos, end = this.nextTokenPos; pos < end; ++pos) {
+        if (isLineBreak(text.charCodeAt(pos))) {
+          this.nextTokenOnNewLine = true;
+          break;
+        }
+      }
     }
     return this.nextToken;
   }
