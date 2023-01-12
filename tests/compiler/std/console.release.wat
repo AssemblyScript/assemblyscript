@@ -1,8 +1,8 @@
 (module
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "console.assert" (func $~lib/bindings/dom/console.assert (param i32 i32)))
  (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
  (import "env" "console.debug" (func $~lib/bindings/dom/console.debug (param i32)))
@@ -45,7 +45,7 @@
  (data (i32.const 1592) "\02\00\00\00\08\00\00\001\002\003\004")
  (export "memory" (memory $0))
  (start $~start)
- (func $~start (type $none_=>_none)
+ (func $~start
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -241,7 +241,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/console/console.assert<bool> (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/console/console.assert<bool> (param $0 i32) (param $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -275,7 +275,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.log (type $i32_=>_none) (param $0 i32)
+ (func $~lib/console/console.log (param $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -306,7 +306,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.time (type $i32_=>_none) (param $0 i32)
+ (func $~lib/console/console.time (param $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -337,7 +337,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.timeLog (type $i32_=>_none) (param $0 i32)
+ (func $~lib/console/console.timeLog (param $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -368,7 +368,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.timeEnd (type $i32_=>_none) (param $0 i32)
+ (func $~lib/console/console.timeEnd (param $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4

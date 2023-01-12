@@ -1,9 +1,9 @@
 (module
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i64_i64_=>_i64 (func_subtype (param i64 i64) (result i64) func))
- (type $f64_f64_=>_f64 (func_subtype (param f64 f64) (result f64) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $none_=>_none (func_subtype func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
+ (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
@@ -23,18 +23,18 @@
  (elem $0 (i32.const 1) $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|0 $function-types/makeAdder<f64>~anonymous|0 $function-types/makeAdder<i32>~anonymous|0)
  (export "memory" (memory $0))
  (start $~start)
- (func $function-types/makeAdder<i32>~anonymous|0 (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-types/makeAdder<i32>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $function-types/makeAdder<i64>~anonymous|0 (type $i64_i64_=>_i64) (param $0 i64) (param $1 i64) (result i64)
+ (func $function-types/makeAdder<i64>~anonymous|0 (param $0 i64) (param $1 i64) (result i64)
   i64.const 30
  )
- (func $function-types/makeAdder<f64>~anonymous|0 (type $f64_f64_=>_f64) (param $0 f64) (param $1 f64) (result f64)
+ (func $function-types/makeAdder<f64>~anonymous|0 (param $0 f64) (param $1 f64) (result f64)
   f64.const 4
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer

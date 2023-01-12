@@ -1,7 +1,7 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memset/dest (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 60))
@@ -13,7 +13,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $memset/memset (type $i32_i32_i32_=>_i32) (param $dest i32) (param $c i32) (param $n i32) (result i32)
+ (func $memset/memset (param $dest i32) (param $c i32) (param $n i32) (result i32)
   (local $ret i32)
   (local $k i32)
   (local $c32 i32)
@@ -274,7 +274,7 @@
   local.get $ret
   return
  )
- (func $start:memset (type $none_=>_none)
+ (func $start:memset
   global.get $~lib/memory/__heap_base
   global.set $memset/dest
   global.get $memset/dest
@@ -376,7 +376,7 @@
    unreachable
   end
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:memset
  )
 )

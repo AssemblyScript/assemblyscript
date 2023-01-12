@@ -1,7 +1,7 @@
 (module
- (type $none_=>_i32 (func_subtype (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_i32 (func (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memory/ptr (mut i32) (i32.const 80))
  (global $~lib/memory/__data_end i32 (i32.const 212))
@@ -37,7 +37,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $memory/test (type $none_=>_i32) (result i32)
+ (func $memory/test (result i32)
   (local $value i32)
   i32.const 16
   i32.load $0
@@ -50,27 +50,27 @@
   local.get $value
   return
  )
- (func $memory/testGeneric<v128> (type $none_=>_i32) (result i32)
+ (func $memory/testGeneric<v128> (result i32)
   i32.const 144
   return
  )
- (func $memory/testGeneric<i64> (type $none_=>_i32) (result i32)
+ (func $memory/testGeneric<i64> (result i32)
   i32.const 152
   return
  )
- (func $memory/testGeneric<i32> (type $none_=>_i32) (result i32)
+ (func $memory/testGeneric<i32> (result i32)
   i32.const 156
   return
  )
- (func $memory/testGeneric<i16> (type $none_=>_i32) (result i32)
+ (func $memory/testGeneric<i16> (result i32)
   i32.const 158
   return
  )
- (func $memory/testGeneric<i8> (type $none_=>_i32) (result i32)
+ (func $memory/testGeneric<i8> (result i32)
   i32.const 159
   return
  )
- (func $start:memory (type $none_=>_none)
+ (func $start:memory
   call $memory/test
   i32.const 0
   i32.eq
@@ -476,7 +476,7 @@
    unreachable
   end
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:memory
  )
 )

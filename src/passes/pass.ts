@@ -80,7 +80,7 @@ import {
   _BinaryenMemoryFillGetDest,
   _BinaryenMemoryFillGetValue,
   _BinaryenMemoryFillGetSize,
-  _BinaryenRefIsGetValue,
+  _BinaryenRefIsNullGetValue,
   _BinaryenRefAsGetValue,
   _BinaryenTryGetBody,
   _BinaryenTryGetNumCatchBodies,
@@ -148,7 +148,7 @@ import {
   _BinaryenMemoryFillSetDest,
   _BinaryenMemoryFillSetValue,
   _BinaryenMemoryFillSetSize,
-  _BinaryenRefIsSetValue,
+  _BinaryenRefIsNullSetValue,
   _BinaryenTrySetBody,
   _BinaryenTrySetCatchBodyAt,
   _BinaryenThrowSetOperandAt,
@@ -480,7 +480,7 @@ export abstract class Visitor {
     // unimp
   }
 
-  visitRefIs(expr: ExpressionRef): void {
+  visitRefIsNull(expr: ExpressionRef): void {
     // unimp
   }
 
@@ -973,11 +973,11 @@ export abstract class Visitor {
         this.visitRefNull(expr);
         break;
       }
-      case ExpressionId.RefIs: {
+      case ExpressionId.RefIsNull: {
         this.stack.push(expr);
-        this.visit(_BinaryenRefIsGetValue(expr));
+        this.visit(_BinaryenRefIsNullGetValue(expr));
         assert(this.stack.pop() == expr);
-        this.visitRefIs(expr);
+        this.visitRefIsNull(expr);
         break;
       }
       case ExpressionId.RefFunc: {
@@ -1811,10 +1811,10 @@ export function replaceChild(
     case ExpressionId.RefNull: {
       break;
     }
-    case ExpressionId.RefIs: {
-      let value = _BinaryenRefIsGetValue(parent);
+    case ExpressionId.RefIsNull: {
+      let value = _BinaryenRefIsNullGetValue(parent);
       if (value == search) {
-        _BinaryenRefIsSetValue(parent, replacement);
+        _BinaryenRefIsNullSetValue(parent, replacement);
         return value;
       }
       break;

@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $getter-setter/Foo._bar (mut i32) (i32.const 0))
  (memory $0 1)
@@ -8,7 +8,7 @@
  (data (i32.const 1048) "\02\00\00\00 \00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
- (func $~start (type $none_=>_none)
+ (func $~start
   global.get $getter-setter/Foo._bar
   if
    i32.const 0

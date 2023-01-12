@@ -1,9 +1,9 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $ternary/a (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
@@ -19,7 +19,7 @@
  (export "memory" (memory $0))
  (export "testVoidInclTypeMismatch" (func $export:ternary/testVoidInclTypeMismatch))
  (start $~start)
- (func $start:ternary (type $none_=>_none)
+ (func $start:ternary
   i32.const 1
   drop
   i32.const 1
@@ -33,7 +33,7 @@
   i32.const 1
   global.set $ternary/a
  )
- (func $ternary/test (type $i32_i32_i32_=>_i32) (param $x i32) (param $y i32) (param $z i32) (result i32)
+ (func $ternary/test (param $x i32) (param $y i32) (param $z i32) (result i32)
   local.get $x
   if (result i32)
    local.get $y
@@ -42,7 +42,7 @@
   end
   return
  )
- (func $ternary/testDropWithTypeMismatch (type $i32_=>_none) (param $cond i32)
+ (func $ternary/testDropWithTypeMismatch (param $cond i32)
   (local $x i32)
   (local $y i32)
   global.get $~lib/memory/__stack_pointer
@@ -72,7 +72,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $ternary/testVoidInclTypeMismatch (type $i32_i32_=>_none) (param $cond i32) (param $nop i32)
+ (func $ternary/testVoidInclTypeMismatch (param $cond i32) (param $nop i32)
   local.get $cond
   if
    i32.const 0
@@ -110,10 +110,10 @@
    call_indirect $0 (type $none_=>_none)
   end
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:ternary
  )
- (func $~stack_check (type $none_=>_none)
+ (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -126,7 +126,7 @@
    unreachable
   end
  )
- (func $export:ternary/testVoidInclTypeMismatch (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $export:ternary/testVoidInclTypeMismatch (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub

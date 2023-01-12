@@ -1018,9 +1018,9 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeType(CommonNames.externref, Type.externref);
     this.registerNativeType(CommonNames.anyref, Type.anyref);
     this.registerNativeType(CommonNames.eqref, Type.eqref);
-    this.registerNativeType(CommonNames.i31ref, Type.i31ref);
-    this.registerNativeType(CommonNames.dataref, Type.dataref);
+    this.registerNativeType(CommonNames.structref, Type.structref);
     this.registerNativeType(CommonNames.arrayref, Type.arrayref);
+    this.registerNativeType(CommonNames.i31ref, Type.i31ref);
     this.registerNativeType(CommonNames.stringref, Type.stringref);
     this.registerNativeType(CommonNames.stringview_wtf8, Type.stringview_wtf8);
     this.registerNativeType(CommonNames.stringview_wtf16, Type.stringview_wtf16);
@@ -1293,9 +1293,9 @@ export class Program extends DiagnosticEmitter {
       if (options.hasFeature(Feature.GC)) {
         this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
         this.registerWrapperClass(Type.eqref, CommonNames.Eqref);
-        this.registerWrapperClass(Type.i31ref, CommonNames.I31ref);
-        this.registerWrapperClass(Type.dataref, CommonNames.Dataref);
+        this.registerWrapperClass(Type.structref, CommonNames.Structref);
         this.registerWrapperClass(Type.arrayref, CommonNames.Arrayref);
+        this.registerWrapperClass(Type.i31ref, CommonNames.I31ref);
       }
     }
 
@@ -1964,9 +1964,9 @@ export class Program extends DiagnosticEmitter {
         return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode);
       case TypeKind.Anyref:
       case TypeKind.Eqref:
-      case TypeKind.I31ref:
-      case TypeKind.Dataref:
-      case TypeKind.Arrayref: {
+      case TypeKind.Structref:
+      case TypeKind.Arrayref:
+      case TypeKind.I31ref: {
         return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
             && this.checkFeatureEnabled(Feature.GC, reportNode);
       }

@@ -1,8 +1,8 @@
 (module
- (type $none_=>_externref (func_subtype (result externref) func))
- (type $none_=>_none (func_subtype func))
- (type $externref_=>_externref (func_subtype (param externref) (result externref) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_externref (func (result externref)))
+ (type $none_=>_none (func))
+ (type $externref_=>_externref (func (param externref) (result externref)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "reference-types" "somethingReal" (func $features/reference-types/somethingReal (result externref)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
@@ -28,16 +28,16 @@
  (export "nonNullReal" (global $features/reference-types/nonNullReal))
  (export "memory" (memory $0))
  (start $~start)
- (func $features/reference-types/someFunc (type $none_=>_none)
-  unreachable
+ (func $features/reference-types/someFunc
+  nop
  )
- (func $features/reference-types/internal (type $externref_=>_externref) (param $0 externref) (result externref)
+ (func $features/reference-types/internal (param $0 externref) (result externref)
   local.get $0
   call $features/reference-types/external
   call $features/reference-types/external
   call $features/reference-types/external
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   (local $0 externref)
   call $features/reference-types/somethingReal
   ref.is_null

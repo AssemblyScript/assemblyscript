@@ -1,12 +1,12 @@
 (module
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
@@ -21,43 +21,43 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $flMap i32)
+ (func $~lib/rt/tlsf/Root#set:flMap (param $this i32) (param $flMap i32)
   local.get $this
   local.get $flMap
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#get:mmInfo (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/common/BLOCK#get:mmInfo (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $mmInfo i32)
+ (func $~lib/rt/common/BLOCK#set:mmInfo (param $this i32) (param $mmInfo i32)
   local.get $this
   local.get $mmInfo
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
+ (func $~lib/rt/tlsf/Block#set:prev (param $this i32) (param $prev i32)
   local.get $this
   local.get $prev
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $next i32)
+ (func $~lib/rt/tlsf/Block#set:next (param $this i32) (param $next i32)
   local.get $this
   local.get $next
   i32.store $0 offset=8
  )
- (func $~lib/rt/tlsf/Block#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/tlsf/Block#get:prev (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/tlsf/Block#get:next (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/rt/tlsf/Root#get:flMap (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/tlsf/Root#get:flMap (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
+ (func $~lib/rt/tlsf/removeBlock (param $root i32) (param $block i32)
   (local $blockInfo i32)
   (local $size i32)
   (local $fl i32)
@@ -293,7 +293,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
+ (func $~lib/rt/tlsf/insertBlock (param $root i32) (param $block i32)
   (local $blockInfo i32)
   (local $block|3 i32)
   (local $right i32)
@@ -657,7 +657,7 @@
   local.get $slMap
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_i32) (param $root i32) (param $start i32) (param $end i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $end i32) (result i32)
   (local $root|3 i32)
   (local $tail i32)
   (local $tailInfo i32)
@@ -822,7 +822,7 @@
   i32.const 1
   return
  )
- (func $~lib/rt/tlsf/initialize (type $none_=>_none)
+ (func $~lib/rt/tlsf/initialize
   (local $rootOffset i32)
   (local $pagesBefore i32)
   (local $pagesNeeded i32)
@@ -967,7 +967,7 @@
   local.get $root
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/tlsf/computeSize (type $i32_=>_i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/computeSize (param $size i32) (result i32)
   local.get $size
   i32.const 12
   i32.le_u
@@ -988,7 +988,7 @@
   end
   return
  )
- (func $~lib/rt/tlsf/prepareSize (type $i32_=>_i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (param $size i32) (result i32)
   local.get $size
   i32.const 1073741820
   i32.gt_u
@@ -1004,7 +1004,7 @@
   call $~lib/rt/tlsf/computeSize
   return
  )
- (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $root i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $root i32) (param $size i32) (result i32)
   (local $fl i32)
   (local $sl i32)
   (local $requestSize i32)
@@ -1212,7 +1212,7 @@
   local.get $head
   return
  )
- (func $~lib/rt/tlsf/growMemory (type $i32_i32_=>_none) (param $root i32) (param $size i32)
+ (func $~lib/rt/tlsf/growMemory (param $root i32) (param $size i32)
   (local $pagesBefore i32)
   (local $root|3 i32)
   (local $pagesNeeded i32)
@@ -1302,7 +1302,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (type $i32_i32_i32_=>_none) (param $root i32) (param $block i32) (param $size i32)
+ (func $~lib/rt/tlsf/prepareBlock (param $root i32) (param $block i32) (param $size i32)
   (local $blockInfo i32)
   (local $remaining i32)
   (local $spare i32)
@@ -1411,7 +1411,7 @@
    call $~lib/rt/common/BLOCK#set:mmInfo
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (type $i32_i32_=>_i32) (param $root i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $root i32) (param $size i32) (result i32)
   (local $payloadSize i32)
   (local $block i32)
   local.get $size
@@ -1475,7 +1475,7 @@
   local.get $block
   return
  )
- (func $~lib/rt/tlsf/__alloc (type $i32_=>_i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $size i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -1488,12 +1488,12 @@
   i32.add
   return
  )
- (func $~lib/memory/heap.alloc (type $i32_=>_i32) (param $size i32) (result i32)
+ (func $~lib/memory/heap.alloc (param $size i32) (result i32)
   local.get $size
   call $~lib/rt/tlsf/__alloc
   return
  )
- (func $~lib/rt/tlsf/checkUsedBlock (type $i32_=>_i32) (param $ptr i32) (result i32)
+ (func $~lib/rt/tlsf/checkUsedBlock (param $ptr i32) (result i32)
   (local $block i32)
   local.get $ptr
   i32.const 4
@@ -1531,7 +1531,7 @@
   local.get $block
   return
  )
- (func $~lib/rt/tlsf/freeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
+ (func $~lib/rt/tlsf/freeBlock (param $root i32) (param $block i32)
   i32.const 0
   drop
   local.get $block
@@ -1544,7 +1544,7 @@
   local.get $block
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/moveBlock (type $i32_i32_i32_=>_i32) (param $root i32) (param $block i32) (param $newSize i32) (result i32)
+ (func $~lib/rt/tlsf/moveBlock (param $root i32) (param $block i32) (param $newSize i32) (result i32)
   (local $newBlock i32)
   local.get $root
   local.get $newSize
@@ -1576,7 +1576,7 @@
   local.get $newBlock
   return
  )
- (func $~lib/rt/tlsf/reallocateBlock (type $i32_i32_i32_=>_i32) (param $root i32) (param $block i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/reallocateBlock (param $root i32) (param $block i32) (param $size i32) (result i32)
   (local $payloadSize i32)
   (local $blockInfo i32)
   (local $blockSize i32)
@@ -1672,7 +1672,7 @@
   call $~lib/rt/tlsf/moveBlock
   return
  )
- (func $~lib/rt/tlsf/__realloc (type $i32_i32_=>_i32) (param $ptr i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/__realloc (param $ptr i32) (param $size i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -1698,13 +1698,13 @@
   i32.add
   return
  )
- (func $~lib/memory/heap.realloc (type $i32_i32_=>_i32) (param $ptr i32) (param $size i32) (result i32)
+ (func $~lib/memory/heap.realloc (param $ptr i32) (param $size i32) (result i32)
   local.get $ptr
   local.get $size
   call $~lib/rt/tlsf/__realloc
   return
  )
- (func $~lib/rt/tlsf/__free (type $i32_=>_none) (param $ptr i32)
+ (func $~lib/rt/tlsf/__free (param $ptr i32)
   local.get $ptr
   global.get $~lib/memory/__heap_base
   i32.lt_u
@@ -1721,11 +1721,11 @@
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/memory/heap.free (type $i32_=>_none) (param $ptr i32)
+ (func $~lib/memory/heap.free (param $ptr i32)
   local.get $ptr
   call $~lib/rt/tlsf/__free
  )
- (func $start:heap (type $none_=>_none)
+ (func $start:heap
   i32.const 16
   call $~lib/memory/heap.alloc
   global.set $heap/ptr
@@ -1736,7 +1736,7 @@
   global.get $heap/ptr
   call $~lib/memory/heap.free
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:heap
  )
 )

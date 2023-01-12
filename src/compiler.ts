@@ -4838,9 +4838,9 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       case TypeKind.Eqref:
-      case TypeKind.I31ref:
-      case TypeKind.Dataref:
-      case TypeKind.Arrayref: return module.ref_eq(leftExpr, rightExpr);
+      case TypeKind.Structref:
+      case TypeKind.Arrayref:
+      case TypeKind.I31ref: return module.ref_eq(leftExpr, rightExpr);
       case TypeKind.Stringref: return module.string_eq(leftExpr, rightExpr);
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
@@ -4888,9 +4888,9 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       case TypeKind.Eqref:
-      case TypeKind.I31ref:
-      case TypeKind.Dataref:
-      case TypeKind.Arrayref: {
+      case TypeKind.Structref:
+      case TypeKind.Arrayref:
+      case TypeKind.I31ref: {
         return module.unary(UnaryOp.EqzI32,
           module.ref_eq(leftExpr, rightExpr)
         );
@@ -9861,7 +9861,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.Externref:
       case TypeKind.Anyref:
       case TypeKind.Eqref:
-      case TypeKind.Dataref:
+      case TypeKind.Structref:
       case TypeKind.Arrayref:
       case TypeKind.Stringref:
       case TypeKind.StringviewWTF8:
@@ -10020,8 +10020,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.Externref:
       case TypeKind.Anyref:
       case TypeKind.Eqref:
+      case TypeKind.Structref:
+      case TypeKind.Arrayref:
       case TypeKind.I31ref:
-      case TypeKind.Dataref:
       case TypeKind.Stringref:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:

@@ -1,12 +1,12 @@
 (module
- (type $none_=>_i32 (func_subtype (result i32) func))
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -76,30 +76,30 @@
  (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:function-expression~anonymous|0 (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $start:function-expression~anonymous|0 (param $0 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~someName|2 (type $none_=>_none)
+ (func $start:function-expression~someName|2
   nop
  )
- (func $start:function-expression~anonymous|3 (type $none_=>_i32) (result i32)
+ (func $start:function-expression~anonymous|3 (result i32)
   i32.const 1
  )
- (func $start:function-expression~anonymous|4 (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|4 (param $0 i32) (param $1 i32) (result i32)
   i32.const 3
  )
- (func $start:function-expression~anonymous|5 (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|5 (param $0 i32) (param $1 i32) (result i32)
   i32.const 1
  )
- (func $start:function-expression~anonymous|6 (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|6 (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $start:function-expression~anonymous|7~anonymous|0 (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $start:function-expression~anonymous|7~anonymous|0 (param $0 i32) (result i32)
   local.get $0
   i32.const 24
   i32.add
  )
- (func $~lib/rt/itcms/visitRoots (type $none_=>_none)
+ (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
   (local $1 i32)
   i32.const 1792
@@ -144,7 +144,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/Object#makeGray (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -276,7 +276,7 @@
   local.get $0
   i32.store $0 offset=8
  )
- (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -429,7 +429,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -675,7 +675,7 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -787,7 +787,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/initialize (type $none_=>_none)
+ (func $~lib/rt/tlsf/initialize
   (local $0 i32)
   (local $1 i32)
   memory.size $0
@@ -866,7 +866,7 @@
   i32.const 34928
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
+ (func $~lib/rt/itcms/step (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1133,7 +1133,7 @@
   end
   i32.const 0
  )
- (func $~lib/rt/tlsf/searchBlock (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1190,7 +1190,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/__new (type $none_=>_i32) (result i32)
+ (func $~lib/rt/itcms/__new (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1422,7 +1422,7 @@
   i32.store $0 align=1
   local.get $0
  )
- (func $function-expression/semanticallyAnonymous (type $none_=>_none)
+ (func $function-expression/semanticallyAnonymous
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1451,7 +1451,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/__visit_members (param $0 i32)
   (local $1 i32)
   block $folding-inner1
    block $folding-inner0
@@ -1516,10 +1516,10 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:function-expression
  )
- (func $start:function-expression (type $none_=>_none)
+ (func $start:function-expression
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1925,7 +1925,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $start:function-expression~anonymous|7 (type $none_=>_i32) (result i32)
+ (func $start:function-expression~anonymous|7 (result i32)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1955,7 +1955,7 @@
   global.set $~lib/memory/__stack_pointer
   i32.const 1472
  )
- (func $function-expression/testLocal~anonymous|0 (type $none_=>_i32) (result i32)
+ (func $function-expression/testLocal~anonymous|0 (result i32)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1985,7 +1985,7 @@
   global.set $~lib/memory/__stack_pointer
   i32.const 1536
  )
- (func $function-expression/testField~anonymous|0 (type $none_=>_i32) (result i32)
+ (func $function-expression/testField~anonymous|0 (result i32)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2015,7 +2015,7 @@
   global.set $~lib/memory/__stack_pointer
   i32.const 2000
  )
- (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   global.get $~lib/rt/itcms/white
   local.get $0
   i32.const 20

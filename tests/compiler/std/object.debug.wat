@@ -1,13 +1,13 @@
 (module
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $none_=>_none (func_subtype func))
- (type $f64_f64_=>_i32 (func_subtype (param f64 f64) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $f32_f32_=>_i32 (func_subtype (param f32 f32) (result i32) func))
- (type $i32_i32_i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32 i32 i32) (result i32) func))
- (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $none_=>_none (func))
+ (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -28,7 +28,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/object/Object.is<f64> (type $f64_f64_=>_i32) (param $x f64) (param $y f64) (result i32)
+ (func $~lib/object/Object.is<f64> (param $x f64) (param $y f64) (result i32)
   i32.const 1
   drop
   i32.const 8
@@ -50,7 +50,7 @@
   i32.or
   return
  )
- (func $~lib/object/Object.is<f32> (type $f32_f32_=>_i32) (param $x f32) (param $y f32) (result i32)
+ (func $~lib/object/Object.is<f32> (param $x f32) (param $y f32) (result i32)
   i32.const 1
   drop
   i32.const 4
@@ -72,7 +72,7 @@
   i32.or
   return
  )
- (func $~lib/object/Object.is<i32> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
+ (func $~lib/object/Object.is<i32> (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
   local.get $x
@@ -80,7 +80,7 @@
   i32.eq
   return
  )
- (func $~lib/object/Object.is<bool> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
+ (func $~lib/object/Object.is<bool> (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
   local.get $x
@@ -92,11 +92,11 @@
   i32.eq
   return
  )
- (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/common/OBJECT#get:rtSize (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/string/String#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/string/String#get:length (param $this i32) (result i32)
   local.get $this
   i32.const 20
   i32.sub
@@ -105,7 +105,7 @@
   i32.shr_u
   return
  )
- (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $7 i32)
@@ -209,7 +209,7 @@
   i32.const 0
   return
  )
- (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+ (func $~lib/string/String.__eq (param $left i32) (param $right i32) (result i32)
   (local $leftLength i32)
   local.get $left
   local.get $right
@@ -252,7 +252,7 @@
   i32.eqz
   return
  )
- (func $~lib/object/Object.is<~lib/string/String> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String> (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
   local.get $x
@@ -260,7 +260,7 @@
   call $~lib/string/String.__eq
   return
  )
- (func $~lib/object/Object.is<~lib/string/String|null> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String|null> (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
   local.get $x
@@ -268,7 +268,7 @@
   call $~lib/string/String.__eq
   return
  )
- (func $~lib/rt/stub/maybeGrowMemory (type $i32_=>_none) (param $newOffset i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $newOffset i32)
   (local $pagesBefore i32)
   (local $maxOffset i32)
   (local $pagesNeeded i32)
@@ -329,12 +329,12 @@
   local.get $newOffset
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $mmInfo i32)
+ (func $~lib/rt/common/BLOCK#set:mmInfo (param $this i32) (param $mmInfo i32)
   local.get $this
   local.get $mmInfo
   i32.store $0
  )
- (func $~lib/rt/stub/__alloc (type $i32_=>_i32) (param $size i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $size i32) (result i32)
   (local $block i32)
   (local $ptr i32)
   (local $size|3 i32)
@@ -383,27 +383,27 @@
   local.get $ptr
   return
  )
- (func $~lib/rt/common/OBJECT#set:gcInfo (type $i32_i32_=>_none) (param $this i32) (param $gcInfo i32)
+ (func $~lib/rt/common/OBJECT#set:gcInfo (param $this i32) (param $gcInfo i32)
   local.get $this
   local.get $gcInfo
   i32.store $0 offset=4
  )
- (func $~lib/rt/common/OBJECT#set:gcInfo2 (type $i32_i32_=>_none) (param $this i32) (param $gcInfo2 i32)
+ (func $~lib/rt/common/OBJECT#set:gcInfo2 (param $this i32) (param $gcInfo2 i32)
   local.get $this
   local.get $gcInfo2
   i32.store $0 offset=8
  )
- (func $~lib/rt/common/OBJECT#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $rtId i32)
+ (func $~lib/rt/common/OBJECT#set:rtId (param $this i32) (param $rtId i32)
   local.get $this
   local.get $rtId
   i32.store $0 offset=12
  )
- (func $~lib/rt/common/OBJECT#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $rtSize i32)
+ (func $~lib/rt/common/OBJECT#set:rtSize (param $this i32) (param $rtSize i32)
   local.get $this
   local.get $rtSize
   i32.store $0 offset=16
  )
- (func $~lib/rt/stub/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
+ (func $~lib/rt/stub/__new (param $size i32) (param $id i32) (result i32)
   (local $ptr i32)
   (local $object i32)
   local.get $size
@@ -443,7 +443,7 @@
   i32.add
   return
  )
- (func $std/object/Implicit#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $std/object/Implicit#constructor (param $this i32) (result i32)
   local.get $this
   i32.eqz
   if
@@ -454,7 +454,7 @@
   end
   local.get $this
  )
- (func $~lib/object/Object#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/object/Object#constructor (param $this i32) (result i32)
   local.get $this
   i32.eqz
   if
@@ -465,7 +465,7 @@
   end
   local.get $this
  )
- (func $std/object/Explicit#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $std/object/Explicit#constructor (param $this i32) (result i32)
   local.get $this
   i32.eqz
   if
@@ -479,7 +479,7 @@
   local.set $this
   local.get $this
  )
- (func $start:std/object (type $none_=>_none)
+ (func $start:std/object
   (local $implicit i32)
   (local $explicit i32)
   (local $object i32)
@@ -1184,7 +1184,7 @@
    unreachable
   end
  )
- (func $~instanceof|std/object/Explicit (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $~instanceof|std/object/Explicit (param $0 i32) (result i32)
   (local $1 i32)
   block $is_instance
    local.get $0
@@ -1201,7 +1201,7 @@
   end
   i32.const 1
  )
- (func $~instanceof|std/object/Implicit (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $~instanceof|std/object/Implicit (param $0 i32) (result i32)
   (local $1 i32)
   block $is_instance
    local.get $0
@@ -1218,7 +1218,7 @@
   end
   i32.const 1
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:std/object
  )
 )

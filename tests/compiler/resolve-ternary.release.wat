@@ -1,13 +1,13 @@
 (module
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $none_=>_i32 (func_subtype (result i32) func))
- (type $i64_i64_i32_i64_=>_i32 (func_subtype (param i64 i64 i32 i64) (result i32) func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i64_i64_i32_i64_=>_i32 (func (param i64 i64 i32 i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -75,7 +75,7 @@
  (elem $0 (i32.const 1) $start:resolve-ternary~anonymous|0 $start:resolve-ternary~anonymous|1 $resolve-ternary/g1 $resolve-ternary/g2)
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/itcms/visitRoots (type $none_=>_none)
+ (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
   (local $1 i32)
   i32.const 1472
@@ -124,7 +124,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/Object#makeGray (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -256,7 +256,7 @@
   local.get $0
   i32.store $0 offset=8
  )
- (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -409,7 +409,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -655,7 +655,7 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -767,7 +767,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/initialize (type $none_=>_none)
+ (func $~lib/rt/tlsf/initialize
   (local $0 i32)
   (local $1 i32)
   memory.size $0
@@ -846,7 +846,7 @@
   i32.const 37408
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
+ (func $~lib/rt/itcms/step (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1113,7 +1113,7 @@
   end
   i32.const 0
  )
- (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -1239,7 +1239,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/__new (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $~lib/rt/itcms/__new (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1545,7 +1545,7 @@
   memory.fill $0
   local.get $1
  )
- (func $~lib/util/number/utoa32_dec_lut (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_dec_lut (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $while-continue|0
    local.get $1
@@ -1649,7 +1649,7 @@
    i32.store16 $0
   end
  )
- (func $~lib/util/number/genDigits (type $i64_i64_i32_i64_=>_i32) (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i64) (result i32)
+ (func $~lib/util/number/genDigits (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i64) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2071,7 +2071,7 @@
   i32.store16 $0
   local.get $4
  )
- (func $~lib/util/number/prettify (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/number/prettify (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -2392,19 +2392,19 @@
    end
   end
  )
- (func $start:resolve-ternary~anonymous|0 (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $start:resolve-ternary~anonymous|0 (param $0 i32) (result i32)
   i32.const 2
  )
- (func $start:resolve-ternary~anonymous|1 (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $start:resolve-ternary~anonymous|1 (param $0 i32) (result i32)
   i32.const 3
  )
- (func $resolve-ternary/g1 (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $resolve-ternary/g1 (param $0 i32) (result i32)
   i32.const 4
  )
- (func $resolve-ternary/g2 (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $resolve-ternary/g2 (param $0 i32) (result i32)
   i32.const 5
  )
- (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/__visit_members (param $0 i32)
   (local $1 i32)
   block $invalid
    block $~lib/function/Function<%28i32%29=>i32>
@@ -2470,7 +2470,7 @@
   end
   unreachable
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   (local $0 i32)
   (local $1 i64)
   (local $2 f64)
@@ -2770,7 +2770,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2930,7 +2930,7 @@
   global.set $~lib/memory/__stack_pointer
   i32.const 0
  )
- (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   global.get $~lib/rt/itcms/white
   local.get $0
   i32.const 20

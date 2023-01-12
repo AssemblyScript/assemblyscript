@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func_subtype func))
+ (type $none_=>_none (func))
  (global $~lib/a/index/a i32 (i32.const 1))
  (global $~lib/c/index/c i32 (i32.const 3))
  (global $~lib/b/index/b i32 (i32.const 2))
@@ -14,7 +14,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:~lib/c/index (type $none_=>_none)
+ (func $start:~lib/c/index
   global.get $~lib/a/index/a
   i32.const 1
   i32.eq
@@ -24,7 +24,7 @@
   i32.eq
   drop
  )
- (func $start:~lib/a/index (type $none_=>_none)
+ (func $start:~lib/a/index
   call $start:~lib/c/index
   global.get $~lib/c/index/c
   i32.const 3
@@ -35,7 +35,7 @@
   i32.eq
   drop
  )
- (func $start:~lib/_/index (type $none_=>_none)
+ (func $start:~lib/_/index
   call $start:~lib/a/index
   global.get $~lib/a/index/a
   i32.const 1
@@ -78,10 +78,10 @@
   i32.eq
   drop
  )
- (func $start:packages (type $none_=>_none)
+ (func $start:packages
   call $start:~lib/_/index
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:packages
  )
 )

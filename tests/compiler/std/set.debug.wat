@@ -1,34 +1,34 @@
 (module
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
- (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
- (type $i32_i64_=>_i32 (func_subtype (param i32 i64) (result i32) func))
- (type $i32_f32_=>_i32 (func_subtype (param i32 f32) (result i32) func))
- (type $i32_f64_=>_i32 (func_subtype (param i32 f64) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i64_=>_i32 (func_subtype (param i64) (result i32) func))
- (type $i32_=>_i64 (func_subtype (param i32) (result i64) func))
- (type $i32_i64_=>_none (func_subtype (param i32 i64) func))
- (type $i32_i64_i32_=>_i32 (func_subtype (param i32 i64 i32) (result i32) func))
- (type $i32_i32_i64_=>_none (func_subtype (param i32 i32 i64) func))
- (type $i32_i32_=>_i64 (func_subtype (param i32 i32) (result i64) func))
- (type $none_=>_i32 (func_subtype (result i32) func))
- (type $f32_=>_i32 (func_subtype (param f32) (result i32) func))
- (type $i32_=>_f32 (func_subtype (param i32) (result f32) func))
- (type $i32_f32_=>_none (func_subtype (param i32 f32) func))
- (type $f64_=>_i32 (func_subtype (param f64) (result i32) func))
- (type $i32_=>_f64 (func_subtype (param i32) (result f64) func))
- (type $i32_f64_=>_none (func_subtype (param i32 f64) func))
- (type $i32_f32_i32_=>_i32 (func_subtype (param i32 f32 i32) (result i32) func))
- (type $i32_i32_f32_=>_none (func_subtype (param i32 i32 f32) func))
- (type $i32_i32_=>_f32 (func_subtype (param i32 i32) (result f32) func))
- (type $i32_f64_i32_=>_i32 (func_subtype (param i32 f64 i32) (result i32) func))
- (type $i32_i32_f64_=>_none (func_subtype (param i32 i32 f64) func))
- (type $i32_i32_=>_f64 (func_subtype (param i32 i32) (result f64) func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
+ (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
+ (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $i32_=>_i64 (func (param i32) (result i64)))
+ (type $i32_i64_=>_none (func (param i32 i64)))
+ (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
+ (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
+ (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
+ (type $none_=>_i32 (func (result i32)))
+ (type $f32_=>_i32 (func (param f32) (result i32)))
+ (type $i32_=>_f32 (func (param i32) (result f32)))
+ (type $i32_f32_=>_none (func (param i32 f32)))
+ (type $f64_=>_i32 (func (param f64) (result i32)))
+ (type $i32_=>_f64 (func (param i32) (result f64)))
+ (type $i32_f64_=>_none (func (param i32 f64)))
+ (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
+ (type $i32_i32_f32_=>_none (func (param i32 i32 f32)))
+ (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
+ (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
+ (type $i32_i32_f64_=>_none (func (param i32 i32 f64)))
+ (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -67,17 +67,17 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $nextWithColor i32)
+ (func $~lib/rt/itcms/Object#set:nextWithColor (param $this i32) (param $nextWithColor i32)
   local.get $this
   local.get $nextWithColor
   i32.store $0 offset=4
  )
- (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
+ (func $~lib/rt/itcms/Object#set:prev (param $this i32) (param $prev i32)
   local.get $this
   local.get $prev
   i32.store $0 offset=8
  )
- (func $~lib/rt/itcms/initLazy (type $i32_=>_i32) (param $space i32) (result i32)
+ (func $~lib/rt/itcms/initLazy (param $space i32) (result i32)
   local.get $space
   local.get $space
   call $~lib/rt/itcms/Object#set:nextWithColor
@@ -87,11 +87,11 @@
   local.get $space
   return
  )
- (func $~lib/rt/itcms/Object#get:nextWithColor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:nextWithColor (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/rt/itcms/Object#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:next (param $this i32) (result i32)
   local.get $this
   call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
@@ -100,14 +100,14 @@
   i32.and
   return
  )
- (func $~lib/rt/itcms/Object#get:color (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:color (param $this i32) (result i32)
   local.get $this
   call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.and
   return
  )
- (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
+ (func $~lib/rt/itcms/visitRoots (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
   local.get $cookie
@@ -149,7 +149,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/Object#set:color (type $i32_i32_=>_none) (param $this i32) (param $color i32)
+ (func $~lib/rt/itcms/Object#set:color (param $this i32) (param $color i32)
   local.get $this
   local.get $this
   call $~lib/rt/itcms/Object#get:nextWithColor
@@ -161,11 +161,11 @@
   i32.or
   call $~lib/rt/itcms/Object#set:nextWithColor
  )
- (func $~lib/rt/itcms/Object#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:prev (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/rt/itcms/Object#set:next (type $i32_i32_=>_none) (param $this i32) (param $obj i32)
+ (func $~lib/rt/itcms/Object#set:next (param $this i32) (param $obj i32)
   local.get $this
   local.get $obj
   local.get $this
@@ -175,7 +175,7 @@
   i32.or
   call $~lib/rt/itcms/Object#set:nextWithColor
  )
- (func $~lib/rt/itcms/Object#unlink (type $i32_=>_none) (param $this i32)
+ (func $~lib/rt/itcms/Object#unlink (param $this i32)
   (local $next i32)
   (local $prev i32)
   local.get $this
@@ -231,15 +231,15 @@
   local.get $next
   call $~lib/rt/itcms/Object#set:next
  )
- (func $~lib/rt/itcms/Object#get:rtId (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:rtId (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/shared/typeinfo/Typeinfo#get:flags (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/shared/typeinfo/Typeinfo#get:flags (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/rt/__typeinfo (type $i32_=>_i32) (param $id i32) (result i32)
+ (func $~lib/rt/__typeinfo (param $id i32) (result i32)
   (local $ptr i32)
   global.get $~lib/rt/__rtti_base
   local.set $ptr
@@ -265,7 +265,7 @@
   call $~lib/shared/typeinfo/Typeinfo#get:flags
   return
  )
- (func $~lib/rt/itcms/Object#get:isPointerfree (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:isPointerfree (param $this i32) (result i32)
   (local $rtId i32)
   local.get $this
   call $~lib/rt/itcms/Object#get:rtId
@@ -285,7 +285,7 @@
   end
   return
  )
- (func $~lib/rt/itcms/Object#linkTo (type $i32_i32_i32_=>_none) (param $this i32) (param $list i32) (param $withColor i32)
+ (func $~lib/rt/itcms/Object#linkTo (param $this i32) (param $list i32) (param $withColor i32)
   (local $prev i32)
   local.get $list
   call $~lib/rt/itcms/Object#get:prev
@@ -305,7 +305,7 @@
   local.get $this
   call $~lib/rt/itcms/Object#set:prev
  )
- (func $~lib/rt/itcms/Object#makeGray (type $i32_=>_none) (param $this i32)
+ (func $~lib/rt/itcms/Object#makeGray (param $this i32)
   (local $1 i32)
   local.get $this
   global.get $~lib/rt/itcms/iter
@@ -341,7 +341,7 @@
   end
   call $~lib/rt/itcms/Object#linkTo
  )
- (func $~lib/rt/itcms/__visit (type $i32_i32_=>_none) (param $ptr i32) (param $cookie i32)
+ (func $~lib/rt/itcms/__visit (param $ptr i32) (param $cookie i32)
   (local $obj i32)
   local.get $ptr
   i32.eqz
@@ -367,7 +367,7 @@
    global.set $~lib/rt/itcms/visitCount
   end
  )
- (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
+ (func $~lib/rt/itcms/visitStack (param $cookie i32)
   (local $ptr i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
@@ -388,11 +388,11 @@
    end
   end
  )
- (func $~lib/rt/common/BLOCK#get:mmInfo (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/common/BLOCK#get:mmInfo (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/rt/itcms/Object#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:size (param $this i32) (result i32)
   i32.const 4
   local.get $this
   call $~lib/rt/common/BLOCK#get:mmInfo
@@ -403,39 +403,39 @@
   i32.add
   return
  )
- (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $flMap i32)
+ (func $~lib/rt/tlsf/Root#set:flMap (param $this i32) (param $flMap i32)
   local.get $this
   local.get $flMap
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $mmInfo i32)
+ (func $~lib/rt/common/BLOCK#set:mmInfo (param $this i32) (param $mmInfo i32)
   local.get $this
   local.get $mmInfo
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
+ (func $~lib/rt/tlsf/Block#set:prev (param $this i32) (param $prev i32)
   local.get $this
   local.get $prev
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $next i32)
+ (func $~lib/rt/tlsf/Block#set:next (param $this i32) (param $next i32)
   local.get $this
   local.get $next
   i32.store $0 offset=8
  )
- (func $~lib/rt/tlsf/Block#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/tlsf/Block#get:prev (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/tlsf/Block#get:next (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/rt/tlsf/Root#get:flMap (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/tlsf/Root#get:flMap (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
+ (func $~lib/rt/tlsf/removeBlock (param $root i32) (param $block i32)
   (local $blockInfo i32)
   (local $size i32)
   (local $fl i32)
@@ -671,7 +671,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
+ (func $~lib/rt/tlsf/insertBlock (param $root i32) (param $block i32)
   (local $blockInfo i32)
   (local $block|3 i32)
   (local $right i32)
@@ -1035,7 +1035,7 @@
   local.get $slMap
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_i32) (param $root i32) (param $start i32) (param $end i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $end i32) (result i32)
   (local $root|3 i32)
   (local $tail i32)
   (local $tailInfo i32)
@@ -1200,7 +1200,7 @@
   i32.const 1
   return
  )
- (func $~lib/rt/tlsf/initialize (type $none_=>_none)
+ (func $~lib/rt/tlsf/initialize
   (local $rootOffset i32)
   (local $pagesBefore i32)
   (local $pagesNeeded i32)
@@ -1345,7 +1345,7 @@
   local.get $root
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/tlsf/checkUsedBlock (type $i32_=>_i32) (param $ptr i32) (result i32)
+ (func $~lib/rt/tlsf/checkUsedBlock (param $ptr i32) (result i32)
   (local $block i32)
   local.get $ptr
   i32.const 4
@@ -1383,7 +1383,7 @@
   local.get $block
   return
  )
- (func $~lib/rt/tlsf/freeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
+ (func $~lib/rt/tlsf/freeBlock (param $root i32) (param $block i32)
   i32.const 0
   drop
   local.get $block
@@ -1396,7 +1396,7 @@
   local.get $block
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/__free (type $i32_=>_none) (param $ptr i32)
+ (func $~lib/rt/tlsf/__free (param $ptr i32)
   local.get $ptr
   global.get $~lib/memory/__heap_base
   i32.lt_u
@@ -1413,7 +1413,7 @@
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/itcms/free (type $i32_=>_none) (param $obj i32)
+ (func $~lib/rt/itcms/free (param $obj i32)
   local.get $obj
   global.get $~lib/memory/__heap_base
   i32.lt_u
@@ -1438,7 +1438,7 @@
    call $~lib/rt/tlsf/__free
   end
  )
- (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
+ (func $~lib/rt/itcms/step (result i32)
   (local $obj i32)
   (local $1 i32)
   (local $black i32)
@@ -1618,7 +1618,7 @@
   i32.const 0
   return
  )
- (func $~lib/rt/itcms/interrupt (type $none_=>_none)
+ (func $~lib/rt/itcms/interrupt
   (local $budget i32)
   i32.const 0
   drop
@@ -1676,7 +1676,7 @@
   i32.const 0
   drop
  )
- (func $~lib/rt/tlsf/computeSize (type $i32_=>_i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/computeSize (param $size i32) (result i32)
   local.get $size
   i32.const 12
   i32.le_u
@@ -1697,7 +1697,7 @@
   end
   return
  )
- (func $~lib/rt/tlsf/prepareSize (type $i32_=>_i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (param $size i32) (result i32)
   local.get $size
   i32.const 1073741820
   i32.gt_u
@@ -1713,7 +1713,7 @@
   call $~lib/rt/tlsf/computeSize
   return
  )
- (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $root i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $root i32) (param $size i32) (result i32)
   (local $fl i32)
   (local $sl i32)
   (local $requestSize i32)
@@ -1921,7 +1921,7 @@
   local.get $head
   return
  )
- (func $~lib/rt/tlsf/growMemory (type $i32_i32_=>_none) (param $root i32) (param $size i32)
+ (func $~lib/rt/tlsf/growMemory (param $root i32) (param $size i32)
   (local $pagesBefore i32)
   (local $root|3 i32)
   (local $pagesNeeded i32)
@@ -2011,7 +2011,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (type $i32_i32_i32_=>_none) (param $root i32) (param $block i32) (param $size i32)
+ (func $~lib/rt/tlsf/prepareBlock (param $root i32) (param $block i32) (param $size i32)
   (local $blockInfo i32)
   (local $remaining i32)
   (local $spare i32)
@@ -2120,7 +2120,7 @@
    call $~lib/rt/common/BLOCK#set:mmInfo
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (type $i32_i32_=>_i32) (param $root i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $root i32) (param $size i32) (result i32)
   (local $payloadSize i32)
   (local $block i32)
   local.get $size
@@ -2184,7 +2184,7 @@
   local.get $block
   return
  )
- (func $~lib/rt/tlsf/__alloc (type $i32_=>_i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $size i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -2197,17 +2197,17 @@
   i32.add
   return
  )
- (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $rtId i32)
+ (func $~lib/rt/itcms/Object#set:rtId (param $this i32) (param $rtId i32)
   local.get $this
   local.get $rtId
   i32.store $0 offset=12
  )
- (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $rtSize i32)
+ (func $~lib/rt/itcms/Object#set:rtSize (param $this i32) (param $rtSize i32)
   local.get $this
   local.get $rtSize
   i32.store $0 offset=16
  )
- (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
+ (func $~lib/rt/itcms/__new (param $size i32) (param $id i32) (result i32)
   (local $obj i32)
   (local $ptr i32)
   local.get $size
@@ -2260,7 +2260,7 @@
   local.get $ptr
   return
  )
- (func $~lib/rt/itcms/__link (type $i32_i32_i32_=>_none) (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
+ (func $~lib/rt/itcms/__link (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
   (local $child i32)
   (local $parent i32)
   (local $parentColor i32)
@@ -2328,7 +2328,7 @@
    end
   end
  )
- (func $~lib/set/Set<i8>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+ (func $~lib/set/Set<i8>#set:buckets (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
   i32.store $0
@@ -2337,12 +2337,12 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<i8>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+ (func $~lib/set/Set<i8>#set:bucketsMask (param $this i32) (param $bucketsMask i32)
   local.get $this
   local.get $bucketsMask
   i32.store $0 offset=4
  )
- (func $~lib/set/Set<i8>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+ (func $~lib/set/Set<i8>#set:entries (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
   i32.store $0 offset=8
@@ -2351,22 +2351,22 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<i8>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+ (func $~lib/set/Set<i8>#set:entriesCapacity (param $this i32) (param $entriesCapacity i32)
   local.get $this
   local.get $entriesCapacity
   i32.store $0 offset=12
  )
- (func $~lib/set/Set<i8>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+ (func $~lib/set/Set<i8>#set:entriesOffset (param $this i32) (param $entriesOffset i32)
   local.get $this
   local.get $entriesOffset
   i32.store $0 offset=16
  )
- (func $~lib/set/Set<i8>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+ (func $~lib/set/Set<i8>#set:entriesCount (param $this i32) (param $entriesCount i32)
   local.get $this
   local.get $entriesCount
   i32.store $0 offset=20
  )
- (func $~lib/util/hash/HASH<i8> (type $i32_=>_i32) (param $key i32) (result i32)
+ (func $~lib/util/hash/HASH<i8> (param $key i32) (result i32)
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
@@ -2435,49 +2435,49 @@
   end
   return
  )
- (func $~lib/set/Set<i8>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i8>#get:buckets (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<i8>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i8>#get:bucketsMask (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<i8>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<i8>#get:taggedNext (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<i8>#get:key (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<i8>#get:key (param $this i32) (result i32)
   local.get $this
   i32.load8_s $0
  )
- (func $~lib/set/Set<i8>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i8>#get:entriesOffset (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/set/Set<i8>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i8>#get:entriesCapacity (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/set/Set<i8>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i8>#get:entriesCount (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=20
  )
- (func $~lib/set/Set<i8>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i8>#get:entries (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<i8>#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
+ (func $~lib/set/SetEntry<i8>#set:key (param $this i32) (param $key i32)
   local.get $this
   local.get $key
   i32.store8 $0
  )
- (func $~lib/set/SetEntry<i8>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/set/SetEntry<i8>#set:taggedNext (param $this i32) (param $taggedNext i32)
   local.get $this
   local.get $taggedNext
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<i8>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+ (func $~lib/array/Array<i8>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
   i32.store $0
@@ -2486,38 +2486,38 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<i8>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+ (func $~lib/array/Array<i8>#set:dataStart (param $this i32) (param $dataStart i32)
   local.get $this
   local.get $dataStart
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<i8>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+ (func $~lib/array/Array<i8>#set:byteLength (param $this i32) (param $byteLength i32)
   local.get $this
   local.get $byteLength
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<i8>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+ (func $~lib/array/Array<i8>#set:length_ (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<i8>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i8>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/arraybuffer/ArrayBufferView#get:byteLength (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#get:byteLength (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/arraybuffer/ArrayBufferView#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/rt/itcms/Object#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:rtSize (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/rt/itcms/__renew (type $i32_i32_=>_i32) (param $oldPtr i32) (param $size i32) (result i32)
+ (func $~lib/rt/itcms/__renew (param $oldPtr i32) (param $size i32) (result i32)
   (local $oldObj i32)
   (local $newPtr i32)
   (local $4 i32)
@@ -2563,11 +2563,11 @@
   local.get $newPtr
   return
  )
- (func $~lib/array/Array<i8>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i8>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/Set<u8>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+ (func $~lib/set/Set<u8>#set:buckets (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
   i32.store $0
@@ -2576,12 +2576,12 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<u8>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+ (func $~lib/set/Set<u8>#set:bucketsMask (param $this i32) (param $bucketsMask i32)
   local.get $this
   local.get $bucketsMask
   i32.store $0 offset=4
  )
- (func $~lib/set/Set<u8>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+ (func $~lib/set/Set<u8>#set:entries (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
   i32.store $0 offset=8
@@ -2590,22 +2590,22 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<u8>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+ (func $~lib/set/Set<u8>#set:entriesCapacity (param $this i32) (param $entriesCapacity i32)
   local.get $this
   local.get $entriesCapacity
   i32.store $0 offset=12
  )
- (func $~lib/set/Set<u8>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+ (func $~lib/set/Set<u8>#set:entriesOffset (param $this i32) (param $entriesOffset i32)
   local.get $this
   local.get $entriesOffset
   i32.store $0 offset=16
  )
- (func $~lib/set/Set<u8>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+ (func $~lib/set/Set<u8>#set:entriesCount (param $this i32) (param $entriesCount i32)
   local.get $this
   local.get $entriesCount
   i32.store $0 offset=20
  )
- (func $~lib/util/hash/HASH<u8> (type $i32_=>_i32) (param $key i32) (result i32)
+ (func $~lib/util/hash/HASH<u8> (param $key i32) (result i32)
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
@@ -2675,49 +2675,49 @@
   end
   return
  )
- (func $~lib/set/Set<u8>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u8>#get:buckets (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<u8>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u8>#get:bucketsMask (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<u8>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<u8>#get:taggedNext (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<u8>#get:key (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<u8>#get:key (param $this i32) (result i32)
   local.get $this
   i32.load8_u $0
  )
- (func $~lib/set/Set<u8>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u8>#get:entriesOffset (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/set/Set<u8>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u8>#get:entriesCapacity (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/set/Set<u8>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u8>#get:entriesCount (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=20
  )
- (func $~lib/set/Set<u8>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u8>#get:entries (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<u8>#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
+ (func $~lib/set/SetEntry<u8>#set:key (param $this i32) (param $key i32)
   local.get $this
   local.get $key
   i32.store8 $0
  )
- (func $~lib/set/SetEntry<u8>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/set/SetEntry<u8>#set:taggedNext (param $this i32) (param $taggedNext i32)
   local.get $this
   local.get $taggedNext
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<u8>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+ (func $~lib/array/Array<u8>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
   i32.store $0
@@ -2726,30 +2726,30 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<u8>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+ (func $~lib/array/Array<u8>#set:dataStart (param $this i32) (param $dataStart i32)
   local.get $this
   local.get $dataStart
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<u8>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+ (func $~lib/array/Array<u8>#set:byteLength (param $this i32) (param $byteLength i32)
   local.get $this
   local.get $byteLength
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<u8>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+ (func $~lib/array/Array<u8>#set:length_ (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<u8>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u8>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/array/Array<u8>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u8>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/Set<i16>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+ (func $~lib/set/Set<i16>#set:buckets (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
   i32.store $0
@@ -2758,12 +2758,12 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<i16>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+ (func $~lib/set/Set<i16>#set:bucketsMask (param $this i32) (param $bucketsMask i32)
   local.get $this
   local.get $bucketsMask
   i32.store $0 offset=4
  )
- (func $~lib/set/Set<i16>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+ (func $~lib/set/Set<i16>#set:entries (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
   i32.store $0 offset=8
@@ -2772,22 +2772,22 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<i16>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+ (func $~lib/set/Set<i16>#set:entriesCapacity (param $this i32) (param $entriesCapacity i32)
   local.get $this
   local.get $entriesCapacity
   i32.store $0 offset=12
  )
- (func $~lib/set/Set<i16>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+ (func $~lib/set/Set<i16>#set:entriesOffset (param $this i32) (param $entriesOffset i32)
   local.get $this
   local.get $entriesOffset
   i32.store $0 offset=16
  )
- (func $~lib/set/Set<i16>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+ (func $~lib/set/Set<i16>#set:entriesCount (param $this i32) (param $entriesCount i32)
   local.get $this
   local.get $entriesCount
   i32.store $0 offset=20
  )
- (func $~lib/util/hash/HASH<i16> (type $i32_=>_i32) (param $key i32) (result i32)
+ (func $~lib/util/hash/HASH<i16> (param $key i32) (result i32)
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
@@ -2856,49 +2856,49 @@
   end
   return
  )
- (func $~lib/set/Set<i16>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i16>#get:buckets (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<i16>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i16>#get:bucketsMask (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<i16>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<i16>#get:taggedNext (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<i16>#get:key (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<i16>#get:key (param $this i32) (result i32)
   local.get $this
   i32.load16_s $0
  )
- (func $~lib/set/Set<i16>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i16>#get:entriesOffset (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/set/Set<i16>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i16>#get:entriesCapacity (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/set/Set<i16>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i16>#get:entriesCount (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=20
  )
- (func $~lib/set/Set<i16>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i16>#get:entries (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<i16>#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
+ (func $~lib/set/SetEntry<i16>#set:key (param $this i32) (param $key i32)
   local.get $this
   local.get $key
   i32.store16 $0
  )
- (func $~lib/set/SetEntry<i16>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/set/SetEntry<i16>#set:taggedNext (param $this i32) (param $taggedNext i32)
   local.get $this
   local.get $taggedNext
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<i16>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+ (func $~lib/array/Array<i16>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
   i32.store $0
@@ -2907,30 +2907,30 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<i16>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+ (func $~lib/array/Array<i16>#set:dataStart (param $this i32) (param $dataStart i32)
   local.get $this
   local.get $dataStart
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<i16>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+ (func $~lib/array/Array<i16>#set:byteLength (param $this i32) (param $byteLength i32)
   local.get $this
   local.get $byteLength
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<i16>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+ (func $~lib/array/Array<i16>#set:length_ (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<i16>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i16>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/array/Array<i16>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i16>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/Set<u16>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+ (func $~lib/set/Set<u16>#set:buckets (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
   i32.store $0
@@ -2939,12 +2939,12 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<u16>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+ (func $~lib/set/Set<u16>#set:bucketsMask (param $this i32) (param $bucketsMask i32)
   local.get $this
   local.get $bucketsMask
   i32.store $0 offset=4
  )
- (func $~lib/set/Set<u16>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+ (func $~lib/set/Set<u16>#set:entries (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
   i32.store $0 offset=8
@@ -2953,22 +2953,22 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<u16>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+ (func $~lib/set/Set<u16>#set:entriesCapacity (param $this i32) (param $entriesCapacity i32)
   local.get $this
   local.get $entriesCapacity
   i32.store $0 offset=12
  )
- (func $~lib/set/Set<u16>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+ (func $~lib/set/Set<u16>#set:entriesOffset (param $this i32) (param $entriesOffset i32)
   local.get $this
   local.get $entriesOffset
   i32.store $0 offset=16
  )
- (func $~lib/set/Set<u16>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+ (func $~lib/set/Set<u16>#set:entriesCount (param $this i32) (param $entriesCount i32)
   local.get $this
   local.get $entriesCount
   i32.store $0 offset=20
  )
- (func $~lib/util/hash/HASH<u16> (type $i32_=>_i32) (param $key i32) (result i32)
+ (func $~lib/util/hash/HASH<u16> (param $key i32) (result i32)
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
@@ -3038,49 +3038,49 @@
   end
   return
  )
- (func $~lib/set/Set<u16>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u16>#get:buckets (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<u16>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u16>#get:bucketsMask (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<u16>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<u16>#get:taggedNext (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<u16>#get:key (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<u16>#get:key (param $this i32) (result i32)
   local.get $this
   i32.load16_u $0
  )
- (func $~lib/set/Set<u16>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u16>#get:entriesOffset (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/set/Set<u16>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u16>#get:entriesCapacity (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/set/Set<u16>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u16>#get:entriesCount (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=20
  )
- (func $~lib/set/Set<u16>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u16>#get:entries (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<u16>#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
+ (func $~lib/set/SetEntry<u16>#set:key (param $this i32) (param $key i32)
   local.get $this
   local.get $key
   i32.store16 $0
  )
- (func $~lib/set/SetEntry<u16>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/set/SetEntry<u16>#set:taggedNext (param $this i32) (param $taggedNext i32)
   local.get $this
   local.get $taggedNext
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<u16>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+ (func $~lib/array/Array<u16>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
   i32.store $0
@@ -3089,30 +3089,30 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<u16>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+ (func $~lib/array/Array<u16>#set:dataStart (param $this i32) (param $dataStart i32)
   local.get $this
   local.get $dataStart
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<u16>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+ (func $~lib/array/Array<u16>#set:byteLength (param $this i32) (param $byteLength i32)
   local.get $this
   local.get $byteLength
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<u16>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+ (func $~lib/array/Array<u16>#set:length_ (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<u16>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u16>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/array/Array<u16>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u16>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/Set<i32>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+ (func $~lib/set/Set<i32>#set:buckets (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
   i32.store $0
@@ -3121,12 +3121,12 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<i32>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+ (func $~lib/set/Set<i32>#set:bucketsMask (param $this i32) (param $bucketsMask i32)
   local.get $this
   local.get $bucketsMask
   i32.store $0 offset=4
  )
- (func $~lib/set/Set<i32>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+ (func $~lib/set/Set<i32>#set:entries (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
   i32.store $0 offset=8
@@ -3135,22 +3135,22 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<i32>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+ (func $~lib/set/Set<i32>#set:entriesCapacity (param $this i32) (param $entriesCapacity i32)
   local.get $this
   local.get $entriesCapacity
   i32.store $0 offset=12
  )
- (func $~lib/set/Set<i32>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+ (func $~lib/set/Set<i32>#set:entriesOffset (param $this i32) (param $entriesOffset i32)
   local.get $this
   local.get $entriesOffset
   i32.store $0 offset=16
  )
- (func $~lib/set/Set<i32>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+ (func $~lib/set/Set<i32>#set:entriesCount (param $this i32) (param $entriesCount i32)
   local.get $this
   local.get $entriesCount
   i32.store $0 offset=20
  )
- (func $~lib/util/hash/HASH<i32> (type $i32_=>_i32) (param $key i32) (result i32)
+ (func $~lib/util/hash/HASH<i32> (param $key i32) (result i32)
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
@@ -3218,49 +3218,49 @@
   end
   return
  )
- (func $~lib/set/Set<i32>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i32>#get:buckets (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<i32>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i32>#get:bucketsMask (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<i32>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<i32>#get:taggedNext (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<i32>#get:key (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<i32>#get:key (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<i32>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i32>#get:entriesOffset (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/set/Set<i32>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i32>#get:entriesCapacity (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/set/Set<i32>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i32>#get:entriesCount (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=20
  )
- (func $~lib/set/Set<i32>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i32>#get:entries (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<i32>#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
+ (func $~lib/set/SetEntry<i32>#set:key (param $this i32) (param $key i32)
   local.get $this
   local.get $key
   i32.store $0
  )
- (func $~lib/set/SetEntry<i32>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/set/SetEntry<i32>#set:taggedNext (param $this i32) (param $taggedNext i32)
   local.get $this
   local.get $taggedNext
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<i32>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+ (func $~lib/array/Array<i32>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
   i32.store $0
@@ -3269,30 +3269,30 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<i32>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+ (func $~lib/array/Array<i32>#set:dataStart (param $this i32) (param $dataStart i32)
   local.get $this
   local.get $dataStart
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<i32>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+ (func $~lib/array/Array<i32>#set:byteLength (param $this i32) (param $byteLength i32)
   local.get $this
   local.get $byteLength
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<i32>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+ (func $~lib/array/Array<i32>#set:length_ (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<i32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i32>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/array/Array<i32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i32>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/Set<u32>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+ (func $~lib/set/Set<u32>#set:buckets (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
   i32.store $0
@@ -3301,12 +3301,12 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<u32>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+ (func $~lib/set/Set<u32>#set:bucketsMask (param $this i32) (param $bucketsMask i32)
   local.get $this
   local.get $bucketsMask
   i32.store $0 offset=4
  )
- (func $~lib/set/Set<u32>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+ (func $~lib/set/Set<u32>#set:entries (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
   i32.store $0 offset=8
@@ -3315,22 +3315,22 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<u32>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+ (func $~lib/set/Set<u32>#set:entriesCapacity (param $this i32) (param $entriesCapacity i32)
   local.get $this
   local.get $entriesCapacity
   i32.store $0 offset=12
  )
- (func $~lib/set/Set<u32>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+ (func $~lib/set/Set<u32>#set:entriesOffset (param $this i32) (param $entriesOffset i32)
   local.get $this
   local.get $entriesOffset
   i32.store $0 offset=16
  )
- (func $~lib/set/Set<u32>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+ (func $~lib/set/Set<u32>#set:entriesCount (param $this i32) (param $entriesCount i32)
   local.get $this
   local.get $entriesCount
   i32.store $0 offset=20
  )
- (func $~lib/util/hash/HASH<u32> (type $i32_=>_i32) (param $key i32) (result i32)
+ (func $~lib/util/hash/HASH<u32> (param $key i32) (result i32)
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
@@ -3398,49 +3398,49 @@
   end
   return
  )
- (func $~lib/set/Set<u32>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u32>#get:buckets (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<u32>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u32>#get:bucketsMask (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<u32>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<u32>#get:taggedNext (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<u32>#get:key (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<u32>#get:key (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<u32>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u32>#get:entriesOffset (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/set/Set<u32>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u32>#get:entriesCapacity (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/set/Set<u32>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u32>#get:entriesCount (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=20
  )
- (func $~lib/set/Set<u32>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u32>#get:entries (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<u32>#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
+ (func $~lib/set/SetEntry<u32>#set:key (param $this i32) (param $key i32)
   local.get $this
   local.get $key
   i32.store $0
  )
- (func $~lib/set/SetEntry<u32>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/set/SetEntry<u32>#set:taggedNext (param $this i32) (param $taggedNext i32)
   local.get $this
   local.get $taggedNext
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<u32>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+ (func $~lib/array/Array<u32>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
   i32.store $0
@@ -3449,30 +3449,30 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<u32>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+ (func $~lib/array/Array<u32>#set:dataStart (param $this i32) (param $dataStart i32)
   local.get $this
   local.get $dataStart
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<u32>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+ (func $~lib/array/Array<u32>#set:byteLength (param $this i32) (param $byteLength i32)
   local.get $this
   local.get $byteLength
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<u32>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+ (func $~lib/array/Array<u32>#set:length_ (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<u32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u32>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/array/Array<u32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u32>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/Set<i64>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+ (func $~lib/set/Set<i64>#set:buckets (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
   i32.store $0
@@ -3481,12 +3481,12 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<i64>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+ (func $~lib/set/Set<i64>#set:bucketsMask (param $this i32) (param $bucketsMask i32)
   local.get $this
   local.get $bucketsMask
   i32.store $0 offset=4
  )
- (func $~lib/set/Set<i64>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+ (func $~lib/set/Set<i64>#set:entries (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
   i32.store $0 offset=8
@@ -3495,22 +3495,22 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<i64>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+ (func $~lib/set/Set<i64>#set:entriesCapacity (param $this i32) (param $entriesCapacity i32)
   local.get $this
   local.get $entriesCapacity
   i32.store $0 offset=12
  )
- (func $~lib/set/Set<i64>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+ (func $~lib/set/Set<i64>#set:entriesOffset (param $this i32) (param $entriesOffset i32)
   local.get $this
   local.get $entriesOffset
   i32.store $0 offset=16
  )
- (func $~lib/set/Set<i64>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+ (func $~lib/set/Set<i64>#set:entriesCount (param $this i32) (param $entriesCount i32)
   local.get $this
   local.get $entriesCount
   i32.store $0 offset=20
  )
- (func $~lib/util/hash/HASH<i64> (type $i64_=>_i32) (param $key i64) (result i32)
+ (func $~lib/util/hash/HASH<i64> (param $key i64) (result i32)
   (local $key|1 i64)
   (local $h i32)
   i32.const 0
@@ -3595,49 +3595,49 @@
   end
   return
  )
- (func $~lib/set/Set<i64>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i64>#get:buckets (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<i64>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i64>#get:bucketsMask (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<i64>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<i64>#get:taggedNext (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<i64>#get:key (type $i32_=>_i64) (param $this i32) (result i64)
+ (func $~lib/set/SetEntry<i64>#get:key (param $this i32) (result i64)
   local.get $this
   i64.load $0
  )
- (func $~lib/set/Set<i64>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i64>#get:entriesOffset (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/set/Set<i64>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i64>#get:entriesCapacity (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/set/Set<i64>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i64>#get:entriesCount (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=20
  )
- (func $~lib/set/Set<i64>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i64>#get:entries (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<i64>#set:key (type $i32_i64_=>_none) (param $this i32) (param $key i64)
+ (func $~lib/set/SetEntry<i64>#set:key (param $this i32) (param $key i64)
   local.get $this
   local.get $key
   i64.store $0
  )
- (func $~lib/set/SetEntry<i64>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/set/SetEntry<i64>#set:taggedNext (param $this i32) (param $taggedNext i32)
   local.get $this
   local.get $taggedNext
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<i64>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+ (func $~lib/array/Array<i64>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
   i32.store $0
@@ -3646,30 +3646,30 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<i64>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+ (func $~lib/array/Array<i64>#set:dataStart (param $this i32) (param $dataStart i32)
   local.get $this
   local.get $dataStart
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<i64>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+ (func $~lib/array/Array<i64>#set:byteLength (param $this i32) (param $byteLength i32)
   local.get $this
   local.get $byteLength
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<i64>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+ (func $~lib/array/Array<i64>#set:length_ (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<i64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i64>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/array/Array<i64>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i64>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/Set<u64>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+ (func $~lib/set/Set<u64>#set:buckets (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
   i32.store $0
@@ -3678,12 +3678,12 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<u64>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+ (func $~lib/set/Set<u64>#set:bucketsMask (param $this i32) (param $bucketsMask i32)
   local.get $this
   local.get $bucketsMask
   i32.store $0 offset=4
  )
- (func $~lib/set/Set<u64>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+ (func $~lib/set/Set<u64>#set:entries (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
   i32.store $0 offset=8
@@ -3692,22 +3692,22 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<u64>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+ (func $~lib/set/Set<u64>#set:entriesCapacity (param $this i32) (param $entriesCapacity i32)
   local.get $this
   local.get $entriesCapacity
   i32.store $0 offset=12
  )
- (func $~lib/set/Set<u64>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+ (func $~lib/set/Set<u64>#set:entriesOffset (param $this i32) (param $entriesOffset i32)
   local.get $this
   local.get $entriesOffset
   i32.store $0 offset=16
  )
- (func $~lib/set/Set<u64>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+ (func $~lib/set/Set<u64>#set:entriesCount (param $this i32) (param $entriesCount i32)
   local.get $this
   local.get $entriesCount
   i32.store $0 offset=20
  )
- (func $~lib/util/hash/HASH<u64> (type $i64_=>_i32) (param $key i64) (result i32)
+ (func $~lib/util/hash/HASH<u64> (param $key i64) (result i32)
   (local $key|1 i64)
   (local $h i32)
   i32.const 0
@@ -3792,49 +3792,49 @@
   end
   return
  )
- (func $~lib/set/Set<u64>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u64>#get:buckets (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<u64>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u64>#get:bucketsMask (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<u64>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<u64>#get:taggedNext (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<u64>#get:key (type $i32_=>_i64) (param $this i32) (result i64)
+ (func $~lib/set/SetEntry<u64>#get:key (param $this i32) (result i64)
   local.get $this
   i64.load $0
  )
- (func $~lib/set/Set<u64>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u64>#get:entriesOffset (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/set/Set<u64>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u64>#get:entriesCapacity (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/set/Set<u64>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u64>#get:entriesCount (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=20
  )
- (func $~lib/set/Set<u64>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u64>#get:entries (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<u64>#set:key (type $i32_i64_=>_none) (param $this i32) (param $key i64)
+ (func $~lib/set/SetEntry<u64>#set:key (param $this i32) (param $key i64)
   local.get $this
   local.get $key
   i64.store $0
  )
- (func $~lib/set/SetEntry<u64>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/set/SetEntry<u64>#set:taggedNext (param $this i32) (param $taggedNext i32)
   local.get $this
   local.get $taggedNext
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<u64>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+ (func $~lib/array/Array<u64>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
   i32.store $0
@@ -3843,30 +3843,30 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<u64>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+ (func $~lib/array/Array<u64>#set:dataStart (param $this i32) (param $dataStart i32)
   local.get $this
   local.get $dataStart
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<u64>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+ (func $~lib/array/Array<u64>#set:byteLength (param $this i32) (param $byteLength i32)
   local.get $this
   local.get $byteLength
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<u64>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+ (func $~lib/array/Array<u64>#set:length_ (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<u64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u64>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/array/Array<u64>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u64>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/Set<f32>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+ (func $~lib/set/Set<f32>#set:buckets (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
   i32.store $0
@@ -3875,12 +3875,12 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<f32>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+ (func $~lib/set/Set<f32>#set:bucketsMask (param $this i32) (param $bucketsMask i32)
   local.get $this
   local.get $bucketsMask
   i32.store $0 offset=4
  )
- (func $~lib/set/Set<f32>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+ (func $~lib/set/Set<f32>#set:entries (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
   i32.store $0 offset=8
@@ -3889,22 +3889,22 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<f32>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+ (func $~lib/set/Set<f32>#set:entriesCapacity (param $this i32) (param $entriesCapacity i32)
   local.get $this
   local.get $entriesCapacity
   i32.store $0 offset=12
  )
- (func $~lib/set/Set<f32>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+ (func $~lib/set/Set<f32>#set:entriesOffset (param $this i32) (param $entriesOffset i32)
   local.get $this
   local.get $entriesOffset
   i32.store $0 offset=16
  )
- (func $~lib/set/Set<f32>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+ (func $~lib/set/Set<f32>#set:entriesCount (param $this i32) (param $entriesCount i32)
   local.get $this
   local.get $entriesCount
   i32.store $0 offset=20
  )
- (func $~lib/util/hash/HASH<f32> (type $f32_=>_i32) (param $key f32) (result i32)
+ (func $~lib/util/hash/HASH<f32> (param $key f32) (result i32)
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
@@ -3973,49 +3973,49 @@
   end
   return
  )
- (func $~lib/set/Set<f32>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f32>#get:buckets (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<f32>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f32>#get:bucketsMask (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<f32>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<f32>#get:taggedNext (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<f32>#get:key (type $i32_=>_f32) (param $this i32) (result f32)
+ (func $~lib/set/SetEntry<f32>#get:key (param $this i32) (result f32)
   local.get $this
   f32.load $0
  )
- (func $~lib/set/Set<f32>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f32>#get:entriesOffset (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/set/Set<f32>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f32>#get:entriesCapacity (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/set/Set<f32>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f32>#get:entriesCount (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=20
  )
- (func $~lib/set/Set<f32>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f32>#get:entries (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<f32>#set:key (type $i32_f32_=>_none) (param $this i32) (param $key f32)
+ (func $~lib/set/SetEntry<f32>#set:key (param $this i32) (param $key f32)
   local.get $this
   local.get $key
   f32.store $0
  )
- (func $~lib/set/SetEntry<f32>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/set/SetEntry<f32>#set:taggedNext (param $this i32) (param $taggedNext i32)
   local.get $this
   local.get $taggedNext
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<f32>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+ (func $~lib/array/Array<f32>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
   i32.store $0
@@ -4024,30 +4024,30 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<f32>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+ (func $~lib/array/Array<f32>#set:dataStart (param $this i32) (param $dataStart i32)
   local.get $this
   local.get $dataStart
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<f32>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+ (func $~lib/array/Array<f32>#set:byteLength (param $this i32) (param $byteLength i32)
   local.get $this
   local.get $byteLength
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<f32>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+ (func $~lib/array/Array<f32>#set:length_ (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<f32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<f32>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/array/Array<f32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<f32>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/Set<f64>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+ (func $~lib/set/Set<f64>#set:buckets (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
   i32.store $0
@@ -4056,12 +4056,12 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<f64>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+ (func $~lib/set/Set<f64>#set:bucketsMask (param $this i32) (param $bucketsMask i32)
   local.get $this
   local.get $bucketsMask
   i32.store $0 offset=4
  )
- (func $~lib/set/Set<f64>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+ (func $~lib/set/Set<f64>#set:entries (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
   i32.store $0 offset=8
@@ -4070,22 +4070,22 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/set/Set<f64>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+ (func $~lib/set/Set<f64>#set:entriesCapacity (param $this i32) (param $entriesCapacity i32)
   local.get $this
   local.get $entriesCapacity
   i32.store $0 offset=12
  )
- (func $~lib/set/Set<f64>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+ (func $~lib/set/Set<f64>#set:entriesOffset (param $this i32) (param $entriesOffset i32)
   local.get $this
   local.get $entriesOffset
   i32.store $0 offset=16
  )
- (func $~lib/set/Set<f64>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+ (func $~lib/set/Set<f64>#set:entriesCount (param $this i32) (param $entriesCount i32)
   local.get $this
   local.get $entriesCount
   i32.store $0 offset=20
  )
- (func $~lib/util/hash/HASH<f64> (type $f64_=>_i32) (param $key f64) (result i32)
+ (func $~lib/util/hash/HASH<f64> (param $key f64) (result i32)
   (local $key|1 i64)
   (local $h i32)
   i32.const 0
@@ -4171,49 +4171,49 @@
   end
   return
  )
- (func $~lib/set/Set<f64>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f64>#get:buckets (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/set/Set<f64>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f64>#get:bucketsMask (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/set/SetEntry<f64>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/SetEntry<f64>#get:taggedNext (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<f64>#get:key (type $i32_=>_f64) (param $this i32) (result f64)
+ (func $~lib/set/SetEntry<f64>#get:key (param $this i32) (result f64)
   local.get $this
   f64.load $0
  )
- (func $~lib/set/Set<f64>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f64>#get:entriesOffset (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=16
  )
- (func $~lib/set/Set<f64>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f64>#get:entriesCapacity (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/set/Set<f64>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f64>#get:entriesCount (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=20
  )
- (func $~lib/set/Set<f64>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f64>#get:entries (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
  )
- (func $~lib/set/SetEntry<f64>#set:key (type $i32_f64_=>_none) (param $this i32) (param $key f64)
+ (func $~lib/set/SetEntry<f64>#set:key (param $this i32) (param $key f64)
   local.get $this
   local.get $key
   f64.store $0
  )
- (func $~lib/set/SetEntry<f64>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/set/SetEntry<f64>#set:taggedNext (param $this i32) (param $taggedNext i32)
   local.get $this
   local.get $taggedNext
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<f64>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+ (func $~lib/array/Array<f64>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
   i32.store $0
@@ -4222,30 +4222,30 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<f64>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+ (func $~lib/array/Array<f64>#set:dataStart (param $this i32) (param $dataStart i32)
   local.get $this
   local.get $dataStart
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<f64>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+ (func $~lib/array/Array<f64>#set:byteLength (param $this i32) (param $byteLength i32)
   local.get $this
   local.get $byteLength
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<f64>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+ (func $~lib/array/Array<f64>#set:length_ (param $this i32) (param $length_ i32)
   local.get $this
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<f64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<f64>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
- (func $~lib/array/Array<f64>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<f64>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/rt/itcms/__collect (type $none_=>_none)
+ (func $~lib/rt/itcms/__collect
   i32.const 0
   drop
   global.get $~lib/rt/itcms/state
@@ -4291,7 +4291,7 @@
   i32.const 0
   drop
  )
- (func $start:std/set (type $none_=>_none)
+ (func $start:std/set
   memory.size $0
   i32.const 16
   i32.shl
@@ -4321,7 +4321,7 @@
   call $std/set/testNumeric<f64>
   call $~lib/rt/itcms/__collect
  )
- (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
   i32.const 224
   local.get $0
@@ -4333,7 +4333,7 @@
   local.get $0
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/arraybuffer/ArrayBufferView~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -4347,10 +4347,10 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/object/Object~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/set/Set<i8>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4358,11 +4358,11 @@
   local.get $1
   call $~lib/set/Set<i8>#__visit
  )
- (func $~lib/array/Array<i8>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i8>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<i8>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i8>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4370,7 +4370,7 @@
   local.get $1
   call $~lib/array/Array<i8>#__visit
  )
- (func $~lib/set/Set<u8>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4378,11 +4378,11 @@
   local.get $1
   call $~lib/set/Set<u8>#__visit
  )
- (func $~lib/array/Array<u8>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u8>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<u8>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u8>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4390,7 +4390,7 @@
   local.get $1
   call $~lib/array/Array<u8>#__visit
  )
- (func $~lib/set/Set<i16>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4398,11 +4398,11 @@
   local.get $1
   call $~lib/set/Set<i16>#__visit
  )
- (func $~lib/array/Array<i16>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i16>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<i16>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i16>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4410,7 +4410,7 @@
   local.get $1
   call $~lib/array/Array<i16>#__visit
  )
- (func $~lib/set/Set<u16>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4418,11 +4418,11 @@
   local.get $1
   call $~lib/set/Set<u16>#__visit
  )
- (func $~lib/array/Array<u16>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u16>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<u16>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u16>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4430,7 +4430,7 @@
   local.get $1
   call $~lib/array/Array<u16>#__visit
  )
- (func $~lib/set/Set<i32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4438,11 +4438,11 @@
   local.get $1
   call $~lib/set/Set<i32>#__visit
  )
- (func $~lib/array/Array<i32>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i32>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<i32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4450,7 +4450,7 @@
   local.get $1
   call $~lib/array/Array<i32>#__visit
  )
- (func $~lib/set/Set<u32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4458,11 +4458,11 @@
   local.get $1
   call $~lib/set/Set<u32>#__visit
  )
- (func $~lib/array/Array<u32>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u32>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<u32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4470,7 +4470,7 @@
   local.get $1
   call $~lib/array/Array<u32>#__visit
  )
- (func $~lib/set/Set<i64>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4478,11 +4478,11 @@
   local.get $1
   call $~lib/set/Set<i64>#__visit
  )
- (func $~lib/array/Array<i64>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i64>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<i64>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4490,7 +4490,7 @@
   local.get $1
   call $~lib/array/Array<i64>#__visit
  )
- (func $~lib/set/Set<u64>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4498,11 +4498,11 @@
   local.get $1
   call $~lib/set/Set<u64>#__visit
  )
- (func $~lib/array/Array<u64>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u64>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<u64>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4510,7 +4510,7 @@
   local.get $1
   call $~lib/array/Array<u64>#__visit
  )
- (func $~lib/set/Set<f32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4518,11 +4518,11 @@
   local.get $1
   call $~lib/set/Set<f32>#__visit
  )
- (func $~lib/array/Array<f32>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<f32>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<f32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4530,7 +4530,7 @@
   local.get $1
   call $~lib/array/Array<f32>#__visit
  )
- (func $~lib/set/Set<f64>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4538,11 +4538,11 @@
   local.get $1
   call $~lib/set/Set<f64>#__visit
  )
- (func $~lib/array/Array<f64>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<f64>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/array/Array<f64>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
@@ -4550,7 +4550,7 @@
   local.get $1
   call $~lib/array/Array<f64>#__visit
  )
- (func $~lib/rt/__visit_members (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
    block $~lib/array/Array<f64>
     block $~lib/set/Set<f64>
@@ -4695,10 +4695,10 @@
   end
   unreachable
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:std/set
  )
- (func $~stack_check (type $none_=>_none)
+ (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -4711,7 +4711,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<i8>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i8>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -4813,7 +4813,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/set/Set<i8>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
+ (func $~lib/set/Set<i8>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
   (local $taggedNext i32)
   (local $5 i32)
@@ -4894,7 +4894,7 @@
   local.get $5
   return
  )
- (func $~lib/set/Set<i8>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<i8>#has (param $this i32) (param $key i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4924,7 +4924,7 @@
   local.get $2
   return
  )
- (func $~lib/set/Set<i8>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+ (func $~lib/set/Set<i8>#rehash (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
   (local $newBuckets i32)
   (local $newEntriesCapacity i32)
@@ -5121,7 +5121,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i8>#add (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<i8>#add (param $this i32) (param $key i32) (result i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
@@ -5305,7 +5305,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<i8>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i8>#get:size (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -5330,7 +5330,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<i8>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/array/Array<i8>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $bufferSize i32)
@@ -5468,7 +5468,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/array/ensureCapacity (type $i32_i32_i32_i32_=>_none) (param $array i32) (param $newSize i32) (param $alignLog2 i32) (param $canGrow i32)
+ (func $~lib/array/ensureCapacity (param $array i32) (param $newSize i32) (param $alignLog2 i32) (param $canGrow i32)
   (local $oldCapacity i32)
   (local $oldData i32)
   (local $6 i32)
@@ -5587,7 +5587,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<i8>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<i8>#__set (param $this i32) (param $index i32) (param $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -5656,7 +5656,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<i8>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
+ (func $~lib/array/Array<i8>#set:length (param $this i32) (param $newLength i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -5684,7 +5684,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i8>#values (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i8>#values (param $this i32) (result i32)
   (local $start i32)
   (local $size i32)
   (local $values i32)
@@ -5787,7 +5787,7 @@
   local.get $8
   return
  )
- (func $~lib/array/Array<i8>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i8>#get:length (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -5812,7 +5812,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<i8>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
+ (func $~lib/array/Array<i8>#__get (param $this i32) (param $index i32) (result i32)
   (local $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -5864,7 +5864,7 @@
   local.get $3
   return
  )
- (func $~lib/set/Set<i8>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<i8>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
   (local $4 i32)
@@ -5993,7 +5993,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<i8>#clear (type $i32_=>_none) (param $this i32)
+ (func $~lib/set/Set<i8>#clear (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -6079,7 +6079,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $std/set/testNumeric<i8> (type $none_=>_none)
+ (func $std/set/testNumeric<i8>
   (local $set i32)
   (local $k i32)
   (local $k|2 i32)
@@ -6562,7 +6562,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u8>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u8>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -6664,7 +6664,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/set/Set<u8>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
+ (func $~lib/set/Set<u8>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
   (local $taggedNext i32)
   (local $5 i32)
@@ -6747,7 +6747,7 @@
   local.get $5
   return
  )
- (func $~lib/set/Set<u8>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<u8>#has (param $this i32) (param $key i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -6777,7 +6777,7 @@
   local.get $2
   return
  )
- (func $~lib/set/Set<u8>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+ (func $~lib/set/Set<u8>#rehash (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
   (local $newBuckets i32)
   (local $newEntriesCapacity i32)
@@ -6974,7 +6974,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u8>#add (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<u8>#add (param $this i32) (param $key i32) (result i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
@@ -7158,7 +7158,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<u8>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u8>#get:size (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -7183,7 +7183,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<u8>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/array/Array<u8>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $bufferSize i32)
@@ -7321,7 +7321,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/array/Array<u8>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<u8>#__set (param $this i32) (param $index i32) (param $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -7390,7 +7390,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<u8>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
+ (func $~lib/array/Array<u8>#set:length (param $this i32) (param $newLength i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -7418,7 +7418,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u8>#values (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u8>#values (param $this i32) (result i32)
   (local $start i32)
   (local $size i32)
   (local $values i32)
@@ -7521,7 +7521,7 @@
   local.get $8
   return
  )
- (func $~lib/array/Array<u8>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u8>#get:length (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -7546,7 +7546,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<u8>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
+ (func $~lib/array/Array<u8>#__get (param $this i32) (param $index i32) (result i32)
   (local $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -7598,7 +7598,7 @@
   local.get $3
   return
  )
- (func $~lib/set/Set<u8>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<u8>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
   (local $4 i32)
@@ -7727,7 +7727,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<u8>#clear (type $i32_=>_none) (param $this i32)
+ (func $~lib/set/Set<u8>#clear (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -7813,7 +7813,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $std/set/testNumeric<u8> (type $none_=>_none)
+ (func $std/set/testNumeric<u8>
   (local $set i32)
   (local $k i32)
   (local $k|2 i32)
@@ -8296,7 +8296,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i16>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i16>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -8398,7 +8398,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/set/Set<i16>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
+ (func $~lib/set/Set<i16>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
   (local $taggedNext i32)
   (local $5 i32)
@@ -8479,7 +8479,7 @@
   local.get $5
   return
  )
- (func $~lib/set/Set<i16>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<i16>#has (param $this i32) (param $key i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -8509,7 +8509,7 @@
   local.get $2
   return
  )
- (func $~lib/set/Set<i16>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+ (func $~lib/set/Set<i16>#rehash (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
   (local $newBuckets i32)
   (local $newEntriesCapacity i32)
@@ -8706,7 +8706,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i16>#add (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<i16>#add (param $this i32) (param $key i32) (result i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
@@ -8890,7 +8890,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<i16>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i16>#get:size (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -8915,7 +8915,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<i16>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/array/Array<i16>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $bufferSize i32)
@@ -9053,7 +9053,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/array/Array<i16>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<i16>#__set (param $this i32) (param $index i32) (param $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -9122,7 +9122,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<i16>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
+ (func $~lib/array/Array<i16>#set:length (param $this i32) (param $newLength i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -9150,7 +9150,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i16>#values (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i16>#values (param $this i32) (result i32)
   (local $start i32)
   (local $size i32)
   (local $values i32)
@@ -9253,7 +9253,7 @@
   local.get $8
   return
  )
- (func $~lib/array/Array<i16>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i16>#get:length (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -9278,7 +9278,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<i16>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
+ (func $~lib/array/Array<i16>#__get (param $this i32) (param $index i32) (result i32)
   (local $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -9330,7 +9330,7 @@
   local.get $3
   return
  )
- (func $~lib/set/Set<i16>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<i16>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
   (local $4 i32)
@@ -9459,7 +9459,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<i16>#clear (type $i32_=>_none) (param $this i32)
+ (func $~lib/set/Set<i16>#clear (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -9545,7 +9545,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $std/set/testNumeric<i16> (type $none_=>_none)
+ (func $std/set/testNumeric<i16>
   (local $set i32)
   (local $k i32)
   (local $k|2 i32)
@@ -10028,7 +10028,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u16>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u16>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -10130,7 +10130,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/set/Set<u16>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
+ (func $~lib/set/Set<u16>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
   (local $taggedNext i32)
   (local $5 i32)
@@ -10213,7 +10213,7 @@
   local.get $5
   return
  )
- (func $~lib/set/Set<u16>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<u16>#has (param $this i32) (param $key i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -10243,7 +10243,7 @@
   local.get $2
   return
  )
- (func $~lib/set/Set<u16>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+ (func $~lib/set/Set<u16>#rehash (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
   (local $newBuckets i32)
   (local $newEntriesCapacity i32)
@@ -10440,7 +10440,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u16>#add (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<u16>#add (param $this i32) (param $key i32) (result i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
@@ -10624,7 +10624,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<u16>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u16>#get:size (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -10649,7 +10649,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<u16>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/array/Array<u16>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $bufferSize i32)
@@ -10787,7 +10787,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/array/Array<u16>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<u16>#__set (param $this i32) (param $index i32) (param $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -10856,7 +10856,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<u16>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
+ (func $~lib/array/Array<u16>#set:length (param $this i32) (param $newLength i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -10884,7 +10884,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u16>#values (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u16>#values (param $this i32) (result i32)
   (local $start i32)
   (local $size i32)
   (local $values i32)
@@ -10987,7 +10987,7 @@
   local.get $8
   return
  )
- (func $~lib/array/Array<u16>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u16>#get:length (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -11012,7 +11012,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<u16>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
+ (func $~lib/array/Array<u16>#__get (param $this i32) (param $index i32) (result i32)
   (local $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -11064,7 +11064,7 @@
   local.get $3
   return
  )
- (func $~lib/set/Set<u16>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<u16>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
   (local $4 i32)
@@ -11193,7 +11193,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<u16>#clear (type $i32_=>_none) (param $this i32)
+ (func $~lib/set/Set<u16>#clear (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -11279,7 +11279,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $std/set/testNumeric<u16> (type $none_=>_none)
+ (func $std/set/testNumeric<u16>
   (local $set i32)
   (local $k i32)
   (local $k|2 i32)
@@ -11762,7 +11762,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i32>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i32>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -11864,7 +11864,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/set/Set<i32>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
+ (func $~lib/set/Set<i32>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
   (local $taggedNext i32)
   (local $5 i32)
@@ -11943,7 +11943,7 @@
   local.get $5
   return
  )
- (func $~lib/set/Set<i32>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<i32>#has (param $this i32) (param $key i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -11973,7 +11973,7 @@
   local.get $2
   return
  )
- (func $~lib/set/Set<i32>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+ (func $~lib/set/Set<i32>#rehash (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
   (local $newBuckets i32)
   (local $newEntriesCapacity i32)
@@ -12170,7 +12170,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i32>#add (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<i32>#add (param $this i32) (param $key i32) (result i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
@@ -12354,7 +12354,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<i32>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i32>#get:size (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -12379,7 +12379,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<i32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $bufferSize i32)
@@ -12517,7 +12517,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/array/Array<i32>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<i32>#__set (param $this i32) (param $index i32) (param $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -12586,7 +12586,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<i32>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
+ (func $~lib/array/Array<i32>#set:length (param $this i32) (param $newLength i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -12614,7 +12614,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i32>#values (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i32>#values (param $this i32) (result i32)
   (local $start i32)
   (local $size i32)
   (local $values i32)
@@ -12717,7 +12717,7 @@
   local.get $8
   return
  )
- (func $~lib/array/Array<i32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i32>#get:length (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -12742,7 +12742,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<i32>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (param $this i32) (param $index i32) (result i32)
   (local $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -12794,7 +12794,7 @@
   local.get $3
   return
  )
- (func $~lib/set/Set<i32>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<i32>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
   (local $4 i32)
@@ -12923,7 +12923,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<i32>#clear (type $i32_=>_none) (param $this i32)
+ (func $~lib/set/Set<i32>#clear (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -13009,7 +13009,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $std/set/testNumeric<i32> (type $none_=>_none)
+ (func $std/set/testNumeric<i32>
   (local $set i32)
   (local $k i32)
   (local $k|2 i32)
@@ -13492,7 +13492,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u32>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u32>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -13594,7 +13594,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/set/Set<u32>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
+ (func $~lib/set/Set<u32>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
   (local $taggedNext i32)
   (local $5 i32)
@@ -13673,7 +13673,7 @@
   local.get $5
   return
  )
- (func $~lib/set/Set<u32>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<u32>#has (param $this i32) (param $key i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -13703,7 +13703,7 @@
   local.get $2
   return
  )
- (func $~lib/set/Set<u32>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+ (func $~lib/set/Set<u32>#rehash (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
   (local $newBuckets i32)
   (local $newEntriesCapacity i32)
@@ -13900,7 +13900,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u32>#add (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<u32>#add (param $this i32) (param $key i32) (result i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
@@ -14084,7 +14084,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<u32>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u32>#get:size (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -14109,7 +14109,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<u32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/array/Array<u32>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $bufferSize i32)
@@ -14247,7 +14247,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/array/Array<u32>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<u32>#__set (param $this i32) (param $index i32) (param $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -14316,7 +14316,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<u32>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
+ (func $~lib/array/Array<u32>#set:length (param $this i32) (param $newLength i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -14344,7 +14344,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u32>#values (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u32>#values (param $this i32) (result i32)
   (local $start i32)
   (local $size i32)
   (local $values i32)
@@ -14447,7 +14447,7 @@
   local.get $8
   return
  )
- (func $~lib/array/Array<u32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u32>#get:length (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -14472,7 +14472,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<u32>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
+ (func $~lib/array/Array<u32>#__get (param $this i32) (param $index i32) (result i32)
   (local $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -14524,7 +14524,7 @@
   local.get $3
   return
  )
- (func $~lib/set/Set<u32>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+ (func $~lib/set/Set<u32>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
   (local $4 i32)
@@ -14653,7 +14653,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<u32>#clear (type $i32_=>_none) (param $this i32)
+ (func $~lib/set/Set<u32>#clear (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -14739,7 +14739,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $std/set/testNumeric<u32> (type $none_=>_none)
+ (func $std/set/testNumeric<u32>
   (local $set i32)
   (local $k i32)
   (local $k|2 i32)
@@ -15222,7 +15222,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i64>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i64>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -15324,7 +15324,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/set/Set<i64>#find (type $i32_i64_i32_=>_i32) (param $this i32) (param $key i64) (param $hashCode i32) (result i32)
+ (func $~lib/set/Set<i64>#find (param $this i32) (param $key i64) (param $hashCode i32) (result i32)
   (local $entry i32)
   (local $taggedNext i32)
   (local $5 i32)
@@ -15403,7 +15403,7 @@
   local.get $5
   return
  )
- (func $~lib/set/Set<i64>#has (type $i32_i64_=>_i32) (param $this i32) (param $key i64) (result i32)
+ (func $~lib/set/Set<i64>#has (param $this i32) (param $key i64) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -15433,7 +15433,7 @@
   local.get $2
   return
  )
- (func $~lib/set/Set<i64>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+ (func $~lib/set/Set<i64>#rehash (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
   (local $newBuckets i32)
   (local $newEntriesCapacity i32)
@@ -15630,7 +15630,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i64>#add (type $i32_i64_=>_i32) (param $this i32) (param $key i64) (result i32)
+ (func $~lib/set/Set<i64>#add (param $this i32) (param $key i64) (result i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
@@ -15814,7 +15814,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<i64>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i64>#get:size (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -15839,7 +15839,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<i64>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/array/Array<i64>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $bufferSize i32)
@@ -15977,7 +15977,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/array/Array<i64>#__set (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
+ (func $~lib/array/Array<i64>#__set (param $this i32) (param $index i32) (param $value i64)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -16046,7 +16046,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<i64>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
+ (func $~lib/array/Array<i64>#set:length (param $this i32) (param $newLength i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -16074,7 +16074,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i64>#values (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<i64>#values (param $this i32) (result i32)
   (local $start i32)
   (local $size i32)
   (local $values i32)
@@ -16177,7 +16177,7 @@
   local.get $8
   return
  )
- (func $~lib/array/Array<i64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i64>#get:length (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -16202,7 +16202,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<i64>#__get (type $i32_i32_=>_i64) (param $this i32) (param $index i32) (result i64)
+ (func $~lib/array/Array<i64>#__get (param $this i32) (param $index i32) (result i64)
   (local $value i64)
   (local $3 i32)
   (local $4 i64)
@@ -16255,7 +16255,7 @@
   local.get $4
   return
  )
- (func $~lib/set/Set<i64>#delete (type $i32_i64_=>_i32) (param $this i32) (param $key i64) (result i32)
+ (func $~lib/set/Set<i64>#delete (param $this i32) (param $key i64) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
   (local $4 i32)
@@ -16384,7 +16384,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<i64>#clear (type $i32_=>_none) (param $this i32)
+ (func $~lib/set/Set<i64>#clear (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -16470,7 +16470,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $std/set/testNumeric<i64> (type $none_=>_none)
+ (func $std/set/testNumeric<i64>
   (local $set i32)
   (local $k i64)
   (local $k|2 i64)
@@ -16953,7 +16953,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u64>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u64>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -17055,7 +17055,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/set/Set<u64>#find (type $i32_i64_i32_=>_i32) (param $this i32) (param $key i64) (param $hashCode i32) (result i32)
+ (func $~lib/set/Set<u64>#find (param $this i32) (param $key i64) (param $hashCode i32) (result i32)
   (local $entry i32)
   (local $taggedNext i32)
   (local $5 i32)
@@ -17134,7 +17134,7 @@
   local.get $5
   return
  )
- (func $~lib/set/Set<u64>#has (type $i32_i64_=>_i32) (param $this i32) (param $key i64) (result i32)
+ (func $~lib/set/Set<u64>#has (param $this i32) (param $key i64) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -17164,7 +17164,7 @@
   local.get $2
   return
  )
- (func $~lib/set/Set<u64>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+ (func $~lib/set/Set<u64>#rehash (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
   (local $newBuckets i32)
   (local $newEntriesCapacity i32)
@@ -17361,7 +17361,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u64>#add (type $i32_i64_=>_i32) (param $this i32) (param $key i64) (result i32)
+ (func $~lib/set/Set<u64>#add (param $this i32) (param $key i64) (result i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
@@ -17545,7 +17545,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<u64>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u64>#get:size (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -17570,7 +17570,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<u64>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/array/Array<u64>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $bufferSize i32)
@@ -17708,7 +17708,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/array/Array<u64>#__set (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
+ (func $~lib/array/Array<u64>#__set (param $this i32) (param $index i32) (param $value i64)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -17777,7 +17777,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<u64>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
+ (func $~lib/array/Array<u64>#set:length (param $this i32) (param $newLength i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -17805,7 +17805,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u64>#values (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<u64>#values (param $this i32) (result i32)
   (local $start i32)
   (local $size i32)
   (local $values i32)
@@ -17908,7 +17908,7 @@
   local.get $8
   return
  )
- (func $~lib/array/Array<u64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<u64>#get:length (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -17933,7 +17933,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<u64>#__get (type $i32_i32_=>_i64) (param $this i32) (param $index i32) (result i64)
+ (func $~lib/array/Array<u64>#__get (param $this i32) (param $index i32) (result i64)
   (local $value i64)
   (local $3 i32)
   (local $4 i64)
@@ -17986,7 +17986,7 @@
   local.get $4
   return
  )
- (func $~lib/set/Set<u64>#delete (type $i32_i64_=>_i32) (param $this i32) (param $key i64) (result i32)
+ (func $~lib/set/Set<u64>#delete (param $this i32) (param $key i64) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
   (local $4 i32)
@@ -18115,7 +18115,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<u64>#clear (type $i32_=>_none) (param $this i32)
+ (func $~lib/set/Set<u64>#clear (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -18201,7 +18201,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $std/set/testNumeric<u64> (type $none_=>_none)
+ (func $std/set/testNumeric<u64>
   (local $set i32)
   (local $k i64)
   (local $k|2 i64)
@@ -18684,7 +18684,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<f32>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f32>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -18786,7 +18786,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/set/Set<f32>#find (type $i32_f32_i32_=>_i32) (param $this i32) (param $key f32) (param $hashCode i32) (result i32)
+ (func $~lib/set/Set<f32>#find (param $this i32) (param $key f32) (param $hashCode i32) (result i32)
   (local $entry i32)
   (local $taggedNext i32)
   (local $5 i32)
@@ -18865,7 +18865,7 @@
   local.get $5
   return
  )
- (func $~lib/set/Set<f32>#has (type $i32_f32_=>_i32) (param $this i32) (param $key f32) (result i32)
+ (func $~lib/set/Set<f32>#has (param $this i32) (param $key f32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -18895,7 +18895,7 @@
   local.get $2
   return
  )
- (func $~lib/set/Set<f32>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+ (func $~lib/set/Set<f32>#rehash (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
   (local $newBuckets i32)
   (local $newEntriesCapacity i32)
@@ -19092,7 +19092,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<f32>#add (type $i32_f32_=>_i32) (param $this i32) (param $key f32) (result i32)
+ (func $~lib/set/Set<f32>#add (param $this i32) (param $key f32) (result i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
@@ -19276,7 +19276,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<f32>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f32>#get:size (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -19301,7 +19301,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<f32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/array/Array<f32>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $bufferSize i32)
@@ -19439,7 +19439,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/array/Array<f32>#__set (type $i32_i32_f32_=>_none) (param $this i32) (param $index i32) (param $value f32)
+ (func $~lib/array/Array<f32>#__set (param $this i32) (param $index i32) (param $value f32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -19508,7 +19508,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<f32>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
+ (func $~lib/array/Array<f32>#set:length (param $this i32) (param $newLength i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -19536,7 +19536,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<f32>#values (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f32>#values (param $this i32) (result i32)
   (local $start i32)
   (local $size i32)
   (local $values i32)
@@ -19639,7 +19639,7 @@
   local.get $8
   return
  )
- (func $~lib/array/Array<f32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<f32>#get:length (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -19664,7 +19664,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<f32>#__get (type $i32_i32_=>_f32) (param $this i32) (param $index i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (param $this i32) (param $index i32) (result f32)
   (local $value f32)
   (local $3 i32)
   (local $4 f32)
@@ -19717,7 +19717,7 @@
   local.get $4
   return
  )
- (func $~lib/set/Set<f32>#delete (type $i32_f32_=>_i32) (param $this i32) (param $key f32) (result i32)
+ (func $~lib/set/Set<f32>#delete (param $this i32) (param $key f32) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
   (local $4 i32)
@@ -19846,7 +19846,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<f32>#clear (type $i32_=>_none) (param $this i32)
+ (func $~lib/set/Set<f32>#clear (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -19932,7 +19932,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $std/set/testNumeric<f32> (type $none_=>_none)
+ (func $std/set/testNumeric<f32>
   (local $set i32)
   (local $k f32)
   (local $k|2 f32)
@@ -20415,7 +20415,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<f64>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f64>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -20517,7 +20517,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/set/Set<f64>#find (type $i32_f64_i32_=>_i32) (param $this i32) (param $key f64) (param $hashCode i32) (result i32)
+ (func $~lib/set/Set<f64>#find (param $this i32) (param $key f64) (param $hashCode i32) (result i32)
   (local $entry i32)
   (local $taggedNext i32)
   (local $5 i32)
@@ -20596,7 +20596,7 @@
   local.get $5
   return
  )
- (func $~lib/set/Set<f64>#has (type $i32_f64_=>_i32) (param $this i32) (param $key f64) (result i32)
+ (func $~lib/set/Set<f64>#has (param $this i32) (param $key f64) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -20626,7 +20626,7 @@
   local.get $2
   return
  )
- (func $~lib/set/Set<f64>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+ (func $~lib/set/Set<f64>#rehash (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
   (local $newBuckets i32)
   (local $newEntriesCapacity i32)
@@ -20823,7 +20823,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<f64>#add (type $i32_f64_=>_i32) (param $this i32) (param $key f64) (result i32)
+ (func $~lib/set/Set<f64>#add (param $this i32) (param $key f64) (result i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
@@ -21007,7 +21007,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<f64>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f64>#get:size (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -21032,7 +21032,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<f64>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/array/Array<f64>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $bufferSize i32)
@@ -21170,7 +21170,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/array/Array<f64>#__set (type $i32_i32_f64_=>_none) (param $this i32) (param $index i32) (param $value f64)
+ (func $~lib/array/Array<f64>#__set (param $this i32) (param $index i32) (param $value f64)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -21239,7 +21239,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<f64>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
+ (func $~lib/array/Array<f64>#set:length (param $this i32) (param $newLength i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -21267,7 +21267,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<f64>#values (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/set/Set<f64>#values (param $this i32) (result i32)
   (local $start i32)
   (local $size i32)
   (local $values i32)
@@ -21370,7 +21370,7 @@
   local.get $8
   return
  )
- (func $~lib/array/Array<f64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<f64>#get:length (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -21395,7 +21395,7 @@
   local.get $1
   return
  )
- (func $~lib/array/Array<f64>#__get (type $i32_i32_=>_f64) (param $this i32) (param $index i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (param $this i32) (param $index i32) (result f64)
   (local $value f64)
   (local $3 i32)
   (local $4 f64)
@@ -21448,7 +21448,7 @@
   local.get $4
   return
  )
- (func $~lib/set/Set<f64>#delete (type $i32_f64_=>_i32) (param $this i32) (param $key f64) (result i32)
+ (func $~lib/set/Set<f64>#delete (param $this i32) (param $key f64) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
   (local $4 i32)
@@ -21577,7 +21577,7 @@
   local.get $6
   return
  )
- (func $~lib/set/Set<f64>#clear (type $i32_=>_none) (param $this i32)
+ (func $~lib/set/Set<f64>#clear (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -21663,7 +21663,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $std/set/testNumeric<f64> (type $none_=>_none)
+ (func $std/set/testNumeric<f64>
   (local $set i32)
   (local $k f64)
   (local $k|2 f64)
@@ -22146,7 +22146,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i8>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/set/Set<i8>#__visit (param $this i32) (param $cookie i32)
   (local $entries i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -22184,7 +22184,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<i8>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/array/Array<i8>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -22210,7 +22210,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u8>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/set/Set<u8>#__visit (param $this i32) (param $cookie i32)
   (local $entries i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -22248,7 +22248,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<u8>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/array/Array<u8>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -22274,7 +22274,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i16>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/set/Set<i16>#__visit (param $this i32) (param $cookie i32)
   (local $entries i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -22312,7 +22312,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<i16>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/array/Array<i16>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -22338,7 +22338,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u16>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/set/Set<u16>#__visit (param $this i32) (param $cookie i32)
   (local $entries i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -22376,7 +22376,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<u16>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/array/Array<u16>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -22402,7 +22402,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/set/Set<i32>#__visit (param $this i32) (param $cookie i32)
   (local $entries i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -22440,7 +22440,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/array/Array<i32>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -22466,7 +22466,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/set/Set<u32>#__visit (param $this i32) (param $cookie i32)
   (local $entries i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -22504,7 +22504,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<u32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/array/Array<u32>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -22530,7 +22530,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<i64>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/set/Set<i64>#__visit (param $this i32) (param $cookie i32)
   (local $entries i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -22568,7 +22568,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<i64>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/array/Array<i64>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -22594,7 +22594,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<u64>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/set/Set<u64>#__visit (param $this i32) (param $cookie i32)
   (local $entries i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -22632,7 +22632,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<u64>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/array/Array<u64>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -22658,7 +22658,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<f32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/set/Set<f32>#__visit (param $this i32) (param $cookie i32)
   (local $entries i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -22696,7 +22696,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<f32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/array/Array<f32>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -22722,7 +22722,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/set/Set<f64>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/set/Set<f64>#__visit (param $this i32) (param $cookie i32)
   (local $entries i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -22760,7 +22760,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<f64>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/array/Array<f64>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -22786,7 +22786,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (param $this i32) (param $length i32) (result i32)
   (local $buffer i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer

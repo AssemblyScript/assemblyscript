@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 76))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32844))
@@ -17,7 +17,7 @@
  (export "ifAlwaysReturns" (func $if/ifAlwaysReturns))
  (export "memory" (memory $0))
  (start $~start)
- (func $if/ifThenElse (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $if/ifThenElse (param $n i32) (result i32)
   local.get $n
   if
    i32.const 1
@@ -28,7 +28,7 @@
   end
   unreachable
  )
- (func $if/ifThen (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $if/ifThen (param $n i32) (result i32)
   local.get $n
   if
    i32.const 1
@@ -37,7 +37,7 @@
   i32.const 0
   return
  )
- (func $if/ifThenElseBlock (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $if/ifThenElseBlock (param $n i32) (result i32)
   local.get $n
   if
    i32.const 1
@@ -48,7 +48,7 @@
   end
   unreachable
  )
- (func $start:if (type $none_=>_none)
+ (func $start:if
   i32.const 0
   call $if/ifThenElse
   i32.const 0
@@ -128,7 +128,7 @@
    unreachable
   end
  )
- (func $if/ifAlwaysReturns (type $i32_=>_i32) (param $n i32) (result i32)
+ (func $if/ifAlwaysReturns (param $n i32) (result i32)
   local.get $n
   if
    i32.const 1
@@ -143,7 +143,7 @@
   end
   unreachable
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:if
  )
 )

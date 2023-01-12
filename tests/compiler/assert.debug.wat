@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func_subtype func))
+ (type $none_=>_none (func))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
  (global $~lib/memory/__heap_base i32 (i32.const 32776))
@@ -8,7 +8,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:assert (type $none_=>_none)
+ (func $start:assert
   i32.const 1
   drop
   i32.const 1
@@ -33,7 +33,7 @@
   i32.eqz
   drop
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:assert
  )
 )

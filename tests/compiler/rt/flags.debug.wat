@@ -1,8 +1,8 @@
 (module
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -22,11 +22,11 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/shared/typeinfo/Typeinfo#get:flags (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/shared/typeinfo/Typeinfo#get:flags (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/rt/__typeinfo (type $i32_=>_i32) (param $id i32) (result i32)
+ (func $~lib/rt/__typeinfo (param $id i32) (result i32)
   (local $ptr i32)
   global.get $~lib/rt/__rtti_base
   local.set $ptr
@@ -52,7 +52,7 @@
   call $~lib/shared/typeinfo/Typeinfo#get:flags
   return
  )
- (func $rt/flags/test<~lib/typedarray/Int8Array> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Int8Array> (param $flags i32)
   i32.const 4
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -67,7 +67,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/typedarray/Uint8Array> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Uint8Array> (param $flags i32)
   i32.const 5
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -82,7 +82,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/typedarray/Uint8ClampedArray> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Uint8ClampedArray> (param $flags i32)
   i32.const 6
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -97,7 +97,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/typedarray/Int16Array> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Int16Array> (param $flags i32)
   i32.const 7
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -112,7 +112,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/typedarray/Uint16Array> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Uint16Array> (param $flags i32)
   i32.const 8
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -127,7 +127,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/typedarray/Int32Array> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Int32Array> (param $flags i32)
   i32.const 9
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -142,7 +142,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/typedarray/Uint32Array> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Uint32Array> (param $flags i32)
   i32.const 10
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -157,7 +157,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/typedarray/Int64Array> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Int64Array> (param $flags i32)
   i32.const 11
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -172,7 +172,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/typedarray/Uint64Array> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Uint64Array> (param $flags i32)
   i32.const 12
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -187,7 +187,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/typedarray/Float32Array> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Float32Array> (param $flags i32)
   i32.const 13
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -202,7 +202,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/typedarray/Float64Array> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/typedarray/Float64Array> (param $flags i32)
   i32.const 14
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -217,7 +217,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<i8>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<i8>> (param $flags i32)
   i32.const 15
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -232,7 +232,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<u8>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<u8>> (param $flags i32)
   i32.const 16
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -247,7 +247,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<i16>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<i16>> (param $flags i32)
   i32.const 17
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -262,7 +262,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<u16>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<u16>> (param $flags i32)
   i32.const 18
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -277,7 +277,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<i32>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<i32>> (param $flags i32)
   i32.const 19
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -292,7 +292,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<u32>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<u32>> (param $flags i32)
   i32.const 20
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -307,7 +307,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<i64>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<i64>> (param $flags i32)
   i32.const 21
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -322,7 +322,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<u64>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<u64>> (param $flags i32)
   i32.const 22
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -337,7 +337,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<f32>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<f32>> (param $flags i32)
   i32.const 23
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -352,7 +352,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<f64>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<f64>> (param $flags i32)
   i32.const 24
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -367,7 +367,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<v128>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<v128>> (param $flags i32)
   i32.const 25
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -382,7 +382,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<rt/flags/Ref>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<rt/flags/Ref>> (param $flags i32)
   i32.const 27
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -397,7 +397,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/array/Array<rt/flags/Ref|null>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/array/Array<rt/flags/Ref|null>> (param $flags i32)
   i32.const 28
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -412,7 +412,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<i8>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<i8>> (param $flags i32)
   i32.const 29
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -427,7 +427,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<u8>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<u8>> (param $flags i32)
   i32.const 30
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -442,7 +442,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<i16>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<i16>> (param $flags i32)
   i32.const 31
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -457,7 +457,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<u16>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<u16>> (param $flags i32)
   i32.const 32
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -472,7 +472,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<i32>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<i32>> (param $flags i32)
   i32.const 33
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -487,7 +487,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<u32>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<u32>> (param $flags i32)
   i32.const 34
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -502,7 +502,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<i64>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<i64>> (param $flags i32)
   i32.const 35
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -517,7 +517,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<u64>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<u64>> (param $flags i32)
   i32.const 36
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -532,7 +532,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<f32>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<f32>> (param $flags i32)
   i32.const 37
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -547,7 +547,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<f64>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<f64>> (param $flags i32)
   i32.const 38
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -562,7 +562,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<v128>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<v128>> (param $flags i32)
   i32.const 39
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -577,7 +577,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<rt/flags/Ref>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<rt/flags/Ref>> (param $flags i32)
   i32.const 40
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -592,7 +592,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/set/Set<rt/flags/Ref|null>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/set/Set<rt/flags/Ref|null>> (param $flags i32)
   i32.const 41
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -607,7 +607,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<v128,i8>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<v128,i8>> (param $flags i32)
   i32.const 42
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -622,7 +622,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i64,i16>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<i64,i16>> (param $flags i32)
   i32.const 43
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -637,7 +637,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i32,i32>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<i32,i32>> (param $flags i32)
   i32.const 44
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -652,7 +652,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i16,i64>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<i16,i64>> (param $flags i32)
   i32.const 45
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -667,7 +667,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i8,v128>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<i8,v128>> (param $flags i32)
   i32.const 46
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -682,7 +682,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<rt/flags/Ref,i8>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<rt/flags/Ref,i8>> (param $flags i32)
   i32.const 47
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -697,7 +697,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<rt/flags/Ref|null,i8>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<rt/flags/Ref|null,i8>> (param $flags i32)
   i32.const 48
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -712,7 +712,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i8,rt/flags/Ref>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<i8,rt/flags/Ref>> (param $flags i32)
   i32.const 49
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -727,7 +727,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i8,rt/flags/Ref|null>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<i8,rt/flags/Ref|null>> (param $flags i32)
   i32.const 50
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -742,7 +742,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<rt/flags/Ref|null,rt/flags/Ref|null>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<rt/flags/Ref|null,rt/flags/Ref|null>> (param $flags i32)
   i32.const 51
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -757,7 +757,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<f32,i32>> (type $i32_=>_none) (param $flags i32)
+ (func $rt/flags/test<~lib/map/Map<f32,i32>> (param $flags i32)
   i32.const 52
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -772,7 +772,7 @@
    unreachable
   end
  )
- (func $start:rt/flags (type $none_=>_none)
+ (func $start:rt/flags
   i32.const 1
   i32.const 64
   i32.or
@@ -1098,7 +1098,7 @@
   i32.or
   call $rt/flags/test<~lib/map/Map<f32,i32>>
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:rt/flags
  )
 )

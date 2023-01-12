@@ -1,12 +1,12 @@
 (module
- (type $none_=>_i32 (func_subtype (result i32) func))
- (type $i32_=>_none (func_subtype (param i32) func))
- (type $none_=>_none (func_subtype func))
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $bindings/noExportRuntime/isBasic (mut i32) (i32.const 0))
  (global $bindings/noExportRuntime/isString i32 (i32.const 1056))
@@ -68,7 +68,7 @@
  (export "_start" (func $~start))
  (export "takesNonPlainObject" (func $export:bindings/noExportRuntime/takesNonPlainObject))
  (export "takesFunction" (func $export:bindings/noExportRuntime/takesNonPlainObject))
- (func $~lib/rt/itcms/visitRoots (type $none_=>_none)
+ (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
   (local $1 i32)
   i32.const 1056
@@ -133,7 +133,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/Object#makeGray (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -265,7 +265,7 @@
   local.get $0
   i32.store $0 offset=8
  )
- (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -418,7 +418,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -664,7 +664,7 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -776,7 +776,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/initialize (type $none_=>_none)
+ (func $~lib/rt/tlsf/initialize
   (local $0 i32)
   (local $1 i32)
   memory.size $0
@@ -855,7 +855,7 @@
   i32.const 34560
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
+ (func $~lib/rt/itcms/step (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1122,7 +1122,7 @@
   end
   i32.const 0
  )
- (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -1248,7 +1248,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/itcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1554,7 +1554,7 @@
   memory.fill $0
   local.get $1
  )
- (func $~lib/arraybuffer/ArrayBufferView#set:buffer (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBufferView#set:buffer (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0
@@ -1609,25 +1609,25 @@
    end
   end
  )
- (func $bindings/noExportRuntime/takesReturnsBasic (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $bindings/noExportRuntime/takesReturnsBasic (param $0 i32) (result i32)
   global.get $bindings/noExportRuntime/isBasic
  )
- (func $bindings/noExportRuntime/returnsString (type $none_=>_i32) (result i32)
+ (func $bindings/noExportRuntime/returnsString (result i32)
   i32.const 1056
  )
- (func $bindings/noExportRuntime/returnsBuffer (type $none_=>_i32) (result i32)
+ (func $bindings/noExportRuntime/returnsBuffer (result i32)
   global.get $bindings/noExportRuntime/isBuffer
  )
- (func $bindings/noExportRuntime/returnsTypedArray (type $none_=>_i32) (result i32)
+ (func $bindings/noExportRuntime/returnsTypedArray (result i32)
   global.get $bindings/noExportRuntime/isTypedArray
  )
- (func $bindings/noExportRuntime/returnsArrayOfBasic (type $none_=>_i32) (result i32)
+ (func $bindings/noExportRuntime/returnsArrayOfBasic (result i32)
   i32.const 1632
  )
- (func $bindings/noExportRuntime/returnsArrayOfArray (type $none_=>_i32) (result i32)
+ (func $bindings/noExportRuntime/returnsArrayOfArray (result i32)
   i32.const 1712
  )
- (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
+ (func $~lib/rt/__visit_members (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1750,7 +1750,7 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1933,7 +1933,7 @@
    unreachable
   end
  )
- (func $export:bindings/noExportRuntime/takesNonPlainObject (type $i32_=>_none) (param $0 i32)
+ (func $export:bindings/noExportRuntime/takesNonPlainObject (param $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1959,7 +1959,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   global.get $~lib/rt/itcms/white
   local.get $0
   i32.const 20

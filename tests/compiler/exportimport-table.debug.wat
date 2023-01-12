@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func_subtype func))
+ (type $none_=>_none (func))
  (import "env" "table" (table $0 2 funcref))
  (global $exportimport-table/f (mut i32) (i32.const 32))
  (global $~lib/memory/__data_end i32 (i32.const 44))
@@ -11,14 +11,14 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $~start)
- (func $start:exportimport-table~anonymous|0 (type $none_=>_none)
+ (func $start:exportimport-table~anonymous|0
   nop
  )
- (func $start:exportimport-table (type $none_=>_none)
+ (func $start:exportimport-table
   global.get $exportimport-table/f
   drop
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:exportimport-table
  )
 )

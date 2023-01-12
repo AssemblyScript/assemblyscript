@@ -1,8 +1,8 @@
 (module
- (type $none_=>_none (func_subtype func))
- (type $none_=>_externref (func_subtype (result externref) func))
- (type $externref_=>_externref (func_subtype (param externref) (result externref) func))
- (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_none (func))
+ (type $none_=>_externref (func (result externref)))
+ (type $externref_=>_externref (func (param externref) (result externref)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "reference-types" "somethingReal" (func $features/reference-types/somethingReal (result externref)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
@@ -35,7 +35,7 @@
  (export "nonNullReal" (global $features/reference-types/nonNullReal))
  (export "memory" (memory $0))
  (start $~start)
- (func $features/reference-types/testLocal<funcref> (type $none_=>_none)
+ (func $features/reference-types/testLocal<funcref>
   (local $local funcref)
   (local $localInit funcref)
   ref.null nofunc
@@ -84,7 +84,7 @@
    unreachable
   end
  )
- (func $features/reference-types/testLocal<externref> (type $none_=>_none)
+ (func $features/reference-types/testLocal<externref>
   (local $local externref)
   (local $localInit externref)
   ref.null noextern
@@ -133,10 +133,10 @@
    unreachable
   end
  )
- (func $features/reference-types/someFunc (type $none_=>_none)
+ (func $features/reference-types/someFunc
   nop
  )
- (func $start:features/reference-types (type $none_=>_none)
+ (func $start:features/reference-types
   (local $funcLocal funcref)
   (local $1 funcref)
   (local $2 externref)
@@ -353,7 +353,7 @@
   end
   global.set $features/reference-types/nonNullReal
  )
- (func $features/reference-types/internal (type $externref_=>_externref) (param $a externref) (result externref)
+ (func $features/reference-types/internal (param $a externref) (result externref)
   (local $b externref)
   (local $c externref)
   (local $d externref)
@@ -369,7 +369,7 @@
   local.get $d
   return
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:features/reference-types
  )
 )

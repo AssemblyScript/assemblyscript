@@ -61,7 +61,6 @@ import {
   SIMDTernaryOp,
   SIMDLoadOp,
   SIMDLoadStoreLaneOp,
-  RefIsOp,
   TypeRef,
   ExpressionRef,
   ExpressionId,
@@ -3470,13 +3469,13 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.Externref:
       case TypeKind.Anyref:
       case TypeKind.Eqref:
-      case TypeKind.Dataref:
+      case TypeKind.Structref:
       case TypeKind.Arrayref:
       case TypeKind.I31ref:
       case TypeKind.Stringref:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
-      case TypeKind.StringviewIter: return module.if(module.ref_is(RefIsOp.Null, arg0), abort);
+      case TypeKind.StringviewIter: return module.if(module.ref_is_null(arg0), abort);
     }
   } else {
     compiler.currentType = type.nonNullableType;
@@ -3551,7 +3550,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.Externref:
       case TypeKind.Anyref:
       case TypeKind.Eqref:
-      case TypeKind.Dataref:
+      case TypeKind.Structref:
       case TypeKind.Arrayref:
       case TypeKind.I31ref:
       case TypeKind.Stringref:
@@ -3560,7 +3559,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.StringviewIter: {
         let temp = flow.getTempLocal(type);
         let ret = module.if(
-          module.ref_is(RefIsOp.Null,
+          module.ref_is_null(
             module.local_tee(temp.index, arg0, false) // ref
           ),
           abort,

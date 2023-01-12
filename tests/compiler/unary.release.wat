@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func_subtype func))
+ (type $none_=>_none (func))
  (global $unary/i (mut i32) (i32.const 0))
  (global $unary/I (mut i64) (i64.const 0))
  (global $unary/f (mut f32) (f32.const 0))
@@ -7,7 +7,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $~start)
- (func $~start (type $none_=>_none)
+ (func $~start
   (local $0 i32)
   (local $1 i64)
   global.get $unary/i

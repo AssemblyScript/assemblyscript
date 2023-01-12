@@ -1,9 +1,9 @@
 (module
- (type $none_=>_none (func_subtype func))
+ (type $none_=>_none (func))
  (memory $0 (shared 1 10))
  (export "memory" (memory $0))
  (start $~start)
- (func $features/threads/testAtomic (type $none_=>_none)
+ (func $features/threads/testAtomic
   i32.const 0
   i32.atomic.load8_u $0
   drop
@@ -285,7 +285,7 @@
   i64.atomic.rmw.cmpxchg $0 offset=8
   drop
  )
- (func $features/threads/testAtomicAsm (type $none_=>_none)
+ (func $features/threads/testAtomicAsm
   i32.const 0
   i32.atomic.load8_u $0
   drop
@@ -532,7 +532,7 @@
   i64.atomic.rmw.cmpxchg $0
   drop
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $features/threads/testAtomic
   call $features/threads/testAtomicAsm
  )

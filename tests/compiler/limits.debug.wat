@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func_subtype func))
+ (type $none_=>_none (func))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i16.MIN_VALUE i32 (i32.const -32768))
@@ -34,7 +34,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:limits (type $none_=>_none)
+ (func $start:limits
   global.get $~lib/builtins/i8.MIN_VALUE
   drop
   global.get $~lib/builtins/i8.MAX_VALUE
@@ -88,7 +88,7 @@
   global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   drop
  )
- (func $~start (type $none_=>_none)
+ (func $~start
   call $start:limits
  )
 )
