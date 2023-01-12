@@ -290,12 +290,12 @@ export class Parser extends DiagnosticEmitter {
         tn.next();
         let abstractStart = tn.tokenPos;
         let abstractEnd = tn.pos;
-        let next = tn.peek(true);
-        if (tn.nextTokenOnNewLine) {
+        if (tn.peekOnNewLine()) {
           tn.reset(state);
           statement = this.parseStatement(tn, true);
           break;
         }
+        let next = tn.peek();
         if (next != Token.Class) {
           if (next == Token.Interface) {
             this.error(
@@ -322,7 +322,7 @@ export class Parser extends DiagnosticEmitter {
       case Token.Namespace: {
         let state = tn.mark();
         tn.next();
-        if (tn.peek(false, IdentifierHandling.Prefer) == Token.Identifier) {
+        if (tn.peek(IdentifierHandling.Prefer) == Token.Identifier) {
           tn.discard(state);
           statement = this.parseNamespace(tn, flags, decorators, startPos);
           decorators = null;
@@ -345,7 +345,7 @@ export class Parser extends DiagnosticEmitter {
       case Token.Type: { // also identifier
         let state = tn.mark();
         tn.next();
-        if (tn.peek(false, IdentifierHandling.Prefer) == Token.Identifier) {
+        if (tn.peek(IdentifierHandling.Prefer) == Token.Identifier) {
           tn.discard(state);
           statement = this.parseTypeDeclaration(tn, flags, decorators, startPos);
           decorators = null;
@@ -358,7 +358,7 @@ export class Parser extends DiagnosticEmitter {
       case Token.Module: { // also identifier
         let state = tn.mark();
         tn.next();
-        if (tn.peek(true) == Token.StringLiteral && !tn.nextTokenOnNewLine) {
+        if (tn.peek() == Token.StringLiteral && !tn.peekOnNewLine()) {
           tn.discard(state);
           statement = this.parseModuleDeclaration(tn, flags);
         } else {
@@ -1113,10 +1113,11 @@ export class Parser extends DiagnosticEmitter {
 
     let startPos = tn.tokenPos;
     let expr: Expression | null = null;
+    let nextToken = tn.peek();
     if (
-      tn.peek(true) != Token.Semicolon &&
-      tn.nextToken != Token.CloseBrace &&
-      !tn.nextTokenOnNewLine
+      nextToken != Token.Semicolon &&
+      nextToken != Token.CloseBrace &&
+      !tn.peekOnNewLine()
     ) {
       if (!(expr = this.parseExpression(tn))) return null;
     }
@@ -2042,7 +2043,7 @@ export class Parser extends DiagnosticEmitter {
     let setEnd = 0;
     if (!isInterface) {
       if (tn.skip(Token.Get)) {
-        if (tn.peek(true, IdentifierHandling.Prefer) == Token.Identifier && !tn.nextTokenOnNewLine) {
+        if (tn.peek(IdentifierHandling.Prefer) == Token.Identifier && !tn.peekOnNewLine()) {
           flags |= CommonFlags.Get;
           isGetter = true;
           getStart = tn.tokenPos;
@@ -2058,7 +2059,7 @@ export class Parser extends DiagnosticEmitter {
           tn.reset(state);
         }
       } else if (tn.skip(Token.Set)) {
-        if (tn.peek(true, IdentifierHandling.Prefer) == Token.Identifier && !tn.nextTokenOnNewLine) {
+        if (tn.peek(IdentifierHandling.Prefer) == Token.Identifier && !tn.peekOnNewLine()) {
           flags |= CommonFlags.Set;
           isSetter = true;
           setStart = tn.tokenPos;
@@ -2966,7 +2967,7 @@ export class Parser extends DiagnosticEmitter {
         break;
       }
       case Token.Type: { // also identifier
-        if (tn.peek(false, IdentifierHandling.Prefer) == Token.Identifier) {
+        if (tn.peek(IdentifierHandling.Prefer) == Token.Identifier) {
           statement = this.parseTypeDeclaration(tn, CommonFlags.None, null, tn.tokenPos);
           break;
         }
@@ -3020,7 +3021,7 @@ export class Parser extends DiagnosticEmitter {
     // at 'break': Identifier? ';'?
 
     let identifier: IdentifierExpression | null = null;
-    if (tn.peek(true) == Token.Identifier && !tn.nextTokenOnNewLine) {
+    if (tn.peek() == Token.Identifier && !tn.peekOnNewLine()) {
       tn.next(IdentifierHandling.Prefer);
       identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
@@ -3036,7 +3037,7 @@ export class Parser extends DiagnosticEmitter {
     // at 'continue': Identifier? ';'?
 
     let identifier: IdentifierExpression | null = null;
-    if (tn.peek(true) == Token.Identifier && !tn.nextTokenOnNewLine) {
+    if (tn.peek() == Token.Identifier && !tn.peekOnNewLine()) {
       tn.next(IdentifierHandling.Prefer);
       identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
@@ -3948,7 +3949,7 @@ export class Parser extends DiagnosticEmitter {
         if (tn.skip(Token.TemplateLiteral)) {
           return this.parseTemplateLiteral(tn, identifier);
         }
-        if (tn.peek(true) == Token.Equals_GreaterThan && !tn.nextTokenOnNewLine) {
+        if (tn.peek() == Token.Equals_GreaterThan && !tn.peekOnNewLine()) {
           return this.parseFunctionExpressionCommon(
             tn,
             Node.createEmptyIdentifierExpression(tn.range(startPos)),
@@ -4405,8 +4406,8 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer
   ): void {
     // see: https://tc39.es/ecma262/#sec-automatic-semicolon-insertion
-    let token = tn.peek(true);
-    if (tn.nextTokenOnNewLine || token == Token.EndOfFile || token == Token.CloseBrace) return;
+    let nextToken = tn.peek();
+    if (nextToken == Token.EndOfFile || nextToken == Token.CloseBrace || tn.peekOnNewLine()) return;
     this.error(
       DiagnosticCode.Unexpected_token,
       tn.range(tn.nextTokenPos)
@@ -4415,10 +4416,9 @@ export class Parser extends DiagnosticEmitter {
 
   /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */
   skipStatement(tn: Tokenizer): void {
-    tn.peek(true);
-    if (tn.nextTokenOnNewLine) tn.next(); // if reset() to the previous line
+    if (tn.peekOnNewLine()) tn.next(); // if reset() to the previous line
     do {
-      let nextToken = tn.peek(true);
+      let nextToken = tn.peek();
       if (
         nextToken == Token.EndOfFile ||   // next step should handle this
         nextToken == Token.Semicolon      // end of the statement for sure
@@ -4426,7 +4426,7 @@ export class Parser extends DiagnosticEmitter {
         tn.next();
         break;
       }
-      if (tn.nextTokenOnNewLine) break;   // end of the statement maybe
+      if (tn.peekOnNewLine()) break;   // end of the statement maybe
       switch (tn.next()) {
         case Token.Identifier: {
           tn.readIdentifier();

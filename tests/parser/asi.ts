@@ -17,3 +17,9 @@ function successCloseBrace(): i32 {
 function successCloseParen(): i32 {
   return ( 123 )
 }
+
+function successAfterLet(): i32 {
+  // multiple tn.peeks
+  let a = 0
+  return a
+}

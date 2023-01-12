@@ -449,6 +449,13 @@ export function operatorTokenToString(token: Token): string {
 /** Handler for intercepting comments while tokenizing. */
 export type CommentHandler = (kind: CommentKind, text: string, range: Range) => void;
 
+/** Whether a token begins on a new line, if known. */
+enum OnNewLine {
+  No,
+  Yes,
+  Unknown
+}
+
 /** Tokenizes a source to individual {@link Token}s. */
 export class Tokenizer extends DiagnosticEmitter {
 
@@ -461,7 +468,7 @@ export class Tokenizer extends DiagnosticEmitter {
 
   nextToken: Token = -1;
   nextTokenPos: i32 = 0;
-  nextTokenOnNewLine: bool = false;
+  nextTokenOnNewLine: OnNewLine = OnNewLine.Unknown;
 
   onComment: CommentHandler | null = null;
 
@@ -504,7 +511,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   next(identifierHandling: IdentifierHandling = IdentifierHandling.Default): Token {
-    this.nextToken = -1;
+    this.clearNextToken();
     let token: Token;
     do token = this.unsafeNext(identifierHandling);
     while (token == Token.Invalid);
@@ -959,34 +966,41 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   peek(
-    checkOnNewLine: bool = false,
     identifierHandling: IdentifierHandling = IdentifierHandling.Default,
     maxCompoundLength: i32 = i32.MAX_VALUE
   ): Token {
-    let text = this.source.text;
-    if (this.nextToken < 0) {
+    let nextToken = this.nextToken;
+    if (nextToken < 0) {
       let posBefore = this.pos;
       let tokenBefore = this.token;
       let tokenPosBefore = this.tokenPos;
-      let nextToken: Token;
       do nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
       while (nextToken == Token.Invalid);
       this.nextToken = nextToken;
       this.nextTokenPos = this.tokenPos;
-      if (checkOnNewLine) {
-        this.nextTokenOnNewLine = false;
-        for (let pos = posBefore, end = this.nextTokenPos; pos < end; ++pos) {
-          if (isLineBreak(text.charCodeAt(pos))) {
-            this.nextTokenOnNewLine = true;
-            break;
-          }
-        }
-      }
+      this.nextTokenOnNewLine = OnNewLine.Unknown;
       this.pos = posBefore;
       this.token = tokenBefore;
       this.tokenPos = tokenPosBefore;
     }
-    return this.nextToken;
+    return nextToken;
+  }
+
+  peekOnNewLine(): bool {
+    switch (this.nextTokenOnNewLine) {
+      case OnNewLine.No: return false;
+      case OnNewLine.Yes: return true;
+    }
+    this.peek();
+    let text = this.source.text;
+    for (let pos = this.pos, end = this.nextTokenPos; pos < end; ++pos) {
+      if (isLineBreak(text.charCodeAt(pos))) {
+        this.nextTokenOnNewLine = OnNewLine.Yes;
+        return true;
+      }
+    }
+    this.nextTokenOnNewLine = OnNewLine.No;
+    return false;
   }
 
   skipIdentifier(identifierHandling: IdentifierHandling = IdentifierHandling.Prefer): bool {
@@ -1006,7 +1020,7 @@ export class Tokenizer extends DiagnosticEmitter {
     while (nextToken == Token.Invalid);
     if (nextToken == token) {
       this.token = token;
-      this.nextToken = -1;
+      this.clearNextToken();
       return true;
     } else {
       this.pos = posBefore;
@@ -1037,7 +1051,13 @@ export class Tokenizer extends DiagnosticEmitter {
     this.pos = state.pos;
     this.token = state.token;
     this.tokenPos = state.tokenPos;
+    this.clearNextToken();
+  }
+
+  clearNextToken(): void {
     this.nextToken = -1;
+    this.nextTokenPos = 0;
+    this.nextTokenOnNewLine = OnNewLine.Unknown;
   }
 
   range(start: i32 = -1, end: i32 = -1): Range {
