@@ -25,8 +25,7 @@ const importmap = {
 
 fs.writeFileSync(path.join(dirname, "..", "dist", "importmap.json"), `${JSON.stringify(importmap, null, 2)}
 `);
-fs.writeFileSync(path.join(dirname, "..", "dist", "importmap.js"), `export const importmap = ${JSON.stringify(importmap, null, 2)}
-export default importmap;
+fs.writeFileSync(path.join(dirname, "..", "dist", "importmap.js"), `var ASC_IMPORTMAP = ${JSON.stringify(importmap, null, 2)};
 `);
 fs.writeFileSync(path.join(dirname, "..", "dist", "web.html"), `<script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1/dist/es-module-shims.js"></script>
 <script type="importmap">
