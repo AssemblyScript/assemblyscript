@@ -1,5 +1,9 @@
 type foo = () => void;
 type foo = (() => void) | null;
+type foo = null | (() => void);
+type foo = (() => void)[];
+type foo = (() => void)[] | null;
+type foo = null | (() => void)[];
 type foo = (a: i32) => i32;
 type foo = (a?: i32) => i32;
 type foo = (this: AClass, a: i32) => i32;

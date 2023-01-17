@@ -507,12 +507,12 @@ export class Parser extends DiagnosticEmitter {
     // '(' ...
     if (token == Token.OpenParen) {
 
-      // '(' FunctionSignature ')' '|' 'null'?
-      let isNullableSignature = tn.skip(Token.OpenParen);
+      // '(' FunctionSignature ')'
+      let isInnerParenthesized = tn.skip(Token.OpenParen);
       // FunctionSignature?
       let signature = this.tryParseFunctionType(tn);
       if (signature) {
-        if (isNullableSignature) {
+        if (isInnerParenthesized) {
           if (!tn.skip(Token.CloseParen)) {
             this.error(
               DiagnosticCode._0_expected,
@@ -520,32 +520,16 @@ export class Parser extends DiagnosticEmitter {
             );
             return null;
           }
-          if (!tn.skip(Token.Bar)) {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), "|"
-            );
-            return null;
-          }
-          if (!tn.skip(Token.Null)) {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), "null"
-            );
-          }
-          signature.isNullable = true;
         }
-        return signature;
-      } else if (isNullableSignature || this.tryParseSignatureIsSignature) {
+        type = signature;
+      } else if (isInnerParenthesized || this.tryParseSignatureIsSignature) {
         this.error(
           DiagnosticCode.Unexpected_token,
           tn.range()
         );
         return null;
-      }
-
       // Type (',' Type)* ')'
-      if (acceptParenthesized) {
+      } else if (acceptParenthesized) {
         let innerType = this.parseType(tn, false, suppressErrors);
         if (!innerType) return null;
         if (!tn.skip(Token.CloseParen)) {
@@ -634,20 +618,29 @@ export class Parser extends DiagnosticEmitter {
       }
       return null;
     }
-    // ... | null
+    // ... | type
     while (tn.skip(Token.Bar)) {
-      if (tn.skip(Token.Null)) {
-        type.isNullable = true;
-      } else {
-        let notNullStart = tn.pos;
-        let notNull = this.parseType(tn, false, true);
+      let nextType = this.parseType(tn, false, true);
+      if (!nextType) return null;
+      let typeIsNull = type.kind == NodeKind.NamedType && (<NamedTypeNode>type).isNull;
+      let nextTypeIsNull = nextType.kind == NodeKind.NamedType && (<NamedTypeNode>nextType).isNull;
+      if (!typeIsNull && !nextTypeIsNull) {
         if (!suppressErrors) {
           this.error(
-            DiagnosticCode._0_expected,
-            notNull ? notNull.range : tn.range(notNullStart), "null"
+            DiagnosticCode.Not_implemented_0, nextType.range, "union types"
           );
         }
         return null;
+      } else if (nextTypeIsNull) {
+        type.isNullable = true;
+        type.range.end = nextType.range.end;
+      } else if (typeIsNull) {
+        nextType.range.start = type.range.start;
+        nextType.isNullable = true;
+        type = nextType;
+      } else {
+        // `null | null` still `null`
+        type.range.end = nextType.range.end;
       }
     }
     // ... [][]
@@ -672,8 +665,8 @@ export class Parser extends DiagnosticEmitter {
         } else {
           if (!suppressErrors) {
             this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), "null"
+              DiagnosticCode.Not_implemented_0,
+              tn.range(), "union types"
             );
           }
           return null;

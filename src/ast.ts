@@ -901,6 +901,11 @@ export class NamedTypeNode extends TypeNode {
     let typeArguments = this.typeArguments;
     return typeArguments != null && typeArguments.length > 0;
   }
+
+  /** Tests if this type is "null". */
+  get isNull(): bool {
+    return this.name.identifier.text == "null";
+  }
 }
 
 /** Represents a function type. */
