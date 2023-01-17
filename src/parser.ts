@@ -508,11 +508,11 @@ export class Parser extends DiagnosticEmitter {
     if (token == Token.OpenParen) {
 
       // '(' FunctionSignature ')'
-      let isOpenParen = tn.skip(Token.OpenParen);
+      let isInnerParenthesized = tn.skip(Token.OpenParen);
       // FunctionSignature?
       let signature = this.tryParseFunctionType(tn);
       if (signature) {
-        if (isOpenParen) {
+        if (isInnerParenthesized) {
           if (!tn.skip(Token.CloseParen)) {
             this.error(
               DiagnosticCode._0_expected,
@@ -522,15 +522,14 @@ export class Parser extends DiagnosticEmitter {
           }
         }
         type = signature;
-      } else if (isOpenParen || this.tryParseSignatureIsSignature) {
+      } else if (isInnerParenthesized || this.tryParseSignatureIsSignature) {
         this.error(
           DiagnosticCode.Unexpected_token,
           tn.range()
         );
         return null;
-      }
       // Type (',' Type)* ')'
-      else if (acceptParenthesized) {
+      } else if (acceptParenthesized) {
         let innerType = this.parseType(tn, false, suppressErrors);
         if (!innerType) return null;
         if (!tn.skip(Token.CloseParen)) {
@@ -622,11 +621,9 @@ export class Parser extends DiagnosticEmitter {
     // ... | type
     while (tn.skip(Token.Bar)) {
       let nextType = this.parseType(tn, false, true);
-      if (nextType == null) {
-        return null;
-      }
-      let nextTypeIsNull = nextType.kind == NodeKind.NamedType && (<NamedTypeNode>nextType).name.identifier.text == "null";
-      let typeIsNull = type.kind == NodeKind.NamedType && (<NamedTypeNode>type).name.identifier.text == "null";
+      if (!nextType) return null;
+      let typeIsNull = type.kind == NodeKind.NamedType && (<NamedTypeNode>type).isNull;
+      let nextTypeIsNull = nextType.kind == NodeKind.NamedType && (<NamedTypeNode>nextType).isNull;
       if (!typeIsNull && !nextTypeIsNull) {
         if (!suppressErrors) {
           this.error(
