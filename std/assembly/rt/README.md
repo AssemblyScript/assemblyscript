@@ -52,9 +52,6 @@ Interface
 * **__typeinfo**(id: `u32`): `RTTIFlags`<br />
   Obtains the runtime type information for objects with the specified runtime id. Runtime type information is a set of flags indicating whether a type is managed, an array or similar, and what the relevant alignments when creating an instance externally are etc.
 
-* **__instanceof**(ptr: `usize`, classId: `u32`): `bool`<br />
-  Tests if the object pointed to by `ptr` is an instance of the specified class id.
-
 ITCMS / `--runtime incremental`
 -----
 

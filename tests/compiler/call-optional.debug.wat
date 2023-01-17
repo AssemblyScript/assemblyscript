@@ -6,11 +6,11 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 96))
  (global $~lib/memory/__data_end i32 (i32.const 108))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16492))
- (global $~lib/memory/__heap_base i32 (i32.const 16492))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32876))
+ (global $~lib/memory/__heap_base i32 (i32.const 32876))
  (memory $0 1)
- (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 76) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 76) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 2 2 funcref)
  (elem $0 (i32.const 1) $call-optional/opt@varargs)
  (export "memory" (memory $0))
@@ -21,6 +21,7 @@
   i32.add
   local.get $c
   i32.add
+  return
  )
  (func $call-optional/opt@varargs (param $a i32) (param $b i32) (param $c i32) (result i32)
   block $2of2

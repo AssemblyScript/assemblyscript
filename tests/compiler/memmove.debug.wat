@@ -6,18 +6,20 @@
  (global $memmove/base i32 (i32.const 8))
  (global $memmove/dest (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 60))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
- (global $~lib/memory/__heap_base i32 (i32.const 16444))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
+ (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
  (func $memmove/memmove (param $dest i32) (param $src i32) (param $n i32) (result i32)
   (local $ret i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   local.get $dest
   local.set $ret
   local.get $dest
@@ -43,8 +45,6 @@
      local.get $dest
      i32.const 8
      i32.rem_u
-     local.set $var$4
-     local.get $var$4
      if
       local.get $n
       i32.eqz
@@ -57,17 +57,17 @@
       i32.sub
       local.set $n
       local.get $dest
-      local.tee $var$5
+      local.tee $4
       i32.const 1
       i32.add
       local.set $dest
-      local.get $var$5
+      local.get $4
       local.get $src
-      local.tee $var$5
+      local.tee $5
       i32.const 1
       i32.add
       local.set $src
-      local.get $var$5
+      local.get $5
       i32.load8_u $0
       i32.store8 $0
       br $while-continue|0
@@ -77,8 +77,6 @@
      local.get $n
      i32.const 8
      i32.ge_u
-     local.set $var$4
-     local.get $var$4
      if
       local.get $dest
       local.get $src
@@ -102,21 +100,19 @@
    end
    loop $while-continue|2
     local.get $n
-    local.set $var$4
-    local.get $var$4
     if
      local.get $dest
-     local.tee $var$5
+     local.tee $6
      i32.const 1
      i32.add
      local.set $dest
-     local.get $var$5
+     local.get $6
      local.get $src
-     local.tee $var$5
+     local.tee $7
      i32.const 1
      i32.add
      local.set $src
-     local.get $var$5
+     local.get $7
      i32.load8_u $0
      i32.store8 $0
      local.get $n
@@ -141,8 +137,6 @@
      i32.add
      i32.const 8
      i32.rem_u
-     local.set $var$4
-     local.get $var$4
      if
       local.get $n
       i32.eqz
@@ -168,8 +162,6 @@
      local.get $n
      i32.const 8
      i32.ge_u
-     local.set $var$4
-     local.get $var$4
      if
       local.get $n
       i32.const 8
@@ -189,8 +181,6 @@
    end
    loop $while-continue|5
     local.get $n
-    local.set $var$4
-    local.get $var$4
     if
      local.get $dest
      local.get $n
@@ -208,6 +198,7 @@
    end
   end
   local.get $ret
+  return
  )
  (func $start:memmove
   global.get $memmove/base

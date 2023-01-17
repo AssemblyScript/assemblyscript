@@ -7,18 +7,18 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17612))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33996))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
- (data (i32.const 1048) "\03\00\00\00\08\00\00\00\01")
+ (data (i32.const 1048) "\04\00\00\00\08\00\00\00\01")
  (data (i32.const 1068) "<")
- (data (i32.const 1080) "\01\00\00\00\"\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00t\00y\00p\00e\00s\00.\00t\00s")
+ (data (i32.const 1080) "\02\00\00\00\"\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00t\00y\00p\00e\00s\00.\00t\00s")
  (data (i32.const 1132) "\1c")
- (data (i32.const 1144) "\04\00\00\00\08\00\00\00\02")
+ (data (i32.const 1144) "\05\00\00\00\08\00\00\00\02")
  (data (i32.const 1164) "\1c")
- (data (i32.const 1176) "\05\00\00\00\08\00\00\00\03")
+ (data (i32.const 1176) "\06\00\00\00\08\00\00\00\03")
  (data (i32.const 1196) "\1c")
- (data (i32.const 1208) "\03\00\00\00\08\00\00\00\04")
+ (data (i32.const 1208) "\04\00\00\00\08\00\00\00\04")
  (table $0 5 5 funcref)
  (elem $0 (i32.const 1) $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|0 $function-types/makeAdder<f64>~anonymous|0 $function-types/makeAdder<i32>~anonymous|0)
  (export "memory" (memory $0))
@@ -163,7 +163,7 @@
    i32.const 2
    global.set $~argumentsLength
    global.get $~lib/memory/__stack_pointer
-   i32.const 4
+   i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -171,8 +171,8 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store $0
+   i64.const 0
+   i64.store $0
    block $1of1
     block $0of1
      block $outOfRange
@@ -189,6 +189,9 @@
     i32.const 1056
     i32.store $0
    end
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store $0 offset=4
    i32.const 2
    global.set $~argumentsLength
    i32.const 1
@@ -198,7 +201,7 @@
    call_indirect $0 (type $i32_i32_=>_i32)
    local.set $0
    global.get $~lib/memory/__stack_pointer
-   i32.const 4
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $0
@@ -238,8 +241,8 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 17632
-  i32.const 17680
+  i32.const 34016
+  i32.const 34064
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort

@@ -2,7 +2,7 @@ import { utoa32, itoa32, utoa64, itoa64, dtoa } from "util/number";
 
 // preliminary
 var str: string = "hi, I'm a string";
-var nullStr: string;
+var nullStr: string | null = null;
 
 // exactly once in static memory
 assert(changetype<usize>(str) == changetype<usize>("hi, I'm a string"));
@@ -810,6 +810,13 @@ assert("".concat("") == "");
 export function getString(): string {
   return str;
 }
+
+// Unicode escapes
+
+assert("\u{c0}\u{c8}" == "ÀÈ");
+assert("\u{00c0}\u{00c8}" == "ÀÈ");
+assert("\u{53D8}\u{91CF}" == "变量");
+assert("\u{2070E}\u{20731}" == "𠜎𠜱");
 
 // Unleak globals
 

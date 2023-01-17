@@ -9,6 +9,10 @@ test_i31();
 
 // constant globals
 
-export const a: anyref = null;
-// export const b: i31ref = null; // TODO: not yet nullable in Binaryen
-// export const c: dataref = null; // TODO: not yet nullable in Binaryen
+export const globalFunc: funcref = null;
+export const globalExtern: externref = null;
+export const globalAny: anyref = null;
+export const globalEq: eqref = null;
+export const globalI31: i31ref = null;
+export const globalStruct: structref = null;
+export const globalArray: arrayref = null;

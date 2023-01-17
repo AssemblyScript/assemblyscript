@@ -8,7 +8,7 @@ export class Error {
   ) {}
 
   toString(): string {
-    var message = this.message;
+    let message = this.message;
     return message.length
       ? this.name + ": " + message
       : this.name;

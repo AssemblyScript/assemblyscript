@@ -4,36 +4,36 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 60))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
- (global $~lib/memory/__heap_base i32 (i32.const 16444))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
+ (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00s\00w\00i\00t\00c\00h\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\12\00\00\00s\00w\00i\00t\00c\00h\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
  (func $switch/doSwitch (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $case4|0
    block $case3|0
     block $case2|0
      block $case1|0
       block $case0|0
        local.get $n
-       local.set $var$1
-       local.get $var$1
+       local.set $1
+       local.get $1
        i32.const 1
        i32.eq
        br_if $case0|0
-       local.get $var$1
+       local.get $1
        i32.const 0
        i32.eq
        br_if $case1|0
-       local.get $var$1
+       local.get $1
        i32.const 2
        i32.eq
        br_if $case3|0
-       local.get $var$1
+       local.get $1
        i32.const 3
        i32.eq
        br_if $case4|0
@@ -51,22 +51,22 @@
   return
  )
  (func $switch/doSwitchDefaultOmitted (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $break|0
    block $case2|0
     block $case1|0
      block $case0|0
       local.get $n
-      local.set $var$1
-      local.get $var$1
+      local.set $1
+      local.get $1
       i32.const 1
       i32.eq
       br_if $case0|0
-      local.get $var$1
+      local.get $1
       i32.const 2
       i32.eq
       br_if $case1|0
-      local.get $var$1
+      local.get $1
       i32.const 3
       i32.eq
       br_if $case2|0
@@ -80,15 +80,16 @@
    return
   end
   i32.const 0
+  return
  )
  (func $switch/doSwitchBreakCase (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $break|0
    block $case1|0
     block $case0|0
      local.get $n
-     local.set $var$1
-     local.get $var$1
+     local.set $1
+     local.get $1
      i32.const 1
      i32.eq
      br_if $case0|0
@@ -100,15 +101,16 @@
    return
   end
   i32.const 1
+  return
  )
  (func $switch/doSwitchBreakDefault (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $break|0
    block $case1|0
     block $case0|0
      local.get $n
-     local.set $var$1
-     local.get $var$1
+     local.set $1
+     local.get $1
      i32.const 1
      i32.eq
      br_if $case0|0
@@ -120,14 +122,15 @@
    br $break|0
   end
   i32.const 2
+  return
  )
  (func $switch/doSwitchFallThroughCase (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $case1|0
    block $case0|0
     local.get $n
-    local.set $var$1
-    local.get $var$1
+    local.set $1
+    local.get $1
     i32.const 1
     i32.eq
     br_if $case1|0
@@ -137,14 +140,15 @@
    return
   end
   i32.const 1
+  return
  )
  (func $switch/doSwitchFallThroughDefault (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $case1|0
    block $case0|0
     local.get $n
-    local.set $var$1
-    local.get $var$1
+    local.set $1
+    local.get $1
     i32.const 1
     i32.eq
     br_if $case0|0
@@ -154,11 +158,13 @@
    return
   end
   i32.const 2
+  return
  )
  (func $switch/doSwitchEmpty (param $n i32) (result i32)
   local.get $n
   drop
   i32.const 2
+  return
  )
  (func $start:switch
   i32.const 0

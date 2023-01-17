@@ -8,7 +8,7 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1036) ",")
- (data (i32.const 1048) "\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s")
  (export "mod" (func $std/mod/mod))
  (export "memory" (memory $0))
  (start $~start)
@@ -189,10 +189,8 @@
     i64.sub
     local.set $5
     local.get $7
-    i64.const 63
-    i64.shr_u
-    i64.const 63
-    i64.shl
+    i64.const -9223372036854775808
+    i64.and
     local.get $3
     local.get $6
     i64.shl

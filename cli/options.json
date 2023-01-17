@@ -98,6 +98,22 @@
     ],
     "type": "s"
   },
+  "uncheckedBehavior": {
+    "category": "Debugging",
+    "description": [
+      "Changes the behavior of unchecked() expressions.",
+      "Using this option can potentially cause breakage.",
+      "",
+      "  default  The default behavior: unchecked operations are",
+      "           only used inside of unchecked().",
+      "  never    Unchecked operations are never used, even when",
+      "           inside of unchecked().",
+      "  always   Unchecked operations are always used if possible,",
+      "           whether or not unchecked() is used."
+    ],
+    "type": "s",
+    "default": "default"
+  },
   "debug": {
     "category": "Debugging",
     "description": "Enables debug information in emitted binaries.",
@@ -190,7 +206,7 @@
     "description": [
       "Overrides the stack size. Only relevant for incremental GC",
       "or when using a custom runtime that requires stack space.",
-      "Defaults to 0 without and to 16384 with incremental GC."
+      "Defaults to 0 without and to 32768 with incremental GC."
     ],
     "default": 0,
     "type": "i"
@@ -204,6 +220,7 @@
       " simd                SIMD types and operations.",
       " reference-types     Reference types and operations.",
       " gc                  Garbage collection (WIP).",
+      " stringref           String reference types.",
       ""
     ],
     "TODO_doesNothingYet": [
@@ -211,7 +228,6 @@
       " tail-calls          Tail call operations.",
       " multi-value         Multi value types.",
       " memory64            Memory64 operations.",
-      " function-references Function reference types.",
       " relaxed-simd        Relaxed SIMD operations.",
       " extended-const      Extended const expressions."
     ],

@@ -16,16 +16,16 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 1456))
  (memory $0 1)
  (data (i32.const 1036) "<")
- (data (i32.const 1048) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1048) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 1100) "<")
- (data (i32.const 1112) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
+ (data (i32.const 1112) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
  (data (i32.const 1164) "<")
- (data (i32.const 1176) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1176) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1260) "<")
- (data (i32.const 1272) "\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d")
+ (data (i32.const 1272) "\02\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d")
  (data (i32.const 1356) "<")
- (data (i32.const 1368) "\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d")
- (data (i32.const 1456) "\03\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1368) "\02\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d")
+ (data (i32.const 1456) "\04\00\00\00 \00\00\00 \00\00\00 ")
  (export "__new" (func $~lib/rt/tcms/__new))
  (export "__pin" (func $~lib/rt/tcms/__pin))
  (export "__unpin" (func $~lib/rt/tcms/__unpin))
@@ -75,11 +75,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -339,11 +339,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -1018,7 +1018,7 @@
    i32.load $0 offset=8
    i32.eqz
    local.get $0
-   i32.const 1484
+   i32.const 1476
    i32.lt_u
    i32.and
    i32.eqz
@@ -1167,11 +1167,11 @@
   (local $5 i32)
   (local $6 i32)
   i32.const 1056
-  call $byn-split-outlined-A$~lib/rt/tcms/__visit
+  call $byn-split-outlined-A$~lib/rt/tcms/__visit_0
   i32.const 1280
-  call $byn-split-outlined-A$~lib/rt/tcms/__visit
+  call $byn-split-outlined-A$~lib/rt/tcms/__visit_0
   i32.const 1376
-  call $byn-split-outlined-A$~lib/rt/tcms/__visit
+  call $byn-split-outlined-A$~lib/rt/tcms/__visit_0
   global.get $~lib/rt/tcms/pinSpace
   local.tee $1
   i32.load $0 offset=4
@@ -1280,7 +1280,7 @@
     i32.and
     local.set $1
     local.get $0
-    i32.const 1484
+    i32.const 1476
     i32.lt_u
     if
      local.get $0
@@ -1303,7 +1303,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 1484
+     i32.const 1476
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1369,15 +1369,20 @@
   global.set $~lib/rt/tcms/white
  )
  (func $~lib/rt/__visit_members (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
   block $invalid
    block $~lib/arraybuffer/ArrayBufferView
     block $~lib/string/String
      block $~lib/arraybuffer/ArrayBuffer
-      local.get $0
-      i32.const 8
-      i32.sub
-      i32.load $0
-      br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
+      block $~lib/object/Object
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load $0
+       br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
+      end
+      return
      end
      return
     end
@@ -1387,8 +1392,43 @@
    i32.load $0
    local.tee $0
    if
+    global.get $~lib/rt/tcms/white
     local.get $0
-    call $byn-split-outlined-A$~lib/rt/tcms/__visit
+    i32.const 20
+    i32.sub
+    local.tee $1
+    i32.load $0 offset=4
+    i32.const 3
+    i32.and
+    i32.eq
+    if
+     local.get $1
+     call $~lib/rt/tcms/Object#unlink
+     global.get $~lib/rt/tcms/toSpace
+     local.tee $0
+     i32.load $0 offset=8
+     local.set $2
+     local.get $1
+     local.get $0
+     global.get $~lib/rt/tcms/white
+     i32.eqz
+     i32.or
+     i32.store $0 offset=4
+     local.get $1
+     local.get $2
+     i32.store $0 offset=8
+     local.get $2
+     local.get $1
+     local.get $2
+     i32.load $0 offset=4
+     i32.const 3
+     i32.and
+     i32.or
+     i32.store $0 offset=4
+     local.get $0
+     local.get $1
+     i32.store $0 offset=8
+    end
    end
    return
   end
@@ -1420,7 +1460,7 @@
   i32.const 1424
   global.set $~lib/rt/tcms/toSpace
  )
- (func $byn-split-outlined-A$~lib/rt/tcms/__visit (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/tcms/__visit_0 (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tcms/white

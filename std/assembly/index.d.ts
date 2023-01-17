@@ -43,10 +43,20 @@ declare type externref = object | null;
 declare type anyref = object | null;
 /** Equatable reference. */
 declare type eqref = object | null;
+/** Struct reference. */
+declare type structref = object | null;
+/** Array reference. */
+declare type arrayref = object | null;
 /** 31-bit integer reference. */
 declare type i31ref = object | null;
-/** Data reference. */
-declare type dataref = object | null;
+/** String reference. */
+declare type stringref = object | null;
+/** WTF-8 string view. */
+declare type stringview_wtf8 = object | null;
+/** WTF-16 string view. */
+declare type stringview_wtf16 = object | null;
+/** String iterator. */
+declare type stringview_iter = object | null;
 
 // Compiler hints
 
@@ -92,12 +102,12 @@ declare const ASC_FEATURE_MULTI_VALUE: bool;
 declare const ASC_FEATURE_GC: bool;
 /** Whether the memory64 feature is enabled. */
 declare const ASC_FEATURE_MEMORY64: bool;
-/** Whether the function references feature is enabled. */
-declare const ASC_FEATURE_FUNCTION_REFERENCES: bool;
 /** Whether the relaxed SIMD feature is enabled. */
 declare const ASC_FEATURE_RELAXED_SIMD: bool;
 /** Whether the extended const expression feature is enabled. */
 declare const ASC_FEATURE_EXTENDED_CONST: bool;
+/** Whether the string references feature is enabled. */
+declare const ASC_FEATURE_STRINGREF: bool;
 /** Major version of the compiler. */
 declare const ASC_VERSION_MAJOR: i32;
 /** Minor version of the compiler. */
@@ -169,7 +179,7 @@ declare const Infinity: f32 | f64;
 /** Data end offset. */
 declare const __data_end: usize;
 /** Stack pointer offset. */
-declare var __stack_pointer: usize;
+declare let __stack_pointer: usize;
 /** Heap base offset. */
 declare const __heap_base: usize;
 /** Determines the byte size of the specified underlying core type. Compiles to a constant. */
@@ -581,7 +591,7 @@ declare namespace i64 {
   }
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
-declare var isize: typeof i32 | typeof i64;
+declare let isize: typeof i32 | typeof i64;
 /** Converts any other numeric value to an 8-bit unsigned integer. */
 declare function u8(value: any): u8;
 declare namespace u8 {
@@ -623,7 +633,7 @@ declare namespace u64 {
   export function parse(value: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
-declare var usize: typeof u32 | typeof u64;
+declare let usize: typeof u32 | typeof u64;
 /** Converts any other numeric value to a 1-bit unsigned integer. */
 declare function bool(value: any): bool;
 declare namespace bool {
@@ -2206,7 +2216,7 @@ declare namespace process {
   /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
   export function exit(code?: i32): void;
   /** `exit()`’s default value. Defaults to `0`. */
-  export var exitCode: i32;
+  export let exitCode: i32;
   /** Stream connected to `stdin` (fd `0`). */
   export const stdin: ReadableStream;
   /** Stream connected to `stdout` (fd `1`). */
@@ -2271,6 +2281,10 @@ interface TypedPropertyDescriptor<T> {
   set?(value: T): void;
 }
 
+type Constructor =
+  (new (...args: any[]) => unknown)
+  | (abstract new (...args: any[]) => unknown);
+
 /** Annotates a method as a binary operator overload for the specified `token`. */
 declare function operator(token:
   "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
@@ -2309,10 +2323,10 @@ declare namespace operator {
 declare function global(...args: any[]): any;
 
 /** Annotates a class as being unmanaged with limited capabilities. */
-declare function unmanaged(constructor: Function): void;
+declare function unmanaged(constructor: Constructor): void;
 
 /** Annotates a class as being final / non-derivable. */
-declare function final(constructor: Function): void;
+declare function final(constructor: Constructor): void;
 
 /** Annotates a method, function or constant global as always inlined. */
 declare function inline(...args: any[]): any;

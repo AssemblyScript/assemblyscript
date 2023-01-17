@@ -11,10 +11,10 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/mod/js i32 (i32.const 1))
  (global $~lib/memory/__data_end i32 (i32.const 60))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
- (global $~lib/memory/__heap_base i32 (i32.const 16444))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
+ (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "mod" (func $std/mod/mod))
@@ -27,9 +27,8 @@
   (local $ey i64)
   (local $sx i64)
   (local $uy1 i64)
-  (local $var$8 f64)
+  (local $m f64)
   (local $ux1 i64)
-  (local $var$10 i32)
   (local $shift i64)
   local.get $y
   f64.abs
@@ -91,9 +90,9 @@
    local.get $x
    local.get $y
    f64.mul
-   local.set $var$8
-   local.get $var$8
-   local.get $var$8
+   local.set $m
+   local.get $m
+   local.get $m
    f64.div
    return
   end
@@ -181,8 +180,6 @@
    local.get $ex
    local.get $ey
    i64.gt_s
-   local.set $var$10
-   local.get $var$10
    if
     local.get $ux
     local.get $uy
@@ -276,6 +273,7 @@
   i64.shl
   i64.or
   f64.reinterpret_i64
+  return
  )
  (func $std/mod/check<f64> (param $actual f64) (param $expected f64) (result i32)
   local.get $expected
@@ -304,6 +302,7 @@
   local.get $actual
   local.get $expected
   f64.eq
+  return
  )
  (func $std/mod/test_fmod (param $left f64) (param $right f64) (param $expected f64) (result i32)
   local.get $left
@@ -320,6 +319,7 @@
   else
    i32.const 0
   end
+  return
  )
  (func $~lib/math/NativeMathf.mod (param $x f32) (param $y f32) (result f32)
   (local $ux i32)
@@ -328,9 +328,8 @@
   (local $ey i32)
   (local $sm i32)
   (local $uy1 i32)
-  (local $var$8 f32)
+  (local $m f32)
   (local $ux1 i32)
-  (local $var$10 i32)
   (local $shift i32)
   local.get $y
   f32.abs
@@ -392,9 +391,9 @@
    local.get $x
    local.get $y
    f32.mul
-   local.set $var$8
-   local.get $var$8
-   local.get $var$8
+   local.set $m
+   local.get $m
+   local.get $m
    f32.div
    return
   end
@@ -478,8 +477,6 @@
    local.get $ex
    local.get $ey
    i32.gt_s
-   local.set $var$10
-   local.get $var$10
    if
     local.get $ux
     local.get $uy
@@ -571,6 +568,7 @@
   local.get $sm
   i32.or
   f32.reinterpret_i32
+  return
  )
  (func $std/mod/check<f32> (param $actual f32) (param $expected f32) (result i32)
   local.get $expected
@@ -599,6 +597,7 @@
   local.get $actual
   local.get $expected
   f32.eq
+  return
  )
  (func $std/mod/test_fmodf (param $left f32) (param $right f32) (param $expected f32) (result i32)
   local.get $left
@@ -606,6 +605,7 @@
   call $~lib/math/NativeMathf.mod
   local.get $expected
   call $std/mod/check<f32>
+  return
  )
  (func $start:std/mod
   f64.const 3

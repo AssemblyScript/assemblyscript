@@ -426,9 +426,9 @@ OutputStream.prototype.toString = function () {
 };
 
 function transformTypes(sourceFile) {
-  var numReplaced = 0;
+  let numReplaced = 0;
   console.log("transforming:");
-  var result = ts.transform(sourceFile, [
+  let result = ts.transform(sourceFile, [
     function (context) {
       const visit = node => {
         node = ts.visitEachChild(node, visit, context);

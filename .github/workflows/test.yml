@@ -9,7 +9,7 @@ jobs:
     name: "Check"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - name: "Check that distribution files are unmodified"
       if: github.event_name == 'pull_request'
       run: |
@@ -26,11 +26,10 @@ jobs:
     needs: check
     strategy:
       matrix:
-        os: ["ubuntu", "macos"]
-        # TODO: re-enable "windows", see https://github.com/npm/cli/issues/4234
+        os: ["ubuntu", "macos", "windows"]
         node_version: ["current", "lts_latest"]
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: ${{ matrix.node_version }}
@@ -50,7 +49,7 @@ jobs:
       matrix:
         target: ["debug", "release"]
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: current
@@ -58,16 +57,20 @@ jobs:
       run: npm ci --no-audit
     - name: Build
       run: npm run build
-    - name: Bootstrap
+    - name: "Bootstrap ${{ matrix.target }}"
       run: npm run bootstrap:${{ matrix.target }}
-    - name: Test
+    - name: "Test ${{ matrix.target }}"
       run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target }}-bootstrap.js
+    - name: "Compile ${{ matrix.target }} -> ${{ matrix.target == 'debug' && 'release' || 'debug' }}"
+      run: node bin/asc --config src/asconfig.json --target ${{ matrix.target == 'debug' && 'release' || 'debug' }}-bootstrap --wasm ./build/assemblyscript.${{ matrix.target }}-bootstrap.js
+    - name: "Test ${{ matrix.target == 'debug' && 'release' || 'debug' }}"
+      run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target == 'debug' && 'release' || 'debug' }}-bootstrap.js
   features:
     name: "Features"
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
@@ -86,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: current
@@ -111,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: current

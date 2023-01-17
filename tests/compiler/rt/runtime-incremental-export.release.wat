@@ -21,20 +21,20 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 1568))
  (memory $0 1)
  (data (i32.const 1036) "<")
- (data (i32.const 1048) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1048) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 1100) "<")
- (data (i32.const 1112) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
+ (data (i32.const 1112) "\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
  (data (i32.const 1228) "<")
- (data (i32.const 1240) "\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 1240) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (data (i32.const 1292) ",")
- (data (i32.const 1304) "\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
+ (data (i32.const 1304) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 1372) "<")
- (data (i32.const 1384) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1384) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1436) "<")
- (data (i32.const 1448) "\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d")
+ (data (i32.const 1448) "\02\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d")
  (data (i32.const 1500) "<")
- (data (i32.const 1512) "\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d")
- (data (i32.const 1568) "\03\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1512) "\02\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d")
+ (data (i32.const 1568) "\04\00\00\00 \00\00\00 \00\00\00 ")
  (export "__new" (func $~lib/rt/itcms/__new))
  (export "__pin" (func $~lib/rt/itcms/__pin))
  (export "__unpin" (func $~lib/rt/itcms/__unpin))
@@ -73,7 +73,7 @@
     if
      i32.const 0
      i32.const 1120
-     i32.const 159
+     i32.const 160
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -104,14 +104,14 @@
    i32.load $0 offset=8
    i32.eqz
    local.get $0
-   i32.const 17980
+   i32.const 34356
    i32.lt_u
    i32.and
    i32.eqz
    if
     i32.const 0
     i32.const 1120
-    i32.const 127
+    i32.const 128
     i32.const 18
     call $~lib/builtins/abort
     unreachable
@@ -125,7 +125,7 @@
   if
    i32.const 0
    i32.const 1120
-   i32.const 131
+   i32.const 132
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -157,7 +157,7 @@
    if
     i32.const 0
     i32.const 1120
-    i32.const 147
+    i32.const 148
     i32.const 30
     call $~lib/builtins/abort
     unreachable
@@ -172,7 +172,7 @@
   local.get $0
   i32.load $0 offset=12
   local.tee $2
-  i32.const 1
+  i32.const 2
   i32.le_u
   if (result i32)
    i32.const 1
@@ -184,13 +184,13 @@
    if
     i32.const 1248
     i32.const 1312
-    i32.const 22
+    i32.const 21
     i32.const 28
     call $~lib/builtins/abort
     unreachable
    end
    local.get $2
-   i32.const 3
+   i32.const 2
    i32.shl
    i32.const 1572
    i32.add
@@ -268,11 +268,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -532,11 +532,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -757,10 +757,10 @@
   if
    unreachable
   end
-  i32.const 17984
+  i32.const 34368
   i32.const 0
   i32.store $0
-  i32.const 19552
+  i32.const 35936
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -771,7 +771,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 17984
+    i32.const 34368
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -789,7 +789,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 17984
+      i32.const 34368
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -807,13 +807,13 @@
     br $for-loop|0
    end
   end
-  i32.const 17984
-  i32.const 19556
+  i32.const 34368
+  i32.const 35940
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 17984
+  i32.const 34368
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (result i32)
@@ -894,11 +894,11 @@
     i32.and
     i32.eq
     if
-     i32.const 17980
+     i32.const 34356
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 17980
+      i32.const 34356
       i32.lt_u
       if
        local.get $0
@@ -992,13 +992,13 @@
     if
      i32.const 0
      i32.const 1120
-     i32.const 228
+     i32.const 229
      i32.const 20
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    i32.const 17980
+    i32.const 34356
     i32.lt_u
     if
      local.get $0
@@ -1021,7 +1021,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 17980
+     i32.const 34356
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1221,7 +1221,7 @@
   if
    i32.const 1056
    i32.const 1120
-   i32.const 260
+   i32.const 261
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1533,7 +1533,7 @@
    if
     i32.const 1456
     i32.const 1120
-    i32.const 337
+    i32.const 338
     i32.const 7
     call $~lib/builtins/abort
     unreachable
@@ -1586,7 +1586,7 @@
   if
    i32.const 1520
    i32.const 1120
-   i32.const 351
+   i32.const 352
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1665,11 +1665,14 @@
    block $~lib/arraybuffer/ArrayBufferView
     block $~lib/string/String
      block $~lib/arraybuffer/ArrayBuffer
-      local.get $0
-      i32.const 8
-      i32.sub
-      i32.load $0
-      br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
+      block $~lib/object/Object
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load $0
+       br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
+      end
+      return
      end
      return
     end
@@ -1690,7 +1693,7 @@
   memory.size $0
   i32.const 16
   i32.shl
-  i32.const 17980
+  i32.const 34356
   i32.sub
   i32.const 1
   i32.shr_u

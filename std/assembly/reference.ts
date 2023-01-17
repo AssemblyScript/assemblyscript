@@ -23,5 +23,9 @@ export abstract class I31ref extends Ref {
 }
 
 @final @unmanaged
-export abstract class Dataref extends Ref {
+export abstract class Structref extends Ref {
+}
+
+@final @unmanaged
+export abstract class Arrayref extends Ref {
 }

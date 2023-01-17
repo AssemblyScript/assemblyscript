@@ -36,7 +36,15 @@ class B extends A {
   public method: i32;
 }
 
+class Animal {
+  sibling: Animal | null;
+}
+class Cat extends Animal {
+  sibling: Cat | null; // covariance is unsound
+}
+
 export function test(): void {
   new A();
   new B();
+  new Cat();
 }

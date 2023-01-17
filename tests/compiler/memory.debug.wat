@@ -5,11 +5,11 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memory/ptr (mut i32) (i32.const 80))
  (global $~lib/memory/__data_end i32 (i32.const 212))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16596))
- (global $~lib/memory/__heap_base i32 (i32.const 16596))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32980))
+ (global $~lib/memory/__heap_base i32 (i32.const 32980))
  (memory $0 1)
  (data (i32.const 16) "\00\00\00\00")
- (data (i32.const 28) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 28) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 80) "\00")
  (data (i32.const 96) "\00")
  (data (i32.const 104) "\00")
@@ -48,21 +48,27 @@
   i32.add
   i32.store $0
   local.get $value
+  return
  )
  (func $memory/testGeneric<v128> (result i32)
   i32.const 144
+  return
  )
  (func $memory/testGeneric<i64> (result i32)
   i32.const 152
+  return
  )
  (func $memory/testGeneric<i32> (result i32)
   i32.const 156
+  return
  )
  (func $memory/testGeneric<i16> (result i32)
   i32.const 158
+  return
  )
  (func $memory/testGeneric<i8> (result i32)
   i32.const 159
+  return
  )
  (func $start:memory
   call $memory/test

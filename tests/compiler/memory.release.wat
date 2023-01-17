@@ -5,7 +5,7 @@
  (global $memory/ptr (mut i32) (i32.const 1088))
  (memory $0 1)
  (data (i32.const 1036) ",")
- (data (i32.const 1048) "\01\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s")
  (data (i32.const 1169) "\01\02\03")
  (data (i32.const 1174) "\c0?\00\00 @\00\00`@")
  (data (i32.const 1200) "\01")

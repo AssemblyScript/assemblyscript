@@ -22,18 +22,11 @@ export namespace process {
   @lazy export const env = lazyEnv();
 
   // @ts-ignore: decorator
-  @lazy export var exitCode = 0;
+  @lazy export let exitCode = 0;
 
   export function exit(code: i32 = exitCode): void {
     process_binding.exit(code);
   }
-
-  // @ts-ignore: decorator
-  @lazy export const stdin = changetype<ReadableStream>(0);
-  // @ts-ignore: decorator
-  @lazy export const stdout = changetype<WritableStream>(1);
-  // @ts-ignore: decorator
-  @lazy export const stderr = changetype<WritableStream>(2);
 
   export function time(): i64 {
     return Date_binding.now();

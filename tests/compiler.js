@@ -83,7 +83,7 @@ const basedir = path.join(dirname, "compiler");
 
 // Gets a list of all relevant tests
 function getTests() {
-  var tests = glob.sync("**/!(_*).ts", { cwd: basedir })
+  let tests = glob.sync("**/!(_*).ts", { cwd: basedir })
     .map(name => name.replace(/\.ts$/, ""))
     .filter(name => !name.endsWith(".d") && !name.includes("node_modules"));
   if (argv.length) { // run matching tests only
@@ -134,11 +134,11 @@ async function runTest(basename) {
   const stdout = asc.createMemoryStream();
   const stderr = asc.createMemoryStream(chunk => process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  ")));
   stderr.isTTY = true;
-  var asc_flags = [];
-  var asc_rtrace = !!config.asc_rtrace;
-  var v8_flags = "";
-  var v8_no_flags = "";
-  var missing_features = [];
+  let asc_flags = [];
+  let asc_rtrace = !!config.asc_rtrace;
+  let v8_flags = "";
+  let v8_no_flags = "";
+  let missing_features = [];
 
   // Makes sure to reset the environment after
   function prepareResult(code, message = null) {
@@ -153,7 +153,7 @@ async function runTest(basename) {
         missing_features.push(feature);
         return; // from forEach
       }
-      var featureConfig = featuresConfig[feature];
+      let featureConfig = featuresConfig[feature];
       if (featureConfig.asc_flags) {
         featureConfig.asc_flags.forEach(flag => {
           Array.prototype.push.apply(asc_flags, flag.split(" "));
@@ -214,7 +214,7 @@ async function runTest(basename) {
       let lastIndex = 0;
       let failed = false;
       expectStderr.forEach((substr, i) => {
-        var index = stderrString.indexOf(substr, lastIndex);
+        let index = stderrString.indexOf(substr, lastIndex);
         if (index < 0) {
           console.log("  missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
           failed = true;
@@ -346,7 +346,7 @@ async function runTest(basename) {
 
 // Tests if instantiation of a module succeeds
 async function testInstantiate(binaryBuffer, glue, stderr) {
-  var failed = false;
+  let failed = false;
   try {
     const memory = new WebAssembly.Memory({ initial: 10 });
     const exports = {};
@@ -354,10 +354,10 @@ async function testInstantiate(binaryBuffer, glue, stderr) {
     function getString(ptr) {
       const RUNTIME_HEADER_SIZE = 16;
       if (!ptr) return "null";
-      var U32 = new Uint32Array(exports.memory ? exports.memory.buffer : memory.buffer);
-      var U16 = new Uint16Array(exports.memory ? exports.memory.buffer : memory.buffer);
-      var len16 = U32[(ptr - RUNTIME_HEADER_SIZE + 12) >>> 2] >>> 1;
-      var ptr16 = ptr >>> 1;
+      let U32 = new Uint32Array(exports.memory ? exports.memory.buffer : memory.buffer);
+      let U16 = new Uint16Array(exports.memory ? exports.memory.buffer : memory.buffer);
+      let len16 = U32[(ptr - RUNTIME_HEADER_SIZE + 12) >>> 2] >>> 1;
+      let ptr16 = ptr >>> 1;
       return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
     }
 
@@ -492,8 +492,9 @@ function evaluateResult(failedTests, skippedTests) {
   }
 }
 
-// Run tests in parallel if requested
-if (args.parallel && coreCount > 2) {
+// Run tests in parallel if requested (except with coverage)
+const isCoverage = process.env.NODE_V8_COVERAGE != null;
+if (!isCoverage && args.parallel && coreCount > 2) {
   if (cluster.isWorker) {
     process.on("message", msg => {
       if (msg.cmd != "run") throw Error("invalid command: " + JSON.stringify(msg));

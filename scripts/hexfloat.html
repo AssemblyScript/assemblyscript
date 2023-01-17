@@ -21,13 +21,13 @@
 <script src="hexfloat.js"></script>
 <script>
 function convert(form) {
-  var isF64 = document.getElementById("f64").checked;
-  var pre = document.getElementById("pre").value;
-  var post = document.getElementById("post").value;
-  var input = document.getElementById("input").value;
+  let isF64 = document.getElementById("f64").checked;
+  let pre = document.getElementById("pre").value;
+  let post = document.getElementById("post").value;
+  let input = document.getElementById("input").value;
   document.getElementById("output").value = input
     .replace(/\b(\-?0x[0-9a-fA-F]*(?:\.[0-9a-fA-F]+)?[pP][+-]?[0-9]+\b)/g, ($0, $1) => {
-      var val = parse($1);
+      let val = parse($1);
       return val.toPrecision(isF64 ? 18 : 10);
     })
     .replace(/(\d\.[0-9])0+\b/g, "$1")

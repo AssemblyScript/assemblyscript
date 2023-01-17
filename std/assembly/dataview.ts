@@ -24,7 +24,7 @@ export class DataView {
       i32(<u32>byteOffset + byteLength > <u32>buffer.byteLength)
     ) throw new RangeError(E_INVALIDLENGTH);
     this.buffer = buffer; // links
-    var dataStart = changetype<usize>(buffer) + <usize>byteOffset;
+    let dataStart = changetype<usize>(buffer) + <usize>byteOffset;
     this.dataStart = dataStart;
     this.byteLength = byteLength;
   }
@@ -56,7 +56,7 @@ export class DataView {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
-    var result: i16 = load<i16>(this.dataStart + <usize>byteOffset);
+    let result: i16 = load<i16>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u16>(result);
   }
 
@@ -64,7 +64,7 @@ export class DataView {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
-    var result: i32 = load<i32>(this.dataStart + <usize>byteOffset);
+    let result: i32 = load<i32>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u32>(result);
   }
 
@@ -77,7 +77,7 @@ export class DataView {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
-    var result: u16 = load<u16>(this.dataStart + <usize>byteOffset);
+    let result: u16 = load<u16>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u16>(result);
   }
 
@@ -85,7 +85,7 @@ export class DataView {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
-    var result: u32 = load<u32>(this.dataStart + <usize>byteOffset);
+    let result: u32 = load<u32>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u32>(result);
   }
 
@@ -149,7 +149,7 @@ export class DataView {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
-    var result: i64 = load<i64>(this.dataStart + <usize>byteOffset);
+    let result: i64 = load<i64>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u64>(result);
   }
 
@@ -157,7 +157,7 @@ export class DataView {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
-    var result = load<u64>(this.dataStart + <usize>byteOffset);
+    let result = load<u64>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u64>(result);
   }
 

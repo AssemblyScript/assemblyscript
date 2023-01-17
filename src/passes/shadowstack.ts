@@ -8,7 +8,7 @@
  * managed arguments, plus assigning managed values to locals:
  *
  *   function foo(a: Obj, b: Obj): Obj {
- *     var c = __tostack(a) // slot 2
+ *     let c = __tostack(a) // slot 2
  *     __collect()
  *     return b
  *   }
@@ -52,7 +52,7 @@
  *     memory.fill(__stack_pointer -= frameSize, 0, frameSize)
  *     store<usize>(__stack_pointer, c = a, 0 * sizeof<usize>())
  *     __collect()
- *     var r = b
+ *     let r = b
  *     __stack_pointer += frameSize
  *     return r
  *   }
@@ -132,7 +132,7 @@ import {
   ExternalKind,
   ExportRef,
   expandType,
-  isConstZero
+  isConstZero,
 } from "../module";
 
 import {
@@ -147,6 +147,10 @@ import {
 import {
   BuiltinNames
 } from "../builtins";
+
+import {
+  Source
+} from "../ast";
 
 type LocalIndex = Index;
 type SlotIndex = Index;
@@ -170,9 +174,9 @@ function needsSlot(module: Module, value: ExpressionRef): bool {
   switch (_BinaryenExpressionGetId(value)) {
     // no need to stack null pointers
     case ExpressionId.Const: return !isConstZero(value);
-    // already kept in another slot
-    case ExpressionId.LocalGet:
-    case ExpressionId.LocalSet: return false; // tee
+    // note: can't omit a slot when assigning from another local since the other
+    // local might have shorter lifetime and become reassigned, say in a loop,
+    // then no longer holding on to the previous value in its stack slot.
   }
   return true;
 }
@@ -255,8 +259,8 @@ export class ShadowStackPass extends Pass {
   /** Makes an expression modifying the stack pointer by the given offset. */
   makeStackOffset(offset: i32): ExpressionRef {
     assert(offset != 0);
-    var module = this.module;
-    var expr = module.global_set(BuiltinNames.stack_pointer,
+    let module = this.module;
+    let expr = module.global_set(BuiltinNames.stack_pointer,
       module.binary(offset >= 0 ? this.ptrBinaryAdd : this.ptrBinarySub,
         module.global_get(BuiltinNames.stack_pointer, this.ptrType),
         this.ptrConst(abs(offset))
@@ -272,8 +276,8 @@ export class ShadowStackPass extends Pass {
   /** Makes a sequence of expressions zeroing the stack frame. */
   makeStackFill(frameSize: i32, stmts: ExpressionRef[]): void {
     assert(frameSize > 0);
-    var module = this.module;
-    if (this.options.hasFeature(Feature.BULK_MEMORY) && frameSize > 16) {
+    let module = this.module;
+    if (this.options.hasFeature(Feature.BulkMemory) && frameSize > 16) {
       stmts.push(
         module.memory_fill(
           module.global_get(BuiltinNames.stack_pointer, this.ptrType),
@@ -314,7 +318,7 @@ export class ShadowStackPass extends Pass {
 
   /** Makes a check that the current stack pointer is valid. */
   makeStackCheck(): ExpressionRef {
-    var module = this.module;
+    let module = this.module;
     if (!this.hasStackCheckFunction) {
       this.hasStackCheckFunction = true;
       module.addFunction("~stack_check", TypeRef.None, TypeRef.None, null,
@@ -325,7 +329,7 @@ export class ShadowStackPass extends Pass {
           ),
           this.compiler.makeStaticAbort(
             this.compiler.ensureStaticString("stack overflow"),
-            this.compiler.program.nativeSource
+            Source.native
           )
         )
       );
@@ -334,8 +338,8 @@ export class ShadowStackPass extends Pass {
   }
 
   private updateCallOperands(operands: ExpressionRef[]): i32 {
-    var module = this.module;
-    var numSlots = 0;
+    let module = this.module;
+    let numSlots = 0;
     for (let i = 0, k = operands.length; i < k; ++i) {
       let operand = operands[i];
       let match = matchPattern(module, operand);
@@ -378,8 +382,8 @@ export class ShadowStackPass extends Pass {
 
   /** @override */
   visitCallPre(call: ExpressionRef): void {
-    var numOperands = _BinaryenCallGetNumOperands(call);
-    var operands = new Array<ExpressionRef>(numOperands);
+    let numOperands = _BinaryenCallGetNumOperands(call);
+    let operands = new Array<ExpressionRef>(numOperands);
     for (let i: Index = 0; i < numOperands; ++i) {
       operands[i] = _BinaryenCallGetOperandAt(call, i);
     }
@@ -477,30 +481,34 @@ export class ShadowStackPass extends Pass {
     let moduleRef = this.module.ref;
     _BinaryenRemoveFunction(moduleRef, name);
     let cArr = allocPtrArray(vars);
-    _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
+    let newFuncRef = _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
+    if (this.options.sourceMap || this.options.debugInfo) {
+      let func = this.compiler.program.searchFunctionByRef(newFuncRef);
+      if (func) func.addDebugInfo(this.module, newFuncRef);
+    }
     _free(cArr);
   }
 
   /** Updates a function export taking managed arguments. */
   updateExport(exportRef: ExportRef, managedOperandIndices: i32[]): void {
-    var module = this.module;
-    var moduleRef = module.ref;
+    let module = this.module;
+    let moduleRef = module.ref;
     assert(_BinaryenExportGetKind(exportRef) == ExternalKind.Function);
 
-    var internalNameRef = _BinaryenExportGetValue(exportRef);
-    var internalName = module.readStringCached(internalNameRef)!;
-    var externalNameRef = _BinaryenExportGetName(exportRef);
-    var funcRef = _BinaryenGetFunction(moduleRef, internalNameRef);
-    var params = _BinaryenFunctionGetParams(funcRef);
-    var paramTypes = expandType(params);
-    var numParams = paramTypes.length;
-    var results = _BinaryenFunctionGetResults(funcRef);
-    var numLocals = numParams;
-    var vars = new Array<TypeRef>();
-    var numSlots = assert(managedOperandIndices.length);
-    var frameSize = numSlots * this.ptrSize;
-    var wrapperName = "export:" + internalName;
-    var wrapperNameRef = module.allocStringCached(wrapperName);
+    let internalNameRef = _BinaryenExportGetValue(exportRef);
+    let internalName = module.readStringCached(internalNameRef)!;
+    let externalNameRef = _BinaryenExportGetName(exportRef);
+    let funcRef = _BinaryenGetFunction(moduleRef, internalNameRef);
+    let params = _BinaryenFunctionGetParams(funcRef);
+    let paramTypes = expandType(params);
+    let numParams = paramTypes.length;
+    let results = _BinaryenFunctionGetResults(funcRef);
+    let numLocals = numParams;
+    let vars = new Array<TypeRef>();
+    let numSlots = assert(managedOperandIndices.length);
+    let frameSize = numSlots * this.ptrSize;
+    let wrapperName = "export:" + internalName;
+    let wrapperNameRef = module.allocStringCached(wrapperName);
 
     if (_BinaryenGetFunction(moduleRef, wrapperNameRef) == 0) {
       let stmts = new Array<ExpressionRef>();
@@ -566,8 +574,8 @@ export class ShadowStackPass extends Pass {
     super.walkModule();
 
     // Instrument returns in functions utilizing stack slots
-    var module = this.module;
-    var instrumentReturns = new InstrumentReturns(this);
+    let module = this.module;
+    let instrumentReturns = new InstrumentReturns(this);
     for (let _keys = Map_keys(this.slotMaps), i = 0, k = _keys.length; i < k; ++i) {
       let func = _keys[i];
       let slotMap = changetype<SlotMap>(this.slotMaps.get(func));
@@ -628,7 +636,7 @@ export class ShadowStackPass extends Pass {
     }
 
     // Update exports taking managed arguments
-    var exportMap = this.exportMap;
+    let exportMap = this.exportMap;
     for (let _keys = Map_keys(exportMap), i = 0, k = _keys.length; i < k; ++i) {
       let exportName = _keys[i];
       let exportRef = _BinaryenGetExport(module.ref, module.allocStringCached(exportName));
@@ -653,9 +661,9 @@ class InstrumentReturns extends Pass {
   /** @override */
   visitReturn(ret: ExpressionRef): void {
     assert(this.frameSize);
-    var module = this.module;
-    var value = _BinaryenReturnGetValue(ret);
-    var stmts = new Array<ExpressionRef>();
+    let module = this.module;
+    let value = _BinaryenReturnGetValue(ret);
+    let stmts = new Array<ExpressionRef>();
     if (value) {
       let returnType = _BinaryenExpressionGetType(value);
       if (returnType == TypeRef.Unreachable) return;

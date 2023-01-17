@@ -6,82 +6,82 @@
 /** Indicates traits of a {@link Node} or {@link Element}. */
 export const enum CommonFlags {
   /** No flags set. */
-  NONE = 0,
+  None = 0,
 
   // Basic modifiers
 
   /** Has an `import` modifier. */
-  IMPORT = 1 << 0,
+  Import = 1 << 0,
   /** Has an `export` modifier. */
-  EXPORT = 1 << 1,
+  Export = 1 << 1,
   /** Has a `declare` modifier. */
-  DECLARE = 1 << 2,
+  Declare = 1 << 2,
   /** Has a `const` modifier. */
-  CONST = 1 << 3,
+  Const = 1 << 3,
   /** Has a `let` modifier. */
-  LET = 1 << 4,
+  Let = 1 << 4,
   /** Has a `static` modifier. */
-  STATIC = 1 << 5,
+  Static = 1 << 5,
   /** Has a `readonly` modifier. */
-  READONLY = 1 << 6,
+  Readonly = 1 << 6,
   /** Has an `abstract` modifier. */
-  ABSTRACT = 1 << 7,
+  Abstract = 1 << 7,
   /** Has a `public` modifier. */
-  PUBLIC = 1 << 8,
+  Public = 1 << 8,
   /** Has a `private` modifier. */
-  PRIVATE = 1 << 9,
+  Private = 1 << 9,
   /** Has a `protected` modifier. */
-  PROTECTED = 1 << 10,
+  Protected = 1 << 10,
   /** Has a `get` modifier. */
-  GET = 1 << 11,
+  Get = 1 << 11,
   /** Has a `set` modifier. */
-  SET = 1 << 12,
+  Set = 1 << 12,
   /** Has a `override` modifier.  */
-  OVERRIDE = 1 << 13,
+  Override = 1 << 13,
 
   /** Has a definite assignment assertion `!` as in `x!: i32;`. */
-  DEFINITELY_ASSIGNED = 1 << 14,
+  DefinitelyAssigned = 1 << 14,
 
   // Extended modifiers usually derived from basic modifiers
 
   /** Is ambient, that is either declared or nested in a declared element. */
-  AMBIENT = 1 << 15,
+  Ambient = 1 << 15,
   /** Is generic. */
-  GENERIC = 1 << 16,
+  Generic = 1 << 16,
   /** Is part of a generic context. */
-  GENERIC_CONTEXT = 1 << 17,
+  GenericContext = 1 << 17,
   /** Is an instance member. */
-  INSTANCE = 1 << 18,
+  Instance = 1 << 18,
   /** Is a constructor. */
-  CONSTRUCTOR = 1 << 19,
+  Constructor = 1 << 19,
   /** Is a module export. */
-  MODULE_EXPORT = 1 << 20,
+  ModuleExport = 1 << 20,
   /** Is a module import. */
-  MODULE_IMPORT = 1 << 21,
+  ModuleImport = 1 << 21,
 
   // Compilation states
 
   /** Is resolved. */
-  RESOLVED = 1 << 22,
+  Resolved = 1 << 22,
   /** Is compiled. */
-  COMPILED = 1 << 23,
+  Compiled = 1 << 23,
   /** Did error. */
-  ERRORED = 1 << 24,
+  Errored = 1 << 24,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 25,
+  Inlined = 1 << 25,
   /** Is scoped. */
-  SCOPED = 1 << 26,
+  Scoped = 1 << 26,
   /** Is a stub. */
-  STUB = 1 << 27,
-  /** Is a virtual method. */
-  VIRTUAL = 1 << 28,
+  Stub = 1 << 27,
+  /** Is an overridden method. */
+  Overridden = 1 << 28,
   /** Is (part of) a closure. */
-  CLOSURE = 1 << 29,
+  Closure = 1 << 29,
 
   // Other
 
   /** Is quoted. */
-  QUOTED = 1 << 30
+  Quoted = 1 << 30
 }
 
 /** Path delimiter inserted between file system levels. */
@@ -110,7 +110,7 @@ export const STUB_DELIMITER = "@";
 /** Common names. */
 export namespace CommonNames {
   // special
-  export const EMPTY = "";
+  export const Empty = "";
   // types
   export const i8 = "i8";
   export const i16 = "i16";
@@ -130,8 +130,13 @@ export namespace CommonNames {
   export const externref = "externref";
   export const anyref = "anyref";
   export const eqref = "eqref";
+  export const structref = "structref";
+  export const arrayref = "arrayref";
   export const i31ref = "i31ref";
-  export const dataref = "dataref";
+  export const stringref = "stringref";
+  export const stringview_wtf8 = "stringview_wtf8";
+  export const stringview_wtf16 = "stringview_wtf16";
+  export const stringview_iter = "stringview_iter";
   export const i8x16 = "i8x16";
   export const u8x16 = "u8x16";
   export const i16x8 = "i16x8";
@@ -181,9 +186,9 @@ export namespace CommonNames {
   export const ASC_FEATURE_MULTI_VALUE = "ASC_FEATURE_MULTI_VALUE";
   export const ASC_FEATURE_GC = "ASC_FEATURE_GC";
   export const ASC_FEATURE_MEMORY64 = "ASC_FEATURE_MEMORY64";
-  export const ASC_FEATURE_FUNCTION_REFERENCES = "ASC_FEATURE_FUNCTION_REFERENCES";
   export const ASC_FEATURE_RELAXED_SIMD = "ASC_FEATURE_RELAXED_SIMD";
   export const ASC_FEATURE_EXTENDED_CONST = "ASC_FEATURE_EXTENDED_CONST";
+  export const ASC_FEATURE_STRINGREF = "ASC_FEATURE_STRINGREF";
   export const ASC_VERSION_MAJOR = "ASC_VERSION_MAJOR";
   export const ASC_VERSION_MINOR = "ASC_VERSION_MINOR";
   export const ASC_VERSION_PATCH = "ASC_VERSION_PATCH";
@@ -206,8 +211,9 @@ export namespace CommonNames {
   export const Externref = "Externref";
   export const Anyref = "Anyref";
   export const Eqref = "Eqref";
+  export const Structref = "Structref";
+  export const Arrayref = "Arrayref";
   export const I31ref = "I31ref";
-  export const Dataref = "Dataref";
   export const String = "String";
   export const RegExp = "RegExp";
   export const Object = "Object";
@@ -250,8 +256,6 @@ export namespace CommonNames {
   export const renew = "__renew";
   export const link = "__link";
   export const collect = "__collect";
-  export const typeinfo = "__typeinfo";
-  export const instanceof_ = "__instanceof";
   export const visit = "__visit";
   export const newBuffer = "__newBuffer";
   export const newArray = "__newArray";

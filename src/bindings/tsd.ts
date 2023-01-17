@@ -1,4 +1,8 @@
 import {
+  Source
+} from "../ast";
+
+import {
   CommonFlags
 } from "../common";
 
@@ -10,8 +14,8 @@ import {
   Interface,
   Enum,
   ElementKind,
-  Field,
-  Element
+  Element,
+  PropertyPrototype
 } from "../program";
 
 import {
@@ -50,9 +54,9 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitGlobal(name: string, element: Global): void {
-    var sb = this.sb;
-    var type = element.type;
-    var tsType = this.toTypeScriptType(type, Mode.EXPORT);
+    let sb = this.sb;
+    let type = element.type;
+    let tsType = this.toTypeScriptType(type, Mode.EXPORT);
     indent(sb, this.indentLevel);
     sb.push("/** ");
     sb.push(element.internalName);
@@ -70,7 +74,7 @@ export class TSDBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push("get value(): ");
     sb.push(tsType);
-    if (!element.is(CommonFlags.CONST)) {
+    if (!element.is(CommonFlags.Const)) {
       sb.push(";\n");
       indent(sb, this.indentLevel);
       sb.push("set value(value: ");
@@ -84,7 +88,7 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitEnum(name: string, element: Enum): void {
-    var sb = this.sb;
+    let sb = this.sb;
     indent(sb, this.indentLevel);
     sb.push("/** ");
     sb.push(element.internalName);
@@ -95,13 +99,13 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("enum ");
     sb.push(name);
     sb.push(" {\n");
-    var members = element.members;
+    let members = element.members;
     if (members) {
       // TODO: for (let [memberName, member] of members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.ENUMVALUE) continue;
+        if (member.kind != ElementKind.EnumValue) continue;
         indent(sb, this.indentLevel);
         sb.push("/** @type `i32` */\n");
         indent(sb, this.indentLevel);
@@ -114,16 +118,16 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitFunction(name: string, element: Function): void {
-    var sb = this.sb;
-    var signature = element.signature;
+    let sb = this.sb;
+    let signature = element.signature;
     indent(sb, this.indentLevel);
     sb.push("/**\n");
     indent(sb, this.indentLevel);
     sb.push(" * ");
     sb.push(element.internalName);
     sb.push("\n");
-    var parameterTypes = signature.parameterTypes;
-    var numParameters = parameterTypes.length;
+    let parameterTypes = signature.parameterTypes;
+    let numParameters = parameterTypes.length;
     for (let i = 0; i < numParameters; ++i) {
       indent(sb, this.indentLevel);
       sb.push(" * @param ");
@@ -132,7 +136,7 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(parameterTypes[i].toString());
       sb.push("`\n");
     }
-    var returnType = signature.returnType;
+    let returnType = signature.returnType;
     if (returnType != Type.void) {
       indent(sb, this.indentLevel);
       sb.push(" * @returns `");
@@ -147,7 +151,7 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("function ");
     sb.push(name);
     sb.push("(");
-    var requiredParameters = signature.requiredParameters;
+    let requiredParameters = signature.requiredParameters;
     for (let i = 0; i < numParameters; ++i) {
       if (i) sb.push(", ");
       sb.push(element.getParameterName(i));
@@ -168,10 +172,6 @@ export class TSDBuilder extends ExportsWalker {
     // not implemented
   }
 
-  visitField(name: string, element: Field): void {
-    // not implemented
-  }
-
   visitNamespace(name: string, element: Element): void {
     // not implemented
   }
@@ -181,7 +181,7 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   build(): string {
-    var sb = this.sb;
+    let sb = this.sb;
     if (!this.esm) {
       sb.push("declare namespace __AdaptedExports {\n");
       ++this.indentLevel;
@@ -203,7 +203,7 @@ export class TSDBuilder extends ExportsWalker {
       --this.indentLevel;
       sb.push("}\n");
     }
-    var deferredTypes = this.deferredTypings;
+    let deferredTypes = this.deferredTypings;
     for (let i = 0, k = deferredTypes.length; i < k; ++i) {
       sb.push(deferredTypes[i]);
     }
@@ -218,7 +218,7 @@ export class TSDBuilder extends ExportsWalker {
           sb.push(moduleName);
         } else {
           sb.push("\"");
-          sb.push(escapeString(moduleName, CharCode.DOUBLEQUOTE));
+          sb.push(escapeString(moduleName, CharCode.DoubleQuote));
           sb.push("\"");
         }
         sb.push(": unknown,\n");
@@ -230,15 +230,15 @@ export class TSDBuilder extends ExportsWalker {
 
   isPlainObject(clazz: Class): bool {
     // A plain object does not inherit and does not have a constructor or private properties
-    if (clazz.base) return false;
-    var members = clazz.members;
+    if (clazz.base && !clazz.prototype.implicitlyExtendsObject) return false;
+    let members = clazz.members;
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
-        if (member.isAny(CommonFlags.PRIVATE | CommonFlags.PROTECTED)) return false;
-        if (member.is(CommonFlags.CONSTRUCTOR)) {
+        if (member.isAny(CommonFlags.Private | CommonFlags.Protected)) return false;
+        if (member.is(CommonFlags.Constructor)) {
           // a generated constructor is ok
-          if (member.declaration.range != this.program.nativeRange) return false;
+          if (member.declaration.range != Source.native.range) return false;
         }
       }
     }
@@ -249,26 +249,26 @@ export class TSDBuilder extends ExportsWalker {
     if (type.isInternalReference) {
       const sb = new Array<string>();
       const clazz = assert(type.getClassOrWrapper(this.program));
-      if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
+      if (clazz.extendsPrototype(this.program.arrayBufferInstance.prototype)) {
         sb.push("ArrayBuffer");
-      } else if (clazz.extends(this.program.stringInstance.prototype)) {
+      } else if (clazz.extendsPrototype(this.program.stringInstance.prototype)) {
         sb.push("string");
-      } else if (clazz.extends(this.program.arrayPrototype)) {
+      } else if (clazz.extendsPrototype(this.program.arrayPrototype)) {
         const valueType = clazz.getArrayValueType();
         sb.push("Array<");
         sb.push(this.toTypeScriptType(valueType, mode));
         sb.push(">");
-      } else if (clazz.extends(this.program.staticArrayPrototype)) {
+      } else if (clazz.extendsPrototype(this.program.staticArrayPrototype)) {
         const valueType = clazz.getArrayValueType();
         sb.push("ArrayLike<");
         sb.push(this.toTypeScriptType(valueType, mode));
         sb.push(">");
-      } else if (clazz.extends(this.program.arrayBufferViewInstance.prototype)) {
+      } else if (clazz.extendsPrototype(this.program.arrayBufferViewInstance.prototype)) {
         const valueType = clazz.getArrayValueType();
         if (valueType == Type.i8) {
           sb.push("Int8Array");
         } else if (valueType == Type.u8) {
-          if (clazz.extends(this.program.uint8ClampedArrayPrototype)) {
+          if (clazz.extendsPrototype(this.program.uint8ClampedArrayPrototype)) {
             sb.push("Uint8ClampedArray");
           } else {
             sb.push("Uint8Array");
@@ -314,7 +314,7 @@ export class TSDBuilder extends ExportsWalker {
           }
         }
       }
-      if (type.is(TypeFlags.NULLABLE)) {
+      if (type.is(TypeFlags.Nullable)) {
         sb.push(" | null");
       }
       return sb.join("");
@@ -336,8 +336,8 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   makeRecordType(clazz: Class, mode: Mode): string {
-    var sb = new Array<string>();
-    var members = clazz.members;
+    let sb = new Array<string>();
+    let members = clazz.members;
     sb.push("/** ");
     sb.push(clazz.internalName);
     sb.push(" */\ndeclare interface __Record");
@@ -347,15 +347,16 @@ export class TSDBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.FIELD) continue;
-        let field = <Field>member;
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        let property = (<PropertyPrototype>member).instance; // resolved during class finalization
+        if (!property || !property.isField) continue;
         sb.push("  /** @type `");
-        sb.push(field.type.toString());
+        sb.push(property.type.toString());
         sb.push("` */\n  ");
-        sb.push(field.name);
+        sb.push(property.name);
         sb.push(": ");
-        sb.push(this.toTypeScriptType(field.type, mode));
-        if (this.fieldAcceptsUndefined(field.type)) {
+        sb.push(this.toTypeScriptType(property.type, mode));
+        if (this.fieldAcceptsUndefined(property.type)) {
           sb.push(" | TOmittable");
         }
         sb.push(";\n");
@@ -367,20 +368,20 @@ export class TSDBuilder extends ExportsWalker {
 
   fieldAcceptsUndefined(type: Type): bool {
     if (type.isInternalReference) {
-      return type.is(TypeFlags.NULLABLE);
+      return type.is(TypeFlags.Nullable);
     }
     return true;
   }
 
   makeInternrefType(clazz: Class): string {
-    var sb = new Array<string>();
+    let sb = new Array<string>();
     sb.push("/** ");
     sb.push(clazz.internalName);
     sb.push(" */\n");
     sb.push("declare class __Internref");
     sb.push(clazz.id.toString());
     sb.push(" extends Number {\n");
-    var base: Class | null = clazz;
+    let base: Class | null = clazz;
     do {
       sb.push("  private __nominal");
       sb.push(base.id.toString());

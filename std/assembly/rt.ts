@@ -1,6 +1,5 @@
 import { Typeinfo, TypeinfoFlags } from "./shared/typeinfo";
 import { E_INDEXOUTOFRANGE } from "./util/error";
-import { OBJECT, TOTAL_OVERHEAD } from "./rt/common";
 import { ArrayBufferView } from "./arraybuffer";
 
 // @ts-ignore: decorator
@@ -18,27 +17,15 @@ export declare function __visit_members(ref: usize, cookie: u32): void;
 // @ts-ignore: decorator
 @unsafe
 export function __typeinfo(id: u32): TypeinfoFlags {
-  var ptr = __rtti_base;
+  let ptr = __rtti_base;
   if (id > load<u32>(ptr)) throw new Error(E_INDEXOUTOFRANGE);
   return changetype<Typeinfo>(ptr + sizeof<u32>() + id * offsetof<Typeinfo>()).flags;
 }
 
 // @ts-ignore: decorator
 @unsafe
-export function __instanceof(ptr: usize, classId: u32): bool { // keyword
-  var id = changetype<OBJECT>(ptr - TOTAL_OVERHEAD).rtId;
-  var rttiBase = __rtti_base;
-  if (id <= load<u32>(rttiBase)) {
-    do if (id == classId) return true;
-    while (id = changetype<Typeinfo>(rttiBase + sizeof<u32>() + id * offsetof<Typeinfo>()).base);
-  }
-  return false;
-}
-
-// @ts-ignore: decorator
-@unsafe
 export function __newBuffer(size: usize, id: u32, data: usize = 0): usize {
-  var buffer = __new(size, id);
+  let buffer = __new(size, id);
   if (data) memory.copy(buffer, data, size);
   return buffer;
 }
@@ -46,11 +33,11 @@ export function __newBuffer(size: usize, id: u32, data: usize = 0): usize {
 // @ts-ignore: decorator
 @unsafe
 export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
-  var bufferSize = <usize>length << alignLog2;
+  let bufferSize = <usize>length << alignLog2;
   // make sure `buffer` is tracked by the shadow stack
-  var buffer = changetype<ArrayBuffer>(__newBuffer(bufferSize, idof<ArrayBuffer>(), data));
+  let buffer = changetype<ArrayBuffer>(__newBuffer(bufferSize, idof<ArrayBuffer>(), data));
   // ...since allocating the array may trigger GC steps
-  var array = __new(offsetof<i32[]>(), id);
+  let array = __new(offsetof<i32[]>(), id);
   store<usize>(array, changetype<usize>(buffer), offsetof<ArrayBufferView>("buffer"));
   __link(array, changetype<usize>(buffer), false);
   store<usize>(array, changetype<usize>(buffer), offsetof<ArrayBufferView>("dataStart"));

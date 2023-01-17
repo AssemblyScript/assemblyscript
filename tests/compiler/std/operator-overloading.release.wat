@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -85,26 +85,25 @@
  (global $std/operator-overloading/aii2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
  (global $std/operator-overloading/tea (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18028))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34388))
  (memory $0 1)
  (data (i32.const 1036) "<")
- (data (i32.const 1048) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1048) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 1100) "<")
- (data (i32.const 1112) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
+ (data (i32.const 1112) "\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
  (data (i32.const 1228) "<")
- (data (i32.const 1240) "\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 1240) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (data (i32.const 1292) ",")
- (data (i32.const 1304) "\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
+ (data (i32.const 1304) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 1372) "<")
- (data (i32.const 1384) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1384) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1436) "L")
- (data (i32.const 1448) "\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 1448) "\02\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
  (data (i32.const 1516) "\1c")
- (data (i32.const 1528) "\01\00\00\00\02\00\00\00x")
+ (data (i32.const 1528) "\02\00\00\00\02\00\00\00x")
  (data (i32.const 1548) "\1c")
- (data (i32.const 1560) "\01\00\00\00\02\00\00\00y")
- (data (i32.const 1584) "\07\00\00\00 \00\00\00\00\00\00\00 ")
- (data (i32.const 1612) " \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1560) "\02\00\00\00\02\00\00\00y")
+ (data (i32.const 1584) "\08\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 ")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -131,7 +130,7 @@
     if
      i32.const 0
      i32.const 1120
-     i32.const 159
+     i32.const 160
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -191,11 +190,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -455,11 +454,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -680,10 +679,10 @@
   if
    unreachable
   end
-  i32.const 18032
+  i32.const 34400
   i32.const 0
   i32.store $0
-  i32.const 19600
+  i32.const 35968
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -694,7 +693,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 18032
+    i32.const 34400
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -712,7 +711,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 18032
+      i32.const 34400
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -730,13 +729,13 @@
     br $for-loop|0
    end
   end
-  i32.const 18032
-  i32.const 19604
+  i32.const 34400
+  i32.const 35972
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 18032
+  i32.const 34400
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (result i32)
@@ -821,7 +820,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 18028
+      i32.const 34388
       i32.lt_u
       if
        local.get $0
@@ -915,13 +914,13 @@
     if
      i32.const 0
      i32.const 1120
-     i32.const 228
+     i32.const 229
      i32.const 20
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    i32.const 18028
+    i32.const 34388
     i32.lt_u
     if
      local.get $0
@@ -944,7 +943,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 18028
+     i32.const 34388
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1199,17 +1198,17 @@
   call $~lib/rt/tlsf/removeBlock
   local.get $1
   i32.load $0
-  local.tee $4
+  local.tee $3
   i32.const -4
   i32.and
   i32.const 28
   i32.sub
-  local.tee $3
+  local.tee $4
   i32.const 16
   i32.ge_u
   if
    local.get $1
-   local.get $4
+   local.get $3
    i32.const 2
    i32.and
    i32.const 28
@@ -1218,19 +1217,19 @@
    local.get $1
    i32.const 32
    i32.add
-   local.tee $4
-   local.get $3
+   local.tee $3
+   local.get $4
    i32.const 4
    i32.sub
    i32.const 1
    i32.or
    i32.store $0
    local.get $2
-   local.get $4
+   local.get $3
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $1
-   local.get $4
+   local.get $3
    i32.const -2
    i32.and
    i32.store $0
@@ -1479,117 +1478,6 @@
    end
   end
   local.get $2
- )
- (func $~lib/string/String.__eq (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $0
-  i32.const 1536
-  i32.eq
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  local.tee $2
-  i32.const 1532
-  i32.load $0
-  i32.const 1
-  i32.shr_u
-  i32.ne
-  if
-   i32.const 0
-   return
-  end
-  i32.const 1536
-  local.set $3
-  local.get $0
-  local.tee $1
-  i32.const 7
-  i32.and
-  i32.eqz
-  local.get $2
-  local.tee $0
-  i32.const 4
-  i32.ge_u
-  i32.and
-  if
-   loop $do-loop|0
-    local.get $1
-    i64.load $0
-    local.get $3
-    i64.load $0
-    i64.eq
-    if
-     local.get $1
-     i32.const 8
-     i32.add
-     local.set $1
-     local.get $3
-     i32.const 8
-     i32.add
-     local.set $3
-     local.get $0
-     i32.const 4
-     i32.sub
-     local.tee $0
-     i32.const 4
-     i32.ge_u
-     br_if $do-loop|0
-    end
-   end
-  end
-  block $__inlined_func$~lib/util/string/compareImpl
-   loop $while-continue|1
-    local.get $0
-    local.tee $2
-    i32.const 1
-    i32.sub
-    local.set $0
-    local.get $2
-    if
-     local.get $1
-     i32.load16_u $0
-     local.tee $4
-     local.get $3
-     i32.load16_u $0
-     local.tee $5
-     i32.sub
-     local.set $2
-     local.get $4
-     local.get $5
-     i32.ne
-     br_if $__inlined_func$~lib/util/string/compareImpl
-     local.get $1
-     i32.const 2
-     i32.add
-     local.set $1
-     local.get $3
-     i32.const 2
-     i32.add
-     local.set $3
-     br $while-continue|1
-    end
-   end
-   i32.const 0
-   local.set $2
-  end
-  local.get $2
-  i32.eqz
  )
  (func $~lib/rt/__visit_globals
   (local $0 i32)
@@ -1967,11 +1855,14 @@
        block $~lib/arraybuffer/ArrayBufferView
         block $~lib/string/String
          block $~lib/arraybuffer/ArrayBuffer
-          local.get $0
-          i32.const 8
-          i32.sub
-          i32.load $0
-          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $std/operator-overloading/Tester $std/operator-overloading/TesterInlineStatic $std/operator-overloading/TesterInlineInstance $std/operator-overloading/TesterElementAccess $invalid
+          block $~lib/object/Object
+           local.get $0
+           i32.const 8
+           i32.sub
+           i32.load $0
+           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $std/operator-overloading/Tester $std/operator-overloading/TesterInlineStatic $std/operator-overloading/TesterInlineInstance $std/operator-overloading/TesterElementAccess $invalid
+          end
+          return
          end
          return
         end
@@ -1999,58 +1890,65 @@
  (func $~start
   call $start:std/operator-overloading
  )
- (func $std/operator-overloading/TesterElementAccess#__set (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $std/operator-overloading/Tester#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 1644
+  i32.const 1620
   i32.lt_s
   if
-   i32.const 18048
-   i32.const 18096
+   i32.const 34416
+   i32.const 34464
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $2
+  i64.const 0
+  i64.store $0
+  local.get $2
+  i32.const 4
+  call $~lib/rt/itcms/__new
+  local.tee $2
+  i32.store $0
+  global.get $~lib/memory/__stack_pointer
   local.tee $3
-  i32.const 0
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  local.get $0
   i32.store $0
   local.get $3
-  i32.const 1536
-  i32.store $0
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
   local.get $1
-  call $~lib/string/String.__eq
-  if
-   local.get $0
-   local.get $2
-   i32.store $0
-  else
-   local.get $0
-   local.get $2
-   i32.store $0 offset=4
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.store $0 offset=4
+  local.get $3
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $2
  )
- (func $std/operator-overloading/TesterElementAccess#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.equals (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 1644
+  i32.const 1620
   i32.lt_s
   if
-   i32.const 18048
-   i32.const 18096
+   i32.const 34416
+   i32.const 34464
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -2061,16 +1959,35 @@
   i32.const 0
   i32.store $0
   local.get $2
-  i32.const 1536
+  local.get $0
   i32.store $0
+  local.get $0
+  i32.load $0
+  local.set $3
+  local.get $2
   local.get $1
-  call $~lib/string/String.__eq
+  i32.store $0
+  local.get $3
+  local.get $1
+  i32.load $0
+  i32.eq
   if (result i32)
+   global.get $~lib/memory/__stack_pointer
+   local.tee $2
    local.get $0
-   i32.load $0
-  else
+   i32.store $0
    local.get $0
    i32.load $0 offset=4
+   local.set $0
+   local.get $2
+   local.get $1
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.load $0 offset=4
+   i32.eq
+  else
+   i32.const 0
   end
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -2079,26 +1996,432 @@
   global.set $~lib/memory/__stack_pointer
   local.get $0
  )
+ (func $std/operator-overloading/Tester.notEquals (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1620
+  i32.lt_s
+  if
+   i32.const 34416
+   i32.const 34464
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $2
+  i32.const 0
+  i32.store $0
+  local.get $2
+  local.get $0
+  i32.store $0
+  local.get $0
+  i32.load $0
+  local.set $3
+  local.get $2
+  local.get $1
+  i32.store $0
+  local.get $3
+  local.get $1
+  i32.load $0
+  i32.ne
+  if (result i32)
+   global.get $~lib/memory/__stack_pointer
+   local.tee $2
+   local.get $0
+   i32.store $0
+   local.get $0
+   i32.load $0 offset=4
+   local.set $0
+   local.get $2
+   local.get $1
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.load $0 offset=4
+   i32.ne
+  else
+   i32.const 0
+  end
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
+ )
+ (func $std/operator-overloading/TesterInlineStatic#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1620
+  i32.lt_s
+  if
+   i32.const 34416
+   i32.const 34464
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $2
+  i64.const 0
+  i64.store $0
+  local.get $2
+  i32.const 5
+  call $~lib/rt/itcms/__new
+  local.tee $2
+  i32.store $0
+  global.get $~lib/memory/__stack_pointer
+  local.tee $3
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  local.get $0
+  i32.store $0
+  local.get $3
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  local.get $1
+  i32.store $0 offset=4
+  local.get $3
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
+ (func $std/operator-overloading/TesterInlineInstance#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1620
+  i32.lt_s
+  if
+   i32.const 34416
+   i32.const 34464
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $2
+  i64.const 0
+  i64.store $0
+  local.get $2
+  i32.const 6
+  call $~lib/rt/itcms/__new
+  local.tee $2
+  i32.store $0
+  global.get $~lib/memory/__stack_pointer
+  local.tee $3
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  local.get $0
+  i32.store $0
+  local.get $3
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  local.get $1
+  i32.store $0 offset=4
+  local.get $3
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
+ (func $~lib/string/String.__eq (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1620
+  i32.lt_s
+  if
+   i32.const 34416
+   i32.const 34464
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $0
+  i32.const 1536
+  i32.eq
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   i32.const 1
+   return
+  end
+  block $folding-inner0
+   local.get $0
+   i32.eqz
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $1
+   local.get $0
+   i32.store $0
+   local.get $0
+   i32.const 20
+   i32.sub
+   i32.load $0 offset=16
+   i32.const 1
+   i32.shr_u
+   local.set $2
+   local.get $1
+   i32.const 1536
+   i32.store $0
+   local.get $2
+   i32.const 1532
+   i32.load $0
+   i32.const 1
+   i32.shr_u
+   i32.ne
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $1
+   local.get $0
+   i32.store $0
+   i32.const 1536
+   local.set $3
+   local.get $1
+   i32.const 1536
+   i32.store $0 offset=4
+   local.get $0
+   local.tee $1
+   i32.const 7
+   i32.and
+   i32.eqz
+   local.get $2
+   local.tee $0
+   i32.const 4
+   i32.ge_u
+   i32.and
+   if
+    loop $do-loop|0
+     local.get $1
+     i64.load $0
+     local.get $3
+     i64.load $0
+     i64.eq
+     if
+      local.get $1
+      i32.const 8
+      i32.add
+      local.set $1
+      local.get $3
+      i32.const 8
+      i32.add
+      local.set $3
+      local.get $0
+      i32.const 4
+      i32.sub
+      local.tee $0
+      i32.const 4
+      i32.ge_u
+      br_if $do-loop|0
+     end
+    end
+   end
+   block $__inlined_func$~lib/util/string/compareImpl
+    loop $while-continue|1
+     local.get $0
+     local.tee $2
+     i32.const 1
+     i32.sub
+     local.set $0
+     local.get $2
+     if
+      local.get $1
+      i32.load16_u $0
+      local.tee $4
+      local.get $3
+      i32.load16_u $0
+      local.tee $5
+      i32.sub
+      local.set $2
+      local.get $4
+      local.get $5
+      i32.ne
+      br_if $__inlined_func$~lib/util/string/compareImpl
+      local.get $1
+      i32.const 2
+      i32.add
+      local.set $1
+      local.get $3
+      i32.const 2
+      i32.add
+      local.set $3
+      br $while-continue|1
+     end
+    end
+    i32.const 0
+    local.set $2
+   end
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $2
+   i32.eqz
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  i32.const 0
+ )
+ (func $std/operator-overloading/TesterElementAccess#__set (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1620
+  i32.lt_s
+  if
+   i32.const 34416
+   i32.const 34464
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $3
+  i64.const 0
+  i64.store $0
+  local.get $3
+  local.get $1
+  i32.store $0
+  local.get $3
+  i32.const 1536
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/string/String.__eq
+  if
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store $0
+   local.get $0
+   local.get $2
+   i32.store $0
+  else
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store $0
+   local.get $0
+   local.get $2
+   i32.store $0 offset=4
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $std/operator-overloading/TesterElementAccess#__get (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1620
+  i32.lt_s
+  if
+   i32.const 34416
+   i32.const 34464
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $2
+  i64.const 0
+  i64.store $0
+  local.get $2
+  local.get $1
+  i32.store $0
+  local.get $2
+  i32.const 1536
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/string/String.__eq
+  if (result i32)
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store $0
+   local.get $0
+   i32.load $0
+  else
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store $0
+   local.get $0
+   i32.load $0 offset=4
+  end
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
+ )
  (func $start:std/operator-overloading
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 24
+  i32.const 48
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 1644
+   i32.const 1620
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.const 24
+   i32.const 48
    memory.fill $0
    memory.size $0
    i32.const 16
    i32.shl
-   i32.const 18028
+   i32.const 34388
    i32.sub
    i32.const 1
    i32.shr_u
@@ -2143,24 +2466,68 @@
    global.get $std/operator-overloading/a2
    local.tee $1
    i32.store $0 offset=4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $2
+   i32.const 0
+   i32.store $0
+   local.get $2
+   local.get $0
+   i32.store $0
    local.get $0
    i32.load $0
+   local.set $3
+   local.get $2
+   local.get $1
+   i32.store $0
+   local.get $3
    local.get $1
    i32.load $0
    i32.add
+   local.set $3
+   local.get $2
+   local.get $0
+   i32.store $0
    local.get $0
    i32.load $0 offset=4
+   local.set $0
+   local.get $2
+   local.get $1
+   i32.store $0
+   local.get $3
+   local.get $0
    local.get $1
    i32.load $0 offset=4
    i32.add
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/a
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/a
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 3
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/a
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 5
     i32.eq
@@ -2191,26 +2558,70 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/s2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.sub
+   local.set $3
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0 offset=4
+   local.set $1
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $1
+   local.get $2
    i32.load $0 offset=4
    i32.sub
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/s
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/s
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    if (result i32)
     i32.const 0
    else
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/s
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 6
     i32.eq
@@ -2239,26 +2650,70 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/m2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.mul
+   local.set $3
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0 offset=4
+   local.set $1
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $1
+   local.get $2
    i32.load $0 offset=4
    i32.mul
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/m
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/m
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 6
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/m
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 10
     i32.eq
@@ -2289,26 +2744,70 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/d2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.div_s
+   local.set $3
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0 offset=4
+   local.set $1
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $1
+   local.get $2
    i32.load $0 offset=4
    i32.div_s
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/d
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/d
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 2
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/d
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 5
     i32.eq
@@ -2339,26 +2838,70 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/f2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.rem_s
+   local.set $3
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0 offset=4
+   local.set $1
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $1
+   local.get $2
    i32.load $0 offset=4
    i32.rem_s
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/f
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/f
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 4
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/f
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
    else
     i32.const 1
@@ -2386,26 +2929,70 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/p2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    call $~lib/math/ipow32
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0 offset=4
+   local.set $1
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.store $0
    local.get $0
+   local.get $1
+   local.get $2
    i32.load $0 offset=4
    call $~lib/math/ipow32
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/p
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/p
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 16
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/p
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 243
     i32.eq
@@ -2436,26 +3023,70 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/n2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.and
+   local.set $3
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0 offset=4
+   local.set $1
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $1
+   local.get $2
    i32.load $0 offset=4
    i32.and
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/n
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/n
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 15
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/n
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 15
     i32.eq
@@ -2486,26 +3117,70 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/o2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.or
+   local.set $3
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0 offset=4
+   local.set $1
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $1
+   local.get $2
    i32.load $0 offset=4
    i32.or
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/o
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/o
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 65535
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/o
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 255
     i32.eq
@@ -2536,26 +3211,70 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/x2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.xor
+   local.set $3
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0 offset=4
+   local.set $1
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $1
+   local.get $2
    i32.load $0 offset=4
    i32.xor
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/x
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/x
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 65535
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/x
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 255
     i32.eq
@@ -2589,19 +3308,8 @@
    local.tee $0
    i32.store $0 offset=4
    local.get $1
-   i32.load $0
    local.get $0
-   i32.load $0
-   i32.eq
-   if (result i32)
-    local.get $1
-    i32.load $0 offset=4
-    local.get $0
-    i32.load $0 offset=4
-    i32.eq
-   else
-    i32.const 0
-   end
+   call $std/operator-overloading/Tester.equals
    global.set $std/operator-overloading/eq
    global.get $std/operator-overloading/eq
    i32.const 1
@@ -2632,19 +3340,8 @@
    local.tee $0
    i32.store $0 offset=4
    local.get $1
-   i32.load $0
    local.get $0
-   i32.load $0
-   i32.eq
-   if (result i32)
-    local.get $1
-    i32.load $0 offset=4
-    local.get $0
-    i32.load $0 offset=4
-    i32.eq
-   else
-    i32.const 0
-   end
+   call $std/operator-overloading/Tester.equals
    global.set $std/operator-overloading/eqf
    global.get $std/operator-overloading/eqf
    if
@@ -2665,19 +3362,8 @@
    local.tee $0
    i32.store $0 offset=4
    local.get $1
-   i32.load $0
    local.get $0
-   i32.load $0
-   i32.ne
-   if (result i32)
-    local.get $1
-    i32.load $0 offset=4
-    local.get $0
-    i32.load $0 offset=4
-    i32.ne
-   else
-    i32.const 0
-   end
+   call $std/operator-overloading/Tester.notEquals
    global.set $std/operator-overloading/eq
    global.get $std/operator-overloading/eq
    if
@@ -2698,19 +3384,8 @@
    local.tee $0
    i32.store $0 offset=4
    local.get $1
-   i32.load $0
    local.get $0
-   i32.load $0
-   i32.ne
-   if (result i32)
-    local.get $1
-    i32.load $0 offset=4
-    local.get $0
-    i32.load $0 offset=4
-    i32.ne
-   else
-    i32.const 0
-   end
+   call $std/operator-overloading/Tester.notEquals
    global.set $std/operator-overloading/eqf
    global.get $std/operator-overloading/eqf
    i32.const 1
@@ -2738,22 +3413,57 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/gt2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.gt_s
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
+    local.get $1
+    i32.store $0
     local.get $1
     i32.load $0 offset=4
+    local.set $1
     local.get $0
+    local.get $2
+    i32.store $0
+    local.get $1
+    local.get $2
     i32.load $0 offset=4
     i32.gt_s
    else
     i32.const 0
    end
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/gt
    global.get $std/operator-overloading/gt
    i32.const 1
@@ -2781,22 +3491,57 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/gte2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.ge_s
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
+    local.get $1
+    i32.store $0
     local.get $1
     i32.load $0 offset=4
+    local.set $1
     local.get $0
+    local.get $2
+    i32.store $0
+    local.get $1
+    local.get $2
     i32.load $0 offset=4
     i32.ge_s
    else
     i32.const 0
    end
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/gte
    global.get $std/operator-overloading/gte
    i32.const 1
@@ -2824,22 +3569,57 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/le2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.lt_s
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
+    local.get $1
+    i32.store $0
     local.get $1
     i32.load $0 offset=4
+    local.set $1
     local.get $0
+    local.get $2
+    i32.store $0
+    local.get $1
+    local.get $2
     i32.load $0 offset=4
     i32.lt_s
    else
     i32.const 0
    end
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/le
    global.get $std/operator-overloading/le
    i32.const 1
@@ -2867,22 +3647,57 @@
    i32.store $0
    local.get $0
    global.get $std/operator-overloading/leq2
-   local.tee $0
+   local.tee $2
    i32.store $0 offset=4
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
+   local.set $3
    local.get $0
+   local.get $2
+   i32.store $0
+   local.get $3
+   local.get $2
    i32.load $0
    i32.le_s
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
+    local.get $1
+    i32.store $0
     local.get $1
     i32.load $0 offset=4
+    local.set $1
     local.get $0
+    local.get $2
+    i32.store $0
+    local.get $1
+    local.get $2
     i32.load $0 offset=4
     i32.le_s
    else
     i32.const 0
    end
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/leq
    global.get $std/operator-overloading/leq
    i32.const 1
@@ -2900,25 +3715,60 @@
    call $std/operator-overloading/Tester#constructor
    global.set $std/operator-overloading/shr
    global.get $~lib/memory/__stack_pointer
-   global.get $std/operator-overloading/shr
    local.tee $0
+   global.get $std/operator-overloading/shr
+   local.tee $1
    i32.store $0
    local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
+   local.get $1
    i32.load $0
    i32.const 3
    i32.shr_s
+   local.set $2
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $2
+   local.get $1
    i32.load $0 offset=4
    i32.const 3
    i32.shr_s
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/sres
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/sres
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 1
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/sres
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 2
     i32.eq
@@ -2939,25 +3789,60 @@
    call $std/operator-overloading/Tester#constructor
    global.set $std/operator-overloading/shu
    global.get $~lib/memory/__stack_pointer
-   global.get $std/operator-overloading/shu
    local.tee $0
+   global.get $std/operator-overloading/shu
+   local.tee $1
    i32.store $0
    local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
+   local.get $1
    i32.load $0
    i32.const 3
    i32.shr_u
+   local.set $2
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $2
+   local.get $1
    i32.load $0 offset=4
    i32.const 3
    i32.shr_u
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/ures
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/ures
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 536870911
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/ures
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 536870910
     i32.eq
@@ -2978,25 +3863,60 @@
    call $std/operator-overloading/Tester#constructor
    global.set $std/operator-overloading/shl
    global.get $~lib/memory/__stack_pointer
-   global.get $std/operator-overloading/shl
    local.tee $0
+   global.get $std/operator-overloading/shl
+   local.tee $1
    i32.store $0
    local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
+   local.get $1
    i32.load $0
    i32.const 3
    i32.shl
+   local.set $2
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $2
+   local.get $1
    i32.load $0 offset=4
    i32.const 3
    i32.shl
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/sres
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/sres
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 8
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/sres
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 16
     i32.eq
@@ -3017,24 +3937,72 @@
    call $std/operator-overloading/Tester#constructor
    global.set $std/operator-overloading/pos
    global.get $~lib/memory/__stack_pointer
+   local.tee $0
    global.get $std/operator-overloading/pos
+   local.tee $1
+   i32.store $0
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
+   local.get $1
+   i32.load $0
+   local.set $2
+   local.get $0
+   local.get $1
+   i32.store $0
+   local.get $2
+   local.get $1
+   i32.load $0 offset=4
+   call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
+   global.set $std/operator-overloading/pres
+   global.get $~lib/memory/__stack_pointer
+   global.get $std/operator-overloading/pres
    local.tee $0
    i32.store $0
    local.get $0
    i32.load $0
-   local.get $0
-   i32.load $0 offset=4
-   call $std/operator-overloading/Tester#constructor
-   global.set $std/operator-overloading/pres
-   global.get $std/operator-overloading/pres
-   i32.load $0
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/pos
+   local.tee $1
+   i32.store $0
+   local.get $0
+   local.get $1
    i32.load $0
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
     global.get $std/operator-overloading/pres
+    local.tee $1
+    i32.store $0
+    local.get $1
     i32.load $0 offset=4
+    local.set $1
+    local.get $0
     global.get $std/operator-overloading/pos
+    local.tee $0
+    i32.store $0
+    local.get $1
+    local.get $0
     i32.load $0 offset=4
     i32.eq
    else
@@ -3054,31 +4022,79 @@
    call $std/operator-overloading/Tester#constructor
    global.set $std/operator-overloading/neg
    global.get $~lib/memory/__stack_pointer
-   global.get $std/operator-overloading/neg
    local.tee $0
+   global.get $std/operator-overloading/neg
+   local.tee $1
+   i32.store $0
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
    i32.store $0
    i32.const 0
-   local.get $0
+   local.get $1
    i32.load $0
    i32.sub
-   i32.const 0
+   local.set $2
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $2
+   i32.const 0
+   local.get $1
    i32.load $0 offset=4
    i32.sub
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/nres
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/nres
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
-   i32.const 0
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/neg
+   local.tee $1
+   i32.store $0
+   local.get $0
+   i32.const 0
+   local.get $1
    i32.load $0
    i32.sub
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
     global.get $std/operator-overloading/nres
+    local.tee $1
+    i32.store $0
+    local.get $1
     i32.load $0 offset=4
-    i32.const 0
+    local.set $1
+    local.get $0
     global.get $std/operator-overloading/neg
+    local.tee $0
+    i32.store $0
+    local.get $1
+    i32.const 0
+    local.get $0
     i32.load $0 offset=4
     i32.sub
     i32.eq
@@ -3099,30 +4115,78 @@
    call $std/operator-overloading/Tester#constructor
    global.set $std/operator-overloading/not
    global.get $~lib/memory/__stack_pointer
-   global.get $std/operator-overloading/not
    local.tee $0
+   global.get $std/operator-overloading/not
+   local.tee $1
    i32.store $0
    local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
+   local.get $1
    i32.load $0
    i32.const -1
    i32.xor
+   local.set $2
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $2
+   local.get $1
    i32.load $0 offset=4
    i32.const -1
    i32.xor
    call $std/operator-overloading/Tester#constructor
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $std/operator-overloading/res
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/res
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/not
+   local.tee $1
+   i32.store $0
+   local.get $0
+   local.get $1
    i32.load $0
    i32.const -1
    i32.xor
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
     global.get $std/operator-overloading/res
+    local.tee $1
+    i32.store $0
+    local.get $1
     i32.load $0 offset=4
+    local.set $1
+    local.get $0
     global.get $std/operator-overloading/not
+    local.tee $0
+    i32.store $0
+    local.get $1
+    local.get $0
     i32.load $0 offset=4
     i32.const -1
     i32.xor
@@ -3144,26 +4208,59 @@
    call $std/operator-overloading/Tester#constructor
    global.set $std/operator-overloading/excl
    global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   global.get $std/operator-overloading/excl
+   local.tee $1
+   i32.store $0
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
+   local.get $1
+   i32.load $0
+   if (result i32)
+    i32.const 1
+   else
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store $0
+    local.get $1
+    i32.load $0 offset=4
+   end
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
+   i32.eqz
+   global.set $std/operator-overloading/bres
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/excl
    local.tee $0
    i32.store $0
+   global.get $std/operator-overloading/bres
    local.get $0
    i32.load $0
    if (result i32)
     i32.const 1
    else
-    local.get $0
-    i32.load $0 offset=4
-   end
-   i32.eqz
-   global.set $std/operator-overloading/bres
-   global.get $std/operator-overloading/bres
-   global.get $std/operator-overloading/excl
-   i32.load $0
-   if (result i32)
-    i32.const 1
-   else
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/excl
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
    end
    i32.eqz
@@ -3192,29 +4289,66 @@
    call $std/operator-overloading/Tester#constructor
    global.set $std/operator-overloading/incdec
    global.get $~lib/memory/__stack_pointer
-   global.get $std/operator-overloading/incdec
    local.tee $0
+   global.get $std/operator-overloading/incdec
+   local.tee $1
    i32.store $0
    local.get $0
+   i32.const 8
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i64.const 0
+   i64.store $0
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0 offset=4
+   local.get $1
+   local.get $1
    i32.load $0
    i32.const 1
    i32.add
    i32.store $0
    local.get $0
+   local.get $1
+   i32.store $0
    local.get $0
+   local.get $1
+   i32.store $0 offset=4
+   local.get $1
+   local.get $1
    i32.load $0 offset=4
    i32.const 1
    i32.add
    i32.store $0 offset=4
    local.get $0
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $1
    global.set $std/operator-overloading/incdec
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/incdec
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 1
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/incdec
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 2
     i32.eq
@@ -3231,29 +4365,66 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   global.get $std/operator-overloading/incdec
    local.tee $0
+   global.get $std/operator-overloading/incdec
+   local.tee $1
    i32.store $0
    local.get $0
+   i32.const 8
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i64.const 0
+   i64.store $0
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0 offset=4
+   local.get $1
+   local.get $1
    i32.load $0
    i32.const 1
    i32.sub
    i32.store $0
    local.get $0
+   local.get $1
+   i32.store $0
    local.get $0
+   local.get $1
+   i32.store $0 offset=4
+   local.get $1
+   local.get $1
    i32.load $0 offset=4
    i32.const 1
    i32.sub
    i32.store $0 offset=4
    local.get $0
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $1
    global.set $std/operator-overloading/incdec
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/incdec
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    if (result i32)
     i32.const 0
    else
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/incdec
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 1
     i32.eq
@@ -3272,27 +4443,65 @@
    call $std/operator-overloading/Tester#constructor
    global.set $std/operator-overloading/incdec
    global.get $~lib/memory/__stack_pointer
-   global.get $std/operator-overloading/incdec
    local.tee $0
+   global.get $std/operator-overloading/incdec
+   local.tee $1
    i32.store $0 offset=8
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
+   local.get $1
    i32.load $0
    i32.const 1
    i32.add
+   local.set $2
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $2
+   local.get $1
    i32.load $0 offset=4
    i32.const 1
    i32.add
    call $std/operator-overloading/Tester#constructor
-   global.set $std/operator-overloading/incdec
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
    local.get $0
+   global.set $std/operator-overloading/incdec
+   local.get $1
    global.set $std/operator-overloading/tmp
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/tmp
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    if (result i32)
     i32.const 0
    else
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/tmp
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 1
     i32.eq
@@ -3306,12 +4515,20 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/incdec
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 1
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/incdec
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 2
     i32.eq
@@ -3328,27 +4545,65 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   global.get $std/operator-overloading/incdec
    local.tee $0
-   i32.store $0 offset=8
+   global.get $std/operator-overloading/incdec
+   local.tee $1
+   i32.store $0 offset=12
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1620
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   local.get $1
+   i32.store $0
+   local.get $1
    i32.load $0
    i32.const 1
    i32.sub
+   local.set $2
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $2
+   local.get $1
    i32.load $0 offset=4
    i32.const 1
    i32.sub
    call $std/operator-overloading/Tester#constructor
-   global.set $std/operator-overloading/incdec
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
    local.get $0
+   global.set $std/operator-overloading/incdec
+   local.get $1
    global.set $std/operator-overloading/tmp
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/tmp
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 1
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/tmp
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 2
     i32.eq
@@ -3364,12 +4619,20 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/incdec
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    if (result i32)
     i32.const 0
    else
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/incdec
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 1
     i32.eq
@@ -3394,11 +4657,19 @@
    i32.store $0
    local.get $0
    local.get $1
-   i32.store $0 offset=8
+   i32.store $0 offset=16
+   local.get $0
+   local.get $1
+   i32.store $0
    local.get $1
    i32.load $0
    i32.const 1
    i32.add
+   local.set $2
+   local.get $0
+   local.get $1
+   i32.store $0
+   local.get $2
    local.get $1
    i32.load $0 offset=4
    i32.const 1
@@ -3412,29 +4683,55 @@
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/ais1
    local.tee $0
-   i32.store $0 offset=12
+   i32.store $0 offset=20
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/ais2
    local.tee $1
-   i32.store $0 offset=8
+   i32.store $0 offset=24
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store $0
    local.get $0
    i32.load $0
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $1
+   i32.store $0
+   local.get $2
    local.get $1
    i32.load $0
    i32.add
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store $0
    local.get $0
    i32.load $0 offset=4
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $1
+   i32.store $0
+   local.get $2
+   local.get $0
    local.get $1
    i32.load $0 offset=4
    i32.add
    call $std/operator-overloading/TesterInlineStatic#constructor
    global.set $std/operator-overloading/ais
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/ais
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 4
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/ais
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 6
     i32.eq
@@ -3455,14 +4752,23 @@
    call $std/operator-overloading/TesterInlineInstance#constructor
    global.set $std/operator-overloading/aii1
    global.get $~lib/memory/__stack_pointer
-   global.get $std/operator-overloading/aii1
    local.tee $0
-   i32.store $0 offset=8
+   global.get $std/operator-overloading/aii1
+   local.tee $1
+   i32.store $0 offset=28
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $1
    i32.load $0
    i32.const 1
    i32.add
+   local.set $2
    local.get $0
+   local.get $1
+   i32.store $0
+   local.get $2
+   local.get $1
    i32.load $0 offset=4
    i32.const 1
    i32.add
@@ -3475,29 +4781,55 @@
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/aii1
    local.tee $0
-   i32.store $0 offset=8
+   i32.store $0 offset=32
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/aii2
    local.tee $1
-   i32.store $0 offset=12
+   i32.store $0 offset=36
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store $0
    local.get $0
    i32.load $0
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $1
+   i32.store $0
+   local.get $2
    local.get $1
    i32.load $0
    i32.add
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store $0
    local.get $0
    i32.load $0 offset=4
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $1
+   i32.store $0
+   local.get $2
+   local.get $0
    local.get $1
    i32.load $0 offset=4
    i32.add
    call $std/operator-overloading/TesterInlineInstance#constructor
    global.set $std/operator-overloading/aii
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/aii
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 4
    i32.eq
    if (result i32)
+    global.get $~lib/memory/__stack_pointer
     global.get $std/operator-overloading/aii
+    local.tee $0
+    i32.store $0
+    local.get $0
     i32.load $0 offset=4
     i32.const 6
     i32.eq
@@ -3514,30 +4846,37 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 4
+   i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1644
+   i32.const 1620
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 0
-   i32.store $0
+   i64.const 0
+   i64.store $0
    local.get $0
-   i32.const 6
+   i32.const 7
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $1
+   local.get $0
+   i32.store $0 offset=4
    local.get $0
    i32.const 1
    i32.store $0
+   local.get $1
+   local.get $0
+   i32.store $0 offset=4
    local.get $0
    i32.const 2
    i32.store $0 offset=4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
+   local.get $1
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $0
@@ -3564,7 +4903,11 @@
    i32.const 1568
    i32.const -2
    call $std/operator-overloading/TesterElementAccess#__set
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/tea
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const -1
    i32.ne
@@ -3597,7 +4940,11 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/tea
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0 offset=4
    i32.const -2
    i32.ne
@@ -3640,10 +4987,10 @@
    i32.store $0 offset=4
    local.get $0
    local.get $1
-   i32.store $0 offset=16
+   i32.store $0 offset=40
    local.get $0
    i32.const 1536
-   i32.store $0 offset=20
+   i32.store $0 offset=44
    local.get $1
    i32.const 1536
    local.get $1
@@ -3662,10 +5009,10 @@
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/tea
    local.tee $1
-   i32.store $0 offset=16
+   i32.store $0 offset=40
    global.get $~lib/memory/__stack_pointer
    i32.const 1568
-   i32.store $0 offset=20
+   i32.store $0 offset=44
    local.get $0
    i32.const 1568
    local.get $1
@@ -3714,131 +5061,17 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 24
+   i32.const 48
    i32.add
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 18048
-  i32.const 18096
+  i32.const 34416
+  i32.const 34464
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
   unreachable
- )
- (func $std/operator-overloading/Tester#constructor (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1644
-  i32.lt_s
-  if
-   i32.const 18048
-   i32.const 18096
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $2
-  i32.const 0
-  i32.store $0
-  local.get $2
-  i32.const 3
-  call $~lib/rt/itcms/__new
-  local.tee $2
-  i32.store $0
-  local.get $2
-  local.get $0
-  i32.store $0
-  local.get $2
-  local.get $1
-  i32.store $0 offset=4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
- )
- (func $std/operator-overloading/TesterInlineStatic#constructor (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1644
-  i32.lt_s
-  if
-   i32.const 18048
-   i32.const 18096
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $2
-  i32.const 0
-  i32.store $0
-  local.get $2
-  i32.const 4
-  call $~lib/rt/itcms/__new
-  local.tee $2
-  i32.store $0
-  local.get $2
-  local.get $0
-  i32.store $0
-  local.get $2
-  local.get $1
-  i32.store $0 offset=4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
- )
- (func $std/operator-overloading/TesterInlineInstance#constructor (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1644
-  i32.lt_s
-  if
-   i32.const 18048
-   i32.const 18096
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $2
-  i32.const 0
-  i32.store $0
-  local.get $2
-  i32.const 5
-  call $~lib/rt/itcms/__new
-  local.tee $2
-  i32.store $0
-  local.get $2
-  local.get $0
-  i32.store $0
-  local.get $2
-  local.get $1
-  i32.store $0 offset=4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   (local $1 i32)
@@ -3865,7 +5098,7 @@
     if
      i32.const 0
      i32.const 1120
-     i32.const 147
+     i32.const 148
      i32.const 30
      call $~lib/builtins/abort
      unreachable
@@ -3885,14 +5118,14 @@
      i32.load $0 offset=8
      i32.eqz
      local.get $1
-     i32.const 18028
+     i32.const 34388
      i32.lt_u
      i32.and
      i32.eqz
      if
       i32.const 0
       i32.const 1120
-      i32.const 127
+      i32.const 128
       i32.const 18
       call $~lib/builtins/abort
       unreachable
@@ -3906,7 +5139,7 @@
     if
      i32.const 0
      i32.const 1120
-     i32.const 131
+     i32.const 132
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -3928,7 +5161,7 @@
    local.get $1
    i32.load $0 offset=12
    local.tee $0
-   i32.const 1
+   i32.const 2
    i32.le_u
    if (result i32)
     i32.const 1
@@ -3940,13 +5173,13 @@
     if
      i32.const 1248
      i32.const 1312
-     i32.const 22
+     i32.const 21
      i32.const 28
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    i32.const 3
+    i32.const 2
     i32.shl
     i32.const 1588
     i32.add

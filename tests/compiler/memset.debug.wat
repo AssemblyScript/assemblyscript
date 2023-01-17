@@ -5,10 +5,10 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memset/dest (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 60))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
- (global $~lib/memory/__heap_base i32 (i32.const 16444))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
+ (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -18,7 +18,6 @@
   (local $k i32)
   (local $c32 i32)
   (local $c64 i64)
-  (local $var$7 i32)
   local.get $dest
   local.set $ret
   local.get $n
@@ -242,8 +241,6 @@
    local.get $n
    i32.const 32
    i32.ge_u
-   local.set $var$7
-   local.get $var$7
    if
     local.get $dest
     local.get $c64
@@ -275,6 +272,7 @@
    end
   end
   local.get $ret
+  return
  )
  (func $start:memset
   global.get $~lib/memory/__heap_base

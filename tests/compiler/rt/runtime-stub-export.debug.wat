@@ -9,11 +9,11 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 144))
- (global $~lib/memory/__heap_base i32 (i32.const 172))
+ (global $~lib/memory/__heap_base i32 (i32.const 164))
  (memory $0 1)
- (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 144) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 144) "\04\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "__new" (func $~lib/rt/stub/__new))
@@ -26,9 +26,10 @@
  (func $~lib/rt/stub/maybeGrowMemory (param $newOffset i32)
   (local $pagesBefore i32)
   (local $maxOffset i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
+  (local $pagesNeeded i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $pagesWanted i32)
   memory.size $0
   local.set $pagesBefore
   local.get $pagesBefore
@@ -56,22 +57,22 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.set $var$3
+   local.set $pagesNeeded
    local.get $pagesBefore
-   local.tee $var$4
-   local.get $var$3
-   local.tee $var$5
-   local.get $var$4
-   local.get $var$5
+   local.tee $4
+   local.get $pagesNeeded
+   local.tee $5
+   local.get $4
+   local.get $5
    i32.gt_s
    select
-   local.set $var$4
-   local.get $var$4
+   local.set $pagesWanted
+   local.get $pagesWanted
    memory.grow $0
    i32.const 0
    i32.lt_s
    if
-    local.get $var$3
+    local.get $pagesNeeded
     memory.grow $0
     i32.const 0
     i32.lt_s
@@ -83,15 +84,15 @@
   local.get $newOffset
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/common/BLOCK#set:mmInfo (param $this i32) (param $mmInfo i32)
+  local.get $this
+  local.get $mmInfo
   i32.store $0
  )
  (func $~lib/rt/stub/__alloc (param $size i32) (result i32)
   (local $block i32)
   (local $ptr i32)
-  (local $var$3 i32)
+  (local $size|3 i32)
   (local $payloadSize i32)
   local.get $size
   i32.const 1073741820
@@ -110,19 +111,22 @@
   i32.const 4
   i32.add
   local.set $ptr
-  local.get $size
-  local.set $var$3
-  local.get $var$3
-  i32.const 4
-  i32.add
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.const 4
-  i32.sub
+  block $~lib/rt/stub/computeSize|inlined.0 (result i32)
+   local.get $size
+   local.set $size|3
+   local.get $size|3
+   i32.const 4
+   i32.add
+   i32.const 15
+   i32.add
+   i32.const 15
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.const 4
+   i32.sub
+   br $~lib/rt/stub/computeSize|inlined.0
+  end
   local.set $payloadSize
   local.get $ptr
   local.get $payloadSize
@@ -132,25 +136,26 @@
   local.get $payloadSize
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $ptr
+  return
  )
- (func $~lib/rt/common/OBJECT#set:gcInfo (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/common/OBJECT#set:gcInfo (param $this i32) (param $gcInfo i32)
+  local.get $this
+  local.get $gcInfo
   i32.store $0 offset=4
  )
- (func $~lib/rt/common/OBJECT#set:gcInfo2 (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/common/OBJECT#set:gcInfo2 (param $this i32) (param $gcInfo2 i32)
+  local.get $this
+  local.get $gcInfo2
   i32.store $0 offset=8
  )
- (func $~lib/rt/common/OBJECT#set:rtId (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/common/OBJECT#set:rtId (param $this i32) (param $rtId i32)
+  local.get $this
+  local.get $rtId
   i32.store $0 offset=12
  )
- (func $~lib/rt/common/OBJECT#set:rtSize (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/common/OBJECT#set:rtSize (param $this i32) (param $rtSize i32)
+  local.get $this
+  local.get $rtSize
   i32.store $0 offset=16
  )
  (func $~lib/rt/stub/__new (param $size i32) (param $id i32) (result i32)
@@ -191,9 +196,11 @@
   local.get $ptr
   i32.const 16
   i32.add
+  return
  )
  (func $~lib/rt/stub/__pin (param $ptr i32) (result i32)
   local.get $ptr
+  return
  )
  (func $~lib/rt/stub/__unpin (param $ptr i32)
   nop

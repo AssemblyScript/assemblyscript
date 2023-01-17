@@ -32,7 +32,7 @@ export class Date {
     millisecond: i32 = 0
   ): i64 {
     if (year >= 0 && year <= 99) year += 1900;
-    var ms = epochMillis(year, month + 1, day, hour, minute, second, millisecond);
+    let ms = epochMillis(year, month + 1, day, hour, minute, second, millisecond);
     if (invalidDate(ms)) throw new RangeError(E_INVALIDDATE);
     return ms;
   }
@@ -54,8 +54,8 @@ export class Date {
       sec: i32 = 0,
       ms: i32 = 0;
 
-    var dateString = dateTimeString;
-    var posT = dateTimeString.indexOf("T");
+    let dateString = dateTimeString;
+    let posT = dateTimeString.indexOf("T");
     if (~posT) {
       // includes a time component
       let timeString: string;
@@ -81,10 +81,10 @@ export class Date {
       }
     }
     // parse the YYYY-MM-DD component
-    var parts = dateString.split("-");
-    var year = I32.parseInt(parts[0]);
-    var month = 1, day = 1;
-    var len = parts.length;
+    let parts = dateString.split("-");
+    let year = I32.parseInt(parts[0]);
+    let month = 1, day = 1;
+    let len = parts.length;
     if (len >= 2) {
       month = I32.parseInt(parts[1]);
       if (len >= 3) {
@@ -185,17 +185,17 @@ export class Date {
   toISOString(): string {
     // TODO: add more low-level helper which combine toString and padStart without extra allocation
 
-    var yr = this.year;
-    var isNeg = yr < 0;
-    var year = (isNeg || yr >= 10000)
+    let yr = this.year;
+    let isNeg = yr < 0;
+    let year = (isNeg || yr >= 10000)
       ? (isNeg ? "-" : "+") + stringify(abs(yr), 6)
       : stringify(yr, 4);
-    var month = stringify(this.month, 2);
-    var day = stringify(this.day);
-    var hours = stringify(this.getUTCHours());
-    var mins = stringify(this.getUTCMinutes());
-    var secs = stringify(this.getUTCSeconds());
-    var ms = stringify(this.getUTCMilliseconds(), 3);
+    let month = stringify(this.month, 2);
+    let day = stringify(this.day);
+    let hours = stringify(this.getUTCHours());
+    let mins = stringify(this.getUTCMinutes());
+    let secs = stringify(this.getUTCSeconds());
+    let ms = stringify(this.getUTCMilliseconds(), 3);
 
     return `${year}-${month}-${day}T${hours}:${mins}:${secs}.${ms}Z`;
   }
@@ -210,17 +210,17 @@ export class Date {
         " Jul ", " Aug ", " Sep ", " Oct ", " Nov ", " Dec "
       ];
 
-    var mo = this.month;
-    var da = this.day;
-    var yr = this.year;
-    var wd = dayOfWeek(yr, mo, da);
-    var year = stringify(abs(yr), 4);
-    var month = unchecked(months[mo - 1]);
-    var week = unchecked(weeks[wd]);
-    var day = stringify(da);
-    var hours = stringify(this.getUTCHours());
-    var mins = stringify(this.getUTCMinutes());
-    var secs = stringify(this.getUTCSeconds());
+    let mo = this.month;
+    let da = this.day;
+    let yr = this.year;
+    let wd = dayOfWeek(yr, mo, da);
+    let year = stringify(abs(yr), 4);
+    let month = unchecked(months[mo - 1]);
+    let week = unchecked(weeks[wd]);
+    let day = stringify(da);
+    let hours = stringify(this.getUTCHours());
+    let mins = stringify(this.getUTCMinutes());
+    let secs = stringify(this.getUTCSeconds());
 
     return `${week}${day}${month}${yr < 0 ? "-" : ""}${year} ${hours}:${mins}:${secs} GMT`;
   }
@@ -237,23 +237,23 @@ export class Date {
         "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "
       ];
 
-    var mo = this.month;
-    var da = this.day;
-    var yr = this.year;
-    var wd = dayOfWeek(yr, mo, da);
-    var year = stringify(abs(yr), 4);
-    var month = unchecked(months[mo - 1]);
-    var week = unchecked(weeks[wd]);
-    var day = stringify(da);
+    let mo = this.month;
+    let da = this.day;
+    let yr = this.year;
+    let wd = dayOfWeek(yr, mo, da);
+    let year = stringify(abs(yr), 4);
+    let month = unchecked(months[mo - 1]);
+    let week = unchecked(weeks[wd]);
+    let day = stringify(da);
 
     return `${week}${month}${day}${yr < 0 ? " -" : " "}${year}`;
   }
 
   // Note: it uses UTC time instead local time (without timezone offset)
   toTimeString(): string {
-    var hours = stringify(this.getUTCHours());
-    var mins = stringify(this.getUTCMinutes());
-    var secs = stringify(this.getUTCSeconds());
+    let hours = stringify(this.getUTCHours());
+    let mins = stringify(this.getUTCMinutes());
+    let secs = stringify(this.getUTCSeconds());
     // TODO: add timezone
     return `${hours}:${mins}:${secs}`;
   }
@@ -289,7 +289,7 @@ function epochMillis(
 
 // @ts-ignore: decorator
 @inline function euclidRem<T extends number>(a: T, b: T): T {
-  var m = a % b;
+  let m = a % b;
   return m + (m < 0 ? b : 0) as T;
 }
 
@@ -301,14 +301,14 @@ function invalidDate(millis: i64): bool {
 // Based on "Euclidean Affine Functions and Applications to Calendar Algorithms"
 // Paper: https://arxiv.org/pdf/2102.06959.pdf
 function dateFromEpoch(ms: i64): i32 {
-  var da = (<i32>floorDiv(ms, MILLIS_PER_DAY) * 4 + EPOCH_OFFSET * 4) | 3;
-  var q0 = floorDiv(da, DAYS_PER_EPOCH); // [0, 146096]
-  var r1 = <u32>da - q0 * DAYS_PER_EPOCH;
-  var u1 = u64(r1 | 3) * 2939745;
-  var dm1 = <u32>u1 / 11758980;
-  var n1 = 2141 * dm1 + 197913;
-  var year = 100 * q0 + i32(u1 >>> 32);
-  var mo = n1 >>> 16;
+  let da = (<i32>floorDiv(ms, MILLIS_PER_DAY) * 4 + EPOCH_OFFSET * 4) | 3;
+  let q0 = floorDiv(da, DAYS_PER_EPOCH); // [0, 146096]
+  let r1 = <u32>da - q0 * DAYS_PER_EPOCH;
+  let u1 = u64(r1 | 3) * 2939745;
+  let dm1 = <u32>u1 / 11758980;
+  let n1 = 2141 * dm1 + 197913;
+  let year = 100 * q0 + i32(u1 >>> 32);
+  let mo = n1 >>> 16;
   _day = (n1 & 0xFFFF) / 2141 + 1; // [1, 31]
   if (dm1 >= 306) { mo -= 12; ++year; }
   _month = mo; // [1, 12]
@@ -318,10 +318,10 @@ function dateFromEpoch(ms: i64): i32 {
 // http://howardhinnant.github.io/date_algorithms.html#days_from_civil
 function daysSinceEpoch(y: i32, m: i32, d: i32): i64 {
   y -= i32(m <= 2);
-  var era = <u32>floorDiv(y, YEARS_PER_EPOCH);
-  var yoe = <u32>y - era * YEARS_PER_EPOCH; // [0, 399]
-  var doy = <u32>(153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1; // [0, 365]
-  var doe = yoe * 365 + yoe / 4 - yoe / 100 + doy; // [0, 146096]
+  let era = <u32>floorDiv(y, YEARS_PER_EPOCH);
+  let yoe = <u32>y - era * YEARS_PER_EPOCH; // [0, 399]
+  let doy = <u32>(153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1; // [0, 365]
+  let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy; // [0, 146096]
   return <i64><i32>(era * 146097 + doe - EPOCH_OFFSET);
 }
 

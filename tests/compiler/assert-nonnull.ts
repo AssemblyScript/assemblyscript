@@ -36,7 +36,7 @@ export function testFn(fn: (() => Foo | null) | null): Foo | null {
 }
 
 export function testFn2(fn: (() => Foo | null) | null): Foo | null {
-  var fn2 = fn!;
+  let fn2 = fn!;
   return fn2();
 }
 

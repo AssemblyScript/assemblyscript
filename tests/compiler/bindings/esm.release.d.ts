@@ -119,37 +119,44 @@ export declare function staticarrayI64(a: ArrayLike<bigint>): ArrayLike<bigint>;
  */
 export declare function arrayFunction(a: Array<number>, b: Array<number>): Array<number>;
 /**
+ * bindings/esm/arrayOfStringsFunction
+ * @param a `~lib/array/Array<~lib/string/String>`
+ * @param b `~lib/array/Array<~lib/string/String>`
+ * @returns `~lib/array/Array<~lib/string/String>`
+ */
+export declare function arrayOfStringsFunction(a: Array<string>, b: Array<string>): Array<string>;
+/**
  * bindings/esm/objectFunction
  * @param a `bindings/esm/PlainObject`
  * @param b `bindings/esm/PlainObject`
  * @returns `bindings/esm/PlainObject`
  */
-export declare function objectFunction(a: __Record11<undefined>, b: __Record11<undefined>): __Record11<never>;
+export declare function objectFunction(a: __Record13<undefined>, b: __Record13<undefined>): __Record13<never>;
 /**
  * bindings/esm/newInternref
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function newInternref(): __Internref14;
+export declare function newInternref(): __Internref15;
 /**
  * bindings/esm/internrefFunction
  * @param a `bindings/esm/NonPlainObject`
  * @param b `bindings/esm/NonPlainObject`
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function internrefFunction(a: __Internref14, b: __Internref14): __Internref14;
+export declare function internrefFunction(a: __Internref15, b: __Internref15): __Internref15;
 /**
  * bindings/esm/functionFunction
  * @param fn `() => void`
  * @returns `() => void`
  */
-export declare function functionFunction(fn: __Internref3): __Internref3;
+export declare function functionFunction(fn: __Internref4): __Internref4;
 /** bindings/esm/fn */
 export declare const fn: {
   /** @type `() => void` */
-  get value(): __Internref3
+  get value(): __Internref4
 };
 /** bindings/esm/PlainObject */
-declare interface __Record11<TOmittable> {
+declare interface __Record13<TOmittable> {
   /** @type `i8` */
   a: number | TOmittable;
   /** @type `i16` */
@@ -184,10 +191,12 @@ declare interface __Record11<TOmittable> {
   p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */
-declare class __Internref14 extends Number {
-  private __nominal14: symbol;
+declare class __Internref15 extends Number {
+  private __nominal15: symbol;
+  private __nominal0: symbol;
 }
 /** ~lib/function/Function<%28%29=>void> */
-declare class __Internref3 extends Number {
-  private __nominal3: symbol;
+declare class __Internref4 extends Number {
+  private __nominal4: symbol;
+  private __nominal0: symbol;
 }

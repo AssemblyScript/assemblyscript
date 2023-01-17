@@ -14,7 +14,7 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "
 /** Ensures that the given array has _at least_ the specified backing size. */
 function ensureCapacity(array: usize, newSize: usize, alignLog2: u32, canGrow: bool = true): void {
   // Depends on the fact that Arrays mimic ArrayBufferView
-  var oldCapacity = <usize>changetype<ArrayBufferView>(array).byteLength;
+  let oldCapacity = <usize>changetype<ArrayBufferView>(array).byteLength;
   if (newSize > oldCapacity >>> alignLog2) {
     if (newSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
@@ -61,7 +61,7 @@ export class Array<T> {
 
   static create<T>(capacity: i32 = 0): Array<T> {
     WARNING("'Array.create' is deprecated. Use 'new Array' instead, making sure initial elements are initialized.");
-    var array = new Array<T>(capacity);
+    let array = new Array<T>(capacity);
     array.length = 0;
     return array;
   }
@@ -69,8 +69,8 @@ export class Array<T> {
   constructor(length: i32 = 0) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     // reserve capacity for at least MIN_SIZE elements
-    var bufferSize = max(<usize>length, MIN_SIZE) << alignof<T>();
-    var buffer = changetype<ArrayBuffer>(__new(bufferSize, idof<ArrayBuffer>()));
+    let bufferSize = max(<usize>length, MIN_SIZE) << alignof<T>();
+    let buffer = changetype<ArrayBuffer>(__new(bufferSize, idof<ArrayBuffer>()));
     if (ASC_RUNTIME != Runtime.Incremental) {
       memory.fill(changetype<usize>(buffer), 0, bufferSize);
     }
@@ -112,7 +112,7 @@ export class Array<T> {
 
   @operator("[]") private __get(index: i32): T {
     if (<u32>index >= <u32>this.length_) throw new RangeError(E_INDEXOUTOFRANGE);
-    var value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
+    let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);
@@ -131,10 +131,6 @@ export class Array<T> {
       ensureCapacity(changetype<usize>(this), index + 1, alignof<T>());
       this.length_ = index + 1;
     }
-    this.__uset(index, value);
-  }
-
-  @unsafe @operator("{}=") private __uset(index: i32, value: T): void {
     store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     if (isManaged<T>()) {
       __link(changetype<usize>(this), changetype<usize>(value), true);
@@ -142,10 +138,10 @@ export class Array<T> {
   }
 
   at(index: i32): T {
-    var len = this.length_;
+    let len = this.length_;
     index += select(0, len, index >= 0);
     if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
-    var value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
+    let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);
@@ -183,10 +179,10 @@ export class Array<T> {
   }
 
   indexOf(value: T, fromIndex: i32 = 0): i32 {
-    var len = this.length_;
+    let len = this.length_;
     if (len == 0 || fromIndex >= len) return -1;
     if (fromIndex < 0) fromIndex = max(len + fromIndex, 0);
-    var ptr = this.dataStart;
+    let ptr = this.dataStart;
     while (fromIndex < len) {
       if (load<T>(ptr + (<usize>fromIndex << alignof<T>())) == value) return fromIndex;
       ++fromIndex;
@@ -195,11 +191,11 @@ export class Array<T> {
   }
 
   lastIndexOf(value: T, fromIndex: i32 = this.length_): i32 {
-    var len = this.length_;
+    let len = this.length_;
     if (len == 0) return -1;
     if (fromIndex < 0) fromIndex = len + fromIndex;
     else if (fromIndex >= len) fromIndex = len - 1;
-    var ptr = this.dataStart;
+    let ptr = this.dataStart;
     while (fromIndex >= 0) {
       if (load<T>(ptr + (<usize>fromIndex << alignof<T>())) == value) return fromIndex;
       --fromIndex;
@@ -208,8 +204,8 @@ export class Array<T> {
   }
 
   push(value: T): i32 {
-    var oldLen = this.length_;
-    var len = oldLen + 1;
+    let oldLen = this.length_;
+    let len = oldLen + 1;
     ensureCapacity(changetype<usize>(this), len, alignof<T>());
     if (isManaged<T>()) {
       store<usize>(this.dataStart + (<usize>oldLen << alignof<T>()), changetype<usize>(value));
@@ -222,13 +218,13 @@ export class Array<T> {
   }
 
   concat(other: Array<T>): Array<T> {
-    var thisLen = this.length_;
-    var otherLen = other.length_;
-    var outLen = thisLen + otherLen;
+    let thisLen = this.length_;
+    let otherLen = other.length_;
+    let outLen = thisLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
-    var out = changetype<Array<T>>(__newArray(outLen, alignof<T>(), idof<Array<T>>()));
-    var outStart = out.dataStart;
-    var thisSize = <usize>thisLen << alignof<T>();
+    let out = changetype<Array<T>>(__newArray(outLen, alignof<T>(), idof<Array<T>>()));
+    let outStart = out.dataStart;
+    let thisSize = <usize>thisLen << alignof<T>();
     if (isManaged<T>()) {
       let thisStart = this.dataStart;
       for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
@@ -252,15 +248,15 @@ export class Array<T> {
   }
 
   copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Array<T> {
-    var ptr = this.dataStart;
-    var len = this.length_;
+    let ptr = this.dataStart;
+    let len = this.length_;
 
     end = min<i32>(end, len);
 
-    var to    = target < 0 ? max(len + target, 0) : min(target, len);
-    var from  = start < 0 ? max(len + start, 0) : min(start, len);
-    var last  = end < 0 ? max(len + end, 0) : min(end, len);
-    var count = min(last - from, len - to);
+    let to    = target < 0 ? max(len + target, 0) : min(target, len);
+    let from  = start < 0 ? max(len + start, 0) : min(start, len);
+    let last  = end < 0 ? max(len + end, 0) : min(end, len);
+    let count = min(last - from, len - to);
 
     memory.copy( // is memmove
       ptr + (<usize>to << alignof<T>()),
@@ -271,9 +267,9 @@ export class Array<T> {
   }
 
   pop(): T {
-    var len = this.length_;
+    let len = this.length_;
     if (len < 1) throw new RangeError(E_EMPTYARRAY);
-    var val = load<T>(this.dataStart + (<usize>(--len) << alignof<T>()));
+    let val = load<T>(this.dataStart + (<usize>(--len) << alignof<T>()));
     this.length_ = len;
     return val;
   }
@@ -285,9 +281,9 @@ export class Array<T> {
   }
 
   map<U>(fn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
-    var len = this.length_;
-    var out = changetype<Array<U>>(__newArray(len, alignof<U>(), idof<Array<U>>()));
-    var outStart = out.dataStart;
+    let len = this.length_;
+    let out = changetype<Array<U>>(__newArray(len, alignof<U>(), idof<Array<U>>()));
+    let outStart = out.dataStart;
     for (let i = 0; i < min(len, this.length_); ++i) {
       let result = fn(load<T>(this.dataStart + (<usize>i << alignof<T>())), i, this);
       store<U>(outStart + (<usize>i << alignof<U>()), result);
@@ -299,7 +295,7 @@ export class Array<T> {
   }
 
   filter(fn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
-    var result = changetype<Array<T>>(__newArray(0, alignof<T>(), idof<Array<T>>()));
+    let result = changetype<Array<T>>(__newArray(0, alignof<T>(), idof<Array<T>>()));
     for (let i = 0, len = this.length_; i < min(len, this.length_); ++i) {
       let value = load<T>(this.dataStart + (<usize>i << alignof<T>()));
       if (fn(value, i, this)) result.push(value);
@@ -311,7 +307,7 @@ export class Array<T> {
     fn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U,
     initialValue: U
   ): U {
-    var acc = initialValue;
+    let acc = initialValue;
     for (let i = 0, len = this.length_; i < min(len, this.length_); ++i) {
       acc = fn(acc, load<T>(this.dataStart + (<usize>i << alignof<T>())), i, this);
     }
@@ -322,7 +318,7 @@ export class Array<T> {
     fn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U,
     initialValue: U
   ): U {
-    var acc = initialValue;
+    let acc = initialValue;
     for (let i = this.length_ - 1; i >= 0; --i) {
       acc = fn(acc, load<T>(this.dataStart + (<usize>i << alignof<T>())), i, this);
     }
@@ -330,11 +326,11 @@ export class Array<T> {
   }
 
   shift(): T {
-    var len = this.length_;
+    let len = this.length_;
     if (len < 1) throw new RangeError(E_EMPTYARRAY);
-    var base = this.dataStart;
-    var element = load<T>(base);
-    var lastIndex = len - 1;
+    let base = this.dataStart;
+    let element = load<T>(base);
+    let lastIndex = len - 1;
     memory.copy(
       base,
       base + sizeof<T>(),
@@ -358,9 +354,9 @@ export class Array<T> {
   }
 
   unshift(value: T): i32 {
-    var len = this.length_ + 1;
+    let len = this.length_ + 1;
     ensureCapacity(changetype<usize>(this), len, alignof<T>());
-    var ptr = this.dataStart;
+    let ptr = this.dataStart;
     memory.copy(
       ptr + sizeof<T>(),
       ptr,
@@ -375,13 +371,13 @@ export class Array<T> {
   }
 
   slice(start: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
-    var len = this.length_;
+    let len = this.length_;
     start = start < 0 ? max(start + len, 0) : min(start, len);
     end   = end   < 0 ? max(end   + len, 0) : min(end  , len);
     len = max(end - start, 0);
-    var slice = changetype<Array<T>>(__newArray(len, alignof<T>(), idof<Array<T>>()));
-    var sliceBase = slice.dataStart;
-    var thisBase = this.dataStart + (<usize>start << alignof<T>());
+    let slice = changetype<Array<T>>(__newArray(len, alignof<T>(), idof<Array<T>>()));
+    let sliceBase = slice.dataStart;
+    let thisBase = this.dataStart + (<usize>start << alignof<T>());
     if (isManaged<T>()) {
       let off = <usize>0;
       let end = <usize>len << alignof<usize>();
@@ -398,19 +394,19 @@ export class Array<T> {
   }
 
   splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): Array<T> {
-    var len = this.length_;
+    let len = this.length_;
     start       = start < 0 ? max<i32>(len + start, 0) : min<i32>(start, len);
     deleteCount = max<i32>(min<i32>(deleteCount, len - start), 0);
-    var result  = changetype<Array<T>>(__newArray(deleteCount, alignof<T>(), idof<Array<T>>()));
-    var resultStart = result.dataStart;
-    var thisStart = this.dataStart;
-    var thisBase  = thisStart + (<usize>start << alignof<T>());
+    let result  = changetype<Array<T>>(__newArray(deleteCount, alignof<T>(), idof<Array<T>>()));
+    let resultStart = result.dataStart;
+    let thisStart = this.dataStart;
+    let thisBase  = thisStart + (<usize>start << alignof<T>());
     memory.copy(
       resultStart,
       thisBase,
       <usize>deleteCount << alignof<T>()
     );
-    var offset = start + deleteCount;
+    let offset = start + deleteCount;
     if (len != offset) {
       memory.copy(
         thisBase,
@@ -433,8 +429,8 @@ export class Array<T> {
   }
 
   join(separator: string = ","): string {
-    var ptr = this.dataStart;
-    var len = this.length_;
+    let ptr = this.dataStart;
+    let len = this.length_;
     if (isBoolean<T>())   return joinBooleanArray(ptr, len, separator);
     if (isInteger<T>())   return joinIntegerArray<T>(ptr, len, separator);
     if (isFloat<T>())     return joinFloatArray<T>(ptr, len, separator);
@@ -453,11 +449,11 @@ export class Array<T> {
       ERROR("Cannot call flat() on Array<T> where T is not an Array.");
     }
     // Get the length and data start values
-    var ptr = this.dataStart;
-    var len = this.length_;
+    let ptr = this.dataStart;
+    let len = this.length_;
 
     // calculate the end size with an initial pass
-    var size = 0;
+    let size = 0;
     for (let i = 0; i < len; ++i) {
       let child = load<usize>(ptr + (i << alignof<T>()));
       size += child == 0 ? 0 : load<i32>(child, offsetof<T>("length_"));
@@ -465,11 +461,11 @@ export class Array<T> {
 
     // calculate the byteLength of the resulting backing ArrayBuffer
     const align = alignof<valueof<T>>();
-    var byteLength = <usize>size << align;
-    var outBuffer = changetype<ArrayBuffer>(__new(byteLength, idof<ArrayBuffer>()));
+    let byteLength = <usize>size << align;
+    let outBuffer = changetype<ArrayBuffer>(__new(byteLength, idof<ArrayBuffer>()));
 
     // create the return value and initialize it
-    var outArray = changetype<T>(__new(offsetof<T>(), idof<T>()));
+    let outArray = changetype<T>(__new(offsetof<T>(), idof<T>()));
     store<i32>(changetype<usize>(outArray), size, offsetof<T>("length_"));
 
     // byteLength, dataStart, and buffer are all readonly
@@ -479,7 +475,7 @@ export class Array<T> {
     __link(changetype<usize>(outArray), changetype<usize>(outBuffer), false);
 
     // set the elements
-    var resultOffset: usize = 0;
+    let resultOffset: usize = 0;
     for (let i = 0; i < len; ++i) { // for each child
       let child = load<usize>(ptr + (<usize>i << alignof<T>()));
 

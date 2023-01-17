@@ -10,9 +10,9 @@
  (global $heap/ptr (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) "<")
- (data (i32.const 1048) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1100) "<")
- (data (i32.const 1112) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1112) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -57,11 +57,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -321,11 +321,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -546,10 +546,10 @@
   if
    unreachable
   end
-  i32.const 17552
+  i32.const 33936
   i32.const 0
   i32.store $0
-  i32.const 19120
+  i32.const 35504
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -560,7 +560,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 17552
+    i32.const 33936
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -578,7 +578,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 17552
+      i32.const 33936
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -596,13 +596,13 @@
     br $for-loop|0
    end
   end
-  i32.const 17552
-  i32.const 19124
+  i32.const 33936
+  i32.const 35508
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 17552
+  i32.const 33936
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
@@ -982,7 +982,7 @@
   i32.and
   memory.copy $0 $0
   local.get $1
-  i32.const 17548
+  i32.const 33932
   i32.ge_u
   if
    local.get $1
@@ -1024,7 +1024,7 @@
    call $~lib/rt/tlsf/initialize
   end
   local.get $0
-  i32.const 17548
+  i32.const 33932
   i32.lt_u
   if
    global.get $~lib/rt/tlsf/ROOT
@@ -1110,7 +1110,7 @@
   global.set $heap/ptr
   global.get $heap/ptr
   local.tee $0
-  i32.const 17548
+  i32.const 33932
   i32.ge_u
   if
    global.get $~lib/rt/tlsf/ROOT

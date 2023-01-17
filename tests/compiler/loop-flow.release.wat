@@ -6,9 +6,9 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1036) ",")
- (data (i32.const 1048) "\01\00\00\00\18\00\00\00l\00o\00o\00p\00-\00f\00l\00o\00w\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00\18\00\00\00l\00o\00o\00p\00-\00f\00l\00o\00w\00.\00t\00s")
  (data (i32.const 1084) "\1c")
- (data (i32.const 1096) "\01\00\00\00\08\00\00\00t\00e\00r\00m")
+ (data (i32.const 1096) "\02\00\00\00\08\00\00\00t\00e\00r\00m")
  (export "whileReturn" (func $loop-flow/whileReturn))
  (export "whileThrow" (func $loop-flow/whileThrow))
  (export "whileContinue" (func $loop-flow/whileContinue))
@@ -26,13 +26,11 @@
   i32.const 1
  )
  (func $loop-flow/whileAny (param $0 i32) (result i32)
-  loop $while-continue|0 (result i32)
+  loop $while-continue|0
    local.get $0
    i32.const 1
-   i32.eq
-   if (result i32)
-    i32.const 1
-   else
+   i32.ne
+   if
     local.get $0
     i32.const 2
     i32.eq
@@ -49,15 +47,14 @@
     unreachable
    end
   end
+  i32.const 1
  )
  (func $loop-flow/forAny (param $0 i32) (result i32)
-  loop $for-loop|0 (result i32)
+  loop $for-loop|0
    local.get $0
    i32.const 1
-   i32.eq
-   if (result i32)
-    i32.const 1
-   else
+   i32.ne
+   if
     local.get $0
     i32.const 2
     i32.eq
@@ -72,13 +69,16 @@
     br $for-loop|0
    end
   end
+  i32.const 1
  )
  (func $loop-flow/doAny (param $0 i32) (result i32)
-  loop $do-loop|0
+  loop $do-loop|0 (result i32)
    local.get $0
    i32.const 1
-   i32.ne
-   if
+   i32.eq
+   if (result i32)
+    i32.const 1
+   else
     local.get $0
     i32.const 2
     i32.eq
@@ -93,7 +93,6 @@
     br $do-loop|0
    end
   end
-  i32.const 1
  )
  (func $loop-flow/whileThrow (result i32)
   i32.const 1104

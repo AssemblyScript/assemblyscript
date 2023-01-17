@@ -7,16 +7,16 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
  (import "reference-types" "external" (func $features/reference-types/external (param externref) (result externref)))
- (global $features/reference-types/funcGlobal (mut funcref) (ref.null func))
- (global $features/reference-types/a externref (ref.null extern))
- (global $features/reference-types/b funcref (ref.null func))
- (global $features/reference-types/nonNullFunc (mut funcref) (ref.null func))
- (global $features/reference-types/nonNullReal (mut externref) (ref.null extern))
+ (global $features/reference-types/funcGlobal (mut funcref) (ref.null nofunc))
+ (global $features/reference-types/a externref (ref.null noextern))
+ (global $features/reference-types/b funcref (ref.null nofunc))
+ (global $features/reference-types/nonNullFunc (mut funcref) (ref.null nofunc))
+ (global $features/reference-types/nonNullReal (mut externref) (ref.null noextern))
  (memory $0 1)
  (data (i32.const 1036) "L")
- (data (i32.const 1048) "\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s")
- (data (i32.const 1116) "<")
- (data (i32.const 1128) "\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
+ (data (i32.const 1048) "\02\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s")
+ (data (i32.const 1116) "|")
+ (data (i32.const 1128) "\02\00\00\00^\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00\'\00n\00u\00l\00l\00\'\00 \00(\00n\00o\00t\00 \00a\00s\00s\00i\00g\00n\00e\00d\00 \00o\00r\00 \00f\00a\00i\00l\00e\00d\00 \00c\00a\00s\00t\00)")
  (elem declare func $features/reference-types/someFunc)
  (export "external" (func $features/reference-types/external))
  (export "somethingReal" (func $features/reference-types/somethingReal))
@@ -29,7 +29,7 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $features/reference-types/someFunc
-  unreachable
+  nop
  )
  (func $features/reference-types/internal (param $0 externref) (result externref)
   local.get $0
@@ -92,7 +92,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  ref.null func
+  ref.null nofunc
   global.set $features/reference-types/funcGlobal
   ref.func $features/reference-types/someFunc
   global.set $features/reference-types/funcGlobal

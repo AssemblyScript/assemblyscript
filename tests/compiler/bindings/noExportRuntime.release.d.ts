@@ -66,17 +66,19 @@ export declare function returnsArrayOfArray(): Array<Array<number>>;
  * bindings/noExportRuntime/takesNonPlainObject
  * @param obj `bindings/noExportRuntime/NonPlainObject`
  */
-export declare function takesNonPlainObject(obj: __Internref6): void;
+export declare function takesNonPlainObject(obj: __Internref7): void;
 /**
  * bindings/noExportRuntime/takesFunction
  * @param fn `() => void`
  */
-export declare function takesFunction(fn: __Internref7): void;
+export declare function takesFunction(fn: __Internref8): void;
 /** bindings/noExportRuntime/NonPlainObject */
-declare class __Internref6 extends Number {
-  private __nominal6: symbol;
-}
-/** ~lib/function/Function<%28%29=>void> */
 declare class __Internref7 extends Number {
   private __nominal7: symbol;
+  private __nominal0: symbol;
+}
+/** ~lib/function/Function<%28%29=>void> */
+declare class __Internref8 extends Number {
+  private __nominal8: symbol;
+  private __nominal0: symbol;
 }
