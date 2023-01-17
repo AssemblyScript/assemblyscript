@@ -15,7 +15,6 @@
 
 <h3 align="center">
   <a href="https://www.assemblyscript.org">About</a> &nbsp;·&nbsp;
-  <a href="https://www.assemblyscript.org/introduction.html">Introduction</a> &nbsp;·&nbsp;
   <a href="https://www.assemblyscript.org/getting-started.html">Getting&nbsp;started</a> &nbsp;·&nbsp;
   <a href="https://www.assemblyscript.org/examples.html">Examples</a> &nbsp;·&nbsp;
   <a href="https://www.assemblyscript.org/built-with-assemblyscript.html">Built with AssemblyScript</a>
