@@ -1144,7 +1144,7 @@ export class Compiler extends DiagnosticEmitter {
       // Otherwise infer type from initializer
       } else if (initializerNode) {
         let previousFlow = this.currentFlow;
-        if (global.hasDecorator(DecoratorFlags.Lazy)) {
+        if (global.hasAnyDecorator(DecoratorFlags.Lazy | DecoratorFlags.Global)) {
           this.currentFlow = global.file.startFunction.flow;
         }
         initExpr = this.compileExpression(initializerNode, Type.auto, // reports
