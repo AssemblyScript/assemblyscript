@@ -3794,12 +3794,11 @@ export class Parser extends DiagnosticEmitter {
                       break;
                     }
                   }
-                  if (tn.skip(Token.Equals_GreaterThan)) {
-                    tn.reset(state);
-                    return this.parseFunctionExpression(tn);
+                  if (!tn.skip(Token.Equals_GreaterThan)) {
+                    again = false;
+                    break;
                   }
-                  again = false;
-                  break;
+                  // fall-through
                 }
                 // function expression
                 case Token.Colon: {    // type annotation
