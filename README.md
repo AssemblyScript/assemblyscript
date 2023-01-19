@@ -5,9 +5,8 @@
 <p align="center">
   <a href="https://github.com/AssemblyScript/assemblyscript/actions?query=workflow%3ATest"><img src="https://img.shields.io/github/actions/workflow/status/AssemblyScript/assemblyscript/test.yml?branch=main&label=test&logo=github" alt="Test status" /></a>
   <a href="https://github.com/AssemblyScript/assemblyscript/actions?query=workflow%3APublish"><img src="https://img.shields.io/github/actions/workflow/status/AssemblyScript/assemblyscript/publish.yml?branch=main&label=publish&logo=github" alt="Publish status" /></a>
-  <a href="https://www.npmjs.com/package/assemblyscript"><img src="https://img.shields.io/npm/v/assemblyscript.svg?label=compiler&color=007acc&logo=npm" alt="npm compiler version" /></a>
-  <a href="https://www.npmjs.com/package/@assemblyscript/loader"><img src="https://img.shields.io/npm/v/@assemblyscript/loader.svg?label=loader&color=007acc&logo=npm" alt="npm loader version" /></a>
-  <a href="https://discord.gg/assemblyscript"><img src="https://img.shields.io/discord/721472913886281818.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2" alt="Discord online" /></a>
+  <a href="https://www.npmjs.com/package/assemblyscript"><img src="https://img.shields.io/npm/v/assemblyscript.svg?color=007acc&logo=npm" alt="npm compiler version" /></a>
+  <a href="https://discord.gg/assemblyscript"><img src="https://img.shields.io/discord/721472913886281818.svg?label=discord&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2" alt="Discord online" /></a>
   <a href="https://stand-with-ukraine.pp.ua"><img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg" alt="#StandWithUkraine" /></a>
 </p>
 
