@@ -2748,6 +2748,7 @@ export class Module {
         passes.push("vacuum");
 
         passes.push("simplify-globals-optimizing");
+        passes.push("reorder-globals");
         passes.push("remove-unused-brs");
         passes.push("optimize-instructions");
       }
