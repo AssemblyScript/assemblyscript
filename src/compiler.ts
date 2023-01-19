@@ -595,7 +595,7 @@ export class Compiler extends DiagnosticEmitter {
         functionTable[i] = this.ensureVarargsStub(instance);
       }
     }
-    let overrrideStubsSeen = new Set<Function>();
+    let overrideStubsSeen = new Set<Function>();
     do {
       // override stubs and overrides have cross-dependencies on each other, in that compiling
       // either may discover the respective other. do this in a loop until no more are found.
@@ -608,10 +608,10 @@ export class Compiler extends DiagnosticEmitter {
             this.compileFunction(overrideInstances[i]);
           }
         }
-        overrrideStubsSeen.add(instance);
+        overrideStubsSeen.add(instance);
       }
-    } while (overrideStubs.size > overrrideStubsSeen.size || resolver.discoveredOverride);
-    overrrideStubsSeen.clear();
+    } while (overrideStubs.size > overrideStubsSeen.size || resolver.discoveredOverride);
+    overrideStubsSeen.clear();
     for (let _values = Set_values(overrideStubs), i = 0, k = _values.length; i < k; ++i) {
       this.finalizeOverrideStub(_values[i]);
     }
@@ -2062,7 +2062,7 @@ export class Compiler extends DiagnosticEmitter {
         let declaration = <NamespaceDeclaration>statement;
         let element = this.program.getElementByDeclaration(declaration);
         if (element) {
-          // any potentiall merged element
+          // any potential merged element
           let previousParent = this.currentParent;
           this.currentParent = element;
           let memberStatements = declaration.members;
@@ -4367,7 +4367,7 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
 
-        // check operator overloadd
+        // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
           let overload = classReference.lookupOverload(OperatorKind.BitwiseAnd);

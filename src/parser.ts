@@ -4530,7 +4530,7 @@ export const enum Precedence {
   Grouping
 }
 
-/** Determines the precende of a non-starting token. */
+/** Determines the precedence of a non-starting token. */
 function determinePrecedence(kind: Token): Precedence {
   switch (kind) {
     case Token.Comma: return Precedence.Comma;
