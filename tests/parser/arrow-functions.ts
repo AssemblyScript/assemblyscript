@@ -9,4 +9,6 @@ x => x;
 
 // not an array function
 (b ? x : y);
+b ? (x) : y;
+b ? (x):i32=>1 : y;
 (b ? f : g)();

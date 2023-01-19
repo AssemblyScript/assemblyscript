@@ -514,19 +514,23 @@ export class Parser extends DiagnosticEmitter {
       if (signature) {
         if (isInnerParenthesized) {
           if (!tn.skip(Token.CloseParen)) {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), ")"
-            );
+            if (!suppressErrors) {
+              this.error(
+                DiagnosticCode._0_expected,
+                tn.range(), ")"
+              );
+            }
             return null;
           }
         }
         type = signature;
       } else if (isInnerParenthesized || this.tryParseSignatureIsSignature) {
-        this.error(
-          DiagnosticCode.Unexpected_token,
-          tn.range()
-        );
+        if (!suppressErrors) {
+          this.error(
+            DiagnosticCode.Unexpected_token,
+            tn.range()
+          );
+        }
         return null;
       // Type (',' Type)* ')'
       } else if (acceptParenthesized) {
@@ -545,10 +549,12 @@ export class Parser extends DiagnosticEmitter {
         type.range.start = startPos;
         type.range.end = tn.pos;
       } else {
-        this.error(
-          DiagnosticCode.Unexpected_token,
-          tn.range()
-        );
+        if (!suppressErrors) {
+          this.error(
+            DiagnosticCode.Unexpected_token,
+            tn.range()
+          );
+        }
         return null;
       }
 
@@ -3780,10 +3786,15 @@ export class Parser extends DiagnosticEmitter {
 
                 // if we got here, check for arrow
                 case Token.CloseParen: {
-                  if (
-                    !tn.skip(Token.Colon) &&
-                    !tn.skip(Token.Equals_GreaterThan)
-                  ) {
+                  // `Identifier):Type =>` is function expression
+                  if (tn.skip(Token.Colon)) {
+                    let type = this.parseType(tn, true, true);
+                    if (type == null) {
+                      again = false;
+                      break;
+                    }
+                  }
+                  if (!tn.skip(Token.Equals_GreaterThan)) {
                     again = false;
                     break;
                   }
