@@ -1,0 +1,6 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "TS2448: Variable 'issues/2622/node_modules_1/t1' used before its declaration."
+  ]
+}

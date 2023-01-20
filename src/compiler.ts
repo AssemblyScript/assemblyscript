@@ -7339,7 +7339,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.Global: {
         let global = <Global>target;
-        if (global.hasDecorator(DecoratorFlags.Global) && !global.is(CommonFlags.Compiled)) {
+        if (!global.hasDecorator(DecoratorFlags.Lazy) && global.hasDecorator(DecoratorFlags.Global) && !global.is(CommonFlags.Compiled)) {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,
             expression.range,
