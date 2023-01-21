@@ -22,7 +22,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     globalScope["i8"] = function i8(value) { return value << 24 >> 24; },
     {
       "MIN_VALUE": { value: -128 },
-      "MAX_VALUE": { value:  127 }
+      "MAX_VALUE": { value:  127 },
+
+      parse(str, radix) { return parseInt(str, radix) << 24 >> 24; }
     }
   );
 
@@ -30,7 +32,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     globalScope["i16"] = function i16(value) { return value << 16 >> 16; },
     {
       "MIN_VALUE": { value: -32768 },
-      "MAX_VALUE": { value:  32767 }
+      "MAX_VALUE": { value:  32767 },
+
+      parse(str, radix) { return parseInt(str, radix) << 16 >> 16; }
     }
   );
 
@@ -38,7 +42,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     globalScope["i32"] = globalScope["isize"] = function i32(value) { return value | 0; },
     {
       "MIN_VALUE": { value: -2147483648 },
-      "MAX_VALUE": { value:  2147483647 }
+      "MAX_VALUE": { value:  2147483647 },
+
+      parse(str, radix) { return parseInt(str, radix) | 0; }
     }
   );
 
@@ -46,7 +52,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     globalScope["u8"] = function u8(value) { return value & 0xff; },
     {
       "MIN_VALUE": { value:   0 },
-      "MAX_VALUE": { value: 255 }
+      "MAX_VALUE": { value: 255 },
+
+      parse(str, radix) { return parseInt(str, radix) & 0xff; }
     }
   );
 
@@ -54,7 +62,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     globalScope["u16"] = function u16(value) { return value & 0xffff; },
     {
       "MIN_VALUE": { value:     0 },
-      "MAX_VALUE": { value: 65535 }
+      "MAX_VALUE": { value: 65535 },
+
+      parse(str, radix) { return parseInt(str, radix) & 0xffff; }
     }
   );
 
@@ -62,7 +72,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     globalScope["u32"] = globalScope["usize"] = function u32(value) { return value >>> 0; },
     {
       "MIN_VALUE": { value:          0 },
-      "MAX_VALUE": { value: 4294967295 }
+      "MAX_VALUE": { value: 4294967295 },
+
+      parse(str, radix) { return parseInt(str, radix) >>> 0; }
     }
   );
 
@@ -70,7 +82,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     globalScope["bool"] = function bool(value) { return !!value; },
     {
       "MIN_VALUE": { value: false },
-      "MAX_VALUE": { value: true }
+      "MAX_VALUE": { value: true },
+
+      parse(str) { return str.trim() === "true"; }
     }
   );
 
@@ -85,7 +99,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
       "MAX_SAFE_INTEGER":  { value:  16777215 },
       "POSITIVE_INFINITY": { value:  Infinity },
       "NEGATIVE_INFINITY": { value: -Infinity },
-      "NaN": { value: NaN }
+      "NaN": { value: NaN },
+
+      parse(str) { return Math.fround(parseFloat(str)); }
     }
   );
 
@@ -100,7 +116,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
       "MAX_SAFE_INTEGER":  { value:  9007199254740991 },
       "POSITIVE_INFINITY": { value:  Infinity },
       "NEGATIVE_INFINITY": { value: -Infinity },
-      "NaN": { value: NaN }
+      "NaN": { value: NaN },
+
+      parse(str) { return parseFloat(str); }
     }
   );
 

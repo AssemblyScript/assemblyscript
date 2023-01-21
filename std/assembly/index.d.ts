@@ -304,6 +304,8 @@ declare namespace i8 {
   export const MIN_VALUE: i8;
   /** Largest representable value. */
   export const MAX_VALUE: i8;
+  /** Converts a string to an i8 of this type. */
+  export function parse(value: string, radix?: i32): i8;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
 declare function i16(value: any): i16;
@@ -312,6 +314,8 @@ declare namespace i16 {
   export const MIN_VALUE: i16;
   /** Largest representable value. */
   export const MAX_VALUE: i16;
+  /** Converts a string to an i16 of this type. */
+  export function parse(value: string, radix?: i32): i16;
 }
 /** Converts any other numeric value to a 32-bit signed integer. */
 declare function i32(value: any): i32;
@@ -666,7 +670,7 @@ declare namespace f32 {
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
   /** Converts a string to an f32 of this type. */
-  export function parse(value: string, radix?: i32): f32;
+  export function parse(value: string): f32;
   /** Loads a 32-bit float from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
@@ -726,7 +730,7 @@ declare namespace f64 {
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
   /** Converts a string to an f64 of this type. */
-  export function parse(value: string, radix?: i32): f64;
+  export function parse(value: string): f64;
   /** Loads a 64-bit float from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
