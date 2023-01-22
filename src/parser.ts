@@ -4311,7 +4311,8 @@ export class Parser extends DiagnosticEmitter {
         case Token.Bar:
         case Token.Caret:
         case Token.Ampersand_Ampersand:
-        case Token.Bar_Bar: {
+        case Token.Bar_Bar:
+        case Token.In: {
           let next = this.parseExpression(tn, nextPrecedence + 1);
           if (!next) return null;
           expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));

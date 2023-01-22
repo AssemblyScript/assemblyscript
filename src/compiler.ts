@@ -4662,6 +4662,14 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
+      case Token.In: {
+        this.error(
+          DiagnosticCode.Not_implemented_0,
+          expression.range, "'in' operator"
+        );
+        this.currentType = Type.bool;
+        return module.unreachable();
+      }
       default: {
         assert(false);
         expr = this.module.unreachable();
