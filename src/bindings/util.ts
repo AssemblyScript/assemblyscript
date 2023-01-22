@@ -19,7 +19,8 @@ import {
   Global,
   Program,
   Property,
-  PropertyPrototype
+  PropertyPrototype,
+  InterfacePrototype
 } from "../program";
 
 /** Walker base class. */
@@ -94,6 +95,10 @@ export abstract class ExportsWalker {
         this.visitClassInstances(name, <ClassPrototype>element);
         break;
       }
+      case ElementKind.InterfacePrototype: {
+        this.visitInterfaceInstances(name, <InterfacePrototype>element);
+        break;
+      }
       case ElementKind.PropertyPrototype: {
         let propertyInstance = (<PropertyPrototype>element).instance;
         if (!propertyInstance) break;
@@ -112,8 +117,13 @@ export abstract class ExportsWalker {
         if (hasCompiledMember(element)) this.visitNamespace(name, element);
         break;
       }
-      case ElementKind.TypeDefinition: break;
-      default: assert(false);
+      case ElementKind.TypeDefinition:
+      case ElementKind.IndexSignature: break;
+      default: {
+        // Not (directly) reachable exports:
+        // File, Local, Function, Class, Interface
+        assert(false);
+      }
     }
   }
 
@@ -134,7 +144,20 @@ export abstract class ExportsWalker {
       // TODO: for (let instance of instances.values()) {
       for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
+        assert(instance.kind == ElementKind.Class);
         if (instance.is(CommonFlags.Compiled)) this.visitClass(name, instance);
+      }
+    }
+  }
+
+  private visitInterfaceInstances(name: string, element: InterfacePrototype): void {
+    let instances = element.instances;
+    if (instances) {
+      // TODO: for (let instance of instances.values()) {
+      for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+        let instance = <Interface>unchecked(_values[i]);
+        assert(instance.kind == ElementKind.Interface);
+        if (instance.is(CommonFlags.Compiled)) this.visitInterface(name, instance);
       }
     }
   }

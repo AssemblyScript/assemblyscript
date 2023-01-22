@@ -169,3 +169,10 @@ immutableGlobalNested;
 declare function Date_getTimezoneOffset(): i32;
 
 Date_getTimezoneOffset();
+
+// Not yet instrumented element kinds:
+
+export class ExportedClass {}
+export interface ExportedInterface {}
+export type ExportedType = ExportedClass;
+export namespace ExportedNamespace {}
