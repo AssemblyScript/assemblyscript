@@ -2054,6 +2054,12 @@ export class Resolver extends DiagnosticEmitter {
         return Type.bool;
       }
 
+      // in operator
+
+      case Token.In: {
+        return Type.bool;
+      }
+
       // arithmetics: result is common type of LHS and RHS, preferring overloads
 
       case Token.Plus:
