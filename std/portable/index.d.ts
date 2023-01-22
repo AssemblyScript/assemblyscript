@@ -131,9 +131,9 @@ declare namespace i8 {
   export const MAX_VALUE: i8;
   /** Converts a string to a floating-point number and cast to target integer after. */
   export function parseFloat(string: string): i8;
-  /** Converts A string to an integer. */
+  /** Parses a string as an integer. */
   export function parseInt(string: string, radix?: i32): i8;
-  /** Converts a string to an i8. */
+  /** Parses a string as an i8. */
   export function parse(value: string, radix?: i32): i8;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
@@ -145,9 +145,9 @@ declare namespace i16 {
   export const MAX_VALUE: i16;
   /** Converts a string to a floating-point number and cast to target integer after. */
   export function parseFloat(string: string): i16;
-  /** Converts a string to an integer. */
+  /** Parses a string as an integer. */
   export function parseInt(string: string, radix?: i32): i16;
-  /** Converts a string to an i16. */
+  /** Parses a string as an i16. */
   export function parse(value: string, radix?: i32): i16;
 }
 /** Converts any other numeric value to a 32-bit signed integer. */
@@ -159,9 +159,9 @@ declare namespace i32 {
   export const MAX_VALUE: i32;
   /** Converts a string to a floating-point number and cast to target integer after. */
   export function parseFloat(string: string): i32;
-  /** Converts a string to an integer. */
+  /** Parses a string as an integer. */
   export function parseInt(string: string, radix?: i32): i32;
-  /** Converts a string to an i32. */
+  /** Parses a string as an i32. */
   export function parse(value: string, radix?: i32): i32;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
@@ -173,9 +173,9 @@ declare namespace isize {
   export const MAX_VALUE: isize;
   /** Converts a string to a floating-point number and cast to target integer after. */
   export function parseFloat(string: string): isize;
-  /** Converts a string to an integer. */
+  /** Parses a string as an integer. */
   export function parseInt(string: string, radix?: i32): isize;
-  /** Converts a string to an iszie. */
+  /** Parses a string as an iszie. */
   export function parse(value: string, radix?: i32): isize;
 }
 /** Converts any other numeric value to an 8-bit unsigned integer. */
@@ -187,9 +187,9 @@ declare namespace u8 {
   export const MAX_VALUE: u8;
   /** Converts a string to a floating-point number and cast to target integer after. */
   export function parseFloat(string: string): u8;
-  /** Converts a string to an integer. */
+  /** Parses a string as an integer. */
   export function parseInt(string: string, radix?: i32): u8;
-  /** Converts a string to an u8. */
+  /** Parses a string as an u8. */
   export function parse(value: string, radix?: i32): u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
@@ -201,9 +201,9 @@ declare namespace u16 {
   export const MAX_VALUE: u16;
   /** Converts a string to a floating-point number and cast to target integer after. */
   export function parseFloat(string: string): u16;
-  /** Converts a string to an integer. */
+  /** Parses a string as an integer. */
   export function parseInt(string: string, radix?: i32): u16;
-  /** Converts a string to an u16. */
+  /** Parses a string as an u16. */
   export function parse(value: string, radix?: i32): u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
@@ -215,9 +215,9 @@ declare namespace u32 {
   export const MAX_VALUE: u32;
   /** Converts a string to a floating-point number and cast to target integer after. */
   export function parseFloat(string: string): u32;
-  /** Converts a string to an integer. */
+  /** Parses a string as an integer. */
   export function parseInt(string: string, radix?: i32): u32;
-  /** Converts a string to an u32. */
+  /** Parses a string as an u32. */
   export function parse(value: string, radix?: i32): u32;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
@@ -229,9 +229,9 @@ declare namespace usize {
   export const MAX_VALUE: usize;
   /** Converts a string to a floating-point number and cast to target integer after. */
   export function parseFloat(string: string): usize;
-  /** Converts a string to an integer. */
+  /** Parses a string as an integer. */
   export function parseInt(string: string, radix?: i32): usize;
-  /** Converts a string to an usize. */
+  /** Parses a string as an usize. */
   export function parse(value: string, radix?: i32): usize;
 }
 /** Converts any other numeric value to a 1-bit unsigned integer. */
@@ -241,7 +241,7 @@ declare namespace bool {
   export const MIN_VALUE: bool;
   /** Largest representable value. */
   export const MAX_VALUE: bool;
-  /** Converts a string to an bool. */
+  /** Parses a string as a bool. */
   export function parse(value: string): bool;
 }
 /** Converts any other numeric value to a 32-bit float. */
@@ -276,9 +276,9 @@ declare namespace f32 {
   export function isInteger(value: f32): bool;
   /** Converts a string to a floating-point number. */
   export function parseFloat(string: string): f32;
-  /** Converts a string to an integer. */
+  /** Parses a string as an integer and convert to an f32. */
   export function parseInt(string: string, radix?: i32): f32;
-  /** Converts a string to an f32. */
+  /** Parses a string as an f32. */
   export function parse(value: string): f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
@@ -313,9 +313,9 @@ declare namespace f64 {
   export function isInteger(value: f64): bool;
   /** Converts a string to a floating-point number. */
   export function parseFloat(string: string): f64;
-  /** Converts a string to an integer. */
+  /** Parses a string as an integer and convert to an f64. */
   export function parseInt(string: string, radix?: i32): f64;
-  /** Converts a string to an f64. */
+  /** Parses a string as an f64. */
   export function parse(value: string): f64;
 }
 
