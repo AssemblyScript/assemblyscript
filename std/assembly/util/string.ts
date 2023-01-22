@@ -755,10 +755,8 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     code = <u32>load<u16>(ptr);
     if (code - CharCode._0 < 10) {
       code -= CharCode._0;
-    } else if (code - CharCode.A <= <u32>(CharCode.Z - CharCode.A)) {
-      code -= CharCode.A - 10;
-    } else if (code - CharCode.a <= <u32>(CharCode.z - CharCode.a)) {
-      code -= CharCode.a - 10;
+    } else if ((code | 32) - CharCode.a <= u32(CharCode.z - CharCode.a)) {
+      code = (code | 32) - (CharCode.a - 10);
     }
     if (code >= <u32>radix) {
       if (initial == len) {

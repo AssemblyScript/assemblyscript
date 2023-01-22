@@ -5746,6 +5746,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -5988,26 +5989,18 @@
        i32.sub
       else
        local.get $0
-       i32.const 65
+       i32.const 32
+       i32.or
+       local.tee $7
+       i32.const 87
+       i32.sub
+       local.get $0
+       local.get $7
+       i32.const 97
        i32.sub
        i32.const 25
        i32.le_u
-       if (result i32)
-        local.get $0
-        i32.const 55
-        i32.sub
-       else
-        local.get $0
-        i32.const 87
-        i32.sub
-        local.get $0
-        local.get $0
-        i32.const 97
-        i32.sub
-        i32.const 25
-        i32.le_u
-        select
-       end
+       select
       end
       local.tee $0
       i32.le_u

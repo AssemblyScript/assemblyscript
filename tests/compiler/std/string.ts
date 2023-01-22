@@ -116,6 +116,8 @@ assert(bool.parse("tru") == false);
 assert(bool.parse("True") == false);
 assert(bool.parse("false") == false);
 
+assert(u64.parse("XxAaBbCc19", 36) == <u64>3445381290647277);
+
 assert(parseInt("0") == 0);
 assert(parseInt("000") == 0);
 assert(parseInt("1") == 1);

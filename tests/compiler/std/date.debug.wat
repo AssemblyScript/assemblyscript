@@ -7614,35 +7614,23 @@
       local.set $code
      else
       local.get $code
-      i32.const 65
+      i32.const 32
+      i32.or
+      i32.const 97
       i32.sub
-      i32.const 90
-      i32.const 65
+      i32.const 122
+      i32.const 97
       i32.sub
       i32.le_u
       if
        local.get $code
-       i32.const 65
+       i32.const 32
+       i32.or
+       i32.const 97
        i32.const 10
        i32.sub
        i32.sub
        local.set $code
-      else
-       local.get $code
-       i32.const 97
-       i32.sub
-       i32.const 122
-       i32.const 97
-       i32.sub
-       i32.le_u
-       if
-        local.get $code
-        i32.const 97
-        i32.const 10
-        i32.sub
-        i32.sub
-        local.set $code
-       end
       end
      end
      local.get $code
