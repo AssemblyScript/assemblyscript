@@ -3,6 +3,10 @@
  * @license Apache-2.0
  */
 
+// helper globals used by mangleImportName
+let mangleImportName_moduleName: string = "";
+let mangleImportName_elementName: string = "";
+
 import {
   BuiltinNames,
   BuiltinContext,
@@ -10398,6 +10402,7 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
+
 function mangleImportName(
   element: Element,
   declaration: DeclarationStatement
@@ -10454,6 +10459,3 @@ function mangleImportName(
     );
   }
 }
-
-let mangleImportName_moduleName: string = "";
-let mangleImportName_elementName: string = "";
