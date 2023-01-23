@@ -46,6 +46,8 @@ assert(!isDefined(c));
 assert(isConstant(1));
 assert(!isConstant(b));
 
+var i: i32;
+
 // small integers
 var l: i8;
 l = add<i8>(1, 2); assert(l == 3);
@@ -62,9 +64,6 @@ v = rotl<u8>(<u8>0b10001111, 3); assert(v == 0b01111100);
 v = rotr<u8>(<u8>0b10101010, 1); assert(v == 0b01010101);
 
 // integers
-
-var i: i32;
-
 clz<i32>(1);
 ctz<i32>(1);
 popcnt<i32>(1);

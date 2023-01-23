@@ -1782,7 +1782,7 @@ export class Program extends DiagnosticEmitter {
     let global = new Global(
       name,
       this.nativeFile,
-      DecoratorFlags.None,
+      DecoratorFlags.Lazy,
       this.makeNativeVariableDeclaration(name, CommonFlags.Const | CommonFlags.Export)
     );
     global.setConstantIntegerValue(value, type);
@@ -1795,7 +1795,7 @@ export class Program extends DiagnosticEmitter {
     let global = new Global(
       name,
       this.nativeFile,
-      DecoratorFlags.None,
+      DecoratorFlags.Lazy,
       this.makeNativeVariableDeclaration(name, CommonFlags.Const | CommonFlags.Export)
     );
     global.setConstantFloatValue(value, type);
