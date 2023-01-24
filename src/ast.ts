@@ -834,6 +834,9 @@ export abstract class TypeNode extends Node {
     super(kind, range);
   }
 
+  /** Whether this type node is currently in the process of being resolved. */
+  currentlyResolving: bool = false;
+
   /** Tests if this type has a generic component matching one of the given type parameters. */
   hasGenericComponent(typeParameterNodes: TypeParameterNode[]): bool {
     if (this.kind == NodeKind.NamedType) {

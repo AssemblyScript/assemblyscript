@@ -3519,40 +3519,6 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  private getRecursiveDepthForTypeDeclaration(
-    identifierName: string,
-    type: TypeNode,
-    depth: i32 = 0
-  ): i32 {
-    switch (type.kind) {
-      case NodeKind.NamedType: {
-        let typeArguments = (<NamedTypeNode>type).typeArguments;
-        if (typeArguments) {
-          for (let i = 0, k = typeArguments.length; i < k; i++) {
-            let res = this.getRecursiveDepthForTypeDeclaration(identifierName, typeArguments[i], depth + 1);
-            if (res != -1) return res;
-          }
-        }
-        if ((<NamedTypeNode>type).name.identifier.text == identifierName) {
-          return depth;
-        }
-        break;
-      }
-      case NodeKind.FunctionType: {
-        let fnType = <FunctionTypeNode>type;
-        let res = this.getRecursiveDepthForTypeDeclaration(identifierName, fnType.returnType, depth + 1);
-        if (res != -1) return res;
-        let params = fnType.parameters;
-        for (let i = 0, k = params.length; i < k; i++) {
-          res = this.getRecursiveDepthForTypeDeclaration(identifierName, params[i].type, depth + 1);
-          if (res != -1) return res;
-        }
-        break;
-      }
-    }
-    return -1;
-  }
-
   parseTypeDeclaration(
     tn: Tokenizer,
     flags: CommonFlags,
@@ -3574,19 +3540,11 @@ export class Parser extends DiagnosticEmitter {
         tn.skip(Token.Bar);
         let type = this.parseType(tn);
         if (!type) return null;
-        let depth = this.getRecursiveDepthForTypeDeclaration(name.text, type);
-        if (depth >= 0) {
-          if (depth == 0) {
-            this.error(
-              DiagnosticCode.Type_alias_0_circularly_references_itself,
-              tn.range(), name.text
-            );
-          } else {
-            this.error(
-              DiagnosticCode.Not_implemented_0,
-              tn.range(), "Recursion in type aliases"
-            );
-          }
+        if (isCircularTypeAlias(name.text, type)) {
+          this.error(
+            DiagnosticCode.Type_alias_0_circularly_references_itself,
+            name.range, name.text
+          );
           return null;
         }
         let ret = Node.createTypeDeclaration(
@@ -4592,4 +4550,33 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.Exclamation: return Precedence.MemberAccess;
   }
   return Precedence.None;
+}
+
+/** Checks if the type alias of the given name and type is circular. */
+function isCircularTypeAlias(name: string, type: TypeNode): bool {
+  switch (type.kind) {
+    case NodeKind.NamedType: {
+      if ((<NamedTypeNode>type).name.identifier.text == name) {
+        return true;
+      }
+      let typeArguments = (<NamedTypeNode>type).typeArguments;
+      if (typeArguments) {
+        for (let i = 0, k = typeArguments.length; i < k; i++) {
+          if (isCircularTypeAlias(name, typeArguments[i])) return true;
+        }
+      }
+      break;
+    }
+    case NodeKind.FunctionType: {
+      let functionType = <FunctionTypeNode>type;
+      if (isCircularTypeAlias(name, functionType.returnType)) return true;
+      let parameters = functionType.parameters;
+      for (let i = 0, k = parameters.length; i < k; i++) {
+        if (isCircularTypeAlias(name, parameters[i].type)) return true;
+      }
+      break;
+    }
+    default: assert(false);
+  }
+  return false;
 }
