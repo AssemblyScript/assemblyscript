@@ -8693,7 +8693,14 @@ export class Compiler extends DiagnosticEmitter {
             (<FunctionDeclaration>baseCtor.declaration).clone()
           ),
           null,
-          baseCtor.signature,
+          Signature.create(
+            this.program,
+            baseCtor.signature.parameterTypes,
+            classInstance.type,
+            classInstance.type,
+            baseCtor.signature.requiredParameters,
+            baseCtor.signature.hasRest
+          ),
           contextualTypeArguments
         );
 
