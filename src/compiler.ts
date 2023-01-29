@@ -5,12 +5,14 @@
 
 import {
   BuiltinNames,
-  BuiltinContext,
-  builtins,
-  function_builtins,
+  BuiltinFunctionContext,
+  BuiltinVariableContext,
+  builtinFunctions,
+  builtinVariables_onAccess,
   compileVisitGlobals,
   compileVisitMembers,
-  compileRTTI
+  compileRTTI,
+  builtinVariables_onCompile
 } from "./builtins";
 
 import {
@@ -508,17 +510,6 @@ export class Compiler extends DiagnosticEmitter {
     assert(startFunctionInstance.internalName == BuiltinNames.start);
     let startFunctionBody = this.currentBody;
     assert(startFunctionBody.length == 0);
-
-    // add mutable data, heap and rtti offset dummies
-    if (options.isWasm64) {
-      module.addGlobal(BuiltinNames.data_end,  TypeRef.I64, true, module.i64(0));
-      module.addGlobal(BuiltinNames.heap_base, TypeRef.I64, true, module.i64(0));
-      module.addGlobal(BuiltinNames.rtti_base, TypeRef.I64, true, module.i64(0));
-    } else {
-      module.addGlobal(BuiltinNames.data_end,  TypeRef.I32, true, module.i32(0));
-      module.addGlobal(BuiltinNames.heap_base, TypeRef.I32, true, module.i32(0));
-      module.addGlobal(BuiltinNames.rtti_base, TypeRef.I32, true, module.i32(0));
-    }
 
     // compile entry file(s) while traversing reachable elements
     let files = program.filesByName;
@@ -1174,13 +1165,13 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // Handle ambient builtins like '__heap_base' that need to be resolved but are added explicitly
-    if (global.is(CommonFlags.Ambient) && global.hasDecorator(DecoratorFlags.Builtin)) {
+    // Handle builtins like '__heap_base' that need to be resolved but are added explicitly
+    if (global.hasDecorator(DecoratorFlags.Builtin)) {
       let internalName = global.internalName;
-      if (internalName == BuiltinNames.data_end) this.runtimeFeatures |= RuntimeFeatures.Data;
-      else if (internalName == BuiltinNames.stack_pointer) this.runtimeFeatures |= RuntimeFeatures.Stack;
-      else if (internalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.Heap;
-      else if (internalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.Rtti;
+      if (builtinVariables_onCompile.has(internalName)) {
+        let fn = assert(builtinVariables_onCompile.get(internalName));
+        fn(new BuiltinVariableContext(this, global));
+      }
       pendingElements.delete(global);
       return true;
     }
@@ -6114,7 +6105,7 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     let callee = expression.expression;
-    let ctx = new BuiltinContext(
+    let ctx = new BuiltinFunctionContext(
       this,
       prototype,
       typeArguments,
@@ -6126,25 +6117,20 @@ export class Compiler extends DiagnosticEmitter {
       expression,
       false
     );
-    // global builtins
-    let internalName = prototype.internalName;
-    if (builtins.has(internalName)) {
-      let fn = assert(builtins.get(internalName));
+    // handle builtins
+    let internalName: string;
+    if (prototype.is(CommonFlags.Instance)) {
+      // omit generic name components, e.g. in `Function<...>#call`
+      let parent = assert(prototype.getBoundClassOrInterface());
+      internalName = `${parent.prototype.internalName}#${prototype.name}`;
+    } else {
+      internalName = prototype.internalName;
+    }
+    if (builtinFunctions.has(internalName)) {
+      let fn = assert(builtinFunctions.get(internalName));
       return fn(ctx);
     }
-    // class builtins
-    let parent = prototype.parent;
-    if (parent.kind == ElementKind.Class) {
-      let classPrototype = (<Class>parent).prototype;
-      if (classPrototype == this.program.functionPrototype) {
-        let methodName = prototype.name;
-        if (function_builtins.has(methodName)) {
-          let fn = assert(function_builtins.get(methodName));
-          return fn(ctx);
-        }
-      }
-    }
-    assert(false);
+    assert(false, "missing builtin " + internalName);
     return this.module.unreachable();
   }
 
@@ -7361,6 +7347,9 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         assert(globalType != Type.void);
+        if (global.hasDecorator(DecoratorFlags.Builtin)) {
+          return this.compileIdentifierExpressionBuiltin(global, expression, contextualType);
+        }
         if (global.is(CommonFlags.Inlined)) {
           return this.compileInlineConstant(global, contextualType, constraints);
         }
@@ -7433,6 +7422,32 @@ export class Compiler extends DiagnosticEmitter {
       expression.range
     );
     return module.unreachable();
+  }
+
+  private compileIdentifierExpressionBuiltin(
+    element: VariableLikeElement,
+    expression: IdentifierExpression,
+    contextualType: Type
+  ): ExpressionRef {
+    if (element.hasDecorator(DecoratorFlags.Unsafe)) this.checkUnsafe(expression, element.identifierNode);
+    let internalName = element.internalName;
+    if (builtinVariables_onAccess.has(internalName)) {
+      let fn = assert(builtinVariables_onAccess.get(internalName));
+      return fn(new BuiltinVariableContext(
+        this,
+        element,
+        contextualType,
+        expression
+      ));
+    }
+    this.errorRelated(
+      DiagnosticCode.Not_implemented_0,
+      expression.range,
+      element.identifierNode.range,
+      `Builtin '${internalName}'`
+    );
+    this.currentType = element.type;
+    return this.module.unreachable();
   }
 
   private compileInstanceOfExpression(

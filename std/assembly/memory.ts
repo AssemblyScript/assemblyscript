@@ -28,6 +28,17 @@ export namespace memory {
     memmove(dst, src, n); // fallback if "bulk-memory" isn't enabled
   }
 
+  export namespace atomic {
+
+    // @ts-ignore: decorator
+    @unsafe @builtin
+    export declare function wait32(ptr: usize, expected: i32, timeout: i64): AtomicWaitResult;
+
+    // @ts-ignore: decorator
+    @unsafe @builtin
+    export declare function wait64(ptr: usize, expected: i64, timeout: i64): AtomicWaitResult;
+  }
+
   /** Initializes a memory segment. */
   // @ts-ignore: decorator
   @unsafe

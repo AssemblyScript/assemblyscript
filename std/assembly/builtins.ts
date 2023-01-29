@@ -452,10 +452,6 @@ export namespace i32 {
     @unsafe @builtin
     export declare function store(ptr: usize, value: i32, immOffset?: usize): void;
 
-    // @ts-ignore: decorator
-    @builtin
-    export declare function wait(ptr: usize, expected: i32, timeout: i64): AtomicWaitResult;
-
     export namespace rmw8 {
 
       // @ts-ignore: decorator
@@ -708,10 +704,6 @@ export namespace i64 {
     // @ts-ignore: decorator
     @unsafe @builtin
     export declare function store(ptr: usize, value: i64, immOffset?: usize): void;
-
-    // @ts-ignore: decorator
-    @builtin
-    export declare function wait(ptr: usize, expected: i64, timeout: i64): AtomicWaitResult;
 
     export namespace rmw8 {
 
