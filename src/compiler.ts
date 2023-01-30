@@ -1168,7 +1168,7 @@ export class Compiler extends DiagnosticEmitter {
     // Handle builtins like '__heap_base' that need to be resolved but are added explicitly
     if (global.hasDecorator(DecoratorFlags.Builtin)) {
       let internalName = global.internalName;
-      if (builtinVariables_onCompile.has(internalName)) {
+      if (builtinVariables_onCompile.has(internalName)) { // optional
         let fn = assert(builtinVariables_onCompile.get(internalName));
         fn(new BuiltinVariableContext(this, global));
       }
@@ -6117,7 +6117,6 @@ export class Compiler extends DiagnosticEmitter {
       expression,
       false
     );
-    // handle builtins
     let internalName: string;
     if (prototype.is(CommonFlags.Instance)) {
       // omit generic name components, e.g. in `Function<...>#call`
@@ -6126,12 +6125,9 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       internalName = prototype.internalName;
     }
-    if (builtinFunctions.has(internalName)) {
-      let fn = assert(builtinFunctions.get(internalName));
-      return fn(ctx);
-    }
-    assert(false, "missing builtin " + internalName);
-    return this.module.unreachable();
+    assert(builtinFunctions.has(internalName)); // checked earlier
+    let fn = assert(builtinFunctions.get(internalName));
+    return fn(ctx);
   }
 
   /**
@@ -7431,23 +7427,14 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     if (element.hasDecorator(DecoratorFlags.Unsafe)) this.checkUnsafe(expression, element.identifierNode);
     let internalName = element.internalName;
-    if (builtinVariables_onAccess.has(internalName)) {
-      let fn = assert(builtinVariables_onAccess.get(internalName));
-      return fn(new BuiltinVariableContext(
-        this,
-        element,
-        contextualType,
-        expression
-      ));
-    }
-    this.errorRelated(
-      DiagnosticCode.Not_implemented_0,
-      expression.range,
-      element.identifierNode.range,
-      `Builtin '${internalName}'`
-    );
-    this.currentType = element.type;
-    return this.module.unreachable();
+    assert(builtinVariables_onAccess.has(internalName)); // checked earlier
+    let fn = assert(builtinVariables_onAccess.get(internalName));
+    return fn(new BuiltinVariableContext(
+      this,
+      element,
+      contextualType,
+      expression
+    ));
   }
 
   private compileInstanceOfExpression(
