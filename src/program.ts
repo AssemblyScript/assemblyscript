@@ -2821,7 +2821,7 @@ export class Program extends DiagnosticEmitter {
       if (element.hasDecorator(DecoratorFlags.Builtin) && !builtinVariables_onAccess.has(element.internalName)) {
         this.error(
           DiagnosticCode.Not_implemented_0,
-          declaration.name.range, `Builtin '${element.internalName}'`
+          declaration.range, `Builtin '${element.internalName}'`
         );
       }
       if (!parent.add(name, element)) continue; // reports
