@@ -2092,9 +2092,11 @@ export class Module {
 
   removeGlobal(
     name: string
-  ): void {
+  ): bool {
     let cStr = this.allocStringCached(name);
+    if (!binaryen._BinaryenGetGlobal(this.ref, cStr)) return false;
     binaryen._BinaryenRemoveGlobal(this.ref, cStr);
+    return true;
   }
 
   // tags

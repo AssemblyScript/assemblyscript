@@ -149,26 +149,38 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
+    if (node.currentlyResolving) {
+      this.error(
+        DiagnosticCode.Not_implemented_0,
+        node.range, "Recursive types"
+      );
+      return null;
+    }
+    node.currentlyResolving = true;
+    let resolved: Type | null = null;
     switch (node.kind) {
       case NodeKind.NamedType: {
-        return this.resolveNamedType(
+        resolved = this.resolveNamedType(
           <NamedTypeNode>node,
           ctxElement,
           ctxTypes,
           reportMode
         );
+        break;
       }
       case NodeKind.FunctionType: {
-        return this.resolveFunctionType(
+        resolved = this.resolveFunctionType(
           <FunctionTypeNode>node,
           ctxElement,
           ctxTypes,
           reportMode
         );
+        break;
       }
       default: assert(false);
     }
-    return null;
+    node.currentlyResolving = false;
+    return resolved;
   }
 
   /** Resolves a {@link NamedTypeNode} to a concrete {@link Type}. */
@@ -2721,7 +2733,7 @@ export class Resolver extends DiagnosticEmitter {
     const declaration = node.declaration;
     const signature = declaration.signature;
     const body = declaration.body;
-    let functionType = this.resolveFunctionType(signature, ctxFlow.sourceFunction, ctxFlow.contextualTypeArguments, reportMode);
+    let functionType = this.resolveType(signature, ctxFlow.sourceFunction, ctxFlow.contextualTypeArguments, reportMode);
     if (
       functionType &&
       declaration.arrowKind != ArrowKind.None &&

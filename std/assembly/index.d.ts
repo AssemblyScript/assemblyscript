@@ -387,8 +387,6 @@ declare namespace i32 {
     export function store16(ptr: usize, value: i32, immOffset?: usize): void;
     /** Atomically stores a 32-bit integer value to memory. */
     export function store(ptr: usize, value: i32, immOffset?: usize): void;
-    /** Performs a wait operation on a 32-bit integer value in memory suspending this agent if the condition is met. */
-    export function wait(ptr: usize, expected: i32, timeout?: i64): AtomicWaitResult;
     /** Atomic 32-bit integer read-modify-write operations on 8-bit values. */
     export namespace rmw8 {
       /** Atomically adds an 8-bit unsigned integer value in memory. */
@@ -522,8 +520,6 @@ declare namespace i64 {
     export function store32(ptr: usize, value: i64, immOffset?: usize): void;
     /** Atomically stores a 64-bit integer value to memory. */
     export function store(ptr: usize, value: i64, immOffset?: usize): void;
-    /** Performs a wait operation on a 64-bit integer value in memory suspending this agent if the condition is met. */
-    export function wait(ptr: usize, expected: i64, timeout?: i64): AtomicWaitResult;
     /** Atomic 64-bit integer read-modify-write operations on 8-bit values. */
     export namespace rmw8 {
       /** Atomically adds an 8-bit unsigned integer value in memory. */
@@ -1530,6 +1526,13 @@ declare namespace memory {
   export function data(size: i32, align?: i32): usize;
   /** Gets a pointer to a pre-initialized static chunk of memory. Alignment defaults to the size of `T`. Arguments must be compile-time constants. */
   export function data<T>(values: T[], align?: i32): usize;
+
+  export namespace atomic {
+    /** Performs a wait operation on a 32-bit integer value in memory suspending this agent if the condition is met. */
+    export function wait32(ptr: usize, expected: i32, timeout?: i64): AtomicWaitResult;
+    /** Performs a wait operation on a 64-bit integer value in memory suspending this agent if the condition is met. */
+    export function wait64(ptr: usize, expected: i64, timeout?: i64): AtomicWaitResult;
+  }
 }
 
 /** Heap memory interface. */

@@ -3,11 +3,11 @@ import { strtol, strtod } from "./util/string";
 
 // @ts-ignore: decorator
 @builtin @inline
-export const NaN: f64 = 0 / 0;
+export const NaN: f64 = 0 / 0; // context-aware
 
 // @ts-ignore: decorator
 @builtin @inline
-export const Infinity: f64 = 1 / 0;
+export const Infinity: f64 = 1 / 0; // context-aware
 
 // @ts-ignore: decorator
 @builtin

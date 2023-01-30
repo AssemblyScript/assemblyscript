@@ -1,0 +1,17 @@
+name: Ask a question
+description: Wondering how to achieve something specific? Ask a question!
+labels: [question]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        To get off to a good start, make sure to:
+        * Consider asking questions on our [community Discord](https://discord.gg/assemblyscript) instead
+        * Search if there is an existing issue on the topic
+  - type: textarea
+    id: description
+    attributes:
+      label: Question
+      description: What would you like to know?
+    validations:
+      required: true

@@ -147,7 +147,9 @@ import {
 } from "./parser";
 
 import {
-  BuiltinNames
+  BuiltinNames,
+  builtinFunctions,
+  builtinVariables_onAccess
 } from "./builtins";
 
 // Memory manager constants
@@ -474,8 +476,6 @@ export class Program extends DiagnosticEmitter {
   managedClasses: Map<i32,Class> = new Map();
   /** A set of unique function signatures contained in the program, by id. */
   uniqueSignatures: Map<string, Signature> = new Map<string, Signature>();
-  /** Module exports. */
-  moduleExports: Map<string,Element> = new Map();
   /** Module imports. */
   moduleImports: Map<string,Map<string,Element>> = new Map();
 
@@ -1915,16 +1915,7 @@ export class Program extends DiagnosticEmitter {
         let kind = DecoratorKind.fromNode(decorator.name);
         let flag = DecoratorFlags.fromKind(kind);
         if (flag) {
-          if (flag == DecoratorFlags.Builtin) {
-            if (!(acceptedFlags & flag) && !decorator.range.source.isLibrary) {
-              this.error(
-                DiagnosticCode.Decorator_0_is_not_valid_here,
-                decorator.range, decorator.name.range.toString()
-              );
-            } else {
-              flags |= flag;
-            }
-          } else if (!(acceptedFlags & flag)) {
+          if (!(acceptedFlags & flag)) {
             this.error(
               DiagnosticCode.Decorator_0_is_not_valid_here,
               decorator.range, decorator.name.range.toString()
@@ -2154,12 +2145,21 @@ export class Program extends DiagnosticEmitter {
     if (parent.is(CommonFlags.Ambient)) {
       acceptedFlags |= DecoratorFlags.External;
     }
+    if (declaration.range.source.isLibrary) {
+      acceptedFlags |= DecoratorFlags.Builtin;
+    }
     let element = new FunctionPrototype(
       name,
       parent,
       declaration,
       this.checkDecorators(declaration.decorators, acceptedFlags)
     );
+    if (element.hasDecorator(DecoratorFlags.Builtin) && !builtinFunctions.has(element.internalName)) {
+      this.error(
+        DiagnosticCode.Not_implemented_0,
+        declaration.range, `Builtin '${element.internalName}'`
+      );
+    }
     if (isStatic) { // global function
       assert(declaration.name.kind != NodeKind.Constructor);
       if (!parent.add(name, element)) return null;
@@ -2579,7 +2579,7 @@ export class Program extends DiagnosticEmitter {
     parent: Element
   ): FunctionPrototype | null {
     let name = declaration.name.text;
-    let validDecorators = DecoratorFlags.Unsafe | DecoratorFlags.Builtin;
+    let validDecorators = DecoratorFlags.Unsafe;
     if (declaration.is(CommonFlags.Ambient)) {
       validDecorators |= DecoratorFlags.External | DecoratorFlags.ExternalJs;
     } else {
@@ -2593,12 +2593,21 @@ export class Program extends DiagnosticEmitter {
         validDecorators |= DecoratorFlags.Global;
       }
     }
+    if (declaration.range.source.isLibrary) {
+      validDecorators |= DecoratorFlags.Builtin;
+    }
     let element = new FunctionPrototype(
       name,
       parent,
       declaration,
       this.checkDecorators(declaration.decorators, validDecorators)
     );
+    if (element.hasDecorator(DecoratorFlags.Builtin) && !builtinFunctions.has(element.internalName)) {
+      this.error(
+        DiagnosticCode.Not_implemented_0,
+        declaration.range, `Builtin '${element.internalName}'`
+      );
+    }
     if (!parent.add(name, element)) return null;
     return element;
   }
@@ -2800,12 +2809,21 @@ export class Program extends DiagnosticEmitter {
       if (declaration.is(CommonFlags.Const)) {
         acceptedFlags |= DecoratorFlags.Inline;
       }
+      if (declaration.range.source.isLibrary) {
+        acceptedFlags |= DecoratorFlags.Builtin;
+      }
       let element = new Global(
         name,
         parent,
         this.checkDecorators(declaration.decorators, acceptedFlags),
         declaration
       );
+      if (element.hasDecorator(DecoratorFlags.Builtin) && !builtinVariables_onAccess.has(element.internalName)) {
+        this.error(
+          DiagnosticCode.Not_implemented_0,
+          declaration.range, `Builtin '${element.internalName}'`
+        );
+      }
       if (!parent.add(name, element)) continue; // reports
     }
   }

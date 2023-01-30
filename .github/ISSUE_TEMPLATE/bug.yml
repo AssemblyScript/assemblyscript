@@ -1,0 +1,33 @@
+name: Bug Report
+description: Encountered an issue? File a bug report!
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! To get off to a good start, make sure to:
+        * Search if there is an existing issue on the topic
+        * Get familiar with the [contributing guidelines](https://github.com/AssemblyScript/assemblyscript/blob/main/CONTRIBUTING.md)
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+      description: What happened? What was the expected behavior?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: |
+        How can the issue be reproduced? A minimum example is best. Tip: Use [code blocks](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks).
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: AssemblyScript version
+      description: "What's the AssemblyScript version used?"
+      placeholder: "vX.Y.Z"
+    validations:
+      required: true
