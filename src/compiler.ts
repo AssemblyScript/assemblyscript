@@ -9,10 +9,10 @@ import {
   BuiltinVariableContext,
   builtinFunctions,
   builtinVariables_onAccess,
+  builtinVariables_onCompile,
   compileVisitGlobals,
   compileVisitMembers,
-  compileRTTI,
-  builtinVariables_onCompile
+  compileRTTI
 } from "./builtins";
 
 import {

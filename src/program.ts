@@ -147,8 +147,8 @@ import {
 } from "./parser";
 
 import {
-  builtinFunctions,
   BuiltinNames,
+  builtinFunctions,
   builtinVariables_onAccess
 } from "./builtins";
 
