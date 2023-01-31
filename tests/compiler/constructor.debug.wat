@@ -36,9 +36,9 @@
  (global $constructor/ctorConditionallyReturnsThis (mut i32) (i32.const 0))
  (global $constructor/ctorFieldInitOrder (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 464))
- (global $~lib/memory/__data_end i32 (i32.const 528))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33296))
- (global $~lib/memory/__heap_base i32 (i32.const 33296))
+ (global $~lib/memory/__data_end i32 (i32.const 532))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33300))
+ (global $~lib/memory/__heap_base i32 (i32.const 33300))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -49,7 +49,7 @@
  (data (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 412) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00c\00o\00n\00s\00t\00r\00u\00c\00t\00o\00r\00.\00t\00s\00")
- (data (i32.const 464) "\0f\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00")
+ (data (i32.const 464) "\10\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -2276,6 +2276,24 @@
   i32.const 0
   return
  )
+ (func $constructor/CtorFieldInitWithoutConstructor#set:a (param $this i32) (param $a i32)
+  local.get $this
+  local.get $a
+  i32.store $0
+ )
+ (func $constructor/CtorFieldInitWithoutConstructor#get:a (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $constructor/CtorFieldInitWithoutConstructor#set:b (param $this i32) (param $b i32)
+  local.get $this
+  local.get $b
+  i32.store $0 offset=4
+ )
+ (func $constructor/CtorFieldInitWithoutConstructor#get:b (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
  (func $constructor/CtorFieldInitOrder#get:a (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
@@ -2409,35 +2427,38 @@
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
    block $constructor/CtorFieldInitOrder
-    block $constructor/CtorConditionallyReturnsThis
-     block $constructor/CtorConditionallyReturns
-      block $constructor/CtorReturns
-       block $constructor/JustFieldNoInit
-        block $constructor/JustFieldInit
-         block $constructor/None
-          block $constructor/EmptyCtorWithFieldAccess
-           block $constructor/EmptyCtorWithFieldNoInit
-            block $constructor/EmptyCtorWithFieldInit
-             block $constructor/EmptyCtor
-              block $~lib/arraybuffer/ArrayBufferView
-               block $~lib/string/String
-                block $~lib/arraybuffer/ArrayBuffer
-                 block $~lib/object/Object
-                  local.get $0
-                  i32.const 8
-                  i32.sub
-                  i32.load $0
-                  br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $constructor/EmptyCtor $constructor/EmptyCtorWithFieldInit $constructor/EmptyCtorWithFieldNoInit $constructor/EmptyCtorWithFieldAccess $constructor/None $constructor/JustFieldInit $constructor/JustFieldNoInit $constructor/CtorReturns $constructor/CtorConditionallyReturns $constructor/CtorConditionallyReturnsThis $constructor/CtorFieldInitOrder $invalid
+    block $constructor/CtorFieldInitWithoutConstructor
+     block $constructor/CtorConditionallyReturnsThis
+      block $constructor/CtorConditionallyReturns
+       block $constructor/CtorReturns
+        block $constructor/JustFieldNoInit
+         block $constructor/JustFieldInit
+          block $constructor/None
+           block $constructor/EmptyCtorWithFieldAccess
+            block $constructor/EmptyCtorWithFieldNoInit
+             block $constructor/EmptyCtorWithFieldInit
+              block $constructor/EmptyCtor
+               block $~lib/arraybuffer/ArrayBufferView
+                block $~lib/string/String
+                 block $~lib/arraybuffer/ArrayBuffer
+                  block $~lib/object/Object
+                   local.get $0
+                   i32.const 8
+                   i32.sub
+                   i32.load $0
+                   br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $constructor/EmptyCtor $constructor/EmptyCtorWithFieldInit $constructor/EmptyCtorWithFieldNoInit $constructor/EmptyCtorWithFieldAccess $constructor/None $constructor/JustFieldInit $constructor/JustFieldNoInit $constructor/CtorReturns $constructor/CtorConditionallyReturns $constructor/CtorConditionallyReturnsThis $constructor/CtorFieldInitWithoutConstructor $constructor/CtorFieldInitOrder $invalid
+                  end
+                  return
                  end
                  return
                 end
                 return
                end
+               local.get $0
+               local.get $1
+               call $~lib/arraybuffer/ArrayBufferView~visit
                return
               end
-              local.get $0
-              local.get $1
-              call $~lib/arraybuffer/ArrayBufferView~visit
               return
              end
              return
@@ -2726,6 +2747,69 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
+ (func $constructor/CtorFieldInitWithoutConstructor#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.const 14
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  i32.const 10
+  call $constructor/CtorFieldInitWithoutConstructor#set:a
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=8
+  local.get $1
+  call $constructor/CtorFieldInitWithoutConstructor#get:a
+  call $constructor/CtorFieldInitWithoutConstructor#set:b
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
  (func $constructor/CtorFieldInitOrder#constructor (param $this i32) (param $a i32) (param $b i32) (result i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2744,7 +2828,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 12
-   i32.const 14
+   i32.const 15
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store $0
@@ -2794,7 +2878,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 93
+   i32.const 101
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -2812,7 +2896,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 94
+   i32.const 102
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -2824,7 +2908,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 95
+   i32.const 103
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -2842,7 +2926,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 96
+   i32.const 104
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -2860,7 +2944,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 97
+   i32.const 105
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -2931,6 +3015,44 @@
   call $constructor/CtorConditionallyReturnsThis#constructor
   global.set $constructor/ctorConditionallyReturnsThis
   i32.const 0
+  call $constructor/CtorFieldInitWithoutConstructor#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $constructor/CtorFieldInitWithoutConstructor#get:a
+  i32.const 10
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 94
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $constructor/CtorFieldInitWithoutConstructor#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $constructor/CtorFieldInitWithoutConstructor#get:b
+  i32.const 10
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 95
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
   i32.const 1
   i32.const 2
   call $constructor/CtorFieldInitOrder#constructor
@@ -2948,7 +3070,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 102
+   i32.const 110
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2966,7 +3088,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 103
+   i32.const 111
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2984,7 +3106,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 104
+   i32.const 112
    i32.const 1
    call $~lib/builtins/abort
    unreachable
