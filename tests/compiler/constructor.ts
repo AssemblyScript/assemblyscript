@@ -87,12 +87,12 @@ class CtorConditionallyReturnsThis {
 
 var ctorConditionallyReturnsThis = new CtorConditionallyReturnsThis();
 
-class CtorFieldInitWithoutConstrucotr {
+class CtorFieldInitWithoutConstructor {
   a: i32 = 10;
   b: i32 = this.a;
 }
-assert(new CtorFieldInitWithoutConstrucotr().a == 10);
-assert(new CtorFieldInitWithoutConstrucotr().b == 10);
+assert(new CtorFieldInitWithoutConstructor().a == 10);
+assert(new CtorFieldInitWithoutConstructor().b == 10);
 
 
 class CtorFieldInitOrder {

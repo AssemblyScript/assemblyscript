@@ -1567,7 +1567,7 @@
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid
    block $constructor/CtorFieldInitOrder
-    block $constructor/CtorFieldInitWithoutConstrucotr
+    block $constructor/CtorFieldInitWithoutConstructor
      block $constructor/CtorConditionallyReturnsThis
       block $constructor/CtorConditionallyReturns
        block $constructor/CtorReturns
@@ -1586,7 +1586,7 @@
                    i32.const 8
                    i32.sub
                    i32.load $0
-                   br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $constructor/EmptyCtor $constructor/EmptyCtorWithFieldInit $constructor/EmptyCtorWithFieldNoInit $constructor/EmptyCtorWithFieldAccess $constructor/None $constructor/JustFieldInit $constructor/JustFieldNoInit $constructor/CtorReturns $constructor/CtorConditionallyReturns $constructor/CtorConditionallyReturnsThis $constructor/CtorFieldInitWithoutConstrucotr $constructor/CtorFieldInitOrder $invalid
+                   br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $constructor/EmptyCtor $constructor/EmptyCtorWithFieldInit $constructor/EmptyCtorWithFieldNoInit $constructor/EmptyCtorWithFieldAccess $constructor/None $constructor/JustFieldInit $constructor/JustFieldNoInit $constructor/CtorReturns $constructor/CtorConditionallyReturns $constructor/CtorConditionallyReturnsThis $constructor/CtorFieldInitWithoutConstructor $constructor/CtorFieldInitOrder $invalid
                   end
                   return
                  end
@@ -1957,7 +1957,7 @@
    global.set $~lib/memory/__stack_pointer
    local.get $0
    global.set $constructor/ctorConditionallyReturnsThis
-   call $constructor/CtorFieldInitWithoutConstrucotr#constructor
+   call $constructor/CtorFieldInitWithoutConstructor#constructor
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -1974,7 +1974,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   call $constructor/CtorFieldInitWithoutConstrucotr#constructor
+   call $constructor/CtorFieldInitWithoutConstructor#constructor
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -2155,7 +2155,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $constructor/CtorFieldInitWithoutConstrucotr#constructor (result i32)
+ (func $constructor/CtorFieldInitWithoutConstructor#constructor (result i32)
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer

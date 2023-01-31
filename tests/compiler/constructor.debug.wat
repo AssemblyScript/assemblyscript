@@ -2276,21 +2276,21 @@
   i32.const 0
   return
  )
- (func $constructor/CtorFieldInitWithoutConstrucotr#set:a (param $this i32) (param $a i32)
+ (func $constructor/CtorFieldInitWithoutConstructor#set:a (param $this i32) (param $a i32)
   local.get $this
   local.get $a
   i32.store $0
  )
- (func $constructor/CtorFieldInitWithoutConstrucotr#get:a (param $this i32) (result i32)
+ (func $constructor/CtorFieldInitWithoutConstructor#get:a (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $constructor/CtorFieldInitWithoutConstrucotr#set:b (param $this i32) (param $b i32)
+ (func $constructor/CtorFieldInitWithoutConstructor#set:b (param $this i32) (param $b i32)
   local.get $this
   local.get $b
   i32.store $0 offset=4
  )
- (func $constructor/CtorFieldInitWithoutConstrucotr#get:b (param $this i32) (result i32)
+ (func $constructor/CtorFieldInitWithoutConstructor#get:b (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
@@ -2427,7 +2427,7 @@
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
    block $constructor/CtorFieldInitOrder
-    block $constructor/CtorFieldInitWithoutConstrucotr
+    block $constructor/CtorFieldInitWithoutConstructor
      block $constructor/CtorConditionallyReturnsThis
       block $constructor/CtorConditionallyReturns
        block $constructor/CtorReturns
@@ -2446,7 +2446,7 @@
                    i32.const 8
                    i32.sub
                    i32.load $0
-                   br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $constructor/EmptyCtor $constructor/EmptyCtorWithFieldInit $constructor/EmptyCtorWithFieldNoInit $constructor/EmptyCtorWithFieldAccess $constructor/None $constructor/JustFieldInit $constructor/JustFieldNoInit $constructor/CtorReturns $constructor/CtorConditionallyReturns $constructor/CtorConditionallyReturnsThis $constructor/CtorFieldInitWithoutConstrucotr $constructor/CtorFieldInitOrder $invalid
+                   br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $constructor/EmptyCtor $constructor/EmptyCtorWithFieldInit $constructor/EmptyCtorWithFieldNoInit $constructor/EmptyCtorWithFieldAccess $constructor/None $constructor/JustFieldInit $constructor/JustFieldNoInit $constructor/CtorReturns $constructor/CtorConditionallyReturns $constructor/CtorConditionallyReturnsThis $constructor/CtorFieldInitWithoutConstructor $constructor/CtorFieldInitOrder $invalid
                   end
                   return
                  end
@@ -2747,7 +2747,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $constructor/CtorFieldInitWithoutConstrucotr#constructor (param $this i32) (result i32)
+ (func $constructor/CtorFieldInitWithoutConstructor#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -2787,7 +2787,7 @@
   i32.store $0 offset=4
   local.get $1
   i32.const 10
-  call $constructor/CtorFieldInitWithoutConstrucotr#set:a
+  call $constructor/CtorFieldInitWithoutConstructor#set:a
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -2800,8 +2800,8 @@
   local.get $1
   i32.store $0 offset=8
   local.get $1
-  call $constructor/CtorFieldInitWithoutConstrucotr#get:a
-  call $constructor/CtorFieldInitWithoutConstrucotr#set:b
+  call $constructor/CtorFieldInitWithoutConstructor#get:a
+  call $constructor/CtorFieldInitWithoutConstructor#set:b
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3015,13 +3015,13 @@
   call $constructor/CtorConditionallyReturnsThis#constructor
   global.set $constructor/ctorConditionallyReturnsThis
   i32.const 0
-  call $constructor/CtorFieldInitWithoutConstrucotr#constructor
+  call $constructor/CtorFieldInitWithoutConstructor#constructor
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store $0
   local.get $0
-  call $constructor/CtorFieldInitWithoutConstrucotr#get:a
+  call $constructor/CtorFieldInitWithoutConstructor#get:a
   i32.const 10
   i32.eq
   i32.eqz
@@ -3034,13 +3034,13 @@
    unreachable
   end
   i32.const 0
-  call $constructor/CtorFieldInitWithoutConstrucotr#constructor
+  call $constructor/CtorFieldInitWithoutConstructor#constructor
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store $0
   local.get $0
-  call $constructor/CtorFieldInitWithoutConstrucotr#get:b
+  call $constructor/CtorFieldInitWithoutConstructor#get:b
   i32.const 10
   i32.eq
   i32.eqz
