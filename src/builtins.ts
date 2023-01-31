@@ -787,6 +787,9 @@ export const builtinVariables_onAccess = new Map<string, (ctx: BuiltinVariableCo
 
 // === Static type evaluation =================================================================
 
+// helper global used by checkConstantType
+let checkConstantType_expr: ExpressionRef = 0;
+
 // isBoolean<T!>() / isBoolean<T?>(value: T) -> bool
 function builtin_isBoolean(ctx: BuiltinFunctionContext): ExpressionRef {
   let compiler = ctx.compiler;
@@ -10619,8 +10622,6 @@ export function compileRTTI(compiler: Compiler): void {
 }
 
 // Helpers
-
-let checkConstantType_expr: ExpressionRef = 0;
 
 /** Checks the constant type of a type argument *or* expression. */
 function checkConstantType(ctx: BuiltinFunctionContext): Type | null {

@@ -3,6 +3,10 @@
  * @license Apache-2.0
  */
 
+// helper globals used by mangleImportName
+let mangleImportName_moduleName: string = "";
+let mangleImportName_elementName: string = "";
+
 import {
   BuiltinNames,
   BuiltinFunctionContext,
@@ -1096,6 +1100,20 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   // === Globals ==================================================================================
+
+  /** Tries to compile a global variable lazily. */
+  compileGlobalLazy(global: Global, reportNode: Node): bool {
+    if (global.is(CommonFlags.Compiled)) return !global.is(CommonFlags.Errored);
+    if (global.hasAnyDecorator(DecoratorFlags.Lazy | DecoratorFlags.Builtin) || global.is(CommonFlags.Ambient)) {
+      return this.compileGlobal(global); // compile now
+    }
+    // Otherwise the global is used before its initializer executes
+    this.errorRelated(
+      DiagnosticCode.Variable_0_used_before_its_declaration,
+      reportNode.range, global.identifierNode.range, global.internalName
+    );
+    return false;
+  }
 
   /** Compiles a global variable. */
   compileGlobal(global: Global): bool {
@@ -5548,8 +5566,9 @@ export class Compiler extends DiagnosticEmitter {
     let targetType: Type;
     switch (target.kind) {
       case ElementKind.Global: {
-        // not yet compiled if a static field compiled as a global
-        if (!this.compileGlobal(<Global>target)) return this.module.unreachable(); // reports
+        if (!this.compileGlobalLazy(<Global>target, expression)) {
+          return this.module.unreachable();
+        }
         // fall-through
       }
       case ElementKind.Local: {
@@ -5691,7 +5710,9 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.Global: {
         let global = <Global>target;
-        if (!this.compileGlobal(global)) return module.unreachable();
+        if (!this.compileGlobalLazy(global, valueExpression)) {
+          return module.unreachable();
+        }
         if (target.isAny(CommonFlags.Const | CommonFlags.Readonly)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
@@ -6766,7 +6787,7 @@ export class Compiler extends DiagnosticEmitter {
           let resolved = this.resolver.lookupExpression(initializer, instance.flow, parameterTypes[i], ReportMode.Swallow);
           if (resolved && resolved.kind == ElementKind.Global) {
             let global = <Global>resolved;
-            if (this.compileGlobal(global) && global.is(CommonFlags.Inlined)) {
+            if (this.compileGlobalLazy(global, initializer) && global.is(CommonFlags.Inlined)) {
               operands.push(
                 this.compileInlineConstant(global, parameterTypes[i], Constraints.ConvImplicit)
               );
@@ -7329,7 +7350,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.Global: {
         let global = <Global>target;
-        if (!this.compileGlobal(global)) { // reports; not yet compiled if a static field
+        if (!this.compileGlobalLazy(global, expression)) {
           return module.unreachable();
         }
         let globalType = global.type;
@@ -8895,7 +8916,9 @@ export class Compiler extends DiagnosticEmitter {
     switch (target.kind) {
       case ElementKind.Global: { // static field
         let global = <Global>target;
-        if (!this.compileGlobal(global)) return module.unreachable(); // reports
+        if (!this.compileGlobalLazy(global, expression)) {
+          return module.unreachable();
+        }
         let globalType = global.type;
         assert(globalType != Type.void);
         if (this.pendingElements.has(global)) {
@@ -10388,6 +10411,7 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
+
 function mangleImportName(
   element: Element,
   declaration: DeclarationStatement
@@ -10444,6 +10468,3 @@ function mangleImportName(
     );
   }
 }
-
-let mangleImportName_moduleName: string = "";
-let mangleImportName_elementName: string = "";
