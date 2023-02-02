@@ -114,6 +114,11 @@ export const enum ReportMode {
   Swallow
 }
 
+const enum InferStatus {
+  None = 1,
+  Done,
+}
+
 /** Provides tools to resolve types and expressions. */
 export class Resolver extends DiagnosticEmitter {
 
@@ -727,11 +732,32 @@ export class Resolver extends DiagnosticEmitter {
       // fill up contextual types with auto for each generic component
       let typeParameterNodes = assert(prototype.typeParameterNodes);
       let numTypeParameters = typeParameterNodes.length;
-      let typeParameterNames = new Set<string>();
+      let typeParameterStatus = new Map<string, InferStatus>();
       for (let i = 0; i < numTypeParameters; ++i) {
         let name = typeParameterNodes[i].name.text;
-        contextualTypeArguments.set(name, Type.auto);
-        typeParameterNames.add(name);
+
+        let type = Type.auto;
+        let extendType = typeParameterNodes[i].extendsType;
+        if (extendType) {
+          let parent = prototype.parent;
+          let defaultTypeContextualTypeArguments: Map<string, Type> | null = null;
+          if (parent.kind == ElementKind.Class) {
+            defaultTypeContextualTypeArguments = (<Class>parent).contextualTypeArguments;
+          } else if (parent.kind == ElementKind.Function) {
+            defaultTypeContextualTypeArguments = (<Function>parent).contextualTypeArguments;
+          }
+          let resolvedExtendType = this.resolveType(
+            extendType,
+            prototype,
+            defaultTypeContextualTypeArguments,
+            reportMode
+          );
+          if (resolvedExtendType && resolvedExtendType.isReference) {
+            type = resolvedExtendType;
+          }
+        }
+        contextualTypeArguments.set(name, type);
+        typeParameterStatus.set(name, InferStatus.None);
       }
 
       let parameterNodes = prototype.functionTypeNode.parameters;
@@ -760,14 +786,15 @@ export class Resolver extends DiagnosticEmitter {
         }
         let typeNode = parameterNodes[i].type;
         if (typeNode.hasGenericComponent(typeParameterNodes)) {
-          let type = this.resolveExpression(argumentExpression, ctxFlow, Type.auto, ReportMode.Swallow);
+          let targetType = this.resolveType(typeNode, prototype, contextualTypeArguments, ReportMode.Swallow);
+          let type = this.resolveExpression(argumentExpression, ctxFlow, targetType == null ? Type.auto : targetType, ReportMode.Swallow);
           if (type) {
             this.propagateInferredGenericTypes(
               typeNode,
               type,
               prototype,
               contextualTypeArguments,
-              typeParameterNames
+              typeParameterStatus
             );
           }
         }
@@ -780,7 +807,7 @@ export class Resolver extends DiagnosticEmitter {
         let name = typeParameterNode.name.text;
         if (contextualTypeArguments.has(name)) {
           let inferredType = assert(contextualTypeArguments.get(name));
-          if (inferredType != Type.auto) {
+          if (inferredType != Type.auto && assert(typeParameterStatus.get(name)) == InferStatus.Done) {
             resolvedTypeArguments[i] = inferredType;
             continue;
           }
@@ -838,7 +865,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
     ctxTypes: Map<string,Type>,
     /** The names of the type parameters being inferred. */
-    typeParameterNames: Set<string>
+    typeParameterStatus: Map<string, InferStatus>
   ): void {
     if (node.kind == NodeKind.NamedType) {
       let namedTypeNode = <NamedTypeNode>node;
@@ -857,7 +884,7 @@ export class Resolver extends DiagnosticEmitter {
                   typeArguments[i],
                   ctxElement,
                   ctxTypes,
-                  typeParameterNames
+                  typeParameterStatus
                 );
               }
               return;
@@ -868,10 +895,23 @@ export class Resolver extends DiagnosticEmitter {
         let name = namedTypeNode.name.identifier.text;
         if (ctxTypes.has(name)) {
           let currentType = assert(ctxTypes.get(name));
-          if (
-            currentType == Type.auto ||
-            (typeParameterNames.has(name) && currentType.isAssignableTo(type))
-          ) ctxTypes.set(name, type);
+          if (currentType == Type.auto) {
+            ctxTypes.set(name, type);
+            typeParameterStatus.set(name, InferStatus.Done);
+          } else {
+            if (typeParameterStatus.has(name)) {
+              if (assert(typeParameterStatus.get(name)) == InferStatus.None) {
+                // extendType
+                if (type.isAssignableTo(currentType)) {
+                  ctxTypes.set(name, type);
+                }
+              } else {
+                if (currentType.isAssignableTo(type)) {
+                  ctxTypes.set(name, type);
+                }
+              }
+            }
+          }
         }
       }
     } else if (node.kind == NodeKind.FunctionType) { // foo<T>(bar: (baz: T) => i32))
@@ -886,7 +926,7 @@ export class Resolver extends DiagnosticEmitter {
             parameterTypes[i],
             ctxElement,
             ctxTypes,
-            typeParameterNames
+            typeParameterStatus
           );
         }
         let returnType = signatureReference.returnType;
@@ -896,7 +936,7 @@ export class Resolver extends DiagnosticEmitter {
             returnType,
             ctxElement,
             ctxTypes,
-            typeParameterNames
+            typeParameterStatus
           );
         }
         let thisType = signatureReference.thisType;
@@ -907,7 +947,7 @@ export class Resolver extends DiagnosticEmitter {
             thisType,
             ctxElement,
             ctxTypes,
-            typeParameterNames
+            typeParameterStatus
           );
         }
         return;

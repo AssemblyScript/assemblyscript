@@ -74,3 +74,11 @@ assert(inferDefault({ x: 2 }) instanceof Ref);
 export function inferAssert(v: Ref | null): void {
   assert(v).x;
 }
+
+class InferByExtendType<T> {
+  foo<U extends Array<T> = Array<T>>(a: U): U {
+    return a;
+  }
+}
+const r = new InferByExtendType<string>().foo([]); // `r` should infer as Array<string> but it deduced as `Array<usize>` instead
+assert(r instanceof Array<string>);
