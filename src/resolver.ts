@@ -739,21 +739,30 @@ export class Resolver extends DiagnosticEmitter {
         let type = Type.auto;
         let extendType = typeParameterNodes[i].extendsType;
         if (extendType) {
-          let parent = prototype.parent;
-          let defaultTypeContextualTypeArguments: Map<string, Type> | null = null;
-          if (parent.kind == ElementKind.Class) {
-            defaultTypeContextualTypeArguments = (<Class>parent).contextualTypeArguments;
-          } else if (parent.kind == ElementKind.Function) {
-            defaultTypeContextualTypeArguments = (<Function>parent).contextualTypeArguments;
-          }
-          let resolvedExtendType = this.resolveType(
-            extendType,
-            prototype,
-            defaultTypeContextualTypeArguments,
-            reportMode
-          );
-          if (resolvedExtendType && resolvedExtendType.isReference) {
-            type = resolvedExtendType;
+          const extendTypeName = extendType.name.identifier.text;
+          if (
+            !extendTypeName.startsWith("ArrayLike") &&
+            extendTypeName != "number"
+          ) {
+            let parent = prototype.parent;
+            let extendTypeContextualTypeArguments: Map<string, Type> | null =
+              null;
+            if (parent.kind == ElementKind.Class) {
+              extendTypeContextualTypeArguments = (<Class>parent)
+                .contextualTypeArguments;
+            } else if (parent.kind == ElementKind.Function) {
+              extendTypeContextualTypeArguments = (<Function>parent)
+                .contextualTypeArguments;
+            }
+            let resolvedExtendType = this.resolveType(
+              extendType,
+              prototype,
+              extendTypeContextualTypeArguments,
+              reportMode
+            );
+            if (resolvedExtendType && resolvedExtendType.isReference) {
+              type = resolvedExtendType;
+            }
           }
         }
         contextualTypeArguments.set(name, type);
