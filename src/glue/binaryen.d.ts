@@ -660,7 +660,7 @@ export declare function _BinaryenArrayCopySetSrcIndex(expr: ExpressionRef, srcIn
 export declare function _BinaryenArrayCopyGetLength(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenArrayCopySetLength(expr: ExpressionRef, lengthExpr: ExpressionRef): void;
 
-export declare function _BinaryenStringNew(module: ModuleRef, op: Op, ptr: ExpressionRef, length: ExpressionRef, start: ExpressionRef, end: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringNew(module: ModuleRef, op: Op, ptr: ExpressionRef, length: ExpressionRef, start: ExpressionRef, end: ExpressionRef, isTry: bool): ExpressionRef;
 export declare function _BinaryenStringNewGetOp(expr: ExpressionRef): Op;
 export declare function _BinaryenStringNewSetOp(expr: ExpressionRef, op: Op): void;
 export declare function _BinaryenStringNewGetPtr(expr: ExpressionRef): ExpressionRef;
@@ -671,6 +671,8 @@ export declare function _BinaryenStringNewGetStart(expr: ExpressionRef): Express
 export declare function _BinaryenStringNewSetStart(expr: ExpressionRef, startExpr: ExpressionRef): void;
 export declare function _BinaryenStringNewGetEnd(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenStringNewSetEnd(expr: ExpressionRef, endExpr: ExpressionRef): void;
+export declare function _BinaryenStringNewIsTry(expr: ExpressionRef): bool;
+export declare function _BinaryenStringNewSetTry(expr: ExpressionRef, isTry: bool): void;
 
 export declare function _BinaryenStringConst(module: ExpressionRef, name: StringRef): ExpressionRef;
 export declare function _BinaryenStringConstGetString(expr: ExpressionRef): StringRef;
@@ -698,7 +700,9 @@ export declare function _BinaryenStringConcatSetLeft(expr: ExpressionRef, leftEx
 export declare function _BinaryenStringConcatGetRight(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenStringConcatSetRight(expr: ExpressionRef, rightExpr: ExpressionRef): void;
 
-export declare function _BinaryenStringEq(module: ExpressionRef, left: ExpressionRef, right: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringEq(module: ExpressionRef, op: Op, left: ExpressionRef, right: ExpressionRef): ExpressionRef;
+export declare function _BinaryenStringEqGetOp(expr: ExpressionRef): Op;
+export declare function _BinaryenStringEqSetOp(expr: ExpressionRef, op: Op): void;
 export declare function _BinaryenStringEqGetLeft(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenStringEqSetLeft(expr: ExpressionRef, leftExpr: ExpressionRef): void;
 export declare function _BinaryenStringEqGetRight(expr: ExpressionRef): ExpressionRef;

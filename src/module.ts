@@ -1231,7 +1231,9 @@ export const enum StringNewOp {
   /** string.new_wtf8_array replace */
   ReplaceArray = 6 /* _BinaryenStringNewReplaceArray */,
   /** string.new_wtf16_array */
-  WTF16Array = 7 /* _BinaryenStringNewWTF16Array */
+  WTF16Array = 7 /* _BinaryenStringNewWTF16Array */,
+  /** string.from_code_point */
+  FromCodePoint = 8 /* _BinaryenStringNewFromCodePoint */
 }
 
 /** Binaryen StringMeasure operation constants. */
@@ -1262,6 +1264,14 @@ export const enum StringEncodeOp {
   WTF8Array = 4 /* _BinaryenStringEncodeWTF8Array */,
   /** string.encode_wtf16_array */
   WTF16Array = 5 /* _BinaryenStringEncodeWTF16Array */
+}
+
+/** Binaryen StringEq operation constants. */
+export const enum StringEqOp {
+  /** string.eq */
+  Equal = 0 /* _BinaryenStringEqEqual */,
+  /** string.compare */
+  Compare = 1 /* _BinaryenStringEqCompare */
 }
 
 /** Binaryen StringAs operation constants. */
@@ -1412,7 +1422,11 @@ export class Module {
   }
 
   string_eq(left: ExpressionRef, right: ExpressionRef): ExpressionRef {
-    return binaryen._BinaryenStringEq(this.ref, left, right);
+    return binaryen._BinaryenStringEq(this.ref, StringEqOp.Equal, left, right);
+  }
+
+  string_compare(left: ExpressionRef, right: ExpressionRef): ExpressionRef {
+    return binaryen._BinaryenStringEq(this.ref, StringEqOp.Compare, left, right);
   }
 
   // expressions

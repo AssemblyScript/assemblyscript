@@ -25,7 +25,7 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "binaryen": "111.0.0-nightly.20230111",
+    "binaryen": "111.0.0-nightly.20230202",
     "long": "^5.2.0"
   },
   "devDependencies": {

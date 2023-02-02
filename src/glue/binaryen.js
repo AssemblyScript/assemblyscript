@@ -627,6 +627,8 @@ export const {
   _BinaryenStringNewSetStart,
   _BinaryenStringNewGetEnd,
   _BinaryenStringNewSetEnd,
+  _BinaryenStringNewIsTry,
+  _BinaryenStringNewSetTry,
 
   _BinaryenStringConst,
   _BinaryenStringConstGetString,
@@ -655,6 +657,8 @@ export const {
   _BinaryenStringConcatSetRight,
 
   _BinaryenStringEq,
+  _BinaryenStringEqGetOp,
+  _BinaryenStringEqSetOp,
   _BinaryenStringEqGetLeft,
   _BinaryenStringEqSetLeft,
   _BinaryenStringEqGetRight,
