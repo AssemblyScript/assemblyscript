@@ -590,7 +590,18 @@ export const enum UnaryOp {
   /** f64x2.promote_low_f32x4 */
   PromoteLowF32x4ToF64x2 = 124 /* _BinaryenPromoteLowVecF32x4ToVecF64x2 */,
 
-  _last = PromoteLowF32x4ToF64x2,
+  // see: https://github.com/WebAssembly/relaxed-simd
+
+  /** i32x4.relaxed_trunc_f32x4_s */
+  RelaxedTruncF32x4ToI32x4 = 125 /* TODO_BinaryenRelaxedTruncSVecF32x4ToVecI32x4 */,
+  /** i32x4.relaxed_trunc_f32x4_u */
+  RelaxedTruncF32x4ToU32x4 = 126 /* TODO_BinaryenRelaxedTruncUVecF32x4ToVecI32x4 */,
+  /** i32x4.relaxed_trunc_f64x2_s_zero */
+  RelaxedTruncF64x2ToI32x4Zero = 127 /* TODO_BinaryenRelaxedTruncZeroSVecF64x2ToVecI32x4 */,
+  /** i32x4.relaxed_trunc_f64x2_u_zero */
+  RelaxedTruncF64x2ToU32x4Zero = 128 /* TODO_BinaryenRelaxedTruncZeroUVecF64x2ToVecI32x4 */,
+
+  _last = RelaxedTruncF64x2ToU32x4Zero,
 
   // Target dependent
 
@@ -1002,7 +1013,24 @@ export const enum BinaryOp {
   /** i8x16.swizzle */
   SwizzleI8x16 = 195 /* _BinaryenSwizzleVecI8x16 */,
 
-  _last = SwizzleI8x16,
+  // see: https://github.com/WebAssembly/relaxed-simd
+
+  /** i8x16.relaxed_swizzle */
+  RelaxedSwizzleI8x16 = 196 /* TODO_BinaryenRelaxedSwizzleVecI8x16 */,
+  /** f32x4.relaxed_min */
+  RelaxedMinF32x4 = 197 /* TODO_BinaryenRelaxedMinVecF32x4 */,
+  /** f32x4.relaxed_max */
+  RelaxedMaxF32x4 = 198 /* TODO_BinaryenRelaxedMaxVecF32x4 */,
+  /** f64x2.relaxed_min */
+  RelaxedMinF64x2 = 199 /* TODO_BinaryenRelaxedMinVecF64x2 */,
+  /** f64x2.relaxed_max */
+  RelaxedMaxF64x2 = 200 /* TODO_BinaryenRelaxedMaxVecF64x2 */,
+  /** i16x8.relaxed_q15mulr_s */
+  RelaxedQ15MulrI16x8 = 201 /* TODO_BinaryenRelaxedQ15MulrSVecI16x8 */,
+  /** i16x8.relaxed_dot_i8x16_i7x16_s */
+  RelaxedDotI8x16I7x16ToI16x8 = 202 /* TODO_BinaryenDotI8x16I7x16SToVecI16x8 */,
+
+  _last = RelaxedDotI8x16I7x16ToI16x8,
 
   // Target dependent
 
@@ -1189,7 +1217,28 @@ export const enum SIMDLoadStoreLaneOp {
 /** Binaryen SIMD ternary operation constants. */
 export const enum SIMDTernaryOp {
   /** v128.bitselect */
-  Bitselect = 0 /* _BinaryenBitselectVec128 */
+  Bitselect = 0 /* _BinaryenBitselectVec128 */,
+
+  // see: https://github.com/WebAssembly/relaxed-simd
+
+  /** f32x4.relaxed_madd */
+  RelaxedMaddF32x4 = 1 /* TODO_BinaryenRelaxedFmaVecF32x4 */,
+  /** f32x4.relaxed_nmadd */
+  RelaxedNmaddF32x4 = 2 /* TODO_BinaryenRelaxedFmsVecF32x4 */,
+  /** f64x2.relaxed_madd */
+  RelaxedMaddF64x2 = 3 /* TODO_BinaryenRelaxedFmaVecF64x2 */,
+  /** f64x2.relaxed_nmadd */
+  RelaxedNmaddF64x2 = 4 /* TODO_BinaryenRelaxedFmsVecF64x2 */,
+  /** i8x16.relaxed_laneselect */
+  RelaxedLaneselectI8x16 = 5 /* TODO_BinaryenLaneselectI8x16 */,
+  /** i16x8.relaxed_laneselect */
+  RelaxedLaneselectI16x8 = 6 /* TODO_BinaryenLaneselectI16x8 */,
+  /** i32x4.relaxed_laneselect */
+  RelaxedLaneselectI32x4 = 7 /* TODO_BinaryenLaneselectI32x4 */,
+  /** i64x2.relaxed_laneselect */
+  RelaxedLaneselectI64x2 = 8 /* TODO_BinaryenLaneselectI64x2 */,
+  /** i32x4.relaxed_dot_i8x16_i7x16_add_s */
+  RelaxedDotI8x16I7x16AddToI32x4 = 9 /* TODO_BinaryenDotI8x16I7x16AddSToVecI32x4 */,
 }
 
 /** Binaryen RefAs operation constants. */
