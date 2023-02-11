@@ -20,8 +20,8 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=7.0.0"
+    "node": ">=16",
+    "npm": ">=7"
   },
   "engineStrict": true,
   "dependencies": {
