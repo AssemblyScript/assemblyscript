@@ -176,36 +176,26 @@ import { Array } from "./array";
     if (!len) return -1;
     let searchStart = min(max(<isize>start, 0), len);
     let firstChar = load<u16>(changetype<usize>(search));
-    let firstIndex = findCodePointForward(
+    searchStart = findCodePointForward(
       changetype<usize>(this),
       searchStart,
       len,
       firstChar
     );
-    if (firstIndex == -1) {
+    if (searchStart == -1) {
       // Nothing found
-      trace(`>> a "${search}" > "${this}", index: `, 2, <f64>-1, <f64>start);
       return -1;
     }
     if (searchLen == 1) {
-      trace(`>> a "${search}" > "${this}", index: `, 2, <f64>firstIndex, <f64>start);
       // Needle is single character
-      return <i32>firstIndex;
+      return <i32>searchStart;
     }
-    // Adjust start position & lengmth
-    // searchStart += firstIndex;
-    // len -= firstIndex;
-
     for (len -= searchLen; searchStart <= len; ++searchStart) {
       // @ts-ignore: string <-> String
       if (!compareImpl(this, searchStart, search, 0, searchLen)) {
-        trace(`>> b "${search}" > "${this}", index: `, 2, <f64>searchStart, <f64>start);
-        trace("");
         return <i32>searchStart;
       }
     }
-    trace(`>> b "${search}" > "${this}", index: `, 2, <f64>-1, <f64>start);
-    trace("");
     return -1;
   }
 
@@ -880,5 +870,5 @@ export namespace String {
 }
 
 export class TemplateStringsArray extends Array<string> {
-  readonly raw: string[];
+  readonly raw!: string[];
 }
