@@ -1,7 +1,17 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
-import { compareImpl, strtol, strtod, isSpace, isAscii, isFinalSigma, toLower8, toUpper8 } from "./util/string";
+import {
+  compareImpl,
+  findCodePointForward,
+  strtol,
+  strtod,
+  isSpace,
+  isAscii,
+  isFinalSigma,
+  toLower8,
+  toUpper8
+} from "./util/string";
 import { SPECIALS_UPPER, casemap, bsearch } from "./util/casemap";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_UNPAIRED_SURROGATE } from "./util/error";
 import { idof } from "./builtins";
@@ -165,10 +175,37 @@ import { Array } from "./array";
     let len = <isize>this.length;
     if (!len) return -1;
     let searchStart = min(max(<isize>start, 0), len);
+    let firstChar = load<u16>(changetype<usize>(search));
+    let firstIndex = findCodePointForward(
+      changetype<usize>(this),
+      searchStart,
+      len,
+      firstChar
+    );
+    if (firstIndex == -1) {
+      // Nothing found
+      trace(`>> a "${search}" > "${this}", index: `, 2, <f64>-1, <f64>start);
+      return -1;
+    }
+    if (searchLen == 1) {
+      trace(`>> a "${search}" > "${this}", index: `, 2, <f64>firstIndex, <f64>start);
+      // Needle is single character
+      return <i32>firstIndex;
+    }
+    // Adjust start position & lengmth
+    // searchStart += firstIndex;
+    // len -= firstIndex;
+
     for (len -= searchLen; searchStart <= len; ++searchStart) {
       // @ts-ignore: string <-> String
-      if (!compareImpl(this, searchStart, search, 0, searchLen)) return <i32>searchStart;
+      if (!compareImpl(this, searchStart, search, 0, searchLen)) {
+        trace(`>> b "${search}" > "${this}", index: `, 2, <f64>searchStart, <f64>start);
+        trace("");
+        return <i32>searchStart;
+      }
     }
+    trace(`>> b "${search}" > "${this}", index: `, 2, <f64>-1, <f64>start);
+    trace("");
     return -1;
   }
 

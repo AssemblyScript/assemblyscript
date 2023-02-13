@@ -1200,3 +1200,44 @@ function pow10(n: i32): f64 {
   // argument `n` should bounds in [0, 22] range
   return load<f64>(POWERS10 + (n << alignof<f64>()));
 }
+
+export function findCodePointForward(input: usize, start: isize, len: isize, code: u32): isize {
+  // mask: 01111110 11111110 ... 11111111
+  const mask: u64 = 0x7FFE_FFFE_FFFE_FFFF;
+  const ones: u64 = 0x0001_0001_0001_0001;
+
+  len -= start;
+
+  let src = input + (start << 1);
+  let ptr = src;
+  let c64 = <u64>code * ones; // repeat code point 4 times in 64-bit word
+
+  // Process 4 code points at once
+  while (len >= 4) {
+    let val = load<u64>(ptr);
+    // Roughly emulate 16-bit per lane move mask
+    if (
+      (((val + mask) ^ ~val) & ~mask) ||
+      ((((val ^ c64) + mask) ^ ~(val ^ c64)) & ~mask)
+    ) {
+      let index = ((ptr - src) >>> 1) + start;
+      if (((val >> 0) & 0xFFFF) == code) return index + 0;
+      else if (((val >> 16) & 0xFFFF) == code) return index + 1;
+      else if (((val >> 32) & 0xFFFF) == code) return index + 2;
+      else return index + 3;
+    }
+    ptr += 8;
+    len -= 4;
+  }
+
+  // Process rest of code points one by one. It takes form 0 to 3 iterations
+  while (len > 0) {
+    if (<u32>load<u16>(ptr) == code) {
+      return ((ptr - src) >>> 1) + start;
+    }
+    ptr += 2;
+    len -= 1;
+  }
+
+  return -1;
+}
