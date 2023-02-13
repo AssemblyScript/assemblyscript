@@ -4735,10 +4735,10 @@
  )
  (func $~lib/string/String#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  (local $7 i64)
   (local $8 i64)
   (local $9 i64)
   (local $10 i32)
@@ -4771,7 +4771,7 @@
   i32.load $0 offset=16
   i32.const 1
   i32.shr_u
-  local.tee $6
+  local.tee $5
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
@@ -4809,11 +4809,11 @@
      local.get $11
      i32.lt_s
      select
-     local.tee $7
+     local.tee $6
      i32.sub
      local.set $3
      local.get $0
-     local.get $7
+     local.get $6
      i32.const 1
      i32.shl
      i32.add
@@ -4821,7 +4821,7 @@
      local.set $2
      local.get $1
      i32.load16_u $0
-     local.tee $5
+     local.tee $4
      i64.extend_i32_u
      i64.const 281479271743489
      i64.mul
@@ -4831,49 +4831,34 @@
       i32.const 4
       i32.ge_s
       if
+       local.get $8
        local.get $2
        i64.load $0
-       local.tee $4
-       i64.const 9223090557583032319
-       i64.add
-       local.get $4
+       local.tee $7
+       i64.xor
+       local.tee $9
+       i64.const 281479271743489
+       i64.sub
+       local.get $9
        i64.const -1
        i64.xor
-       i64.xor
-       i64.const -9223090557583032320
+       i64.and
+       i64.const -9223231297218904064
        i64.and
        i64.const 0
        i64.ne
-       if (result i32)
-        i32.const 1
-       else
-        local.get $4
-        local.get $8
-        i64.xor
-        local.tee $9
-        i64.const 9223090557583032319
-        i64.add
-        local.get $9
-        i64.const -1
-        i64.xor
-        i64.xor
-        i64.const -9223090557583032320
-        i64.and
-        i64.const 0
-        i64.ne
-       end
        if
         local.get $2
         local.get $10
         i32.sub
         i32.const 1
         i32.shr_u
-        local.get $7
+        local.get $6
         i32.add
         local.tee $2
-        local.get $5
-        i64.extend_i32_u
         local.get $4
+        i64.extend_i32_u
+        local.get $7
         i64.const 65535
         i64.and
         i64.eq
@@ -4882,9 +4867,9 @@
         local.get $2
         i32.const 1
         i32.add
-        local.get $5
-        i64.extend_i32_u
         local.get $4
+        i64.extend_i32_u
+        local.get $7
         i64.const 16
         i64.shr_u
         i64.const 65535
@@ -4895,9 +4880,9 @@
         local.get $2
         i32.const 2
         i32.add
-        local.get $5
-        i64.extend_i32_u
         local.get $4
+        i64.extend_i32_u
+        local.get $7
         i64.const 32
         i64.shr_u
         i64.const 65535
@@ -4931,11 +4916,11 @@
        i32.sub
        i32.const 1
        i32.shr_u
-       local.get $7
+       local.get $6
        i32.add
        local.get $2
        i32.load16_u $0
-       local.get $5
+       local.get $4
        i32.eq
        br_if $__inlined_func$~lib/util/string/findCodePointForward
        drop
@@ -4956,12 +4941,12 @@
     i32.const -1
     i32.eq
     br_if $folding-inner2
-    local.get $6
+    local.get $5
     i32.const 1
     i32.eq
     br_if $folding-inner1
     local.get $11
-    local.get $6
+    local.get $5
     i32.sub
     local.set $3
     loop $for-loop|0
@@ -4970,16 +4955,16 @@
      i32.le_s
      if
       global.get $~lib/memory/__stack_pointer
-      local.tee $5
+      local.tee $4
       local.get $0
       i32.store $0
-      local.get $5
+      local.get $4
       local.get $1
       i32.store $0 offset=4
       local.get $0
       local.get $2
       local.get $1
-      local.get $6
+      local.get $5
       call $~lib/util/string/compareImpl
       i32.eqz
       br_if $folding-inner1

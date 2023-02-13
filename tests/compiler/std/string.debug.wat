@@ -2972,7 +2972,10 @@
   (local $src i32)
   (local $ptr i32)
   (local $c64 i64)
-  (local $val i64)
+  (local $value i64)
+  (local $base i64)
+  (local $points i64)
+  (local $value|10 i64)
   (local $index i32)
   local.get $len
   local.get $start
@@ -2998,40 +3001,28 @@
    if
     local.get $ptr
     i64.load $0
-    local.set $val
-    local.get $val
-    i64.const 9223090557583032319
-    i64.add
-    local.get $val
-    i64.const -1
-    i64.xor
-    i64.xor
-    i64.const 9223090557583032319
-    i64.const -1
-    i64.xor
-    i64.and
-    i64.const 0
-    i64.ne
-    if (result i32)
-     i32.const 1
-    else
-     local.get $val
+    local.set $value
+    block $~lib/util/string/containsUSC2|inlined.0 (result i32)
+     local.get $value
+     local.set $base
      local.get $c64
+     local.set $points
+     local.get $base
+     local.get $points
      i64.xor
-     i64.const 9223090557583032319
-     i64.add
-     local.get $val
-     local.get $c64
-     i64.xor
-     i64.const -1
-     i64.xor
-     i64.xor
-     i64.const 9223090557583032319
+     local.set $value|10
+     local.get $value|10
+     i64.const 281479271743489
+     i64.sub
+     local.get $value|10
      i64.const -1
      i64.xor
      i64.and
+     i64.const -9223231297218904064
+     i64.and
      i64.const 0
      i64.ne
+     br $~lib/util/string/containsUSC2|inlined.0
     end
     if
      local.get $ptr
@@ -3042,7 +3033,7 @@
      local.get $start
      i32.add
      local.set $index
-     local.get $val
+     local.get $value
      i64.const 0
      i64.shr_u
      i64.const 65535
@@ -3056,7 +3047,7 @@
       i32.add
       return
      else
-      local.get $val
+      local.get $value
       i64.const 16
       i64.shr_u
       i64.const 65535
@@ -3070,7 +3061,7 @@
        i32.add
        return
       else
-       local.get $val
+       local.get $value
        i64.const 32
        i64.shr_u
        i64.const 65535
