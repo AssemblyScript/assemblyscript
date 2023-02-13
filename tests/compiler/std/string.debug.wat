@@ -2974,7 +2974,7 @@
   (local $c64 i64)
   (local $value i64)
   (local $base i64)
-  (local $points i64)
+  (local $reps i64)
   (local $value|10 i64)
   (local $index i32)
   local.get $len
@@ -3006,9 +3006,9 @@
      local.get $value
      local.set $base
      local.get $c64
-     local.set $points
+     local.set $reps
      local.get $base
-     local.get $points
+     local.get $reps
      i64.xor
      local.set $value|10
      local.get $value|10
