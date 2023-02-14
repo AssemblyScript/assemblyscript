@@ -67,6 +67,12 @@ assert(str.indexOf("x") == -1);
 assert(str.indexOf(",", 2) == 2);
 assert(str.indexOf(",", 3) == -1);
 assert(str.indexOf(", I", -1) == 2);
+assert("aaaaa".indexOf("a", 0) == 0);
+assert("aaaaa".indexOf("a", 1) == 1);
+assert("abbbb".indexOf("a", 0) == 0);
+assert("abbbb".indexOf("a", 1) == -1);
+assert("ababa".indexOf("a", 0) == 0);
+assert("ababa".indexOf("a", 1) == 2);
 
 assert("".lastIndexOf("") == 0);
 assert("".lastIndexOf("hi") == -1);
