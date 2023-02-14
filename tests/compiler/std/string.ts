@@ -73,6 +73,7 @@ assert("abbbb".indexOf("a", 0) == 0);
 assert("abbbb".indexOf("a", 1) == -1);
 assert("ababa".indexOf("a", 0) == 0);
 assert("ababa".indexOf("a", 1) == 2);
+assert("bbbaa".indexOf("a", 0) == 3);
 
 assert("".lastIndexOf("") == 0);
 assert("".lastIndexOf("hi") == -1);
