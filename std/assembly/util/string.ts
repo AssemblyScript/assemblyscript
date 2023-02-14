@@ -1221,21 +1221,15 @@ export function findCodePointForward(input: usize, start: isize, len: isize, cod
   while (len >= 4) {
     // Roughly emulate 16-bit per lane move mask
     let mask = makeMoveMask(load<u64>(ptr) ^ c64);
-    if (mask != 0) {
-      let index = (ptr - input) >>> 1;
-      return index + maskToIndex(mask);
-    }
+    if (mask) return ((ptr - input) >>> 1) + maskToIndex(mask);
     ptr += 8;
     len -= 4;
   }
   // Process rest of code points one by one. It takes form 0 to 3 iterations
   while (len > 0) {
-    if (load<u16>(ptr) == code) {
-      return (ptr - input) >>> 1;
-    }
+    if (load<u16>(ptr) == code) return (ptr - input) >>> 1;
     ptr += 2;
     len -= 1;
   }
-
   return -1;
 }

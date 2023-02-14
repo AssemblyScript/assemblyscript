@@ -3484,7 +3484,6 @@
   (local $c64 i64)
   (local $value i64)
   (local $mask i64)
-  (local $index i32)
   (local $x i64)
   local.get $len
   local.get $start
@@ -3533,8 +3532,6 @@
      i32.sub
      i32.const 1
      i32.shr_u
-     local.set $index
-     local.get $index
      block $~lib/util/string/maskToIndex|inlined.0 (result i32)
       local.get $mask
       local.set $x
