@@ -3002,7 +3002,7 @@
     local.get $ptr
     i64.load $0
     local.set $value
-    block $~lib/util/string/containsZeroWord|inlined.0 (result i64)
+    block $~lib/util/string/makeMoveMask|inlined.0 (result i64)
      local.get $value
      local.get $c64
      i64.xor
@@ -3016,7 +3016,7 @@
      i64.and
      i64.const -9223231297218904064
      i64.and
-     br $~lib/util/string/containsZeroWord|inlined.0
+     br $~lib/util/string/makeMoveMask|inlined.0
     end
     local.set $mask
     local.get $mask

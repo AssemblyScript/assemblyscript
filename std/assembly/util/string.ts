@@ -1203,7 +1203,7 @@ function pow10(n: i32): f64 {
 
 // @ts-ignore: decorator
 @inline
-function containsZeroWord(value: u64): u64 {
+function makeMoveMask(value: u64): u64 {
   return (((value - 0x0001_0001_0001_0001) & ~value) & 0x8000_8000_8000_8000);
 }
 
@@ -1222,7 +1222,7 @@ export function findCodePointForward(input: usize, start: isize, len: isize, cod
   while (len >= 4) {
     let value = load<u64>(ptr);
     // Roughly emulate 16-bit per lane move mask
-    let mask = containsZeroWord(value ^ c64);
+    let mask = makeMoveMask(value ^ c64);
     if (mask != 0) {
       let index = ((ptr - src) >>> 1) + start;
       return index + maskToIndex(mask);
