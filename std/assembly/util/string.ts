@@ -1233,3 +1233,15 @@ export function findCodePointForward(input: usize, start: isize, len: isize, cod
   }
   return -1;
 }
+
+export function findCodePointBackward(input: usize, start: isize, code: u32): isize {
+  let ptr = input + (start << 1);
+
+  // TODO: Add process 4 code points at once
+
+  while (ptr >= input) {
+    if (load<u16>(ptr) == code) return ptr - input >>> 1;
+    ptr -= 2;
+  }
+  return -1;
+}

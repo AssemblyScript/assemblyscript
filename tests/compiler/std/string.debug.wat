@@ -3107,6 +3107,41 @@
    end
   end
  )
+ (func $~lib/util/string/findCodePointBackward (param $input i32) (param $start i32) (param $code i32) (result i32)
+  (local $ptr i32)
+  local.get $input
+  local.get $start
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $ptr
+  loop $while-continue|0
+   local.get $ptr
+   local.get $input
+   i32.ge_u
+   if
+    local.get $ptr
+    i32.load16_u $0
+    local.get $code
+    i32.eq
+    if
+     local.get $ptr
+     local.get $input
+     i32.sub
+     i32.const 1
+     i32.shr_u
+     return
+    end
+    local.get $ptr
+    i32.const 2
+    i32.sub
+    local.set $ptr
+    br $while-continue|0
+   end
+  end
+  i32.const -1
+  return
+ )
  (func $~lib/util/string/isSpace (param $c i32) (result i32)
   (local $1 i32)
   local.get $c
@@ -5963,7 +5998,7 @@
   if
    i32.const 240
    i32.const 304
-   i32.const 67
+   i32.const 68
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -6847,7 +6882,8 @@
   (local $7 i32)
   (local $8 i32)
   (local $searchStart i32)
-  (local $10 i32)
+  (local $firstChar i32)
+  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -6857,49 +6893,49 @@
   i64.const 0
   i64.store $0
   local.get $search
-  local.set $10
+  local.set $11
   global.get $~lib/memory/__stack_pointer
-  local.get $10
+  local.get $11
   i32.store $0
-  local.get $10
+  local.get $11
   call $~lib/string/String#get:length
   local.set $searchLen
   local.get $searchLen
   i32.eqz
   if
    local.get $this
-   local.set $10
+   local.set $11
    global.get $~lib/memory/__stack_pointer
-   local.get $10
+   local.get $11
    i32.store $0
-   local.get $10
+   local.get $11
    call $~lib/string/String#get:length
-   local.set $10
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $10
+   local.get $11
    return
   end
   local.get $this
-  local.set $10
+  local.set $11
   global.get $~lib/memory/__stack_pointer
-  local.get $10
+  local.get $11
   i32.store $0
-  local.get $10
+  local.get $11
   call $~lib/string/String#get:length
   local.set $len
   local.get $len
   i32.eqz
   if
    i32.const -1
-   local.set $10
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $10
+   local.get $11
    return
   end
   local.get $start
@@ -6920,36 +6956,74 @@
   i32.lt_s
   select
   local.set $searchStart
+  i32.const 0
+  i32.const 2
+  i32.le_s
+  drop
+  local.get $search
+  i32.load16_u $0
+  local.set $firstChar
+  local.get $this
+  local.get $searchStart
+  local.get $firstChar
+  call $~lib/util/string/findCodePointBackward
+  local.set $searchStart
+  local.get $searchStart
+  i32.const -1
+  i32.eq
+  if
+   i32.const -1
+   local.set $11
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $11
+   return
+  end
+  local.get $searchLen
+  i32.const 1
+  i32.eq
+  if
+   local.get $searchStart
+   local.set $11
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $11
+   return
+  end
   loop $for-loop|0
    local.get $searchStart
    i32.const 0
    i32.ge_s
    if
     local.get $this
-    local.set $10
+    local.set $11
     global.get $~lib/memory/__stack_pointer
-    local.get $10
+    local.get $11
     i32.store $0
-    local.get $10
+    local.get $11
     local.get $searchStart
     local.get $search
-    local.set $10
+    local.set $11
     global.get $~lib/memory/__stack_pointer
-    local.get $10
+    local.get $11
     i32.store $0 offset=4
-    local.get $10
+    local.get $11
     i32.const 0
     local.get $searchLen
     call $~lib/util/string/compareImpl
     i32.eqz
     if
      local.get $searchStart
-     local.set $10
+     local.set $11
      global.get $~lib/memory/__stack_pointer
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     local.get $10
+     local.get $11
      return
     end
     local.get $searchStart
@@ -6960,12 +7034,12 @@
    end
   end
   i32.const -1
-  local.set $10
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $10
+  local.get $11
   return
  )
  (func $~lib/string/String#lastIndexOf@varargs (param $this i32) (param $search i32) (param $start i32) (result i32)
@@ -10257,7 +10331,7 @@
   if
    i32.const 13168
    i32.const 304
-   i32.const 350
+   i32.const 357
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -28980,7 +29054,7 @@
    if
     i32.const 0
     i32.const 304
-    i32.const 49
+    i32.const 50
     i32.const 7
     call $~lib/builtins/abort
     unreachable

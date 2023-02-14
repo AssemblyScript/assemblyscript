@@ -4,6 +4,7 @@ import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import {
   compareImpl,
   findCodePointForward,
+  findCodePointBackward,
   strtol,
   strtod,
   isSpace,
@@ -194,6 +195,12 @@ import { Array } from "./array";
     let len = this.length;
     if (!len) return -1;
     let searchStart = min(max(<isize>start, 0), <isize>len - searchLen);
+    if (ASC_SHRINK_LEVEL <= 2) {
+      let firstChar = load<u16>(changetype<usize>(search));
+      searchStart = findCodePointBackward(changetype<usize>(this), searchStart, firstChar);
+      if (searchStart == -1) return -1; // Nothing found
+      if (searchLen == 1) return <i32>searchStart; // Needle is single character
+    }
     for (; searchStart >= 0; --searchStart) {
       // @ts-ignore: string <-> String
       if (!compareImpl(this, searchStart, search, 0, searchLen)) return <i32>searchStart;

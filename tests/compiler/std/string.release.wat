@@ -4388,7 +4388,7 @@
   if
    i32.const 1264
    i32.const 1328
-   i32.const 67
+   i32.const 68
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -5102,6 +5102,7 @@
  (func $~lib/string/String#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -5154,70 +5155,108 @@
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store $0
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  local.tee $4
-  i32.eqz
-  if
+  block $folding-inner2
+   block $folding-inner1
+    local.get $0
+    i32.const 20
+    i32.sub
+    i32.load $0 offset=16
+    i32.const 1
+    i32.shr_u
+    local.tee $4
+    i32.eqz
+    br_if $folding-inner2
+    block $__inlined_func$~lib/util/string/findCodePointBackward (result i32)
+     local.get $1
+     i32.load16_u $0
+     local.set $5
+     local.get $0
+     local.get $2
+     i32.const 0
+     local.get $2
+     i32.const 0
+     i32.gt_s
+     select
+     local.tee $2
+     local.get $4
+     local.get $3
+     i32.sub
+     local.tee $4
+     local.get $2
+     local.get $4
+     i32.lt_s
+     select
+     i32.const 1
+     i32.shl
+     i32.add
+     local.set $2
+     loop $while-continue|0
+      local.get $0
+      local.get $2
+      i32.le_u
+      if
+       local.get $2
+       local.get $0
+       i32.sub
+       i32.const 1
+       i32.shr_u
+       local.get $2
+       i32.load16_u $0
+       local.get $5
+       i32.eq
+       br_if $__inlined_func$~lib/util/string/findCodePointBackward
+       drop
+       local.get $2
+       i32.const 2
+       i32.sub
+       local.set $2
+       br $while-continue|0
+      end
+     end
+     i32.const -1
+    end
+    local.tee $2
+    i32.const -1
+    i32.eq
+    br_if $folding-inner2
+    local.get $3
+    i32.const 1
+    i32.eq
+    br_if $folding-inner1
+    loop $for-loop|0
+     local.get $2
+     i32.const 0
+     i32.ge_s
+     if
+      global.get $~lib/memory/__stack_pointer
+      local.tee $4
+      local.get $0
+      i32.store $0
+      local.get $4
+      local.get $1
+      i32.store $0 offset=4
+      local.get $0
+      local.get $2
+      local.get $1
+      local.get $3
+      call $~lib/util/string/compareImpl
+      i32.eqz
+      br_if $folding-inner1
+      local.get $2
+      i32.const 1
+      i32.sub
+      local.set $2
+      br $for-loop|0
+     end
+    end
+    br $folding-inner2
+   end
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   i32.const -1
-   return
-  end
-  local.get $2
-  i32.const 0
-  local.get $2
-  i32.const 0
-  i32.gt_s
-  select
-  local.tee $2
-  local.get $4
-  local.get $3
-  i32.sub
-  local.tee $4
-  local.get $2
-  local.get $4
-  i32.lt_s
-  select
-  local.set $2
-  loop $for-loop|0
    local.get $2
-   i32.const 0
-   i32.ge_s
-   if
-    global.get $~lib/memory/__stack_pointer
-    local.tee $4
-    local.get $0
-    i32.store $0
-    local.get $4
-    local.get $1
-    i32.store $0 offset=4
-    local.get $0
-    local.get $2
-    local.get $1
-    local.get $3
-    call $~lib/util/string/compareImpl
-    i32.eqz
-    if
-     global.get $~lib/memory/__stack_pointer
-     i32.const 8
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $2
-     return
-    end
-    local.get $2
-    i32.const 1
-    i32.sub
-    local.set $2
-    br $for-loop|0
-   end
+   return
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -8502,7 +8541,7 @@
   if
    i32.const 14192
    i32.const 1328
-   i32.const 350
+   i32.const 357
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -25251,7 +25290,7 @@
    if
     i32.const 0
     i32.const 1328
-    i32.const 49
+    i32.const 50
     i32.const 7
     call $~lib/builtins/abort
     unreachable
