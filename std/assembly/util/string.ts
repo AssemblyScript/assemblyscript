@@ -1215,16 +1215,14 @@ function maskToIndex(x: u64): isize {
 
 export function findCodePointForward(input: usize, start: isize, len: isize, code: u32): isize {
   len -= start;
-  let src = input + (start << 1);
-  let ptr = src;
+  let ptr = input + (start << 1);
   let c64 = <u64>code * 0x0001_0001_0001_0001; // repeat code point 4 times in 64-bit word
   // Process 4 code points at once
   while (len >= 4) {
-    let value = load<u64>(ptr);
     // Roughly emulate 16-bit per lane move mask
-    let mask = makeMoveMask(value ^ c64);
+    let mask = makeMoveMask(load<u64>(ptr) ^ c64);
     if (mask != 0) {
-      let index = ((ptr - src) >>> 1) + start;
+      let index = (ptr - input) >>> 1;
       return index + maskToIndex(mask);
     }
     ptr += 8;
@@ -1233,7 +1231,7 @@ export function findCodePointForward(input: usize, start: isize, len: isize, cod
   // Process rest of code points one by one. It takes form 0 to 3 iterations
   while (len > 0) {
     if (<u32>load<u16>(ptr) == code) {
-      return ((ptr - src) >>> 1) + start;
+      return (ptr - input) >>> 1;
     }
     ptr += 2;
     len -= 1;

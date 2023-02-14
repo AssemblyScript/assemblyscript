@@ -2969,11 +2969,9 @@
   i32.load $0 offset=4
  )
  (func $~lib/util/string/findCodePointForward (param $input i32) (param $start i32) (param $len i32) (param $code i32) (result i32)
-  (local $src i32)
   (local $ptr i32)
   (local $c64 i64)
   (local $value i64)
-  (local $value|8 i64)
   (local $mask i64)
   (local $index i32)
   (local $x i64)
@@ -2986,8 +2984,6 @@
   i32.const 1
   i32.shl
   i32.add
-  local.set $src
-  local.get $src
   local.set $ptr
   local.get $code
   i64.extend_i32_u
@@ -2999,18 +2995,16 @@
    i32.const 4
    i32.ge_s
    if
-    local.get $ptr
-    i64.load $0
-    local.set $value
     block $~lib/util/string/makeMoveMask|inlined.0 (result i64)
-     local.get $value
+     local.get $ptr
+     i64.load $0
      local.get $c64
      i64.xor
-     local.set $value|8
-     local.get $value|8
+     local.set $value
+     local.get $value
      i64.const 281479271743489
      i64.sub
-     local.get $value|8
+     local.get $value
      i64.const -1
      i64.xor
      i64.and
@@ -3024,12 +3018,10 @@
     i64.ne
     if
      local.get $ptr
-     local.get $src
+     local.get $input
      i32.sub
      i32.const 1
      i32.shr_u
-     local.get $start
-     i32.add
      local.set $index
      local.get $index
      block $~lib/util/string/maskToIndex|inlined.0 (result i32)
@@ -3067,12 +3059,10 @@
     i32.eq
     if
      local.get $ptr
-     local.get $src
+     local.get $input
      i32.sub
      i32.const 1
      i32.shr_u
-     local.get $start
-     i32.add
      return
     end
     local.get $ptr
