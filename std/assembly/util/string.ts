@@ -1187,7 +1187,7 @@ function parseExp(ptr: usize, len: i32): i32 {
 function fixmul(a: u64, b: u32): u64 {
   let low  = (a & 0xFFFFFFFF) * b;
   let high = (a >> 32) * b + (low >> 32);
-  let overflow = <u32>(high >> 32);
+  let overflow = u32(high >> 32);
   let space = clz(overflow);
   let revspace: u64 = 32 - space;
   __fixmulShift += revspace;
