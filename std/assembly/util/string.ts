@@ -1203,9 +1203,14 @@ function pow10(n: i32): f64 {
 
 // @ts-ignore: decorator
 @inline
-function containsUSC2(base: u64, reps: u64): bool {
-  let value = base ^ reps;
-  return (((value - 0x0001_0001_0001_0001) & ~value) & 0x8000_8000_8000_8000) != 0;
+function containsZeroWord(value: u64): u64 {
+  return (((value - 0x0001_0001_0001_0001) & ~value) & 0x8000_8000_8000_8000);
+}
+
+// @ts-ignore: decorator
+@inline
+function maskToIndex(x: u64): isize {
+  return <isize>ctz(x) >>> 4;
 }
 
 export function findCodePointForward(input: usize, start: isize, len: isize, code: u32): isize {
@@ -1217,12 +1222,10 @@ export function findCodePointForward(input: usize, start: isize, len: isize, cod
   while (len >= 4) {
     let value = load<u64>(ptr);
     // Roughly emulate 16-bit per lane move mask
-    if (containsUSC2(value, c64)) {
+    let mask = containsZeroWord(value ^ c64);
+    if (mask != 0) {
       let index = ((ptr - src) >>> 1) + start;
-      if (((value >> 0) & 0xFFFF) == code) return index + 0;
-      else if (((value >> 16) & 0xFFFF) == code) return index + 1;
-      else if (((value >> 32) & 0xFFFF) == code) return index + 2;
-      else return index + 3;
+      return index + maskToIndex(mask);
     }
     ptr += 8;
     len -= 4;

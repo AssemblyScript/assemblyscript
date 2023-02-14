@@ -3484,10 +3484,10 @@
   (local $ptr i32)
   (local $c64 i64)
   (local $value i64)
-  (local $base i64)
-  (local $reps i64)
-  (local $value|10 i64)
+  (local $value|8 i64)
+  (local $mask i64)
   (local $index i32)
+  (local $x i64)
   local.get $len
   local.get $start
   i32.sub
@@ -3513,28 +3513,26 @@
     local.get $ptr
     i64.load $0
     local.set $value
-    block $~lib/util/string/containsUSC2|inlined.0 (result i32)
+    block $~lib/util/string/containsZeroWord|inlined.0 (result i64)
      local.get $value
-     local.set $base
      local.get $c64
-     local.set $reps
-     local.get $base
-     local.get $reps
      i64.xor
-     local.set $value|10
-     local.get $value|10
+     local.set $value|8
+     local.get $value|8
      i64.const 281479271743489
      i64.sub
-     local.get $value|10
+     local.get $value|8
      i64.const -1
      i64.xor
      i64.and
      i64.const -9223231297218904064
      i64.and
-     i64.const 0
-     i64.ne
-     br $~lib/util/string/containsUSC2|inlined.0
+     br $~lib/util/string/containsZeroWord|inlined.0
     end
+    local.set $mask
+    local.get $mask
+    i64.const 0
+    i64.ne
     if
      local.get $ptr
      local.get $src
@@ -3544,58 +3542,19 @@
      local.get $start
      i32.add
      local.set $index
-     local.get $value
-     i64.const 0
-     i64.shr_u
-     i64.const 65535
-     i64.and
-     local.get $code
-     i64.extend_i32_u
-     i64.eq
-     if
-      local.get $index
-      i32.const 0
-      i32.add
-      return
-     else
-      local.get $value
-      i64.const 16
-      i64.shr_u
-      i64.const 65535
-      i64.and
-      local.get $code
-      i64.extend_i32_u
-      i64.eq
-      if
-       local.get $index
-       i32.const 1
-       i32.add
-       return
-      else
-       local.get $value
-       i64.const 32
-       i64.shr_u
-       i64.const 65535
-       i64.and
-       local.get $code
-       i64.extend_i32_u
-       i64.eq
-       if
-        local.get $index
-        i32.const 2
-        i32.add
-        return
-       else
-        local.get $index
-        i32.const 3
-        i32.add
-        return
-       end
-       unreachable
-      end
-      unreachable
+     local.get $index
+     block $~lib/util/string/maskToIndex|inlined.0 (result i32)
+      local.get $mask
+      local.set $x
+      local.get $x
+      i64.ctz
+      i32.wrap_i64
+      i32.const 4
+      i32.shr_u
+      br $~lib/util/string/maskToIndex|inlined.0
      end
-     unreachable
+     i32.add
+     return
     end
     local.get $ptr
     i32.const 8
