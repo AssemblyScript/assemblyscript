@@ -175,26 +175,15 @@ import { Array } from "./array";
     let len = <isize>this.length;
     if (!len) return -1;
     let searchStart = min(max(<isize>start, 0), len);
-    let firstChar = load<u16>(changetype<usize>(search));
-    searchStart = findCodePointForward(
-      changetype<usize>(this),
-      searchStart,
-      len,
-      firstChar
-    );
-    if (searchStart == -1) {
-      // Nothing found
-      return -1;
-    }
-    if (searchLen == 1) {
-      // Needle is single character
-      return <i32>searchStart;
+    if (ASC_SHRINK_LEVEL <= 2) {
+      let firstChar = load<u16>(changetype<usize>(search));
+      searchStart = findCodePointForward(changetype<usize>(this), searchStart, len, firstChar);
+      if (searchStart == -1) return -1; // Nothing found
+      if (searchLen == 1) return <i32>searchStart; // Needle is single character
     }
     for (len -= searchLen; searchStart <= len; ++searchStart) {
       // @ts-ignore: string <-> String
-      if (!compareImpl(this, searchStart, search, 0, searchLen)) {
-        return <i32>searchStart;
-      }
+      if (!compareImpl(this, searchStart, search, 0, searchLen)) return <i32>searchStart;
     }
     return -1;
   }

@@ -1230,7 +1230,7 @@ export function findCodePointForward(input: usize, start: isize, len: isize, cod
   }
   // Process rest of code points one by one. It takes form 0 to 3 iterations
   while (len > 0) {
-    if (<u32>load<u16>(ptr) == code) {
+    if (load<u16>(ptr) == code) {
       return (ptr - input) >>> 1;
     }
     ptr += 2;

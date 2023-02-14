@@ -6468,6 +6468,10 @@
   i32.lt_s
   select
   local.set $searchStart
+  i32.const 0
+  i32.const 2
+  i32.le_s
+  drop
   local.get $search
   i32.load16_u $0
   local.set $firstChar
@@ -10253,7 +10257,7 @@
   if
    i32.const 13040
    i32.const 304
-   i32.const 361
+   i32.const 350
    i32.const 7
    call $~lib/builtins/abort
    unreachable
