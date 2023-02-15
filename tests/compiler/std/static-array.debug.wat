@@ -1954,22 +1954,6 @@
   (local $pagesAfter i32)
   i32.const 0
   drop
-  local.get $size
-  i32.const 536870910
-  i32.lt_u
-  if
-   local.get $size
-   i32.const 1
-   i32.const 27
-   local.get $size
-   i32.clz
-   i32.sub
-   i32.shl
-   i32.const 1
-   i32.sub
-   i32.add
-   local.set $size
-  end
   memory.size $0
   local.set $pagesBefore
   local.get $size
@@ -1990,6 +1974,22 @@
   i32.shl
   i32.add
   local.set $size
+  local.get $size
+  i32.const 536870910
+  i32.lt_u
+  if
+   local.get $size
+   i32.const 1
+   i32.const 27
+   local.get $size
+   i32.clz
+   i32.sub
+   i32.shl
+   i32.const 1
+   i32.sub
+   i32.add
+   local.set $size
+  end
   local.get $size
   i32.const 65535
   i32.add
