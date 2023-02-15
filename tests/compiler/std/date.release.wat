@@ -4792,21 +4792,27 @@
     local.tee $6
     i32.eqz
     br_if $folding-inner2
+    local.get $6
+    local.get $2
+    i32.const 0
+    local.get $2
+    i32.const 0
+    i32.gt_s
+    select
+    local.tee $2
+    local.get $6
+    local.get $2
+    local.get $6
+    i32.lt_s
+    select
+    local.tee $2
+    i32.sub
+    local.get $4
+    i32.lt_s
+    br_if $folding-inner2
     block $__inlined_func$~lib/util/string/findCodePointForward (result i32)
      local.get $6
      local.get $2
-     i32.const 0
-     local.get $2
-     i32.const 0
-     i32.gt_s
-     select
-     local.tee $2
-     local.get $6
-     local.get $2
-     local.get $6
-     i32.lt_s
-     select
-     local.tee $2
      i32.sub
      local.set $3
      local.get $0

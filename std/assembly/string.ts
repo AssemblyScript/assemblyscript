@@ -176,6 +176,7 @@ import { Array } from "./array";
     let len = <isize>this.length;
     if (!len) return -1;
     let searchStart = min(max(<isize>start, 0), len);
+    if (len - searchStart < searchLen) return -1;
     if (ASC_SHRINK_LEVEL <= 2) {
       let firstChar = load<u16>(changetype<usize>(search));
       searchStart = findCodePointForward(changetype<usize>(this), searchStart, len, firstChar);
@@ -192,9 +193,10 @@ import { Array } from "./array";
   lastIndexOf(search: String, start: i32 = i32.MAX_VALUE): i32 {
     let searchLen = <isize>search.length;
     if (!searchLen) return this.length;
-    let len = this.length;
+    let len = <isize>this.length;
     if (!len) return -1;
-    let searchStart = min(max(<isize>start, 0), <isize>len - searchLen);
+    if (len < searchLen) return -1;
+    let searchStart = min(max(<isize>start, 0), len - searchLen);
     if (ASC_SHRINK_LEVEL <= 2) {
       let firstChar = load<u16>(changetype<usize>(search));
       searchStart = findCodePointBackward(changetype<usize>(this), searchStart, firstChar);

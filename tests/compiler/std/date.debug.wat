@@ -6390,6 +6390,21 @@
   i32.lt_s
   select
   local.set $searchStart
+  local.get $len
+  local.get $searchStart
+  i32.sub
+  local.get $searchLen
+  i32.lt_s
+  if
+   i32.const -1
+   local.set $11
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $11
+   return
+  end
   i32.const 0
   i32.const 2
   i32.le_s
