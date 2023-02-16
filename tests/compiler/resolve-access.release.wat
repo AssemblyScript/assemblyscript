@@ -634,9 +634,13 @@
  (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  local.get $2
+  i32.eqz
   local.get $1
   local.get $2
-  i32.gt_u
+  i32.le_u
+  i32.or
+  i32.eqz
   if
    i32.const 0
    i32.const 1424

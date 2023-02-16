@@ -1126,6 +1126,13 @@
   local.get $start
   local.get $end
   i32.le_u
+  if (result i32)
+   i32.const 1
+  else
+   local.get $end
+   i32.const 0
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
