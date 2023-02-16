@@ -374,7 +374,7 @@ function prepareBlock(root: Root, block: Block, size: usize): void {
 
 /** Adds more memory to the pool. */
 function addMemory(root: Root, start: usize, end: usize): bool {
-  if (DEBUG) assert(start <= end); // must be valid
+  if (DEBUG) assert(start <= end || end == 0); // must be valid
   start = ((start + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
   end &= ~AL_MASK;
 
