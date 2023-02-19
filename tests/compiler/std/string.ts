@@ -92,6 +92,7 @@ assert("abc".lastIndexOf("bc", 0) == -1);
 assert("abcd".lastIndexOf("bc") == 1);
 assert("_abcde".lastIndexOf("bc") == 2);
 assert("_abcde".lastIndexOf("a") == 1);
+assert("external".lastIndexOf("/") == -1);
 
 assert("".localeCompare("") == 0);
 assert("a".localeCompare("") == 1);
