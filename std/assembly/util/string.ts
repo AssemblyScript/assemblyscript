@@ -1251,7 +1251,7 @@ export function findCodePointBackward(input: usize, start: isize, code: u32): is
     do {
       // Roughly emulate 16-bit per lane move mask
       let mask = makeMoveMask(load<u64>(src) ^ c64);
-      if (mask) return (src + 8 - input >>> 1) + maskToIndex(mask);
+      if (mask) return (src - input >>> 1) + maskToIndex(mask);
       src -= 8;
       off -= 8;
     } while (off >= 8);

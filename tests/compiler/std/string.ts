@@ -89,6 +89,9 @@ assert(str.lastIndexOf("hi", 0) == 0);
 assert("abc".lastIndexOf("bc", 1) == 1);
 assert("abc".lastIndexOf("bc", 6) == 1);
 assert("abc".lastIndexOf("bc", 0) == -1);
+assert("abcd".lastIndexOf("bc") == 1);
+assert("_abcde".lastIndexOf("bc") == 2);
+assert("_abcde".lastIndexOf("a") == 1);
 
 assert("".localeCompare("") == 0);
 assert("a".localeCompare("") == 1);
