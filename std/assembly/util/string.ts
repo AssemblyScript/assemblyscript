@@ -1245,17 +1245,17 @@ export function findCodePointBackward(input: usize, start: isize, code: u32): is
 
   if (ptr - input >= 8) {
     let c64 = <u64>code * 0x0001_0001_0001_0001; // repeat code point 4 times in 64-bit word
-    let src = ptr - 7;
+    let src = ptr - 8;
     let off = src - input;
     // Process 4 code points at once
     do {
       // Roughly emulate 16-bit per lane move mask
       let mask = makeMoveMask(load<u64>(src) ^ c64);
-      if (mask) return (src + 7 - input >>> 1) + maskToIndex(mask);
+      if (mask) return (src + 8 - input >>> 1) + maskToIndex(mask);
       src -= 8;
       off -= 8;
     } while (off >= 8);
-    ptr = src + 7;
+    ptr = src + 8;
   }
   // Process rest of code points one by one. It takes form 0 to 3 iterations
   while (ptr >= input) {

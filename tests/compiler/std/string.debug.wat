@@ -3164,7 +3164,7 @@
    i64.mul
    local.set $c64
    local.get $ptr
-   i32.const 7
+   i32.const 8
    i32.sub
    local.set $src
    local.get $src
@@ -3195,7 +3195,7 @@
     i64.ne
     if
      local.get $src
-     i32.const 7
+     i32.const 8
      i32.add
      local.get $input
      i32.sub
@@ -3228,7 +3228,7 @@
     br_if $do-loop|1
    end
    local.get $src
-   i32.const 7
+   i32.const 8
    i32.add
    local.set $ptr
   end

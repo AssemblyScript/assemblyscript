@@ -5242,7 +5242,7 @@
       i64.mul
       local.set $6
       local.get $2
-      i32.const 7
+      i32.const 8
       i32.sub
       local.tee $2
       local.get $0
@@ -5272,7 +5272,7 @@
         i32.const 4
         i32.shr_u
         local.get $2
-        i32.const 7
+        i32.const 8
         i32.add
         local.get $0
         i32.sub
@@ -5294,7 +5294,7 @@
        br_if $do-loop|1
       end
       local.get $2
-      i32.const 7
+      i32.const 8
       i32.add
       local.set $2
      end
