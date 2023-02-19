@@ -5240,7 +5240,7 @@
      local.get $0
      i32.sub
      i32.const 8
-     i32.ge_u
+     i32.ge_s
      if
       local.get $5
       i64.extend_i32_u

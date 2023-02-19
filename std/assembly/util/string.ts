@@ -1243,7 +1243,7 @@ export function findCodePointBackward(input: usize, start: isize, code: u32): is
     if (ptr < input) return -1;
   }
 
-  if (ptr - input >= 8) {
+  if (isize(ptr - input) >= 8) {
     let c64 = <u64>code * 0x0001_0001_0001_0001; // repeat code point 4 times in 64-bit word
     let src = ptr - 8;
     let off = isize(src - input);
