@@ -3109,6 +3109,12 @@
  )
  (func $~lib/util/string/findCodePointBackward (param $input i32) (param $start i32) (param $code i32) (result i32)
   (local $ptr i32)
+  (local $c64 i64)
+  (local $src i32)
+  (local $off i32)
+  (local $value i64)
+  (local $mask i64)
+  (local $x i64)
   local.get $input
   local.get $start
   i32.const 1
@@ -3116,6 +3122,117 @@
   i32.add
   local.set $ptr
   loop $while-continue|0
+   local.get $ptr
+   i32.const 7
+   i32.and
+   if
+    local.get $ptr
+    i32.load16_u $0
+    local.get $code
+    i32.eq
+    if
+     local.get $ptr
+     local.get $input
+     i32.sub
+     i32.const 1
+     i32.shr_u
+     return
+    end
+    local.get $ptr
+    i32.const 2
+    i32.sub
+    local.set $ptr
+    local.get $ptr
+    local.get $input
+    i32.lt_u
+    if
+     i32.const -1
+     return
+    end
+    br $while-continue|0
+   end
+  end
+  local.get $ptr
+  local.get $input
+  i32.sub
+  i32.const 8
+  i32.ge_u
+  if
+   local.get $code
+   i64.extend_i32_u
+   i64.const 281479271743489
+   i64.mul
+   local.set $c64
+   local.get $ptr
+   i32.const 7
+   i32.sub
+   local.set $src
+   local.get $src
+   local.get $input
+   i32.sub
+   local.set $off
+   loop $do-loop|1
+    block $~lib/util/string/makeMoveMask|inlined.1 (result i64)
+     local.get $src
+     i64.load $0
+     local.get $c64
+     i64.xor
+     local.set $value
+     local.get $value
+     i64.const 281479271743489
+     i64.sub
+     local.get $value
+     i64.const -1
+     i64.xor
+     i64.and
+     i64.const -9223231297218904064
+     i64.and
+     br $~lib/util/string/makeMoveMask|inlined.1
+    end
+    local.set $mask
+    local.get $mask
+    i64.const 0
+    i64.ne
+    if
+     local.get $src
+     i32.const 7
+     i32.add
+     local.get $input
+     i32.sub
+     i32.const 1
+     i32.shr_u
+     block $~lib/util/string/maskToIndex|inlined.1 (result i32)
+      local.get $mask
+      local.set $x
+      local.get $x
+      i64.ctz
+      i32.wrap_i64
+      i32.const 4
+      i32.shr_u
+      br $~lib/util/string/maskToIndex|inlined.1
+     end
+     i32.add
+     return
+    end
+    local.get $src
+    i32.const 8
+    i32.sub
+    local.set $src
+    local.get $off
+    i32.const 8
+    i32.sub
+    local.set $off
+    local.get $off
+    i32.const 8
+    i32.ge_u
+    br_if $do-loop|1
+   end
+   local.get $src
+   i32.const 7
+   i32.add
+   local.set $ptr
+  end
+  loop $while-continue|2
    local.get $ptr
    local.get $input
    i32.ge_u
@@ -3136,7 +3253,7 @@
     i32.const 2
     i32.sub
     local.set $ptr
-    br $while-continue|0
+    br $while-continue|2
    end
   end
   i32.const -1

@@ -5109,6 +5109,8 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i64)
+  (local $7 i64)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -5137,7 +5139,7 @@
   i32.load $0 offset=16
   i32.const 1
   i32.shr_u
-  local.tee $3
+  local.tee $4
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
@@ -5169,12 +5171,12 @@
     i32.load $0 offset=16
     i32.const 1
     i32.shr_u
-    local.tee $4
+    local.tee $3
     i32.eqz
     br_if $folding-inner2
     local.get $3
     local.get $4
-    i32.gt_s
+    i32.lt_s
     br_if $folding-inner2
     block $__inlined_func$~lib/util/string/findCodePointBackward (result i32)
      local.get $1
@@ -5188,12 +5190,12 @@
      i32.gt_s
      select
      local.tee $2
-     local.get $4
      local.get $3
-     i32.sub
-     local.tee $4
-     local.get $2
      local.get $4
+     i32.sub
+     local.tee $3
+     local.get $2
+     local.get $3
      i32.lt_s
      select
      i32.const 1
@@ -5201,6 +5203,102 @@
      i32.add
      local.set $2
      loop $while-continue|0
+      local.get $2
+      i32.const 7
+      i32.and
+      if
+       local.get $2
+       local.get $0
+       i32.sub
+       i32.const 1
+       i32.shr_u
+       local.get $2
+       i32.load16_u $0
+       local.get $5
+       i32.eq
+       br_if $__inlined_func$~lib/util/string/findCodePointBackward
+       drop
+       i32.const -1
+       local.get $2
+       i32.const 2
+       i32.sub
+       local.tee $2
+       local.get $0
+       i32.lt_u
+       br_if $__inlined_func$~lib/util/string/findCodePointBackward
+       drop
+       br $while-continue|0
+      end
+     end
+     local.get $2
+     local.get $0
+     i32.sub
+     i32.const 8
+     i32.ge_u
+     if
+      local.get $5
+      i64.extend_i32_u
+      i64.const 281479271743489
+      i64.mul
+      local.set $6
+      local.get $2
+      i32.const 7
+      i32.sub
+      local.tee $2
+      local.get $0
+      i32.sub
+      local.set $3
+      loop $do-loop|1
+       local.get $2
+       i64.load $0
+       local.get $6
+       i64.xor
+       local.tee $7
+       i64.const 281479271743489
+       i64.sub
+       local.get $7
+       i64.const -1
+       i64.xor
+       i64.and
+       i64.const -9223231297218904064
+       i64.and
+       local.tee $7
+       i64.const 0
+       i64.ne
+       if
+        local.get $7
+        i64.ctz
+        i32.wrap_i64
+        i32.const 4
+        i32.shr_u
+        local.get $2
+        i32.const 7
+        i32.add
+        local.get $0
+        i32.sub
+        i32.const 1
+        i32.shr_u
+        i32.add
+        br $__inlined_func$~lib/util/string/findCodePointBackward
+       end
+       local.get $2
+       i32.const 8
+       i32.sub
+       local.set $2
+       local.get $3
+       i32.const 8
+       i32.sub
+       local.tee $3
+       i32.const 8
+       i32.ge_u
+       br_if $do-loop|1
+      end
+      local.get $2
+      i32.const 7
+      i32.add
+      local.set $2
+     end
+     loop $while-continue|2
       local.get $0
       local.get $2
       i32.le_u
@@ -5220,7 +5318,7 @@
        i32.const 2
        i32.sub
        local.set $2
-       br $while-continue|0
+       br $while-continue|2
       end
      end
      i32.const -1
@@ -5229,7 +5327,7 @@
     i32.const -1
     i32.eq
     br_if $folding-inner2
-    local.get $3
+    local.get $4
     i32.const 1
     i32.eq
     br_if $folding-inner1
@@ -5239,16 +5337,16 @@
      i32.ge_s
      if
       global.get $~lib/memory/__stack_pointer
-      local.tee $4
+      local.tee $3
       local.get $0
       i32.store $0
-      local.get $4
+      local.get $3
       local.get $1
       i32.store $0 offset=4
       local.get $0
       local.get $2
       local.get $1
-      local.get $3
+      local.get $4
       call $~lib/util/string/compareImpl
       i32.eqz
       br_if $folding-inner1
