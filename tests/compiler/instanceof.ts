@@ -21,11 +21,20 @@ function assertDynamicFalse<T,U>(value: T): void {
   assert(isDefined(check));
 }
 
-class A {}
+class A {
+  checkInstanceof(): void {}
+}
 class B extends A {}
 
 var a: A = new A();
+class C extends A {
+  checkInstanceof(): void {
+    if (a instanceof C) {
+    }
+  }
+}
 var b: B = new B();
+(new C() as A).checkInstanceof();
 var i: i32;
 var I: i64;
 var f: f32;
