@@ -559,25 +559,6 @@ export class Compiler extends DiagnosticEmitter {
       }
     } while (lazyFunctions.size);
 
-    // compile pending instanceof helpers
-    for (let _keys = Map_keys(this.pendingInstanceOf), i = 0, k = _keys.length; i < k; ++i) {
-      let elem = _keys[i];
-      let name = assert(this.pendingInstanceOf.get(elem));
-      switch (elem.kind) {
-        case ElementKind.Class:
-        case ElementKind.Interface: {
-          this.finalizeInstanceOf(<Class>elem, name);
-          break;
-        }
-        case ElementKind.ClassPrototype:
-        case ElementKind.InterfacePrototype: {
-          this.finalizeAnyInstanceOf(<ClassPrototype>elem, name);
-          break;
-        }
-        default: assert(false);
-      }
-    }
-
     // set up override stubs
     let functionTable = this.functionTable;
     let overrideStubs = this.overrideStubs;
@@ -609,6 +590,25 @@ export class Compiler extends DiagnosticEmitter {
     overrideStubsSeen.clear();
     for (let _values = Set_values(overrideStubs), i = 0, k = _values.length; i < k; ++i) {
       this.finalizeOverrideStub(_values[i]);
+    }
+
+    // compile pending instanceof helpers
+    for (let _keys = Map_keys(this.pendingInstanceOf), i = 0, k = _keys.length; i < k; ++i) {
+      let elem = _keys[i];
+      let name = assert(this.pendingInstanceOf.get(elem));
+      switch (elem.kind) {
+        case ElementKind.Class:
+        case ElementKind.Interface: {
+          this.finalizeInstanceOf(<Class>elem, name);
+          break;
+        }
+        case ElementKind.ClassPrototype:
+        case ElementKind.InterfacePrototype: {
+          this.finalizeAnyInstanceOf(<ClassPrototype>elem, name);
+          break;
+        }
+        default: assert(false);
+      }
     }
 
     // finalize runtime features

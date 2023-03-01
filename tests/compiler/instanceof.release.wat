@@ -2239,7 +2239,11 @@
     i32.store $0
     local.get $0
     if
-     unreachable
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     drop
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 4

@@ -4111,6 +4111,58 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $instanceof/C#checkInstanceof (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/a
+  local.tee $1
+  i32.store $0
+  local.get $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $1
+   call $~instanceof|instanceof/C
+  end
+  if
+   nop
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $instanceof/A#checkInstanceof@override (param $0 i32)
+  (local $1 i32)
+  block $default
+   block $case0
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load $0
+    local.set $1
+    local.get $1
+    i32.const 6
+    i32.eq
+    br_if $case0
+    br $default
+   end
+   local.get $0
+   call $instanceof/C#checkInstanceof
+   return
+  end
+  local.get $0
+  call $instanceof/A#checkInstanceof
+ )
  (func $~instanceof|instanceof/B (param $0 i32) (result i32)
   (local $1 i32)
   block $is_instance
@@ -4377,59 +4429,21 @@
   i32.const 1
  )
  (func $~instanceof|instanceof/C (param $0 i32) (result i32)
-  unreachable
- )
- (func $instanceof/C#checkInstanceof (param $this i32)
   (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/a
-  local.tee $1
-  i32.store $0
-  local.get $1
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $1
-   call $~instanceof|instanceof/C
-  end
-  if
-   nop
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $instanceof/A#checkInstanceof@override (param $0 i32)
-  (local $1 i32)
-  block $default
-   block $case0
-    local.get $0
-    i32.const 8
-    i32.sub
-    i32.load $0
-    local.set $1
-    local.get $1
-    i32.const 6
-    i32.eq
-    br_if $case0
-    br $default
-   end
+  block $is_instance
    local.get $0
-   call $instanceof/C#checkInstanceof
+   i32.const 8
+   i32.sub
+   i32.load $0
+   local.set $1
+   local.get $1
+   i32.const 6
+   i32.eq
+   br_if $is_instance
+   i32.const 0
    return
   end
-  local.get $0
-  call $instanceof/A#checkInstanceof
+  i32.const 1
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
