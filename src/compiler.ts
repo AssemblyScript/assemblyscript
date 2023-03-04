@@ -307,6 +307,10 @@ export class Options {
     return this.target == Target.Wasm64 ? Type.isize64 : Type.isize32;
   }
 
+  get nullType(): Type {
+    return this.target == Target.Wasm64 ? Type.nullType64 : Type.nullType32;
+  }
+
   /** Gets the size type reference matching the target. */
   get sizeTypeRef(): TypeRef {
     return this.target == Target.Wasm64 ? TypeRef.I64 : TypeRef.I32;
@@ -7209,11 +7213,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           return this.makeZero(contextualType);
         }
-        this.currentType = options.usizeType;
-        this.warning(
-          DiagnosticCode.Expression_resolves_to_unusual_type_0,
-          expression.range, this.currentType.toString()
-        );
+        this.currentType = options.nullType;
         return options.isWasm64
           ? module.i64(0)
           : module.i32(0);

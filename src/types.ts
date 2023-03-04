@@ -123,10 +123,6 @@ export const enum TypeFlags {
   Vector = 1 << 10,
   /** Is an external type. */
   External = 1 << 11,
-  /** Is a class. */
-  Class = 1 << 12,
-  /** Is a function. */
-  Function = 1 << 13
 }
 
 /** Represents a resolved type. */
@@ -443,8 +439,14 @@ export class Type {
     let targetClass: Class | null;
     let currentFunction: Signature | null;
     let targetFunction: Signature | null;
+    if (target == Type.nullType32 || target == Type.nullType64) {
+      return false;
+    }
     if (this.isReference) {
       if (target.isReference) {
+        if (target.isNullableReference && (this == Type.nullType32 || this == Type.nullType64)) {
+          return true;
+        }
         if (!this.isNullableReference || target.isNullableReference) {
           if (currentClass = this.getClass()) {
             if (targetClass = target.getClass()) {
@@ -564,6 +566,11 @@ export class Type {
       if (contextualType != Type.void && left.isAssignableTo(contextualType) && right.isAssignableTo(contextualType)) {
         return contextualType;
       }
+      if (left == Type.nullType32 || left == Type.nullType64) {
+        return right.nullableType;
+      } else if (right == Type.nullType32 || left == Type.nullType64) {
+        return left.nullableType;
+      }
       let leftClass = left.getClass();
       let rightClass = right.getClass();
       if (leftClass && rightClass) {
@@ -585,6 +592,9 @@ export class Type {
 
   /** Converts this type to a string. */
   toString(validWat: bool = false): string {
+    if (this == Type.nullType32 || this == Type.nullType64) {
+      return "null";
+    }
     const nullablePostfix = validWat ? "|null" : " | null";
     if (this.isReference) {
       let classReference = this.getClass();
@@ -900,6 +910,9 @@ export class Type {
 
   /** Alias of i32 indicating type inference of locals and globals with just an initializer. */
   static readonly auto: Type = new Type(Type.i32.kind, Type.i32.flags, Type.i32.size);
+  
+  static readonly nullType32: Type = new Type(Type.usize32.kind, Type.usize32.flags & ~TypeFlags.Value | TypeFlags.Reference, Type.usize32.size);
+  static readonly nullType64: Type = new Type(Type.usize64.kind, Type.usize64.flags & ~TypeFlags.Value | TypeFlags.Reference, Type.usize64.size);
 }
 
 /** Converts an array of types to an array of type references. */

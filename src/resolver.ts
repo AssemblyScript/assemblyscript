@@ -1266,7 +1266,8 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     switch (node.kind) {
       case NodeKind.True:
-      case NodeKind.False: return Type.bool;
+      case NodeKind.False:
+        return Type.bool;
       case NodeKind.Null: {
         let classReference = ctxType.getClass();
         if (classReference) {
@@ -1279,7 +1280,7 @@ export class Resolver extends DiagnosticEmitter {
             return ctxType; // TODO: nullable?
           }
         }
-        return this.program.options.usizeType;
+        return this.program.options.nullType;
       }
     }
     let element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
@@ -2357,26 +2358,21 @@ export class Resolver extends DiagnosticEmitter {
         let expressions = (<ArrayLiteralExpression>node).elementExpressions;
         let length = expressions.length;
         let elementType = Type.auto;
-        let numNullLiterals = 0;
         for (let i = 0, k = length; i < k; ++i) {
           let expression = expressions[i];
           if (expression) {
-            if (expression.kind == NodeKind.Null && length > 1) {
-              ++numNullLiterals;
-            } else {
-              let currentType = this.resolveExpression(expression, ctxFlow, elementType);
-              if (!currentType) return null;
-              if (elementType == Type.auto) elementType = currentType;
-              else if (currentType != elementType) {
-                let commonType = Type.commonType(elementType, currentType, elementType);
-                if (commonType) elementType = commonType;
-                // otherwise triggers error on compilation
-              }
+            let currentType = this.resolveExpression(expression, ctxFlow, elementType);
+            if (!currentType) return null;
+            if (elementType == Type.auto) elementType = currentType;
+            else if (currentType != elementType) {
+              let commonType = Type.commonType(elementType, currentType, elementType);
+              if (commonType) elementType = commonType;
+              // otherwise triggers error on compilation
             }
           }
         }
         if (elementType /* still */ == Type.auto) {
-          if (numNullLiterals == length) { // all nulls infers as usize
+          if (length == 0) { // zero element infers as usize
             elementType = this.program.options.usizeType;
           } else {
             if (reportMode == ReportMode.Report) {
@@ -2388,11 +2384,8 @@ export class Resolver extends DiagnosticEmitter {
             return null;
           }
         }
-        if (
-          numNullLiterals > 0 &&
-          elementType.isInternalReference
-        ) {
-          elementType = elementType.asNullable();
+        if (elementType == this.program.options.nullType) {
+          elementType = this.program.objectInstance.type.asNullable();
         }
         return assert(this.resolveClass(this.program.arrayPrototype, [ elementType ]));
       }
