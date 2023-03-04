@@ -3967,7 +3967,16 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.Exclamation_Equals_Equals:
       case Token.Exclamation_Equals: {
-        leftExpr = this.compileExpression(left, contextualType);
+        let resolver = this.resolver;
+        let leftType = resolver.resolveExpression(left, this.currentFlow, Type.auto, ReportMode.Swallow);
+        if (leftType == this.options.usizeType || leftType == Type.auto || leftType == null) {
+          let rightType = this.resolver.resolveExpression(right, this.currentFlow, Type.auto, ReportMode.Swallow);
+          leftType = rightType;
+        }
+        if (leftType == null) {
+          leftType = Type.auto;
+        }
+        leftExpr = this.compileExpression(left, leftType);
         leftType = this.currentType;
 
         // check operator overload
@@ -3982,7 +3991,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        commonType = Type.commonType(leftType, rightType, contextualType);
+        commonType = Type.commonType(leftType, rightType);
         if (!commonType) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,

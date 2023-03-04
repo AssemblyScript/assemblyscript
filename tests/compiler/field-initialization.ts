@@ -30,6 +30,7 @@ class Nullable_Init {
 {
   let o = new Nullable_Init();
   assert(o.a != null);
+  assert(null != o.a);
 }
 
 class Nullable {
