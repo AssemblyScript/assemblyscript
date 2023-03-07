@@ -893,8 +893,7 @@ export const {
   __i32_load16_u,
   __i32_load,
   __f32_load,
-  __f64_load
-
+  __f64_load,
 } = binaryen;
 
 export default binaryen;

@@ -1,9 +1,5 @@
 {
   "extends": "../tsconfig.json",
-  "include": [
-    "./**/*.ts"
-  ],
-  "exclude": [
-    "./wasm/**"
-  ]
+  "include": ["./**/*.ts"],
+  "exclude": ["./wasm/**"]
 }

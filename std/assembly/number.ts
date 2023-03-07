@@ -17,9 +17,9 @@ export declare function isNaN<T extends number>(value: T): bool;
 @builtin
 export declare function isFinite<T extends number>(value: T): bool;
 
+
 @final @unmanaged
 export abstract class I8 {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: i8 = i8.MIN_VALUE;
@@ -38,9 +38,9 @@ export abstract class I8 {
   }
 }
 
+
 @final @unmanaged
 export abstract class I16 {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: i16 = i16.MIN_VALUE;
@@ -59,9 +59,9 @@ export abstract class I16 {
   }
 }
 
+
 @final @unmanaged
 export abstract class I32 {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: i32 = i32.MIN_VALUE;
@@ -80,9 +80,9 @@ export abstract class I32 {
   }
 }
 
+
 @final @unmanaged
 export abstract class I64 {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: i64 = i64.MIN_VALUE;
@@ -101,9 +101,9 @@ export abstract class I64 {
   }
 }
 
+
 @final @unmanaged
 export abstract class Isize {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: isize = isize.MIN_VALUE;
@@ -126,9 +126,9 @@ export abstract class Isize {
   }
 }
 
+
 @final @unmanaged
 export abstract class U8 {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: u8 = u8.MIN_VALUE;
@@ -147,9 +147,9 @@ export abstract class U8 {
   }
 }
 
+
 @final @unmanaged
 export abstract class U16 {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: u16 = u16.MIN_VALUE;
@@ -168,9 +168,9 @@ export abstract class U16 {
   }
 }
 
+
 @final @unmanaged
 export abstract class U32 {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: u32 = u32.MIN_VALUE;
@@ -189,9 +189,9 @@ export abstract class U32 {
   }
 }
 
+
 @final @unmanaged
 export abstract class U64 {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: u64 = u64.MIN_VALUE;
@@ -210,9 +210,9 @@ export abstract class U64 {
   }
 }
 
+
 @final @unmanaged
 export abstract class Usize {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: usize = usize.MIN_VALUE;
@@ -235,9 +235,9 @@ export abstract class Usize {
   }
 }
 
+
 @final @unmanaged
 export abstract class Bool {
-
   // @ts-ignore: decorator
   @lazy
   static readonly MIN_VALUE: bool = bool.MIN_VALUE;
@@ -253,9 +253,9 @@ export abstract class Bool {
 
 export { Bool as Boolean };
 
+
 @final @unmanaged
 export abstract class F32 {
-
   // @ts-ignore: decorator
   @lazy
   static readonly EPSILON: f32 = f32.EPSILON;
@@ -297,7 +297,9 @@ export abstract class F32 {
   }
 
   static isSafeInteger(value: f32): bool {
-    return abs<f32>(value) <= f32.MAX_SAFE_INTEGER && trunc<f32>(value) == value;
+    return (
+      abs<f32>(value) <= f32.MAX_SAFE_INTEGER && trunc<f32>(value) == value
+    );
   }
 
   static isInteger(value: f32): bool {
@@ -319,9 +321,9 @@ export abstract class F32 {
   }
 }
 
+
 @final @unmanaged
 export abstract class F64 {
-
   // @ts-ignore: decorator
   @lazy
   static readonly EPSILON: f64 = f64.EPSILON;
@@ -363,7 +365,9 @@ export abstract class F64 {
   }
 
   static isSafeInteger(value: f64): bool {
-    return abs<f64>(value) <= f64.MAX_SAFE_INTEGER && trunc<f64>(value) == value;
+    return (
+      abs<f64>(value) <= f64.MAX_SAFE_INTEGER && trunc<f64>(value) == value
+    );
   }
 
   static isInteger(value: f64): bool {

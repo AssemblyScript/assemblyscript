@@ -68,5 +68,5 @@ export const enum TypeinfoFlags {
   /** Key type is nullable. */
   KEY_NULLABLE = 1 << 22,
   /** Key type is managed. */
-  KEY_MANAGED = 1 << 23
+  KEY_MANAGED = 1 << 23,
 }

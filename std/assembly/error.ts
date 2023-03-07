@@ -1,17 +1,12 @@
 export class Error {
-
-  name: string  = "Error";
+  name: string = "Error";
   stack: string = ""; // TODO
 
-  constructor(
-    public message: string = ""
-  ) {}
+  constructor(public message: string = "") {}
 
   toString(): string {
     let message = this.message;
-    return message.length
-      ? this.name + ": " + message
-      : this.name;
+    return message.length ? this.name + ": " + message : this.name;
   }
 }
 

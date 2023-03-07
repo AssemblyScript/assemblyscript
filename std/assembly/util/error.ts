@@ -19,7 +19,8 @@ export const E_EMPTYARRAY: string = "Array is empty";
 
 // @ts-ignore: decorator
 @lazy @inline
-export const E_HOLEYARRAY: string = "Element type must be nullable if array is holey";
+export const E_HOLEYARRAY: string =
+  "Element type must be nullable if array is holey";
 
 // @ts-ignore: decorator
 @lazy @inline

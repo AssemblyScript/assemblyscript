@@ -7,13 +7,13 @@
 
 // @ts-ignore: decorator
 @global @inline
-function Map_keys<K,V>(map: Map<K,V>): K[] {
+function Map_keys<K, V>(map: Map<K, V>): K[] {
   return map.keys(); // preliminary
 }
 
 // @ts-ignore: decorator
 @global @inline
-function Map_values<K,V>(map: Map<K,V>): V[] {
+function Map_values<K, V>(map: Map<K, V>): V[] {
   return map.values(); // preliminary
 }
 

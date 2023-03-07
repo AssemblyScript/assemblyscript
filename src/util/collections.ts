@@ -4,12 +4,13 @@
  */
 
 /** Clone map. Typically used to track contextual type arguments. */
-export function cloneMap<K,V>(map: Map<K,V> | null): Map<K,V> {
-  if (!ASC_TARGET) { // JS
+export function cloneMap<K, V>(map: Map<K, V> | null): Map<K, V> {
+  if (!ASC_TARGET) {
+    // JS
     // fast path for js target
-    return new Map<K,V>(map);
+    return new Map<K, V>(map);
   } else {
-    let out = new Map<K,V>();
+    let out = new Map<K, V>();
     if (map) {
       // TODO: for (let [k, v] of map) {
       for (let _keys = Map_keys(map), i = 0, k = _keys.length; i < k; ++i) {
@@ -23,13 +24,14 @@ export function cloneMap<K,V>(map: Map<K,V> | null): Map<K,V> {
 }
 
 /** Merge two maps in into new one. */
-export function mergeMaps<K,V>(map1: Map<K,V>, map2: Map<K,V>): Map<K,V> {
-  if (!ASC_TARGET) { // JS
-    let out = new Map<K,V>(map1);
+export function mergeMaps<K, V>(map1: Map<K, V>, map2: Map<K, V>): Map<K, V> {
+  if (!ASC_TARGET) {
+    // JS
+    let out = new Map<K, V>(map1);
     map2.forEach((v, k) => out.set(k, v));
     return out;
   } else {
-    let out = new Map<K,V>();
+    let out = new Map<K, V>();
     // TODO: for (let [k, v] of map1) {
     for (let _keys = Map_keys(map1), i = 0, k = _keys.length; i < k; ++i) {
       let k = unchecked(_keys[i]);
@@ -70,12 +72,13 @@ export class BitSet {
   add(index: i32): this {
     let idx = index >>> 5;
     let words = this.words;
-    if (idx >= words.length) { // resize
+    if (idx >= words.length) {
+      // resize
       this.words = new Uint32Array(idx + 16);
       this.words.set(words);
       words = this.words;
     }
-    unchecked(words[idx] |= 1 << index);
+    unchecked((words[idx] |= 1 << index));
     return this;
   }
 
@@ -83,7 +86,7 @@ export class BitSet {
     let idx = index >>> 5;
     let words = this.words;
     if (idx >= words.length) return;
-    unchecked(words[idx] &= ~(1 << index));
+    unchecked((words[idx] &= ~(1 << index)));
   }
 
   has(index: i32): bool {
@@ -103,7 +106,7 @@ export class BitSet {
       let word = unchecked(this.words[i]);
       while (word) {
         let mask = word & -word;
-        unchecked(res[p++] = (i << 5) + popcnt(mask - 1));
+        unchecked((res[p++] = (i << 5) + popcnt(mask - 1)));
         word ^= mask;
       }
     }

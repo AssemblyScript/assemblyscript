@@ -7,7 +7,11 @@ declare function __reset(): void;
 // Garbage collector
 declare function __new(size: usize, id: u32): usize;
 declare function __renew(ptr: usize, size: usize): usize;
-declare function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void;
+declare function __link(
+  parentPtr: usize,
+  childPtr: usize,
+  expectMultiple: bool,
+): void;
 declare function __collect(): void;
 
 // Runtime type info
@@ -20,7 +24,12 @@ declare function __visit_members(ptr: usize, cookie: u32): void;
 
 // Allocation helpers
 declare function __newBuffer(size: usize, id: u32, data?: usize): usize;
-declare function __newArray(length: i32, alignLog2: usize, id: u32, data?: usize): usize;
+declare function __newArray(
+  length: i32,
+  alignLog2: usize,
+  id: u32,
+  data?: usize,
+): usize;
 
 // Finalization
 declare function __finalize(ptr: usize): void;

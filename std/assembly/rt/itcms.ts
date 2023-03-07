@@ -1,7 +1,21 @@
-import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE, RTRACE, PROFILE } from "./common";
+import {
+  BLOCK,
+  BLOCK_OVERHEAD,
+  OBJECT_OVERHEAD,
+  OBJECT_MAXSIZE,
+  TOTAL_OVERHEAD,
+  DEBUG,
+  TRACE,
+  RTRACE,
+  PROFILE,
+} from "./common";
 import { onvisit, oncollect, oninterrupt, onyield } from "./rtrace";
 import { TypeinfoFlags } from "../shared/typeinfo";
-import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/error";
+import {
+  E_ALLOCATION_TOO_LARGE,
+  E_ALREADY_PINNED,
+  E_NOT_PINNED,
+} from "../util/error";
 
 // === ITCMS: An incremental Tri-Color Mark & Sweep garbage collector ===
 // Adapted from Bach Le's μgc, see: https://github.com/bullno1/ugc
@@ -43,11 +57,17 @@ import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/
 @lazy let state = STATE_IDLE;
 
 // @ts-ignore: decorator
-@lazy let fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let fromSpace = initLazy(
+  changetype<Object>(memory.data(offsetof<Object>())),
+);
 // @ts-ignore: decorator
-@lazy let toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let toSpace = initLazy(
+  changetype<Object>(memory.data(offsetof<Object>())),
+);
 // @ts-ignore: decorator
-@lazy let pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let pinSpace = initLazy(
+  changetype<Object>(memory.data(offsetof<Object>())),
+);
 // @ts-ignore: decorator
 @lazy let iter: Object = changetype<Object>(0); // unsafe initializion below
 
@@ -96,7 +116,8 @@ function initLazy(space: Object): Object {
 
   /** Sets the pointer to the next object. */
   set next(obj: Object) {
-    this.nextWithColor = changetype<usize>(obj) | (this.nextWithColor & COLOR_MASK);
+    this.nextWithColor =
+      changetype<usize>(obj) | (this.nextWithColor & COLOR_MASK);
   }
 
   /** Gets this object's color. */
@@ -118,14 +139,18 @@ function initLazy(space: Object): Object {
   get isPointerfree(): bool {
     let rtId = this.rtId;
     // 0: Object, 1: ArrayBuffer, 2: String
-    return rtId <= idof<string>() || (__typeinfo(rtId) & TypeinfoFlags.POINTERFREE) != 0;
+    return (
+      rtId <= idof<string>() ||
+      (__typeinfo(rtId) & TypeinfoFlags.POINTERFREE) != 0
+    );
   }
 
   /** Unlinks this object from its list. */
   unlink(): void {
     let next = this.next;
     if (next == null) {
-      if (DEBUG) assert(this.prev == null && changetype<usize>(this) < __heap_base);
+      if (DEBUG)
+        assert(this.prev == null && changetype<usize>(this) < __heap_base);
       return; // static data not yet linked
     }
     let prev = this.prev;
@@ -192,7 +217,8 @@ function step(): usize {
       obj = iter.next;
       while (obj != toSpace) {
         iter = obj;
-        if (obj.color != black) { // skip already-blacks (pointerfree)
+        if (obj.color != black) {
+          // skip already-blacks (pointerfree)
           obj.color = black;
           visitCount = 0;
           __visit_members(changetype<usize>(obj) + TOTAL_OVERHEAD, VISIT_SCAN);
@@ -209,7 +235,10 @@ function step(): usize {
         while (obj != toSpace) {
           if (obj.color != black) {
             obj.color = black;
-            __visit_members(changetype<usize>(obj) + TOTAL_OVERHEAD, VISIT_SCAN);
+            __visit_members(
+              changetype<usize>(obj) + TOTAL_OVERHEAD,
+              VISIT_SCAN,
+            );
           }
           obj = obj.next;
         }
@@ -260,7 +289,9 @@ function free(obj: Object): void {
 export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   if (total >= threshold) interrupt();
-  let obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
+  let obj = changetype<Object>(
+    __alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD,
+  );
   obj.rtId = id;
   obj.rtSize = <u32>size;
   obj.linkTo(fromSpace, white); // inits next/prev
@@ -289,7 +320,11 @@ export function __renew(oldPtr: usize, size: usize): usize {
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void {
+export function __link(
+  parentPtr: usize,
+  childPtr: usize,
+  expectMultiple: bool,
+): void {
   // Write barrier is unnecessary if non-incremental
   if (!childPtr) return;
   if (DEBUG) assert(parentPtr);
@@ -373,7 +408,7 @@ export function __collect(): void {
   // perform a full cycle
   step();
   while (state != STATE_IDLE) step();
-  threshold = <usize>(<u64>total * IDLEFACTOR / 100) + GRANULARITY;
+  threshold = <usize>((<u64>total * IDLEFACTOR) / 100) + GRANULARITY;
   if (TRACE) trace("GC (full) done at cur/max", 2, total, memory.size() << 16);
   if (RTRACE || PROFILE) oncollect(total);
 }
@@ -382,28 +417,36 @@ export function __collect(): void {
 
 /** How often to interrupt. The default of 1024 means "interrupt each 1024 bytes allocated". */
 // @ts-ignore: decorator
-@inline const GRANULARITY: usize = isDefined(ASC_GC_GRANULARITY) ? ASC_GC_GRANULARITY : 1024;
+@inline const GRANULARITY: usize = isDefined(ASC_GC_GRANULARITY)
+  ? ASC_GC_GRANULARITY
+  : 1024;
 /** How long to interrupt. The default of 200% means "run at double the speed of allocations". */
 // @ts-ignore: decorator
-@inline const STEPFACTOR: usize = isDefined(ASC_GC_SWEEPFACTOR) ? ASC_GC_SWEEPFACTOR : 200;
+@inline const STEPFACTOR: usize = isDefined(ASC_GC_SWEEPFACTOR)
+  ? ASC_GC_SWEEPFACTOR
+  : 200;
 /** How long to idle. The default of 200% means "wait for memory to double before kicking in again". */
 // @ts-ignore: decorator
-@inline const IDLEFACTOR: usize = isDefined(ASC_GC_IDLEFACTOR) ? ASC_GC_IDLEFACTOR : 200;
+@inline const IDLEFACTOR: usize = isDefined(ASC_GC_IDLEFACTOR)
+  ? ASC_GC_IDLEFACTOR
+  : 200;
 
 /** Threshold of memory used by objects to exceed before interrupting again. */
 // @ts-ignore: decorator
-@lazy let threshold: usize = ((<usize>memory.size() << 16) - __heap_base) >> 1;
+@lazy let threshold: usize =
+  (((<usize>memory.size()) << 16) - __heap_base) >> 1;
 
 /** Performs a reasonable amount of incremental GC steps. */
 function interrupt(): void {
   if (PROFILE) oninterrupt(total);
   if (TRACE) trace("GC (auto) at", 1, total);
-  let budget: isize = GRANULARITY * STEPFACTOR / 100;
+  let budget: isize = (GRANULARITY * STEPFACTOR) / 100;
   do {
     budget -= step();
     if (state == STATE_IDLE) {
-      if (TRACE) trace("└ GC (auto) done at cur/max", 2, total, memory.size() << 16);
-      threshold = <usize>(<u64>total * IDLEFACTOR / 100) + GRANULARITY;
+      if (TRACE)
+        trace("└ GC (auto) done at cur/max", 2, total, memory.size() << 16);
+      threshold = <usize>((<u64>total * IDLEFACTOR) / 100) + GRANULARITY;
       if (PROFILE) onyield(total);
       return;
     }

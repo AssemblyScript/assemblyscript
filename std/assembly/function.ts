@@ -1,5 +1,6 @@
 type auto = i32;
 
+
 @final export abstract class Function<T> {
   private _index: u32;
   private _env: usize;

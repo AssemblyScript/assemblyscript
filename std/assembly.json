@@ -5,13 +5,11 @@
     "module": "commonjs",
     "noLib": true,
     "allowJs": false,
-    "typeRoots": [ "types" ],
-    "types": [ "assembly" ],
+    "typeRoots": ["types"],
+    "types": ["assembly"],
     "baseUrl": ".",
     "paths": {
-      "*": [
-        "./assembly/*"
-      ]
+      "*": ["./assembly/*"]
     }
   }
 }

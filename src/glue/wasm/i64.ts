@@ -29,7 +29,7 @@ function i64_is<T>(value: T): bool {
 // @ts-ignore: decorator
 @global @inline
 function i64_new(lo: i32, hi: i32 = 0): i64 {
-  return <i64><u32>lo | (<i64>hi << 32);
+  return (<i64>(<u32>lo)) | ((<i64>hi) << 32);
 }
 
 // @ts-ignore: decorator
@@ -283,13 +283,17 @@ function i64_is_bool(value: i64): bool {
 // @ts-ignore: decorator
 @global @inline
 function i64_is_f32(value: i64): bool {
-  return value >= <i64>f32.MIN_SAFE_INTEGER && value <= <i64>f32.MAX_SAFE_INTEGER;
+  return (
+    value >= <i64>f32.MIN_SAFE_INTEGER && value <= <i64>f32.MAX_SAFE_INTEGER
+  );
 }
 
 // @ts-ignore: decorator
 @global @inline
 function i64_is_f64(value: i64): bool {
-  return value >= <i64>f64.MIN_SAFE_INTEGER && value <= <i64>f64.MAX_SAFE_INTEGER;
+  return (
+    value >= <i64>f64.MIN_SAFE_INTEGER && value <= <i64>f64.MAX_SAFE_INTEGER
+  );
 }
 
 // @ts-ignore: decorator

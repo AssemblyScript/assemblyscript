@@ -1,8 +1,10 @@
-/** @module std/portable *//***/
+/** @module std/portable */ /***/
 
-let globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
+let globalScope =
+  (typeof window !== "undefined" && window) ||
+  (typeof global !== "undefined" && global) ||
+  self;
 if (typeof globalScope.ASC_TARGET === "undefined") {
-
   globalScope.ASC_TARGET = 0; // Target.JS
   globalScope.ASC_RUNTIME = 0; // Runtime.Stub
   globalScope.ASC_NO_ASSERT = false;
@@ -19,107 +21,145 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   let U64 = new Uint32Array(F64.buffer);
 
   Object.defineProperties(
-    globalScope["i8"] = function i8(value) { return value << 24 >> 24; },
+    (globalScope["i8"] = function i8(value) {
+      return (value << 24) >> 24;
+    }),
     {
-      "MIN_VALUE": { value: -128 },
-      "MAX_VALUE": { value:  127 },
+      MIN_VALUE: { value: -128 },
+      MAX_VALUE: { value: 127 },
 
-      parse(str, radix) { return parseInt(str, radix) << 24 >> 24; }
-    }
+      parse(str, radix) {
+        return (parseInt(str, radix) << 24) >> 24;
+      },
+    },
   );
 
   Object.defineProperties(
-    globalScope["i16"] = function i16(value) { return value << 16 >> 16; },
+    (globalScope["i16"] = function i16(value) {
+      return (value << 16) >> 16;
+    }),
     {
-      "MIN_VALUE": { value: -32768 },
-      "MAX_VALUE": { value:  32767 },
+      MIN_VALUE: { value: -32768 },
+      MAX_VALUE: { value: 32767 },
 
-      parse(str, radix) { return parseInt(str, radix) << 16 >> 16; }
-    }
+      parse(str, radix) {
+        return (parseInt(str, radix) << 16) >> 16;
+      },
+    },
   );
 
   Object.defineProperties(
-    globalScope["i32"] = globalScope["isize"] = function i32(value) { return value | 0; },
+    (globalScope["i32"] = globalScope["isize"] =
+      function i32(value) {
+        return value | 0;
+      }),
     {
-      "MIN_VALUE": { value: -2147483648 },
-      "MAX_VALUE": { value:  2147483647 },
+      MIN_VALUE: { value: -2147483648 },
+      MAX_VALUE: { value: 2147483647 },
 
-      parse(str, radix) { return parseInt(str, radix) | 0; }
-    }
+      parse(str, radix) {
+        return parseInt(str, radix) | 0;
+      },
+    },
   );
 
   Object.defineProperties(
-    globalScope["u8"] = function u8(value) { return value & 0xff; },
+    (globalScope["u8"] = function u8(value) {
+      return value & 0xff;
+    }),
     {
-      "MIN_VALUE": { value:   0 },
-      "MAX_VALUE": { value: 255 },
+      MIN_VALUE: { value: 0 },
+      MAX_VALUE: { value: 255 },
 
-      parse(str, radix) { return parseInt(str, radix) & 0xff; }
-    }
+      parse(str, radix) {
+        return parseInt(str, radix) & 0xff;
+      },
+    },
   );
 
   Object.defineProperties(
-    globalScope["u16"] = function u16(value) { return value & 0xffff; },
+    (globalScope["u16"] = function u16(value) {
+      return value & 0xffff;
+    }),
     {
-      "MIN_VALUE": { value:     0 },
-      "MAX_VALUE": { value: 65535 },
+      MIN_VALUE: { value: 0 },
+      MAX_VALUE: { value: 65535 },
 
-      parse(str, radix) { return parseInt(str, radix) & 0xffff; }
-    }
+      parse(str, radix) {
+        return parseInt(str, radix) & 0xffff;
+      },
+    },
   );
 
   Object.defineProperties(
-    globalScope["u32"] = globalScope["usize"] = function u32(value) { return value >>> 0; },
+    (globalScope["u32"] = globalScope["usize"] =
+      function u32(value) {
+        return value >>> 0;
+      }),
     {
-      "MIN_VALUE": { value:          0 },
-      "MAX_VALUE": { value: 4294967295 },
+      MIN_VALUE: { value: 0 },
+      MAX_VALUE: { value: 4294967295 },
 
-      parse(str, radix) { return parseInt(str, radix) >>> 0; }
-    }
+      parse(str, radix) {
+        return parseInt(str, radix) >>> 0;
+      },
+    },
   );
 
   Object.defineProperties(
-    globalScope["bool"] = function bool(value) { return !!value; },
+    (globalScope["bool"] = function bool(value) {
+      return !!value;
+    }),
     {
-      "MIN_VALUE": { value: false },
-      "MAX_VALUE": { value: true },
+      MIN_VALUE: { value: false },
+      MAX_VALUE: { value: true },
 
-      parse(str) { return str.trim() === "true"; }
-    }
+      parse(str) {
+        return str.trim() === "true";
+      },
+    },
   );
 
   Object.defineProperties(
-    globalScope["f32"] = function f32(value) { return Math.fround(value); },
+    (globalScope["f32"] = function f32(value) {
+      return Math.fround(value);
+    }),
     {
-      "EPSILON":   { value: 1.1920928955078125e-07 },
-      "MIN_VALUE": { value: 1.401298464324817e-45 },
-      "MAX_VALUE": { value: 3.4028234663852886e+38 },
-      "MIN_NORMAL_VALUE":  { value:  1.1754943508222875e-38 },
-      "MIN_SAFE_INTEGER":  { value: -16777215 },
-      "MAX_SAFE_INTEGER":  { value:  16777215 },
-      "POSITIVE_INFINITY": { value:  Infinity },
-      "NEGATIVE_INFINITY": { value: -Infinity },
-      "NaN": { value: NaN },
+      EPSILON: { value: 1.1920928955078125e-7 },
+      MIN_VALUE: { value: 1.401298464324817e-45 },
+      MAX_VALUE: { value: 3.4028234663852886e38 },
+      MIN_NORMAL_VALUE: { value: 1.1754943508222875e-38 },
+      MIN_SAFE_INTEGER: { value: -16777215 },
+      MAX_SAFE_INTEGER: { value: 16777215 },
+      POSITIVE_INFINITY: { value: Infinity },
+      NEGATIVE_INFINITY: { value: -Infinity },
+      NaN: { value: NaN },
 
-      parse(str) { return Math.fround(parseFloat(str)); }
-    }
+      parse(str) {
+        return Math.fround(parseFloat(str));
+      },
+    },
   );
 
   Object.defineProperties(
-    globalScope["f64"] = function f64(value) { return +value; },
+    (globalScope["f64"] = function f64(value) {
+      return +value;
+    }),
     {
-      "EPSILON":   { value: 2.2204460492503131e-016 },
-      "MIN_VALUE": { value:                  5e-324 },
-      "MAX_VALUE": { value: 1.7976931348623157e+308 },
-      "MIN_NORMAL_VALUE":  { value:  2.2250738585072014e-308 },
-      "MIN_SAFE_INTEGER":  { value: -9007199254740991 },
-      "MAX_SAFE_INTEGER":  { value:  9007199254740991 },
-      "POSITIVE_INFINITY": { value:  Infinity },
-      "NEGATIVE_INFINITY": { value: -Infinity },
-      "NaN": { value: NaN },
+      EPSILON: { value: 2.2204460492503131e-16 },
+      MIN_VALUE: { value: 5e-324 },
+      MAX_VALUE: { value: 1.7976931348623157e308 },
+      MIN_NORMAL_VALUE: { value: 2.2250738585072014e-308 },
+      MIN_SAFE_INTEGER: { value: -9007199254740991 },
+      MAX_SAFE_INTEGER: { value: 9007199254740991 },
+      POSITIVE_INFINITY: { value: Infinity },
+      NEGATIVE_INFINITY: { value: -Infinity },
+      NaN: { value: NaN },
 
-      parse(str) { return parseFloat(str); }
-    }
+      parse(str) {
+        return parseFloat(str);
+      },
+    },
   );
 
   globalScope["clz"] = Math.clz32;
@@ -129,9 +169,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   };
 
   globalScope["popcnt"] = function popcnt(value) {
-    value -= value >>> 1 & 0x55555555;
-    value = (value & 0x33333333) + (value >>> 2 & 0x33333333);
-    return (((value + (value >>> 4)) & 0x0F0F0F0F) * 0x01010101) >>> 24;
+    value -= (value >>> 1) & 0x55555555;
+    value = (value & 0x33333333) + ((value >>> 2) & 0x33333333);
+    return (((value + (value >>> 4)) & 0x0f0f0f0f) * 0x01010101) >>> 24;
   };
 
   globalScope["rotl"] = function rotl(value, shift) {
@@ -173,15 +213,15 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   globalScope["copysign"] = function copysign(x, y) {
     return y
       ? Math.abs(x) * Math.sign(y)
-      : (F64[0] = y, U64[1] >>> 31 ? -1 : 1); // +0, -0, -NaN, +NaN
+      : ((F64[0] = y), U64[1] >>> 31 ? -1 : 1); // +0, -0, -NaN, +NaN
   };
 
   globalScope["bswap"] = function bswap(value) {
-    let a = value >> 8 & 0x00FF00FF;
-    let b = (value & 0x00FF00FF) << 8;
+    let a = (value >> 8) & 0x00ff00ff;
+    let b = (value & 0x00ff00ff) << 8;
     value = a | b;
-    a = value >> 16 & 0x0000FFFF;
-    b = (value & 0x0000FFFF) << 16;
+    a = (value >> 16) & 0x0000ffff;
+    b = (value & 0x0000ffff) << 16;
     return a | b;
   };
 
@@ -227,11 +267,11 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
       return String.fromCharCode.apply(String, arr);
     }
     let index = 0;
-    let parts = '';
+    let parts = "";
     while (index < len) {
       parts += String.fromCharCode.apply(
         String,
-        arr.slice(index, Math.min(index + CHUNKSIZE, len))
+        arr.slice(index, Math.min(index + CHUNKSIZE, len)),
       );
       index += CHUNKSIZE;
     }
@@ -245,11 +285,11 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
       return String.fromCodePoint.apply(String, arr);
     }
     let index = 0;
-    let parts = '';
+    let parts = "";
     while (index < len) {
       parts += String.fromCodePoint.apply(
         String,
-        arr.slice(index, Math.min(index + CHUNKSIZE, len))
+        arr.slice(index, Math.min(index + CHUNKSIZE, len)),
       );
       index += CHUNKSIZE;
     }
@@ -261,7 +301,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
       value: function at(index) {
         return this.charAt(index >= 0 ? index : index + this.length);
       },
-      configurable: true
+      configurable: true,
     });
   }
 
@@ -272,16 +312,17 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
         if (!search.length) res = replacment + res + replacment;
         return res;
       },
-      configurable: true
+      configurable: true,
     });
   }
 
   function defaultComparator(a, b) {
     if (a == b) {
       if (a != 0) return 0;
-      a = 1 / a, b = 1 / b;
+      (a = 1 / a), (b = 1 / b);
     } else {
-      let nanA = a != a, nanB = b != b;
+      let nanA = a != a,
+        nanB = b != b;
       if (nanA | nanB) return nanA - nanB;
       if (a == null) a = String(a);
       if (b == null) b = String(b);
@@ -294,19 +335,24 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     return arraySort.call(this, comparator || defaultComparator);
   };
 
-  [ Array,
+  [
+    Array,
     Uint8ClampedArray,
-    Uint8Array, Int8Array,
-    Uint16Array, Int16Array,
-    Uint32Array, Int32Array,
-    Float32Array, Float64Array
-  ].forEach(Ctr => {
+    Uint8Array,
+    Int8Array,
+    Uint16Array,
+    Int16Array,
+    Uint32Array,
+    Int32Array,
+    Float32Array,
+    Float64Array,
+  ].forEach((Ctr) => {
     if (!Ctr.prototype.at) {
       Object.defineProperty(Ctr.prototype, "at", {
         value: function at(index) {
           return this[index >= 0 ? index : index + this.length];
         },
-        configurable: true
+        configurable: true,
       });
     }
 
@@ -318,7 +364,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
           }
           return -1;
         },
-        configurable: true
+        configurable: true,
       });
     }
 
@@ -327,7 +373,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
         value: function wrap(buffer, byteOffset, length) {
           return new Ctr(buffer, byteOffset, length);
         },
-        configurable: true
+        configurable: true,
       });
     }
   });
@@ -356,11 +402,13 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
 
   globalScope["isArray"] = Array.isArray;
   globalScope["isArrayLike"] = function isArrayLike(expr) {
-    return expr
-      && typeof expr === 'object'
-      && typeof expr.length === 'number'
-      && expr.length >= 0
-      && Math.trunc(expr.length) === expr.length;
+    return (
+      expr &&
+      typeof expr === "object" &&
+      typeof expr.length === "number" &&
+      expr.length >= 0 &&
+      Math.trunc(expr.length) === expr.length
+    );
   };
 
   globalScope["isDefined"] = function isDefined(expr) {
@@ -390,25 +438,28 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     sincos_cos: { value: 0.0, writable: true },
     signbit: {
       value: function signbit(x) {
-        F64[0] = x; return Boolean(U64[1] >>> 31);
-      }
+        F64[0] = x;
+        return Boolean(U64[1] >>> 31);
+      },
     },
     sincos: {
       value: function sincos(x) {
         this.sincos_sin = Math.sin(x);
         this.sincos_cos = Math.cos(x);
-      }
+      },
     },
     exp2: {
       value: function exp2(x) {
         return Math.pow(2, x);
-      }
-    }
+      },
+    },
   });
 
-  globalScope["unmanaged"] = function() { /* nop */ };
+  globalScope["unmanaged"] = function () {
+    /* nop */
+  };
 
-  globalScope["trace"] = function(message, n) {
+  globalScope["trace"] = function (message, n) {
     if (n) message += Array.prototype.slice.call(arguments, 2, 2 + n);
     console.error("trace: " + message);
   };

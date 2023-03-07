@@ -39,21 +39,36 @@ export const enum Feature {
 /** Gets the name of the specified feature one would specify on the command line. */
 export function featureToString(feature: Feature): string {
   switch (feature) {
-    case Feature.SignExtension: return "sign-extension";
-    case Feature.MutableGlobals: return "mutable-globals";
-    case Feature.NontrappingF2I: return "nontrapping-f2i";
-    case Feature.BulkMemory: return "bulk-memory";
-    case Feature.Simd: return "simd";
-    case Feature.Threads: return "threads";
-    case Feature.ExceptionHandling: return "exception-handling";
-    case Feature.TailCalls: return "tail-calls";
-    case Feature.ReferenceTypes: return "reference-types";
-    case Feature.MultiValue: return "multi-value";
-    case Feature.GC: return "gc";
-    case Feature.Memory64: return "memory64";
-    case Feature.RelaxedSimd: return "relaxed-simd";
-    case Feature.ExtendedConst: return "extended-const";
-    case Feature.Stringref: return "stringref";
+    case Feature.SignExtension:
+      return "sign-extension";
+    case Feature.MutableGlobals:
+      return "mutable-globals";
+    case Feature.NontrappingF2I:
+      return "nontrapping-f2i";
+    case Feature.BulkMemory:
+      return "bulk-memory";
+    case Feature.Simd:
+      return "simd";
+    case Feature.Threads:
+      return "threads";
+    case Feature.ExceptionHandling:
+      return "exception-handling";
+    case Feature.TailCalls:
+      return "tail-calls";
+    case Feature.ReferenceTypes:
+      return "reference-types";
+    case Feature.MultiValue:
+      return "multi-value";
+    case Feature.GC:
+      return "gc";
+    case Feature.Memory64:
+      return "memory64";
+    case Feature.RelaxedSimd:
+      return "relaxed-simd";
+    case Feature.ExtendedConst:
+      return "extended-const";
+    case Feature.Stringref:
+      return "stringref";
   }
   assert(false);
   return "";

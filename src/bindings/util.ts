@@ -1,10 +1,6 @@
-import {
-  SourceKind
-} from "../ast";
+import { SourceKind } from "../ast";
 
-import {
-  CommonFlags
-} from "../common";
+import { CommonFlags } from "../common";
 
 import {
   ClassPrototype,
@@ -20,18 +16,17 @@ import {
   Program,
   Property,
   PropertyPrototype,
-  InterfacePrototype
+  InterfacePrototype,
 } from "../program";
 
 /** Walker base class. */
 export abstract class ExportsWalker {
-
   /** Program reference. */
   program: Program;
   /** Whether to include private members */
   includePrivate: bool;
   /** Already seen elements. */
-  seen: Map<Element,string> = new Map();
+  seen: Map<Element, string> = new Map();
 
   /** Constructs a new Element walker. */
   constructor(program: Program, includePrivate: bool = false) {
@@ -42,7 +37,13 @@ export abstract class ExportsWalker {
   /** Walks all elements and calls the respective handlers. */
   walk(): void {
     // TODO: for (let file of this.program.filesByName.values()) {
-    for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
+    for (
+      let _values = Map_values(this.program.filesByName),
+        i = 0,
+        k = _values.length;
+      i < k;
+      ++i
+    ) {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.UserEntry) this.visitFile(file);
     }
@@ -79,14 +80,17 @@ export abstract class ExportsWalker {
     seen.set(element, name);
     switch (element.kind) {
       case ElementKind.Global: {
-        if (element.is(CommonFlags.Compiled)) this.visitGlobal(name, <Global>element);
+        if (element.is(CommonFlags.Compiled))
+          this.visitGlobal(name, <Global>element);
         break;
       }
       case ElementKind.Enum: {
-        if (element.is(CommonFlags.Compiled)) this.visitEnum(name, <Enum>element);
+        if (element.is(CommonFlags.Compiled))
+          this.visitEnum(name, <Enum>element);
         break;
       }
-      case ElementKind.EnumValue: break; // handled by visitEnum
+      case ElementKind.EnumValue:
+        break; // handled by visitEnum
       case ElementKind.FunctionPrototype: {
         this.visitFunctionInstances(name, <FunctionPrototype>element);
         break;
@@ -118,7 +122,8 @@ export abstract class ExportsWalker {
         break;
       }
       case ElementKind.TypeDefinition:
-      case ElementKind.IndexSignature: break;
+      case ElementKind.IndexSignature:
+        break;
       default: {
         // Not (directly) reachable exports:
         // File, Local, Function, Class, Interface
@@ -127,13 +132,21 @@ export abstract class ExportsWalker {
     }
   }
 
-  private visitFunctionInstances(name: string, element: FunctionPrototype): void {
+  private visitFunctionInstances(
+    name: string,
+    element: FunctionPrototype,
+  ): void {
     let instances = element.instances;
     if (instances) {
       // TODO: for (let instance of instances.values()) {
-      for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+      for (
+        let _values = Map_values(instances), i = 0, k = _values.length;
+        i < k;
+        ++i
+      ) {
         let instance = unchecked(_values[i]);
-        if (instance.is(CommonFlags.Compiled)) this.visitFunction(name, instance);
+        if (instance.is(CommonFlags.Compiled))
+          this.visitFunction(name, instance);
       }
     }
   }
@@ -142,7 +155,11 @@ export abstract class ExportsWalker {
     let instances = element.instances;
     if (instances) {
       // TODO: for (let instance of instances.values()) {
-      for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+      for (
+        let _values = Map_values(instances), i = 0, k = _values.length;
+        i < k;
+        ++i
+      ) {
         let instance = unchecked(_values[i]);
         assert(instance.kind == ElementKind.Class);
         if (instance.is(CommonFlags.Compiled)) this.visitClass(name, instance);
@@ -150,14 +167,22 @@ export abstract class ExportsWalker {
     }
   }
 
-  private visitInterfaceInstances(name: string, element: InterfacePrototype): void {
+  private visitInterfaceInstances(
+    name: string,
+    element: InterfacePrototype,
+  ): void {
     let instances = element.instances;
     if (instances) {
       // TODO: for (let instance of instances.values()) {
-      for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+      for (
+        let _values = Map_values(instances), i = 0, k = _values.length;
+        i < k;
+        ++i
+      ) {
         let instance = <Interface>unchecked(_values[i]);
         assert(instance.kind == ElementKind.Interface);
-        if (instance.is(CommonFlags.Compiled)) this.visitInterface(name, instance);
+        if (instance.is(CommonFlags.Compiled))
+          this.visitInterface(name, instance);
       }
     }
   }
@@ -168,7 +193,11 @@ export abstract class ExportsWalker {
   abstract visitClass(name: string, element: Class): void;
   abstract visitInterface(name: string, element: Interface): void;
   abstract visitNamespace(name: string, element: Element): void;
-  abstract visitAlias(name: string, element: Element, originalName: string): void;
+  abstract visitAlias(
+    name: string,
+    element: Element,
+    originalName: string,
+  ): void;
 }
 
 // Helpers
@@ -178,14 +207,22 @@ export function hasCompiledMember(element: Element): bool {
   let members = element.members;
   if (members) {
     // TODO: for (let member of members.values()) {
-    for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+    for (
+      let _values = Map_values(members), i = 0, k = _values.length;
+      i < k;
+      ++i
+    ) {
       let member = unchecked(_values[i]);
       switch (member.kind) {
         case ElementKind.FunctionPrototype: {
           let instances = (<FunctionPrototype>member).instances;
           if (instances) {
             // TODO: for (let instance of instances.values()) {
-            for (let _values = Map_values(instances), j = 0, l = _values.length; j < l; ++j) {
+            for (
+              let _values = Map_values(instances), j = 0, l = _values.length;
+              j < l;
+              ++j
+            ) {
               let instance = unchecked(_values[j]);
               if (instance.is(CommonFlags.Compiled)) return true;
             }
@@ -196,7 +233,11 @@ export function hasCompiledMember(element: Element): bool {
           let instances = (<ClassPrototype>member).instances;
           if (instances) {
             // TODO: for (let instance of instances.values()) {
-            for (let _values = Map_values(instances), j = 0, l = _values.length; j < l; ++j) {
+            for (
+              let _values = Map_values(instances), j = 0, l = _values.length;
+              j < l;
+              ++j
+            ) {
               let instance = unchecked(_values[j]);
               if (instance.is(CommonFlags.Compiled)) return true;
             }
@@ -204,7 +245,8 @@ export function hasCompiledMember(element: Element): bool {
           break;
         }
         default: {
-          if (member.is(CommonFlags.Compiled) || hasCompiledMember(member)) return true;
+          if (member.is(CommonFlags.Compiled) || hasCompiledMember(member))
+            return true;
           break;
         }
       }

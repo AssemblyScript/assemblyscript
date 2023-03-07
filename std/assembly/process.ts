@@ -1,14 +1,11 @@
 import {
   Date as Date_binding,
-  performance as performance_binding
+  performance as performance_binding,
 } from "bindings/dom";
 
-import {
-  process as process_binding
-} from "bindings/node";
+import { process as process_binding } from "bindings/node";
 
 export namespace process {
-
   // @ts-ignore: decorator
   @lazy export const arch = sizeof<usize>() == 4 ? "wasm32" : "wasm64";
 
@@ -44,7 +41,7 @@ function lazyArgv(): string[] {
   return process_binding.argv;
 }
 
-function lazyEnv(): Map<string,string> {
+function lazyEnv(): Map<string, string> {
   // TODO: What about Node?
   return new Map();
 }

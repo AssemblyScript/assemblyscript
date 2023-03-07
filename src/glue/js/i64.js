@@ -7,8 +7,8 @@
 
 import Long from "long";
 
-globalThis.i64_zero    = Long.ZERO;
-globalThis.i64_one     = Long.ONE;
+globalThis.i64_zero = Long.ZERO;
+globalThis.i64_one = Long.ONE;
 globalThis.i64_neg_one = Long.fromInt(-1);
 globalThis.i64_minimum = Long.MIN_VALUE;
 globalThis.i64_maximum = Long.MAX_VALUE;
@@ -75,7 +75,7 @@ globalThis.i64_pow = function i64_pow(left, right) {
   while (rightLo | rightHi) {
     if (rightLo & 1) result = result.mul(left);
     right = right.shru(1);
-    left  = left.mul(left);
+    left = left.mul(left);
     rightLo = right.low;
     rightHi = right.high;
   }
@@ -173,26 +173,31 @@ globalThis.i64_signbit = function i64_signbit(value) {
 };
 
 globalThis.i64_is_i8 = function i64_is_i8(value) {
-  return value.high === 0 && (value.low >= 0 && value.low <= i8.MAX_VALUE)
-      || value.high === -1 && (value.low >= i8.MIN_VALUE && value.low < 0);
+  return (
+    (value.high === 0 && value.low >= 0 && value.low <= i8.MAX_VALUE) ||
+    (value.high === -1 && value.low >= i8.MIN_VALUE && value.low < 0)
+  );
 };
 
 globalThis.i64_is_i16 = function i64_is_i16(value) {
-  return value.high === 0 && (value.low >= 0 && value.low <= i16.MAX_VALUE)
-      || value.high === -1 && (value.low >= i16.MIN_VALUE && value.low < 0);
+  return (
+    (value.high === 0 && value.low >= 0 && value.low <= i16.MAX_VALUE) ||
+    (value.high === -1 && value.low >= i16.MIN_VALUE && value.low < 0)
+  );
 };
 
 globalThis.i64_is_i32 = function i64_is_i32(value) {
-  return (value.high === 0 && value.low >= 0)
-      || (value.high === -1 && value.low < 0);
+  return (
+    (value.high === 0 && value.low >= 0) || (value.high === -1 && value.low < 0)
+  );
 };
 
 globalThis.i64_is_u8 = function i64_is_u8(value) {
-  return value.high === 0 && (value.low >>> 0) <= u8.MAX_VALUE;
+  return value.high === 0 && value.low >>> 0 <= u8.MAX_VALUE;
 };
 
 globalThis.i64_is_u16 = function i64_is_u16(value) {
-  return value.high === 0 && (value.low >>> 0) <= u16.MAX_VALUE;
+  return value.high === 0 && value.low >>> 0 <= u16.MAX_VALUE;
 };
 
 globalThis.i64_is_u32 = function i64_is_u32(value) {

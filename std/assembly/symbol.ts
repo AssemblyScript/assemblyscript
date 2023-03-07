@@ -9,8 +9,8 @@ import { Map } from "./map";
 // @ts-ignore: decorator
 @lazy let nextId: usize = 12; // Symbol.unscopables + 1
 
-@unmanaged @final abstract class _Symbol {
 
+@unmanaged @final abstract class _Symbol {
   // TODO: all of the following default symbols are unused currently yet add to
   // binary size if #toString becomes compiled. Ultimately we'll most likely want
   // to remove the unsupported ones and only keep what's actually supported.
@@ -82,17 +82,50 @@ import { Map } from "./map";
     let id = changetype<usize>(this);
     let str = "";
     switch (<u32>id) {
-      case 1:  { str = "hasInstance"; break; }
-      case 2:  { str = "isConcatSpreadable"; break; }
-      case 3:  { str = "isRegExp"; break; }
-      case 4:  { str = "match"; break; }
-      case 5:  { str = "replace"; break; }
-      case 6:  { str = "search"; break; }
-      case 7:  { str = "species"; break; }
-      case 8:  { str = "split"; break; }
-      case 9:  { str = "toPrimitive"; break; }
-      case 10: { str = "toStringTag"; break; }
-      case 11: { str = "unscopables"; break; }
+      case 1: {
+        str = "hasInstance";
+        break;
+      }
+      case 2: {
+        str = "isConcatSpreadable";
+        break;
+      }
+      case 3: {
+        str = "isRegExp";
+        break;
+      }
+      case 4: {
+        str = "match";
+        break;
+      }
+      case 5: {
+        str = "replace";
+        break;
+      }
+      case 6: {
+        str = "search";
+        break;
+      }
+      case 7: {
+        str = "species";
+        break;
+      }
+      case 8: {
+        str = "split";
+        break;
+      }
+      case 9: {
+        str = "toPrimitive";
+        break;
+      }
+      case 10: {
+        str = "toStringTag";
+        break;
+      }
+      case 11: {
+        str = "unscopables";
+        break;
+      }
       default: {
         if (idToString != null && idToString.has(id)) str = idToString.get(id);
         break;

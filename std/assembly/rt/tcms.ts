@@ -1,6 +1,19 @@
-import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE, RTRACE } from "./common";
+import {
+  BLOCK,
+  BLOCK_OVERHEAD,
+  OBJECT_OVERHEAD,
+  OBJECT_MAXSIZE,
+  TOTAL_OVERHEAD,
+  DEBUG,
+  TRACE,
+  RTRACE,
+} from "./common";
 import { onvisit, oncollect } from "./rtrace";
-import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/error";
+import {
+  E_ALLOCATION_TOO_LARGE,
+  E_ALREADY_PINNED,
+  E_NOT_PINNED,
+} from "../util/error";
 
 // === TCMS: A Two-Color Mark & Sweep garbage collector ===
 
@@ -25,11 +38,17 @@ import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/
 @lazy let total: usize = 0;
 
 // @ts-ignore: decorator
-@lazy let fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let fromSpace = initLazy(
+  changetype<Object>(memory.data(offsetof<Object>())),
+);
 // @ts-ignore: decorator
-@lazy let toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let toSpace = initLazy(
+  changetype<Object>(memory.data(offsetof<Object>())),
+);
 // @ts-ignore: decorator
-@lazy let pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let pinSpace = initLazy(
+  changetype<Object>(memory.data(offsetof<Object>())),
+);
 
 function initLazy(space: Object): Object {
   space.nextWithColor = changetype<usize>(space);
@@ -76,7 +95,8 @@ function initLazy(space: Object): Object {
 
   /** Sets the pointer to the next object. */
   set next(obj: Object) {
-    this.nextWithColor = changetype<usize>(obj) | (this.nextWithColor & COLOR_MASK);
+    this.nextWithColor =
+      changetype<usize>(obj) | (this.nextWithColor & COLOR_MASK);
   }
 
   /** Gets this object's color. */
@@ -98,7 +118,8 @@ function initLazy(space: Object): Object {
   unlink(): void {
     let next = this.next;
     if (next == null) {
-      if (DEBUG) assert(this.prev == null && changetype<usize>(this) < __heap_base);
+      if (DEBUG)
+        assert(this.prev == null && changetype<usize>(this) < __heap_base);
       return; // static data not yet linked
     }
     let prev = this.prev;
@@ -123,7 +144,9 @@ function initLazy(space: Object): Object {
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
   if (size > OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
-  let obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
+  let obj = changetype<Object>(
+    __alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD,
+  );
   obj.rtId = id;
   obj.rtSize = <u32>size;
   obj.linkTo(fromSpace, white);
@@ -135,14 +158,17 @@ export function __new(size: usize, id: i32): usize {
 @global @unsafe
 export function __renew(oldPtr: usize, size: usize): usize {
   let oldObj = changetype<Object>(oldPtr - TOTAL_OVERHEAD);
-  if (oldPtr < __heap_base) { // move to heap for simplicity
+  if (oldPtr < __heap_base) {
+    // move to heap for simplicity
     let newPtr = __new(size, oldObj.rtId);
     memory.copy(newPtr, oldPtr, min(size, oldObj.rtSize));
     return newPtr;
   }
   if (size > OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   total -= oldObj.size;
-  let newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
+  let newPtr =
+    __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) +
+    OBJECT_OVERHEAD;
   let newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);
   newObj.rtSize = <u32>size;
 
@@ -156,7 +182,11 @@ export function __renew(oldPtr: usize, size: usize): usize {
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void {
+export function __link(
+  parentPtr: usize,
+  childPtr: usize,
+  expectMultiple: bool,
+): void {
   // nop
 }
 
@@ -236,7 +266,8 @@ export function __collect(): void {
       iter.prev = changetype<Object>(0);
     } else {
       total -= iter.size;
-      if (isDefined(__finalize)) __finalize(changetype<usize>(iter) + TOTAL_OVERHEAD);
+      if (isDefined(__finalize))
+        __finalize(changetype<usize>(iter) + TOTAL_OVERHEAD);
       __free(changetype<usize>(iter) + BLOCK_OVERHEAD);
     }
     iter = newNext;

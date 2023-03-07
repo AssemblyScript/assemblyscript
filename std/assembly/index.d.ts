@@ -1,7 +1,7 @@
 /**
  * Environment definitions for compiling AssemblyScript to WebAssembly using asc.
  * @module std/assembly
- *//***/
+ */ /***/
 
 /// <reference no-default-lib="true"/>
 
@@ -118,7 +118,9 @@ declare const ASC_VERSION_PATCH: i32;
 // Builtins
 
 /** Performs the sign-agnostic reverse bytes **/
-declare function bswap<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
+declare function bswap<
+  T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize,
+>(value: T): T;
 /** Performs the sign-agnostic count leading zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered leading if the value is zero. */
 declare function clz<T extends i32 | i64>(value: T): T;
 /** Performs the sign-agnostic count tailing zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered trailing if the value is zero. */
@@ -168,7 +170,12 @@ declare function rem<T extends i32 | i64>(left: T, right: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
-declare function store<T>(ptr: usize, value: T, immOffset?: usize, immAlign?: usize): void;
+declare function store<T>(
+  ptr: usize,
+  value: T,
+  immOffset?: usize,
+  immAlign?: usize,
+): void;
 /** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression. */
 declare function unreachable(): never;
 
@@ -239,7 +246,10 @@ declare function isManaged<T>(value?: any): bool;
 /** Tests if the specified type is void. Compiles to a constant. */
 declare function isVoid<T>(): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
-declare function assert<T>(isTrueish: T, message?: string): T & (object | string | number); // any better way to model `: T != null`?
+declare function assert<T>(
+  isTrueish: T,
+  message?: string,
+): T & (object | string | number); // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
 /** Parses a string to a 64-bit float. */
@@ -278,9 +288,18 @@ declare namespace atomic {
   /** Atomically exchanges an integer value in memory. */
   export function xchg<T>(ptr: usize, value: T, immOffset?: usize): T;
   /** Atomically compares and exchanges an integer value in memory if the condition is met. */
-  export function cmpxchg<T>(ptr: usize, expected: T, replacement: T, immOffset?: usize): T;
+  export function cmpxchg<T>(
+    ptr: usize,
+    expected: T,
+    replacement: T,
+    immOffset?: usize,
+  ): T;
   /** Performs a wait operation on an address in memory suspending this agent if the integer condition is met. */
-  export function wait<T>(ptr: usize, expected: T, timeout?: i64): AtomicWaitResult;
+  export function wait<T>(
+    ptr: usize,
+    expected: T,
+    timeout?: i64,
+  ): AtomicWaitResult;
   /** Performs a notify operation on an address in memory waking up suspended agents. */
   export function notify(ptr: usize, count?: i32): i32;
   /** Performs a fence operation, preserving synchronization guarantees of higher level languages. */
@@ -294,7 +313,7 @@ declare enum AtomicWaitResult {
   /** Loaded value did not match the expected value. */
   NOT_EQUAL,
   /** Not woken before the timeout expired. */
-  TIMED_OUT
+  TIMED_OUT,
 }
 
 /** Converts any other numeric value to an 8-bit signed integer. */
@@ -331,17 +350,40 @@ declare namespace i32 {
   /** Loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
   export function load8_u(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads a 16-bit signed integer value from memory and returns it as a 32-bit integer. */
-  export function load16_s(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
+  export function load16_s(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): i32;
   /** Loads a 16-bit unsigned integer value from memory and returns it as a 32-bit integer. */
-  export function load16_u(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
+  export function load16_u(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): i32;
   /** Loads a 32-bit integer value from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Stores a 32-bit integer value to memory as an 8-bit integer. */
-  export function store8(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  export function store8(
+    ptr: usize,
+    value: i32,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): void;
   /** Stores a 32-bit integer value to memory as a 16-bit integer. */
-  export function store16(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  export function store16(
+    ptr: usize,
+    value: i32,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): void;
   /** Stores a 32-bit integer value to memory. */
-  export function store(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  export function store(
+    ptr: usize,
+    value: i32,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): void;
   /** Performs the sign-agnostic count leading zero bits operation on a 32-bit integer. All zero bits are considered leading if the value is zero. */
   export function clz(value: i32): i32;
   /** Performs the sign-agnostic count tailing zero bits operation on a 32-bit integer. All zero bits are considered trailing if the value is zero. */
@@ -402,7 +444,12 @@ declare namespace i32 {
       /** Atomically exchanges an 8-bit unsigned integer value in memory. */
       export function xchg_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically compares and exchanges an 8-bit unsigned integer value in memory if the condition is met. */
-      export function cmpxchg_u(ptr: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
+      export function cmpxchg_u(
+        ptr: usize,
+        expected: i32,
+        replacement: i32,
+        immOffset?: usize,
+      ): i32;
     }
     /** Atomic 32-bit integer read-modify-write operations on 16-bit values. */
     export namespace rmw16 {
@@ -419,7 +466,12 @@ declare namespace i32 {
       /** Atomically exchanges a 16-bit unsigned integer value in memory. */
       export function xchg_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically compares and exchanges a 16-bit unsigned integer value in memory if the condition is met. */
-      export function cmpxchg_u(ptr: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
+      export function cmpxchg_u(
+        ptr: usize,
+        expected: i32,
+        replacement: i32,
+        immOffset?: usize,
+      ): i32;
     }
     /** Atomic 32-bit integer read-modify-write operations. */
     export namespace rmw {
@@ -436,7 +488,12 @@ declare namespace i32 {
       /** Atomically exchanges a 32-bit integer value in memory. */
       export function xchg(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically compares and exchanges a 32-bit integer value in memory if the condition is met. */
-      export function cmpxchg(ptr: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
+      export function cmpxchg(
+        ptr: usize,
+        expected: i32,
+        replacement: i32,
+        immOffset?: usize,
+      ): i32;
     }
   }
 }
@@ -454,23 +511,59 @@ declare namespace i64 {
   /** Loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
   export function load8_u(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads a 16-bit signed integer value from memory and returns it as a 64-bit integer. */
-  export function load16_s(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load16_s(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): i64;
   /** Loads a 16-bit unsigned integer value from memory and returns it as a 64-bit integer. */
-  export function load16_u(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load16_u(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): i64;
   /** Loads a 32-bit signed integer value from memory and returns it as a 64-bit integer. */
-  export function load32_s(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load32_s(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): i64;
   /** Loads a 32-bit unsigned integer value from memory and returns it as a 64-bit integer. */
-  export function load32_u(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load32_u(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): i64;
   /** Loads a 64-bit unsigned integer value from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Stores a 64-bit integer value to memory as an 8-bit integer. */
-  export function store8(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  export function store8(
+    ptr: usize,
+    value: i64,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): void;
   /** Stores a 64-bit integer value to memory as a 16-bit integer. */
-  export function store16(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  export function store16(
+    ptr: usize,
+    value: i64,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): void;
   /** Stores a 64-bit integer value to memory as a 32-bit integer. */
-  export function store32(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  export function store32(
+    ptr: usize,
+    value: i64,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): void;
   /** Stores a 64-bit integer value to memory. */
-  export function store(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  export function store(
+    ptr: usize,
+    value: i64,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): void;
   /** Performs the sign-agnostic count leading zero bits operation on a 64-bit integer. All zero bits are considered leading if the value is zero. */
   export function clz(value: i64): i64;
   /** Performs the sign-agnostic count tailing zero bits operation on a 64-bit integer. All zero bits are considered trailing if the value is zero. */
@@ -535,7 +628,12 @@ declare namespace i64 {
       /** Atomically exchanges an 8-bit unsigned integer value in memory. */
       export function xchg_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically compares and exchanges an 8-bit unsigned integer value in memory if the condition is met. */
-      export function cmpxchg_u(ptr: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+      export function cmpxchg_u(
+        ptr: usize,
+        expected: i64,
+        replacement: i64,
+        immOffset?: usize,
+      ): i64;
     }
     /** Atomic 64-bit integer read-modify-write operations on 16-bit values. */
     export namespace rmw16 {
@@ -552,7 +650,12 @@ declare namespace i64 {
       /** Atomically exchanges a 16-bit unsigned integer value in memory. */
       export function xchg_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically compares and exchanges a 16-bit unsigned integer value in memory if the condition is met. */
-      export function cmpxchg_u(ptr: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+      export function cmpxchg_u(
+        ptr: usize,
+        expected: i64,
+        replacement: i64,
+        immOffset?: usize,
+      ): i64;
     }
     /** Atomic 64-bit integer read-modify-write operations on 32-bit values. */
     export namespace rmw32 {
@@ -569,7 +672,12 @@ declare namespace i64 {
       /** Atomically exchanges a 32-bit unsigned integer value in memory. */
       export function xchg_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically compares and exchanges a 32-bit unsigned integer value in memory if the condition is met. */
-      export function cmpxchg_u(ptr: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+      export function cmpxchg_u(
+        ptr: usize,
+        expected: i64,
+        replacement: i64,
+        immOffset?: usize,
+      ): i64;
     }
     /** Atomic 64-bit integer read-modify-write operations. */
     export namespace rmw {
@@ -586,7 +694,12 @@ declare namespace i64 {
       /** Atomically exchanges a 64-bit integer value in memory. */
       export function xchg(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically compares and exchanges a 64-bit integer value in memory if the condition is met. */
-      export function cmpxchg(ptr: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+      export function cmpxchg(
+        ptr: usize,
+        expected: i64,
+        replacement: i64,
+        immOffset?: usize,
+      ): i64;
     }
   }
 }
@@ -670,7 +783,12 @@ declare namespace f32 {
   /** Loads a 32-bit float from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
-  export function store(ptr: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
+  export function store(
+    ptr: usize,
+    value: f32,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): void;
   /** Computes the sum of two 32-bit floats. */
   export function add(left: f32, right: f32): f32;
   /** Computes the difference of two 32-bit floats. */
@@ -730,7 +848,12 @@ declare namespace f64 {
   /** Loads a 64-bit float from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
-  export function store(ptr: usize, value: f64, immOffset?: usize, immAlign?: usize): void;
+  export function store(
+    ptr: usize,
+    value: f64,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): void;
   /** Computes the sum of two 64-bit floats. */
   export function add(left: f64, right: f64): f64;
   /** Computes the difference of two 64-bit floats. */
@@ -765,7 +888,24 @@ declare namespace f64 {
   export function trunc(value: f64): f64;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
-declare function v128(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
+declare function v128(
+  a: i8,
+  b: i8,
+  c: i8,
+  d: i8,
+  e: i8,
+  f: i8,
+  g: i8,
+  h: i8,
+  i: i8,
+  j: i8,
+  k: i8,
+  l: i8,
+  m: i8,
+  n: i8,
+  o: i8,
+  p: i8,
+): v128;
 declare namespace v128 {
   /** Creates a vector with identical lanes. */
   export function splat<T>(x: T): v128;
@@ -780,13 +920,33 @@ declare namespace v128 {
   /** Loads a vector from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
   /** Creates a vector by loading the lanes of the specified type and extending each to the next larger type. */
-  export function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  export function load_ext<TFrom>(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Creates a vector by loading a value of the specified type into the lowest bits and initializing all other bits of the vector to zero. */
-  export function load_zero<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  export function load_zero<TFrom>(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Loads a single lane from memory into the specified lane of the given vector. Other lanes are bypassed as is. */
-  export function load_lane<T>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function load_lane<T>(
+    ptr: usize,
+    vec: v128,
+    idx: u8,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Stores the single lane at the specified index of the given vector to memory. */
-  export function store_lane<T>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function store_lane<T>(
+    ptr: usize,
+    vec: v128,
+    idx: u8,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
   export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
   /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
@@ -800,37 +960,118 @@ declare namespace v128 {
   /** Creates a vector with two 64-bit integer lanes by loading and zero extending two 32-bit integers. */
   export function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
   /** Creates a vector with identical lanes by loading the splatted value. */
-  export function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  export function load_splat<T>(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Loads an 8-bit integer and splats it sixteen times forming a new vector. */
-  export function load8_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  export function load8_splat(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Loads a 16-bit integer and splats it eight times forming a new vector. */
-  export function load16_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  export function load16_splat(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Loads a 32-bit integer and splats it four times forming a new vector. */
-  export function load32_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  export function load32_splat(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Loads a 64-bit integer and splats it two times forming a new vector. */
-  export function load64_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  export function load64_splat(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Creates a vector by loading a 32-bit value into the lowest bits and initializing all other bits of the vector to zero. */
-  export function load32_zero(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  export function load32_zero(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Creates a vector by loading a 64-bit value into the lowest bits and initializing all other bits of the vector to zero. */
-  export function load64_zero(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  export function load64_zero(
+    ptr: usize,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Loads a single 8-bit lane from memory into the specified lane of the given vector. Other lanes are bypassed as is. */
-  export function load8_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function load8_lane(
+    ptr: usize,
+    vec: v128,
+    idx: u8,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Loads a single 16-bit lane from memory into the specified lane of the given vector. Other lanes are bypassed as is. */
-  export function load16_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function load16_lane(
+    ptr: usize,
+    vec: v128,
+    idx: u8,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Loads a single 32-bit lane from memory into the specified lane of the given vector. Other lanes are bypassed as is. */
-  export function load32_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function load32_lane(
+    ptr: usize,
+    vec: v128,
+    idx: u8,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Loads a single 64-bit lane from memory into the specified lane of the given vector. Other lanes are bypassed as is. */
-  export function load64_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function load64_lane(
+    ptr: usize,
+    vec: v128,
+    idx: u8,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Stores the 8-bit lane at the specified lane of the given vector to memory. */
-  export function store8_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function store8_lane(
+    ptr: usize,
+    vec: v128,
+    idx: u8,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Stores the 16-bit lane at the specified lane of the given vector to memory. */
-  export function store16_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function store16_lane(
+    ptr: usize,
+    vec: v128,
+    idx: u8,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Stores the 32-bit lane at the specified lane of the given vector to memory. */
-  export function store32_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function store32_lane(
+    ptr: usize,
+    vec: v128,
+    idx: u8,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Stores the 64-bit lane at the specified lane of the given vector to memory. */
-  export function store64_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function store64_lane(
+    ptr: usize,
+    vec: v128,
+    idx: u8,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): v128;
   /** Stores a vector to memory. */
-  export function store(ptr: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
+  export function store(
+    ptr: usize,
+    value: v128,
+    immOffset?: usize,
+    immAlign?: usize,
+  ): void;
   /** Adds each lane. */
   export function add<T>(a: v128, b: v128): v128;
   /** Subtracts each lane. */
@@ -916,11 +1157,17 @@ declare namespace v128 {
   /** Narrows each lane to their respective narrower lanes. */
   export function narrow<TFrom extends i16 | i32>(a: v128, b: v128): v128;
   /** Extends the low lanes of a vector to their respective wider lanes. */
-  export function extend_low<TFrom extends i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
+  export function extend_low<TFrom extends i8 | u8 | i16 | u16 | i32 | u32>(
+    a: v128,
+  ): v128;
   /** Extends the high lanes of a vector to their respective wider lanes. */
-  export function extend_high<TFrom extends i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
+  export function extend_high<TFrom extends i8 | u8 | i16 | u16 | i32 | u32>(
+    a: v128,
+  ): v128;
   /** Adds lanes pairwise producing twice wider extended results. */
-  export function extadd_pairwise<TFrom extends i8 | u8 | i16 | u16>(a: v128): v128;
+  export function extadd_pairwise<TFrom extends i8 | u8 | i16 | u16>(
+    a: v128,
+  ): v128;
   /** Demotes each float lane to lower precision. The higher lanes of the result are initialized to zero. */
   export function demote_zero<T extends f64 = f64>(a: v128): v128;
   /** Promotes the lower float lanes to higher precision. */
@@ -928,12 +1175,35 @@ declare namespace v128 {
   /** Performs the line-wise saturating rounding multiplication in Q15 format. */
   export function q15mulr_sat<T extends i16>(a: v128, b: v128): v128;
   /** Performs the lane-wise integer extended multiplication of the lower lanes producing a twice wider result than the inputs. */
-  export function extmul_low<T extends i8 | u8 | i16 | u16 | i32 | u32>(a: v128, b: v128): v128;
+  export function extmul_low<T extends i8 | u8 | i16 | u16 | i32 | u32>(
+    a: v128,
+    b: v128,
+  ): v128;
   /** Performs the lane-wise integer extended multiplication of the higher lanes producing a twice wider result than the inputs. */
-  export function extmul_high<T extends i8 | u8 | i16 | u16 | i32 | u32>(a: v128, b: v128): v128;
+  export function extmul_high<T extends i8 | u8 | i16 | u16 | i32 | u32>(
+    a: v128,
+    b: v128,
+  ): v128;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
-declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
+declare function i8x16(
+  a: i8,
+  b: i8,
+  c: i8,
+  d: i8,
+  e: i8,
+  f: i8,
+  g: i8,
+  h: i8,
+  i: i8,
+  j: i8,
+  k: i8,
+  l: i8,
+  m: i8,
+  n: i8,
+  o: i8,
+  p: i8,
+): v128;
 declare namespace i8x16 {
   /** Creates a vector with sixteen identical 8-bit integer lanes. */
   export function splat(x: i8): v128;
@@ -1006,12 +1276,40 @@ declare namespace i8x16 {
   /** Narrows each 16-bit signed integer lane to 8-bit unsigned integer lanes. */
   export function narrow_i16x8_u(a: v128, b: v128): v128;
   /** Selects 8-bit lanes from either vector according to the specified [0-15] respectively [16-31] lane indexes. */
-  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
+  export function shuffle(
+    a: v128,
+    b: v128,
+    l0: u8,
+    l1: u8,
+    l2: u8,
+    l3: u8,
+    l4: u8,
+    l5: u8,
+    l6: u8,
+    l7: u8,
+    l8: u8,
+    l9: u8,
+    l10: u8,
+    l11: u8,
+    l12: u8,
+    l13: u8,
+    l14: u8,
+    l15: u8,
+  ): v128;
   /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
   export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
-declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
+declare function i16x8(
+  a: i16,
+  b: i16,
+  c: i16,
+  d: i16,
+  e: i16,
+  f: i16,
+  g: i16,
+  h: i16,
+): v128;
 declare namespace i16x8 {
   /** Creates a vector with eight identical 16-bit integer lanes. */
   export function splat(x: i16): v128;
@@ -1106,7 +1404,18 @@ declare namespace i16x8 {
   /** Performs the lane-wise 8-bit unsigned integer extended multiplication of the eight higher lanes producing twice wider 16-bit integer results. */
   export function extmul_high_i8x16_u(a: v128, b: v128): v128;
   /** Selects 16-bit lanes from either vector according to the specified [0-7] respectively [8-15] lane indexes. */
-  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8): v128;
+  export function shuffle(
+    a: v128,
+    b: v128,
+    l0: u8,
+    l1: u8,
+    l2: u8,
+    l3: u8,
+    l4: u8,
+    l5: u8,
+    l6: u8,
+    l7: u8,
+  ): v128;
   /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
   export function swizzle(a: v128, s: v128): v128;
 }
@@ -1198,7 +1507,14 @@ declare namespace i32x4 {
   /** Performs the lane-wise 16-bit unsigned integer extended multiplication of the four higher lanes producing twice wider 32-bit integer results. */
   export function extmul_high_i16x8_u(a: v128, b: v128): v128;
   /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
-  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
+  export function shuffle(
+    a: v128,
+    b: v128,
+    l0: u8,
+    l1: u8,
+    l2: u8,
+    l3: u8,
+  ): v128;
   /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
   export function swizzle(a: v128, s: v128): v128;
 }
@@ -1322,7 +1638,14 @@ declare namespace f32x4 {
   /** Demotes each 64-bit float lane of a vector to single-precision. The higher lanes of the result are initialized to zero. */
   export function demote_f64x2_zero(a: v128): v128;
   /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
-  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
+  export function shuffle(
+    a: v128,
+    b: v128,
+    l0: u8,
+    l1: u8,
+    l2: u8,
+    l3: u8,
+  ): v128;
   /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
   export function swizzle(a: v128, s: v128): v128;
 }
@@ -1403,7 +1726,11 @@ declare type indexof<T extends ArrayLike<unknown>> = keyof T;
 /** Special type evaluating the indexed access value type. */
 declare type valueof<T extends ArrayLike<unknown>> = T[0];
 /** A special type evaluated to the return type of T if T is a callable function. */
-declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+declare type ReturnType<T extends (...args: any) => any> = T extends (
+  ...args: any
+) => infer R
+  ? R
+  : any;
 /** A special type evaluated to the return type of T if T is a callable function. */
 declare type returnof<T extends (...args: any) => any> = ReturnType<T>;
 /** A special type that excludes null and undefined from T. */
@@ -1515,9 +1842,19 @@ declare namespace memory {
   /** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
   export function copy(dst: usize, src: usize, n: usize): void;
   /** Repeats `src` of length `srcLength` `count` times at `dst`. */
-  export function repeat(dst: usize, src: usize, srcLength: usize, count: usize): void;
+  export function repeat(
+    dst: usize,
+    src: usize,
+    srcLength: usize,
+    count: usize,
+  ): void;
   /** Copies elements from a passive element segment to a table. */
-  export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void;
+  export function init(
+    segmentIndex: u32,
+    srcOffset: usize,
+    dstOffset: usize,
+    n: usize,
+  ): void;
   /** Prevents further use of a passive element segment. */
   export function drop(segmentIndex: u32): void;
   /** Compares two chunks of memory. Returns `0` if equal, otherwise the difference of the first differing bytes. */
@@ -1529,9 +1866,17 @@ declare namespace memory {
 
   export namespace atomic {
     /** Performs a wait operation on a 32-bit integer value in memory suspending this agent if the condition is met. */
-    export function wait32(ptr: usize, expected: i32, timeout?: i64): AtomicWaitResult;
+    export function wait32(
+      ptr: usize,
+      expected: i32,
+      timeout?: i64,
+    ): AtomicWaitResult;
     /** Performs a wait operation on a 64-bit integer value in memory suspending this agent if the condition is met. */
-    export function wait64(ptr: usize, expected: i64, timeout?: i64): AtomicWaitResult;
+    export function wait64(
+      ptr: usize,
+      expected: i64,
+      timeout?: i64,
+    ): AtomicWaitResult;
   }
 }
 
@@ -1548,7 +1893,12 @@ declare namespace heap {
 /** Table operations. */
 declare namespace table {
   /** Copies elements from a passive element segment to a table. */
-  export function init(elementIndex: u32, srcOffset: u32, dstOffset: u32, n: u32): void;
+  export function init(
+    elementIndex: u32,
+    srcOffset: u32,
+    dstOffset: u32,
+    n: u32,
+  ): void;
   /** Prevents further use of a passive element segment. */
   export function drop(elementIndex: u32): void;
   /** Copies elements from one region of a table to another region. */
@@ -1556,17 +1906,56 @@ declare namespace table {
 }
 
 declare namespace Atomics {
-  export function load<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32): T;
-  export function store<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): void;
-  export function add<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
-  export function sub<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
-  export function and<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
-  export function or<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
-  export function xor<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
-  export function exchange<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
-  export function compareExchange<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, expectedValue: T, replacementValue: T): T;
-  export function wait<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, value: T, timeout?: i64): AtomicWaitResult;
-  export function notify<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, count?: i32): i32;
+  export function load<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(
+    array: TypedArray<T>,
+    index: i32,
+  ): T;
+  export function store<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(
+    array: TypedArray<T>,
+    index: i32,
+    value: T,
+  ): void;
+  export function add<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(
+    array: TypedArray<T>,
+    index: i32,
+    value: T,
+  ): T;
+  export function sub<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(
+    array: TypedArray<T>,
+    index: i32,
+    value: T,
+  ): T;
+  export function and<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(
+    array: TypedArray<T>,
+    index: i32,
+    value: T,
+  ): T;
+  export function or<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(
+    array: TypedArray<T>,
+    index: i32,
+    value: T,
+  ): T;
+  export function xor<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(
+    array: TypedArray<T>,
+    index: i32,
+    value: T,
+  ): T;
+  export function exchange<
+    T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64,
+  >(array: TypedArray<T>, index: i32, value: T): T;
+  export function compareExchange<
+    T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64,
+  >(array: TypedArray<T>, index: i32, expectedValue: T, replacementValue: T): T;
+  export function wait<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(
+    array: TypedArray<T>,
+    value: T,
+    timeout?: i64,
+  ): AtomicWaitResult;
+  export function notify<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(
+    array: TypedArray<T>,
+    index: i32,
+    count?: i32,
+  ): i32;
   /** The static Atomics.isLockFree() method is used to determine whether to use locks or atomic operations. It returns true, if the given size is one of the BYTES_PER_ELEMENT */
   export function isLockFree(size: usize): bool;
 }
@@ -1690,9 +2079,15 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   /** The copyWithin() method copies the sequence of array elements within the array to the position starting at target. The copy is taken from the index positions of the second and third arguments start and end. The end argument is optional and defaults to the length of the array. */
   copyWithin(target: i32, start: i32, end?: i32): this;
   /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
-  reduce<U>(callbackfn: (accumulator: U, value: T, index: i32, self: this) => U, initialValue: U): U;
+  reduce<U>(
+    callbackfn: (accumulator: U, value: T, index: i32, self: this) => U,
+    initialValue: U,
+  ): U;
   /**  The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. This method has the same algorithm as Array.prototype.reduceRight(). */
-  reduceRight<U>(callbackfn: (accumulator: U, value: T, index: i32, self: this) => U, initialValue: U): U;
+  reduceRight<U>(
+    callbackfn: (accumulator: U, value: T, index: i32, self: this) => U,
+    initialValue: U,
+  ): U;
   /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some().*/
   some(callbackfn: (value: T, index: i32, self: this) => bool): bool;
   /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. This method has the same algorithm as Array.prototype.map().*/
@@ -1716,7 +2111,7 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
   join(separator?: string): string;
   /** The set() method stores multiple values in the typed array, reading input values from a specified array. */
-  set<U extends ArrayLike<number>>(source: U, offset?: i32): void
+  set<U extends ArrayLike<number>>(source: U, offset?: i32): void;
   /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
   toString(): string;
 }
@@ -1734,7 +2129,11 @@ declare class Uint8Array extends TypedArray<u8> {
 /** A clamped array of 8-bit unsigned integers. */
 declare class Uint8ClampedArray extends TypedArray<u8> {
   /** Wrap an ArrayBuffer */
-  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint8ClampedArray;
+  static wrap(
+    buffer: ArrayBuffer,
+    byteOffset?: i32,
+    length?: i32,
+  ): Uint8ClampedArray;
 }
 /** An array of twos-complement 16-bit signed integers. */
 declare class Int16Array extends TypedArray<i16> {
@@ -1769,17 +2168,24 @@ declare class Uint64Array extends TypedArray<u64> {
 /** An array of 32-bit floating point numbers. */
 declare class Float32Array extends TypedArray<f32> {
   /** Wrap an ArrayBuffer */
-  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float32Array;
+  static wrap(
+    buffer: ArrayBuffer,
+    byteOffset?: i32,
+    length?: i32,
+  ): Float32Array;
 }
 /** An array of 64-bit floating point numbers. */
 declare class Float64Array extends TypedArray<f64> {
   /** Wrap an ArrayBuffer */
-  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float64Array;
+  static wrap(
+    buffer: ArrayBuffer,
+    byteOffset?: i32,
+    length?: i32,
+  ): Float64Array;
 }
 
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {
-
   /** Tests if a value is an array. */
   static isArray<U>(value: any): value is Array<any>;
 
@@ -1793,7 +2199,9 @@ declare class Array<T> {
   at(index: i32): T;
   fill(value: T, start?: i32, end?: i32): this;
   findIndex(callbackfn: (value: T, index: i32, array: Array<T>) => bool): i32;
-  findLastIndex(callbackfn: (value: T, index: i32, array: Array<T>) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: T, index: i32, array: Array<T>) => bool,
+  ): i32;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
@@ -1804,8 +2212,24 @@ declare class Array<T> {
   forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void;
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U>;
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T>;
-  reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U, initialValue: U): U;
-  reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U, initialValue: U): U;
+  reduce<U>(
+    callbackfn: (
+      previousValue: U,
+      currentValue: T,
+      currentIndex: i32,
+      array: Array<T>,
+    ) => U,
+    initialValue: U,
+  ): U;
+  reduceRight<U>(
+    callbackfn: (
+      previousValue: U,
+      currentValue: T,
+      currentIndex: i32,
+      array: Array<T>,
+    ) => U,
+    initialValue: U,
+  ): U;
   every(callbackfn: (value: T, index: i32, array: Array<T>) => bool): bool;
   some(callbackfn: (value: T, index: i32, array: Array<T>) => bool): bool;
   shift(): T;
@@ -1825,25 +2249,60 @@ declare class StaticArray<T> {
   [key: number]: T;
   static fromArray<T>(source: Array<T>): StaticArray<T>;
   /** @deprecated */
-  static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T>;
+  static concat<T>(
+    source: StaticArray<T>,
+    other: StaticArray<T>,
+  ): StaticArray<T>;
   /** @deprecated */
-  static slice<T>(source: StaticArray<T>, start?: i32, end?: i32): StaticArray<T>;
+  static slice<T>(
+    source: StaticArray<T>,
+    start?: i32,
+    end?: i32,
+  ): StaticArray<T>;
   readonly length: i32;
   constructor(length?: i32);
   at(index: i32): T;
   fill(value: T, start?: i32, end?: i32): this;
-  findIndex(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): i32;
-  findLastIndex(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): i32;
+  findIndex(
+    callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool,
+  ): i32;
+  findLastIndex(
+    callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool,
+  ): i32;
   copyWithin(target: i32, start: i32, end?: i32): this;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
-  forEach(callbackfn: (value: T, index: i32, array: StaticArray<T>) => void): void;
-  map<U>(callbackfn: (value: T, index: i32, array: StaticArray<T>) => U): Array<U>;
-  filter(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): Array<T>;
-  reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: StaticArray<T>) => U, initialValue: U): U;
-  reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: StaticArray<T>) => U, initialValue: U): U;
-  every(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
+  forEach(
+    callbackfn: (value: T, index: i32, array: StaticArray<T>) => void,
+  ): void;
+  map<U>(
+    callbackfn: (value: T, index: i32, array: StaticArray<T>) => U,
+  ): Array<U>;
+  filter(
+    callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool,
+  ): Array<T>;
+  reduce<U>(
+    callbackfn: (
+      previousValue: U,
+      currentValue: T,
+      currentIndex: i32,
+      array: StaticArray<T>,
+    ) => U,
+    initialValue: U,
+  ): U;
+  reduceRight<U>(
+    callbackfn: (
+      previousValue: U,
+      currentValue: T,
+      currentIndex: i32,
+      array: StaticArray<T>,
+    ) => U,
+    initialValue: U,
+  ): U;
+  every(
+    callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool,
+  ): bool;
   some(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   concat(items: Array<T>): Array<T>;
   concat<U extends ArrayLike<T>>(other: U): U;
@@ -1903,18 +2362,32 @@ declare namespace String {
       /** Replaces unpaired surrogates with the replacement character (U+FFFD). */
       REPLACE,
       /** Throws an error on unpaired surrogates. */
-      ERROR
+      ERROR,
     }
     /** Calculates the byte length of the specified string when encoded as UTF-8, optionally null terminated. */
     export function byteLength(str: string, nullTerminated?: bool): i32;
     /** Encodes the specified string to UTF-8 bytes, optionally null terminated. ErrorMode defaults to WTF-8. */
-    export function encode(str: string, nullTerminated?: bool, errorMode?: ErrorMode): ArrayBuffer;
+    export function encode(
+      str: string,
+      nullTerminated?: bool,
+      errorMode?: ErrorMode,
+    ): ArrayBuffer;
     /** Encodes the specified raw string to UTF-8 bytes, opionally null terminated. ErrorMode defaults to WTF-8. Returns the number of bytes written. */
-    export function encodeUnsafe(str: usize, len: i32, buf: usize, nullTerminated?: bool, errorMode?: ErrorMode): usize;
+    export function encodeUnsafe(
+      str: usize,
+      len: i32,
+      buf: usize,
+      nullTerminated?: bool,
+      errorMode?: ErrorMode,
+    ): usize;
     /** Decodes the specified buffer from UTF-8 bytes to a string, optionally null terminated. */
     export function decode(buf: ArrayBuffer, nullTerminated?: bool): string;
     /** Decodes raw UTF-8 bytes to a string, optionally null terminated. */
-    export function decodeUnsafe(buf: usize, len: usize, nullTerminated?: bool): string;
+    export function decodeUnsafe(
+      buf: usize,
+      len: usize,
+      nullTerminated?: bool,
+    ): string;
   }
   /** Encoding helpers for UTF-16. */
   export namespace UTF16 {
@@ -1954,7 +2427,7 @@ declare class Date {
     hour: i32,
     minute: i32,
     second: i32,
-    millisecond: i32
+    millisecond: i32,
   ): i64;
   /** Returns the current UTC timestamp in milliseconds. */
   static now(): i64;
@@ -1994,7 +2467,6 @@ declare class Date {
 
 /** Class for representing a runtime error. Base class of all errors. */
 declare class Error {
-
   /** Error name. */
   name: string;
 
@@ -2012,16 +2484,16 @@ declare class Error {
 }
 
 /** Class for indicating an error when a value is not in the set or range of allowed values. */
-declare class RangeError extends Error { }
+declare class RangeError extends Error {}
 
 /** Class for indicating an error when a value is not of the expected type. */
-declare class TypeError extends Error { }
+declare class TypeError extends Error {}
 
 /** Class for indicating an error when trying to interpret syntactically invalid code. */
-declare class SyntaxError extends Error { }
+declare class SyntaxError extends Error {}
 
 /** Class for indicating an error when a global URI handling function was used in a wrong way. */
-declare class URIError extends Error { }
+declare class URIError extends Error {}
 
 interface Function {
   /** Function table index. */
@@ -2038,7 +2510,7 @@ interface Function {
 interface IArguments {}
 interface RegExp {}
 
-declare class Map<K,V> {
+declare class Map<K, V> {
   readonly size: i32;
   has(key: K): bool;
   set(key: K, value: V): this;
@@ -2204,9 +2676,22 @@ declare const Math: IMath<f64>;
 declare const Mathf: IMath<f32>;
 
 /** Environmental abort function. */
-declare function abort(msg?: string | null, fileName?: string | null, lineNumber?: i32, columnNumber?: i32): never;
+declare function abort(
+  msg?: string | null,
+  fileName?: string | null,
+  lineNumber?: i32,
+  columnNumber?: i32,
+): never;
 /** Environmental tracing function. */
-declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
+declare function trace(
+  msg: string,
+  n?: i32,
+  a0?: f64,
+  a1?: f64,
+  a2?: f64,
+  a3?: f64,
+  a4?: f64,
+): void;
 /** Environmental seeding function. */
 declare function seed(): f64;
 
@@ -2219,7 +2704,7 @@ declare namespace process {
   /** Array of command line arguments passed to the binary upon instantiation. */
   export const argv: string[];
   /** Map of variables in the binary's user environment. */
-  export const env: Map<string,string>;
+  export const env: Map<string, string>;
   /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
   export function exit(code?: i32): void;
   /** `exit()`’s default value. Defaults to `0`. */
@@ -2289,40 +2774,86 @@ interface TypedPropertyDescriptor<T> {
 }
 
 type Constructor =
-  (new (...args: any[]) => unknown)
+  | (new (...args: any[]) => unknown)
   | (abstract new (...args: any[]) => unknown);
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
-declare function operator(token:
-  "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
-  ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+declare function operator(
+  token:
+    | "[]"
+    | "[]="
+    | "{}"
+    | "{}="
+    | "=="
+    | "!="
+    | ">"
+    | "<"
+    | "<="
+    | ">="
+    | ">>"
+    | ">>>"
+    | "<<"
+    | "&"
+    | "|"
+    | "^"
+    | "+"
+    | "-"
+    | "*"
+    | "**"
+    | "/"
+    | "%",
 ): (
   target: any,
   propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
+  descriptor: TypedPropertyDescriptor<any>,
 ) => TypedPropertyDescriptor<any> | void;
 
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
-  export function binary(token:
-    "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
-    ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+  export function binary(
+    token:
+      | "[]"
+      | "[]="
+      | "{}"
+      | "{}="
+      | "=="
+      | "!="
+      | ">"
+      | "<"
+      | "<="
+      | ">="
+      | ">>"
+      | ">>>"
+      | "<<"
+      | "&"
+      | "|"
+      | "^"
+      | "+"
+      | "-"
+      | "*"
+      | "**"
+      | "/"
+      | "%",
   ): (
     target: any,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<any>
+    descriptor: TypedPropertyDescriptor<any>,
   ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
-  export function prefix(token: "!" | "~" | "+" | "-" | "++" | "--"): (
+  export function prefix(
+    token: "!" | "~" | "+" | "-" | "++" | "--",
+  ): (
     target: any,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<any>
+    descriptor: TypedPropertyDescriptor<any>,
   ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary postfix operator overload for the specified `token`. */
-  export function postfix(token: "++" | "--"): (
+  export function postfix(
+    token: "++" | "--",
+  ): (
     target: any,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<any>
+    descriptor: TypedPropertyDescriptor<any>,
   ) => TypedPropertyDescriptor<any> | void;
 }
 

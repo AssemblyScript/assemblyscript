@@ -1,5 +1,4 @@
-Standard library
-================
+# Standard library
 
 Standard library components for use with `tsc` (portable) and `asc` (assembly).
 

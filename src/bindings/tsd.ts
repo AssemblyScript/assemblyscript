@@ -1,10 +1,6 @@
-import {
-  Source
-} from "../ast";
+import { Source } from "../ast";
 
-import {
-  CommonFlags
-} from "../common";
+import { CommonFlags } from "../common";
 
 import {
   Global,
@@ -15,27 +11,17 @@ import {
   Enum,
   ElementKind,
   Element,
-  PropertyPrototype
+  PropertyPrototype,
 } from "../program";
 
-import {
-  Type,
-  TypeFlags
-} from "../types";
+import { Type, TypeFlags } from "../types";
 
-import {
-  CharCode,
-  escapeString,
-  indent, isIdentifier
-} from "../util";
+import { CharCode, escapeString, indent, isIdentifier } from "../util";
 
-import {
-  ExportsWalker
-} from "./util";
+import { ExportsWalker } from "./util";
 
 /** A TypeScript definitions builder. */
 export class TSDBuilder extends ExportsWalker {
-
   /** Builds TypeScript definitions for the specified program. */
   static build(program: Program, esm: bool = true): string {
     return new TSDBuilder(program, esm).build();
@@ -44,7 +30,7 @@ export class TSDBuilder extends ExportsWalker {
   private esm: bool;
   private sb: string[] = [];
   private indentLevel: i32 = 0;
-  private seenObjectTypes: Map<Class,string> = new Map();
+  private seenObjectTypes: Map<Class, string> = new Map();
   private deferredTypings: string[] = new Array();
 
   /** Constructs a new TypeScript definitions builder. */
@@ -190,13 +176,19 @@ export class TSDBuilder extends ExportsWalker {
       indent(sb, this.indentLevel);
       sb.push("/** Exported memory */\n");
       indent(sb, this.indentLevel);
-      sb.push(`export ${this.esm ? "declare " : ""}const memory: WebAssembly.Memory;\n`);
+      sb.push(
+        `export ${
+          this.esm ? "declare " : ""
+        }const memory: WebAssembly.Memory;\n`,
+      );
     }
     if (this.program.options.exportTable) {
       indent(sb, this.indentLevel);
       sb.push("/** Exported table */\n");
       indent(sb, this.indentLevel);
-      sb.push(`export ${this.esm ? "declare " : ""}const table: WebAssembly.Table;\n`);
+      sb.push(
+        `export ${this.esm ? "declare " : ""}const table: WebAssembly.Table;\n`,
+      );
     }
     this.walk();
     if (!this.esm) {
@@ -208,18 +200,26 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(deferredTypes[i]);
     }
     if (!this.esm) {
-      sb.push("/** Instantiates the compiled WebAssembly module with the given imports. */\n");
-      sb.push("export declare function instantiate(module: WebAssembly.Module, imports: {\n");
+      sb.push(
+        "/** Instantiates the compiled WebAssembly module with the given imports. */\n",
+      );
+      sb.push(
+        "export declare function instantiate(module: WebAssembly.Module, imports: {\n",
+      );
       let moduleImports = this.program.moduleImports;
-      for (let _keys = Map_keys(moduleImports), i = 0, k = _keys.length; i < k; ++i) {
+      for (
+        let _keys = Map_keys(moduleImports), i = 0, k = _keys.length;
+        i < k;
+        ++i
+      ) {
         let moduleName = _keys[i];
         sb.push("  ");
         if (isIdentifier(moduleName)) {
           sb.push(moduleName);
         } else {
-          sb.push("\"");
+          sb.push('"');
           sb.push(escapeString(moduleName, CharCode.DoubleQuote));
-          sb.push("\"");
+          sb.push('"');
         }
         sb.push(": unknown,\n");
       }
@@ -233,9 +233,14 @@ export class TSDBuilder extends ExportsWalker {
     if (clazz.base && !clazz.prototype.implicitlyExtendsObject) return false;
     let members = clazz.members;
     if (members) {
-      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+      for (
+        let _values = Map_values(members), i = 0, k = _values.length;
+        i < k;
+        ++i
+      ) {
         let member = _values[i];
-        if (member.isAny(CommonFlags.Private | CommonFlags.Protected)) return false;
+        if (member.isAny(CommonFlags.Private | CommonFlags.Protected))
+          return false;
         if (member.is(CommonFlags.Constructor)) {
           // a generated constructor is ok
           if (member.declaration.range != Source.native.range) return false;
@@ -251,7 +256,9 @@ export class TSDBuilder extends ExportsWalker {
       const clazz = assert(type.getClassOrWrapper(this.program));
       if (clazz.extendsPrototype(this.program.arrayBufferInstance.prototype)) {
         sb.push("ArrayBuffer");
-      } else if (clazz.extendsPrototype(this.program.stringInstance.prototype)) {
+      } else if (
+        clazz.extendsPrototype(this.program.stringInstance.prototype)
+      ) {
         sb.push("string");
       } else if (clazz.extendsPrototype(this.program.arrayPrototype)) {
         const valueType = clazz.getArrayValueType();
@@ -263,7 +270,9 @@ export class TSDBuilder extends ExportsWalker {
         sb.push("ArrayLike<");
         sb.push(this.toTypeScriptType(valueType, mode));
         sb.push(">");
-      } else if (clazz.extendsPrototype(this.program.arrayBufferViewInstance.prototype)) {
+      } else if (
+        clazz.extendsPrototype(this.program.arrayBufferViewInstance.prototype)
+      ) {
         const valueType = clazz.getArrayValueType();
         if (valueType == Type.i8) {
           sb.push("Int8Array");
@@ -397,5 +406,5 @@ export class TSDBuilder extends ExportsWalker {
 
 enum Mode {
   IMPORT,
-  EXPORT
+  EXPORT,
 }

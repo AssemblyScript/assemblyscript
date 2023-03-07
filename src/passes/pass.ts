@@ -10,7 +10,7 @@ import {
   FunctionRef,
   GlobalRef,
   Index,
-  StringRef
+  StringRef,
 } from "../module";
 
 import {
@@ -283,7 +283,7 @@ import {
   _BinaryenStringSliceWTFSetEnd,
   _BinaryenStringSliceIterSetRef,
   _BinaryenStringSliceIterSetNum,
-  _BinaryenArrayInitSetValueAt
+  _BinaryenArrayInitSetValueAt,
 } from "../glue/binaryen";
 
 /** Base class of custom Binaryen visitors. */
@@ -657,7 +657,11 @@ export abstract class Visitor {
         this.stack.push(expr);
         let name = _BinaryenBlockGetName(expr);
         if (name) this.visitLabel(name);
-        for (let i: Index = 0, n = _BinaryenBlockGetNumChildren(expr); i < n; ++i) {
+        for (
+          let i: Index = 0, n = _BinaryenBlockGetNumChildren(expr);
+          i < n;
+          ++i
+        ) {
           this.visit(_BinaryenBlockGetChildAt(expr, i));
         }
         assert(this.stack.pop() == expr);
@@ -725,7 +729,11 @@ export abstract class Visitor {
         this.visitCallIndirectPre(expr);
         this.stack.push(expr);
         this.visit(_BinaryenCallIndirectGetTarget(expr));
-        for (let i: Index = 0, k = _BinaryenCallIndirectGetNumOperands(expr); i < k; ++i) {
+        for (
+          let i: Index = 0, k = _BinaryenCallIndirectGetNumOperands(expr);
+          i < k;
+          ++i
+        ) {
           this.visit(_BinaryenCallIndirectGetOperandAt(expr, i));
         }
         assert(this.stack.pop() == expr);
@@ -1289,7 +1297,8 @@ export abstract class Visitor {
         this.visitStringSliceIter(expr);
         break;
       }
-      default: throw new Error("unexpected expression kind");
+      default:
+        throw new Error("unexpected expression kind");
     }
     this._currentExpression = previousExpression;
   }
@@ -1297,7 +1306,6 @@ export abstract class Visitor {
 
 /** Base class of custom Binaryen passes. */
 export abstract class Pass extends Visitor {
-
   /** Gets the current function being walked. */
   get currentFunction(): FunctionRef {
     let currentFunction = this._currentFunction;
@@ -1330,7 +1338,11 @@ export abstract class Pass extends Visitor {
   /** Walks all functions. */
   walkFunctions(): void {
     let moduleRef = this.module.ref;
-    for (let i: Index = 0, k = _BinaryenGetNumFunctions(moduleRef); i < k; ++i) {
+    for (
+      let i: Index = 0, k = _BinaryenGetNumFunctions(moduleRef);
+      i < k;
+      ++i
+    ) {
       this.walkFunction(_BinaryenGetFunctionByIndex(moduleRef, i));
     }
   }
@@ -1386,7 +1398,7 @@ export function replaceChild(
   /** Expression to replace. */
   search: ExpressionRef,
   /** Expression to replace `search` with. */
-  replacement: ExpressionRef
+  replacement: ExpressionRef,
 ): ExpressionRef {
   switch (_BinaryenExpressionGetId(parent)) {
     case ExpressionId.Block: {
@@ -2240,7 +2252,8 @@ export function replaceChild(
       }
       break;
     }
-    default: throw new Error("unexpected expression id");
+    default:
+      throw new Error("unexpected expression id");
   }
   return 0;
 }

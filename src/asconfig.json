@@ -1,14 +1,11 @@
 {
-  "entries": [
-    "./glue/wasm/index.ts",
-    "./index-wasm.ts"
-  ],
+  "entries": ["./glue/wasm/index.ts", "./index-wasm.ts"],
   "options": {
     "exportStart": "_initialize",
     "exportRuntime": true,
     "initialMemory": 768,
     "runtime": "incremental",
-    "bindings": [ "esm" ],
+    "bindings": ["esm"],
     "stats": true
   },
   "targets": {

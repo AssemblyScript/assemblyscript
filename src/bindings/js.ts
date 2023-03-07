@@ -6,12 +6,10 @@ import {
   StringLiteralExpression,
   TemplateLiteralExpression,
   findDecorator,
-  Source
+  Source,
 } from "../ast";
 
-import {
-  CommonFlags
-} from "../common";
+import { CommonFlags } from "../common";
 
 import {
   ElementKind,
@@ -23,25 +21,14 @@ import {
   Interface,
   Enum,
   EnumValue,
-  PropertyPrototype
+  PropertyPrototype,
 } from "../program";
 
-import {
-  Type,
-  TypeFlags,
-  Signature
-} from "../types";
+import { Type, TypeFlags, Signature } from "../types";
 
-import {
-  CharCode,
-  escapeString,
-  indent,
-  isIdentifier
-} from "../util";
+import { CharCode, escapeString, indent, isIdentifier } from "../util";
 
-import {
-  ExportsWalker
-} from "./util";
+import { ExportsWalker } from "./util";
 
 // Limitations
 //
@@ -106,7 +93,6 @@ function shouldInstrument(moduleName: string): bool {
 
 /** A JavaScript bindings builder. */
 export class JSBuilder extends ExportsWalker {
-
   /** Builds JavaScript bindings for the specified program. */
   static build(program: Program, esm: bool = true): string {
     return new JSBuilder(program, esm).build();
@@ -153,7 +139,7 @@ export class JSBuilder extends ExportsWalker {
   private deferredCode: string[] = new Array<string>();
 
   private exports: string[] = new Array();
-  private importMappings: Map<string,i32> = new Map();
+  private importMappings: Map<string, i32> = new Map();
 
   /** Constructs a new JavaScript bindings builder. */
   constructor(program: Program, esm: bool, includePrivate: bool = false) {
@@ -217,7 +203,11 @@ export class JSBuilder extends ExportsWalker {
     sb.push("\n");
     let members = element.members;
     if (members) {
-      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+      for (
+        let _values = Map_values(members), i = 0, k = _values.length;
+        i < k;
+        ++i
+      ) {
         let value = _values[i];
         if (value.kind != ElementKind.EnumValue) continue;
         indent(sb, this.indentLevel);
@@ -227,13 +217,13 @@ export class JSBuilder extends ExportsWalker {
           sb.push(" = ");
           sb.push(i64_low((<EnumValue>value).constantIntegerValue).toString());
         } else {
-          sb.push(" = exports[\"");
+          sb.push(' = exports["');
           sb.push(escapeString(name + "." + value.name, CharCode.DoubleQuote));
-          sb.push("\"].valueOf()");
+          sb.push('"].valueOf()');
         }
-        sb.push("] = \"");
+        sb.push('] = "');
         sb.push(escapeString(value.name, CharCode.DoubleQuote));
-        sb.push("\",\n");
+        sb.push('",\n');
       }
     }
     indent(sb, this.indentLevel);
@@ -250,9 +240,9 @@ export class JSBuilder extends ExportsWalker {
     if (isIdentifier(name)) {
       sb.push(name);
     } else {
-      sb.push("\"");
+      sb.push('"');
       sb.push(escapeString(name, CharCode.DoubleQuote));
-      sb.push("\": ");
+      sb.push('": ');
     }
     let moduleId = this.ensureModuleId(moduleName);
     if (isPlainValue(type, Mode.Import)) {
@@ -289,16 +279,21 @@ export class JSBuilder extends ExportsWalker {
     sb.push(",\n");
   }
 
-  makeFunctionImport(moduleName: string, name: string, element: Function, code: string | null = null): void {
+  makeFunctionImport(
+    moduleName: string,
+    name: string,
+    element: Function,
+    code: string | null = null,
+  ): void {
     let sb = this.sb;
     let signature = element.signature;
     indent(sb, this.indentLevel);
     if (isIdentifier(name)) {
       sb.push(name);
     } else {
-      sb.push("\"");
+      sb.push('"');
       sb.push(escapeString(name, CharCode.DoubleQuote));
-      sb.push("\"");
+      sb.push('"');
     }
     if (isPlainFunction(signature, Mode.Import) && !code) {
       sb.push(": (\n");
@@ -409,7 +404,8 @@ export class JSBuilder extends ExportsWalker {
           indent(sb, this.indentLevel);
           sb.push(name);
           sb.push(" = ");
-          let needsRetainRelease = type.isInternalReference && --numReferences > 0;
+          let needsRetainRelease =
+            type.isInternalReference && --numReferences > 0;
           if (needsRetainRelease) {
             this.needsRetain = true;
             this.needsRelease = true;
@@ -490,7 +486,10 @@ export class JSBuilder extends ExportsWalker {
   }
 
   getExternalCode(element: Function): string | null {
-    let decorator = findDecorator(DecoratorKind.ExternalJs, element.decoratorNodes);
+    let decorator = findDecorator(
+      DecoratorKind.ExternalJs,
+      element.decoratorNodes,
+    );
     if (decorator) {
       let args = decorator.args;
       if (args && args.length == 1) {
@@ -530,17 +529,21 @@ export class JSBuilder extends ExportsWalker {
     indent(sb, this.indentLevel++);
     sb.push("const adaptedImports = {\n");
     let sbLengthBefore = sb.length;
-    for (let _keys = Map_keys(moduleImports), i = 0, k = _keys.length; i < k; ++i) {
+    for (
+      let _keys = Map_keys(moduleImports), i = 0, k = _keys.length;
+      i < k;
+      ++i
+    ) {
       let moduleName = _keys[i];
       let moduleId = this.ensureModuleId(moduleName);
-      let module = <Map<string,Element>>moduleImports.get(moduleName);
+      let module = <Map<string, Element>>moduleImports.get(moduleName);
       indent(sb, this.indentLevel);
       if (isIdentifier(moduleName)) {
         sb.push(moduleName);
       } else {
-        sb.push("\"");
+        sb.push('"');
         sb.push(escapeString(moduleName, CharCode.DoubleQuote));
-        sb.push("\"");
+        sb.push('"');
       }
       if (!shouldInstrument(moduleName)) {
         sb.push(": __module");
@@ -563,13 +566,21 @@ export class JSBuilder extends ExportsWalker {
       sb.push("{\n");
       ++this.indentLevel;
       let numInstrumented = 0;
-      for (let _keys2 = Map_keys(module), j = 0, l = _keys2.length; j < l; ++j) {
+      for (
+        let _keys2 = Map_keys(module), j = 0, l = _keys2.length;
+        j < l;
+        ++j
+      ) {
         let name = _keys2[j];
         let elem = assert(module.get(name));
         if (elem.kind == ElementKind.Function) {
           let func = <Function>elem;
           let code = this.getExternalCode(func);
-          if (!isPlainFunction(func.signature, Mode.Import) || !isIdentifier(name) || code) {
+          if (
+            !isPlainFunction(func.signature, Mode.Import) ||
+            !isIdentifier(name) ||
+            code
+          ) {
             this.makeFunctionImport(moduleName, name, <Function>elem, code);
             ++numInstrumented;
           }
@@ -585,7 +596,9 @@ export class JSBuilder extends ExportsWalker {
       if (!numInstrumented) {
         sb.length = resetPos;
         if (moduleName == "env") {
-          sb.push(": Object.assign(Object.create(globalThis), imports.env || {})");
+          sb.push(
+            ": Object.assign(Object.create(globalThis), imports.env || {})",
+          );
         } else {
           sb.push(": __module");
           sb.push(moduleId.toString());
@@ -618,7 +631,9 @@ export class JSBuilder extends ExportsWalker {
           // object. Use sensible defaults and substitute the original import.
           map.push("  ((rtrace) => {\n");
           map.push("    delete imports.rtrace;\n");
-          map.push("    new rtrace.Rtrace({ getMemory() { return memory; }, onerror(err) { console.log(`RTRACE: ${err.stack}`); } }).install(imports);\n");
+          map.push(
+            "    new rtrace.Rtrace({ getMemory() { return memory; }, onerror(err) { console.log(`RTRACE: ${err.stack}`); } }).install(imports);\n",
+          );
           map.push("  })(imports.rtrace);\n");
         }
         map.push("  const __module");
@@ -628,9 +643,9 @@ export class JSBuilder extends ExportsWalker {
           map.push(".");
           map.push(moduleName);
         } else {
-          map.push("[\"");
+          map.push('["');
           map.push(escapeString(moduleName, CharCode.DoubleQuote));
-          map.push("\"]");
+          map.push('"]');
         }
         map.push(";\n");
       }
@@ -660,10 +675,14 @@ export class JSBuilder extends ExportsWalker {
       sb.push("}, exports);\n");
     } else {
       if (
-        this.needsLiftBuffer || this.needsLowerBuffer ||
-        this.needsLiftString || this.needsLowerString ||
-        this.needsLiftArray || this.needsLowerArray ||
-        this.needsLiftTypedArray || this.needsLowerTypedArray ||
+        this.needsLiftBuffer ||
+        this.needsLowerBuffer ||
+        this.needsLiftString ||
+        this.needsLowerString ||
+        this.needsLiftArray ||
+        this.needsLowerArray ||
+        this.needsLiftTypedArray ||
+        this.needsLowerTypedArray ||
         this.needsLiftStaticArray
       ) {
         sb.length = sbLengthBefore - 2; // skip adaptedExports + 1x indent
@@ -683,7 +702,8 @@ export class JSBuilder extends ExportsWalker {
     // Add the respective lifting and lowering adapters
     if (this.needsLiftBuffer) {
       let objectInstance = program.OBJECTInstance;
-      let rtSizeOffset = objectInstance.offsetof("rtSize") - objectInstance.nextMemoryOffset;
+      let rtSizeOffset =
+        objectInstance.offsetof("rtSize") - objectInstance.nextMemoryOffset;
       sb.push(`  function __liftBuffer(pointer) {
     if (!pointer) return null;
     return memory.buffer.slice(pointer, pointer + new Uint32Array(memory.buffer)[pointer - ${-rtSizeOffset} >>> 2]);
@@ -702,7 +722,8 @@ export class JSBuilder extends ExportsWalker {
     }
     if (this.needsLiftString) {
       let objectInstance = program.OBJECTInstance;
-      let rtSizeOffset = objectInstance.offsetof("rtSize") - objectInstance.nextMemoryOffset;
+      let rtSizeOffset =
+        objectInstance.offsetof("rtSize") - objectInstance.nextMemoryOffset;
       let chunkSize = 1024;
       sb.push(`  function __liftString(pointer) {
     if (!pointer) return null;
@@ -731,7 +752,8 @@ export class JSBuilder extends ExportsWalker {
 `);
     }
     if (this.needsLiftArray) {
-      let dataStartOffset = program.arrayBufferViewInstance.offsetof("dataStart");
+      let dataStartOffset =
+        program.arrayBufferViewInstance.offsetof("dataStart");
       let lengthOffset = program.arrayBufferViewInstance.nextMemoryOffset;
       this.needsGetU32 = true;
       sb.push(`  function __liftArray(liftElement, align, pointer) {
@@ -811,7 +833,8 @@ export class JSBuilder extends ExportsWalker {
     }
     if (this.needsLiftStaticArray) {
       let objectInstance = program.OBJECTInstance;
-      let rtSizeOffset = objectInstance.offsetof("rtSize") - objectInstance.nextMemoryOffset;
+      let rtSizeOffset =
+        objectInstance.offsetof("rtSize") - objectInstance.nextMemoryOffset;
       this.needsGetU32 = true;
       sb.push(`  function __liftStaticArray(liftElement, align, pointer) {
     if (!pointer) return null;
@@ -965,7 +988,11 @@ export class JSBuilder extends ExportsWalker {
 `);
       let needsMaybeDefault = false;
       let importExpr = new Array<string>();
-      for (let _keys = Map_keys(mappings), i = 0, k = _keys.length; i < k; ++i) {
+      for (
+        let _keys = Map_keys(mappings), i = 0, k = _keys.length;
+        i < k;
+        ++i
+      ) {
         let moduleName = _keys[i];
         if (moduleName == "env") {
           indent(sb, 2);
@@ -976,24 +1003,29 @@ export class JSBuilder extends ExportsWalker {
           if (isIdentifier(moduleName)) {
             sb.push(moduleName);
           } else {
-            sb.push("\"");
+            sb.push('"');
             sb.push(escapeString(moduleName, CharCode.DoubleQuote));
-            sb.push("\"");
+            sb.push('"');
           }
           sb.push(": __maybeDefault(__import");
           sb.push(moduleId.toString());
           sb.push("),\n");
           importExpr.push("import * as __import");
           importExpr.push(moduleId.toString());
-          importExpr.push(" from \"");
-          importExpr.push(escapeString(importToModule(moduleName), CharCode.DoubleQuote));
-          importExpr.push("\";\n");
+          importExpr.push(' from "');
+          importExpr.push(
+            escapeString(importToModule(moduleName), CharCode.DoubleQuote),
+          );
+          importExpr.push('";\n');
           needsMaybeDefault = true;
         }
       }
       sb[0] = importExpr.join("");
       sb.push(`  }
-))(new URL("${escapeString(options.basenameHint, CharCode.DoubleQuote)}.wasm", import.meta.url));
+))(new URL("${escapeString(
+        options.basenameHint,
+        CharCode.DoubleQuote,
+      )}.wasm", import.meta.url));
 `);
       if (needsMaybeDefault) {
         sb.push(`function __maybeDefault(module) {
@@ -1018,14 +1050,20 @@ export class JSBuilder extends ExportsWalker {
   }
 
   /** Lifts a WebAssembly value to a JavaScript value, as an expression. */
-  makeLiftFromValue(valueExpr: string, type: Type, sb: string[] = this.sb): void {
+  makeLiftFromValue(
+    valueExpr: string,
+    type: Type,
+    sb: string[] = this.sb,
+  ): void {
     if (type.isInternalReference) {
       // Lift reference types
       const clazz = assert(type.getClassOrWrapper(this.program));
       if (clazz.extendsPrototype(this.program.arrayBufferInstance.prototype)) {
         sb.push("__liftBuffer(");
         this.needsLiftBuffer = true;
-      } else if (clazz.extendsPrototype(this.program.stringInstance.prototype)) {
+      } else if (
+        clazz.extendsPrototype(this.program.stringInstance.prototype)
+      ) {
         sb.push("__liftString(");
         this.needsLiftString = true;
       } else if (clazz.extendsPrototype(this.program.arrayPrototype)) {
@@ -1044,7 +1082,9 @@ export class JSBuilder extends ExportsWalker {
         sb.push(valueType.alignLog2.toString());
         sb.push(", ");
         this.needsLiftStaticArray = true;
-      } else if (clazz.extendsPrototype(this.program.arrayBufferViewInstance.prototype)) {
+      } else if (
+        clazz.extendsPrototype(this.program.arrayBufferViewInstance.prototype)
+      ) {
         sb.push("__liftTypedArray(");
         if (clazz.name == "Uint64Array") {
           sb.push("BigUint64Array");
@@ -1078,12 +1118,15 @@ export class JSBuilder extends ExportsWalker {
       sb.push(")");
     } else {
       // Lift and coerce basic values (from a Wasm export)
-      if (type == Type.bool) { // i32 to boolean
+      if (type == Type.bool) {
+        // i32 to boolean
         sb.push(`${valueExpr} != 0`);
       } else if (type.isUnsignedIntegerValue && type.size >= 32) {
-        if (type.size == 64) { // i64 to unsigned bigint
+        if (type.size == 64) {
+          // i64 to unsigned bigint
           sb.push(`BigInt.asUintN(64, ${valueExpr})`);
-        } else { // i32 to unsigned
+        } else {
+          // i32 to unsigned
           sb.push(`${valueExpr} >>> 0`);
         }
       } else {
@@ -1093,14 +1136,20 @@ export class JSBuilder extends ExportsWalker {
   }
 
   /** Lowers a JavaScript value to a WebAssembly value, as an expression. */
-  makeLowerToValue(valueExpr: string, type: Type, sb: string[] = this.sb): void {
+  makeLowerToValue(
+    valueExpr: string,
+    type: Type,
+    sb: string[] = this.sb,
+  ): void {
     if (type.isInternalReference) {
       // Lower reference types
       const clazz = assert(type.getClassOrWrapper(this.program));
       if (clazz.extendsPrototype(this.program.arrayBufferInstance.prototype)) {
         sb.push("__lowerBuffer(");
         this.needsLowerBuffer = true;
-      } else if (clazz.extendsPrototype(this.program.stringInstance.prototype)) {
+      } else if (
+        clazz.extendsPrototype(this.program.stringInstance.prototype)
+      ) {
         sb.push("__lowerString(");
         this.needsLowerString = true;
       } else if (clazz.extendsPrototype(this.program.arrayPrototype)) {
@@ -1123,7 +1172,9 @@ export class JSBuilder extends ExportsWalker {
         sb.push(valueType.alignLog2.toString());
         sb.push(", ");
         this.needsLowerStaticArray = true;
-      } else if (clazz.extendsPrototype(this.program.arrayBufferViewInstance.prototype)) {
+      } else if (
+        clazz.extendsPrototype(this.program.arrayBufferViewInstance.prototype)
+      ) {
         let valueType = clazz.getArrayValueType();
         sb.push("__lowerTypedArray(");
         if (valueType == Type.u64) {
@@ -1253,7 +1304,7 @@ export class JSBuilder extends ExportsWalker {
       this.needsGetF64 = true;
       return "__getF64";
     }
-    return "(() => { throw Error(\"unsupported type\"); })";
+    return '(() => { throw Error("unsupported type"); })';
   }
 
   /** Lifts a WebAssembly memory address to a JavaScript value, as a function. */
@@ -1273,7 +1324,11 @@ export class JSBuilder extends ExportsWalker {
   }
 
   /** Lifts a WebAssembly memory address to a JavaScript value, as a call. */
-  makeLiftFromMemoryCall(valueType: Type, sb: string[] = this.sb, pointerExpr: string = "pointer"): void {
+  makeLiftFromMemoryCall(
+    valueType: Type,
+    sb: string[] = this.sb,
+    pointerExpr: string = "pointer",
+  ): void {
     let fn = this.ensureLiftFromMemoryFn(valueType);
     if (valueType.isInternalReference) {
       this.makeLiftFromValue(`${fn}(${pointerExpr})`, valueType, sb);
@@ -1299,7 +1354,11 @@ export class JSBuilder extends ExportsWalker {
         return "__setU32";
       }
     }
-    if (valueType == Type.i8 || valueType == Type.u8 || valueType == Type.bool) {
+    if (
+      valueType == Type.i8 ||
+      valueType == Type.u8 ||
+      valueType == Type.bool
+    ) {
       this.needsSetU8 = true;
       return "__setU8";
     }
@@ -1307,11 +1366,21 @@ export class JSBuilder extends ExportsWalker {
       this.needsSetU16 = true;
       return "__setU16";
     }
-    if (valueType == Type.i32 || valueType == Type.u32 || valueType == Type.isize32 || valueType == Type.usize32) {
+    if (
+      valueType == Type.i32 ||
+      valueType == Type.u32 ||
+      valueType == Type.isize32 ||
+      valueType == Type.usize32
+    ) {
       this.needsSetU32 = true;
       return "__setU32";
     }
-    if (valueType == Type.i64 || valueType == Type.u64 || valueType == Type.isize64 || valueType == Type.usize64) {
+    if (
+      valueType == Type.i64 ||
+      valueType == Type.u64 ||
+      valueType == Type.isize64 ||
+      valueType == Type.usize64
+    ) {
       this.needsSetU64 = true;
       return "__setU64";
     }
@@ -1323,7 +1392,7 @@ export class JSBuilder extends ExportsWalker {
       this.needsSetF64 = true;
       return "__setF64";
     }
-    return "(() => { throw Error(\"unsupported type\") })";
+    return '(() => { throw Error("unsupported type") })';
   }
 
   /** Lowers a JavaScript value to a WebAssembly memory address, as a function. */
@@ -1341,7 +1410,12 @@ export class JSBuilder extends ExportsWalker {
   }
 
   /** Lowers a JavaScript value to a WebAssembly memory address, as a call. */
-  makeLowerToMemoryCall(valueType: Type, sb: string[] = this.sb, pointerExpr: string = "pointer", valueExpr: string = "value"): void {
+  makeLowerToMemoryCall(
+    valueType: Type,
+    sb: string[] = this.sb,
+    pointerExpr: string = "pointer",
+    valueExpr: string = "value",
+  ): void {
     let fn = this.ensureLowerToMemoryFn(valueType);
     sb.push(fn);
     sb.push("(");
@@ -1363,7 +1437,9 @@ export class JSBuilder extends ExportsWalker {
     sb.push(clazz.type.toString());
     sb.push("\n");
     indent(sb, this.indentLevel);
-    sb.push("// Hint: Opt-out from lifting as a record by providing an empty constructor\n");
+    sb.push(
+      "// Hint: Opt-out from lifting as a record by providing an empty constructor\n",
+    );
     indent(sb, this.indentLevel);
     sb.push("if (!pointer) return null;\n");
     indent(sb, this.indentLevel++);
@@ -1380,7 +1456,11 @@ export class JSBuilder extends ExportsWalker {
         indent(sb, this.indentLevel);
         sb.push(property.name);
         sb.push(": ");
-        this.makeLiftFromMemoryCall(property.type, sb, `pointer + ${property.memoryOffset}`);
+        this.makeLiftFromMemoryCall(
+          property.type,
+          sb,
+          `pointer + ${property.memoryOffset}`,
+        );
         sb.push(",\n");
       }
     }
@@ -1403,7 +1483,9 @@ export class JSBuilder extends ExportsWalker {
     sb.push(clazz.type.toString());
     sb.push("\n");
     indent(sb, this.indentLevel);
-    sb.push("// Hint: Opt-out from lowering as a record by providing an empty constructor\n");
+    sb.push(
+      "// Hint: Opt-out from lowering as a record by providing an empty constructor\n",
+    );
     indent(sb, this.indentLevel);
     sb.push("if (value == null) return 0;\n");
     indent(sb, this.indentLevel);
@@ -1422,7 +1504,12 @@ export class JSBuilder extends ExportsWalker {
         if (!property || !property.isField) continue;
         assert(property.memoryOffset >= 0);
         indent(sb, this.indentLevel);
-        this.makeLowerToMemoryCall(property.type, sb, `pointer + ${property.memoryOffset}`, `value.${memberName}`);
+        this.makeLowerToMemoryCall(
+          property.type,
+          sb,
+          `pointer + ${property.memoryOffset}`,
+          `value.${memberName}`,
+        );
         sb.push(";\n");
       }
     }
@@ -1440,7 +1527,7 @@ export class JSBuilder extends ExportsWalker {
 
 enum Mode {
   Import,
-  Export
+  Export,
 }
 
 function isPlainValue(type: Type, kind: Mode): bool {
@@ -1474,9 +1561,14 @@ function isPlainObject(clazz: Class): bool {
   if (clazz.base && !clazz.prototype.implicitlyExtendsObject) return false;
   let members = clazz.members;
   if (members) {
-    for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+    for (
+      let _values = Map_values(members), i = 0, k = _values.length;
+      i < k;
+      ++i
+    ) {
       let member = _values[i];
-      if (member.isAny(CommonFlags.Private | CommonFlags.Protected)) return false;
+      if (member.isAny(CommonFlags.Private | CommonFlags.Protected))
+        return false;
       if (member.is(CommonFlags.Constructor)) {
         // a generated constructor is ok
         if (member.declaration.range != Source.native.range) return false;
@@ -1486,7 +1578,12 @@ function isPlainObject(clazz: Class): bool {
   return true;
 }
 
-function indentText(text: string, indentLevel: i32, sb: string[], butFirst: bool = false): void {
+function indentText(
+  text: string,
+  indentLevel: i32,
+  sb: string[],
+  butFirst: bool = false,
+): void {
   let lineStart = 0;
   let length = text.length;
   let pos = 0;
@@ -1494,7 +1591,7 @@ function indentText(text: string, indentLevel: i32, sb: string[], butFirst: bool
     if (text.charCodeAt(pos) == CharCode.LineFeed) {
       if (butFirst) butFirst = false;
       else indent(sb, indentLevel);
-      sb.push(text.substring(lineStart, lineStart = pos + 1));
+      sb.push(text.substring(lineStart, (lineStart = pos + 1)));
     }
     ++pos;
   }

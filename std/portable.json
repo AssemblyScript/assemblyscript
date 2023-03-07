@@ -4,8 +4,8 @@
     "target": "esnext",
     "module": "commonjs",
     "allowJs": true,
-    "typeRoots": [ "types" ],
-    "types": [ "portable" ],
+    "typeRoots": ["types"],
+    "types": ["portable"],
     "lib": ["esnext", "esnext.string"]
   }
 }

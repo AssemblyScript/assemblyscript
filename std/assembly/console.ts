@@ -1,9 +1,6 @@
-import {
-  console as binding
-} from "./bindings/dom";
+import { console as binding } from "./bindings/dom";
 
 export namespace console {
-
   export function assert<T>(condition: T, message: string = ""): void {
     binding.assert(!!condition, message);
   }

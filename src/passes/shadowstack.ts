@@ -80,9 +80,7 @@
  * @license Apache-2.0
  */
 
-import {
-  Pass
-} from "./pass";
+import { Pass } from "./pass";
 
 import {
   _BinaryenAddFunction,
@@ -117,7 +115,7 @@ import {
   _BinaryenRemoveFunction,
   _BinaryenReturnGetValue,
   _BinaryenReturnSetValue,
-  _free
+  _free,
 } from "../glue/binaryen";
 
 import {
@@ -135,33 +133,25 @@ import {
   isConstZero,
 } from "../module";
 
-import {
-  Compiler,
-  Options
-} from "../compiler";
+import { Compiler, Options } from "../compiler";
 
-import {
-  Feature
-} from "../common";
+import { Feature } from "../common";
 
-import {
-  BuiltinNames
-} from "../builtins";
+import { BuiltinNames } from "../builtins";
 
-import {
-  Source
-} from "../ast";
+import { Source } from "../ast";
 
 type LocalIndex = Index;
 type SlotIndex = Index;
-type SlotMap = Map<LocalIndex,SlotIndex>;
-type TempMap = Map<TypeRef,LocalIndex>;
+type SlotMap = Map<LocalIndex, SlotIndex>;
+type TempMap = Map<TypeRef, LocalIndex>;
 
 /** Attempts to match the `__tostack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
 function matchPattern(module: Module, expr: ExpressionRef): ExpressionRef {
   if (
     _BinaryenExpressionGetId(expr) == ExpressionId.Call &&
-    module.readStringCached(_BinaryenCallGetTarget(expr)) == BuiltinNames.tostack
+    module.readStringCached(_BinaryenCallGetTarget(expr)) ==
+      BuiltinNames.tostack
   ) {
     assert(_BinaryenCallGetNumOperands(expr) == 1);
     return _BinaryenCallGetOperandAt(expr, 0);
@@ -173,7 +163,8 @@ function matchPattern(module: Module, expr: ExpressionRef): ExpressionRef {
 function needsSlot(module: Module, value: ExpressionRef): bool {
   switch (_BinaryenExpressionGetId(value)) {
     // no need to stack null pointers
-    case ExpressionId.Const: return !isConstZero(value);
+    case ExpressionId.Const:
+      return !isConstZero(value);
     // note: can't omit a slot when assigning from another local since the other
     // local might have shorter lifetime and become reassigned, say in a loop,
     // then no longer holding on to the previous value in its stack slot.
@@ -188,7 +179,7 @@ export class ShadowStackPass extends Pass {
   /** Temporary locals, per function. */
   tempMaps: Map<FunctionRef, TempMap> = new Map();
   /** Exports (with managed operands) map. */
-  exportMap: Map<string,i32[]> = new Map();
+  exportMap: Map<string, i32[]> = new Map();
   /** Compiler reference. */
   compiler: Compiler;
 
@@ -198,15 +189,25 @@ export class ShadowStackPass extends Pass {
   }
 
   /** Compiler options. */
-  get options(): Options { return this.compiler.options; }
+  get options(): Options {
+    return this.compiler.options;
+  }
   /** Target pointer type. */
-  get ptrType(): TypeRef { return this.options.sizeTypeRef; }
+  get ptrType(): TypeRef {
+    return this.options.sizeTypeRef;
+  }
   /** Target pointer size. */
-  get ptrSize(): i32 { return this.ptrType == TypeRef.I64 ? 8 : 4; }
+  get ptrSize(): i32 {
+    return this.ptrType == TypeRef.I64 ? 8 : 4;
+  }
   /** Target pointer addition operation. */
-  get ptrBinaryAdd(): BinaryOp { return this.ptrType == TypeRef.I64 ? BinaryOp.AddI64 : BinaryOp.AddI32; }
+  get ptrBinaryAdd(): BinaryOp {
+    return this.ptrType == TypeRef.I64 ? BinaryOp.AddI64 : BinaryOp.AddI32;
+  }
   /** Target pointer subtraction operation. */
-  get ptrBinarySub(): BinaryOp { return this.ptrType == TypeRef.I64 ? BinaryOp.SubI64 : BinaryOp.SubI32; }
+  get ptrBinarySub(): BinaryOp {
+    return this.ptrType == TypeRef.I64 ? BinaryOp.SubI64 : BinaryOp.SubI32;
+  }
 
   /** Gets a constant with the specified value of the target pointer type. */
   ptrConst(value: i32): ExpressionRef {
@@ -260,17 +261,16 @@ export class ShadowStackPass extends Pass {
   makeStackOffset(offset: i32): ExpressionRef {
     assert(offset != 0);
     let module = this.module;
-    let expr = module.global_set(BuiltinNames.stack_pointer,
-      module.binary(offset >= 0 ? this.ptrBinaryAdd : this.ptrBinarySub,
+    let expr = module.global_set(
+      BuiltinNames.stack_pointer,
+      module.binary(
+        offset >= 0 ? this.ptrBinaryAdd : this.ptrBinarySub,
         module.global_get(BuiltinNames.stack_pointer, this.ptrType),
-        this.ptrConst(abs(offset))
-      )
+        this.ptrConst(abs(offset)),
+      ),
     );
     if (offset > 0) return expr;
-    return module.block(null, [
-      expr,
-      this.makeStackCheck()
-    ], TypeRef.None);
+    return module.block(null, [expr, this.makeStackCheck()], TypeRef.None);
   }
 
   /** Makes a sequence of expressions zeroing the stack frame. */
@@ -282,20 +282,21 @@ export class ShadowStackPass extends Pass {
         module.memory_fill(
           module.global_get(BuiltinNames.stack_pointer, this.ptrType),
           module.i32(0), // TODO: Wasm64 also i32?
-          this.ptrConst(frameSize)
-        )
+          this.ptrConst(frameSize),
+        ),
       );
     } else {
       let remain = frameSize;
       while (remain >= 8) {
         // store<i64>(__stack_pointer, 0, frameSize - remain)
         stmts.push(
-          module.store(8,
+          module.store(
+            8,
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),
             module.i64(0),
             TypeRef.I64,
-            frameSize - remain
-          )
+            frameSize - remain,
+          ),
         );
         remain -= 8;
       }
@@ -303,12 +304,13 @@ export class ShadowStackPass extends Pass {
         assert(remain == 4);
         // store<i32>(__stack_pointer, 0, frameSize - remain)
         stmts.push(
-          module.store(4,
+          module.store(
+            4,
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),
             module.i32(0),
             TypeRef.I32,
-            frameSize - remain
-          )
+            frameSize - remain,
+          ),
         );
       }
     }
@@ -321,17 +323,22 @@ export class ShadowStackPass extends Pass {
     let module = this.module;
     if (!this.hasStackCheckFunction) {
       this.hasStackCheckFunction = true;
-      module.addFunction("~stack_check", TypeRef.None, TypeRef.None, null,
+      module.addFunction(
+        "~stack_check",
+        TypeRef.None,
+        TypeRef.None,
+        null,
         module.if(
-          module.binary(BinaryOp.LtI32,
+          module.binary(
+            BinaryOp.LtI32,
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),
-            module.global_get(BuiltinNames.data_end, this.ptrType)
+            module.global_get(BuiltinNames.data_end, this.ptrType),
           ),
           this.compiler.makeStaticAbort(
             this.compiler.ensureStaticString("stack overflow"),
-            Source.native
-          )
-        )
+            Source.native,
+          ),
+        ),
       );
     }
     return module.call("~stack_check", null, TypeRef.None);
@@ -350,25 +357,26 @@ export class ShadowStackPass extends Pass {
       }
       let currentFunction = this.currentFunction;
       let numLocals = _BinaryenFunctionGetNumLocals(currentFunction);
-      let slotIndex = this.noteSlot(currentFunction, numLocals + this.callSlotOffset + i);
+      let slotIndex = this.noteSlot(
+        currentFunction,
+        numLocals + this.callSlotOffset + i,
+      );
       let temp = this.getSharedTemp(currentFunction, this.ptrType);
       let stmts = new Array<ExpressionRef>();
       // t = value
-      stmts.push(
-        module.local_set(temp, match, false)
-      );
+      stmts.push(module.local_set(temp, match, false));
       // store<usize>(__stack_pointer, t, slotIndex * ptrSize)
       stmts.push(
-        module.store(this.ptrSize,
+        module.store(
+          this.ptrSize,
           module.global_get(BuiltinNames.stack_pointer, this.ptrType),
           module.local_get(temp, this.ptrType),
-          this.ptrType, slotIndex * this.ptrSize
-        )
+          this.ptrType,
+          slotIndex * this.ptrSize,
+        ),
       );
       // -> t
-      stmts.push(
-        module.local_get(temp, this.ptrType)
-      );
+      stmts.push(module.local_get(temp, this.ptrType));
       operands[i] = module.block(null, stmts, this.ptrType);
       ++numSlots;
     }
@@ -443,17 +451,17 @@ export class ShadowStackPass extends Pass {
     let stmts = new Array<ExpressionRef>();
     // store<usize>(__stack_pointer, local = match, slotIndex * ptrSize)
     stmts.push(
-      module.store(this.ptrSize,
+      module.store(
+        this.ptrSize,
         module.global_get(BuiltinNames.stack_pointer, this.ptrType),
         module.local_tee(index, match, false),
-        this.ptrType, slotIndex * this.ptrSize
-      )
+        this.ptrType,
+        slotIndex * this.ptrSize,
+      ),
     );
     if (_BinaryenLocalSetIsTee(localSet)) {
       // -> local
-      stmts.push(
-        module.local_get(index, this.ptrType)
-      );
+      stmts.push(module.local_get(index, this.ptrType));
       this.replaceCurrent(module.flatten(stmts, this.ptrType));
     } else {
       this.replaceCurrent(module.flatten(stmts, TypeRef.None));
@@ -481,7 +489,15 @@ export class ShadowStackPass extends Pass {
     let moduleRef = this.module.ref;
     _BinaryenRemoveFunction(moduleRef, name);
     let cArr = allocPtrArray(vars);
-    let newFuncRef = _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
+    let newFuncRef = _BinaryenAddFunction(
+      moduleRef,
+      name,
+      params,
+      results,
+      cArr,
+      vars.length,
+      body,
+    );
     if (this.options.sourceMap || this.options.debugInfo) {
       let func = this.compiler.program.searchFunctionByRef(newFuncRef);
       if (func) func.addDebugInfo(this.module, newFuncRef);
@@ -513,17 +529,17 @@ export class ShadowStackPass extends Pass {
     if (_BinaryenGetFunction(moduleRef, wrapperNameRef) == 0) {
       let stmts = new Array<ExpressionRef>();
       // __stack_pointer -= frameSize
-      stmts.push(
-        this.makeStackOffset(-frameSize)
-      );
+      stmts.push(this.makeStackOffset(-frameSize));
       for (let slotIndex = 0; slotIndex < numSlots; ++slotIndex) {
         // store<usize>(__stack_pointer, $local, slotIndex * ptrSize)
         stmts.push(
-          module.store(this.ptrSize,
+          module.store(
+            this.ptrSize,
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),
             module.local_get(managedOperandIndices[slotIndex], this.ptrType),
-            this.ptrType, slotIndex * this.ptrSize
-          )
+            this.ptrType,
+            slotIndex * this.ptrSize,
+          ),
         );
       }
       let forwardedOperands = new Array<ExpressionRef>(numParams);
@@ -535,32 +551,31 @@ export class ShadowStackPass extends Pass {
         vars.push(results);
         // t = original(...)
         stmts.push(
-          module.local_set(tempIndex,
+          module.local_set(
+            tempIndex,
             module.call(internalName, forwardedOperands, results),
-            false // internal
-          )
+            false, // internal
+          ),
         );
         // __stack_pointer += frameSize
-        stmts.push(
-          this.makeStackOffset(+frameSize)
-        );
+        stmts.push(this.makeStackOffset(+frameSize));
         // -> t
-        stmts.push(
-          module.local_get(tempIndex, results)
-        );
+        stmts.push(module.local_get(tempIndex, results));
       } else {
         // original(...)
-        stmts.push(
-          module.call(internalName, forwardedOperands, results)
-        );
+        stmts.push(module.call(internalName, forwardedOperands, results));
         // __stack_pointer += frameSize
-        stmts.push(
-          this.makeStackOffset(+frameSize)
-        );
+        stmts.push(this.makeStackOffset(+frameSize));
       }
       let cArr = allocPtrArray(vars);
-      _BinaryenAddFunction(moduleRef, wrapperNameRef, params, results, cArr, vars.length,
-        module.block(null, stmts, results)
+      _BinaryenAddFunction(
+        moduleRef,
+        wrapperNameRef,
+        params,
+        results,
+        cArr,
+        vars.length,
+        module.block(null, stmts, results),
       );
       _free(cArr);
     }
@@ -576,7 +591,11 @@ export class ShadowStackPass extends Pass {
     // Instrument returns in functions utilizing stack slots
     let module = this.module;
     let instrumentReturns = new InstrumentReturns(this);
-    for (let _keys = Map_keys(this.slotMaps), i = 0, k = _keys.length; i < k; ++i) {
+    for (
+      let _keys = Map_keys(this.slotMaps), i = 0, k = _keys.length;
+      i < k;
+      ++i
+    ) {
       let func = _keys[i];
       let slotMap = changetype<SlotMap>(this.slotMaps.get(func));
       let frameSize = slotMap.size * this.ptrSize;
@@ -588,9 +607,7 @@ export class ShadowStackPass extends Pass {
       // Instrument function entry
       let stmts = new Array<ExpressionRef>();
       // __stack_pointer -= frameSize
-      stmts.push(
-        this.makeStackOffset(-frameSize)
-      );
+      stmts.push(this.makeStackOffset(-frameSize));
       // memory.fill(__stack_pointer, 0, frameSize)
       this.makeStackFill(frameSize, stmts);
 
@@ -599,39 +616,31 @@ export class ShadowStackPass extends Pass {
       let bodyType = _BinaryenExpressionGetType(body);
       if (bodyType == TypeRef.Unreachable) {
         // body
-        stmts.push(
-          body
-        );
+        stmts.push(body);
       } else if (bodyType == TypeRef.None) {
         // body
-        stmts.push(
-          body
-        );
+        stmts.push(body);
         // __stack_pointer += frameSize
-        stmts.push(
-          this.makeStackOffset(+frameSize)
-        );
+        stmts.push(this.makeStackOffset(+frameSize));
       } else {
         let temp = this.getSharedTemp(func, bodyType);
         // t = body
-        stmts.push(
-          module.local_set(temp, body, false)
-        );
+        stmts.push(module.local_set(temp, body, false));
         // __stack_pointer += frameSize
-        stmts.push(
-          this.makeStackOffset(+frameSize)
-        );
+        stmts.push(this.makeStackOffset(+frameSize));
         // -> t
-        stmts.push(
-          module.local_get(temp, bodyType)
-        );
+        stmts.push(module.local_get(temp, bodyType));
       }
       _BinaryenFunctionSetBody(func, module.flatten(stmts, bodyType));
     }
 
     // Update functions we added more locals to
     // TODO: _BinaryenFunctionAddVar ?
-    for (let _keys = Map_keys(this.tempMaps), i = 0, k = _keys.length; i < k; ++i) {
+    for (
+      let _keys = Map_keys(this.tempMaps), i = 0, k = _keys.length;
+      i < k;
+      ++i
+    ) {
       this.updateFunction(_keys[i]);
     }
 
@@ -639,7 +648,10 @@ export class ShadowStackPass extends Pass {
     let exportMap = this.exportMap;
     for (let _keys = Map_keys(exportMap), i = 0, k = _keys.length; i < k; ++i) {
       let exportName = _keys[i];
-      let exportRef = _BinaryenGetExport(module.ref, module.allocStringCached(exportName));
+      let exportRef = _BinaryenGetExport(
+        module.ref,
+        module.allocStringCached(exportName),
+      );
       let managedOperandIndices = changetype<i32[]>(exportMap.get(exportName));
       this.updateExport(exportRef, managedOperandIndices);
     }
@@ -667,27 +679,22 @@ class InstrumentReturns extends Pass {
     if (value) {
       let returnType = _BinaryenExpressionGetType(value);
       if (returnType == TypeRef.Unreachable) return;
-      let temp = this.parentPass.getSharedTemp(this.currentFunction, returnType);
+      let temp = this.parentPass.getSharedTemp(
+        this.currentFunction,
+        returnType,
+      );
       // t = value
-      stmts.push(
-        module.local_set(temp, value, false)
-      );
+      stmts.push(module.local_set(temp, value, false));
       // __stack_pointer += frameSize
-      stmts.push(
-        this.parentPass.makeStackOffset(+this.frameSize)
-      );
+      stmts.push(this.parentPass.makeStackOffset(+this.frameSize));
       // return t
       _BinaryenReturnSetValue(ret, module.local_get(temp, returnType));
     } else {
       // __stack_pointer += frameSize
-      stmts.push(
-        this.parentPass.makeStackOffset(+this.frameSize)
-      );
+      stmts.push(this.parentPass.makeStackOffset(+this.frameSize));
       // return
     }
-    stmts.push(
-      ret
-    );
+    stmts.push(ret);
     this.replaceCurrent(module.flatten(stmts, TypeRef.Unreachable));
   }
 }

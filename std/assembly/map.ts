@@ -21,7 +21,7 @@ import { E_KEYNOTFOUND } from "./util/error";
 @inline const FREE_FACTOR_D = 4;
 
 /** Structure of a map entry. */
-@unmanaged class MapEntry<K,V> {
+@unmanaged class MapEntry<K, V> {
   key: K;
   value: V;
   taggedNext: usize; // LSB=1 indicates EMPTY
@@ -38,7 +38,7 @@ import { E_KEYNOTFOUND } from "./util/error";
 /** Computes the alignment of an entry. */
 // @ts-ignore: decorator
 @inline
-function ENTRY_ALIGN<K,V>(): usize {
+function ENTRY_ALIGN<K, V>(): usize {
   // can align to 4 instead of 8 if 32-bit and K/V is <= 32-bits
   const maxkv = sizeof<K>() > sizeof<V>() ? sizeof<K>() : sizeof<V>();
   const align = (maxkv > sizeof<usize>() ? maxkv : sizeof<usize>()) - 1;
@@ -48,20 +48,23 @@ function ENTRY_ALIGN<K,V>(): usize {
 /** Computes the aligned size of an entry. */
 // @ts-ignore: decorator
 @inline
-function ENTRY_SIZE<K,V>(): usize {
-  const align = ENTRY_ALIGN<K,V>();
-  const size = (offsetof<MapEntry<K,V>>() + align) & ~align;
+function ENTRY_SIZE<K, V>(): usize {
+  const align = ENTRY_ALIGN<K, V>();
+  const size = (offsetof<MapEntry<K, V>>() + align) & ~align;
   return size;
 }
 
-export class Map<K,V> {
-
+export class Map<K, V> {
   // buckets referencing their respective first entry, usize[bucketsMask + 1]
-  private buckets: ArrayBuffer = new ArrayBuffer(INITIAL_CAPACITY * <i32>BUCKET_SIZE);
+  private buckets: ArrayBuffer = new ArrayBuffer(
+    INITIAL_CAPACITY * <i32>BUCKET_SIZE,
+  );
   private bucketsMask: u32 = INITIAL_CAPACITY - 1;
 
   // entries in insertion order, MapEntry<K,V>[entriesCapacity]
-  private entries: ArrayBuffer = new ArrayBuffer(INITIAL_CAPACITY * <i32>ENTRY_SIZE<K,V>());
+  private entries: ArrayBuffer = new ArrayBuffer(
+    INITIAL_CAPACITY * <i32>ENTRY_SIZE<K, V>(),
+  );
   private entriesCapacity: i32 = INITIAL_CAPACITY;
   private entriesOffset: i32 = 0;
   private entriesCount: i32 = 0;
@@ -77,20 +80,21 @@ export class Map<K,V> {
   clear(): void {
     this.buckets = new ArrayBuffer(INITIAL_CAPACITY * <i32>BUCKET_SIZE);
     this.bucketsMask = INITIAL_CAPACITY - 1;
-    this.entries = new ArrayBuffer(INITIAL_CAPACITY * <i32>ENTRY_SIZE<K,V>());
+    this.entries = new ArrayBuffer(INITIAL_CAPACITY * <i32>ENTRY_SIZE<K, V>());
     this.entriesCapacity = INITIAL_CAPACITY;
     this.entriesOffset = 0;
     this.entriesCount = 0;
   }
 
-  private find(key: K, hashCode: u32): MapEntry<K,V> | null {
-    let entry = load<MapEntry<K,V>>( // unmanaged!
-      changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
+  private find(key: K, hashCode: u32): MapEntry<K, V> | null {
+    let entry = load<MapEntry<K, V>>( // unmanaged!
+      changetype<usize>(this.buckets) +
+        <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE,
     );
     while (entry) {
       let taggedNext = entry.taggedNext;
       if (!(taggedNext & EMPTY) && entry.key == key) return entry;
-      entry = changetype<MapEntry<K,V>>(taggedNext & ~EMPTY);
+      entry = changetype<MapEntry<K, V>>(taggedNext & ~EMPTY);
     }
     return null;
   }
@@ -99,12 +103,14 @@ export class Map<K,V> {
     return this.find(key, HASH<K>(key)) != null;
   }
 
+
   @operator("[]")
   get(key: K): V {
     let entry = this.find(key, HASH<K>(key));
     if (!entry) throw new Error(E_KEYNOTFOUND); // cannot represent `undefined`
     return entry.value;
   }
+
 
   @operator("[]=")
   set(key: K, value: V): this {
@@ -119,14 +125,18 @@ export class Map<K,V> {
       // check if rehashing is necessary
       if (this.entriesOffset == this.entriesCapacity) {
         this.rehash(
-          this.entriesCount < this.entriesCapacity * FREE_FACTOR_N / FREE_FACTOR_D
-            ?  this.bucketsMask           // just rehash if 1/4+ entries are empty
-            : (this.bucketsMask << 1) | 1 // grow capacity to next 2^N
+          this.entriesCount <
+            (this.entriesCapacity * FREE_FACTOR_N) / FREE_FACTOR_D
+            ? this.bucketsMask // just rehash if 1/4+ entries are empty
+            : (this.bucketsMask << 1) | 1, // grow capacity to next 2^N
         );
       }
       // append new entry
       let entries = this.entries;
-      entry = changetype<MapEntry<K,V>>(changetype<usize>(entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<K,V>());
+      entry = changetype<MapEntry<K, V>>(
+        changetype<usize>(entries) +
+          <usize>this.entriesOffset++ * ENTRY_SIZE<K, V>(),
+      );
       // link with the map
       entry.key = key;
       if (isManaged<K>()) {
@@ -138,7 +148,9 @@ export class Map<K,V> {
       }
       ++this.entriesCount;
       // link with previous entry in bucket
-      let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
+      let bucketPtrBase =
+        changetype<usize>(this.buckets) +
+        <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
     }
@@ -154,35 +166,40 @@ export class Map<K,V> {
     let halfBucketsMask = this.bucketsMask >> 1;
     if (
       halfBucketsMask + 1 >= max<u32>(INITIAL_CAPACITY, this.entriesCount) &&
-      this.entriesCount < this.entriesCapacity * FREE_FACTOR_N / FREE_FACTOR_D
-    ) this.rehash(halfBucketsMask);
+      this.entriesCount < (this.entriesCapacity * FREE_FACTOR_N) / FREE_FACTOR_D
+    )
+      this.rehash(halfBucketsMask);
     return true;
   }
 
   private rehash(newBucketsMask: u32): void {
     let newBucketsCapacity = <i32>(newBucketsMask + 1);
     let newBuckets = new ArrayBuffer(newBucketsCapacity * <i32>BUCKET_SIZE);
-    let newEntriesCapacity = newBucketsCapacity * FILL_FACTOR_N / FILL_FACTOR_D;
-    let newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<K,V>());
+    let newEntriesCapacity =
+      (newBucketsCapacity * FILL_FACTOR_N) / FILL_FACTOR_D;
+    let newEntries = new ArrayBuffer(
+      newEntriesCapacity * <i32>ENTRY_SIZE<K, V>(),
+    );
 
     // copy old entries to new entries
     let oldPtr = changetype<usize>(this.entries);
-    let oldEnd = oldPtr + <usize>this.entriesOffset * ENTRY_SIZE<K,V>();
+    let oldEnd = oldPtr + <usize>this.entriesOffset * ENTRY_SIZE<K, V>();
     let newPtr = changetype<usize>(newEntries);
     while (oldPtr != oldEnd) {
-      let oldEntry = changetype<MapEntry<K,V>>(oldPtr);
+      let oldEntry = changetype<MapEntry<K, V>>(oldPtr);
       if (!(oldEntry.taggedNext & EMPTY)) {
-        let newEntry = changetype<MapEntry<K,V>>(newPtr);
+        let newEntry = changetype<MapEntry<K, V>>(newPtr);
         let oldEntryKey = oldEntry.key;
         newEntry.key = oldEntryKey;
         newEntry.value = oldEntry.value;
         let newBucketIndex = HASH<K>(oldEntryKey) & newBucketsMask;
-        let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
+        let newBucketPtrBase =
+          changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
         newEntry.taggedNext = load<usize>(newBucketPtrBase);
         store<usize>(newBucketPtrBase, newPtr);
-        newPtr += ENTRY_SIZE<K,V>();
+        newPtr += ENTRY_SIZE<K, V>();
       }
-      oldPtr += ENTRY_SIZE<K,V>();
+      oldPtr += ENTRY_SIZE<K, V>();
     }
 
     this.buckets = newBuckets;
@@ -199,9 +216,11 @@ export class Map<K,V> {
     let keys = new Array<K>(size);
     let length = 0;
     for (let i = 0; i < size; ++i) {
-      let entry = changetype<MapEntry<K,V>>(start + <usize>i * ENTRY_SIZE<K,V>());
+      let entry = changetype<MapEntry<K, V>>(
+        start + <usize>i * ENTRY_SIZE<K, V>(),
+      );
       if (!(entry.taggedNext & EMPTY)) {
-        unchecked(keys[length++] = entry.key);
+        unchecked((keys[length++] = entry.key));
       }
     }
     keys.length = length;
@@ -215,9 +234,11 @@ export class Map<K,V> {
     let values = new Array<V>(size);
     let length = 0;
     for (let i = 0; i < size; ++i) {
-      let entry = changetype<MapEntry<K,V>>(start + <usize>i * ENTRY_SIZE<K,V>());
+      let entry = changetype<MapEntry<K, V>>(
+        start + <usize>i * ENTRY_SIZE<K, V>(),
+      );
       if (!(entry.taggedNext & EMPTY)) {
-        unchecked(values[length++] = entry.value);
+        unchecked((values[length++] = entry.value));
       }
     }
     values.length = length;
@@ -235,9 +256,9 @@ export class Map<K,V> {
     let entries = changetype<usize>(this.entries);
     if (isManaged<K>() || isManaged<V>()) {
       let cur = entries;
-      let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K,V>();
+      let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K, V>();
       while (cur < end) {
-        let entry = changetype<MapEntry<K,V>>(cur);
+        let entry = changetype<MapEntry<K, V>>(cur);
         if (!(entry.taggedNext & EMPTY)) {
           if (isManaged<K>()) {
             let val = changetype<usize>(entry.key);
@@ -252,7 +273,7 @@ export class Map<K,V> {
             } else __visit(val, cookie);
           }
         }
-        cur += ENTRY_SIZE<K,V>();
+        cur += ENTRY_SIZE<K, V>();
       }
     }
     __visit(entries, cookie);

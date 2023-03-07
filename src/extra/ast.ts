@@ -11,13 +11,11 @@ import {
   NodeKind,
   Source,
   ArrowKind,
-
   TypeNode,
   NamedTypeNode,
   FunctionTypeNode,
   TypeName,
   TypeParameterNode,
-
   Expression,
   IdentifierExpression,
   LiteralExpression,
@@ -44,7 +42,6 @@ import {
   UnaryPrefixExpression,
   ClassExpression,
   ObjectLiteralExpression,
-
   BlockStatement,
   BreakStatement,
   ContinueStatement,
@@ -66,7 +63,6 @@ import {
   VariableStatement,
   WhileStatement,
   ModuleDeclaration,
-
   DeclarationStatement,
   ClassDeclaration,
   EnumDeclaration,
@@ -79,34 +75,23 @@ import {
   NamespaceDeclaration,
   TypeDeclaration,
   VariableDeclaration,
-
   DecoratorNode,
   ParameterNode,
   ParameterKind,
   ExportMember,
   SwitchCase,
   IndexSignatureNode,
-
-  isTypeOmitted
+  isTypeOmitted,
 } from "../ast";
 
-import {
-  operatorTokenToString
-} from "../tokenizer";
+import { operatorTokenToString } from "../tokenizer";
 
-import {
-  CharCode,
-  indent,
-  escapeString
-} from "../util";
+import { CharCode, indent, escapeString } from "../util";
 
-import {
-  CommonFlags
-} from "../common";
+import { CommonFlags } from "../common";
 
 /** An AST builder. */
 export class ASTBuilder {
-
   /** Rebuilds the textual source from the specified AST, as far as possible. */
   static build(node: Node): string {
     let builder = new ASTBuilder();
@@ -364,7 +349,8 @@ export class ASTBuilder {
         this.visitIndexSignature(<IndexSignatureNode>node);
         break;
       }
-      default: assert(false);
+      default:
+        assert(false);
     }
   }
 
@@ -387,7 +373,8 @@ export class ASTBuilder {
         this.visitFunctionTypeNode(<FunctionTypeNode>node);
         break;
       }
-      default: assert(false);
+      default:
+        assert(false);
     }
   }
 
@@ -547,7 +534,8 @@ export class ASTBuilder {
         sb.push(" as const");
         break;
       }
-      default: assert(false);
+      default:
+        assert(false);
     }
   }
 
@@ -565,7 +553,10 @@ export class ASTBuilder {
     this.visitArguments(node.typeArguments, node.args);
   }
 
-  private visitArguments(typeArguments: TypeNode[] | null, args: Expression[]): void {
+  private visitArguments(
+    typeArguments: TypeNode[] | null,
+    args: Expression[],
+  ): void {
     let sb = this.sb;
     if (typeArguments) {
       let numTypeArguments = typeArguments.length;
@@ -685,9 +676,9 @@ export class ASTBuilder {
 
   visitStringLiteral(str: string): void {
     let sb = this.sb;
-    sb.push("\"");
+    sb.push('"');
     sb.push(escapeString(str, CharCode.DoubleQuote));
-    sb.push("\"");
+    sb.push('"');
   }
 
   visitStringLiteralExpression(node: StringLiteralExpression): void {
@@ -758,7 +749,8 @@ export class ASTBuilder {
         this.visitUnaryPrefixExpression(<UnaryPrefixExpression>node);
         break;
       }
-      default: assert(false);
+      default:
+        assert(false);
     }
   }
 
@@ -778,17 +770,18 @@ export class ASTBuilder {
     this.visitNode(node);
     let sb = this.sb;
     if (
-      !sb.length ||                     // leading EmptyStatement
+      !sb.length || // leading EmptyStatement
       node.kind == NodeKind.Variable || // potentially assigns a FunctionExpression
-      node.kind == NodeKind.Expression  // potentially assigns a FunctionExpression
+      node.kind == NodeKind.Expression // potentially assigns a FunctionExpression
     ) {
       sb.push(";\n");
     } else {
       let last = sb[sb.length - 1];
       let lastCharPos = last.length - 1;
-      if (lastCharPos >= 0 && (
-        last.charCodeAt(lastCharPos) == CharCode.CloseBrace ||
-        last.charCodeAt(lastCharPos) == CharCode.Semicolon)
+      if (
+        lastCharPos >= 0 &&
+        (last.charCodeAt(lastCharPos) == CharCode.CloseBrace ||
+          last.charCodeAt(lastCharPos) == CharCode.Semicolon)
       ) {
         sb.push("\n");
       } else {
@@ -894,7 +887,10 @@ export class ASTBuilder {
       }
       for (let i = 0, k = members.length; i < k; ++i) {
         let member = members[i];
-        if (member.kind != NodeKind.FieldDeclaration || (<FieldDeclaration>member).parameterIndex < 0) {
+        if (
+          member.kind != NodeKind.FieldDeclaration ||
+          (<FieldDeclaration>member).parameterIndex < 0
+        ) {
           indent(sb, indentLevel);
           this.visitNodeAndTerminate(member);
         }
@@ -1035,7 +1031,8 @@ export class ASTBuilder {
         this.visitNamespaceDeclaration(<NamespaceDeclaration>declaration, true);
         break;
       }
-      default: assert(false);
+      default:
+        assert(false);
     }
   }
 
@@ -1103,7 +1100,10 @@ export class ASTBuilder {
     this.visitNode(node.body);
   }
 
-  visitFunctionDeclaration(node: FunctionDeclaration, isDefault: bool = false): void {
+  visitFunctionDeclaration(
+    node: FunctionDeclaration,
+    isDefault: bool = false,
+  ): void {
     let sb = this.sb;
     let decorators = node.decorators;
     if (decorators) {
@@ -1272,7 +1272,10 @@ export class ASTBuilder {
     this.visitTypeNode(node.valueType);
   }
 
-  visitInterfaceDeclaration(node: InterfaceDeclaration, isDefault: bool = false): void {
+  visitInterfaceDeclaration(
+    node: InterfaceDeclaration,
+    isDefault: bool = false,
+  ): void {
     let decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
@@ -1330,7 +1333,10 @@ export class ASTBuilder {
     this.visitFunctionCommon(node);
   }
 
-  visitNamespaceDeclaration(node: NamespaceDeclaration, isDefault: bool = false): void {
+  visitNamespaceDeclaration(
+    node: NamespaceDeclaration,
+    isDefault: bool = false,
+  ): void {
     let decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
@@ -1483,9 +1489,9 @@ export class ASTBuilder {
     if (node.flags & CommonFlags.Declare) {
       sb.push("declare ");
     }
-    sb.push("module \"");
+    sb.push('module "');
     sb.push(escapeString(node.moduleName, CharCode.DoubleQuote));
-    sb.push("\"");
+    sb.push('"');
   }
 
   visitVariableDeclaration(node: VariableDeclaration): void {
@@ -1518,7 +1524,13 @@ export class ASTBuilder {
     let numDeclarations = assert(declarations.length);
     let firstDeclaration = declarations[0];
     this.serializeExternalModifiers(firstDeclaration);
-    sb.push(firstDeclaration.is(CommonFlags.Const) ? "const " : firstDeclaration.is(CommonFlags.Let) ? "let " : "var ");
+    sb.push(
+      firstDeclaration.is(CommonFlags.Const)
+        ? "const "
+        : firstDeclaration.is(CommonFlags.Let)
+        ? "let "
+        : "var ",
+    );
     this.visitVariableDeclaration(node.declarations[0]);
     for (let i = 1; i < numDeclarations; ++i) {
       sb.push(", ");

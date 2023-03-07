@@ -5,14 +5,14 @@ export abstract class Object {
       // 0.0 !=-0.0
       // NaN == NaN
       if (sizeof<T>() == 8) {
-        return (
-          bool(u32(x != x) & u32(y != y) |
-          u32(reinterpret<u64>(f64(x)) == reinterpret<u64>(f64(y))))
+        return bool(
+          (u32(x != x) & u32(y != y)) |
+            u32(reinterpret<u64>(f64(x)) == reinterpret<u64>(f64(y))),
         );
       } else {
-        return (
-          bool(u32(x != x) & u32(y != y) |
-          u32(reinterpret<u32>(f32(x)) == reinterpret<u32>(f32(y))))
+        return bool(
+          (u32(x != x) & u32(y != y)) |
+            u32(reinterpret<u32>(f32(x)) == reinterpret<u32>(f32(y))),
         );
       }
     }

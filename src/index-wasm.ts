@@ -14,28 +14,17 @@
  * When compiling to WebAssembly `glue/wasm/index.ts` must be included.
  */
 
-import {
-  Target,
-  Runtime,
-  Feature
-} from "./common";
+import { Target, Runtime, Feature } from "./common";
 
-import {
-  Compiler,
-  Options,
-  UncheckedBehavior
-} from "./compiler";
+import { Compiler, Options, UncheckedBehavior } from "./compiler";
 
-import {
-  TSDBuilder,
-  JSBuilder
-} from "./bindings";
+import { TSDBuilder, JSBuilder } from "./bindings";
 
 import {
   Range,
   DiagnosticMessage,
   DiagnosticCategory,
-  formatDiagnosticMessage
+  formatDiagnosticMessage,
 } from "./diagnostics";
 
 import { Module } from "./module";
@@ -104,7 +93,10 @@ export function setSourceMap(options: Options, sourceMap: bool): void {
 }
 
 /** Sets the `uncheckedBehavior` option. */
-export function setUncheckedBehavior(options: Options, uncheckedBehavior: UncheckedBehavior): void {
+export function setUncheckedBehavior(
+  options: Options,
+  uncheckedBehavior: UncheckedBehavior,
+): void {
   options.uncheckedBehavior = uncheckedBehavior;
 }
 
@@ -119,7 +111,11 @@ export function setTableBase(options: Options, tableBase: u32): void {
 }
 
 /** Adds a 'globalAliases' value. */
-export function addGlobalAlias(options: Options, alias: string, name: string): void {
+export function addGlobalAlias(
+  options: Options,
+  alias: string,
+  name: string,
+): void {
   let globalAliases = options.globalAliases;
   if (!globalAliases) options.globalAliases = globalAliases = new Map();
   globalAliases.set(alias, name);
@@ -132,7 +128,10 @@ export function removeGlobalAlias(options: Options, alias: string): void {
 }
 
 /** Sets the `exportStart` option. */
-export function setExportStart(options: Options, exportStart: string | null): void {
+export function setExportStart(
+  options: Options,
+  exportStart: string | null,
+): void {
   options.exportStart = exportStart;
 }
 
@@ -213,7 +212,11 @@ export function disableFeature(options: Options, feature: Feature): void {
 }
 
 /** Gives the compiler a hint at the optimize levels that will be used later on. */
-export function setOptimizeLevelHints(options: Options, optimizeLevel: i32, shrinkLevel: i32): void {
+export function setOptimizeLevelHints(
+  options: Options,
+  optimizeLevel: i32,
+  shrinkLevel: i32,
+): void {
   options.optimizeLevelHint = optimizeLevel;
   options.shrinkLevelHint = shrinkLevel;
 }
@@ -252,7 +255,10 @@ export function nextDiagnostic(program: Program): DiagnosticMessage | null {
 }
 
 /** Obtains the source of the given file. */
-export function getSource(program: Program, internalPath: string): string | null {
+export function getSource(
+  program: Program,
+  internalPath: string,
+): string | null {
   return program.getSource(internalPath);
 }
 
@@ -265,7 +271,9 @@ export function getDiagnosticCode(diagnostic: DiagnosticMessage): i32 {
 }
 
 /** Gets the category of a diagnostic message. */
-export function getDiagnosticCategory(diagnostic: DiagnosticMessage): DiagnosticCategory {
+export function getDiagnosticCategory(
+  diagnostic: DiagnosticMessage,
+): DiagnosticCategory {
   return diagnostic.category;
 }
 
@@ -275,12 +283,16 @@ export function getDiagnosticMessage(diagnostic: DiagnosticMessage): string {
 }
 
 /** Gets the primary range, if any, of a diagnostic message. */
-export function getDiagnosticRange(diagnostic: DiagnosticMessage): Range | null {
+export function getDiagnosticRange(
+  diagnostic: DiagnosticMessage,
+): Range | null {
   return diagnostic.range;
 }
 
 /** Gets the related range, if any, of a diagnostic message. */
-export function getDiagnosticRelatedRange(diagnostic: DiagnosticMessage): Range | null {
+export function getDiagnosticRelatedRange(
+  diagnostic: DiagnosticMessage,
+): Range | null {
   return diagnostic.relatedRange;
 }
 
@@ -330,7 +342,7 @@ export function parse(
   /** Normalized path of the file. */
   path: string,
   /** Whether this is an entry file. */
-  isEntry: bool = false
+  isEntry: bool = false,
 ): void {
   program.parser.parseFile(text, path, isEntry);
 }
@@ -384,7 +396,7 @@ export function optimize(
   optimizeLevel: i32,
   shrinkLevel: i32,
   debugInfo: bool = false,
-  zeroFilledMemory: bool = false
+  zeroFilledMemory: bool = false,
 ): void {
   module.optimize(optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
 }

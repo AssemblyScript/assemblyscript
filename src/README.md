@@ -1,23 +1,19 @@
-Compiler
-========
+# Compiler
 
 Portable compiler sources that compile to both JavaScript using `tsc` and WebAssembly using `asc`.
 
-Architecture
-------------
+## Architecture
 
 ![](https://raw.githubusercontent.com/AssemblyScript/assemblyscript/main/media/architecture.svg)
 
-Usage
------
+## Usage
 
 ```js
 import assemblyscript from "assemblyscript";
 ...
 ```
 
-Building
---------
+## Building
 
 ### Building to JavaScript
 

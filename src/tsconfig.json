@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "esnext",
     "outDir": "../build",
-    "types" : ["node"],
+    "types": ["node"],
     "allowJs": false,
     "sourceMap": true,
     "skipLibCheck": true,
@@ -13,9 +13,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "esModuleInterop": true
   },
-  "include": [
-    "./**/*.ts"
-  ],
+  "include": ["./**/*.ts"],
   "exclude": [
     "../**/node_modules/",
     "../tests/**",

@@ -2,9 +2,9 @@ export abstract class Iterable<T> {
   // ?
 }
 
+
 @final
 export abstract class Iterator<T> {
-
   // private constructor(iterable: Iterable<T>) {
   // }
 

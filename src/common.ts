@@ -81,7 +81,7 @@ export const enum CommonFlags {
   // Other
 
   /** Is quoted. */
-  Quoted = 1 << 30
+  Quoted = 1 << 30,
 }
 
 /** Path delimiter inserted between file system levels. */
@@ -180,7 +180,8 @@ export namespace CommonNames {
   export const ASC_FEATURE_BULK_MEMORY = "ASC_FEATURE_BULK_MEMORY";
   export const ASC_FEATURE_SIMD = "ASC_FEATURE_SIMD";
   export const ASC_FEATURE_THREADS = "ASC_FEATURE_THREADS";
-  export const ASC_FEATURE_EXCEPTION_HANDLING = "ASC_FEATURE_EXCEPTION_HANDLING";
+  export const ASC_FEATURE_EXCEPTION_HANDLING =
+    "ASC_FEATURE_EXCEPTION_HANDLING";
   export const ASC_FEATURE_TAIL_CALLS = "ASC_FEATURE_TAIL_CALLS";
   export const ASC_FEATURE_REFERENCE_TYPES = "ASC_FEATURE_REFERENCE_TYPES";
   export const ASC_FEATURE_MULTI_VALUE = "ASC_FEATURE_MULTI_VALUE";

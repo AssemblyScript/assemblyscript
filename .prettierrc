@@ -1,0 +1,4 @@
+{
+  "pluginSearchDirs": ["node_modules"],
+  "plugins": ["assemblyscript-prettier"]
+}

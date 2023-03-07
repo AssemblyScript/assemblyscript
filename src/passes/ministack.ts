@@ -1,18 +1,16 @@
 /**
  * @fileoverview A potential minimalistic shadow stack. Currently not used.
- * 
+ *
  * Instruments a module's exports to track when the execution stack is fully
  * unwound, and injects a call to `__autocollect` to be invoked when it is.
  * Accounts for the currently in-flight managed return value from Wasm to the
  * host by pushing it to a mini stack, essentially a stack of only one value,
  * while `__autocollect` is executing.
- * 
+ *
  * @license Apache-2.0
  */
 
-import {
-  Pass
-} from "./pass";
+import { Pass } from "./pass";
 
 import {
   BinaryOp,
@@ -23,7 +21,7 @@ import {
   Index,
   Module,
   TypeRef,
-  UnaryOp
+  UnaryOp,
 } from "../module";
 
 import {
@@ -38,12 +36,10 @@ import {
   _BinaryenGetExportByIndex,
   _BinaryenGetFunction,
   _BinaryenGetNumExports,
-  _BinaryenRemoveExport
+  _BinaryenRemoveExport,
 } from "../glue/binaryen";
 
-import {
-  Program
-} from "../program";
+import { Program } from "../program";
 
 const MINISTACK = "~lib/rt/__ministack";
 const STACK_DEPTH = "~stack_depth";
@@ -73,7 +69,9 @@ export class MiniStack extends Pass {
     let internalNameRef = _BinaryenExportGetValue(ref);
     let externalNameRef = _BinaryenExportGetName(ref);
     let functionRef = _BinaryenGetFunction(module.ref, internalNameRef);
-    let originalName = module.readStringCached(_BinaryenFunctionGetName(functionRef))!;
+    let originalName = module.readStringCached(
+      _BinaryenFunctionGetName(functionRef),
+    )!;
 
     let wrapperName = "export:" + originalName;
     if (!module.hasFunction(wrapperName)) {
@@ -95,63 +93,73 @@ export class MiniStack extends Pass {
       let stmts = new Array<ExpressionRef>();
       if (numLocals) {
         stmts.push(
-          module.global_set(STACK_DEPTH,
-            module.binary(BinaryOp.AddI32,
+          module.global_set(
+            STACK_DEPTH,
+            module.binary(
+              BinaryOp.AddI32,
               module.global_get(STACK_DEPTH, TypeRef.I32),
-              module.i32(1) // only need to know > 0
-            )
-          )
+              module.i32(1), // only need to know > 0
+            ),
+          ),
         );
       }
       if (results == TypeRef.None) {
-        stmts.push(
-          call
-        );
+        stmts.push(call);
       } else {
         vars.push(results);
         stmts.push(
-          module.local_set(numParams, call, false) // no shadow stack here
+          module.local_set(numParams, call, false), // no shadow stack here
         );
       }
       if (numLocals) {
         stmts.push(
-          module.global_set(STACK_DEPTH,
-            module.binary(BinaryOp.SubI32,
+          module.global_set(
+            STACK_DEPTH,
+            module.binary(
+              BinaryOp.SubI32,
               module.global_get(STACK_DEPTH, TypeRef.I32),
-              module.i32(1) // only need to know > 0
-            )
-          )
+              module.i32(1), // only need to know > 0
+            ),
+          ),
         );
       }
       let exportName = module.readStringCached(externalNameRef)!;
       stmts.push(
-        module.global_set(MINISTACK,
+        module.global_set(
+          MINISTACK,
           this.managedReturns.has(exportName)
             ? module.local_get(numParams, results)
-            : module.i32(0)
-        )
+            : module.i32(0),
+        ),
       );
       stmts.push(
         module.if(
-          module.unary(UnaryOp.EqzI32,
-            module.global_get(STACK_DEPTH, TypeRef.I32)
+          module.unary(
+            UnaryOp.EqzI32,
+            module.global_get(STACK_DEPTH, TypeRef.I32),
           ),
-          module.call(AUTOCOLLECT, null, TypeRef.None)
-        )
+          module.call(AUTOCOLLECT, null, TypeRef.None),
+        ),
       );
       if (results != TypeRef.None) {
-        stmts.push(
-          module.local_get(numParams, results)
-        );
+        stmts.push(module.local_get(numParams, results));
       }
-      module.addFunction(wrapperName, params, results, vars,
-        module.block(null, stmts, results)
+      module.addFunction(
+        wrapperName,
+        params,
+        results,
+        vars,
+        module.block(null, stmts, results),
       );
     }
 
     // Replace the original export with the wrapped one
     _BinaryenRemoveExport(module.ref, externalNameRef);
-    _BinaryenAddFunctionExport(module.ref, module.allocStringCached(wrapperName), externalNameRef);
+    _BinaryenAddFunctionExport(
+      module.ref,
+      module.allocStringCached(wrapperName),
+      externalNameRef,
+    );
   }
 
   /** Runs the pass. Returns `true` if the mini stack has been added. */

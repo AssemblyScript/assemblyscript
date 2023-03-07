@@ -35,7 +35,7 @@ export function HASH<T>(key: T): u32 {
 function hash32(key: u32, len: u32 = 4): u32 {
   let h: u32 = XXH32_SEED + XXH32_P5 + len;
   h += key * XXH32_P3;
-  h  = rotl(h, 17) * XXH32_P4;
+  h = rotl(h, 17) * XXH32_P4;
   h ^= h >> 15;
   h *= XXH32_P2;
   h ^= h >> 13;
@@ -49,9 +49,9 @@ function hash32(key: u32, len: u32 = 4): u32 {
 function hash64(key: u64): u32 {
   let h: u32 = XXH32_SEED + XXH32_P5 + 8;
   h += <u32>key * XXH32_P3;
-  h  = rotl(h, 17) * XXH32_P4;
+  h = rotl(h, 17) * XXH32_P4;
   h += <u32>(key >> 32) * XXH32_P3;
-  h  = rotl(h, 17) * XXH32_P4;
+  h = rotl(h, 17) * XXH32_P4;
   h ^= h >> 15;
   h *= XXH32_P2;
   h ^= h >> 13;
@@ -83,9 +83,9 @@ function hashStr(key: string): u32 {
 
     let end = len + pos - 16;
     while (pos <= end) {
-      s1 = mix(s1, load<u32>(pos    ));
-      s2 = mix(s2, load<u32>(pos,  4));
-      s3 = mix(s3, load<u32>(pos,  8));
+      s1 = mix(s1, load<u32>(pos));
+      s2 = mix(s2, load<u32>(pos, 4));
+      s3 = mix(s3, load<u32>(pos, 8));
       s4 = mix(s4, load<u32>(pos, 12));
       pos += 16;
     }

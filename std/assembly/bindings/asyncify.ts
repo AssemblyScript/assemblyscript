@@ -1,3 +1,4 @@
+
 @unmanaged
 export class StackDescriptor {
   /** The index in linear memory of the start of the “asyncify stack”. */

@@ -10,7 +10,7 @@
  * {@link glue/js/i64} respectively {@link glue/wasm/i64}.
  *
  * @module std/portable
- *//***/
+ */ /***/
 
 // Types
 
@@ -112,7 +112,10 @@ declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. */
 declare function isConstant(expression: any): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the value. */
-declare function assert<T>(isTrueish: T, message?: string): T & (object | string | number); // any better way to model `: T != null`?
+declare function assert<T>(
+  isTrueish: T,
+  message?: string,
+): T & (object | string | number); // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
 /** Parses a floating point string to a 64-bit float. */
@@ -340,13 +343,23 @@ declare interface String {
 declare function unmanaged(constructor: Function): void;
 
 /** Environmental tracing function. */
-declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
+declare function trace(
+  msg: string,
+  n?: i32,
+  a0?: f64,
+  a1?: f64,
+  a2?: f64,
+  a3?: f64,
+  a4?: f64,
+): void;
 
 declare interface Array<T> {
   /** Returns value using relative indexing. Index may be negative */
   at(index: i32): T;
   /** Returns an index start searching from the end in the array */
-  findLastIndex(callbackfn: (value: T, index: i32, self: Array<T>) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: T, index: i32, self: Array<T>) => bool,
+  ): i32;
 }
 
 declare interface Int8ArrayConstructor {
@@ -358,7 +371,9 @@ declare interface Int8Array {
   /** Returns value using relative indexing. Index may be negative */
   at(index: i32): i8;
   /** Returns an index start searching from the end in the typedarray */
-  findLastIndex(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: i8, index: i32, self: Int8Array) => bool,
+  ): i32;
 }
 
 declare interface Uint8ArrayConstructor {
@@ -370,7 +385,9 @@ declare interface Uint8Array {
   /** Returns value using relative indexing. Index may be negative */
   at(index: i32): u8;
   /** Returns an index start searching from the end in the typedarray */
-  findLastIndex(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: u8, index: i32, self: Uint8Array) => bool,
+  ): i32;
 }
 
 declare interface Uint8ClampedArrayConstructor {
@@ -382,7 +399,9 @@ declare interface Uint8ClampedArray {
   /** Returns value using relative indexing. Index may be negative */
   at(index: i32): u8;
   /** Returns an index start searching from the end in the typedarray */
-  findLastIndex(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool,
+  ): i32;
 }
 
 declare interface Int16ArrayConstructor {
@@ -394,7 +413,9 @@ declare interface Int16Array {
   /** Returns value using relative indexing. Index may be negative */
   at(index: i32): i16;
   /** Returns an index start searching from the end in the typedarray */
-  findLastIndex(callbackfn: (value: i16, index: i32, self: Int16Array) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: i16, index: i32, self: Int16Array) => bool,
+  ): i32;
 }
 
 declare interface Uint16ArrayConstructor {
@@ -406,7 +427,9 @@ declare interface Uint16Array {
   /** Returns value using relative indexing. Index may be negative */
   at(index: i32): u16;
   /** Returns an index start searching from the end in the typedarray */
-  findLastIndex(callbackfn: (value: u16, index: i32, self: Uint16Array) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: u16, index: i32, self: Uint16Array) => bool,
+  ): i32;
 }
 
 declare interface Int32ArrayConstructor {
@@ -418,7 +441,9 @@ declare interface Int32Array {
   /** Returns value using relative indexing. Index may be negative */
   at(index: i32): i32;
   /** Returns an index start searching from the end in the typedarray */
-  findLastIndex(callbackfn: (value: i32, index: i32, self: Int32Array) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: i32, index: i32, self: Int32Array) => bool,
+  ): i32;
 }
 
 declare interface Uint32ArrayConstructor {
@@ -430,7 +455,9 @@ declare interface Uint32Array {
   /** Returns value using relative indexing. Index may be negative */
   at(index: i32): u32;
   /** Returns an index start searching from the end in the typedarray */
-  findLastIndex(callbackfn: (value: u32, index: i32, self: Uint32Array) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: u32, index: i32, self: Uint32Array) => bool,
+  ): i32;
 }
 
 declare interface Float32ArrayConstructor {
@@ -442,7 +469,9 @@ declare interface Float32Array {
   /** Returns value using relative indexing. Index may be negative */
   at(index: i32): f32;
   /** Returns an index start searching from the end in the typedarray */
-  findLastIndex(callbackfn: (value: f32, index: i32, self: Float32Array) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: f32, index: i32, self: Float32Array) => bool,
+  ): i32;
 }
 
 declare interface Float64ArrayConstructor {
@@ -454,7 +483,9 @@ declare interface Float64Array {
   /** Returns value using relative indexing. Index may be negative */
   at(index: i32): f64;
   /** Returns an index start searching from the end in the typedarray */
-  findLastIndex(callbackfn: (value: f64, index: i32, self: Float64Array) => bool): i32;
+  findLastIndex(
+    callbackfn: (value: f64, index: i32, self: Float64Array) => bool,
+  ): i32;
 }
 
 // FIXME: remove

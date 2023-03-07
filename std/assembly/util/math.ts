@@ -10,14 +10,17 @@
   // exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
   // used for computing 2^(k/N) for an int |k| < 150 N as
   // double(tab[k%N] + (k << 52-BITS))
-  0x3FF0000000000000, 0x3FEFD9B0D3158574, 0x3FEFB5586CF9890F, 0x3FEF9301D0125B51,
-  0x3FEF72B83C7D517B, 0x3FEF54873168B9AA, 0x3FEF387A6E756238, 0x3FEF1E9DF51FDEE1,
-  0x3FEF06FE0A31B715, 0x3FEEF1A7373AA9CB, 0x3FEEDEA64C123422, 0x3FEECE086061892D,
-  0x3FEEBFDAD5362A27, 0x3FEEB42B569D4F82, 0x3FEEAB07DD485429, 0x3FEEA47EB03A5585,
-  0x3FEEA09E667F3BCD, 0x3FEE9F75E8EC5F74, 0x3FEEA11473EB0187, 0x3FEEA589994CCE13,
-  0x3FEEACE5422AA0DB, 0x3FEEB737B0CDC5E5, 0x3FEEC49182A3F090, 0x3FEED503B23E255D,
-  0x3FEEE89F995AD3AD, 0x3FEEFF76F2FB5E47, 0x3FEF199BDD85529C, 0x3FEF3720DCEF9069,
-  0x3FEF5818DCFBA487, 0x3FEF7C97337B9B5F, 0x3FEFA4AFA2A490DA, 0x3FEFD0765B6E4540
+  0x3ff0000000000000, 0x3fefd9b0d3158574, 0x3fefb5586cf9890f,
+  0x3fef9301d0125b51, 0x3fef72b83c7d517b, 0x3fef54873168b9aa,
+  0x3fef387a6e756238, 0x3fef1e9df51fdee1, 0x3fef06fe0a31b715,
+  0x3feef1a7373aa9cb, 0x3feedea64c123422, 0x3feece086061892d,
+  0x3feebfdad5362a27, 0x3feeb42b569d4f82, 0x3feeab07dd485429,
+  0x3feea47eb03a5585, 0x3feea09e667f3bcd, 0x3fee9f75e8ec5f74,
+  0x3feea11473eb0187, 0x3feea589994cce13, 0x3feeace5422aa0db,
+  0x3feeb737b0cdc5e5, 0x3feec49182a3f090, 0x3feed503b23e255d,
+  0x3feee89f995ad3ad, 0x3feeff76f2fb5e47, 0x3fef199bdd85529c,
+  0x3fef3720dcef9069, 0x3fef5818dcfba487, 0x3fef7c97337b9b5f,
+  0x3fefa4afa2a490da, 0x3fefd0765b6e4540,
 ]);
 
 // ULP error: 0.502 (nearest rounding.)
@@ -26,40 +29,38 @@
 // @ts-ignore: decorator
 @inline
 export function exp2f_lut(x: f32): f32 {
-  const
-    N      = 1 << EXP2F_TABLE_BITS,
+  const N = 1 << EXP2F_TABLE_BITS,
     N_MASK = N - 1,
-    shift  = reinterpret<f64>(0x4338000000000000) / N, // 0x1.8p+52
-    Ox127f = reinterpret<f32>(0x7F000000);
+    shift = reinterpret<f64>(0x4338000000000000) / N, // 0x1.8p+52
+    Ox127f = reinterpret<f32>(0x7f000000);
 
-  const
-    C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
-    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3), // 0x1.ebfce50fac4f3p-3
-    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
+  const C0 = reinterpret<f64>(0x3fac6af84b912394), // 0x1.c6af84b912394p-5
+    C1 = reinterpret<f64>(0x3fcebfce50fac4f3), // 0x1.ebfce50fac4f3p-3
+    C2 = reinterpret<f64>(0x3fe62e42ff0c52d6); // 0x1.62e42ff0c52d6p-1
 
   let xd = <f64>x;
   let ix = reinterpret<u32>(x);
-  let ux = ix >> 20 & 0x7FF;
+  let ux = (ix >> 20) & 0x7ff;
   if (ux >= 0x430) {
     // |x| >= 128 or x is nan.
-    if (ix == 0xFF800000) return 0; // x == -Inf    -> 0
-    if (ux >= 0x7F8) return x + x;  // x == Inf/NaN -> Inf/NaN
-    if (x > 0) return x * Ox127f;   // x >     0    -> HugeVal (Owerflow)
-    if (x <= -150) return 0;        // x <= -150    -> 0 (Underflow)
+    if (ix == 0xff800000) return 0; // x == -Inf    -> 0
+    if (ux >= 0x7f8) return x + x; // x == Inf/NaN -> Inf/NaN
+    if (x > 0) return x * Ox127f; // x >     0    -> HugeVal (Owerflow)
+    if (x <= -150) return 0; // x <= -150    -> 0 (Underflow)
   }
 
   // x = k/N + r with r in [-1/(2N), 1/(2N)] and int k.
   let kd = xd + shift;
   let ki = reinterpret<u64>(kd);
-  let r  = xd - (kd - shift);
+  let r = xd - (kd - shift);
   let t: u64, y: f64, s: f64;
 
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(EXP2F_DATA_TAB + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t = load<u64>(EXP2F_DATA_TAB + (((<usize>ki) & N_MASK) << alignof<u64>()));
   t += ki << (52 - EXP2F_TABLE_BITS);
-  s  = reinterpret<f64>(t);
-  y  = C2 * r + 1;
-  y += (C0 * r + C1) * (r  * r);
+  s = reinterpret<f64>(t);
+  y = C2 * r + 1;
+  y += (C0 * r + C1) * (r * r);
   y *= s;
 
   return <f32>y;
@@ -71,27 +72,25 @@ export function exp2f_lut(x: f32): f32 {
 // @ts-ignore: decorator
 @inline
 export function expf_lut(x: f32): f32 {
-  const
-    N        = 1 << EXP2F_TABLE_BITS,
-    N_MASK   = N - 1,
-    shift    = reinterpret<f64>(0x4338000000000000),        // 0x1.8p+52
-    InvLn2N  = reinterpret<f64>(0x3FF71547652B82FE) * N,    // 0x1.71547652b82fep+0
-    Ox1p127f = reinterpret<f32>(0x7F000000);
+  const N = 1 << EXP2F_TABLE_BITS,
+    N_MASK = N - 1,
+    shift = reinterpret<f64>(0x4338000000000000), // 0x1.8p+52
+    InvLn2N = reinterpret<f64>(0x3ff71547652b82fe) * N, // 0x1.71547652b82fep+0
+    Ox1p127f = reinterpret<f32>(0x7f000000);
 
-  const
-    C0 = reinterpret<f64>(0x3FAC6AF84B912394) / N / N / N, // 0x1.c6af84b912394p-5
-    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3) / N / N,     // 0x1.ebfce50fac4f3p-3
-    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6) / N;         // 0x1.62e42ff0c52d6p-1
+  const C0 = reinterpret<f64>(0x3fac6af84b912394) / N / N / N, // 0x1.c6af84b912394p-5
+    C1 = reinterpret<f64>(0x3fcebfce50fac4f3) / N / N, // 0x1.ebfce50fac4f3p-3
+    C2 = reinterpret<f64>(0x3fe62e42ff0c52d6) / N; // 0x1.62e42ff0c52d6p-1
 
   let xd = <f64>x;
   let ix = reinterpret<u32>(x);
-  let ux = ix >> 20 & 0x7FF;
-  if (ux >= 0x42B) {
+  let ux = (ix >> 20) & 0x7ff;
+  if (ux >= 0x42b) {
     // |x| >= 88 or x is nan.
-    if (ix == 0xFF800000) return 0;                            // x == -Inf    -> 0
-    if (ux >= 0x7F8) return x + x;                             // x == Inf/NaN -> Inf/NaN
-    if (x > reinterpret<f32>(0x42B17217)) return x * Ox1p127f; // x > log(0x1p128)  ~=  88.72 -> HugeVal (Owerflow)
-    if (x < reinterpret<f32>(0xC2CFF1B4)) return 0;            // x < log(0x1p-150) ~= -103.97 -> 0 (Underflow)
+    if (ix == 0xff800000) return 0; // x == -Inf    -> 0
+    if (ux >= 0x7f8) return x + x; // x == Inf/NaN -> Inf/NaN
+    if (x > reinterpret<f32>(0x42b17217)) return x * Ox1p127f; // x > log(0x1p128)  ~=  88.72 -> HugeVal (Owerflow)
+    if (x < reinterpret<f32>(0xc2cff1b4)) return 0; // x < log(0x1p-150) ~= -103.97 -> 0 (Underflow)
   }
 
   // x*N/Ln2 = k + r with r in [-1/2, 1/2] and int k.
@@ -102,15 +101,15 @@ export function expf_lut(x: f32): f32 {
   // can be bigger which gives larger approximation error.
   let kd = <f64>(z + shift);
   let ki = reinterpret<u64>(kd);
-  let r  = z - (kd - shift);
+  let r = z - (kd - shift);
   let s: f64, y: f64, t: u64;
 
   // exp(x) = 2^(k/N) * 2^(r/N) ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(EXP2F_DATA_TAB + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t = load<u64>(EXP2F_DATA_TAB + (((<usize>ki) & N_MASK) << alignof<u64>()));
   t += ki << (52 - EXP2F_TABLE_BITS);
-  s  = reinterpret<f64>(t);
-  z  = C0 * r + C1;
-  y  = C2 * r + 1;
+  s = reinterpret<f64>(t);
+  z = C0 * r + C1;
+  y = C2 * r + 1;
   y += z * (r * r);
   y *= s;
 
@@ -126,22 +125,38 @@ export function expf_lut(x: f32): f32 {
 
 // @ts-ignore: decorator
 @lazy @inline const LOG2F_DATA_TAB = memory.data<u64>([
-  0x3FF661EC79F8F3BE, 0xBFDEFEC65B963019, // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
-  0x3FF571ED4AAF883D, 0xBFDB0B6832D4FCA4, // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
-  0x3FF49539F0F010B0, 0xBFD7418B0A1FB77B, // 0x1.49539f0f010bp+0 , -0x1.7418b0a1fb77bp-2,
-  0x3FF3C995B0B80385, 0xBFD39DE91A6DCF7B, // 0x1.3c995b0b80385p+0, -0x1.39de91a6dcf7bp-2,
-  0x3FF30D190C8864A5, 0xBFD01D9BF3F2B631, // 0x1.30d190c8864a5p+0, -0x1.01d9bf3f2b631p-2,
-  0x3FF25E227B0B8EA0, 0xBFC97C1D1B3B7AF0, // 0x1.25e227b0b8eap+0 , -0x1.97c1d1b3b7afp-3 ,
-  0x3FF1BB4A4A1A343F, 0xBFC2F9E393AF3C9F, // 0x1.1bb4a4a1a343fp+0, -0x1.2f9e393af3c9fp-3,
-  0x3FF12358F08AE5BA, 0xBFB960CBBF788D5C, // 0x1.12358f08ae5bap+0, -0x1.960cbbf788d5cp-4,
-  0x3FF0953F419900A7, 0xBFAA6F9DB6475FCE, // 0x1.0953f419900a7p+0, -0x1.a6f9db6475fcep-5,
-  0x3FF0000000000000, 0,                  // 0x1p+0,                0x0,
-  0x3FEE608CFD9A47AC, 0x3FB338CA9F24F53D, // 0x1.e608cfd9a47acp-1,  0x1.338ca9f24f53dp-4,
-  0x3FECA4B31F026AA0, 0x3FC476A9543891BA, // 0x1.ca4b31f026aap-1 ,  0x1.476a9543891bap-3,
-  0x3FEB2036576AFCE6, 0x3FCE840B4AC4E4D2, // 0x1.b2036576afce6p-1,  0x1.e840b4ac4e4d2p-3,
-  0x3FE9C2D163A1AA2D, 0x3FD40645F0C6651C, // 0x1.9c2d163a1aa2dp-1,  0x1.40645f0c6651cp-2,
-  0x3FE886E6037841ED, 0x3FD88E9C2C1B9FF8, // 0x1.886e6037841edp-1,  0x1.88e9c2c1b9ff8p-2,
-  0x3FE767DCF5534862, 0x3FDCE0A44EB17BCC  // 0x1.767dcf5534862p-1,  0x1.ce0a44eb17bccp-2
+  0x3ff661ec79f8f3be,
+  0xbfdefec65b963019, // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
+  0x3ff571ed4aaf883d,
+  0xbfdb0b6832d4fca4, // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
+  0x3ff49539f0f010b0,
+  0xbfd7418b0a1fb77b, // 0x1.49539f0f010bp+0 , -0x1.7418b0a1fb77bp-2,
+  0x3ff3c995b0b80385,
+  0xbfd39de91a6dcf7b, // 0x1.3c995b0b80385p+0, -0x1.39de91a6dcf7bp-2,
+  0x3ff30d190c8864a5,
+  0xbfd01d9bf3f2b631, // 0x1.30d190c8864a5p+0, -0x1.01d9bf3f2b631p-2,
+  0x3ff25e227b0b8ea0,
+  0xbfc97c1d1b3b7af0, // 0x1.25e227b0b8eap+0 , -0x1.97c1d1b3b7afp-3 ,
+  0x3ff1bb4a4a1a343f,
+  0xbfc2f9e393af3c9f, // 0x1.1bb4a4a1a343fp+0, -0x1.2f9e393af3c9fp-3,
+  0x3ff12358f08ae5ba,
+  0xbfb960cbbf788d5c, // 0x1.12358f08ae5bap+0, -0x1.960cbbf788d5cp-4,
+  0x3ff0953f419900a7,
+  0xbfaa6f9db6475fce, // 0x1.0953f419900a7p+0, -0x1.a6f9db6475fcep-5,
+  0x3ff0000000000000,
+  0, // 0x1p+0,                0x0,
+  0x3fee608cfd9a47ac,
+  0x3fb338ca9f24f53d, // 0x1.e608cfd9a47acp-1,  0x1.338ca9f24f53dp-4,
+  0x3feca4b31f026aa0,
+  0x3fc476a9543891ba, // 0x1.ca4b31f026aap-1 ,  0x1.476a9543891bap-3,
+  0x3feb2036576afce6,
+  0x3fce840b4ac4e4d2, // 0x1.b2036576afce6p-1,  0x1.e840b4ac4e4d2p-3,
+  0x3fe9c2d163a1aa2d,
+  0x3fd40645f0c6651c, // 0x1.9c2d163a1aa2dp-1,  0x1.40645f0c6651cp-2,
+  0x3fe886e6037841ed,
+  0x3fd88e9c2c1b9ff8, // 0x1.886e6037841edp-1,  0x1.88e9c2c1b9ff8p-2,
+  0x3fe767dcf5534862,
+  0x3fdce0a44eb17bcc, // 0x1.767dcf5534862p-1,  0x1.ce0a44eb17bccp-2
 ]);
 
 // ULP error: 0.752 (nearest rounding.)
@@ -149,24 +164,22 @@ export function expf_lut(x: f32): f32 {
 // @ts-ignore: decorator
 @inline
 export function log2f_lut(x: f32): f32 {
-  const
-    N_MASK  = (1 << LOG2F_TABLE_BITS) - 1,
-    Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f
+  const N_MASK = (1 << LOG2F_TABLE_BITS) - 1,
+    Ox1p23f = reinterpret<f32>(0x4b000000); // 0x1p23f
 
-  const
-    A0 = reinterpret<f64>(0xBFD712B6F70A7E4D), // -0x1.712b6f70a7e4dp-2
-    A1 = reinterpret<f64>(0x3FDECABF496832E0), //  0x1.ecabf496832ep-2
-    A2 = reinterpret<f64>(0xBFE715479FFAE3DE), // -0x1.715479ffae3dep-1
-    A3 = reinterpret<f64>(0x3FF715475F35C8B8); //  0x1.715475f35c8b8p0
+  const A0 = reinterpret<f64>(0xbfd712b6f70a7e4d), // -0x1.712b6f70a7e4dp-2
+    A1 = reinterpret<f64>(0x3fdecabf496832e0), //  0x1.ecabf496832ep-2
+    A2 = reinterpret<f64>(0xbfe715479ffae3de), // -0x1.715479ffae3dep-1
+    A3 = reinterpret<f64>(0x3ff715475f35c8b8); //  0x1.715475f35c8b8p0
 
   let ux = reinterpret<u32>(x);
   // Fix sign of zero with downward rounding when x==1.
   // if (WANT_ROUNDING && predict_false(ix == 0x3f800000)) return 0;
-  if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
+  if (ux - 0x00800000 >= 0x7f800000 - 0x00800000) {
     // x < 0x1p-126 or inf or nan.
     if (ux * 2 == 0) return -Infinity;
-    if (ux == 0x7F800000) return x; // log2(inf) == inf.
-    if ((ux >> 31) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
+    if (ux == 0x7f800000) return x; // log2(inf) == inf.
+    if (ux >> 31 || ux * 2 >= 0xff000000) return (x - x) / (x - x);
     // x is subnormal, normalize it.
     ux = reinterpret<u32>(x * Ox1p23f);
     ux -= 23 << 23;
@@ -174,26 +187,32 @@ export function log2f_lut(x: f32): f32 {
   // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
-  let tmp  = ux - 0x3F330000;
-  let i    = (tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK;
-  let top  = tmp & 0xFF800000;
-  let iz   = ux - top;
-  let k    = <i32>tmp >> 23;
+  let tmp = ux - 0x3f330000;
+  let i = (tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK;
+  let top = tmp & 0xff800000;
+  let iz = ux - top;
+  let k = (<i32>tmp) >> 23;
 
-  let invc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  let logc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
-  let z    = <f64>reinterpret<f32>(iz);
+  let invc = load<f64>(
+    LOG2F_DATA_TAB + (i << (1 + alignof<f64>())),
+    0 << alignof<f64>(),
+  );
+  let logc = load<f64>(
+    LOG2F_DATA_TAB + (i << (1 + alignof<f64>())),
+    1 << alignof<f64>(),
+  );
+  let z = <f64>reinterpret<f32>(iz);
 
   // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
-  let r  = z * invc - 1;
+  let r = z * invc - 1;
   let y0 = logc + <f64>k;
 
   // Pipelined polynomial evaluation to approximate log1p(r)/ln2.
-  let y  = A1 * r + A2;
-  let p  = A3 * r + y0;
+  let y = A1 * r + A2;
+  let p = A3 * r + y0;
   let r2 = r * r;
   y += A0 * r2;
-  y  = y * r2 + p;
+  y = y * r2 + p;
 
   return <f32>y;
 }
@@ -207,22 +226,38 @@ export function log2f_lut(x: f32): f32 {
 
 // @ts-ignore: decorator
 @lazy @inline const LOGF_DATA_TAB = memory.data<u64>([
-  0x3FF661EC79F8F3BE, 0xBFD57BF7808CAADE, // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
-  0x3FF571ED4AAF883D, 0xBFD2BEF0A7C06DDB, // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
-  0x3FF49539F0F010B0, 0xBFD01EAE7F513A67, // 0x1.49539f0f010bp+0 , -0x1.01eae7f513a67p-2,
-  0x3FF3C995B0B80385, 0xBFCB31D8A68224E9, // 0x1.3c995b0b80385p+0, -0x1.b31d8a68224e9p-3,
-  0x3FF30D190C8864A5, 0xBFC6574F0AC07758, // 0x1.30d190c8864a5p+0, -0x1.6574f0ac07758p-3,
-  0x3FF25E227B0B8EA0, 0xBFC1AA2BC79C8100, // 0x1.25e227b0b8eap+0 , -0x1.1aa2bc79c81p-3  ,
-  0x3FF1BB4A4A1A343F, 0xBFBA4E76CE8C0E5E, // 0x1.1bb4a4a1a343fp+0, -0x1.a4e76ce8c0e5ep-4,
-  0x3FF12358F08AE5BA, 0xBFB1973C5A611CCC, // 0x1.12358f08ae5bap+0, -0x1.1973c5a611cccp-4,
-  0x3FF0953F419900A7, 0xBFA252F438E10C1E, // 0x1.0953f419900a7p+0, -0x1.252f438e10c1ep-5,
-  0x3FF0000000000000, 0,                  // 0x1p+0,                0,
-  0x3FEE608CFD9A47AC, 0x3FAAA5AA5DF25984, // 0x1.e608cfd9a47acp-1,  0x1.aa5aa5df25984p-5,
-  0x3FECA4B31F026AA0, 0x3FBC5E53AA362EB4, // 0x1.ca4b31f026aap-1 ,  0x1.c5e53aa362eb4p-4,
-  0x3FEB2036576AFCE6, 0x3FC526E57720DB08, // 0x1.b2036576afce6p-1,  0x1.526e57720db08p-3,
-  0x3FE9C2D163A1AA2D, 0x3FCBC2860D224770, // 0x1.9c2d163a1aa2dp-1,  0x1.bc2860d22477p-3 ,
-  0x3FE886E6037841ED, 0x3FD1058BC8A07EE1, // 0x1.886e6037841edp-1,  0x1.1058bc8a07ee1p-2,
-  0x3FE767DCF5534862, 0x3FD4043057B6EE09  // 0x1.767dcf5534862p-1,  0x1.4043057b6ee09p-2
+  0x3ff661ec79f8f3be,
+  0xbfd57bf7808caade, // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
+  0x3ff571ed4aaf883d,
+  0xbfd2bef0a7c06ddb, // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
+  0x3ff49539f0f010b0,
+  0xbfd01eae7f513a67, // 0x1.49539f0f010bp+0 , -0x1.01eae7f513a67p-2,
+  0x3ff3c995b0b80385,
+  0xbfcb31d8a68224e9, // 0x1.3c995b0b80385p+0, -0x1.b31d8a68224e9p-3,
+  0x3ff30d190c8864a5,
+  0xbfc6574f0ac07758, // 0x1.30d190c8864a5p+0, -0x1.6574f0ac07758p-3,
+  0x3ff25e227b0b8ea0,
+  0xbfc1aa2bc79c8100, // 0x1.25e227b0b8eap+0 , -0x1.1aa2bc79c81p-3  ,
+  0x3ff1bb4a4a1a343f,
+  0xbfba4e76ce8c0e5e, // 0x1.1bb4a4a1a343fp+0, -0x1.a4e76ce8c0e5ep-4,
+  0x3ff12358f08ae5ba,
+  0xbfb1973c5a611ccc, // 0x1.12358f08ae5bap+0, -0x1.1973c5a611cccp-4,
+  0x3ff0953f419900a7,
+  0xbfa252f438e10c1e, // 0x1.0953f419900a7p+0, -0x1.252f438e10c1ep-5,
+  0x3ff0000000000000,
+  0, // 0x1p+0,                0,
+  0x3fee608cfd9a47ac,
+  0x3faaa5aa5df25984, // 0x1.e608cfd9a47acp-1,  0x1.aa5aa5df25984p-5,
+  0x3feca4b31f026aa0,
+  0x3fbc5e53aa362eb4, // 0x1.ca4b31f026aap-1 ,  0x1.c5e53aa362eb4p-4,
+  0x3feb2036576afce6,
+  0x3fc526e57720db08, // 0x1.b2036576afce6p-1,  0x1.526e57720db08p-3,
+  0x3fe9c2d163a1aa2d,
+  0x3fcbc2860d224770, // 0x1.9c2d163a1aa2dp-1,  0x1.bc2860d22477p-3 ,
+  0x3fe886e6037841ed,
+  0x3fd1058bc8a07ee1, // 0x1.886e6037841edp-1,  0x1.1058bc8a07ee1p-2,
+  0x3fe767dcf5534862,
+  0x3fd4043057b6ee09, // 0x1.767dcf5534862p-1,  0x1.4043057b6ee09p-2
 ]);
 
 // ULP error: 0.818 (nearest rounding.)
@@ -230,24 +265,22 @@ export function log2f_lut(x: f32): f32 {
 // @ts-ignore: decorator
 @inline
 export function logf_lut(x: f32): f32 {
-  const
-    N_MASK  = (1 << LOGF_TABLE_BITS) - 1,
-    Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f
+  const N_MASK = (1 << LOGF_TABLE_BITS) - 1,
+    Ox1p23f = reinterpret<f32>(0x4b000000); // 0x1p23f
 
-  const
-    Ln2 = reinterpret<f64>(0x3FE62E42FEFA39EF), // 0x1.62e42fefa39efp-1;
-    A0  = reinterpret<f64>(0xBFD00EA348B88334), // -0x1.00ea348b88334p-2
-    A1  = reinterpret<f64>(0x3FD5575B0BE00B6A), //  0x1.5575b0be00b6ap-2
-    A2  = reinterpret<f64>(0xBFDFFFFEF20A4123); // -0x1.ffffef20a4123p-2
+  const Ln2 = reinterpret<f64>(0x3fe62e42fefa39ef), // 0x1.62e42fefa39efp-1;
+    A0 = reinterpret<f64>(0xbfd00ea348b88334), // -0x1.00ea348b88334p-2
+    A1 = reinterpret<f64>(0x3fd5575b0be00b6a), //  0x1.5575b0be00b6ap-2
+    A2 = reinterpret<f64>(0xbfdffffef20a4123); // -0x1.ffffef20a4123p-2
 
   let ux = reinterpret<u32>(x);
   // Fix sign of zero with downward rounding when x==1.
   // if (WANT_ROUNDING && ux == 0x3f800000) return 0;
-  if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
+  if (ux - 0x00800000 >= 0x7f800000 - 0x00800000) {
     // x < 0x1p-126 or inf or nan.
-    if ((ux << 1) == 0) return -Infinity;
-    if (ux == 0x7F800000) return x; // log(inf) == inf.
-    if ((ux >> 31) || (ux << 1) >= 0xFF000000) return (x - x) / (x - x);
+    if (ux << 1 == 0) return -Infinity;
+    if (ux == 0x7f800000) return x; // log(inf) == inf.
+    if (ux >> 31 || ux << 1 >= 0xff000000) return (x - x) / (x - x);
     // x is subnormal, normalize it.
     ux = reinterpret<u32>(x * Ox1p23f);
     ux -= 23 << 23;
@@ -255,13 +288,19 @@ export function logf_lut(x: f32): f32 {
   // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
-  let tmp = ux - 0x3F330000;
-  let i   = (tmp >> (23 - LOGF_TABLE_BITS)) & N_MASK;
-  let k   = <i32>tmp >> 23;
-  let iz  = ux - (tmp & 0x1FF << 23);
+  let tmp = ux - 0x3f330000;
+  let i = (tmp >> (23 - LOGF_TABLE_BITS)) & N_MASK;
+  let k = (<i32>tmp) >> 23;
+  let iz = ux - (tmp & (0x1ff << 23));
 
-  let invc = load<f64>(LOGF_DATA_TAB + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  let logc = load<f64>(LOGF_DATA_TAB + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+  let invc = load<f64>(
+    LOGF_DATA_TAB + (i << (1 + alignof<f64>())),
+    0 << alignof<f64>(),
+  );
+  let logc = load<f64>(
+    LOGF_DATA_TAB + (i << (1 + alignof<f64>())),
+    1 << alignof<f64>(),
+  );
 
   let z = <f64>reinterpret<f32>(iz);
 
@@ -271,7 +310,7 @@ export function logf_lut(x: f32): f32 {
 
   // Pipelined polynomial evaluation to approximate log1p(r).
   let r2 = r * r;
-  let y  = A1 * r + A2;
+  let y = A1 * r + A2;
   y += A0 * r2;
   y = y * r2 + (y0 + r);
 
@@ -285,7 +324,7 @@ export function logf_lut(x: f32): f32 {
 // @ts-ignore: decorator
 @inline
 function zeroinfnanf(ux: u32): bool {
-  return (ux << 1) - 1 >= (<u32>0x7f800000 << 1) - 1;
+  return (ux << 1) - 1 >= ((<u32>0x7f800000) << 1) - 1;
 }
 
 // Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
@@ -293,12 +332,12 @@ function zeroinfnanf(ux: u32): bool {
 // @ts-ignore: decorator
 @inline
 function checkintf(iy: u32): i32 {
-  let e = iy >> 23 & 0xFF;
-  if (e < 0x7F     ) return 0;
-  if (e > 0x7F + 23) return 2;
-  e = 1 << (0x7F + 23 - e);
+  let e = (iy >> 23) & 0xff;
+  if (e < 0x7f) return 0;
+  if (e > 0x7f + 23) return 2;
+  e = 1 << (0x7f + 23 - e);
   if (iy & (e - 1)) return 0;
-  if (iy &  e     ) return 1;
+  if (iy & e) return 1;
   return 2;
 }
 
@@ -309,28 +348,33 @@ function checkintf(iy: u32): i32 {
 function log2f_inline(ux: u32): f64 {
   const N_MASK = (1 << LOG2F_TABLE_BITS) - 1;
 
-  const
-    A0 = reinterpret<f64>(0x3FD27616C9496E0B), //  0x1.27616c9496e0bp-2
-    A1 = reinterpret<f64>(0xBFD71969A075C67A), // -0x1.71969a075c67ap-2
-    A2 = reinterpret<f64>(0x3FDEC70A6CA7BADD), //  0x1.ec70a6ca7baddp-2
-    A3 = reinterpret<f64>(0xBFE7154748BEF6C8), // -0x1.7154748bef6c8p-1
-    A4 = reinterpret<f64>(0x3FF71547652AB82B); //  0x1.71547652ab82bp+0
+  const A0 = reinterpret<f64>(0x3fd27616c9496e0b), //  0x1.27616c9496e0bp-2
+    A1 = reinterpret<f64>(0xbfd71969a075c67a), // -0x1.71969a075c67ap-2
+    A2 = reinterpret<f64>(0x3fdec70a6ca7badd), //  0x1.ec70a6ca7baddp-2
+    A3 = reinterpret<f64>(0xbfe7154748bef6c8), // -0x1.7154748bef6c8p-1
+    A4 = reinterpret<f64>(0x3ff71547652ab82b); //  0x1.71547652ab82bp+0
 
   // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
-  let tmp  = ux - 0x3F330000;
-  let i    = usize((tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK);
-  let top  = tmp & 0xFF800000;
-  let uz   = ux - top;
-  let k    = <i32>top >> 23;
+  let tmp = ux - 0x3f330000;
+  let i = usize((tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK);
+  let top = tmp & 0xff800000;
+  let uz = ux - top;
+  let k = (<i32>top) >> 23;
 
-  let invc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  let logc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
-  let z    = <f64>reinterpret<f32>(uz);
+  let invc = load<f64>(
+    LOG2F_DATA_TAB + (i << (1 + alignof<f64>())),
+    0 << alignof<f64>(),
+  );
+  let logc = load<f64>(
+    LOG2F_DATA_TAB + (i << (1 + alignof<f64>())),
+    1 << alignof<f64>(),
+  );
+  let z = <f64>reinterpret<f32>(uz);
 
   // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
-  let r  = z * invc - 1;
+  let r = z * invc - 1;
   let y0 = logc + <f64>k;
 
   // Pipelined polynomial evaluation to approximate log1p(r)/ln2.
@@ -340,7 +384,7 @@ function log2f_inline(ux: u32): f64 {
 
   r *= r;
   q += p * r;
-  y  = y * (r * r) + q;
+  y = y * (r * r) + q;
 
   return y;
 }
@@ -351,28 +395,26 @@ function log2f_inline(ux: u32): f64 {
 // @ts-ignore: decorator
 @inline
 function exp2f_inline(xd: f64, signBias: u32): f32 {
-  const
-    N      = 1 << EXP2F_TABLE_BITS,
+  const N = 1 << EXP2F_TABLE_BITS,
     N_MASK = N - 1,
-    shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
+    shift = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
 
-  const
-    C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
-    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3), // 0x1.ebfce50fac4f3p-3
-    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
+  const C0 = reinterpret<f64>(0x3fac6af84b912394), // 0x1.c6af84b912394p-5
+    C1 = reinterpret<f64>(0x3fcebfce50fac4f3), // 0x1.ebfce50fac4f3p-3
+    C2 = reinterpret<f64>(0x3fe62e42ff0c52d6); // 0x1.62e42ff0c52d6p-1
 
   // x = k/N + r with r in [-1/(2N), 1/(2N)]
   let kd = <f64>(xd + shift);
   let ki = reinterpret<u64>(kd);
-  let r  = xd - (kd - shift);
+  let r = xd - (kd - shift);
   let t: u64, z: f64, y: f64, s: f64;
 
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(EXP2F_DATA_TAB + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t = load<u64>(EXP2F_DATA_TAB + (((<usize>ki) & N_MASK) << alignof<u64>()));
   t += (ki + signBias) << (52 - EXP2F_TABLE_BITS);
-  s  = reinterpret<f64>(t);
-  z  = C0 * r + C1;
-  y  = C2 * r + 1;
+  s = reinterpret<f64>(t);
+  z = C0 * r + C1;
+  y = C2 * r + 1;
   y += z * (r * r);
   y *= s;
   return <f32>y;
@@ -399,30 +441,33 @@ function uflowf(sign: u32): f32 {
 // @ts-ignore: decorator
 @inline
 export function powf_lut(x: f32, y: f32): f32 {
-  const
-    Ox1p23f     = reinterpret<f32>(0x4B000000), // 0x1p23f
-    UPPER_LIMIT = reinterpret<f64>(0x405FFFFFFFD1D571), // 0x1.fffffffd1d571p+6
+  const Ox1p23f = reinterpret<f32>(0x4b000000), // 0x1p23f
+    UPPER_LIMIT = reinterpret<f64>(0x405fffffffd1d571), // 0x1.fffffffd1d571p+6
     LOWER_LIMIT = -150.0,
-    SIGN_BIAS   = 1 << (EXP2F_TABLE_BITS + 11);
+    SIGN_BIAS = 1 << (EXP2F_TABLE_BITS + 11);
 
   let signBias: u32 = 0;
   let ix = reinterpret<u32>(x);
   let iy = reinterpret<u32>(y);
   let ny = 0;
 
-  if (i32(ix - 0x00800000 >= 0x7f800000 - 0x00800000) | (ny = i32(zeroinfnanf(iy)))) {
+  if (
+    i32(ix - 0x00800000 >= 0x7f800000 - 0x00800000) |
+    (ny = i32(zeroinfnanf(iy)))
+  ) {
     // Either (x < 0x1p-126 or inf or nan) or (y is 0 or inf or nan).
     if (ny) {
-      if ((iy << 1) == 0) return 1.0;
-      if (ix == 0x3F800000) return NaN; // original: 1.0
-      if ((ix << 1) > (<u32>0x7F800000 << 1) || (iy << 1) > (<u32>0x7F800000 << 1)) return x + y;
-      if ((ix << 1) == (0x3F800000 << 1)) return NaN; // original: 1.0
-      if (((ix << 1) < (0x3F800000 << 1)) == !(iy >> 31)) return 0; // |x| < 1 && y==inf or |x| > 1 && y==-inf.
+      if (iy << 1 == 0) return 1.0;
+      if (ix == 0x3f800000) return NaN; // original: 1.0
+      if (ix << 1 > (<u32>0x7f800000) << 1 || iy << 1 > (<u32>0x7f800000) << 1)
+        return x + y;
+      if (ix << 1 == 0x3f800000 << 1) return NaN; // original: 1.0
+      if (ix << 1 < 0x3f800000 << 1 == !(iy >> 31)) return 0; // |x| < 1 && y==inf or |x| > 1 && y==-inf.
       return y * y;
     }
     if (zeroinfnanf(ix)) {
       let x2 = x * x;
-      if ((ix >> 31) && checkintf(iy) == 1) x2 = -x2;
+      if (ix >> 31 && checkintf(iy) == 1) x2 = -x2;
       return <i32>iy < 0 ? 1 / x2 : x2;
     }
     // x and y are non-zero finite.
@@ -431,20 +476,21 @@ export function powf_lut(x: f32, y: f32): f32 {
       let yint = checkintf(iy);
       if (yint == 0) return (x - x) / (x - x);
       if (yint == 1) signBias = SIGN_BIAS;
-      ix &= 0x7FFFFFFF;
+      ix &= 0x7fffffff;
     }
     if (ix < 0x00800000) {
       // Normalize subnormal x so exponent becomes negative.
       ix = reinterpret<u32>(x * Ox1p23f);
-      ix &= 0x7FFFFFFF;
+      ix &= 0x7fffffff;
       ix -= 23 << 23;
     }
   }
   let logx = log2f_inline(ix);
   let ylogx = y * logx; // cannot overflow, y is single prec.
-  if ((reinterpret<u64>(ylogx) >> 47 & 0xFFFF) >= 0x80BF) { // reinterpret<u64>(126.0) >> 47
+  if (((reinterpret<u64>(ylogx) >> 47) & 0xffff) >= 0x80bf) {
+    // reinterpret<u64>(126.0) >> 47
     // |y * log(x)| >= 126
-    if (ylogx  > UPPER_LIMIT) return oflowf(signBias); // overflow
+    if (ylogx > UPPER_LIMIT) return oflowf(signBias); // overflow
     if (ylogx <= LOWER_LIMIT) return uflowf(signBias); // underflow
   }
   return exp2f_inline(ylogx, signBias);
@@ -459,134 +505,92 @@ export function powf_lut(x: f32, y: f32): f32 {
 
 // @ts-ignore: decorator
 @lazy @inline const EXP_DATA_TAB = memory.data<u64>([
-  0x0000000000000000, 0x3FF0000000000000,
-  0x3C9B3B4F1A88BF6E, 0x3FEFF63DA9FB3335,
-  0xBC7160139CD8DC5D, 0x3FEFEC9A3E778061,
-  0xBC905E7A108766D1, 0x3FEFE315E86E7F85,
-  0x3C8CD2523567F613, 0x3FEFD9B0D3158574,
-  0xBC8BCE8023F98EFA, 0x3FEFD06B29DDF6DE,
-  0x3C60F74E61E6C861, 0x3FEFC74518759BC8,
-  0x3C90A3E45B33D399, 0x3FEFBE3ECAC6F383,
-  0x3C979AA65D837B6D, 0x3FEFB5586CF9890F,
-  0x3C8EB51A92FDEFFC, 0x3FEFAC922B7247F7,
-  0x3C3EBE3D702F9CD1, 0x3FEFA3EC32D3D1A2,
-  0xBC6A033489906E0B, 0x3FEF9B66AFFED31B,
-  0xBC9556522A2FBD0E, 0x3FEF9301D0125B51,
-  0xBC5080EF8C4EEA55, 0x3FEF8ABDC06C31CC,
-  0xBC91C923B9D5F416, 0x3FEF829AAEA92DE0,
-  0x3C80D3E3E95C55AF, 0x3FEF7A98C8A58E51,
-  0xBC801B15EAA59348, 0x3FEF72B83C7D517B,
-  0xBC8F1FF055DE323D, 0x3FEF6AF9388C8DEA,
-  0x3C8B898C3F1353BF, 0x3FEF635BEB6FCB75,
-  0xBC96D99C7611EB26, 0x3FEF5BE084045CD4,
-  0x3C9AECF73E3A2F60, 0x3FEF54873168B9AA,
-  0xBC8FE782CB86389D, 0x3FEF4D5022FCD91D,
-  0x3C8A6F4144A6C38D, 0x3FEF463B88628CD6,
-  0x3C807A05B0E4047D, 0x3FEF3F49917DDC96,
-  0x3C968EFDE3A8A894, 0x3FEF387A6E756238,
-  0x3C875E18F274487D, 0x3FEF31CE4FB2A63F,
-  0x3C80472B981FE7F2, 0x3FEF2B4565E27CDD,
-  0xBC96B87B3F71085E, 0x3FEF24DFE1F56381,
-  0x3C82F7E16D09AB31, 0x3FEF1E9DF51FDEE1,
-  0xBC3D219B1A6FBFFA, 0x3FEF187FD0DAD990,
-  0x3C8B3782720C0AB4, 0x3FEF1285A6E4030B,
-  0x3C6E149289CECB8F, 0x3FEF0CAFA93E2F56,
-  0x3C834D754DB0ABB6, 0x3FEF06FE0A31B715,
-  0x3C864201E2AC744C, 0x3FEF0170FC4CD831,
-  0x3C8FDD395DD3F84A, 0x3FEEFC08B26416FF,
-  0xBC86A3803B8E5B04, 0x3FEEF6C55F929FF1,
-  0xBC924AEDCC4B5068, 0x3FEEF1A7373AA9CB,
-  0xBC9907F81B512D8E, 0x3FEEECAE6D05D866,
-  0xBC71D1E83E9436D2, 0x3FEEE7DB34E59FF7,
-  0xBC991919B3CE1B15, 0x3FEEE32DC313A8E5,
-  0x3C859F48A72A4C6D, 0x3FEEDEA64C123422,
-  0xBC9312607A28698A, 0x3FEEDA4504AC801C,
-  0xBC58A78F4817895B, 0x3FEED60A21F72E2A,
-  0xBC7C2C9B67499A1B, 0x3FEED1F5D950A897,
-  0x3C4363ED60C2AC11, 0x3FEECE086061892D,
-  0x3C9666093B0664EF, 0x3FEECA41ED1D0057,
-  0x3C6ECCE1DAA10379, 0x3FEEC6A2B5C13CD0,
-  0x3C93FF8E3F0F1230, 0x3FEEC32AF0D7D3DE,
-  0x3C7690CEBB7AAFB0, 0x3FEEBFDAD5362A27,
-  0x3C931DBDEB54E077, 0x3FEEBCB299FDDD0D,
-  0xBC8F94340071A38E, 0x3FEEB9B2769D2CA7,
-  0xBC87DECCDC93A349, 0x3FEEB6DAA2CF6642,
-  0xBC78DEC6BD0F385F, 0x3FEEB42B569D4F82,
-  0xBC861246EC7B5CF6, 0x3FEEB1A4CA5D920F,
-  0x3C93350518FDD78E, 0x3FEEAF4736B527DA,
-  0x3C7B98B72F8A9B05, 0x3FEEAD12D497C7FD,
-  0x3C9063E1E21C5409, 0x3FEEAB07DD485429,
-  0x3C34C7855019C6EA, 0x3FEEA9268A5946B7,
-  0x3C9432E62B64C035, 0x3FEEA76F15AD2148,
-  0xBC8CE44A6199769F, 0x3FEEA5E1B976DC09,
-  0xBC8C33C53BEF4DA8, 0x3FEEA47EB03A5585,
-  0xBC845378892BE9AE, 0x3FEEA34634CCC320,
-  0xBC93CEDD78565858, 0x3FEEA23882552225,
-  0x3C5710AA807E1964, 0x3FEEA155D44CA973,
-  0xBC93B3EFBF5E2228, 0x3FEEA09E667F3BCD,
-  0xBC6A12AD8734B982, 0x3FEEA012750BDABF,
-  0xBC6367EFB86DA9EE, 0x3FEE9FB23C651A2F,
-  0xBC80DC3D54E08851, 0x3FEE9F7DF9519484,
-  0xBC781F647E5A3ECF, 0x3FEE9F75E8EC5F74,
-  0xBC86EE4AC08B7DB0, 0x3FEE9F9A48A58174,
-  0xBC8619321E55E68A, 0x3FEE9FEB564267C9,
-  0x3C909CCB5E09D4D3, 0x3FEEA0694FDE5D3F,
-  0xBC7B32DCB94DA51D, 0x3FEEA11473EB0187,
-  0x3C94ECFD5467C06B, 0x3FEEA1ED0130C132,
-  0x3C65EBE1ABD66C55, 0x3FEEA2F336CF4E62,
-  0xBC88A1C52FB3CF42, 0x3FEEA427543E1A12,
-  0xBC9369B6F13B3734, 0x3FEEA589994CCE13,
-  0xBC805E843A19FF1E, 0x3FEEA71A4623C7AD,
-  0xBC94D450D872576E, 0x3FEEA8D99B4492ED,
-  0x3C90AD675B0E8A00, 0x3FEEAAC7D98A6699,
-  0x3C8DB72FC1F0EAB4, 0x3FEEACE5422AA0DB,
-  0xBC65B6609CC5E7FF, 0x3FEEAF3216B5448C,
-  0x3C7BF68359F35F44, 0x3FEEB1AE99157736,
-  0xBC93091FA71E3D83, 0x3FEEB45B0B91FFC6,
-  0xBC5DA9B88B6C1E29, 0x3FEEB737B0CDC5E5,
-  0xBC6C23F97C90B959, 0x3FEEBA44CBC8520F,
-  0xBC92434322F4F9AA, 0x3FEEBD829FDE4E50,
-  0xBC85CA6CD7668E4B, 0x3FEEC0F170CA07BA,
-  0x3C71AFFC2B91CE27, 0x3FEEC49182A3F090,
-  0x3C6DD235E10A73BB, 0x3FEEC86319E32323,
-  0xBC87C50422622263, 0x3FEECC667B5DE565,
-  0x3C8B1C86E3E231D5, 0x3FEED09BEC4A2D33,
-  0xBC91BBD1D3BCBB15, 0x3FEED503B23E255D,
-  0x3C90CC319CEE31D2, 0x3FEED99E1330B358,
-  0x3C8469846E735AB3, 0x3FEEDE6B5579FDBF,
-  0xBC82DFCD978E9DB4, 0x3FEEE36BBFD3F37A,
-  0x3C8C1A7792CB3387, 0x3FEEE89F995AD3AD,
-  0xBC907B8F4AD1D9FA, 0x3FEEEE07298DB666,
-  0xBC55C3D956DCAEBA, 0x3FEEF3A2B84F15FB,
-  0xBC90A40E3DA6F640, 0x3FEEF9728DE5593A,
-  0xBC68D6F438AD9334, 0x3FEEFF76F2FB5E47,
-  0xBC91EEE26B588A35, 0x3FEF05B030A1064A,
-  0x3C74FFD70A5FDDCD, 0x3FEF0C1E904BC1D2,
-  0xBC91BDFBFA9298AC, 0x3FEF12C25BD71E09,
-  0x3C736EAE30AF0CB3, 0x3FEF199BDD85529C,
-  0x3C8EE3325C9FFD94, 0x3FEF20AB5FFFD07A,
-  0x3C84E08FD10959AC, 0x3FEF27F12E57D14B,
-  0x3C63CDAF384E1A67, 0x3FEF2F6D9406E7B5,
-  0x3C676B2C6C921968, 0x3FEF3720DCEF9069,
-  0xBC808A1883CCB5D2, 0x3FEF3F0B555DC3FA,
-  0xBC8FAD5D3FFFFA6F, 0x3FEF472D4A07897C,
-  0xBC900DAE3875A949, 0x3FEF4F87080D89F2,
-  0x3C74A385A63D07A7, 0x3FEF5818DCFBA487,
-  0xBC82919E2040220F, 0x3FEF60E316C98398,
-  0x3C8E5A50D5C192AC, 0x3FEF69E603DB3285,
-  0x3C843A59AC016B4B, 0x3FEF7321F301B460,
-  0xBC82D52107B43E1F, 0x3FEF7C97337B9B5F,
-  0xBC892AB93B470DC9, 0x3FEF864614F5A129,
-  0x3C74B604603A88D3, 0x3FEF902EE78B3FF6,
-  0x3C83C5EC519D7271, 0x3FEF9A51FBC74C83,
-  0xBC8FF7128FD391F0, 0x3FEFA4AFA2A490DA,
-  0xBC8DAE98E223747D, 0x3FEFAF482D8E67F1,
-  0x3C8EC3BC41AA2008, 0x3FEFBA1BEE615A27,
-  0x3C842B94C3A9EB32, 0x3FEFC52B376BBA97,
-  0x3C8A64A931D185EE, 0x3FEFD0765B6E4540,
-  0xBC8E37BAE43BE3ED, 0x3FEFDBFDAD9CBE14,
-  0x3C77893B4D91CD9D, 0x3FEFE7C1819E90D8,
-  0x3C5305C14160CC89, 0x3FEFF3C22B8F71F1
+  0x0000000000000000, 0x3ff0000000000000, 0x3c9b3b4f1a88bf6e,
+  0x3feff63da9fb3335, 0xbc7160139cd8dc5d, 0x3fefec9a3e778061,
+  0xbc905e7a108766d1, 0x3fefe315e86e7f85, 0x3c8cd2523567f613,
+  0x3fefd9b0d3158574, 0xbc8bce8023f98efa, 0x3fefd06b29ddf6de,
+  0x3c60f74e61e6c861, 0x3fefc74518759bc8, 0x3c90a3e45b33d399,
+  0x3fefbe3ecac6f383, 0x3c979aa65d837b6d, 0x3fefb5586cf9890f,
+  0x3c8eb51a92fdeffc, 0x3fefac922b7247f7, 0x3c3ebe3d702f9cd1,
+  0x3fefa3ec32d3d1a2, 0xbc6a033489906e0b, 0x3fef9b66affed31b,
+  0xbc9556522a2fbd0e, 0x3fef9301d0125b51, 0xbc5080ef8c4eea55,
+  0x3fef8abdc06c31cc, 0xbc91c923b9d5f416, 0x3fef829aaea92de0,
+  0x3c80d3e3e95c55af, 0x3fef7a98c8a58e51, 0xbc801b15eaa59348,
+  0x3fef72b83c7d517b, 0xbc8f1ff055de323d, 0x3fef6af9388c8dea,
+  0x3c8b898c3f1353bf, 0x3fef635beb6fcb75, 0xbc96d99c7611eb26,
+  0x3fef5be084045cd4, 0x3c9aecf73e3a2f60, 0x3fef54873168b9aa,
+  0xbc8fe782cb86389d, 0x3fef4d5022fcd91d, 0x3c8a6f4144a6c38d,
+  0x3fef463b88628cd6, 0x3c807a05b0e4047d, 0x3fef3f49917ddc96,
+  0x3c968efde3a8a894, 0x3fef387a6e756238, 0x3c875e18f274487d,
+  0x3fef31ce4fb2a63f, 0x3c80472b981fe7f2, 0x3fef2b4565e27cdd,
+  0xbc96b87b3f71085e, 0x3fef24dfe1f56381, 0x3c82f7e16d09ab31,
+  0x3fef1e9df51fdee1, 0xbc3d219b1a6fbffa, 0x3fef187fd0dad990,
+  0x3c8b3782720c0ab4, 0x3fef1285a6e4030b, 0x3c6e149289cecb8f,
+  0x3fef0cafa93e2f56, 0x3c834d754db0abb6, 0x3fef06fe0a31b715,
+  0x3c864201e2ac744c, 0x3fef0170fc4cd831, 0x3c8fdd395dd3f84a,
+  0x3feefc08b26416ff, 0xbc86a3803b8e5b04, 0x3feef6c55f929ff1,
+  0xbc924aedcc4b5068, 0x3feef1a7373aa9cb, 0xbc9907f81b512d8e,
+  0x3feeecae6d05d866, 0xbc71d1e83e9436d2, 0x3feee7db34e59ff7,
+  0xbc991919b3ce1b15, 0x3feee32dc313a8e5, 0x3c859f48a72a4c6d,
+  0x3feedea64c123422, 0xbc9312607a28698a, 0x3feeda4504ac801c,
+  0xbc58a78f4817895b, 0x3feed60a21f72e2a, 0xbc7c2c9b67499a1b,
+  0x3feed1f5d950a897, 0x3c4363ed60c2ac11, 0x3feece086061892d,
+  0x3c9666093b0664ef, 0x3feeca41ed1d0057, 0x3c6ecce1daa10379,
+  0x3feec6a2b5c13cd0, 0x3c93ff8e3f0f1230, 0x3feec32af0d7d3de,
+  0x3c7690cebb7aafb0, 0x3feebfdad5362a27, 0x3c931dbdeb54e077,
+  0x3feebcb299fddd0d, 0xbc8f94340071a38e, 0x3feeb9b2769d2ca7,
+  0xbc87deccdc93a349, 0x3feeb6daa2cf6642, 0xbc78dec6bd0f385f,
+  0x3feeb42b569d4f82, 0xbc861246ec7b5cf6, 0x3feeb1a4ca5d920f,
+  0x3c93350518fdd78e, 0x3feeaf4736b527da, 0x3c7b98b72f8a9b05,
+  0x3feead12d497c7fd, 0x3c9063e1e21c5409, 0x3feeab07dd485429,
+  0x3c34c7855019c6ea, 0x3feea9268a5946b7, 0x3c9432e62b64c035,
+  0x3feea76f15ad2148, 0xbc8ce44a6199769f, 0x3feea5e1b976dc09,
+  0xbc8c33c53bef4da8, 0x3feea47eb03a5585, 0xbc845378892be9ae,
+  0x3feea34634ccc320, 0xbc93cedd78565858, 0x3feea23882552225,
+  0x3c5710aa807e1964, 0x3feea155d44ca973, 0xbc93b3efbf5e2228,
+  0x3feea09e667f3bcd, 0xbc6a12ad8734b982, 0x3feea012750bdabf,
+  0xbc6367efb86da9ee, 0x3fee9fb23c651a2f, 0xbc80dc3d54e08851,
+  0x3fee9f7df9519484, 0xbc781f647e5a3ecf, 0x3fee9f75e8ec5f74,
+  0xbc86ee4ac08b7db0, 0x3fee9f9a48a58174, 0xbc8619321e55e68a,
+  0x3fee9feb564267c9, 0x3c909ccb5e09d4d3, 0x3feea0694fde5d3f,
+  0xbc7b32dcb94da51d, 0x3feea11473eb0187, 0x3c94ecfd5467c06b,
+  0x3feea1ed0130c132, 0x3c65ebe1abd66c55, 0x3feea2f336cf4e62,
+  0xbc88a1c52fb3cf42, 0x3feea427543e1a12, 0xbc9369b6f13b3734,
+  0x3feea589994cce13, 0xbc805e843a19ff1e, 0x3feea71a4623c7ad,
+  0xbc94d450d872576e, 0x3feea8d99b4492ed, 0x3c90ad675b0e8a00,
+  0x3feeaac7d98a6699, 0x3c8db72fc1f0eab4, 0x3feeace5422aa0db,
+  0xbc65b6609cc5e7ff, 0x3feeaf3216b5448c, 0x3c7bf68359f35f44,
+  0x3feeb1ae99157736, 0xbc93091fa71e3d83, 0x3feeb45b0b91ffc6,
+  0xbc5da9b88b6c1e29, 0x3feeb737b0cdc5e5, 0xbc6c23f97c90b959,
+  0x3feeba44cbc8520f, 0xbc92434322f4f9aa, 0x3feebd829fde4e50,
+  0xbc85ca6cd7668e4b, 0x3feec0f170ca07ba, 0x3c71affc2b91ce27,
+  0x3feec49182a3f090, 0x3c6dd235e10a73bb, 0x3feec86319e32323,
+  0xbc87c50422622263, 0x3feecc667b5de565, 0x3c8b1c86e3e231d5,
+  0x3feed09bec4a2d33, 0xbc91bbd1d3bcbb15, 0x3feed503b23e255d,
+  0x3c90cc319cee31d2, 0x3feed99e1330b358, 0x3c8469846e735ab3,
+  0x3feede6b5579fdbf, 0xbc82dfcd978e9db4, 0x3feee36bbfd3f37a,
+  0x3c8c1a7792cb3387, 0x3feee89f995ad3ad, 0xbc907b8f4ad1d9fa,
+  0x3feeee07298db666, 0xbc55c3d956dcaeba, 0x3feef3a2b84f15fb,
+  0xbc90a40e3da6f640, 0x3feef9728de5593a, 0xbc68d6f438ad9334,
+  0x3feeff76f2fb5e47, 0xbc91eee26b588a35, 0x3fef05b030a1064a,
+  0x3c74ffd70a5fddcd, 0x3fef0c1e904bc1d2, 0xbc91bdfbfa9298ac,
+  0x3fef12c25bd71e09, 0x3c736eae30af0cb3, 0x3fef199bdd85529c,
+  0x3c8ee3325c9ffd94, 0x3fef20ab5fffd07a, 0x3c84e08fd10959ac,
+  0x3fef27f12e57d14b, 0x3c63cdaf384e1a67, 0x3fef2f6d9406e7b5,
+  0x3c676b2c6c921968, 0x3fef3720dcef9069, 0xbc808a1883ccb5d2,
+  0x3fef3f0b555dc3fa, 0xbc8fad5d3ffffa6f, 0x3fef472d4a07897c,
+  0xbc900dae3875a949, 0x3fef4f87080d89f2, 0x3c74a385a63d07a7,
+  0x3fef5818dcfba487, 0xbc82919e2040220f, 0x3fef60e316c98398,
+  0x3c8e5a50d5c192ac, 0x3fef69e603db3285, 0x3c843a59ac016b4b,
+  0x3fef7321f301b460, 0xbc82d52107b43e1f, 0x3fef7c97337b9b5f,
+  0xbc892ab93b470dc9, 0x3fef864614f5a129, 0x3c74b604603a88d3,
+  0x3fef902ee78b3ff6, 0x3c83c5ec519d7271, 0x3fef9a51fbc74c83,
+  0xbc8ff7128fd391f0, 0x3fefa4afa2a490da, 0xbc8dae98e223747d,
+  0x3fefaf482d8e67f1, 0x3c8ec3bc41aa2008, 0x3fefba1bee615a27,
+  0x3c842b94c3a9eb32, 0x3fefc52b376bba97, 0x3c8a64a931d185ee,
+  0x3fefd0765b6e4540, 0xbc8e37bae43be3ed, 0x3fefdbfdad9cbe14,
+  0x3c77893b4d91cd9d, 0x3fefe7c1819e90d8, 0x3c5305c14160cc89,
+  0x3feff3c22b8f71f1,
 ]);
 
 // Handle cases that may overflow or underflow when computing the result that
@@ -599,9 +603,8 @@ export function powf_lut(x: f32, y: f32): f32 {
 // @ts-ignore: decorator
 @inline
 function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
-  const
-    Ox1p_1022 = reinterpret<f64>(0x0010000000000000), // 0x1p-1022
-    Ox1p1009  = reinterpret<f64>(0x7F00000000000000); // 0x1p1009
+  const Ox1p_1022 = reinterpret<f64>(0x0010000000000000), // 0x1p-1022
+    Ox1p1009 = reinterpret<f64>(0x7f00000000000000); // 0x1p1009
 
   let scale: f64;
   if (!(ki & 0x80000000)) {
@@ -624,7 +627,7 @@ function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
     let lo = scale - y + scale * tmp;
     let hi = one + y;
     lo = one - hi + y + lo;
-    y  = (hi + lo) - one;
+    y = hi + lo - one;
     // Fix the sign of 0.
     if (y == 0.0) y = reinterpret<f64>(sbits & 0x8000000000000000);
   }
@@ -634,29 +637,26 @@ function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
 // @ts-ignore: decorator
 @inline
 export function exp_lut(x: f64): f64 {
-  const
-    N      = 1 << EXP_TABLE_BITS,
+  const N = 1 << EXP_TABLE_BITS,
     N_MASK = N - 1;
 
-  const
-    InvLn2N   = reinterpret<f64>(0x3FF71547652B82FE) * N, // 0x1.71547652b82fep0
-    NegLn2hiN = reinterpret<f64>(0xBF762E42FEFA0000),     // -0x1.62e42fefa0000p-8
-    NegLn2loN = reinterpret<f64>(0xBD0CF79ABC9E3B3A),     // -0x1.cf79abc9e3b3ap-47
-    shift     = reinterpret<f64>(0x4338000000000000);     // 0x1.8p52;
+  const InvLn2N = reinterpret<f64>(0x3ff71547652b82fe) * N, // 0x1.71547652b82fep0
+    NegLn2hiN = reinterpret<f64>(0xbf762e42fefa0000), // -0x1.62e42fefa0000p-8
+    NegLn2loN = reinterpret<f64>(0xbd0cf79abc9e3b3a), // -0x1.cf79abc9e3b3ap-47
+    shift = reinterpret<f64>(0x4338000000000000); // 0x1.8p52;
 
-  const
-    C2 = reinterpret<f64>(0x3FDFFFFFFFFFFDBD), // __exp_data.poly[0] (0x1.ffffffffffdbdp-2)
-    C3 = reinterpret<f64>(0x3FC555555555543C), // __exp_data.poly[1] (0x1.555555555543cp-3)
-    C4 = reinterpret<f64>(0x3FA55555CF172B91), // __exp_data.poly[2] (0x1.55555cf172b91p-5)
-    C5 = reinterpret<f64>(0x3F81111167A4D017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
+  const C2 = reinterpret<f64>(0x3fdffffffffffdbd), // __exp_data.poly[0] (0x1.ffffffffffdbdp-2)
+    C3 = reinterpret<f64>(0x3fc555555555543c), // __exp_data.poly[1] (0x1.555555555543cp-3)
+    C4 = reinterpret<f64>(0x3fa55555cf172b91), // __exp_data.poly[2] (0x1.55555cf172b91p-5)
+    C5 = reinterpret<f64>(0x3f81111167a4d017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
 
   let ux = reinterpret<u64>(x);
-  let abstop = u32(ux >> 52) & 0x7FF;
-  if (abstop - 0x3C9 >= 0x03F) {
-    if (abstop - 0x3C9 >= 0x80000000) return 1;
+  let abstop = u32(ux >> 52) & 0x7ff;
+  if (abstop - 0x3c9 >= 0x03f) {
+    if (abstop - 0x3c9 >= 0x80000000) return 1;
     if (abstop >= 0x409) {
-      if (ux == 0xFFF0000000000000) return 0;
-      if (abstop >= 0x7FF) {
+      if (ux == 0xfff0000000000000) return 0;
+      if (abstop >= 0x7ff) {
         return 1.0 + x;
       } else {
         return select<f64>(0, Infinity, <i64>ux < 0);
@@ -688,9 +688,13 @@ export function exp_lut(x: f64): f64 {
   let idx = usize((ki & N_MASK) << 1);
   let top = ki << (52 - EXP_TABLE_BITS);
 
-  let tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()))); // T[idx]
+  let tail = reinterpret<f64>(
+    load<u64>(EXP_DATA_TAB + (idx << alignof<u64>())),
+  ); // T[idx]
   // This is only a valid scale when -1023*N < k < 1024*N
-  let sbits = load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
+  let sbits =
+    load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) +
+    top; // T[idx + 1]
   // exp(x) = 2^(k/N) * exp(r) ~= scale + scale * (tail + exp(r) - 1).
   // Evaluation is optimized assuming superscalar pipelined execution.
   let r2 = r * r;
@@ -739,7 +743,7 @@ function specialcase2(tmp: f64, sbits: u64, ki: u64): f64 {
     lo = scale - y + scale * tmp;
     hi = 1.0 + y;
     lo = 1.0 - hi + y + lo;
-    y = (hi + lo) - 1.0;
+    y = hi + lo - 1.0;
   }
   return y * Ox1p_1022;
 }
@@ -747,29 +751,27 @@ function specialcase2(tmp: f64, sbits: u64, ki: u64): f64 {
 // @ts-ignore: decorator
 @inline
 export function exp2_lut(x: f64): f64 {
-  const
-    N      = 1 << EXP_TABLE_BITS,
+  const N = 1 << EXP_TABLE_BITS,
     N_MASK = N - 1,
-    shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p52
+    shift = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p52
 
-  const
-    C1 = reinterpret<f64>(0x3FE62E42FEFA39EF), // 0x1.62e42fefa39efp-1
-    C2 = reinterpret<f64>(0x3FCEBFBDFF82C424), // 0x1.ebfbdff82c424p-3
-    C3 = reinterpret<f64>(0x3FAC6B08D70CF4B5), // 0x1.c6b08d70cf4b5p-5
-    C4 = reinterpret<f64>(0x3F83B2ABD24650CC), // 0x1.3b2abd24650ccp-7
-    C5 = reinterpret<f64>(0x3F55D7E09B4E3A84); // 0x1.5d7e09b4e3a84p-10
+  const C1 = reinterpret<f64>(0x3fe62e42fefa39ef), // 0x1.62e42fefa39efp-1
+    C2 = reinterpret<f64>(0x3fcebfbdff82c424), // 0x1.ebfbdff82c424p-3
+    C3 = reinterpret<f64>(0x3fac6b08d70cf4b5), // 0x1.c6b08d70cf4b5p-5
+    C4 = reinterpret<f64>(0x3f83b2abd24650cc), // 0x1.3b2abd24650ccp-7
+    C5 = reinterpret<f64>(0x3f55d7e09b4e3a84); // 0x1.5d7e09b4e3a84p-10
 
   let ux = reinterpret<u64>(x);
   let abstop = u32(ux >> 52) & 0x7ff;
-  if (abstop - 0x3C9 >= 0x03F) {
-    if (abstop - 0x3C9 >= 0x80000000) return 1.0;
+  if (abstop - 0x3c9 >= 0x03f) {
+    if (abstop - 0x3c9 >= 0x80000000) return 1.0;
     if (abstop >= 0x409) {
-      if (ux == 0xFFF0000000000000) return 0;
-      if (abstop >= 0x7FF) return 1.0 + x;
+      if (ux == 0xfff0000000000000) return 0;
+      if (abstop >= 0x7ff) return 1.0 + x;
       if (<i64>ux >= 0) return Infinity;
-      else if (ux >= 0xC090CC0000000000) return 0;
+      else if (ux >= 0xc090cc0000000000) return 0;
     }
-    if ((ux << 1) > 0x811A000000000000) abstop = 0; // Large x is special cased below.
+    if (ux << 1 > 0x811a000000000000) abstop = 0; // Large x is special cased below.
   }
 
   // exp2(x) = 2^(k/N) * 2^r, with 2^r in [2^(-1/2N),2^(1/2N)].
@@ -782,9 +784,13 @@ export function exp2_lut(x: f64): f64 {
   let idx = usize((ki & N_MASK) << 1);
   let top = ki << (52 - EXP_TABLE_BITS);
 
-  let tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 0 << alignof<u64>())); // T[idx])
+  let tail = reinterpret<f64>(
+    load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 0 << alignof<u64>()),
+  ); // T[idx])
   // This is only a valid scale when -1023*N < k < 1024*N
-  let sbits = load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
+  let sbits =
+    load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) +
+    top; // T[idx + 1]
   // exp2(x) = 2^(k/N) * 2^r ~= scale + scale * (tail + 2^r - 1).
   // Evaluation is optimized assuming superscalar pipelined execution
   let r2 = r * r;
@@ -835,139 +841,97 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 // @ts-ignore: decorator
 @lazy @inline const LOG2_DATA_TAB1 = memory.data<u64>([
   //     invc       ,        logc
-  0x3FF724286BB1ACF8, 0xBFE1095FEECDB000,
-  0x3FF6E1F766D2CCA1, 0xBFE08494BD76D000,
-  0x3FF6A13D0E30D48A, 0xBFE00143AEE8F800,
-  0x3FF661EC32D06C85, 0xBFDEFEC5360B4000,
-  0x3FF623FA951198F8, 0xBFDDFDD91AB7E000,
-  0x3FF5E75BA4CF026C, 0xBFDCFFAE0CC79000,
-  0x3FF5AC055A214FB8, 0xBFDC043811FDA000,
-  0x3FF571ED0F166E1E, 0xBFDB0B67323AE000,
-  0x3FF53909590BF835, 0xBFDA152F5A2DB000,
-  0x3FF5014FED61ADDD, 0xBFD9217F5AF86000,
-  0x3FF4CAB88E487BD0, 0xBFD8304DB0719000,
-  0x3FF49539B4334FEE, 0xBFD74189F9A9E000,
-  0x3FF460CBDFAFD569, 0xBFD6552BB5199000,
-  0x3FF42D664EE4B953, 0xBFD56B23A29B1000,
-  0x3FF3FB01111DD8A6, 0xBFD483650F5FA000,
-  0x3FF3C995B70C5836, 0xBFD39DE937F6A000,
-  0x3FF3991C4AB6FD4A, 0xBFD2BAA1538D6000,
-  0x3FF3698E0CE099B5, 0xBFD1D98340CA4000,
-  0x3FF33AE48213E7B2, 0xBFD0FA853A40E000,
-  0x3FF30D191985BDB1, 0xBFD01D9C32E73000,
-  0x3FF2E025CAB271D7, 0xBFCE857DA2FA6000,
-  0x3FF2B404CF13CD82, 0xBFCCD3C8633D8000,
-  0x3FF288B02C7CCB50, 0xBFCB26034C14A000,
-  0x3FF25E2263944DE5, 0xBFC97C1C2F4FE000,
-  0x3FF234563D8615B1, 0xBFC7D6023F800000,
-  0x3FF20B46E33EAF38, 0xBFC633A71A05E000,
-  0x3FF1E2EEFDCDA3DD, 0xBFC494F5E9570000,
-  0x3FF1BB4A580B3930, 0xBFC2F9E424E0A000,
-  0x3FF19453847F2200, 0xBFC162595AFDC000,
-  0x3FF16E06C0D5D73C, 0xBFBF9C9A75BD8000,
-  0x3FF1485F47B7E4C2, 0xBFBC7B575BF9C000,
-  0x3FF12358AD0085D1, 0xBFB960C60FF48000,
-  0x3FF0FEF00F532227, 0xBFB64CE247B60000,
-  0x3FF0DB2077D03A8F, 0xBFB33F78B2014000,
-  0x3FF0B7E6D65980D9, 0xBFB0387D1A42C000,
-  0x3FF0953EFE7B408D, 0xBFAA6F9208B50000,
-  0x3FF07325CAC53B83, 0xBFA47A954F770000,
-  0x3FF05197E40D1B5C, 0xBF9D23A8C50C0000,
-  0x3FF03091C1208EA2, 0xBF916A2629780000,
-  0x3FF0101025B37E21, 0xBF7720F8D8E80000,
-  0x3FEFC07EF9CAA76B, 0x3F86FE53B1500000,
-  0x3FEF4465D3F6F184, 0x3FA11CCCE10F8000,
-  0x3FEECC079F84107F, 0x3FAC4DFC8C8B8000,
-  0x3FEE573A99975AE8, 0x3FB3AA321E574000,
-  0x3FEDE5D6F0BD3DE6, 0x3FB918A0D08B8000,
-  0x3FED77B681FF38B3, 0x3FBE72E9DA044000,
-  0x3FED0CB5724DE943, 0x3FC1DCD2507F6000,
-  0x3FECA4B2DC0E7563, 0x3FC476AB03DEA000,
-  0x3FEC3F8EE8D6CB51, 0x3FC7074377E22000,
-  0x3FEBDD2B4F020C4C, 0x3FC98EDE8BA94000,
-  0x3FEB7D6C006015CA, 0x3FCC0DB86AD2E000,
-  0x3FEB20366E2E338F, 0x3FCE840AAFCEE000,
-  0x3FEAC57026295039, 0x3FD0790AB4678000,
-  0x3FEA6D01BC2731DD, 0x3FD1AC056801C000,
-  0x3FEA16D3BC3FF18B, 0x3FD2DB11D4FEE000,
-  0x3FE9C2D14967FEAD, 0x3FD406464EC58000,
-  0x3FE970E4F47C9902, 0x3FD52DBE093AF000,
-  0x3FE920FB3982BCF2, 0x3FD651902050D000,
-  0x3FE8D30187F759F1, 0x3FD771D2CDEAF000,
-  0x3FE886E5EBB9F66D, 0x3FD88E9C857D9000,
-  0x3FE83C97B658B994, 0x3FD9A80155E16000,
-  0x3FE7F405FFC61022, 0x3FDABE186ED3D000,
-  0x3FE7AD22181415CA, 0x3FDBD0F2AEA0E000,
-  0x3FE767DCF99EFF8C, 0x3FDCE0A43DBF4000
+  0x3ff724286bb1acf8, 0xbfe1095feecdb000, 0x3ff6e1f766d2cca1,
+  0xbfe08494bd76d000, 0x3ff6a13d0e30d48a, 0xbfe00143aee8f800,
+  0x3ff661ec32d06c85, 0xbfdefec5360b4000, 0x3ff623fa951198f8,
+  0xbfddfdd91ab7e000, 0x3ff5e75ba4cf026c, 0xbfdcffae0cc79000,
+  0x3ff5ac055a214fb8, 0xbfdc043811fda000, 0x3ff571ed0f166e1e,
+  0xbfdb0b67323ae000, 0x3ff53909590bf835, 0xbfda152f5a2db000,
+  0x3ff5014fed61addd, 0xbfd9217f5af86000, 0x3ff4cab88e487bd0,
+  0xbfd8304db0719000, 0x3ff49539b4334fee, 0xbfd74189f9a9e000,
+  0x3ff460cbdfafd569, 0xbfd6552bb5199000, 0x3ff42d664ee4b953,
+  0xbfd56b23a29b1000, 0x3ff3fb01111dd8a6, 0xbfd483650f5fa000,
+  0x3ff3c995b70c5836, 0xbfd39de937f6a000, 0x3ff3991c4ab6fd4a,
+  0xbfd2baa1538d6000, 0x3ff3698e0ce099b5, 0xbfd1d98340ca4000,
+  0x3ff33ae48213e7b2, 0xbfd0fa853a40e000, 0x3ff30d191985bdb1,
+  0xbfd01d9c32e73000, 0x3ff2e025cab271d7, 0xbfce857da2fa6000,
+  0x3ff2b404cf13cd82, 0xbfccd3c8633d8000, 0x3ff288b02c7ccb50,
+  0xbfcb26034c14a000, 0x3ff25e2263944de5, 0xbfc97c1c2f4fe000,
+  0x3ff234563d8615b1, 0xbfc7d6023f800000, 0x3ff20b46e33eaf38,
+  0xbfc633a71a05e000, 0x3ff1e2eefdcda3dd, 0xbfc494f5e9570000,
+  0x3ff1bb4a580b3930, 0xbfc2f9e424e0a000, 0x3ff19453847f2200,
+  0xbfc162595afdc000, 0x3ff16e06c0d5d73c, 0xbfbf9c9a75bd8000,
+  0x3ff1485f47b7e4c2, 0xbfbc7b575bf9c000, 0x3ff12358ad0085d1,
+  0xbfb960c60ff48000, 0x3ff0fef00f532227, 0xbfb64ce247b60000,
+  0x3ff0db2077d03a8f, 0xbfb33f78b2014000, 0x3ff0b7e6d65980d9,
+  0xbfb0387d1a42c000, 0x3ff0953efe7b408d, 0xbfaa6f9208b50000,
+  0x3ff07325cac53b83, 0xbfa47a954f770000, 0x3ff05197e40d1b5c,
+  0xbf9d23a8c50c0000, 0x3ff03091c1208ea2, 0xbf916a2629780000,
+  0x3ff0101025b37e21, 0xbf7720f8d8e80000, 0x3fefc07ef9caa76b,
+  0x3f86fe53b1500000, 0x3fef4465d3f6f184, 0x3fa11ccce10f8000,
+  0x3feecc079f84107f, 0x3fac4dfc8c8b8000, 0x3fee573a99975ae8,
+  0x3fb3aa321e574000, 0x3fede5d6f0bd3de6, 0x3fb918a0d08b8000,
+  0x3fed77b681ff38b3, 0x3fbe72e9da044000, 0x3fed0cb5724de943,
+  0x3fc1dcd2507f6000, 0x3feca4b2dc0e7563, 0x3fc476ab03dea000,
+  0x3fec3f8ee8d6cb51, 0x3fc7074377e22000, 0x3febdd2b4f020c4c,
+  0x3fc98ede8ba94000, 0x3feb7d6c006015ca, 0x3fcc0db86ad2e000,
+  0x3feb20366e2e338f, 0x3fce840aafcee000, 0x3feac57026295039,
+  0x3fd0790ab4678000, 0x3fea6d01bc2731dd, 0x3fd1ac056801c000,
+  0x3fea16d3bc3ff18b, 0x3fd2db11d4fee000, 0x3fe9c2d14967fead,
+  0x3fd406464ec58000, 0x3fe970e4f47c9902, 0x3fd52dbe093af000,
+  0x3fe920fb3982bcf2, 0x3fd651902050d000, 0x3fe8d30187f759f1,
+  0x3fd771d2cdeaf000, 0x3fe886e5ebb9f66d, 0x3fd88e9c857d9000,
+  0x3fe83c97b658b994, 0x3fd9a80155e16000, 0x3fe7f405ffc61022,
+  0x3fdabe186ed3d000, 0x3fe7ad22181415ca, 0x3fdbd0f2aea0e000,
+  0x3fe767dcf99eff8c, 0x3fdce0a43dbf4000,
 ]);
 
 // @ts-ignore: decorator
 @lazy @inline const LOG2_DATA_TAB2 = memory.data<u64>([
   //      chi       ,         clo
-  0x3FE6200012B90A8E, 0x3C8904AB0644B605,
-  0x3FE66000045734A6, 0x3C61FF9BEA62F7A9,
-  0x3FE69FFFC325F2C5, 0x3C827ECFCB3C90BA,
-  0x3FE6E00038B95A04, 0x3C88FF8856739326,
-  0x3FE71FFFE09994E3, 0x3C8AFD40275F82B1,
-  0x3FE7600015590E10, 0xBC72FD75B4238341,
-  0x3FE7A00012655BD5, 0x3C7808E67C242B76,
-  0x3FE7E0003259E9A6, 0xBC6208E426F622B7,
-  0x3FE81FFFEDB4B2D2, 0xBC8402461EA5C92F,
-  0x3FE860002DFAFCC3, 0x3C6DF7F4A2F29A1F,
-  0x3FE89FFFF78C6B50, 0xBC8E0453094995FD,
-  0x3FE8E00039671566, 0xBC8A04F3BEC77B45,
-  0x3FE91FFFE2BF1745, 0xBC77FA34400E203C,
-  0x3FE95FFFCC5C9FD1, 0xBC76FF8005A0695D,
-  0x3FE9A0003BBA4767, 0x3C70F8C4C4EC7E03,
-  0x3FE9DFFFE7B92DA5, 0x3C8E7FD9478C4602,
-  0x3FEA1FFFD72EFDAF, 0xBC6A0C554DCDAE7E,
-  0x3FEA5FFFDE04FF95, 0x3C867DA98CE9B26B,
-  0x3FEA9FFFCA5E8D2B, 0xBC8284C9B54C13DE,
-  0x3FEADFFFDDAD03EA, 0x3C5812C8EA602E3C,
-  0x3FEB1FFFF10D3D4D, 0xBC8EFADDAD27789C,
-  0x3FEB5FFFCE21165A, 0x3C53CB1719C61237,
-  0x3FEB9FFFD950E674, 0x3C73F7D94194CE00,
-  0x3FEBE000139CA8AF, 0x3C750AC4215D9BC0,
-  0x3FEC20005B46DF99, 0x3C6BEEA653E9C1C9,
-  0x3FEC600040B9F7AE, 0xBC7C079F274A70D6,
-  0x3FECA0006255FD8A, 0xBC7A0B4076E84C1F,
-  0x3FECDFFFD94C095D, 0x3C88F933F99AB5D7,
-  0x3FED1FFFF975D6CF, 0xBC582C08665FE1BE,
-  0x3FED5FFFA2561C93, 0xBC7B04289BD295F3,
-  0x3FED9FFF9D228B0C, 0x3C870251340FA236,
-  0x3FEDE00065BC7E16, 0xBC75011E16A4D80C,
-  0x3FEE200002F64791, 0x3C89802F09EF62E0,
-  0x3FEE600057D7A6D8, 0xBC7E0B75580CF7FA,
-  0x3FEEA00027EDC00C, 0xBC8C848309459811,
-  0x3FEEE0006CF5CB7C, 0xBC8F8027951576F4,
-  0x3FEF2000782B7DCC, 0xBC8F81D97274538F,
-  0x3FEF6000260C450A, 0xBC4071002727FFDC,
-  0x3FEF9FFFE88CD533, 0xBC581BDCE1FDA8B0,
-  0x3FEFDFFFD50F8689, 0x3C87F91ACB918E6E,
-  0x3FF0200004292367, 0x3C9B7FF365324681,
-  0x3FF05FFFE3E3D668, 0x3C86FA08DDAE957B,
-  0x3FF0A0000A85A757, 0xBC57E2DE80D3FB91,
-  0x3FF0E0001A5F3FCC, 0xBC91823305C5F014,
-  0x3FF11FFFF8AFBAF5, 0xBC8BFABB6680BAC2,
-  0x3FF15FFFE54D91AD, 0xBC9D7F121737E7EF,
-  0x3FF1A00011AC36E1, 0x3C9C000A0516F5FF,
-  0x3FF1E00019C84248, 0xBC9082FBE4DA5DA0,
-  0x3FF220000FFE5E6E, 0xBC88FDD04C9CFB43,
-  0x3FF26000269FD891, 0x3C8CFE2A7994D182,
-  0x3FF2A00029A6E6DA, 0xBC700273715E8BC5,
-  0x3FF2DFFFE0293E39, 0x3C9B7C39DAB2A6F9,
-  0x3FF31FFFF7DCF082, 0x3C7DF1336EDC5254,
-  0x3FF35FFFF05A8B60, 0xBC9E03564CCD31EB,
-  0x3FF3A0002E0EAECC, 0x3C75F0E74BD3A477,
-  0x3FF3E000043BB236, 0x3C9C7DCB149D8833,
-  0x3FF4200002D187FF, 0x3C7E08AFCF2D3D28,
-  0x3FF460000D387CB1, 0x3C820837856599A6,
-  0x3FF4A00004569F89, 0xBC89FA5C904FBCD2,
-  0x3FF4E000043543F3, 0xBC781125ED175329,
-  0x3FF51FFFCC027F0F, 0x3C9883D8847754DC,
-  0x3FF55FFFFD87B36F, 0xBC8709E731D02807,
-  0x3FF59FFFF21DF7BA, 0x3C87F79F68727B02,
-  0x3FF5DFFFEBFC3481, 0xBC9180902E30E93E
+  0x3fe6200012b90a8e, 0x3c8904ab0644b605, 0x3fe66000045734a6,
+  0x3c61ff9bea62f7a9, 0x3fe69fffc325f2c5, 0x3c827ecfcb3c90ba,
+  0x3fe6e00038b95a04, 0x3c88ff8856739326, 0x3fe71fffe09994e3,
+  0x3c8afd40275f82b1, 0x3fe7600015590e10, 0xbc72fd75b4238341,
+  0x3fe7a00012655bd5, 0x3c7808e67c242b76, 0x3fe7e0003259e9a6,
+  0xbc6208e426f622b7, 0x3fe81fffedb4b2d2, 0xbc8402461ea5c92f,
+  0x3fe860002dfafcc3, 0x3c6df7f4a2f29a1f, 0x3fe89ffff78c6b50,
+  0xbc8e0453094995fd, 0x3fe8e00039671566, 0xbc8a04f3bec77b45,
+  0x3fe91fffe2bf1745, 0xbc77fa34400e203c, 0x3fe95fffcc5c9fd1,
+  0xbc76ff8005a0695d, 0x3fe9a0003bba4767, 0x3c70f8c4c4ec7e03,
+  0x3fe9dfffe7b92da5, 0x3c8e7fd9478c4602, 0x3fea1fffd72efdaf,
+  0xbc6a0c554dcdae7e, 0x3fea5fffde04ff95, 0x3c867da98ce9b26b,
+  0x3fea9fffca5e8d2b, 0xbc8284c9b54c13de, 0x3feadfffddad03ea,
+  0x3c5812c8ea602e3c, 0x3feb1ffff10d3d4d, 0xbc8efaddad27789c,
+  0x3feb5fffce21165a, 0x3c53cb1719c61237, 0x3feb9fffd950e674,
+  0x3c73f7d94194ce00, 0x3febe000139ca8af, 0x3c750ac4215d9bc0,
+  0x3fec20005b46df99, 0x3c6beea653e9c1c9, 0x3fec600040b9f7ae,
+  0xbc7c079f274a70d6, 0x3feca0006255fd8a, 0xbc7a0b4076e84c1f,
+  0x3fecdfffd94c095d, 0x3c88f933f99ab5d7, 0x3fed1ffff975d6cf,
+  0xbc582c08665fe1be, 0x3fed5fffa2561c93, 0xbc7b04289bd295f3,
+  0x3fed9fff9d228b0c, 0x3c870251340fa236, 0x3fede00065bc7e16,
+  0xbc75011e16a4d80c, 0x3fee200002f64791, 0x3c89802f09ef62e0,
+  0x3fee600057d7a6d8, 0xbc7e0b75580cf7fa, 0x3feea00027edc00c,
+  0xbc8c848309459811, 0x3feee0006cf5cb7c, 0xbc8f8027951576f4,
+  0x3fef2000782b7dcc, 0xbc8f81d97274538f, 0x3fef6000260c450a,
+  0xbc4071002727ffdc, 0x3fef9fffe88cd533, 0xbc581bdce1fda8b0,
+  0x3fefdfffd50f8689, 0x3c87f91acb918e6e, 0x3ff0200004292367,
+  0x3c9b7ff365324681, 0x3ff05fffe3e3d668, 0x3c86fa08ddae957b,
+  0x3ff0a0000a85a757, 0xbc57e2de80d3fb91, 0x3ff0e0001a5f3fcc,
+  0xbc91823305c5f014, 0x3ff11ffff8afbaf5, 0xbc8bfabb6680bac2,
+  0x3ff15fffe54d91ad, 0xbc9d7f121737e7ef, 0x3ff1a00011ac36e1,
+  0x3c9c000a0516f5ff, 0x3ff1e00019c84248, 0xbc9082fbe4da5da0,
+  0x3ff220000ffe5e6e, 0xbc88fdd04c9cfb43, 0x3ff26000269fd891,
+  0x3c8cfe2a7994d182, 0x3ff2a00029a6e6da, 0xbc700273715e8bc5,
+  0x3ff2dfffe0293e39, 0x3c9b7c39dab2a6f9, 0x3ff31ffff7dcf082,
+  0x3c7df1336edc5254, 0x3ff35ffff05a8b60, 0xbc9e03564ccd31eb,
+  0x3ff3a0002e0eaecc, 0x3c75f0e74bd3a477, 0x3ff3e000043bb236,
+  0x3c9c7dcb149d8833, 0x3ff4200002d187ff, 0x3c7e08afcf2d3d28,
+  0x3ff460000d387cb1, 0x3c820837856599a6, 0x3ff4a00004569f89,
+  0xbc89fa5c904fbcd2, 0x3ff4e000043543f3, 0xbc781125ed175329,
+  0x3ff51fffcc027f0f, 0x3c9883d8847754dc, 0x3ff55ffffd87b36f,
+  0xbc8709e731d02807, 0x3ff59ffff21df7ba, 0x3c87f79f68727b02,
+  0x3ff5dfffebfc3481, 0xbc9180902e30e93e,
 ]);
 
 // @ts-ignore: decorator
@@ -975,34 +939,30 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 export function log2_lut(x: f64): f64 {
   const N_MASK = (1 << LOG2_TABLE_BITS) - 1;
 
-  const
-    LO: u64 = 0x3FEEA4AF00000000, // reinterpret<u64>(1.0 - 0x1.5b51p-5)
-    HI: u64 = 0x3FF0B55900000000; // reinterpret<u64>(1.0 + 0x1.6ab2p-5)
+  const LO: u64 = 0x3feea4af00000000, // reinterpret<u64>(1.0 - 0x1.5b51p-5)
+    HI: u64 = 0x3ff0b55900000000; // reinterpret<u64>(1.0 + 0x1.6ab2p-5)
 
-  const
-    InvLn2hi = reinterpret<f64>(0x3FF7154765200000), // 0x1.7154765200000p+0
-    InvLn2lo = reinterpret<f64>(0x3DE705FC2EEFA200), // 0x1.705fc2eefa200p-33
-    Ox1p52   = reinterpret<f64>(0x4330000000000000); // 0x1p52
+  const InvLn2hi = reinterpret<f64>(0x3ff7154765200000), // 0x1.7154765200000p+0
+    InvLn2lo = reinterpret<f64>(0x3de705fc2eefa200), // 0x1.705fc2eefa200p-33
+    Ox1p52 = reinterpret<f64>(0x4330000000000000); // 0x1p52
 
-  const
-    B0 = reinterpret<f64>(0xBFE71547652B82FE), // -0x1.71547652b82fep-1
-    B1 = reinterpret<f64>(0x3FDEC709DC3A03F7), //  0x1.ec709dc3a03f7p-2
-    B2 = reinterpret<f64>(0xBFD71547652B7C3F), // -0x1.71547652b7c3fp-2
-    B3 = reinterpret<f64>(0x3FD2776C50F05BE4), //  0x1.2776c50f05be4p-2
-    B4 = reinterpret<f64>(0xBFCEC709DD768FE5), // -0x1.ec709dd768fe5p-3
-    B5 = reinterpret<f64>(0x3FCA61761EC4E736), //  0x1.a61761ec4e736p-3
-    B6 = reinterpret<f64>(0xBFC7153FBC64A79B), // -0x1.7153fbc64a79bp-3
-    B7 = reinterpret<f64>(0x3FC484D154F01B4A), //  0x1.484d154f01b4ap-3
-    B8 = reinterpret<f64>(0xBFC289E4A72C383C), // -0x1.289e4a72c383cp-3
-    B9 = reinterpret<f64>(0x3FC0B32F285AEE66); //  0x1.0b32f285aee66p-3
+  const B0 = reinterpret<f64>(0xbfe71547652b82fe), // -0x1.71547652b82fep-1
+    B1 = reinterpret<f64>(0x3fdec709dc3a03f7), //  0x1.ec709dc3a03f7p-2
+    B2 = reinterpret<f64>(0xbfd71547652b7c3f), // -0x1.71547652b7c3fp-2
+    B3 = reinterpret<f64>(0x3fd2776c50f05be4), //  0x1.2776c50f05be4p-2
+    B4 = reinterpret<f64>(0xbfcec709dd768fe5), // -0x1.ec709dd768fe5p-3
+    B5 = reinterpret<f64>(0x3fca61761ec4e736), //  0x1.a61761ec4e736p-3
+    B6 = reinterpret<f64>(0xbfc7153fbc64a79b), // -0x1.7153fbc64a79bp-3
+    B7 = reinterpret<f64>(0x3fc484d154f01b4a), //  0x1.484d154f01b4ap-3
+    B8 = reinterpret<f64>(0xbfc289e4a72c383c), // -0x1.289e4a72c383cp-3
+    B9 = reinterpret<f64>(0x3fc0b32f285aee66); //  0x1.0b32f285aee66p-3
 
-  const
-    A0 = reinterpret<f64>(0xBFE71547652B8339), // -0x1.71547652b8339p-1
-    A1 = reinterpret<f64>(0x3FDEC709DC3A04BE), //  0x1.ec709dc3a04bep-2
-    A2 = reinterpret<f64>(0xBFD7154764702FFB), // -0x1.7154764702ffbp-2
-    A3 = reinterpret<f64>(0x3FD2776C50034C48), //  0x1.2776c50034c48p-2
-    A4 = reinterpret<f64>(0xBFCEC7B328EA92BC), // -0x1.ec7b328ea92bcp-3
-    A5 = reinterpret<f64>(0x3FCA6225E117F92E); //  0x1.a6225e117f92ep-3
+  const A0 = reinterpret<f64>(0xbfe71547652b8339), // -0x1.71547652b8339p-1
+    A1 = reinterpret<f64>(0x3fdec709dc3a04be), //  0x1.ec709dc3a04bep-2
+    A2 = reinterpret<f64>(0xbfd7154764702ffb), // -0x1.7154764702ffbp-2
+    A3 = reinterpret<f64>(0x3fd2776c50034c48), //  0x1.2776c50034c48p-2
+    A4 = reinterpret<f64>(0xbfcec7b328ea92bc), // -0x1.ec7b328ea92bcp-3
+    A5 = reinterpret<f64>(0x3fca6225e117f92e); //  0x1.a6225e117f92ep-3
 
   let ix = reinterpret<u64>(x);
   if (ix - LO < HI - LO) {
@@ -1011,10 +971,10 @@ export function log2_lut(x: f64): f64 {
     //     hi = r * InvLn2hi;
     //     lo = r * InvLn2lo + __builtin_fma(r, InvLn2hi, -hi);
     // #else
-    let rhi = reinterpret<f64>(reinterpret<u64>(r) & 0xFFFFFFFF00000000);
+    let rhi = reinterpret<f64>(reinterpret<u64>(r) & 0xffffffff00000000);
     let rlo = r - rhi;
-    let hi  = rhi * InvLn2hi;
-    let lo  = rlo * InvLn2hi + r * InvLn2lo;
+    let hi = rhi * InvLn2hi;
+    let lo = rlo * InvLn2hi + r * InvLn2lo;
     // #endif
     let r2 = r * r; // rounding error: 0x1p-62
     let r4 = r2 * r2;
@@ -1022,16 +982,20 @@ export function log2_lut(x: f64): f64 {
     let p = r2 * (B0 + r * B1);
     let y = hi + p;
     lo += hi - y + p;
-    lo += r4 * (B2 + r * B3 + r2 * (B4 + r * B5) +
-          r4 * (B6 + r * B7 + r2 * (B8 + r * B9)));
+    lo +=
+      r4 *
+      (B2 +
+        r * B3 +
+        r2 * (B4 + r * B5) +
+        r4 * (B6 + r * B7 + r2 * (B8 + r * B9)));
     return y + lo;
   }
   let top = u32(ix >> 48);
   if (top - 0x0010 >= 0x7ff0 - 0x0010) {
     // x < 0x1p-1022 or inf or nan.
-    if ((ix << 1) == 0) return -1.0 / (x * x);
-    if (ix == 0x7FF0000000000000) return x; // log(inf) == inf
-    if ((top & 0x8000) || (top & 0x7FF0) == 0x7FF0) return (x - x) / (x - x);
+    if (ix << 1 == 0) return -1.0 / (x * x);
+    if (ix == 0x7ff0000000000000) return x; // log(inf) == inf
+    if (top & 0x8000 || (top & 0x7ff0) == 0x7ff0) return (x - x) / (x - x);
     // x is subnormal, normalize it.
     ix = reinterpret<u64>(x * Ox1p52);
     ix -= u64(52) << 52;
@@ -1040,15 +1004,21 @@ export function log2_lut(x: f64): f64 {
   // x = 2^k z; where z is in range [OFF,2*OFF) and exact.
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
-  let tmp  = ix - 0x3FE6000000000000;
-  let i    = <usize>((tmp >> (52 - LOG2_TABLE_BITS)) & N_MASK);
-  let k    = <i64>tmp >> 52;
-  let iz   = ix - (tmp & 0xFFF0000000000000);
+  let tmp = ix - 0x3fe6000000000000;
+  let i = <usize>((tmp >> (52 - LOG2_TABLE_BITS)) & N_MASK);
+  let k = (<i64>tmp) >> 52;
+  let iz = ix - (tmp & 0xfff0000000000000);
 
-  let invc = load<f64>(LOG2_DATA_TAB1  + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
-  let logc = load<f64>(LOG2_DATA_TAB1  + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
-  let z    = reinterpret<f64>(iz);
-  let kd   = <f64>k;
+  let invc = load<f64>(
+    LOG2_DATA_TAB1 + (i << (1 + alignof<f64>())),
+    0 << alignof<f64>(),
+  ); // T[i].invc;
+  let logc = load<f64>(
+    LOG2_DATA_TAB1 + (i << (1 + alignof<f64>())),
+    1 << alignof<f64>(),
+  ); // T[i].logc;
+  let z = reinterpret<f64>(iz);
+  let kd = <f64>k;
 
   // log2(x) = log2(z/c) + log2(c) + k.
   // r ~= z/c - 1, |r| < 1/(2*N).
@@ -1059,14 +1029,20 @@ export function log2_lut(x: f64): f64 {
   // 	t2 = r * InvLn2lo + __builtin_fma(r, InvLn2hi, -t1);
   // #else
   // rounding error: 0x1p-55/N + 0x1p-65.
-  let chi = load<f64>(LOG2_DATA_TAB2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].chi;
-  let clo = load<f64>(LOG2_DATA_TAB2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].clo;
+  let chi = load<f64>(
+    LOG2_DATA_TAB2 + (i << (1 + alignof<f64>())),
+    0 << alignof<f64>(),
+  ); // T[i].chi;
+  let clo = load<f64>(
+    LOG2_DATA_TAB2 + (i << (1 + alignof<f64>())),
+    1 << alignof<f64>(),
+  ); // T[i].clo;
 
-  let r   = (z - chi - clo) * invc;
-  let rhi = reinterpret<f64>(reinterpret<u64>(r) & 0xFFFFFFFF00000000);
+  let r = (z - chi - clo) * invc;
+  let rhi = reinterpret<f64>(reinterpret<u64>(r) & 0xffffffff00000000);
   let rlo = r - rhi;
-  let t1  = rhi * InvLn2hi;
-  let t2  = rlo * InvLn2hi + r * InvLn2lo;
+  let t1 = rhi * InvLn2hi;
+  let t2 = rlo * InvLn2hi + r * InvLn2lo;
   // #endif
 
   // hi + lo = r/ln2 + log2(c) + k
@@ -1079,7 +1055,7 @@ export function log2_lut(x: f64): f64 {
   let r2 = r * r; // rounding error: 0x1p-54/N^2
   // Worst-case error if |y| > 0x1p-4: 0.547 ULP (0.550 ULP without fma).
   // ~ 0.5 + 2/N/ln2 + abs-poly-error*0x1p56 ULP (+ 0.003 ULP without fma).
-  let p = A0 + r * A1 + r2 * (A2 + r * A3) + (r2 * r2) * (A4 + r * A5);
+  let p = A0 + r * A1 + r2 * (A2 + r * A3) + r2 * r2 * (A4 + r * A5);
   return lo + r2 * p + hi;
 }
 
@@ -1120,267 +1096,183 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 // @ts-ignore: decorator
 @lazy @inline const LOG_DATA_TAB1 = memory.data<u64>([
   //      invc      ,        logc
-  0x3FF734F0C3E0DE9F, 0xBFD7CC7F79E69000,
-  0x3FF713786A2CE91F, 0xBFD76FEEC20D0000,
-  0x3FF6F26008FAB5A0, 0xBFD713E31351E000,
-  0x3FF6D1A61F138C7D, 0xBFD6B85B38287800,
-  0x3FF6B1490BC5B4D1, 0xBFD65D5590807800,
-  0x3FF69147332F0CBA, 0xBFD602D076180000,
-  0x3FF6719F18224223, 0xBFD5A8CA86909000,
-  0x3FF6524F99A51ED9, 0xBFD54F4356035000,
-  0x3FF63356AA8F24C4, 0xBFD4F637C36B4000,
-  0x3FF614B36B9DDC14, 0xBFD49DA7FDA85000,
-  0x3FF5F66452C65C4C, 0xBFD445923989A800,
-  0x3FF5D867B5912C4F, 0xBFD3EDF439B0B800,
-  0x3FF5BABCCB5B90DE, 0xBFD396CE448F7000,
-  0x3FF59D61F2D91A78, 0xBFD3401E17BDA000,
-  0x3FF5805612465687, 0xBFD2E9E2EF468000,
-  0x3FF56397CEE76BD3, 0xBFD2941B3830E000,
-  0x3FF54725E2A77F93, 0xBFD23EC58CDA8800,
-  0x3FF52AFF42064583, 0xBFD1E9E129279000,
-  0x3FF50F22DBB2BDDF, 0xBFD1956D2B48F800,
-  0x3FF4F38F4734DED7, 0xBFD141679AB9F800,
-  0x3FF4D843CFDE2840, 0xBFD0EDD094EF9800,
-  0x3FF4BD3EC078A3C8, 0xBFD09AA518DB1000,
-  0x3FF4A27FC3E0258A, 0xBFD047E65263B800,
-  0x3FF4880524D48434, 0xBFCFEB224586F000,
-  0x3FF46DCE1B192D0B, 0xBFCF474A7517B000,
-  0x3FF453D9D3391854, 0xBFCEA4443D103000,
-  0x3FF43A2744B4845A, 0xBFCE020D44E9B000,
-  0x3FF420B54115F8FB, 0xBFCD60A22977F000,
-  0x3FF40782DA3EF4B1, 0xBFCCC00104959000,
-  0x3FF3EE8F5D57FE8F, 0xBFCC202956891000,
-  0x3FF3D5D9A00B4CE9, 0xBFCB81178D811000,
-  0x3FF3BD60C010C12B, 0xBFCAE2C9CCD3D000,
-  0x3FF3A5242B75DAB8, 0xBFCA45402E129000,
-  0x3FF38D22CD9FD002, 0xBFC9A877681DF000,
-  0x3FF3755BC5847A1C, 0xBFC90C6D69483000,
-  0x3FF35DCE49AD36E2, 0xBFC87120A645C000,
-  0x3FF34679984DD440, 0xBFC7D68FB4143000,
-  0x3FF32F5CCEFFCB24, 0xBFC73CB83C627000,
-  0x3FF3187775A10D49, 0xBFC6A39A9B376000,
-  0x3FF301C8373E3990, 0xBFC60B3154B7A000,
-  0x3FF2EB4EBB95F841, 0xBFC5737D76243000,
-  0x3FF2D50A0219A9D1, 0xBFC4DC7B8FC23000,
-  0x3FF2BEF9A8B7FD2A, 0xBFC4462C51D20000,
-  0x3FF2A91C7A0C1BAB, 0xBFC3B08ABC830000,
-  0x3FF293726014B530, 0xBFC31B996B490000,
-  0x3FF27DFA5757A1F5, 0xBFC2875490A44000,
-  0x3FF268B39B1D3BBF, 0xBFC1F3B9F879A000,
-  0x3FF2539D838FF5BD, 0xBFC160C8252CA000,
-  0x3FF23EB7AAC9083B, 0xBFC0CE7F57F72000,
-  0x3FF22A012BA940B6, 0xBFC03CDC49FEA000,
-  0x3FF2157996CC4132, 0xBFBF57BDBC4B8000,
-  0x3FF201201DD2FC9B, 0xBFBE370896404000,
-  0x3FF1ECF4494D480B, 0xBFBD17983EF94000,
-  0x3FF1D8F5528F6569, 0xBFBBF9674ED8A000,
-  0x3FF1C52311577E7C, 0xBFBADC79202F6000,
-  0x3FF1B17C74CB26E9, 0xBFB9C0C3E7288000,
-  0x3FF19E010C2C1AB6, 0xBFB8A646B372C000,
-  0x3FF18AB07BB670BD, 0xBFB78D01B3AC0000,
-  0x3FF1778A25EFBCB6, 0xBFB674F145380000,
-  0x3FF1648D354C31DA, 0xBFB55E0E6D878000,
-  0x3FF151B990275FDD, 0xBFB4485CDEA1E000,
-  0x3FF13F0EA432D24C, 0xBFB333D94D6AA000,
-  0x3FF12C8B7210F9DA, 0xBFB22079F8C56000,
-  0x3FF11A3028ECB531, 0xBFB10E4698622000,
-  0x3FF107FBDA8434AF, 0xBFAFFA6C6AD20000,
-  0x3FF0F5EE0F4E6BB3, 0xBFADDA8D4A774000,
-  0x3FF0E4065D2A9FCE, 0xBFABBCECE4850000,
-  0x3FF0D244632CA521, 0xBFA9A1894012C000,
-  0x3FF0C0A77CE2981A, 0xBFA788583302C000,
-  0x3FF0AF2F83C636D1, 0xBFA5715E67D68000,
-  0x3FF09DDB98A01339, 0xBFA35C8A49658000,
-  0x3FF08CABAF52E7DF, 0xBFA149E364154000,
-  0x3FF07B9F2F4E28FB, 0xBF9E72C082EB8000,
-  0x3FF06AB58C358F19, 0xBF9A55F152528000,
-  0x3FF059EEA5ECF92C, 0xBF963D62CF818000,
-  0x3FF04949CDD12C90, 0xBF9228FB8CAA0000,
-  0x3FF038C6C6F0ADA9, 0xBF8C317B20F90000,
-  0x3FF02865137932A9, 0xBF8419355DAA0000,
-  0x3FF0182427EA7348, 0xBF781203C2EC0000,
-  0x3FF008040614B195, 0xBF60040979240000,
-  0x3FEFE01FF726FA1A, 0x3F6FEFF384900000,
-  0x3FEFA11CC261EA74, 0x3F87DC41353D0000,
-  0x3FEF6310B081992E, 0x3F93CEA3C4C28000,
-  0x3FEF25F63CEEADCD, 0x3F9B9FC114890000,
-  0x3FEEE9C8039113E7, 0x3FA1B0D8CE110000,
-  0x3FEEAE8078CBB1AB, 0x3FA58A5BD001C000,
-  0x3FEE741AA29D0C9B, 0x3FA95C8340D88000,
-  0x3FEE3A91830A99B5, 0x3FAD276AEF578000,
-  0x3FEE01E009609A56, 0x3FB07598E598C000,
-  0x3FEDCA01E577BB98, 0x3FB253F5E30D2000,
-  0x3FED92F20B7C9103, 0x3FB42EDD8B380000,
-  0x3FED5CAC66FB5CCE, 0x3FB606598757C000,
-  0x3FED272CAA5EDE9D, 0x3FB7DA76356A0000,
-  0x3FECF26E3E6B2CCD, 0x3FB9AB434E1C6000,
-  0x3FECBE6DA2A77902, 0x3FBB78C7BB0D6000,
-  0x3FEC8B266D37086D, 0x3FBD431332E72000,
-  0x3FEC5894BD5D5804, 0x3FBF0A3171DE6000,
-  0x3FEC26B533BB9F8C, 0x3FC067152B914000,
-  0x3FEBF583EEECE73F, 0x3FC147858292B000,
-  0x3FEBC4FD75DB96C1, 0x3FC2266ECDCA3000,
-  0x3FEB951E0C864A28, 0x3FC303D7A6C55000,
-  0x3FEB65E2C5EF3E2C, 0x3FC3DFC33C331000,
-  0x3FEB374867C9888B, 0x3FC4BA366B7A8000,
-  0x3FEB094B211D304A, 0x3FC5933928D1F000,
-  0x3FEADBE885F2EF7E, 0x3FC66ACD2418F000,
-  0x3FEAAF1D31603DA2, 0x3FC740F8EC669000,
-  0x3FEA82E63FD358A7, 0x3FC815C0F51AF000,
-  0x3FEA5740EF09738B, 0x3FC8E92954F68000,
-  0x3FEA2C2A90AB4B27, 0x3FC9BB3602F84000,
-  0x3FEA01A01393F2D1, 0x3FCA8BED1C2C0000,
-  0x3FE9D79F24DB3C1B, 0x3FCB5B515C01D000,
-  0x3FE9AE2505C7B190, 0x3FCC2967CCBCC000,
-  0x3FE9852EF297CE2F, 0x3FCCF635D5486000,
-  0x3FE95CBAEEA44B75, 0x3FCDC1BD3446C000,
-  0x3FE934C69DE74838, 0x3FCE8C01B8CFE000,
-  0x3FE90D4F2F6752E6, 0x3FCF5509C0179000,
-  0x3FE8E6528EFFD79D, 0x3FD00E6C121FB800,
-  0x3FE8BFCE9FCC007C, 0x3FD071B80E93D000,
-  0x3FE899C0DABEC30E, 0x3FD0D46B9E867000,
-  0x3FE87427AA2317FB, 0x3FD13687334BD000,
-  0x3FE84F00ACB39A08, 0x3FD1980D67234800,
-  0x3FE82A49E8653E55, 0x3FD1F8FFE0CC8000,
-  0x3FE8060195F40260, 0x3FD2595FD7636800,
-  0x3FE7E22563E0A329, 0x3FD2B9300914A800,
-  0x3FE7BEB377DCB5AD, 0x3FD3187210436000,
-  0x3FE79BAA679725C2, 0x3FD377266DEC1800,
-  0x3FE77907F2170657, 0x3FD3D54FFBAF3000,
-  0x3FE756CADBD6130C, 0x3FD432EEE32FE000
+  0x3ff734f0c3e0de9f, 0xbfd7cc7f79e69000, 0x3ff713786a2ce91f,
+  0xbfd76feec20d0000, 0x3ff6f26008fab5a0, 0xbfd713e31351e000,
+  0x3ff6d1a61f138c7d, 0xbfd6b85b38287800, 0x3ff6b1490bc5b4d1,
+  0xbfd65d5590807800, 0x3ff69147332f0cba, 0xbfd602d076180000,
+  0x3ff6719f18224223, 0xbfd5a8ca86909000, 0x3ff6524f99a51ed9,
+  0xbfd54f4356035000, 0x3ff63356aa8f24c4, 0xbfd4f637c36b4000,
+  0x3ff614b36b9ddc14, 0xbfd49da7fda85000, 0x3ff5f66452c65c4c,
+  0xbfd445923989a800, 0x3ff5d867b5912c4f, 0xbfd3edf439b0b800,
+  0x3ff5babccb5b90de, 0xbfd396ce448f7000, 0x3ff59d61f2d91a78,
+  0xbfd3401e17bda000, 0x3ff5805612465687, 0xbfd2e9e2ef468000,
+  0x3ff56397cee76bd3, 0xbfd2941b3830e000, 0x3ff54725e2a77f93,
+  0xbfd23ec58cda8800, 0x3ff52aff42064583, 0xbfd1e9e129279000,
+  0x3ff50f22dbb2bddf, 0xbfd1956d2b48f800, 0x3ff4f38f4734ded7,
+  0xbfd141679ab9f800, 0x3ff4d843cfde2840, 0xbfd0edd094ef9800,
+  0x3ff4bd3ec078a3c8, 0xbfd09aa518db1000, 0x3ff4a27fc3e0258a,
+  0xbfd047e65263b800, 0x3ff4880524d48434, 0xbfcfeb224586f000,
+  0x3ff46dce1b192d0b, 0xbfcf474a7517b000, 0x3ff453d9d3391854,
+  0xbfcea4443d103000, 0x3ff43a2744b4845a, 0xbfce020d44e9b000,
+  0x3ff420b54115f8fb, 0xbfcd60a22977f000, 0x3ff40782da3ef4b1,
+  0xbfccc00104959000, 0x3ff3ee8f5d57fe8f, 0xbfcc202956891000,
+  0x3ff3d5d9a00b4ce9, 0xbfcb81178d811000, 0x3ff3bd60c010c12b,
+  0xbfcae2c9ccd3d000, 0x3ff3a5242b75dab8, 0xbfca45402e129000,
+  0x3ff38d22cd9fd002, 0xbfc9a877681df000, 0x3ff3755bc5847a1c,
+  0xbfc90c6d69483000, 0x3ff35dce49ad36e2, 0xbfc87120a645c000,
+  0x3ff34679984dd440, 0xbfc7d68fb4143000, 0x3ff32f5cceffcb24,
+  0xbfc73cb83c627000, 0x3ff3187775a10d49, 0xbfc6a39a9b376000,
+  0x3ff301c8373e3990, 0xbfc60b3154b7a000, 0x3ff2eb4ebb95f841,
+  0xbfc5737d76243000, 0x3ff2d50a0219a9d1, 0xbfc4dc7b8fc23000,
+  0x3ff2bef9a8b7fd2a, 0xbfc4462c51d20000, 0x3ff2a91c7a0c1bab,
+  0xbfc3b08abc830000, 0x3ff293726014b530, 0xbfc31b996b490000,
+  0x3ff27dfa5757a1f5, 0xbfc2875490a44000, 0x3ff268b39b1d3bbf,
+  0xbfc1f3b9f879a000, 0x3ff2539d838ff5bd, 0xbfc160c8252ca000,
+  0x3ff23eb7aac9083b, 0xbfc0ce7f57f72000, 0x3ff22a012ba940b6,
+  0xbfc03cdc49fea000, 0x3ff2157996cc4132, 0xbfbf57bdbc4b8000,
+  0x3ff201201dd2fc9b, 0xbfbe370896404000, 0x3ff1ecf4494d480b,
+  0xbfbd17983ef94000, 0x3ff1d8f5528f6569, 0xbfbbf9674ed8a000,
+  0x3ff1c52311577e7c, 0xbfbadc79202f6000, 0x3ff1b17c74cb26e9,
+  0xbfb9c0c3e7288000, 0x3ff19e010c2c1ab6, 0xbfb8a646b372c000,
+  0x3ff18ab07bb670bd, 0xbfb78d01b3ac0000, 0x3ff1778a25efbcb6,
+  0xbfb674f145380000, 0x3ff1648d354c31da, 0xbfb55e0e6d878000,
+  0x3ff151b990275fdd, 0xbfb4485cdea1e000, 0x3ff13f0ea432d24c,
+  0xbfb333d94d6aa000, 0x3ff12c8b7210f9da, 0xbfb22079f8c56000,
+  0x3ff11a3028ecb531, 0xbfb10e4698622000, 0x3ff107fbda8434af,
+  0xbfaffa6c6ad20000, 0x3ff0f5ee0f4e6bb3, 0xbfadda8d4a774000,
+  0x3ff0e4065d2a9fce, 0xbfabbcece4850000, 0x3ff0d244632ca521,
+  0xbfa9a1894012c000, 0x3ff0c0a77ce2981a, 0xbfa788583302c000,
+  0x3ff0af2f83c636d1, 0xbfa5715e67d68000, 0x3ff09ddb98a01339,
+  0xbfa35c8a49658000, 0x3ff08cabaf52e7df, 0xbfa149e364154000,
+  0x3ff07b9f2f4e28fb, 0xbf9e72c082eb8000, 0x3ff06ab58c358f19,
+  0xbf9a55f152528000, 0x3ff059eea5ecf92c, 0xbf963d62cf818000,
+  0x3ff04949cdd12c90, 0xbf9228fb8caa0000, 0x3ff038c6c6f0ada9,
+  0xbf8c317b20f90000, 0x3ff02865137932a9, 0xbf8419355daa0000,
+  0x3ff0182427ea7348, 0xbf781203c2ec0000, 0x3ff008040614b195,
+  0xbf60040979240000, 0x3fefe01ff726fa1a, 0x3f6feff384900000,
+  0x3fefa11cc261ea74, 0x3f87dc41353d0000, 0x3fef6310b081992e,
+  0x3f93cea3c4c28000, 0x3fef25f63ceeadcd, 0x3f9b9fc114890000,
+  0x3feee9c8039113e7, 0x3fa1b0d8ce110000, 0x3feeae8078cbb1ab,
+  0x3fa58a5bd001c000, 0x3fee741aa29d0c9b, 0x3fa95c8340d88000,
+  0x3fee3a91830a99b5, 0x3fad276aef578000, 0x3fee01e009609a56,
+  0x3fb07598e598c000, 0x3fedca01e577bb98, 0x3fb253f5e30d2000,
+  0x3fed92f20b7c9103, 0x3fb42edd8b380000, 0x3fed5cac66fb5cce,
+  0x3fb606598757c000, 0x3fed272caa5ede9d, 0x3fb7da76356a0000,
+  0x3fecf26e3e6b2ccd, 0x3fb9ab434e1c6000, 0x3fecbe6da2a77902,
+  0x3fbb78c7bb0d6000, 0x3fec8b266d37086d, 0x3fbd431332e72000,
+  0x3fec5894bd5d5804, 0x3fbf0a3171de6000, 0x3fec26b533bb9f8c,
+  0x3fc067152b914000, 0x3febf583eeece73f, 0x3fc147858292b000,
+  0x3febc4fd75db96c1, 0x3fc2266ecdca3000, 0x3feb951e0c864a28,
+  0x3fc303d7a6c55000, 0x3feb65e2c5ef3e2c, 0x3fc3dfc33c331000,
+  0x3feb374867c9888b, 0x3fc4ba366b7a8000, 0x3feb094b211d304a,
+  0x3fc5933928d1f000, 0x3feadbe885f2ef7e, 0x3fc66acd2418f000,
+  0x3feaaf1d31603da2, 0x3fc740f8ec669000, 0x3fea82e63fd358a7,
+  0x3fc815c0f51af000, 0x3fea5740ef09738b, 0x3fc8e92954f68000,
+  0x3fea2c2a90ab4b27, 0x3fc9bb3602f84000, 0x3fea01a01393f2d1,
+  0x3fca8bed1c2c0000, 0x3fe9d79f24db3c1b, 0x3fcb5b515c01d000,
+  0x3fe9ae2505c7b190, 0x3fcc2967ccbcc000, 0x3fe9852ef297ce2f,
+  0x3fccf635d5486000, 0x3fe95cbaeea44b75, 0x3fcdc1bd3446c000,
+  0x3fe934c69de74838, 0x3fce8c01b8cfe000, 0x3fe90d4f2f6752e6,
+  0x3fcf5509c0179000, 0x3fe8e6528effd79d, 0x3fd00e6c121fb800,
+  0x3fe8bfce9fcc007c, 0x3fd071b80e93d000, 0x3fe899c0dabec30e,
+  0x3fd0d46b9e867000, 0x3fe87427aa2317fb, 0x3fd13687334bd000,
+  0x3fe84f00acb39a08, 0x3fd1980d67234800, 0x3fe82a49e8653e55,
+  0x3fd1f8ffe0cc8000, 0x3fe8060195f40260, 0x3fd2595fd7636800,
+  0x3fe7e22563e0a329, 0x3fd2b9300914a800, 0x3fe7beb377dcb5ad,
+  0x3fd3187210436000, 0x3fe79baa679725c2, 0x3fd377266dec1800,
+  0x3fe77907f2170657, 0x3fd3d54ffbaf3000, 0x3fe756cadbd6130c,
+  0x3fd432eee32fe000,
 ]);
 
 // @ts-ignore: decorator
 @lazy @inline const LOG_DATA_TAB2 = memory.data<u64>([
   //      chi       ,         clo
-  0x3FE61000014FB66B, 0x3C7E026C91425B3C,
-  0x3FE63000034DB495, 0x3C8DBFEA48005D41,
-  0x3FE650000D94D478, 0x3C8E7FA786D6A5B7,
-  0x3FE67000074E6FAD, 0x3C61FCEA6B54254C,
-  0x3FE68FFFFEDF0FAE, 0xBC7C7E274C590EFD,
-  0x3FE6B0000763C5BC, 0xBC8AC16848DCDA01,
-  0x3FE6D0001E5CC1F6, 0x3C833F1C9D499311,
-  0x3FE6EFFFEB05F63E, 0xBC7E80041AE22D53,
-  0x3FE710000E869780, 0x3C7BFF6671097952,
-  0x3FE72FFFFC67E912, 0x3C8C00E226BD8724,
-  0x3FE74FFFDF81116A, 0xBC6E02916EF101D2,
-  0x3FE770000F679C90, 0xBC67FC71CD549C74,
-  0x3FE78FFFFA7EC835, 0x3C81BEC19EF50483,
-  0x3FE7AFFFFE20C2E6, 0xBC707E1729CC6465,
-  0x3FE7CFFFED3FC900, 0xBC808072087B8B1C,
-  0x3FE7EFFFE9261A76, 0x3C8DC0286D9DF9AE,
-  0x3FE81000049CA3E8, 0x3C897FD251E54C33,
-  0x3FE8300017932C8F, 0xBC8AFEE9B630F381,
-  0x3FE850000633739C, 0x3C89BFBF6B6535BC,
-  0x3FE87000204289C6, 0xBC8BBF65F3117B75,
-  0x3FE88FFFEBF57904, 0xBC89006EA23DCB57,
-  0x3FE8B00022BC04DF, 0xBC7D00DF38E04B0A,
-  0x3FE8CFFFE50C1B8A, 0xBC88007146FF9F05,
-  0x3FE8EFFFFC918E43, 0x3C83817BD07A7038,
-  0x3FE910001EFA5FC7, 0x3C893E9176DFB403,
-  0x3FE9300013467BB9, 0x3C7F804E4B980276,
-  0x3FE94FFFE6EE076F, 0xBC8F7EF0D9FF622E,
-  0x3FE96FFFDE3C12D1, 0xBC7082AA962638BA,
-  0x3FE98FFFF4458A0D, 0xBC87801B9164A8EF,
-  0x3FE9AFFFDD982E3E, 0xBC8740E08A5A9337,
-  0x3FE9CFFFED49FB66, 0x3C3FCE08C19BE000,
-  0x3FE9F00020F19C51, 0xBC8A3FAA27885B0A,
-  0x3FEA10001145B006, 0x3C74FF489958DA56,
-  0x3FEA300007BBF6FA, 0x3C8CBEAB8A2B6D18,
-  0x3FEA500010971D79, 0x3C88FECADD787930,
-  0x3FEA70001DF52E48, 0xBC8F41763DD8ABDB,
-  0x3FEA90001C593352, 0xBC8EBF0284C27612,
-  0x3FEAB0002A4F3E4B, 0xBC69FD043CFF3F5F,
-  0x3FEACFFFD7AE1ED1, 0xBC823EE7129070B4,
-  0x3FEAEFFFEE510478, 0x3C6A063EE00EDEA3,
-  0x3FEB0FFFDB650D5B, 0x3C5A06C8381F0AB9,
-  0x3FEB2FFFFEAACA57, 0xBC79011E74233C1D,
-  0x3FEB4FFFD995BADC, 0xBC79FF1068862A9F,
-  0x3FEB7000249E659C, 0x3C8AFF45D0864F3E,
-  0x3FEB8FFFF9871640, 0x3C7CFE7796C2C3F9,
-  0x3FEBAFFFD204CB4F, 0xBC63FF27EEF22BC4,
-  0x3FEBCFFFD2415C45, 0xBC6CFFB7EE3BEA21,
-  0x3FEBEFFFF86309DF, 0xBC814103972E0B5C,
-  0x3FEC0FFFE1B57653, 0x3C8BC16494B76A19,
-  0x3FEC2FFFF1FA57E3, 0xBC64FEEF8D30C6ED,
-  0x3FEC4FFFDCBFE424, 0xBC843F68BCEC4775,
-  0x3FEC6FFFED54B9F7, 0x3C847EA3F053E0EC,
-  0x3FEC8FFFEB998FD5, 0x3C7383068DF992F1,
-  0x3FECB0002125219A, 0xBC68FD8E64180E04,
-  0x3FECCFFFDD94469C, 0x3C8E7EBE1CC7EA72,
-  0x3FECEFFFEAFDC476, 0x3C8EBE39AD9F88FE,
-  0x3FED1000169AF82B, 0x3C757D91A8B95A71,
-  0x3FED30000D0FF71D, 0x3C89C1906970C7DA,
-  0x3FED4FFFEA790FC4, 0xBC580E37C558FE0C,
-  0x3FED70002EDC87E5, 0xBC7F80D64DC10F44,
-  0x3FED900021DC82AA, 0xBC747C8F94FD5C5C,
-  0x3FEDAFFFD86B0283, 0x3C8C7F1DC521617E,
-  0x3FEDD000296C4739, 0x3C88019EB2FFB153,
-  0x3FEDEFFFE54490F5, 0x3C6E00D2C652CC89,
-  0x3FEE0FFFCDABF694, 0xBC7F8340202D69D2,
-  0x3FEE2FFFDB52C8DD, 0x3C7B00C1CA1B0864,
-  0x3FEE4FFFF24216EF, 0x3C72FFA8B094AB51,
-  0x3FEE6FFFE88A5E11, 0xBC57F673B1EFBE59,
-  0x3FEE9000119EFF0D, 0xBC84808D5E0BC801,
-  0x3FEEAFFFDFA51744, 0x3C780006D54320B5,
-  0x3FEED0001A127FA1, 0xBC5002F860565C92,
-  0x3FEEF00007BABCC4, 0xBC8540445D35E611,
-  0x3FEF0FFFF57A8D02, 0xBC4FFB3139EF9105,
-  0x3FEF30001EE58AC7, 0x3C8A81ACF2731155,
-  0x3FEF4FFFF5823494, 0x3C8A3F41D4D7C743,
-  0x3FEF6FFFFCA94C6B, 0xBC6202F41C987875,
-  0x3FEF8FFFE1F9C441, 0x3C777DD1F477E74B,
-  0x3FEFAFFFD2E0E37E, 0xBC6F01199A7CA331,
-  0x3FEFD0001C77E49E, 0x3C7181EE4BCEACB1,
-  0x3FEFEFFFF7E0C331, 0xBC6E05370170875A,
-  0x3FF00FFFF465606E, 0xBC8A7EAD491C0ADA,
-  0x3FF02FFFF3867A58, 0xBC977F69C3FCB2E0,
-  0x3FF04FFFFDFC0D17, 0x3C97BFFE34CB945B,
-  0x3FF0700003CD4D82, 0x3C820083C0E456CB,
-  0x3FF08FFFF9F2CBE8, 0xBC6DFFDFBE37751A,
-  0x3FF0B000010CDA65, 0xBC913F7FAEE626EB,
-  0x3FF0D00001A4D338, 0x3C807DFA79489FF7,
-  0x3FF0EFFFFADAFDFD, 0xBC77040570D66BC0,
-  0x3FF110000BBAFD96, 0x3C8E80D4846D0B62,
-  0x3FF12FFFFAE5F45D, 0x3C9DBFFA64FD36EF,
-  0x3FF150000DD59AD9, 0x3C9A0077701250AE,
-  0x3FF170000F21559A, 0x3C8DFDF9E2E3DEEE,
-  0x3FF18FFFFC275426, 0x3C910030DC3B7273,
-  0x3FF1B000123D3C59, 0x3C997F7980030188,
-  0x3FF1CFFFF8299EB7, 0xBC65F932AB9F8C67,
-  0x3FF1EFFFF48AD400, 0x3C937FBF9DA75BEB,
-  0x3FF210000C8B86A4, 0x3C9F806B91FD5B22,
-  0x3FF2300003854303, 0x3C93FFC2EB9FBF33,
-  0x3FF24FFFFFBCF684, 0x3C7601E77E2E2E72,
-  0x3FF26FFFF52921D9, 0x3C7FFCBB767F0C61,
-  0x3FF2900014933A3C, 0xBC7202CA3C02412B,
-  0x3FF2B00014556313, 0xBC92808233F21F02,
-  0x3FF2CFFFEBFE523B, 0xBC88FF7E384FDCF2,
-  0x3FF2F0000BB8AD96, 0xBC85FF51503041C5,
-  0x3FF30FFFFB7AE2AF, 0xBC810071885E289D,
-  0x3FF32FFFFEAC5F7F, 0xBC91FF5D3FB7B715,
-  0x3FF350000CA66756, 0x3C957F82228B82BD,
-  0x3FF3700011FBF721, 0x3C8000BAC40DD5CC,
-  0x3FF38FFFF9592FB9, 0xBC943F9D2DB2A751,
-  0x3FF3B00004DDD242, 0x3C857F6B707638E1,
-  0x3FF3CFFFF5B2C957, 0x3C7A023A10BF1231,
-  0x3FF3EFFFEAB0B418, 0x3C987F6D66B152B0,
-  0x3FF410001532AFF4, 0x3C67F8375F198524,
-  0x3FF4300017478B29, 0x3C8301E672DC5143,
-  0x3FF44FFFE795B463, 0x3C89FF69B8B2895A,
-  0x3FF46FFFE80475E0, 0xBC95C0B19BC2F254,
-  0x3FF48FFFEF6FC1E7, 0x3C9B4009F23A2A72,
-  0x3FF4AFFFE5BEA704, 0xBC94FFB7BF0D7D45,
-  0x3FF4D000171027DE, 0xBC99C06471DC6A3D,
-  0x3FF4F0000FF03EE2, 0x3C977F890B85531C,
-  0x3FF5100012DC4BD1, 0x3C6004657166A436,
-  0x3FF530001605277A, 0xBC96BFCECE233209,
-  0x3FF54FFFECDB704C, 0xBC8902720505A1D7,
-  0x3FF56FFFEF5F54A9, 0x3C9BBFE60EC96412,
-  0x3FF5900017E61012, 0x3C887EC581AFEF90,
-  0x3FF5B00003C93E92, 0xBC9F41080ABF0CC0,
-  0x3FF5D0001D4919BC, 0xBC98812AFB254729,
-  0x3FF5EFFFE7B87A89, 0xBC947EB780ED6904
+  0x3fe61000014fb66b, 0x3c7e026c91425b3c, 0x3fe63000034db495,
+  0x3c8dbfea48005d41, 0x3fe650000d94d478, 0x3c8e7fa786d6a5b7,
+  0x3fe67000074e6fad, 0x3c61fcea6b54254c, 0x3fe68ffffedf0fae,
+  0xbc7c7e274c590efd, 0x3fe6b0000763c5bc, 0xbc8ac16848dcda01,
+  0x3fe6d0001e5cc1f6, 0x3c833f1c9d499311, 0x3fe6efffeb05f63e,
+  0xbc7e80041ae22d53, 0x3fe710000e869780, 0x3c7bff6671097952,
+  0x3fe72ffffc67e912, 0x3c8c00e226bd8724, 0x3fe74fffdf81116a,
+  0xbc6e02916ef101d2, 0x3fe770000f679c90, 0xbc67fc71cd549c74,
+  0x3fe78ffffa7ec835, 0x3c81bec19ef50483, 0x3fe7affffe20c2e6,
+  0xbc707e1729cc6465, 0x3fe7cfffed3fc900, 0xbc808072087b8b1c,
+  0x3fe7efffe9261a76, 0x3c8dc0286d9df9ae, 0x3fe81000049ca3e8,
+  0x3c897fd251e54c33, 0x3fe8300017932c8f, 0xbc8afee9b630f381,
+  0x3fe850000633739c, 0x3c89bfbf6b6535bc, 0x3fe87000204289c6,
+  0xbc8bbf65f3117b75, 0x3fe88fffebf57904, 0xbc89006ea23dcb57,
+  0x3fe8b00022bc04df, 0xbc7d00df38e04b0a, 0x3fe8cfffe50c1b8a,
+  0xbc88007146ff9f05, 0x3fe8effffc918e43, 0x3c83817bd07a7038,
+  0x3fe910001efa5fc7, 0x3c893e9176dfb403, 0x3fe9300013467bb9,
+  0x3c7f804e4b980276, 0x3fe94fffe6ee076f, 0xbc8f7ef0d9ff622e,
+  0x3fe96fffde3c12d1, 0xbc7082aa962638ba, 0x3fe98ffff4458a0d,
+  0xbc87801b9164a8ef, 0x3fe9afffdd982e3e, 0xbc8740e08a5a9337,
+  0x3fe9cfffed49fb66, 0x3c3fce08c19be000, 0x3fe9f00020f19c51,
+  0xbc8a3faa27885b0a, 0x3fea10001145b006, 0x3c74ff489958da56,
+  0x3fea300007bbf6fa, 0x3c8cbeab8a2b6d18, 0x3fea500010971d79,
+  0x3c88fecadd787930, 0x3fea70001df52e48, 0xbc8f41763dd8abdb,
+  0x3fea90001c593352, 0xbc8ebf0284c27612, 0x3feab0002a4f3e4b,
+  0xbc69fd043cff3f5f, 0x3feacfffd7ae1ed1, 0xbc823ee7129070b4,
+  0x3feaefffee510478, 0x3c6a063ee00edea3, 0x3feb0fffdb650d5b,
+  0x3c5a06c8381f0ab9, 0x3feb2ffffeaaca57, 0xbc79011e74233c1d,
+  0x3feb4fffd995badc, 0xbc79ff1068862a9f, 0x3feb7000249e659c,
+  0x3c8aff45d0864f3e, 0x3feb8ffff9871640, 0x3c7cfe7796c2c3f9,
+  0x3febafffd204cb4f, 0xbc63ff27eef22bc4, 0x3febcfffd2415c45,
+  0xbc6cffb7ee3bea21, 0x3febeffff86309df, 0xbc814103972e0b5c,
+  0x3fec0fffe1b57653, 0x3c8bc16494b76a19, 0x3fec2ffff1fa57e3,
+  0xbc64feef8d30c6ed, 0x3fec4fffdcbfe424, 0xbc843f68bcec4775,
+  0x3fec6fffed54b9f7, 0x3c847ea3f053e0ec, 0x3fec8fffeb998fd5,
+  0x3c7383068df992f1, 0x3fecb0002125219a, 0xbc68fd8e64180e04,
+  0x3feccfffdd94469c, 0x3c8e7ebe1cc7ea72, 0x3fecefffeafdc476,
+  0x3c8ebe39ad9f88fe, 0x3fed1000169af82b, 0x3c757d91a8b95a71,
+  0x3fed30000d0ff71d, 0x3c89c1906970c7da, 0x3fed4fffea790fc4,
+  0xbc580e37c558fe0c, 0x3fed70002edc87e5, 0xbc7f80d64dc10f44,
+  0x3fed900021dc82aa, 0xbc747c8f94fd5c5c, 0x3fedafffd86b0283,
+  0x3c8c7f1dc521617e, 0x3fedd000296c4739, 0x3c88019eb2ffb153,
+  0x3fedefffe54490f5, 0x3c6e00d2c652cc89, 0x3fee0fffcdabf694,
+  0xbc7f8340202d69d2, 0x3fee2fffdb52c8dd, 0x3c7b00c1ca1b0864,
+  0x3fee4ffff24216ef, 0x3c72ffa8b094ab51, 0x3fee6fffe88a5e11,
+  0xbc57f673b1efbe59, 0x3fee9000119eff0d, 0xbc84808d5e0bc801,
+  0x3feeafffdfa51744, 0x3c780006d54320b5, 0x3feed0001a127fa1,
+  0xbc5002f860565c92, 0x3feef00007babcc4, 0xbc8540445d35e611,
+  0x3fef0ffff57a8d02, 0xbc4ffb3139ef9105, 0x3fef30001ee58ac7,
+  0x3c8a81acf2731155, 0x3fef4ffff5823494, 0x3c8a3f41d4d7c743,
+  0x3fef6ffffca94c6b, 0xbc6202f41c987875, 0x3fef8fffe1f9c441,
+  0x3c777dd1f477e74b, 0x3fefafffd2e0e37e, 0xbc6f01199a7ca331,
+  0x3fefd0001c77e49e, 0x3c7181ee4bceacb1, 0x3fefeffff7e0c331,
+  0xbc6e05370170875a, 0x3ff00ffff465606e, 0xbc8a7ead491c0ada,
+  0x3ff02ffff3867a58, 0xbc977f69c3fcb2e0, 0x3ff04ffffdfc0d17,
+  0x3c97bffe34cb945b, 0x3ff0700003cd4d82, 0x3c820083c0e456cb,
+  0x3ff08ffff9f2cbe8, 0xbc6dffdfbe37751a, 0x3ff0b000010cda65,
+  0xbc913f7faee626eb, 0x3ff0d00001a4d338, 0x3c807dfa79489ff7,
+  0x3ff0effffadafdfd, 0xbc77040570d66bc0, 0x3ff110000bbafd96,
+  0x3c8e80d4846d0b62, 0x3ff12ffffae5f45d, 0x3c9dbffa64fd36ef,
+  0x3ff150000dd59ad9, 0x3c9a0077701250ae, 0x3ff170000f21559a,
+  0x3c8dfdf9e2e3deee, 0x3ff18ffffc275426, 0x3c910030dc3b7273,
+  0x3ff1b000123d3c59, 0x3c997f7980030188, 0x3ff1cffff8299eb7,
+  0xbc65f932ab9f8c67, 0x3ff1effff48ad400, 0x3c937fbf9da75beb,
+  0x3ff210000c8b86a4, 0x3c9f806b91fd5b22, 0x3ff2300003854303,
+  0x3c93ffc2eb9fbf33, 0x3ff24fffffbcf684, 0x3c7601e77e2e2e72,
+  0x3ff26ffff52921d9, 0x3c7ffcbb767f0c61, 0x3ff2900014933a3c,
+  0xbc7202ca3c02412b, 0x3ff2b00014556313, 0xbc92808233f21f02,
+  0x3ff2cfffebfe523b, 0xbc88ff7e384fdcf2, 0x3ff2f0000bb8ad96,
+  0xbc85ff51503041c5, 0x3ff30ffffb7ae2af, 0xbc810071885e289d,
+  0x3ff32ffffeac5f7f, 0xbc91ff5d3fb7b715, 0x3ff350000ca66756,
+  0x3c957f82228b82bd, 0x3ff3700011fbf721, 0x3c8000bac40dd5cc,
+  0x3ff38ffff9592fb9, 0xbc943f9d2db2a751, 0x3ff3b00004ddd242,
+  0x3c857f6b707638e1, 0x3ff3cffff5b2c957, 0x3c7a023a10bf1231,
+  0x3ff3efffeab0b418, 0x3c987f6d66b152b0, 0x3ff410001532aff4,
+  0x3c67f8375f198524, 0x3ff4300017478b29, 0x3c8301e672dc5143,
+  0x3ff44fffe795b463, 0x3c89ff69b8b2895a, 0x3ff46fffe80475e0,
+  0xbc95c0b19bc2f254, 0x3ff48fffef6fc1e7, 0x3c9b4009f23a2a72,
+  0x3ff4afffe5bea704, 0xbc94ffb7bf0d7d45, 0x3ff4d000171027de,
+  0xbc99c06471dc6a3d, 0x3ff4f0000ff03ee2, 0x3c977f890b85531c,
+  0x3ff5100012dc4bd1, 0x3c6004657166a436, 0x3ff530001605277a,
+  0xbc96bfcece233209, 0x3ff54fffecdb704c, 0xbc8902720505a1d7,
+  0x3ff56fffef5f54a9, 0x3c9bbfe60ec96412, 0x3ff5900017e61012,
+  0x3c887ec581afef90, 0x3ff5b00003c93e92, 0xbc9f41080abf0cc0,
+  0x3ff5d0001d4919bc, 0xbc98812afb254729, 0x3ff5efffe7b87a89,
+  0xbc947eb780ed6904,
 ]);
 
 // @ts-ignore: decorator
@@ -1388,47 +1280,45 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 export function log_lut(x: f64): f64 {
   const N_MASK = (1 << LOG_TABLE_BITS) - 1;
 
-  const
-    B0  = reinterpret<f64>(0xBFE0000000000000), // -0x1p-1
-    B1  = reinterpret<f64>(0x3FD5555555555577), //  0x1.5555555555577p-2
-    B2  = reinterpret<f64>(0xBFCFFFFFFFFFFDCB), // -0x1.ffffffffffdcbp-3
-    B3  = reinterpret<f64>(0x3FC999999995DD0C), //  0x1.999999995dd0cp-3
-    B4  = reinterpret<f64>(0xBFC55555556745A7), // -0x1.55555556745a7p-3
-    B5  = reinterpret<f64>(0x3FC24924A344DE30), //  0x1.24924a344de3p-3
-    B6  = reinterpret<f64>(0xBFBFFFFFA4423D65), // -0x1.fffffa4423d65p-4
-    B7  = reinterpret<f64>(0x3FBC7184282AD6CA), //  0x1.c7184282ad6cap-4
-    B8  = reinterpret<f64>(0xBFB999EB43B068FF), // -0x1.999eb43b068ffp-4
-    B9  = reinterpret<f64>(0x3FB78182F7AFD085), //  0x1.78182f7afd085p-4
-    B10 = reinterpret<f64>(0xBFB5521375D145CD); // -0x1.5521375d145cdp-4
+  const B0 = reinterpret<f64>(0xbfe0000000000000), // -0x1p-1
+    B1 = reinterpret<f64>(0x3fd5555555555577), //  0x1.5555555555577p-2
+    B2 = reinterpret<f64>(0xbfcffffffffffdcb), // -0x1.ffffffffffdcbp-3
+    B3 = reinterpret<f64>(0x3fc999999995dd0c), //  0x1.999999995dd0cp-3
+    B4 = reinterpret<f64>(0xbfc55555556745a7), // -0x1.55555556745a7p-3
+    B5 = reinterpret<f64>(0x3fc24924a344de30), //  0x1.24924a344de3p-3
+    B6 = reinterpret<f64>(0xbfbfffffa4423d65), // -0x1.fffffa4423d65p-4
+    B7 = reinterpret<f64>(0x3fbc7184282ad6ca), //  0x1.c7184282ad6cap-4
+    B8 = reinterpret<f64>(0xbfb999eb43b068ff), // -0x1.999eb43b068ffp-4
+    B9 = reinterpret<f64>(0x3fb78182f7afd085), //  0x1.78182f7afd085p-4
+    B10 = reinterpret<f64>(0xbfb5521375d145cd); // -0x1.5521375d145cdp-4
 
-  const
-    A0 = reinterpret<f64>(0xBFE0000000000001),  // -0x1.0000000000001p-1
-    A1 = reinterpret<f64>(0x3FD555555551305B),  //  0x1.555555551305bp-2
-    A2 = reinterpret<f64>(0xBFCFFFFFFFEB4590),  // -0x1.fffffffeb459p-3
-    A3 = reinterpret<f64>(0x3FC999B324F10111),  //  0x1.999b324f10111p-3
-    A4 = reinterpret<f64>(0xBFC55575E506C89F);  // -0x1.55575e506c89fp-3
+  const A0 = reinterpret<f64>(0xbfe0000000000001), // -0x1.0000000000001p-1
+    A1 = reinterpret<f64>(0x3fd555555551305b), //  0x1.555555551305bp-2
+    A2 = reinterpret<f64>(0xbfcfffffffeb4590), // -0x1.fffffffeb459p-3
+    A3 = reinterpret<f64>(0x3fc999b324f10111), //  0x1.999b324f10111p-3
+    A4 = reinterpret<f64>(0xbfc55575e506c89f); // -0x1.55575e506c89fp-3
 
-  const
-    LO: u64 = 0x3FEE000000000000,
-    HI: u64 = 0x3FF1090000000000;
+  const LO: u64 = 0x3fee000000000000,
+    HI: u64 = 0x3ff1090000000000;
 
-  const
-    Ln2hi  = reinterpret<f64>(0x3FE62E42FEFA3800), // 0x1.62e42fefa3800p-1
-    Ln2lo  = reinterpret<f64>(0x3D2EF35793C76730), // 0x1.ef35793c76730p-45
-    Ox1p27 = reinterpret<f64>(0x41A0000000000000), // 0x1p27
+  const Ln2hi = reinterpret<f64>(0x3fe62e42fefa3800), // 0x1.62e42fefa3800p-1
+    Ln2lo = reinterpret<f64>(0x3d2ef35793c76730), // 0x1.ef35793c76730p-45
+    Ox1p27 = reinterpret<f64>(0x41a0000000000000), // 0x1p27
     Ox1p52 = reinterpret<f64>(0x4330000000000000); // 0x1p52
 
   let ix = reinterpret<u64>(x);
   if (ix - LO < HI - LO) {
-    let r  = x - 1.0;
+    let r = x - 1.0;
     let r2 = r * r;
     let r3 = r2 * r;
     let y =
-      r3 * (B1 + r * B2 + r2 * B3 +
-      r3 * (B4 + r * B5 + r2 * B6 +
-      r3 * (B7 + r * B8 + r2 * B9 + r3 * B10)));
+      r3 *
+      (B1 +
+        r * B2 +
+        r2 * B3 +
+        r3 * (B4 + r * B5 + r2 * B6 + r3 * (B7 + r * B8 + r2 * B9 + r3 * B10)));
     // Worst-case error is around 0.507 ULP
-    let w   = r * Ox1p27;
+    let w = r * Ox1p27;
     let rhi = r + w - w;
     let rlo = r - rhi;
     w = rhi * rhi * B0; // B[0] == -0.5
@@ -1438,11 +1328,11 @@ export function log_lut(x: f64): f64 {
     return y + lo + hi;
   }
   let top = u32(ix >> 48);
-  if (top - 0x0010 >= 0x7FF0 - 0x0010) {
+  if (top - 0x0010 >= 0x7ff0 - 0x0010) {
     // x < 0x1p-1022 or inf or nan
-    if ((ix << 1) == 0) return -1.0 / (x * x);
+    if (ix << 1 == 0) return -1.0 / (x * x);
     if (ix == reinterpret<u64>(Infinity)) return x; // log(inf) == inf
-    if ((top & 0x8000) || (top & 0x7FF0) == 0x7FF0) return (x - x) / (x - x);
+    if (top & 0x8000 || (top & 0x7ff0) == 0x7ff0) return (x - x) / (x - x);
     // x is subnormal, normalize it
     ix = reinterpret<u64>(x * Ox1p52);
     ix -= u64(52) << 52;
@@ -1451,14 +1341,20 @@ export function log_lut(x: f64): f64 {
   // x = 2^k z; where z is in range [OFF,2*OFF) and exact.
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
-  let tmp  = ix - 0x3FE6000000000000;
-  let i    = <usize>((tmp >> (52 - LOG_TABLE_BITS)) & N_MASK);
-  let k    = <i64>tmp >> 52;
-  let iz   = ix - (tmp & (u64(0xFFF) << 52));
+  let tmp = ix - 0x3fe6000000000000;
+  let i = <usize>((tmp >> (52 - LOG_TABLE_BITS)) & N_MASK);
+  let k = (<i64>tmp) >> 52;
+  let iz = ix - (tmp & (u64(0xfff) << 52));
 
-  let invc = load<f64>(LOG_DATA_TAB1 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
-  let logc = load<f64>(LOG_DATA_TAB1 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
-  let z    = reinterpret<f64>(iz);
+  let invc = load<f64>(
+    LOG_DATA_TAB1 + (i << (1 + alignof<f64>())),
+    0 << alignof<f64>(),
+  ); // T[i].invc;
+  let logc = load<f64>(
+    LOG_DATA_TAB1 + (i << (1 + alignof<f64>())),
+    1 << alignof<f64>(),
+  ); // T[i].logc;
+  let z = reinterpret<f64>(iz);
 
   // log(x) = log1p(z/c-1) + log(c) + k*Ln2.
   // r ~= z/c - 1, |r| < 1/(2*N)
@@ -1467,14 +1363,20 @@ export function log_lut(x: f64): f64 {
   // 	r = __builtin_fma(z, invc, -1.0);
   // #else
   // rounding error: 0x1p-55/N + 0x1p-66
-  const chi = load<f64>(LOG_DATA_TAB2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T2[i].chi
-  const clo = load<f64>(LOG_DATA_TAB2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T2[i].clo
+  const chi = load<f64>(
+    LOG_DATA_TAB2 + (i << (1 + alignof<f64>())),
+    0 << alignof<f64>(),
+  ); // T2[i].chi
+  const clo = load<f64>(
+    LOG_DATA_TAB2 + (i << (1 + alignof<f64>())),
+    1 << alignof<f64>(),
+  ); // T2[i].clo
   let r = (z - chi - clo) * invc;
   // #endif
   let kd = <f64>k;
 
   // hi + lo = r + log(c) + k*Ln2
-  let w  = kd * Ln2hi + logc;
+  let w = kd * Ln2hi + logc;
   let hi = w + r;
   let lo = w - hi + r + kd * Ln2lo;
 
@@ -1520,134 +1422,133 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 // @ts-ignore: decorator
 @lazy @inline const POW_LOG_DATA_TAB = memory.data<u64>([
   //      invc      ,pad,       logc       ,       logctail
-  0x3FF6A00000000000, 0, 0xBFD62C82F2B9C800, 0x3CFAB42428375680,
-  0x3FF6800000000000, 0, 0xBFD5D1BDBF580800, 0xBD1CA508D8E0F720,
-  0x3FF6600000000000, 0, 0xBFD5767717455800, 0xBD2362A4D5B6506D,
-  0x3FF6400000000000, 0, 0xBFD51AAD872DF800, 0xBCE684E49EB067D5,
-  0x3FF6200000000000, 0, 0xBFD4BE5F95777800, 0xBD041B6993293EE0,
-  0x3FF6000000000000, 0, 0xBFD4618BC21C6000, 0x3D13D82F484C84CC,
-  0x3FF5E00000000000, 0, 0xBFD404308686A800, 0x3CDC42F3ED820B3A,
-  0x3FF5C00000000000, 0, 0xBFD3A64C55694800, 0x3D20B1C686519460,
-  0x3FF5A00000000000, 0, 0xBFD347DD9A988000, 0x3D25594DD4C58092,
-  0x3FF5800000000000, 0, 0xBFD2E8E2BAE12000, 0x3D267B1E99B72BD8,
-  0x3FF5600000000000, 0, 0xBFD2895A13DE8800, 0x3D15CA14B6CFB03F,
-  0x3FF5600000000000, 0, 0xBFD2895A13DE8800, 0x3D15CA14B6CFB03F,
-  0x3FF5400000000000, 0, 0xBFD22941FBCF7800, 0xBD165A242853DA76,
-  0x3FF5200000000000, 0, 0xBFD1C898C1699800, 0xBD1FAFBC68E75404,
-  0x3FF5000000000000, 0, 0xBFD1675CABABA800, 0x3D1F1FC63382A8F0,
-  0x3FF4E00000000000, 0, 0xBFD1058BF9AE4800, 0xBD26A8C4FD055A66,
-  0x3FF4C00000000000, 0, 0xBFD0A324E2739000, 0xBD0C6BEE7EF4030E,
-  0x3FF4A00000000000, 0, 0xBFD0402594B4D000, 0xBCF036B89EF42D7F,
-  0x3FF4A00000000000, 0, 0xBFD0402594B4D000, 0xBCF036B89EF42D7F,
-  0x3FF4800000000000, 0, 0xBFCFB9186D5E4000, 0x3D0D572AAB993C87,
-  0x3FF4600000000000, 0, 0xBFCEF0ADCBDC6000, 0x3D2B26B79C86AF24,
-  0x3FF4400000000000, 0, 0xBFCE27076E2AF000, 0xBD172F4F543FFF10,
-  0x3FF4200000000000, 0, 0xBFCD5C216B4FC000, 0x3D21BA91BBCA681B,
-  0x3FF4000000000000, 0, 0xBFCC8FF7C79AA000, 0x3D27794F689F8434,
-  0x3FF4000000000000, 0, 0xBFCC8FF7C79AA000, 0x3D27794F689F8434,
-  0x3FF3E00000000000, 0, 0xBFCBC286742D9000, 0x3D194EB0318BB78F,
-  0x3FF3C00000000000, 0, 0xBFCAF3C94E80C000, 0x3CBA4E633FCD9066,
-  0x3FF3A00000000000, 0, 0xBFCA23BC1FE2B000, 0xBD258C64DC46C1EA,
-  0x3FF3A00000000000, 0, 0xBFCA23BC1FE2B000, 0xBD258C64DC46C1EA,
-  0x3FF3800000000000, 0, 0xBFC9525A9CF45000, 0xBD2AD1D904C1D4E3,
-  0x3FF3600000000000, 0, 0xBFC87FA06520D000, 0x3D2BBDBF7FDBFA09,
-  0x3FF3400000000000, 0, 0xBFC7AB890210E000, 0x3D2BDB9072534A58,
-  0x3FF3400000000000, 0, 0xBFC7AB890210E000, 0x3D2BDB9072534A58,
-  0x3FF3200000000000, 0, 0xBFC6D60FE719D000, 0xBD10E46AA3B2E266,
-  0x3FF3000000000000, 0, 0xBFC5FF3070A79000, 0xBD1E9E439F105039,
-  0x3FF3000000000000, 0, 0xBFC5FF3070A79000, 0xBD1E9E439F105039,
-  0x3FF2E00000000000, 0, 0xBFC526E5E3A1B000, 0xBD20DE8B90075B8F,
-  0x3FF2C00000000000, 0, 0xBFC44D2B6CCB8000, 0x3D170CC16135783C,
-  0x3FF2C00000000000, 0, 0xBFC44D2B6CCB8000, 0x3D170CC16135783C,
-  0x3FF2A00000000000, 0, 0xBFC371FC201E9000, 0x3CF178864D27543A,
-  0x3FF2800000000000, 0, 0xBFC29552F81FF000, 0xBD248D301771C408,
-  0x3FF2600000000000, 0, 0xBFC1B72AD52F6000, 0xBD2E80A41811A396,
-  0x3FF2600000000000, 0, 0xBFC1B72AD52F6000, 0xBD2E80A41811A396,
-  0x3FF2400000000000, 0, 0xBFC0D77E7CD09000, 0x3D0A699688E85BF4,
-  0x3FF2400000000000, 0, 0xBFC0D77E7CD09000, 0x3D0A699688E85BF4,
-  0x3FF2200000000000, 0, 0xBFBFEC9131DBE000, 0xBD2575545CA333F2,
-  0x3FF2000000000000, 0, 0xBFBE27076E2B0000, 0x3D2A342C2AF0003C,
-  0x3FF2000000000000, 0, 0xBFBE27076E2B0000, 0x3D2A342C2AF0003C,
-  0x3FF1E00000000000, 0, 0xBFBC5E548F5BC000, 0xBD1D0C57585FBE06,
-  0x3FF1C00000000000, 0, 0xBFBA926D3A4AE000, 0x3D253935E85BAAC8,
-  0x3FF1C00000000000, 0, 0xBFBA926D3A4AE000, 0x3D253935E85BAAC8,
-  0x3FF1A00000000000, 0, 0xBFB8C345D631A000, 0x3D137C294D2F5668,
-  0x3FF1A00000000000, 0, 0xBFB8C345D631A000, 0x3D137C294D2F5668,
-  0x3FF1800000000000, 0, 0xBFB6F0D28AE56000, 0xBD269737C93373DA,
-  0x3FF1600000000000, 0, 0xBFB51B073F062000, 0x3D1F025B61C65E57,
-  0x3FF1600000000000, 0, 0xBFB51B073F062000, 0x3D1F025B61C65E57,
-  0x3FF1400000000000, 0, 0xBFB341D7961BE000, 0x3D2C5EDACCF913DF,
-  0x3FF1400000000000, 0, 0xBFB341D7961BE000, 0x3D2C5EDACCF913DF,
-  0x3FF1200000000000, 0, 0xBFB16536EEA38000, 0x3D147C5E768FA309,
-  0x3FF1000000000000, 0, 0xBFAF0A30C0118000, 0x3D2D599E83368E91,
-  0x3FF1000000000000, 0, 0xBFAF0A30C0118000, 0x3D2D599E83368E91,
-  0x3FF0E00000000000, 0, 0xBFAB42DD71198000, 0x3D1C827AE5D6704C,
-  0x3FF0E00000000000, 0, 0xBFAB42DD71198000, 0x3D1C827AE5D6704C,
-  0x3FF0C00000000000, 0, 0xBFA77458F632C000, 0xBD2CFC4634F2A1EE,
-  0x3FF0C00000000000, 0, 0xBFA77458F632C000, 0xBD2CFC4634F2A1EE,
-  0x3FF0A00000000000, 0, 0xBFA39E87B9FEC000, 0x3CF502B7F526FEAA,
-  0x3FF0A00000000000, 0, 0xBFA39E87B9FEC000, 0x3CF502B7F526FEAA,
-  0x3FF0800000000000, 0, 0xBF9F829B0E780000, 0xBD2980267C7E09E4,
-  0x3FF0800000000000, 0, 0xBF9F829B0E780000, 0xBD2980267C7E09E4,
-  0x3FF0600000000000, 0, 0xBF97B91B07D58000, 0xBD288D5493FAA639,
-  0x3FF0400000000000, 0, 0xBF8FC0A8B0FC0000, 0xBCDF1E7CF6D3A69C,
-  0x3FF0400000000000, 0, 0xBF8FC0A8B0FC0000, 0xBCDF1E7CF6D3A69C,
-  0x3FF0200000000000, 0, 0xBF7FE02A6B100000, 0xBD19E23F0DDA40E4,
-  0x3FF0200000000000, 0, 0xBF7FE02A6B100000, 0xBD19E23F0DDA40E4,
-  0x3FF0000000000000, 0, 0, 0,
-  0x3FF0000000000000, 0, 0, 0,
-  0x3FEFC00000000000, 0, 0x3F80101575890000, 0xBD10C76B999D2BE8,
-  0x3FEF800000000000, 0, 0x3F90205658938000, 0xBD23DC5B06E2F7D2,
-  0x3FEF400000000000, 0, 0x3F98492528C90000, 0xBD2AA0BA325A0C34,
-  0x3FEF000000000000, 0, 0x3FA0415D89E74000, 0x3D0111C05CF1D753,
-  0x3FEEC00000000000, 0, 0x3FA466AED42E0000, 0xBD2C167375BDFD28,
-  0x3FEE800000000000, 0, 0x3FA894AA149FC000, 0xBD197995D05A267D,
-  0x3FEE400000000000, 0, 0x3FACCB73CDDDC000, 0xBD1A68F247D82807,
-  0x3FEE200000000000, 0, 0x3FAEEA31C006C000, 0xBD0E113E4FC93B7B,
-  0x3FEDE00000000000, 0, 0x3FB1973BD1466000, 0xBD25325D560D9E9B,
-  0x3FEDA00000000000, 0, 0x3FB3BDF5A7D1E000, 0x3D2CC85EA5DB4ED7,
-  0x3FED600000000000, 0, 0x3FB5E95A4D97A000, 0xBD2C69063C5D1D1E,
-  0x3FED400000000000, 0, 0x3FB700D30AEAC000, 0x3CEC1E8DA99DED32,
-  0x3FED000000000000, 0, 0x3FB9335E5D594000, 0x3D23115C3ABD47DA,
-  0x3FECC00000000000, 0, 0x3FBB6AC88DAD6000, 0xBD1390802BF768E5,
-  0x3FECA00000000000, 0, 0x3FBC885801BC4000, 0x3D2646D1C65AACD3,
-  0x3FEC600000000000, 0, 0x3FBEC739830A2000, 0xBD2DC068AFE645E0,
-  0x3FEC400000000000, 0, 0x3FBFE89139DBE000, 0xBD2534D64FA10AFD,
-  0x3FEC000000000000, 0, 0x3FC1178E8227E000, 0x3D21EF78CE2D07F2,
-  0x3FEBE00000000000, 0, 0x3FC1AA2B7E23F000, 0x3D2CA78E44389934,
-  0x3FEBA00000000000, 0, 0x3FC2D1610C868000, 0x3D039D6CCB81B4A1,
-  0x3FEB800000000000, 0, 0x3FC365FCB0159000, 0x3CC62FA8234B7289,
-  0x3FEB400000000000, 0, 0x3FC4913D8333B000, 0x3D25837954FDB678,
-  0x3FEB200000000000, 0, 0x3FC527E5E4A1B000, 0x3D2633E8E5697DC7,
-  0x3FEAE00000000000, 0, 0x3FC6574EBE8C1000, 0x3D19CF8B2C3C2E78,
-  0x3FEAC00000000000, 0, 0x3FC6F0128B757000, 0xBD25118DE59C21E1,
-  0x3FEAA00000000000, 0, 0x3FC7898D85445000, 0xBD1C661070914305,
-  0x3FEA600000000000, 0, 0x3FC8BEAFEB390000, 0xBD073D54AAE92CD1,
-  0x3FEA400000000000, 0, 0x3FC95A5ADCF70000, 0x3D07F22858A0FF6F,
-  0x3FEA000000000000, 0, 0x3FCA93ED3C8AE000, 0xBD28724350562169,
-  0x3FE9E00000000000, 0, 0x3FCB31D8575BD000, 0xBD0C358D4EACE1AA,
-  0x3FE9C00000000000, 0, 0x3FCBD087383BE000, 0xBD2D4BC4595412B6,
-  0x3FE9A00000000000, 0, 0x3FCC6FFBC6F01000, 0xBCF1EC72C5962BD2,
-  0x3FE9600000000000, 0, 0x3FCDB13DB0D49000, 0xBD2AFF2AF715B035,
-  0x3FE9400000000000, 0, 0x3FCE530EFFE71000, 0x3CC212276041F430,
-  0x3FE9200000000000, 0, 0x3FCEF5ADE4DD0000, 0xBCCA211565BB8E11,
-  0x3FE9000000000000, 0, 0x3FCF991C6CB3B000, 0x3D1BCBECCA0CDF30,
-  0x3FE8C00000000000, 0, 0x3FD07138604D5800, 0x3CF89CDB16ED4E91,
-  0x3FE8A00000000000, 0, 0x3FD0C42D67616000, 0x3D27188B163CEAE9,
-  0x3FE8800000000000, 0, 0x3FD1178E8227E800, 0xBD2C210E63A5F01C,
-  0x3FE8600000000000, 0, 0x3FD16B5CCBACF800, 0x3D2B9ACDF7A51681,
-  0x3FE8400000000000, 0, 0x3FD1BF99635A6800, 0x3D2CA6ED5147BDB7,
-  0x3FE8200000000000, 0, 0x3FD214456D0EB800, 0x3D0A87DEBA46BAEA,
-  0x3FE7E00000000000, 0, 0x3FD2BEF07CDC9000, 0x3D2A9CFA4A5004F4,
-  0x3FE7C00000000000, 0, 0x3FD314F1E1D36000, 0xBD28E27AD3213CB8,
-  0x3FE7A00000000000, 0, 0x3FD36B6776BE1000, 0x3D116ECDB0F177C8,
-  0x3FE7800000000000, 0, 0x3FD3C25277333000, 0x3D183B54B606BD5C,
-  0x3FE7600000000000, 0, 0x3FD419B423D5E800, 0x3D08E436EC90E09D,
-  0x3FE7400000000000, 0, 0x3FD4718DC271C800, 0xBD2F27CE0967D675,
-  0x3FE7200000000000, 0, 0x3FD4C9E09E173000, 0xBD2E20891B0AD8A4,
-  0x3FE7000000000000, 0, 0x3FD522AE0738A000, 0x3D2EBE708164C759,
-  0x3FE6E00000000000, 0, 0x3FD57BF753C8D000, 0x3D1FADEDEE5D40EF,
-  0x3FE6C00000000000, 0, 0x3FD5D5BDDF596000, 0xBD0A0B2A08A465DC
+  0x3ff6a00000000000, 0, 0xbfd62c82f2b9c800, 0x3cfab42428375680,
+  0x3ff6800000000000, 0, 0xbfd5d1bdbf580800, 0xbd1ca508d8e0f720,
+  0x3ff6600000000000, 0, 0xbfd5767717455800, 0xbd2362a4d5b6506d,
+  0x3ff6400000000000, 0, 0xbfd51aad872df800, 0xbce684e49eb067d5,
+  0x3ff6200000000000, 0, 0xbfd4be5f95777800, 0xbd041b6993293ee0,
+  0x3ff6000000000000, 0, 0xbfd4618bc21c6000, 0x3d13d82f484c84cc,
+  0x3ff5e00000000000, 0, 0xbfd404308686a800, 0x3cdc42f3ed820b3a,
+  0x3ff5c00000000000, 0, 0xbfd3a64c55694800, 0x3d20b1c686519460,
+  0x3ff5a00000000000, 0, 0xbfd347dd9a988000, 0x3d25594dd4c58092,
+  0x3ff5800000000000, 0, 0xbfd2e8e2bae12000, 0x3d267b1e99b72bd8,
+  0x3ff5600000000000, 0, 0xbfd2895a13de8800, 0x3d15ca14b6cfb03f,
+  0x3ff5600000000000, 0, 0xbfd2895a13de8800, 0x3d15ca14b6cfb03f,
+  0x3ff5400000000000, 0, 0xbfd22941fbcf7800, 0xbd165a242853da76,
+  0x3ff5200000000000, 0, 0xbfd1c898c1699800, 0xbd1fafbc68e75404,
+  0x3ff5000000000000, 0, 0xbfd1675cababa800, 0x3d1f1fc63382a8f0,
+  0x3ff4e00000000000, 0, 0xbfd1058bf9ae4800, 0xbd26a8c4fd055a66,
+  0x3ff4c00000000000, 0, 0xbfd0a324e2739000, 0xbd0c6bee7ef4030e,
+  0x3ff4a00000000000, 0, 0xbfd0402594b4d000, 0xbcf036b89ef42d7f,
+  0x3ff4a00000000000, 0, 0xbfd0402594b4d000, 0xbcf036b89ef42d7f,
+  0x3ff4800000000000, 0, 0xbfcfb9186d5e4000, 0x3d0d572aab993c87,
+  0x3ff4600000000000, 0, 0xbfcef0adcbdc6000, 0x3d2b26b79c86af24,
+  0x3ff4400000000000, 0, 0xbfce27076e2af000, 0xbd172f4f543fff10,
+  0x3ff4200000000000, 0, 0xbfcd5c216b4fc000, 0x3d21ba91bbca681b,
+  0x3ff4000000000000, 0, 0xbfcc8ff7c79aa000, 0x3d27794f689f8434,
+  0x3ff4000000000000, 0, 0xbfcc8ff7c79aa000, 0x3d27794f689f8434,
+  0x3ff3e00000000000, 0, 0xbfcbc286742d9000, 0x3d194eb0318bb78f,
+  0x3ff3c00000000000, 0, 0xbfcaf3c94e80c000, 0x3cba4e633fcd9066,
+  0x3ff3a00000000000, 0, 0xbfca23bc1fe2b000, 0xbd258c64dc46c1ea,
+  0x3ff3a00000000000, 0, 0xbfca23bc1fe2b000, 0xbd258c64dc46c1ea,
+  0x3ff3800000000000, 0, 0xbfc9525a9cf45000, 0xbd2ad1d904c1d4e3,
+  0x3ff3600000000000, 0, 0xbfc87fa06520d000, 0x3d2bbdbf7fdbfa09,
+  0x3ff3400000000000, 0, 0xbfc7ab890210e000, 0x3d2bdb9072534a58,
+  0x3ff3400000000000, 0, 0xbfc7ab890210e000, 0x3d2bdb9072534a58,
+  0x3ff3200000000000, 0, 0xbfc6d60fe719d000, 0xbd10e46aa3b2e266,
+  0x3ff3000000000000, 0, 0xbfc5ff3070a79000, 0xbd1e9e439f105039,
+  0x3ff3000000000000, 0, 0xbfc5ff3070a79000, 0xbd1e9e439f105039,
+  0x3ff2e00000000000, 0, 0xbfc526e5e3a1b000, 0xbd20de8b90075b8f,
+  0x3ff2c00000000000, 0, 0xbfc44d2b6ccb8000, 0x3d170cc16135783c,
+  0x3ff2c00000000000, 0, 0xbfc44d2b6ccb8000, 0x3d170cc16135783c,
+  0x3ff2a00000000000, 0, 0xbfc371fc201e9000, 0x3cf178864d27543a,
+  0x3ff2800000000000, 0, 0xbfc29552f81ff000, 0xbd248d301771c408,
+  0x3ff2600000000000, 0, 0xbfc1b72ad52f6000, 0xbd2e80a41811a396,
+  0x3ff2600000000000, 0, 0xbfc1b72ad52f6000, 0xbd2e80a41811a396,
+  0x3ff2400000000000, 0, 0xbfc0d77e7cd09000, 0x3d0a699688e85bf4,
+  0x3ff2400000000000, 0, 0xbfc0d77e7cd09000, 0x3d0a699688e85bf4,
+  0x3ff2200000000000, 0, 0xbfbfec9131dbe000, 0xbd2575545ca333f2,
+  0x3ff2000000000000, 0, 0xbfbe27076e2b0000, 0x3d2a342c2af0003c,
+  0x3ff2000000000000, 0, 0xbfbe27076e2b0000, 0x3d2a342c2af0003c,
+  0x3ff1e00000000000, 0, 0xbfbc5e548f5bc000, 0xbd1d0c57585fbe06,
+  0x3ff1c00000000000, 0, 0xbfba926d3a4ae000, 0x3d253935e85baac8,
+  0x3ff1c00000000000, 0, 0xbfba926d3a4ae000, 0x3d253935e85baac8,
+  0x3ff1a00000000000, 0, 0xbfb8c345d631a000, 0x3d137c294d2f5668,
+  0x3ff1a00000000000, 0, 0xbfb8c345d631a000, 0x3d137c294d2f5668,
+  0x3ff1800000000000, 0, 0xbfb6f0d28ae56000, 0xbd269737c93373da,
+  0x3ff1600000000000, 0, 0xbfb51b073f062000, 0x3d1f025b61c65e57,
+  0x3ff1600000000000, 0, 0xbfb51b073f062000, 0x3d1f025b61c65e57,
+  0x3ff1400000000000, 0, 0xbfb341d7961be000, 0x3d2c5edaccf913df,
+  0x3ff1400000000000, 0, 0xbfb341d7961be000, 0x3d2c5edaccf913df,
+  0x3ff1200000000000, 0, 0xbfb16536eea38000, 0x3d147c5e768fa309,
+  0x3ff1000000000000, 0, 0xbfaf0a30c0118000, 0x3d2d599e83368e91,
+  0x3ff1000000000000, 0, 0xbfaf0a30c0118000, 0x3d2d599e83368e91,
+  0x3ff0e00000000000, 0, 0xbfab42dd71198000, 0x3d1c827ae5d6704c,
+  0x3ff0e00000000000, 0, 0xbfab42dd71198000, 0x3d1c827ae5d6704c,
+  0x3ff0c00000000000, 0, 0xbfa77458f632c000, 0xbd2cfc4634f2a1ee,
+  0x3ff0c00000000000, 0, 0xbfa77458f632c000, 0xbd2cfc4634f2a1ee,
+  0x3ff0a00000000000, 0, 0xbfa39e87b9fec000, 0x3cf502b7f526feaa,
+  0x3ff0a00000000000, 0, 0xbfa39e87b9fec000, 0x3cf502b7f526feaa,
+  0x3ff0800000000000, 0, 0xbf9f829b0e780000, 0xbd2980267c7e09e4,
+  0x3ff0800000000000, 0, 0xbf9f829b0e780000, 0xbd2980267c7e09e4,
+  0x3ff0600000000000, 0, 0xbf97b91b07d58000, 0xbd288d5493faa639,
+  0x3ff0400000000000, 0, 0xbf8fc0a8b0fc0000, 0xbcdf1e7cf6d3a69c,
+  0x3ff0400000000000, 0, 0xbf8fc0a8b0fc0000, 0xbcdf1e7cf6d3a69c,
+  0x3ff0200000000000, 0, 0xbf7fe02a6b100000, 0xbd19e23f0dda40e4,
+  0x3ff0200000000000, 0, 0xbf7fe02a6b100000, 0xbd19e23f0dda40e4,
+  0x3ff0000000000000, 0, 0, 0, 0x3ff0000000000000, 0, 0, 0, 0x3fefc00000000000,
+  0, 0x3f80101575890000, 0xbd10c76b999d2be8, 0x3fef800000000000, 0,
+  0x3f90205658938000, 0xbd23dc5b06e2f7d2, 0x3fef400000000000, 0,
+  0x3f98492528c90000, 0xbd2aa0ba325a0c34, 0x3fef000000000000, 0,
+  0x3fa0415d89e74000, 0x3d0111c05cf1d753, 0x3feec00000000000, 0,
+  0x3fa466aed42e0000, 0xbd2c167375bdfd28, 0x3fee800000000000, 0,
+  0x3fa894aa149fc000, 0xbd197995d05a267d, 0x3fee400000000000, 0,
+  0x3faccb73cdddc000, 0xbd1a68f247d82807, 0x3fee200000000000, 0,
+  0x3faeea31c006c000, 0xbd0e113e4fc93b7b, 0x3fede00000000000, 0,
+  0x3fb1973bd1466000, 0xbd25325d560d9e9b, 0x3feda00000000000, 0,
+  0x3fb3bdf5a7d1e000, 0x3d2cc85ea5db4ed7, 0x3fed600000000000, 0,
+  0x3fb5e95a4d97a000, 0xbd2c69063c5d1d1e, 0x3fed400000000000, 0,
+  0x3fb700d30aeac000, 0x3cec1e8da99ded32, 0x3fed000000000000, 0,
+  0x3fb9335e5d594000, 0x3d23115c3abd47da, 0x3fecc00000000000, 0,
+  0x3fbb6ac88dad6000, 0xbd1390802bf768e5, 0x3feca00000000000, 0,
+  0x3fbc885801bc4000, 0x3d2646d1c65aacd3, 0x3fec600000000000, 0,
+  0x3fbec739830a2000, 0xbd2dc068afe645e0, 0x3fec400000000000, 0,
+  0x3fbfe89139dbe000, 0xbd2534d64fa10afd, 0x3fec000000000000, 0,
+  0x3fc1178e8227e000, 0x3d21ef78ce2d07f2, 0x3febe00000000000, 0,
+  0x3fc1aa2b7e23f000, 0x3d2ca78e44389934, 0x3feba00000000000, 0,
+  0x3fc2d1610c868000, 0x3d039d6ccb81b4a1, 0x3feb800000000000, 0,
+  0x3fc365fcb0159000, 0x3cc62fa8234b7289, 0x3feb400000000000, 0,
+  0x3fc4913d8333b000, 0x3d25837954fdb678, 0x3feb200000000000, 0,
+  0x3fc527e5e4a1b000, 0x3d2633e8e5697dc7, 0x3feae00000000000, 0,
+  0x3fc6574ebe8c1000, 0x3d19cf8b2c3c2e78, 0x3feac00000000000, 0,
+  0x3fc6f0128b757000, 0xbd25118de59c21e1, 0x3feaa00000000000, 0,
+  0x3fc7898d85445000, 0xbd1c661070914305, 0x3fea600000000000, 0,
+  0x3fc8beafeb390000, 0xbd073d54aae92cd1, 0x3fea400000000000, 0,
+  0x3fc95a5adcf70000, 0x3d07f22858a0ff6f, 0x3fea000000000000, 0,
+  0x3fca93ed3c8ae000, 0xbd28724350562169, 0x3fe9e00000000000, 0,
+  0x3fcb31d8575bd000, 0xbd0c358d4eace1aa, 0x3fe9c00000000000, 0,
+  0x3fcbd087383be000, 0xbd2d4bc4595412b6, 0x3fe9a00000000000, 0,
+  0x3fcc6ffbc6f01000, 0xbcf1ec72c5962bd2, 0x3fe9600000000000, 0,
+  0x3fcdb13db0d49000, 0xbd2aff2af715b035, 0x3fe9400000000000, 0,
+  0x3fce530effe71000, 0x3cc212276041f430, 0x3fe9200000000000, 0,
+  0x3fcef5ade4dd0000, 0xbcca211565bb8e11, 0x3fe9000000000000, 0,
+  0x3fcf991c6cb3b000, 0x3d1bcbecca0cdf30, 0x3fe8c00000000000, 0,
+  0x3fd07138604d5800, 0x3cf89cdb16ed4e91, 0x3fe8a00000000000, 0,
+  0x3fd0c42d67616000, 0x3d27188b163ceae9, 0x3fe8800000000000, 0,
+  0x3fd1178e8227e800, 0xbd2c210e63a5f01c, 0x3fe8600000000000, 0,
+  0x3fd16b5ccbacf800, 0x3d2b9acdf7a51681, 0x3fe8400000000000, 0,
+  0x3fd1bf99635a6800, 0x3d2ca6ed5147bdb7, 0x3fe8200000000000, 0,
+  0x3fd214456d0eb800, 0x3d0a87deba46baea, 0x3fe7e00000000000, 0,
+  0x3fd2bef07cdc9000, 0x3d2a9cfa4a5004f4, 0x3fe7c00000000000, 0,
+  0x3fd314f1e1d36000, 0xbd28e27ad3213cb8, 0x3fe7a00000000000, 0,
+  0x3fd36b6776be1000, 0x3d116ecdb0f177c8, 0x3fe7800000000000, 0,
+  0x3fd3c25277333000, 0x3d183b54b606bd5c, 0x3fe7600000000000, 0,
+  0x3fd419b423d5e800, 0x3d08e436ec90e09d, 0x3fe7400000000000, 0,
+  0x3fd4718dc271c800, 0xbd2f27ce0967d675, 0x3fe7200000000000, 0,
+  0x3fd4c9e09e173000, 0xbd2e20891b0ad8a4, 0x3fe7000000000000, 0,
+  0x3fd522ae0738a000, 0x3d2ebe708164c759, 0x3fe6e00000000000, 0,
+  0x3fd57bf753c8d000, 0x3d1fadedee5d40ef, 0x3fe6c00000000000, 0,
+  0x3fd5d5bddf596000, 0xbd0a0b2a08a465dc,
 ]);
 
 // Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
@@ -1655,12 +1556,12 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 // @ts-ignore: decorator
 @inline
 function checkint(iy: u64): i32 {
-  let e = iy >> 52 & 0x7FF;
-  if (e < 0x3FF     ) return 0;
-  if (e > 0x3FF + 52) return 2;
-  e = u64(1) << (0x3FF + 52 - e);
+  let e = (iy >> 52) & 0x7ff;
+  if (e < 0x3ff) return 0;
+  if (e > 0x3ff + 52) return 2;
+  e = u64(1) << (0x3ff + 52 - e);
   if (iy & (e - 1)) return 0;
-  if (iy &  e     ) return 1;
+  if (iy & e) return 1;
   return 2;
 }
 
@@ -1686,7 +1587,7 @@ function oflow(sign: u32): f64 {
 // @ts-ignore: decorator
 @inline
 function zeroinfnan(u: u64): bool {
-  return (u << 1) - 1 >= 0xFFE0000000000000 - 1;
+  return (u << 1) - 1 >= 0xffe0000000000000 - 1;
 }
 
 // @ts-ignore: decorator
@@ -1701,64 +1602,71 @@ function log_inline(ix: u64): f64 {
   const N = 1 << POW_LOG_TABLE_BITS;
   const N_MASK = N - 1;
 
-  const
-    Ln2hi = reinterpret<f64>(0x3FE62E42FEFA3800),
-    Ln2lo = reinterpret<f64>(0x3D2EF35793C76730);
+  const Ln2hi = reinterpret<f64>(0x3fe62e42fefa3800),
+    Ln2lo = reinterpret<f64>(0x3d2ef35793c76730);
 
-  const
-    A0 = reinterpret<f64>(0xBFE0000000000000),
-    A1 = reinterpret<f64>(0xBFE5555555555560),
-    A2 = reinterpret<f64>(0x3FE0000000000006),
-    A3 = reinterpret<f64>(0x3FE999999959554E),
-    A4 = reinterpret<f64>(0xBFE555555529A47A),
-    A5 = reinterpret<f64>(0xBFF2495B9B4845E9),
-    A6 = reinterpret<f64>(0x3FF0002B8B263FC3);
+  const A0 = reinterpret<f64>(0xbfe0000000000000),
+    A1 = reinterpret<f64>(0xbfe5555555555560),
+    A2 = reinterpret<f64>(0x3fe0000000000006),
+    A3 = reinterpret<f64>(0x3fe999999959554e),
+    A4 = reinterpret<f64>(0xbfe555555529a47a),
+    A5 = reinterpret<f64>(0xbff2495b9b4845e9),
+    A6 = reinterpret<f64>(0x3ff0002b8b263fc3);
 
   // x = 2^k z; where z is in range [OFF,2*OFF) and exact.
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
-  let tmp = ix - 0x3fE6955500000000;
-  let i   = usize((tmp >> (52 - POW_LOG_TABLE_BITS)) & N_MASK);
-  let k   = <i64>tmp >> 52;
-  let iz  = ix - (tmp & u64(0xFFF) << 52);
-  let z   = reinterpret<f64>(iz);
-  let kd  = <f64>k;
+  let tmp = ix - 0x3fe6955500000000;
+  let i = usize((tmp >> (52 - POW_LOG_TABLE_BITS)) & N_MASK);
+  let k = (<i64>tmp) >> 52;
+  let iz = ix - (tmp & (u64(0xfff) << 52));
+  let z = reinterpret<f64>(iz);
+  let kd = <f64>k;
 
   // log(x) = k*Ln2 + log(c) + log1p(z/c-1).
-  let invc     = load<f64>(POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())), 0 << alignof<f64>()); // tab[i].invc
-  let logc     = load<f64>(POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())), 2 << alignof<f64>()); // tab[i].logc
-  let logctail = load<f64>(POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())), 3 << alignof<f64>()); // tab[i].logctail
+  let invc = load<f64>(
+    POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())),
+    0 << alignof<f64>(),
+  ); // tab[i].invc
+  let logc = load<f64>(
+    POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())),
+    2 << alignof<f64>(),
+  ); // tab[i].logc
+  let logctail = load<f64>(
+    POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())),
+    3 << alignof<f64>(),
+  ); // tab[i].logctail
 
   // Note: 1/c is j/N or j/N/2 where j is an integer in [N,2N) and
   // |z/c - 1| < 1/N, so r = z/c - 1 is exactly representible.
   // Split z such that rhi, rlo and rhi*rhi are exact and |rlo| <= |r|.
-  let zhi = reinterpret<f64>((iz + u64(0x80000000)) & 0xFFFFFFFF00000000);
+  let zhi = reinterpret<f64>((iz + u64(0x80000000)) & 0xffffffff00000000);
   let zlo = z - zhi;
   let rhi = zhi * invc - 1.0;
   let rlo = zlo * invc;
-  let r   = rhi + rlo;
+  let r = rhi + rlo;
 
   // k * Ln2 + log(c) + r.
-  let t1  = kd * Ln2hi + logc;
-  let t2  = t1 + r;
+  let t1 = kd * Ln2hi + logc;
+  let t2 = t1 + r;
   let lo1 = kd * Ln2lo + logctail;
   let lo2 = t1 - t2 + r;
 
   // Evaluation is optimized assuming superscalar pipelined execution.
-  let ar  = A0 * r; // A[0] = -0.5
+  let ar = A0 * r; // A[0] = -0.5
   let ar2 = r * ar;
   let ar3 = r * ar2;
   // k * Ln2 + log(c) + r + A[0] * r * r.
-  let arhi  = A0  * rhi;
+  let arhi = A0 * rhi;
   let arhi2 = rhi * arhi;
-  let hi    = t2  + arhi2;
-  let lo3   = rlo * (ar + arhi);
-  let lo4   = t2 - hi + arhi2;
+  let hi = t2 + arhi2;
+  let lo3 = rlo * (ar + arhi);
+  let lo4 = t2 - hi + arhi2;
 
   // p = log1p(r) - r - A[0] * r * r.
-  let p  = ar3 * (A1 + r * A2 + ar2 * (A3 + r * A4 + ar2 * (A5 + r * A6)));
+  let p = ar3 * (A1 + r * A2 + ar2 * (A3 + r * A4 + ar2 * (A5 + r * A6)));
   let lo = lo1 + lo2 + lo3 + lo4 + p;
-  let y  = hi + lo;
+  let y = hi + lo;
   log_tail = hi - y + lo;
 
   return y;
@@ -1772,20 +1680,18 @@ function log_inline(ix: u64): f64 {
 // @ts-ignore: decorator
 @inline
 function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
-  const N      = 1 << EXP_TABLE_BITS;
+  const N = 1 << EXP_TABLE_BITS;
   const N_MASK = N - 1;
 
-  const
-    InvLn2N   = reinterpret<f64>(0x3FF71547652B82FE) * N, // 0x1.71547652b82fep0
-    NegLn2hiN = reinterpret<f64>(0xBF762E42FEFA0000),     // -0x1.62e42fefa0000p-8
-    NegLn2loN = reinterpret<f64>(0xBD0CF79ABC9E3B3A),     // -0x1.cf79abc9e3b3ap-47
-    shift     = reinterpret<f64>(0x4338000000000000);     // 0x1.8p52
+  const InvLn2N = reinterpret<f64>(0x3ff71547652b82fe) * N, // 0x1.71547652b82fep0
+    NegLn2hiN = reinterpret<f64>(0xbf762e42fefa0000), // -0x1.62e42fefa0000p-8
+    NegLn2loN = reinterpret<f64>(0xbd0cf79abc9e3b3a), // -0x1.cf79abc9e3b3ap-47
+    shift = reinterpret<f64>(0x4338000000000000); // 0x1.8p52
 
-  const
-    C2 = reinterpret<f64>(0x3FDFFFFFFFFFFDBD), // __exp_data.poly[0] (0x1.ffffffffffdbdp-2)
-    C3 = reinterpret<f64>(0x3FC555555555543C), // __exp_data.poly[1] (0x1.555555555543cp-3)
-    C4 = reinterpret<f64>(0x3FA55555CF172B91), // __exp_data.poly[2] (0x1.55555cf172b91p-5)
-    C5 = reinterpret<f64>(0x3F81111167A4D017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
+  const C2 = reinterpret<f64>(0x3fdffffffffffdbd), // __exp_data.poly[0] (0x1.ffffffffffdbdp-2)
+    C3 = reinterpret<f64>(0x3fc555555555543c), // __exp_data.poly[1] (0x1.555555555543cp-3)
+    C4 = reinterpret<f64>(0x3fa55555cf172b91), // __exp_data.poly[2] (0x1.55555cf172b91p-5)
+    C5 = reinterpret<f64>(0x3f81111167a4d017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
 
   let abstop: u32;
   let ki: u64, top: u64, sbits: u64;
@@ -1794,18 +1700,17 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   let kd: f64, z: f64, r: f64, r2: f64, scale: f64, tail: f64, tmp: f64;
 
   let ux = reinterpret<u64>(x);
-  abstop = u32(ux >> 52) & 0x7FF;
-  if (abstop - 0x3C9 >= 0x03F) {
-    if (abstop - 0x3C9 >= 0x80000000) {
+  abstop = u32(ux >> 52) & 0x7ff;
+  if (abstop - 0x3c9 >= 0x03f) {
+    if (abstop - 0x3c9 >= 0x80000000) {
       // Avoid spurious underflow for tiny x.
       // Note: 0 is common input.
       return select(-1.0, 1.0, sign_bias);
     }
-    if (abstop >= 0x409) { // top12(1024.0)
+    if (abstop >= 0x409) {
+      // top12(1024.0)
       // Note: inf and nan are already handled.
-      return <i64>ux < 0
-        ? uflow(sign_bias)
-        : oflow(sign_bias);
+      return <i64>ux < 0 ? uflow(sign_bias) : oflow(sign_bias);
     }
     // Large x is special cased below.
     abstop = 0;
@@ -1825,8 +1730,8 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   //   kd = (double_t)(int32_t)ki;
   // #else
   // z - kd is in [-1, 1] in non-nearest rounding modes
-  kd  = z + shift;
-  ki  = reinterpret<u64>(kd);
+  kd = z + shift;
+  ki = reinterpret<u64>(kd);
   kd -= shift;
   // #endif
   r = x + kd * NegLn2hiN + kd * NegLn2loN;
@@ -1838,7 +1743,9 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
 
   tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>())));
   // This is only a valid scale when -1023*N < k < 1024*N
-  sbits = load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) + top;
+  sbits =
+    load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) +
+    top;
   // exp(x) = 2^(k/N) * exp(r) ~= scale + scale * (tail + exp(r) - 1).
   // Evaluation is optimized assuming superscalar pipelined execution.
   r2 = r * r;
@@ -1863,17 +1770,21 @@ export function pow_lut(x: f64, y: f64): f64 {
   let topx = ix >> 52;
   let topy = iy >> 52;
 
-  if (topx - 0x001 >= 0x7FF - 0x001 || (topy & 0x7FF) - 0x3BE >= 0x43e - 0x3BE) {
+  if (
+    topx - 0x001 >= 0x7ff - 0x001 ||
+    (topy & 0x7ff) - 0x3be >= 0x43e - 0x3be
+  ) {
     // Note: if |y| > 1075 * ln2 * 2^53 ~= 0x1.749p62 then pow(x,y) = inf/0
     // and if |y| < 2^-54 / 1075 ~= 0x1.e7b6p-65 then pow(x,y) = +-1.
     // Special cases: (x < 0x1p-126 or inf or nan) or
     // (|y| < 0x1p-65 or |y| >= 0x1p63 or nan).
     if (zeroinfnan(iy)) {
-      if ((iy << 1) == 0) return 1.0;
-      if (ix == 0x3FF0000000000000) return NaN; // original: 1.0
-      if ((ix << 1) > 0xFFE0000000000000 || (iy << 1) > 0xFFE0000000000000) return x + y;
-      if ((ix << 1) == 0x7FE0000000000000) return NaN; // original: 1.0
-      if (((ix << 1) < 0x7FE0000000000000) == !(iy >> 63)) return 0; // |x|<1 && y==inf or |x|>1 && y==-inf.
+      if (iy << 1 == 0) return 1.0;
+      if (ix == 0x3ff0000000000000) return NaN; // original: 1.0
+      if (ix << 1 > 0xffe0000000000000 || iy << 1 > 0xffe0000000000000)
+        return x + y;
+      if (ix << 1 == 0x7fe0000000000000) return NaN; // original: 1.0
+      if (ix << 1 < 0x7fe0000000000000 == !(iy >> 63)) return 0; // |x|<1 && y==inf or |x|>1 && y==-inf.
       return y * y;
     }
     if (zeroinfnan(ix)) {
@@ -1887,19 +1798,19 @@ export function pow_lut(x: f64, y: f64): f64 {
       let yint = checkint(iy);
       if (yint == 0) return (x - x) / (x - x);
       if (yint == 1) sign_bias = SIGN_BIAS;
-      ix   &= 0x7FFFFFFFFFFFFFFF;
-      topx &= 0x7FF;
+      ix &= 0x7fffffffffffffff;
+      topx &= 0x7ff;
     }
-    if ((topy & 0x7FF) - 0x3BE >= 0x43E - 0x3BE) {
+    if ((topy & 0x7ff) - 0x3be >= 0x43e - 0x3be) {
       // Note: sign_bias == 0 here because y is not odd.
-      if (ix == 0x3FF0000000000000) return 1;
-      if ((topy & 0x7FF) < 0x3BE)   return 1; // |y| < 2^-65, x^y ~= 1 + y*log(x).
-      return (ix > 0x3FF0000000000000) == (topy < 0x800) ? Infinity : 0;
+      if (ix == 0x3ff0000000000000) return 1;
+      if ((topy & 0x7ff) < 0x3be) return 1; // |y| < 2^-65, x^y ~= 1 + y*log(x).
+      return ix > 0x3ff0000000000000 == topy < 0x800 ? Infinity : 0;
     }
     if (topx == 0) {
       // Normalize subnormal x so exponent becomes negative.
       ix = reinterpret<u64>(x * Ox1p52);
-      ix &= 0x7FFFFFFFFFFFFFFF;
+      ix &= 0x7fffffffffffffff;
       ix -= u64(52) << 52;
     }
   }
@@ -1911,9 +1822,9 @@ export function pow_lut(x: f64, y: f64): f64 {
   //   ehi = y * hi;
   //   elo = y * lo + __builtin_fma(y, hi, -ehi);
   // #else
-  let yhi = reinterpret<f64>(iy & 0xFFFFFFFFF8000000);
+  let yhi = reinterpret<f64>(iy & 0xfffffffff8000000);
   let ylo = y - yhi;
-  let lhi = reinterpret<f64>(reinterpret<u64>(hi) & 0xFFFFFFFFF8000000);
+  let lhi = reinterpret<f64>(reinterpret<u64>(hi) & 0xfffffffff8000000);
   let llo = hi - lhi + lo;
   ehi = yhi * lhi;
   elo = ylo * lhi + y * llo; // |elo| < |ehi| * 2^-25.

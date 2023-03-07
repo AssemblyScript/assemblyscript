@@ -19,7 +19,8 @@ export declare function __visit_members(ref: usize, cookie: u32): void;
 export function __typeinfo(id: u32): TypeinfoFlags {
   let ptr = __rtti_base;
   if (id > load<u32>(ptr)) throw new Error(E_INDEXOUTOFRANGE);
-  return changetype<Typeinfo>(ptr + sizeof<u32>() + id * offsetof<Typeinfo>()).flags;
+  return changetype<Typeinfo>(ptr + sizeof<u32>() + id * offsetof<Typeinfo>())
+    .flags;
 }
 
 // @ts-ignore: decorator
@@ -32,15 +33,30 @@ export function __newBuffer(size: usize, id: u32, data: usize = 0): usize {
 
 // @ts-ignore: decorator
 @unsafe
-export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
-  let bufferSize = <usize>length << alignLog2;
+export function __newArray(
+  length: i32,
+  alignLog2: usize,
+  id: u32,
+  data: usize = 0,
+): usize {
+  let bufferSize = (<usize>length) << alignLog2;
   // make sure `buffer` is tracked by the shadow stack
-  let buffer = changetype<ArrayBuffer>(__newBuffer(bufferSize, idof<ArrayBuffer>(), data));
+  let buffer = changetype<ArrayBuffer>(
+    __newBuffer(bufferSize, idof<ArrayBuffer>(), data),
+  );
   // ...since allocating the array may trigger GC steps
   let array = __new(offsetof<i32[]>(), id);
-  store<usize>(array, changetype<usize>(buffer), offsetof<ArrayBufferView>("buffer"));
+  store<usize>(
+    array,
+    changetype<usize>(buffer),
+    offsetof<ArrayBufferView>("buffer"),
+  );
   __link(array, changetype<usize>(buffer), false);
-  store<usize>(array, changetype<usize>(buffer), offsetof<ArrayBufferView>("dataStart"));
+  store<usize>(
+    array,
+    changetype<usize>(buffer),
+    offsetof<ArrayBufferView>("dataStart"),
+  );
   store<i32>(array, bufferSize, offsetof<ArrayBufferView>("byteLength"));
   store<i32>(array, length, offsetof<i32[]>("length_"));
   return array;
@@ -48,7 +64,8 @@ export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize =
 
 // @ts-ignore: decorator
 @global @unsafe
-function __tostack(ptr: usize): usize { // eslint-disable-line
+function __tostack(ptr: usize): usize {
+  // eslint-disable-line
   return ptr;
 }
 
