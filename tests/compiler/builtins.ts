@@ -39,6 +39,13 @@ assert(!isFunction(changetype<u32>(0)));
 assert(isNullable(changetype<C | null>(0)));
 assert(!isNullable(changetype<C>(0)));
 
+// compile time check
+export function foo(a:i32[]): void {
+  if (isReference(a[0])) {
+    ERROR();
+  }
+}
+
 // evaluation
 
 assert(isDefined(b));

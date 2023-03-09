@@ -9859,7 +9859,11 @@ export class Compiler extends DiagnosticEmitter {
     return supported;
   }
 
-  /** Evaluates a boolean condition, determining whether it is TRUE, FALSE or UNKNOWN. */
+  /** 
+   * Evaluates a boolean condition, determining whether it is TRUE, FALSE or UNKNOWN.
+   * Side effects are not considered.
+   * Regardless of the return value, the expression still needs to be compiled
+   */
   evaluateCondition(expr: ExpressionRef): ConditionKind {
     let type = getExpressionType(expr);
     if (type == TypeRef.Unreachable)
@@ -9873,6 +9877,32 @@ export class Compiler extends DiagnosticEmitter {
         ? ConditionKind.True
         : ConditionKind.False;
     }
+
+    // minimal runExpression range and try again
+    while (getExpressionId(expr) == ExpressionId.Block) {
+      let isUpdate = false;
+      const blockSize = getBlockChildCount(expr);
+      for (let i: u32 = 0; i < blockSize; i++) {
+        const childExpr = getBlockChildAt(expr, blockSize - 1 - i);
+        if (getExpressionType(childExpr) == TypeRef.I32) {
+          isUpdate = true;
+          expr = childExpr;
+          break;
+        } else if (getExpressionType(childExpr) == TypeRef.Unreachable) {
+          return ConditionKind.Unknown;
+        }
+      }
+      if (!isUpdate) {
+        break;
+      }
+    }
+    evaled = module.runExpression(expr, ExpressionRunnerFlags.Default);
+    if (evaled) {
+      return getConstValueI32(evaled)
+        ? ConditionKind.True
+        : ConditionKind.False;
+    }
+    
     return ConditionKind.Unknown;
   }
 
