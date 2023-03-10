@@ -106,6 +106,12 @@ export class Map<K,V> {
     return entry.value;
   }
 
+  getOrDefault(key: K, def: V): V {
+    let entry = this.find(key, HASH<K>(key));
+    if (!entry) return def;
+    return entry.value;
+  }
+
   @operator("[]=")
   set(key: K, value: V): this {
     let hashCode = HASH<K>(key);

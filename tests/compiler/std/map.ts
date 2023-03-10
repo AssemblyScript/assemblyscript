@@ -20,6 +20,9 @@ function testNumeric<K extends number,V extends number>(): void {
   }
   assert(map.size == 100);
 
+  // getOrDefault
+  assert(map.getOrDefault(255 as K, 255 as V) == 255 as V);
+
   // keys and values
   let keys = map.keys();
   let vals = map.values();

@@ -2043,6 +2043,7 @@ declare class Map<K,V> {
   has(key: K): bool;
   set(key: K, value: V): this;
   get(key: K): V;
+  getOrDefault(key: K, def: V): V;
   delete(key: K): bool;
   clear(): void;
   keys(): K[]; // preliminary
