@@ -6,17 +6,17 @@
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
  (type $i32_=>_i64 (func (param i32) (result i64)))
  (type $i32_i64_=>_none (func (param i32 i64)))
- (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
+ (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
+ (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
  (type $i32_=>_f32 (func (param i32) (result f32)))
  (type $i32_f32_=>_none (func (param i32 f32)))
  (type $i32_=>_f64 (func (param i32) (result f64)))
  (type $i32_f64_=>_none (func (param i32 f64)))
- (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
  (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
- (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
@@ -6419,6 +6419,50 @@
   local.get $1
   return
  )
+ (func $~lib/map/Map<i8,i32>#getOrDefault (param $this i32) (param $key i32) (param $def i32) (result i32)
+  (local $entry i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<i8>
+  call $~lib/map/Map<i8,i32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   local.get $def
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<i8,i32>#get:value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
+  return
+ )
  (func $~lib/array/Array<i8>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -9026,6 +9070,26 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $map
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store $0 offset=4
+  local.get $12
+  i32.const 255
+  i32.const 255
+  call $~lib/map/Map<i8,i32>#getOrDefault
+  i32.const 255
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 544
+   i32.const 24
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $map
   local.set $12
@@ -9099,7 +9163,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 31
+     i32.const 34
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -9118,7 +9182,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 32
+     i32.const 35
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -9167,7 +9231,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 36
+   i32.const 39
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -9185,7 +9249,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 37
+   i32.const 40
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -9209,7 +9273,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 41
+     i32.const 44
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -9230,7 +9294,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 42
+     i32.const 45
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -9257,7 +9321,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 44
+     i32.const 47
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -9282,7 +9346,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 46
+   i32.const 49
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -9307,7 +9371,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 50
+     i32.const 53
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -9336,7 +9400,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 52
+     i32.const 55
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -9363,7 +9427,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 54
+     i32.const 57
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -9388,7 +9452,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 56
+   i32.const 59
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -9413,7 +9477,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 60
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -10106,6 +10170,50 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
+ )
+ (func $~lib/map/Map<u8,i32>#getOrDefault (param $this i32) (param $key i32) (param $def i32) (result i32)
+  (local $entry i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<u8>
+  call $~lib/map/Map<u8,i32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   local.get $def
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<u8,i32>#get:value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
   return
  )
  (func $~lib/array/Array<u8>#constructor (param $this i32) (param $length i32) (result i32)
@@ -11702,6 +11810,26 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $map
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store $0 offset=4
+  local.get $12
+  i32.const 255
+  i32.const 255
+  call $~lib/map/Map<u8,i32>#getOrDefault
+  i32.const 255
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 544
+   i32.const 24
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $map
   local.set $12
@@ -11775,7 +11903,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 31
+     i32.const 34
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -11794,7 +11922,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 32
+     i32.const 35
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -11843,7 +11971,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 36
+   i32.const 39
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -11861,7 +11989,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 37
+   i32.const 40
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -11885,7 +12013,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 41
+     i32.const 44
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -11906,7 +12034,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 42
+     i32.const 45
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -11933,7 +12061,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 44
+     i32.const 47
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -11958,7 +12086,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 46
+   i32.const 49
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -11983,7 +12111,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 50
+     i32.const 53
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -12012,7 +12140,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 52
+     i32.const 55
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -12039,7 +12167,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 54
+     i32.const 57
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -12064,7 +12192,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 56
+   i32.const 59
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -12089,7 +12217,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 60
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -12780,6 +12908,50 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
+ )
+ (func $~lib/map/Map<i16,i32>#getOrDefault (param $this i32) (param $key i32) (param $def i32) (result i32)
+  (local $entry i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<i16>
+  call $~lib/map/Map<i16,i32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   local.get $def
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<i16,i32>#get:value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
   return
  )
  (func $~lib/array/Array<i16>#constructor (param $this i32) (param $length i32) (result i32)
@@ -14374,6 +14546,26 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $map
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store $0 offset=4
+  local.get $12
+  i32.const 255
+  i32.const 255
+  call $~lib/map/Map<i16,i32>#getOrDefault
+  i32.const 255
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 544
+   i32.const 24
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $map
   local.set $12
@@ -14447,7 +14639,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 31
+     i32.const 34
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -14466,7 +14658,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 32
+     i32.const 35
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -14515,7 +14707,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 36
+   i32.const 39
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -14533,7 +14725,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 37
+   i32.const 40
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -14557,7 +14749,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 41
+     i32.const 44
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -14578,7 +14770,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 42
+     i32.const 45
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -14605,7 +14797,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 44
+     i32.const 47
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -14630,7 +14822,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 46
+   i32.const 49
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -14655,7 +14847,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 50
+     i32.const 53
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -14684,7 +14876,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 52
+     i32.const 55
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -14711,7 +14903,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 54
+     i32.const 57
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -14736,7 +14928,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 56
+   i32.const 59
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -14761,7 +14953,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 60
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -15454,6 +15646,50 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
+ )
+ (func $~lib/map/Map<u16,i32>#getOrDefault (param $this i32) (param $key i32) (param $def i32) (result i32)
+  (local $entry i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<u16>
+  call $~lib/map/Map<u16,i32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   local.get $def
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<u16,i32>#get:value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
   return
  )
  (func $~lib/array/Array<u16>#constructor (param $this i32) (param $length i32) (result i32)
@@ -17050,6 +17286,26 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $map
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store $0 offset=4
+  local.get $12
+  i32.const 255
+  i32.const 255
+  call $~lib/map/Map<u16,i32>#getOrDefault
+  i32.const 255
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 544
+   i32.const 24
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $map
   local.set $12
@@ -17123,7 +17379,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 31
+     i32.const 34
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -17142,7 +17398,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 32
+     i32.const 35
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -17191,7 +17447,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 36
+   i32.const 39
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -17209,7 +17465,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 37
+   i32.const 40
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -17233,7 +17489,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 41
+     i32.const 44
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -17254,7 +17510,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 42
+     i32.const 45
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -17281,7 +17537,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 44
+     i32.const 47
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -17306,7 +17562,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 46
+   i32.const 49
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -17331,7 +17587,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 50
+     i32.const 53
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -17360,7 +17616,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 52
+     i32.const 55
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -17387,7 +17643,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 54
+     i32.const 57
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -17412,7 +17668,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 56
+   i32.const 59
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -17437,7 +17693,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 60
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -17517,6 +17773,50 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+  return
+ )
+ (func $~lib/map/Map<i32,i32>#getOrDefault (param $this i32) (param $key i32) (param $def i32) (result i32)
+  (local $entry i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<i32>
+  call $~lib/map/Map<i32,i32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   local.get $def
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<i32,i32>#get:value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
   return
  )
  (func $~lib/map/Map<i32,i32>#keys (param $this i32) (result i32)
@@ -18213,6 +18513,26 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $map
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store $0 offset=4
+  local.get $12
+  i32.const 255
+  i32.const 255
+  call $~lib/map/Map<i32,i32>#getOrDefault
+  i32.const 255
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 544
+   i32.const 24
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $map
   local.set $12
@@ -18286,7 +18606,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 31
+     i32.const 34
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -18305,7 +18625,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 32
+     i32.const 35
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -18354,7 +18674,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 36
+   i32.const 39
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -18372,7 +18692,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 37
+   i32.const 40
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -18396,7 +18716,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 41
+     i32.const 44
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -18417,7 +18737,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 42
+     i32.const 45
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -18444,7 +18764,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 44
+     i32.const 47
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -18469,7 +18789,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 46
+   i32.const 49
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -18494,7 +18814,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 50
+     i32.const 53
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -18523,7 +18843,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 52
+     i32.const 55
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -18550,7 +18870,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 54
+     i32.const 57
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -18575,7 +18895,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 56
+   i32.const 59
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -18600,7 +18920,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 60
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -19289,6 +19609,50 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
+ )
+ (func $~lib/map/Map<u32,i32>#getOrDefault (param $this i32) (param $key i32) (param $def i32) (result i32)
+  (local $entry i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<u32>
+  call $~lib/map/Map<u32,i32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   local.get $def
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<u32,i32>#get:value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
   return
  )
  (func $~lib/array/Array<u32>#constructor (param $this i32) (param $length i32) (result i32)
@@ -20881,6 +21245,26 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $map
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store $0 offset=4
+  local.get $12
+  i32.const 255
+  i32.const 255
+  call $~lib/map/Map<u32,i32>#getOrDefault
+  i32.const 255
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 544
+   i32.const 24
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $map
   local.set $12
@@ -20954,7 +21338,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 31
+     i32.const 34
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -20973,7 +21357,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 32
+     i32.const 35
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -21022,7 +21406,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 36
+   i32.const 39
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -21040,7 +21424,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 37
+   i32.const 40
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -21064,7 +21448,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 41
+     i32.const 44
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -21085,7 +21469,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 42
+     i32.const 45
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -21112,7 +21496,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 44
+     i32.const 47
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -21137,7 +21521,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 46
+   i32.const 49
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -21162,7 +21546,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 50
+     i32.const 53
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -21191,7 +21575,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 52
+     i32.const 55
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -21218,7 +21602,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 54
+     i32.const 57
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -21243,7 +21627,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 56
+   i32.const 59
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -21268,7 +21652,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 60
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -21957,6 +22341,50 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
+ )
+ (func $~lib/map/Map<i64,i32>#getOrDefault (param $this i32) (param $key i64) (param $def i32) (result i32)
+  (local $entry i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<i64>
+  call $~lib/map/Map<i64,i32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   local.get $def
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<i64,i32>#get:value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
   return
  )
  (func $~lib/array/Array<i64>#constructor (param $this i32) (param $length i32) (result i32)
@@ -23555,6 +23983,26 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $map
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store $0 offset=4
+  local.get $12
+  i64.const 255
+  i32.const 255
+  call $~lib/map/Map<i64,i32>#getOrDefault
+  i32.const 255
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 544
+   i32.const 24
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $map
   local.set $12
@@ -23628,7 +24076,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 31
+     i32.const 34
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -23648,7 +24096,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 32
+     i32.const 35
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -23697,7 +24145,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 36
+   i32.const 39
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -23715,7 +24163,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 37
+   i32.const 40
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -23739,7 +24187,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 41
+     i32.const 44
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -23761,7 +24209,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 42
+     i32.const 45
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -23788,7 +24236,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 44
+     i32.const 47
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -23813,7 +24261,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 46
+   i32.const 49
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -23838,7 +24286,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 50
+     i32.const 53
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -23868,7 +24316,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 52
+     i32.const 55
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -23895,7 +24343,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 54
+     i32.const 57
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -23920,7 +24368,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 56
+   i32.const 59
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -23945,7 +24393,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 60
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -24634,6 +25082,50 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
+ )
+ (func $~lib/map/Map<u64,i32>#getOrDefault (param $this i32) (param $key i64) (param $def i32) (result i32)
+  (local $entry i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<u64>
+  call $~lib/map/Map<u64,i32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   local.get $def
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<u64,i32>#get:value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
   return
  )
  (func $~lib/array/Array<u64>#constructor (param $this i32) (param $length i32) (result i32)
@@ -26232,6 +26724,26 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $map
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store $0 offset=4
+  local.get $12
+  i64.const 255
+  i32.const 255
+  call $~lib/map/Map<u64,i32>#getOrDefault
+  i32.const 255
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 544
+   i32.const 24
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $map
   local.set $12
@@ -26305,7 +26817,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 31
+     i32.const 34
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -26325,7 +26837,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 32
+     i32.const 35
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -26374,7 +26886,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 36
+   i32.const 39
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -26392,7 +26904,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 37
+   i32.const 40
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -26416,7 +26928,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 41
+     i32.const 44
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -26438,7 +26950,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 42
+     i32.const 45
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -26465,7 +26977,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 44
+     i32.const 47
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -26490,7 +27002,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 46
+   i32.const 49
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -26515,7 +27027,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 50
+     i32.const 53
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -26545,7 +27057,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 52
+     i32.const 55
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -26572,7 +27084,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 54
+     i32.const 57
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -26597,7 +27109,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 56
+   i32.const 59
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -26622,7 +27134,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 60
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -27311,6 +27823,50 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
+ )
+ (func $~lib/map/Map<f32,i32>#getOrDefault (param $this i32) (param $key f32) (param $def i32) (result i32)
+  (local $entry i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<f32>
+  call $~lib/map/Map<f32,i32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   local.get $def
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<f32,i32>#get:value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
   return
  )
  (func $~lib/array/Array<f32>#constructor (param $this i32) (param $length i32) (result i32)
@@ -28909,6 +29465,26 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $map
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store $0 offset=4
+  local.get $12
+  f32.const 255
+  i32.const 255
+  call $~lib/map/Map<f32,i32>#getOrDefault
+  i32.const 255
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 544
+   i32.const 24
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $map
   local.set $12
@@ -28982,7 +29558,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 31
+     i32.const 34
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -29002,7 +29578,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 32
+     i32.const 35
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -29051,7 +29627,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 36
+   i32.const 39
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -29069,7 +29645,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 37
+   i32.const 40
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -29093,7 +29669,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 41
+     i32.const 44
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -29115,7 +29691,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 42
+     i32.const 45
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -29142,7 +29718,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 44
+     i32.const 47
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -29167,7 +29743,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 46
+   i32.const 49
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -29192,7 +29768,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 50
+     i32.const 53
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -29222,7 +29798,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 52
+     i32.const 55
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -29249,7 +29825,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 54
+     i32.const 57
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -29274,7 +29850,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 56
+   i32.const 59
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -29299,7 +29875,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 60
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -29988,6 +30564,50 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
+ )
+ (func $~lib/map/Map<f64,i32>#getOrDefault (param $this i32) (param $key f64) (param $def i32) (result i32)
+  (local $entry i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<f64>
+  call $~lib/map/Map<f64,i32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   local.get $def
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $4
+   return
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<f64,i32>#get:value
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $4
   return
  )
  (func $~lib/array/Array<f64>#constructor (param $this i32) (param $length i32) (result i32)
@@ -31586,6 +32206,26 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $map
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store $0 offset=4
+  local.get $12
+  f64.const 255
+  i32.const 255
+  call $~lib/map/Map<f64,i32>#getOrDefault
+  i32.const 255
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 544
+   i32.const 24
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $map
   local.set $12
@@ -31659,7 +32299,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 31
+     i32.const 34
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -31679,7 +32319,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 32
+     i32.const 35
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -31728,7 +32368,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 36
+   i32.const 39
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -31746,7 +32386,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 37
+   i32.const 40
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -31770,7 +32410,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 41
+     i32.const 44
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -31792,7 +32432,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 42
+     i32.const 45
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -31819,7 +32459,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 44
+     i32.const 47
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -31844,7 +32484,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 46
+   i32.const 49
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -31869,7 +32509,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 50
+     i32.const 53
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -31899,7 +32539,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 52
+     i32.const 55
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -31926,7 +32566,7 @@
     if
      i32.const 0
      i32.const 544
-     i32.const 54
+     i32.const 57
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -31951,7 +32591,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 56
+   i32.const 59
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -31976,7 +32616,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 60
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
