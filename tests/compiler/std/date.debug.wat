@@ -8,6 +8,7 @@
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i64 (func (param i32 i32 i32) (result i64)))
  (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (type $none_=>_i32 (func (result i32)))
@@ -20,7 +21,6 @@
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
  (type $i32_i64_=>_i64 (func (param i32 i64) (result i64)))
- (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/date/_day (mut i32) (i32.const 0))
  (global $~lib/date/_month (mut i32) (i32.const 0))
@@ -3479,6 +3479,114 @@
   i32.load $0
   return
  )
+ (func $~lib/util/string/findCodePointForward (param $input i32) (param $start i32) (param $len i32) (param $code i32) (result i32)
+  (local $ptr i32)
+  (local $c64 i64)
+  (local $value i64)
+  (local $mask i64)
+  (local $x i64)
+  local.get $len
+  local.get $start
+  i32.sub
+  local.set $len
+  local.get $input
+  local.get $start
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $ptr
+  local.get $code
+  i64.extend_i32_u
+  i64.const 281479271743489
+  i64.mul
+  local.set $c64
+  loop $while-continue|0
+   local.get $len
+   i32.const 4
+   i32.ge_s
+   if
+    block $~lib/util/string/makeMoveMask|inlined.0 (result i64)
+     local.get $ptr
+     i64.load $0
+     local.get $c64
+     i64.xor
+     local.set $value
+     local.get $value
+     i64.const 281479271743489
+     i64.sub
+     local.get $value
+     i64.const -1
+     i64.xor
+     i64.and
+     i64.const -9223231297218904064
+     i64.and
+     br $~lib/util/string/makeMoveMask|inlined.0
+    end
+    local.set $mask
+    local.get $mask
+    i64.const 0
+    i64.ne
+    if
+     local.get $ptr
+     local.get $input
+     i32.sub
+     i32.const 1
+     i32.shr_u
+     block $~lib/util/string/maskToIndex|inlined.0 (result i32)
+      local.get $mask
+      local.set $x
+      local.get $x
+      i64.ctz
+      i32.wrap_i64
+      i32.const 4
+      i32.shr_u
+      br $~lib/util/string/maskToIndex|inlined.0
+     end
+     i32.add
+     return
+    end
+    local.get $ptr
+    i32.const 8
+    i32.add
+    local.set $ptr
+    local.get $len
+    i32.const 4
+    i32.sub
+    local.set $len
+    br $while-continue|0
+   end
+  end
+  loop $while-continue|1
+   local.get $len
+   i32.const 0
+   i32.gt_s
+   if
+    local.get $ptr
+    i32.load16_u $0
+    local.get $code
+    i32.eq
+    if
+     local.get $ptr
+     local.get $input
+     i32.sub
+     i32.const 1
+     i32.shr_u
+     return
+    end
+    local.get $ptr
+    i32.const 2
+    i32.add
+    local.set $ptr
+    local.get $len
+    i32.const 1
+    i32.sub
+    local.set $len
+    br $while-continue|1
+   end
+  end
+  i32.const -1
+  return
+ )
  (func $~lib/array/Array<~lib/string/String>#get:length_ (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
@@ -6216,7 +6324,8 @@
   (local $7 i32)
   (local $8 i32)
   (local $searchStart i32)
-  (local $10 i32)
+  (local $firstChar i32)
+  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -6226,43 +6335,43 @@
   i64.const 0
   i64.store $0
   local.get $search
-  local.set $10
+  local.set $11
   global.get $~lib/memory/__stack_pointer
-  local.get $10
+  local.get $11
   i32.store $0
-  local.get $10
+  local.get $11
   call $~lib/string/String#get:length
   local.set $searchLen
   local.get $searchLen
   i32.eqz
   if
    i32.const 0
-   local.set $10
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $10
+   local.get $11
    return
   end
   local.get $this
-  local.set $10
+  local.set $11
   global.get $~lib/memory/__stack_pointer
-  local.get $10
+  local.get $11
   i32.store $0
-  local.get $10
+  local.get $11
   call $~lib/string/String#get:length
   local.set $len
   local.get $len
   i32.eqz
   if
    i32.const -1
-   local.set $10
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $10
+   local.get $11
    return
   end
   local.get $start
@@ -6282,6 +6391,60 @@
   select
   local.set $searchStart
   local.get $len
+  local.get $searchStart
+  i32.sub
+  local.get $searchLen
+  i32.lt_s
+  if
+   i32.const -1
+   local.set $11
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $11
+   return
+  end
+  i32.const 0
+  i32.const 2
+  i32.le_s
+  drop
+  local.get $search
+  i32.load16_u $0
+  local.set $firstChar
+  local.get $this
+  local.get $searchStart
+  local.get $len
+  local.get $firstChar
+  call $~lib/util/string/findCodePointForward
+  local.set $searchStart
+  local.get $searchStart
+  i32.const -1
+  i32.eq
+  if
+   i32.const -1
+   local.set $11
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $11
+   return
+  end
+  local.get $searchLen
+  i32.const 1
+  i32.eq
+  if
+   local.get $searchStart
+   local.set $11
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $11
+   return
+  end
+  local.get $len
   local.get $searchLen
   i32.sub
   local.set $len
@@ -6291,30 +6454,30 @@
    i32.le_s
    if
     local.get $this
-    local.set $10
+    local.set $11
     global.get $~lib/memory/__stack_pointer
-    local.get $10
+    local.get $11
     i32.store $0
-    local.get $10
+    local.get $11
     local.get $searchStart
     local.get $search
-    local.set $10
+    local.set $11
     global.get $~lib/memory/__stack_pointer
-    local.get $10
+    local.get $11
     i32.store $0 offset=4
-    local.get $10
+    local.get $11
     i32.const 0
     local.get $searchLen
     call $~lib/util/string/compareImpl
     i32.eqz
     if
      local.get $searchStart
-     local.set $10
+     local.set $11
      global.get $~lib/memory/__stack_pointer
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     local.get $10
+     local.get $11
      return
     end
     local.get $searchStart
@@ -6325,12 +6488,12 @@
    end
   end
   i32.const -1
-  local.set $10
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $10
+  local.get $11
   return
  )
  (func $~lib/string/String#substring (param $this i32) (param $start i32) (param $end i32) (result i32)

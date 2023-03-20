@@ -1,7 +1,18 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
-import { compareImpl, strtol, strtod, isSpace, isAscii, isFinalSigma, toLower8, toUpper8 } from "./util/string";
+import {
+  compareImpl,
+  findCodePointForward,
+  findCodePointBackward,
+  strtol,
+  strtod,
+  isSpace,
+  isAscii,
+  isFinalSigma,
+  toLower8,
+  toUpper8
+} from "./util/string";
 import { SPECIALS_UPPER, casemap, bsearch } from "./util/casemap";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_UNPAIRED_SURROGATE } from "./util/error";
 import { idof } from "./builtins";
@@ -165,6 +176,13 @@ import { Array } from "./array";
     let len = <isize>this.length;
     if (!len) return -1;
     let searchStart = min(max(<isize>start, 0), len);
+    if (len - searchStart < searchLen) return -1;
+    if (ASC_SHRINK_LEVEL <= 2) {
+      let firstChar = load<u16>(changetype<usize>(search));
+      searchStart = findCodePointForward(changetype<usize>(this), searchStart, len, firstChar);
+      if (searchStart == -1) return -1; // Nothing found
+      if (searchLen == 1) return <i32>searchStart; // Needle is single character
+    }
     for (len -= searchLen; searchStart <= len; ++searchStart) {
       // @ts-ignore: string <-> String
       if (!compareImpl(this, searchStart, search, 0, searchLen)) return <i32>searchStart;
@@ -175,9 +193,16 @@ import { Array } from "./array";
   lastIndexOf(search: String, start: i32 = i32.MAX_VALUE): i32 {
     let searchLen = <isize>search.length;
     if (!searchLen) return this.length;
-    let len = this.length;
+    let len = <isize>this.length;
     if (!len) return -1;
-    let searchStart = min(max(<isize>start, 0), <isize>len - searchLen);
+    if (len < searchLen) return -1;
+    let searchStart = min(max(<isize>start, 0), len - searchLen);
+    if (ASC_SHRINK_LEVEL <= 2) {
+      let firstChar = load<u16>(changetype<usize>(search));
+      searchStart = findCodePointBackward(changetype<usize>(this), searchStart, firstChar);
+      if (searchStart == -1) return -1; // Nothing found
+      if (searchLen == 1) return <i32>searchStart; // Needle is single character
+    }
     for (; searchStart >= 0; --searchStart) {
       // @ts-ignore: string <-> String
       if (!compareImpl(this, searchStart, search, 0, searchLen)) return <i32>searchStart;
@@ -843,5 +868,5 @@ export namespace String {
 }
 
 export class TemplateStringsArray extends Array<string> {
-  readonly raw: string[];
+  readonly raw!: string[];
 }

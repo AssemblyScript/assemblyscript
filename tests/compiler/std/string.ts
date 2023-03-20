@@ -67,6 +67,13 @@ assert(str.indexOf("x") == -1);
 assert(str.indexOf(",", 2) == 2);
 assert(str.indexOf(",", 3) == -1);
 assert(str.indexOf(", I", -1) == 2);
+assert("aaaaa".indexOf("a", 0) == 0);
+assert("aaaaa".indexOf("a", 1) == 1);
+assert("abbbb".indexOf("a", 0) == 0);
+assert("abbbb".indexOf("a", 1) == -1);
+assert("ababa".indexOf("a", 0) == 0);
+assert("ababa".indexOf("a", 1) == 2);
+assert("bbbaa".indexOf("a", 0) == 3);
 
 assert("".lastIndexOf("") == 0);
 assert("".lastIndexOf("hi") == -1);
@@ -79,6 +86,13 @@ assert(str.lastIndexOf(",", 3) == 2);
 assert(str.lastIndexOf(", I", -1) == -1);
 assert(str.lastIndexOf("i", 0) == -1);
 assert(str.lastIndexOf("hi", 0) == 0);
+assert("abc".lastIndexOf("bc", 1) == 1);
+assert("abc".lastIndexOf("bc", 6) == 1);
+assert("abc".lastIndexOf("bc", 0) == -1);
+assert("abcd".lastIndexOf("bc") == 1);
+assert("_abcde".lastIndexOf("bc") == 2);
+assert("_abcde".lastIndexOf("a") == 1);
+assert("external".lastIndexOf("/") == -1);
 
 assert("".localeCompare("") == 0);
 assert("a".localeCompare("") == 1);

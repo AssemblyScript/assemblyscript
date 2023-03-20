@@ -1187,7 +1187,7 @@ function parseExp(ptr: usize, len: i32): i32 {
 function fixmul(a: u64, b: u32): u64 {
   let low  = (a & 0xFFFFFFFF) * b;
   let high = (a >> 32) * b + (low >> 32);
-  let overflow = <u32>(high >> 32);
+  let overflow = u32(high >> 32);
   let space = clz(overflow);
   let revspace: u64 = 32 - space;
   __fixmulShift += revspace;
@@ -1199,4 +1199,68 @@ function fixmul(a: u64, b: u32): u64 {
 function pow10(n: i32): f64 {
   // argument `n` should bounds in [0, 22] range
   return load<f64>(POWERS10 + (n << alignof<f64>()));
+}
+
+// @ts-ignore: decorator
+@inline
+function makeMoveMask(value: u64): u64 {
+  return (value - 0x0001_0001_0001_0001) & ~value & 0x8000_8000_8000_8000;
+}
+
+// @ts-ignore: decorator
+@inline
+function maskToIndex(x: u64): isize {
+  return <isize>ctz(x) >>> 4;
+}
+
+export function findCodePointForward(input: usize, start: isize, len: isize, code: u32): isize {
+  len -= start;
+  let ptr = input + (start << 1);
+  let c64 = <u64>code * 0x0001_0001_0001_0001; // repeat code point 4 times in 64-bit word
+  // Process 4 code points at once
+  while (len >= 4) {
+    // Roughly emulate 16-bit per lane move mask
+    let mask = makeMoveMask(load<u64>(ptr) ^ c64);
+    if (mask) return (ptr - input >>> 1) + maskToIndex(mask);
+    ptr += 8;
+    len -= 4;
+  }
+  // Process rest of code points one by one. It takes form 0 to 3 iterations
+  while (len > 0) {
+    if (load<u16>(ptr) == code) return ptr - input >>> 1;
+    ptr += 2;
+    len -= 1;
+  }
+  return -1;
+}
+
+export function findCodePointBackward(input: usize, start: isize, code: u32): isize {
+  let ptr = input + (start << 1);
+  // Align to 8 bytes
+  while (ptr & 7) {
+    if (load<u16>(ptr) == code) return ptr - input >>> 1;
+    ptr -= 2;
+    if (ptr < input) return -1;
+  }
+
+  if (isize(ptr - input) >= 8) {
+    let c64 = <u64>code * 0x0001_0001_0001_0001; // repeat code point 4 times in 64-bit word
+    let src = ptr - 8;
+    let off = isize(src - input);
+    // Process 4 code points at once
+    do {
+      // Roughly emulate 16-bit per lane move mask
+      let mask = makeMoveMask(load<u64>(src) ^ c64);
+      if (mask) return (src - input >>> 1) + maskToIndex(mask);
+      src -= 8;
+      off -= 8;
+    } while (off >= 8);
+    ptr = src + 8;
+  }
+  // Process rest of code points one by one. It takes form 0 to 3 iterations
+  while (ptr >= input) {
+    if (load<u16>(ptr) == code) return ptr - input >>> 1;
+    ptr -= 2;
+  }
+  return -1;
 }
