@@ -776,7 +776,7 @@ export abstract class Node {
   }
 
   /** Tests whether this node is guaranteed to compile to a constant value. */
-  get compilesToConst(): bool {
+  isLiteral(): bool {
     switch (this.kind) {
       case NodeKind.Literal: {
         switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
@@ -788,7 +788,15 @@ export abstract class Node {
       }
       case NodeKind.Null:
       case NodeKind.True:
-      case NodeKind.False: return true;
+      case NodeKind.False:
+        return true;
+      case NodeKind.UnaryPrefix: {
+        const unaryPrefixExpr = <UnaryPrefixExpression>changetype<Node>(this);
+        if (unaryPrefixExpr.operator == Token.Minus || unaryPrefixExpr.operator == Token.Plus) {
+          // if expr can compile to const, +expr or -expr should also compile to const
+          return unaryPrefixExpr.operand.isLiteral();
+        }
+      }
     }
     return false;
   }

@@ -2532,25 +2532,6 @@
   memory.fill $0
   local.get $1
  )
- (func $~lib/string/String.fromCharCode@varargs (param $0 i32) (result i32)
-  (local $1 i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const -1
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $~lib/string/String.fromCharCode
- )
  (func $~lib/math/ipow32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -10585,10 +10566,9 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 1
-   global.set $~argumentsLength
    i32.const 0
-   call $~lib/string/String.fromCharCode@varargs
+   i32.const -1
+   call $~lib/string/String.fromCharCode
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.tee $5
@@ -10609,10 +10589,9 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 1
-   global.set $~argumentsLength
    i32.const 65600
-   call $~lib/string/String.fromCharCode@varargs
+   i32.const -1
+   call $~lib/string/String.fromCharCode
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.tee $5
@@ -10633,10 +10612,9 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 1
-   global.set $~argumentsLength
    i32.const 54
-   call $~lib/string/String.fromCharCode@varargs
+   i32.const -1
+   call $~lib/string/String.fromCharCode
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.tee $5
@@ -10657,10 +10635,9 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 1
-   global.set $~argumentsLength
    i32.const 65590
-   call $~lib/string/String.fromCharCode@varargs
+   i32.const -1
+   call $~lib/string/String.fromCharCode
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.tee $5

@@ -6807,7 +6807,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = numArguments; i < maxArguments; ++i) {
         let initializer = parameterNodes[i].initializer;
         if (initializer) {
-          if (initializer.compilesToConst) {
+          if (initializer.isLiteral()) {
             operands.push(this.compileExpression(
               initializer,
               parameterTypes[i],
@@ -6818,11 +6818,15 @@ export class Compiler extends DiagnosticEmitter {
           let resolved = this.resolver.lookupExpression(initializer, instance.flow, parameterTypes[i], ReportMode.Swallow);
           if (resolved && resolved.kind == ElementKind.Global) {
             let global = <Global>resolved;
-            if (this.compileGlobalLazy(global, initializer) && global.is(CommonFlags.Inlined)) {
-              operands.push(
-                this.compileInlineConstant(global, parameterTypes[i], Constraints.ConvImplicit)
-              );
-              continue;
+            if (this.compileGlobalLazy(global, initializer)) {
+              if (global.is(CommonFlags.Inlined)) {
+                operands.push(this.compileInlineConstant(global, parameterTypes[i], Constraints.ConvImplicit));
+                continue;
+              }
+              if (!global.hasDecorator(DecoratorFlags.Lazy)) {
+                operands.push(module.global_get(global.internalName, global.type.toRef()));
+                continue;
+              }
             }
           }
         }

@@ -3,8 +3,8 @@
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 96))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 108))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32876))
  (global $~lib/memory/__heap_base i32 (i32.const 32876))
@@ -23,36 +23,11 @@
   i32.add
   return
  )
- (func $call-optional/opt@varargs (param $a i32) (param $b i32) (param $c i32) (result i32)
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const -1
-    local.set $b
-   end
-   i32.const -2
-   local.set $c
-  end
-  local.get $a
-  local.get $b
-  local.get $c
-  call $call-optional/opt
- )
  (func $start:call-optional
   i32.const 3
-  i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $call-optional/opt@varargs
+  i32.const -1
+  i32.const -2
+  call $call-optional/opt
   i32.const 0
   i32.eq
   i32.eqz
@@ -66,10 +41,8 @@
   end
   i32.const 3
   i32.const 4
-  i32.const 2
-  global.set $~argumentsLength
-  i32.const 0
-  call $call-optional/opt@varargs
+  i32.const -2
+  call $call-optional/opt
   i32.const 5
   i32.eq
   i32.eqz
@@ -153,6 +126,29 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $call-optional/opt@varargs (param $a i32) (param $b i32) (param $c i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const -1
+    local.set $b
+   end
+   i32.const -2
+   local.set $c
+  end
+  local.get $a
+  local.get $b
+  local.get $c
+  call $call-optional/opt
  )
  (func $~start
   call $start:call-optional

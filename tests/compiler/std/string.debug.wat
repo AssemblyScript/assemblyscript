@@ -41,8 +41,8 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/string/String.MAX_LENGTH i32 (i32.const 536870910))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/util/string/__fixmulShift (mut i64) (i64.const 0))
  (global $~lib/number/I32.MAX_VALUE i32 (i32.const 2147483647))
@@ -2857,24 +2857,6 @@
   memory.fill $0
   local.get $ptr
   return
- )
- (func $~lib/string/String.fromCharCode@varargs (param $unit i32) (param $surr i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const -1
-   local.set $surr
-  end
-  local.get $unit
-  local.get $surr
-  call $~lib/string/String.fromCharCode
  )
  (func $~lib/rt/__newBuffer (param $size i32) (param $id i32) (param $data i32) (result i32)
   (local $buffer i32)
@@ -12470,10 +12452,8 @@
    unreachable
   end
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/string/String.fromCharCode@varargs
+  i32.const -1
+  call $~lib/string/String.fromCharCode
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -12496,10 +12476,8 @@
    unreachable
   end
   i32.const 65600
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/string/String.fromCharCode@varargs
+  i32.const -1
+  call $~lib/string/String.fromCharCode
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -12522,10 +12500,8 @@
    unreachable
   end
   i32.const 54
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/string/String.fromCharCode@varargs
+  i32.const -1
+  call $~lib/string/String.fromCharCode
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -12550,10 +12526,8 @@
   i32.const 65536
   i32.const 54
   i32.add
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/string/String.fromCharCode@varargs
+  i32.const -1
+  call $~lib/string/String.fromCharCode
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55

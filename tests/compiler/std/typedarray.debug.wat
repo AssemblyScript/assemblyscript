@@ -1,7 +1,7 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -60974,49 +60974,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Uint8Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Uint8Array.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $~lib/arraybuffer/ArrayBuffer#slice (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $length i32)
   (local $4 i32)
@@ -61263,49 +61220,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Int8Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Int8Array.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Int8Array,i8>
   (local $values i32)
   (local $length i32)
@@ -61421,10 +61335,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Int8Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Int8Array.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -61590,10 +61502,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Uint8Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Uint8Array.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -61774,49 +61684,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Uint8ClampedArray.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Uint8ClampedArray.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint8ClampedArray,u8>
   (local $values i32)
   (local $length i32)
@@ -61937,10 +61804,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Uint8ClampedArray.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Uint8ClampedArray.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -62121,49 +61986,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Int16Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Int16Array.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Int16Array,i16>
   (local $values i32)
   (local $length i32)
@@ -62285,10 +62107,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Int16Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Int16Array.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -62469,49 +62289,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Uint16Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Uint16Array.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint16Array,u16>
   (local $values i32)
   (local $length i32)
@@ -62636,10 +62413,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Uint16Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Uint16Array.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -62820,49 +62595,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Int32Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Int32Array.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Int32Array,i32>
   (local $values i32)
   (local $length i32)
@@ -62987,10 +62719,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Int32Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Int32Array.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -63171,49 +62901,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Uint32Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Uint32Array.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint32Array,u32>
   (local $values i32)
   (local $length i32)
@@ -63340,10 +63027,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Uint32Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Uint32Array.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -63524,49 +63209,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Int64Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Int64Array.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Int64Array,i64>
   (local $values i32)
   (local $length i32)
@@ -63696,10 +63338,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Int64Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Int64Array.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -63880,49 +63520,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Uint64Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Uint64Array.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint64Array,u64>
   (local $values i32)
   (local $length i32)
@@ -64054,10 +63651,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Uint64Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Uint64Array.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -64238,49 +63833,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Float32Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Float32Array.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Float32Array,f32>
   (local $values i32)
   (local $length i32)
@@ -64414,10 +63966,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Float32Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Float32Array.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -64598,49 +64148,6 @@
   local.get $9
   return
  )
- (func $~lib/typedarray/Float64Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $byteOffset
-   end
-   i32.const -1
-   local.set $length
-  end
-  local.get $buffer
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $byteOffset
-  local.get $length
-  call $~lib/typedarray/Float64Array.wrap
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Float64Array,f64>
   (local $values i32)
   (local $length i32)
@@ -64776,10 +64283,8 @@
   i32.store $0 offset=4
   local.get $7
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Float64Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Float64Array.wrap
   local.tee $result
   i32.store $0 offset=20
   i32.const 0
@@ -91085,10 +90590,8 @@
   i32.store $0 offset=4
   local.get $100
   i32.const 0
-  i32.const 2
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Uint8Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Uint8Array.wrap
   local.tee $81
   i32.store $0 offset=96
   local.get $81
@@ -91123,10 +90626,8 @@
   i32.store $0 offset=4
   local.get $100
   i32.const 2
-  i32.const 2
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/typedarray/Uint8Array.wrap@varargs
+  i32.const -1
+  call $~lib/typedarray/Uint8Array.wrap
   local.tee $81
   i32.store $0 offset=96
   local.get $81
