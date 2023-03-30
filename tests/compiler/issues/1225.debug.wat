@@ -2447,7 +2447,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8

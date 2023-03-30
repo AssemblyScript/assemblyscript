@@ -2073,7 +2073,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $4
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    memory.size $0
    i32.const 16
    i32.shl

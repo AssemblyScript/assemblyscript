@@ -241,7 +241,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   i32.const 1
   drop
   block $~lib/util/hash/hashStr|inlined.0 (result i32)
@@ -530,7 +530,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   i32.const 1
   drop
   block $~lib/util/hash/hashStr|inlined.1 (result i32)

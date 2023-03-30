@@ -114,7 +114,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $1of1
    block $0of1
     block $outOfRange

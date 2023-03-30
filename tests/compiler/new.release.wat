@@ -1559,7 +1559,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 4
   call $~lib/rt/itcms/__new
@@ -1599,7 +1599,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.eqz
   if
@@ -1645,7 +1645,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 6
   call $~lib/rt/itcms/__new
@@ -1687,7 +1687,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 7
   call $~lib/rt/itcms/__new

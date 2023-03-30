@@ -129,7 +129,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $1
   local.get $0
   i32.store $0

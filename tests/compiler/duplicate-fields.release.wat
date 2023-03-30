@@ -1640,7 +1640,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    memory.size $0
    i32.const 16
    i32.shl
@@ -1684,7 +1684,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.const 4
    i32.const 5
@@ -1711,7 +1711,7 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.eqz
    if
@@ -1781,7 +1781,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.const 4
    i32.const 7
@@ -1819,7 +1819,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.const 0
    i32.store $0 offset=8
@@ -1854,7 +1854,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $3
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $3
    i32.const 0
    i32.store $0 offset=8
@@ -1937,7 +1937,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.const 8
    i32.const 9
@@ -1958,7 +1958,7 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.eqz
    if

@@ -1677,7 +1677,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $3
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $3
   i32.const 0
   i32.store $0 offset=8
@@ -3091,10 +3091,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    memory.size $0
    i32.const 16
    i32.shl
@@ -3141,7 +3141,7 @@
      global.get $~lib/memory/__stack_pointer
      local.tee $0
      i64.const 0
-     i64.store $0
+     i64.store $0 align=4
      local.get $0
      i32.const 12
      i32.const 4
@@ -3163,10 +3163,10 @@
      global.get $~lib/memory/__stack_pointer
      local.tee $3
      i64.const 0
-     i64.store $0
+     i64.store $0 align=4
      local.get $3
      i64.const 0
-     i64.store $0 offset=8
+     i64.store $0 offset=8 align=4
      local.get $0
      i32.eqz
      if
@@ -5240,7 +5240,7 @@
    br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    block $2of2
     block $1of2
      block $outOfRange

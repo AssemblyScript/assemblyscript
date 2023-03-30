@@ -89,7 +89,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   f32.const -1
   local.set $a
   f64.const -2
@@ -2674,10 +2674,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.set $this

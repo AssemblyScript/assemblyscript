@@ -5459,14 +5459,14 @@
     i32.const 2
     i32.shl
     i32.add
-    i64.load32_u $0
+    i64.load32_u $0 align=1
     local.set $digits1
     i32.const 6988
     local.get $d2
     i32.const 2
     i32.shl
     i32.add
-    i64.load32_u $0
+    i64.load32_u $0 align=1
     local.set $digits2
     local.get $offset
     i32.const 4
@@ -5482,7 +5482,7 @@
     i64.const 32
     i64.shl
     i64.or
-    i64.store $0
+    i64.store $0 align=2
     br $while-continue|0
    end
   end
@@ -5517,7 +5517,7 @@
    i32.shl
    i32.add
    local.get $digits
-   i32.store $0
+   i32.store $0 align=2
   end
   local.get $num
   i32.const 10
@@ -5540,7 +5540,7 @@
    i32.shl
    i32.add
    local.get $digits|12
-   i32.store $0
+   i32.store $0 align=2
   else
    local.get $offset
    i32.const 1
@@ -6641,7 +6641,7 @@
     i64.const 32
     i64.shl
     i64.or
-    i64.store $0
+    i64.store $0 align=2
     br $while-continue|0
    end
   end
@@ -14324,10 +14324,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $this
   i32.eqz
   if
@@ -14434,7 +14434,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -14532,7 +14532,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -14597,7 +14597,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -14662,7 +14662,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -14729,7 +14729,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -14796,7 +14796,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -14863,7 +14863,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -14930,7 +14930,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -14997,7 +14997,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -15064,7 +15064,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -15131,7 +15131,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   i32.eqz
   if
@@ -16019,7 +16019,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -16223,7 +16223,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -16395,7 +16395,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -16841,7 +16841,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -16881,7 +16881,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -17445,7 +17445,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -17854,7 +17854,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -18051,7 +18051,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/COPY_WITHIN<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -18256,10 +18256,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Int8Array,i8,i8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -18343,7 +18343,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -18471,10 +18471,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Uint8Array,u8,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -18558,7 +18558,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -18644,10 +18644,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Uint8ClampedArray,u8,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -18731,7 +18731,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -18864,10 +18864,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Int16Array,i16,i16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -18951,7 +18951,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -19083,10 +19083,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Uint16Array,u16,u16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -19170,7 +19170,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -19256,10 +19256,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Int32Array,i32,i32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -19343,7 +19343,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -19474,10 +19474,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Uint32Array,u32,u32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -19561,7 +19561,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -19693,10 +19693,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Int64Array,i64,i64>|inlined.0 (result i64)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -19780,7 +19780,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -19912,10 +19912,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Uint64Array,u64,u64>|inlined.0 (result i64)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -19999,7 +19999,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -20131,10 +20131,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Float32Array,f32,f32>|inlined.0 (result f32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -20218,7 +20218,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -20303,10 +20303,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE<~lib/typedarray/Float64Array,f64,f64>|inlined.0 (result f64)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -20390,7 +20390,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -20526,7 +20526,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -20689,7 +20689,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -20852,7 +20852,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -21019,7 +21019,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -21186,7 +21186,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -21353,7 +21353,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -21520,7 +21520,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -21688,7 +21688,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -21856,7 +21856,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -22024,7 +22024,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -22192,7 +22192,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -22302,10 +22302,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int8Array,i8,i8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -22389,7 +22389,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -22473,10 +22473,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint8Array,u8,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -22560,7 +22560,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -22645,10 +22645,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint8ClampedArray,u8,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -22732,7 +22732,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -22817,10 +22817,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int16Array,i16,i16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -22904,7 +22904,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -22988,10 +22988,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint16Array,u16,u16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -23075,7 +23075,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -23160,10 +23160,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int32Array,i32,i32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -23247,7 +23247,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -23330,10 +23330,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint32Array,u32,u32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -23417,7 +23417,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -23501,10 +23501,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int64Array,i64,i64>|inlined.0 (result i64)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -23588,7 +23588,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -23672,10 +23672,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint64Array,u64,u64>|inlined.0 (result i64)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -23759,7 +23759,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -23843,10 +23843,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Float32Array,f32,f32>|inlined.0 (result f32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -23930,7 +23930,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -24014,10 +24014,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Float64Array,f64,f64>|inlined.0 (result f64)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -24101,7 +24101,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -24303,10 +24303,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -24596,10 +24596,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -24844,10 +24844,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -25141,10 +25141,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -25438,10 +25438,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -25686,10 +25686,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -25983,10 +25983,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -26281,10 +26281,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -26579,10 +26579,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -26877,10 +26877,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -27125,10 +27125,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -27395,10 +27395,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -27719,10 +27719,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -28043,10 +28043,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -28367,10 +28367,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -28691,10 +28691,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -29015,10 +29015,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -29339,10 +29339,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -29663,10 +29663,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -29987,10 +29987,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -30311,10 +30311,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -30635,10 +30635,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 6
@@ -30818,10 +30818,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -30906,7 +30906,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -31013,10 +31013,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -31101,7 +31101,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -31208,10 +31208,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -31296,7 +31296,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -31403,10 +31403,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -31491,7 +31491,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -31598,10 +31598,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -31686,7 +31686,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -31793,10 +31793,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -31881,7 +31881,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -31988,10 +31988,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -32076,7 +32076,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -32183,10 +32183,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -32271,7 +32271,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -32378,10 +32378,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -32466,7 +32466,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -32573,10 +32573,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -32661,7 +32661,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -32768,10 +32768,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/SOME<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -32856,7 +32856,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -32963,10 +32963,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -33051,7 +33051,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -33159,10 +33159,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -33247,7 +33247,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -33355,10 +33355,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -33443,7 +33443,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -33551,10 +33551,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -33639,7 +33639,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -33747,10 +33747,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -33835,7 +33835,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -33943,10 +33943,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -34031,7 +34031,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -34139,10 +34139,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -34227,7 +34227,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -34335,10 +34335,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -34423,7 +34423,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -34531,10 +34531,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -34619,7 +34619,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -34727,10 +34727,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -34815,7 +34815,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -34923,10 +34923,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -35011,7 +35011,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -35118,10 +35118,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -35206,7 +35206,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -35313,10 +35313,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -35401,7 +35401,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -35508,10 +35508,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -35596,7 +35596,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -35703,10 +35703,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -35791,7 +35791,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -35898,10 +35898,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -35986,7 +35986,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -36093,10 +36093,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -36181,7 +36181,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -36288,10 +36288,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -36376,7 +36376,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -36483,10 +36483,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -36571,7 +36571,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -36678,10 +36678,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -36766,7 +36766,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -36873,10 +36873,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -36961,7 +36961,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -37068,10 +37068,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -37156,7 +37156,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -37264,10 +37264,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -37355,7 +37355,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -37462,10 +37462,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -37553,7 +37553,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -37660,10 +37660,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -37751,7 +37751,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -37858,10 +37858,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -37949,7 +37949,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -38056,10 +38056,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -38147,7 +38147,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -38254,10 +38254,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -38345,7 +38345,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -38452,10 +38452,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -38543,7 +38543,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -38650,10 +38650,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -38741,7 +38741,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -38848,10 +38848,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -38939,7 +38939,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -39046,10 +39046,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -39137,7 +39137,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -39244,10 +39244,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   block $~lib/typedarray/EVERY<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -39335,7 +39335,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -39509,10 +39509,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -39584,7 +39584,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -39762,10 +39762,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -39837,7 +39837,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -40018,10 +40018,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -40093,7 +40093,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -40272,10 +40272,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -40347,7 +40347,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -40525,10 +40525,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -40600,7 +40600,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -40777,10 +40777,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -40852,7 +40852,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -41023,10 +41023,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -41098,7 +41098,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -41270,10 +41270,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -41345,7 +41345,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -41520,10 +41520,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -41595,7 +41595,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -41770,10 +41770,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -41845,7 +41845,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -42020,10 +42020,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.tee $array
@@ -42095,7 +42095,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -42525,7 +42525,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -42961,7 +42961,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -43397,7 +43397,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -43830,7 +43830,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -44539,7 +44539,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -44969,7 +44969,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -45402,7 +45402,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -45835,7 +45835,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -46502,7 +46502,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -46611,7 +46611,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -47399,7 +47399,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -47509,7 +47509,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -48299,7 +48299,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -48409,7 +48409,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -49199,7 +49199,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -49308,7 +49308,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -50096,7 +50096,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -50206,7 +50206,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -50996,7 +50996,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -51104,7 +51104,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -51890,7 +51890,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -51998,7 +51998,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -52784,7 +52784,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -52892,7 +52892,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -53679,7 +53679,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -53787,7 +53787,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -54574,7 +54574,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -54682,7 +54682,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -55469,7 +55469,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -55577,7 +55577,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -56365,7 +56365,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INCLUDES<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -56491,7 +56491,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   block $~lib/typedarray/INCLUDES<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $this
@@ -56627,7 +56627,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $22
   global.get $~lib/memory/__stack_pointer
@@ -56765,7 +56765,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $length
   i32.const 1
   i32.sub
@@ -56936,7 +56936,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -56976,7 +56976,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $left
   local.get $right
   i32.eq
@@ -57071,7 +57071,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -57242,7 +57242,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $length
   i32.const 1
   i32.sub
@@ -57413,7 +57413,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -57452,7 +57452,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -57615,7 +57615,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -57654,7 +57654,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -57825,7 +57825,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $length
   i32.const 1
   i32.sub
@@ -57996,7 +57996,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -58035,7 +58035,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -58206,7 +58206,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $length
   i32.const 1
   i32.sub
@@ -58377,7 +58377,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -58416,7 +58416,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -58587,7 +58587,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $length
   i32.const 1
   i32.sub
@@ -58758,7 +58758,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -58797,7 +58797,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -58968,7 +58968,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $length
   i32.const 1
   i32.sub
@@ -59139,7 +59139,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -59178,7 +59178,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -59349,7 +59349,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $length
   i32.const 1
   i32.sub
@@ -59522,7 +59522,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -59561,7 +59561,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -59732,7 +59732,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $length
   i32.const 1
   i32.sub
@@ -59903,7 +59903,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -59942,7 +59942,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -60112,7 +60112,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $length
   i32.const 1
   i32.sub
@@ -60277,7 +60277,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -60316,7 +60316,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -60486,7 +60486,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $length
   i32.const 1
   i32.sub
@@ -60648,7 +60648,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -60687,7 +60687,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -60856,7 +60856,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -61039,7 +61039,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $16
   global.get $~lib/memory/__stack_pointer
@@ -61145,7 +61145,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -61656,7 +61656,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -62003,7 +62003,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -62351,7 +62351,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -62702,7 +62702,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -63053,7 +63053,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -63406,7 +63406,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -63762,7 +63762,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -64120,7 +64120,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -64480,7 +64480,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -64845,7 +64845,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -65167,7 +65167,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -65309,7 +65309,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -65466,7 +65466,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -65605,7 +65605,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -65707,7 +65707,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -65835,7 +65835,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -66268,7 +66268,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -66590,7 +66590,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -66732,7 +66732,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -66864,7 +66864,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -67003,7 +67003,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -67105,7 +67105,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -67233,7 +67233,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -67666,7 +67666,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -67952,7 +67952,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -68097,7 +68097,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -68251,7 +68251,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -68393,7 +68393,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -68495,7 +68495,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -68645,7 +68645,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -69125,7 +69125,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -69449,7 +69449,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -69591,7 +69591,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -69723,7 +69723,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -69865,7 +69865,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -69993,7 +69993,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -70095,7 +70095,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -70557,7 +70557,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -70881,7 +70881,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -71023,7 +71023,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -71155,7 +71155,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -71297,7 +71297,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -71425,7 +71425,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -71527,7 +71527,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -71986,7 +71986,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -72256,7 +72256,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -72398,7 +72398,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -72530,7 +72530,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -72672,7 +72672,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -72803,7 +72803,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -72934,7 +72934,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -73393,7 +73393,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -73688,7 +73688,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -73830,7 +73830,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -73962,7 +73962,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -74104,7 +74104,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -74235,7 +74235,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -74366,7 +74366,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -74828,7 +74828,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -75155,7 +75155,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -75294,7 +75294,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -75396,7 +75396,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -75538,7 +75538,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -75670,7 +75670,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -75802,7 +75802,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -76265,7 +76265,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -76592,7 +76592,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -76731,7 +76731,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -76833,7 +76833,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -76975,7 +76975,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -77107,7 +77107,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -77239,7 +77239,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -77702,7 +77702,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -78001,7 +78001,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -78103,7 +78103,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -78235,7 +78235,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -78367,7 +78367,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -78499,7 +78499,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -78929,7 +78929,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -79229,7 +79229,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -79362,7 +79362,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -79494,7 +79494,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -79626,7 +79626,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -79758,7 +79758,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -80188,7 +80188,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -80333,7 +80333,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -80485,7 +80485,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -80648,7 +80648,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -81094,7 +81094,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -81134,7 +81134,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -81191,10 +81191,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -81414,7 +81414,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -81860,7 +81860,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -81900,7 +81900,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -81955,10 +81955,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -82147,7 +82147,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -82187,7 +82187,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -82242,10 +82242,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -82465,7 +82465,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -82911,7 +82911,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -82951,7 +82951,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -83008,10 +83008,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -83231,7 +83231,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -83677,7 +83677,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -83717,7 +83717,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -83772,10 +83772,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -83995,7 +83995,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -84441,7 +84441,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -84481,7 +84481,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -84538,10 +84538,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -84761,7 +84761,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -85207,7 +85207,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -85247,7 +85247,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -85302,10 +85302,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -85525,7 +85525,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -85971,7 +85971,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -86011,7 +86011,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -86068,10 +86068,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -86291,7 +86291,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -86737,7 +86737,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -86777,7 +86777,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -86832,10 +86832,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -87055,7 +87055,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -87501,7 +87501,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -87541,7 +87541,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
@@ -87600,10 +87600,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
@@ -87794,10 +87794,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3

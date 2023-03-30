@@ -187,7 +187,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $left
   local.get $right
   i32.eq
@@ -282,7 +282,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   call $issues/1714/foo<i32,i64>
   i32.const 0
   i32.eq

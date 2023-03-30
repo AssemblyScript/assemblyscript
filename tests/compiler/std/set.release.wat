@@ -1727,7 +1727,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.store $0 offset=8
@@ -1976,10 +1976,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $2
   local.get $1
   i32.const 1
@@ -2173,7 +2173,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -2724,7 +2724,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -2866,7 +2866,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $1
   local.get $0
   i32.store $0
@@ -3108,7 +3108,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $5
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $5
    local.get $9
    i32.store $0
@@ -3132,10 +3132,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $6
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $6
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    local.get $6
    i32.const 16
    i32.const 5
@@ -3554,7 +3554,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.store $0 offset=8
@@ -3724,10 +3724,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $2
   local.get $1
   i32.const 1
@@ -3920,7 +3920,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -4159,7 +4159,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -4456,7 +4456,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $5
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $5
    local.get $9
    i32.store $0
@@ -4480,10 +4480,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $6
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $6
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    local.get $6
    i32.const 16
    i32.const 7
@@ -4902,7 +4902,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.store $0 offset=8
@@ -5151,10 +5151,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $2
   local.get $1
   i32.const 1
@@ -5348,7 +5348,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -5695,7 +5695,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -5991,7 +5991,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $5
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $5
    local.get $9
    i32.store $0
@@ -6015,10 +6015,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $6
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $6
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    local.get $6
    i32.const 16
    i32.const 9
@@ -6439,7 +6439,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.store $0 offset=8
@@ -6609,10 +6609,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $2
   local.get $1
   i32.const 1
@@ -6805,7 +6805,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -7046,7 +7046,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -7343,7 +7343,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $5
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $5
    local.get $9
    i32.store $0
@@ -7367,10 +7367,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $6
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $6
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    local.get $6
    i32.const 16
    i32.const 11
@@ -7791,7 +7791,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.store $0 offset=8
@@ -8037,10 +8037,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $2
   local.get $1
   i32.const 1
@@ -8233,7 +8233,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -8579,7 +8579,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -8874,7 +8874,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $5
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $5
    local.get $9
    i32.store $0
@@ -8898,10 +8898,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $6
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $6
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    local.get $6
    i32.const 16
    i32.const 13
@@ -9322,7 +9322,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.store $0 offset=8
@@ -9568,10 +9568,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $2
   local.get $1
   i32.const 1
@@ -9764,7 +9764,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -10003,7 +10003,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -10298,7 +10298,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $5
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $5
    local.get $9
    i32.store $0
@@ -10322,10 +10322,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $6
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $6
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    local.get $6
    i32.const 16
    i32.const 15
@@ -10746,7 +10746,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.store $0 offset=8
@@ -11005,10 +11005,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $2
   local.get $1
   i32.const 1
@@ -11213,7 +11213,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -11573,7 +11573,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -11726,7 +11726,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $1
   local.get $0
   i32.store $0
@@ -11969,7 +11969,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $6
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $6
    local.get $10
    i32.store $0
@@ -11993,10 +11993,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $7
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $7
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    local.get $7
    i32.const 16
    i32.const 17
@@ -12417,7 +12417,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.store $0 offset=8
@@ -12676,10 +12676,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $2
   local.get $1
   i32.const 1
@@ -12884,7 +12884,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -13137,7 +13137,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -13445,7 +13445,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $6
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $6
    local.get $10
    i32.store $0
@@ -13469,10 +13469,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $7
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $7
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    local.get $7
    i32.const 16
    i32.const 19
@@ -13893,7 +13893,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.store $0 offset=8
@@ -14141,10 +14141,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $2
   local.get $1
   i32.const 1
@@ -14338,7 +14338,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -14524,7 +14524,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $1
    local.get $0
    i32.store $0
@@ -14548,10 +14548,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    local.get $0
    i32.const 16
    i32.const 21
@@ -14846,7 +14846,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   local.get $0
   i32.store $0
@@ -15401,7 +15401,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.store $0 offset=8
@@ -15664,10 +15664,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $2
   i64.const 0
-  i64.store $0 offset=8
+  i64.store $0 offset=8 align=4
   local.get $2
   local.get $1
   i32.const 1
@@ -15875,7 +15875,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $3
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $3
   local.get $0
   i32.store $0
@@ -16074,7 +16074,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $1
    local.get $0
    i32.store $0
@@ -16098,10 +16098,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i64.const 0
-   i64.store $0 offset=8
+   i64.store $0 offset=8 align=4
    local.get $0
    i32.const 16
    i32.const 23
@@ -16397,7 +16397,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $3
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $3
   local.get $0
   i32.store $0

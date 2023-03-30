@@ -1514,7 +1514,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    memory.size $0
    i32.const 16
    i32.shl
@@ -1558,7 +1558,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.const 4
    call $~lib/rt/itcms/__new
@@ -1593,7 +1593,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.const 5
    call $~lib/rt/itcms/__new
@@ -1628,7 +1628,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.const 6
    call $~lib/rt/itcms/__new
@@ -1663,7 +1663,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.const 8
    call $~lib/rt/itcms/__new

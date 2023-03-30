@@ -1760,7 +1760,7 @@
     i32.shl
     i32.const 1788
     i32.add
-    i64.load32_u $0
+    i64.load32_u $0 align=1
     local.get $3
     i32.const 100
     i32.rem_u
@@ -1768,11 +1768,11 @@
     i32.shl
     i32.const 1788
     i32.add
-    i64.load32_u $0
+    i64.load32_u $0 align=1
     i64.const 32
     i64.shl
     i64.or
-    i64.store $0
+    i64.store $0 align=2
     br $while-continue|0
    end
   end
@@ -1796,7 +1796,7 @@
    i32.const 1788
    i32.add
    i32.load $0
-   i32.store $0
+   i32.store $0 align=2
    local.get $1
    i32.const 100
    i32.div_u
@@ -1819,7 +1819,7 @@
    i32.const 1788
    i32.add
    i32.load $0
-   i32.store $0
+   i32.store $0 align=2
   else
    local.get $0
    local.get $2
@@ -2911,7 +2911,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   local.get $1
   i32.eq
@@ -3070,7 +3070,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store $0 align=4
   local.get $0
   i32.const 0
   i32.const 5
@@ -3990,7 +3990,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.const 0
    i32.const 4
@@ -4410,7 +4410,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store $0 align=4
    local.get $0
    i32.const 0
    i32.const 6
