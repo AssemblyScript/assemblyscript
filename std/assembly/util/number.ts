@@ -191,11 +191,11 @@ function utoa32_dec_lut(buffer: usize, num: u32, offset: usize): void {
     let d1 = r / 100;
     let d2 = r % 100;
 
-    let digits1 = <u64>load<u32>(DIGITS + (<usize>d1 << alignof<u32>()));
-    let digits2 = <u64>load<u32>(DIGITS + (<usize>d2 << alignof<u32>()));
+    let digits1 = <u64>load<u32>(DIGITS + (<usize>d1 << alignof<u32>()), 0, 1);
+    let digits2 = <u64>load<u32>(DIGITS + (<usize>d2 << alignof<u32>()), 0, 1);
 
     offset -= 4;
-    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
+    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), 0, 2);
   }
 
   if (num >= 100) {
@@ -204,13 +204,13 @@ function utoa32_dec_lut(buffer: usize, num: u32, offset: usize): void {
     num = t;
     offset -= 2;
     let digits = load<u32>(DIGITS + (<usize>d1 << alignof<u32>()));
-    store<u32>(buffer + (offset << 1), digits);
+    store<u32>(buffer + (offset << 1), digits, 0, 2);
   }
 
   if (num >= 10) {
     offset -= 2;
     let digits = load<u32>(DIGITS + (<usize>num << alignof<u32>()));
-    store<u32>(buffer + (offset << 1), digits);
+    store<u32>(buffer + (offset << 1), digits, 0, 2);
   } else {
     offset -= 1;
     let digit = CharCode._0 + num;
@@ -242,7 +242,7 @@ function utoa64_dec_lut(buffer: usize, num: u64, offset: usize): void {
     digits2 = <u64>load<u32>(DIGITS + (<usize>b2 << alignof<u32>()));
 
     offset -= 4;
-    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
+    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), 0, 2);
   }
 
   utoa32_dec_lut(buffer, <u32>num, offset);

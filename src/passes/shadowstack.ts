@@ -294,7 +294,8 @@ export class ShadowStackPass extends Pass {
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),
             module.i64(0),
             TypeRef.I64,
-            frameSize - remain
+            frameSize - remain,
+            this.ptrSize
           )
         );
         remain -= 8;
