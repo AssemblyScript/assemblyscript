@@ -32,5 +32,21 @@
     "v8_flags": [
       "--experimental-wasm-eh"
     ]
+  },
+  "simd": {
+    "asc_flags": [
+      "--enable simd"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-simd"
+    ]
+  },
+  "relaxed-simd": {
+    "asc_flags": [
+      "--enable relaxed-simd"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-relaxed-simd"
+    ]
   }
 }

@@ -859,7 +859,7 @@ declare namespace v128 {
   export function andnot(a: v128, b: v128): v128;
   /** Performs the bitwise NOT operation on a vector. */
   export function not(a: v128): v128;
-  /** Selects bits of either vector according to the specified mask. */
+  /** Selects bits of either vector according to the specified mask. Selects from `v1` if the bit in `mask` is `1`, otherwise from `v2`. */
   export function bitselect(v1: v128, v2: v128, mask: v128): v128;
   /** Reduces a vector to a scalar indicating whether any lane is considered `true`. */
   export function any_true(a: v128): bool;
@@ -925,12 +925,104 @@ declare namespace v128 {
   export function demote_zero<T extends f64 = f64>(a: v128): v128;
   /** Promotes the lower float lanes to higher precision. */
   export function promote_low<T extends f32 = f32>(a: v128): v128;
-  /** Performs the line-wise saturating rounding multiplication in Q15 format. */
+  /** Performs the line-wise saturating rounding multiplication in Q15 format (`(a[i] * b[i] + (1 << (Q - 1))) >> Q` where `Q=15`). */
   export function q15mulr_sat<T extends i16>(a: v128, b: v128): v128;
   /** Performs the lane-wise integer extended multiplication of the lower lanes producing a twice wider result than the inputs. */
   export function extmul_low<T extends i8 | u8 | i16 | u16 | i32 | u32>(a: v128, b: v128): v128;
   /** Performs the lane-wise integer extended multiplication of the higher lanes producing a twice wider result than the inputs. */
   export function extmul_high<T extends i8 | u8 | i16 | u16 | i32 | u32>(a: v128, b: v128): v128;
+  /**
+   * Selects 8-bit lanes from `a` using indices in `s`. Indices in the range [0-15] select the i-th element of `a`.
+   * 
+   * Unlike {@link v128.swizzle}, the result of an out of bounds index is implementation-defined, depending on hardware
+   * capabilities: Either `0` or `a[s[i]%16]`.
+   */
+  export function relaxed_swizzle(a: v128, s: v128): v128;
+  /**
+   * Truncates each lane of a vector from 32-bit floating point to a 32-bit signed or unsigned integer as indicated by
+   * `T`.
+   *
+   * Unlike {@link v128.trunc_sat}, the result of lanes out of bounds of the target type is implementation defined,
+   * depending on hardware capabilities:
+   * - If the input lane contains `NaN`, the result is either `0` or the respective maximum integer value.
+   * - If the input lane contains a value otherwise out of bounds of the target type, the result is either the
+   *   saturatated result or maximum integer value.
+   */
+  export function relaxed_trunc<T extends i32 | u32>(a: v128): v128;
+  /**
+   * Truncates each lane of a vector from 64-bit floating point to a 32-bit signed or unsigned integer as indicated by
+   * `T`. Unused higher integer lanes of the result are initialized to zero.
+   * 
+   * Unlike {@link v128.trunc_sat_zero}, the result of lanes out of bounds of the target type is implementation defined,
+   * depending on hardware capabilities:
+   * - If the input lane contains `NaN`, the result is either `0` or the respective maximum integer value.
+   * - If the input lane contains a value otherwise out of bounds of the target type, the result is either the
+   *   saturatated result or maximum integer value.
+   */
+  export function relaxed_trunc_zero<T extends i32 | u32>(a: v128): v128;
+  /**
+   * Performs the fused multiply-add operation (`a * b + c`) on 32- or 64-bit floating point lanes as indicated by
+   * `T`.
+   * 
+   * The result is implementation defined, depending on hardware capabilities:
+   * - Either `a * b` is rounded once and the final result rounded again, or
+   * - The expression is evaluated with higher precision and only rounded once
+   */
+  export function relaxed_madd<T>(a: v128, b: v128, c: v128): v128;
+  /**
+   * Performs the fused negative multiply-add operation (`-(a * b) + c`) on 32- or 64-bit floating point lanes as
+   * indicated by `T`.
+   * 
+   * The result is implementation defined, depending on hardware capabilities:
+   * - Either `a * b` is rounded once and the final result rounded again, or
+   * - The expression is evaluated with higher precision and only rounded once
+   */
+  export function relaxed_nmadd<T>(a: v128, b: v128, c: v128): v128;
+  /**
+   * Selects 8-, 16-, 32- or 64-bit integer lanes as indicated by `T` from `a` or `b` based on masks in `m`.
+   * 
+   * Behaves like {@link v128.bitselect} if masks in `m` do have all bits either set (result is `a[i]`) or unset (result
+   * is `b[i]`). Otherwise the result is implementation-defined, depending on hardware capabilities: If the most
+   * significant bit of `m` is set, the result is either `bitselect(a[i], b[i], mask)` or `a[i]`, otherwise the result
+   * is `b[i]`.
+   */
+  export function relaxed_laneselect<T>(a: v128, b: v128, m: v128): v128;
+  /**
+   * Computes the minimum of each 32- or 64-bit floating point lane as indicated by `T`.
+   * 
+   * Unlike {@link v128.min}, the result is implementation-defined if either value is `NaN`, `-0.0` or `+0.0`,
+   * depending on hardware capabilities: Either `a[i]` or `b[i]`.
+   */
+  export function relaxed_min<T>(a: v128, b: v128): v128;
+  /**
+   * Computes the maximum of each 32- or 64-bit floating point lane as indicated by `T`.
+   * 
+   * Unlike {@link v128.max}, the result is implementation-defined if either value is `NaN`, `-0.0` or `+0.0`,
+   * depending on hardware capabilities: Either `a[i]` or `b[i]`.
+   */
+  export function relaxed_max<T>(a: v128, b: v128): v128;
+  /**
+   * Performs the lane-wise rounding multiplication in Q15 format (`(a[i] * b[i] + (1 << (Q - 1))) >> Q` where `Q=15`).
+   * 
+   * Unlike {@link v128.q15mulr_sat}, the result is implementation-defined if both inputs are the minimum signed value:
+   * Either the minimum or maximum signed value.
+   */
+  export function relaxed_q15mulr<T>(a: v128, b: v128): v128;
+  /**
+   * Computes the dot product of two 8-bit integer lanes each, yielding lanes one size wider than the input.
+   * 
+   * Unlike {@link v128.dot}, if the most significant bit of `b[i]` is set, whether `b[i]` is interpreted as signed or
+   * unsigned is implementation-defined.
+   */
+  export function relaxed_dot<T>(a: v128, b: v128): v128;
+  /**
+   * Computes the dot product of two 8-bit integer lanes each, yielding lanes two sizes wider than the input with the
+   * lanes of `c` accumulated into the result.
+   * 
+   * Unlike {@link v128.dot}, if the most significant bit of `b[i]` is set, whether `b[i]` is interpreted as signed or
+   * unsigned by the intermediate multiplication is implementation-defined.
+   */
+  export function relaxed_dot_add<T>(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -1009,6 +1101,23 @@ declare namespace i8x16 {
   export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
   /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
   export function swizzle(a: v128, s: v128): v128;
+  /**
+   * Selects 8-bit integer lanes from `a` using indices in `s`. Indices in the range [0-15] select the i-th element of
+   * `a`.
+   * 
+   * Unlike {@link i8x16.swizzle}, the result of an out of bounds index is implementation-defined, depending on hardware
+   * capabilities: Either `0` or `a[s[i]%16]`.
+   */
+  export function relaxed_swizzle(a: v128, s: v128): v128;
+  /**
+   * Selects 8-bit integer lanes from `a` or `b` based on masks in `m`.
+   * 
+   * Behaves like {@link v128.bitselect} if masks in `m` do have all bits either set (result is `a[i]`) or unset (result
+   * is `b[i]`). Otherwise the result is implementation-defined, depending on hardware capabilities: If the most
+   * significant bit of `m` is set, the result is either `bitselect(a[i], b[i], mask)` or `a[i]`, otherwise the result
+   * is `b[i]`.
+   */
+  export function relaxed_laneselect(a: v128, b: v128, m: v128): v128;
 }
 /** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
 declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
@@ -1107,8 +1216,29 @@ declare namespace i16x8 {
   export function extmul_high_i8x16_u(a: v128, b: v128): v128;
   /** Selects 16-bit lanes from either vector according to the specified [0-7] respectively [8-15] lane indexes. */
   export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8): v128;
-  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
-  export function swizzle(a: v128, s: v128): v128;
+  /**
+   * Selects 16-bit integer lanes from `a` or `b` based on masks in `m`.
+   *
+   * Behaves like {@link v128.bitselect} if masks in `m` do have all bits either set (result is `a[i]`) or unset (result
+   * is `b[i]`). Otherwise the result is implementation-defined, depending on hardware capabilities: If the most
+   * significant bit of `m` is set, the result is either `bitselect(a[i], b[i], mask)` or `a[i]`, otherwise the result
+   * is `b[i]`.
+   */
+  export function relaxed_laneselect(a: v128, b: v128, m: v128): v128;
+  /**
+   * Performs the line-wise rounding multiplication in Q15 format (`(a[i] * b[i] + (1 << (Q - 1))) >> Q` where `Q=15`).
+   *
+   * Some results are implementation-defined: If both inputs are `i16.MIN_VALUE`, the value of the respective
+   * resulting lane may be either `i16.MIN_VALUE` or `i16.MAX_VALUE`.
+   */
+  export function relaxed_q15mulr_s(a: v128, b: v128): v128;
+  /**
+   * Computes the dot product of two 8-bit integer lanes each, yielding lanes one size wider than the input.
+   * 
+   * Some results are implementation-defined: If the most significant bit of `b[i]` is set, the intermediate
+   * multiplication may interpret `b[i]` as either signed or unsigned.
+   */
+  export function relaxed_dot_i8x16_i7x16_s(a: v128, b: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -1199,8 +1329,65 @@ declare namespace i32x4 {
   export function extmul_high_i16x8_u(a: v128, b: v128): v128;
   /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
   export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
-  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
-  export function swizzle(a: v128, s: v128): v128;
+  /**
+   * Truncates each lane of a vector from 32-bit floating point to a signed 32-bit integer.
+   *
+   * Unlike {@link i32x4.trunc_sat_f32x4_s}, the result of lanes out of bounds of the target type is implementation
+   * defined, depending on hardware capabilities:
+   * - If the input lane contains `NaN`, the result is either `0` or the respective maximum integer value.
+   * - If the input lane contains a value otherwise out of bounds of the target type, the result is either the
+   *   saturatated result or maximum integer value.
+   */
+  export function relaxed_trunc_f32x4_s(a: v128): v128;
+  /**
+   * Truncates each lane of a vector from 32-bit floating point to an unsigned 32-bit integer.
+   *
+   * Unlike {@link i32x4.trunc_sat_f32x4_u}, the result of lanes out of bounds of the target type is implementation
+   * defined, depending on hardware capabilities:
+   * - If the input lane contains `NaN`, the result is either `0` or the respective maximum integer value.
+   * - If the input lane contains a value otherwise out of bounds of the target type, the result is either the
+   *   saturatated result or maximum integer value.
+   */
+  export function relaxed_trunc_f32x4_u(a: v128): v128;
+  /**
+   * Truncates each lane of a vector from 64-bit floating point to a signed 32-bit integer. The two higher
+   * integer lanes of the result are initialized to zero.
+   * 
+   * Unlike {@link i32x4.trunc_sat_f64x2_s_zero}, the result of lanes out of bounds of the target type is implementation
+   * defined, depending on hardware capabilities:
+   * - If the input lane contains `NaN`, the result is either `0` or the respective maximum integer value.
+   * - If the input lane contains a value otherwise out of bounds of the target type, the result is either the
+   *   saturatated result or maximum integer value.
+   */
+  export function relaxed_trunc_f64x2_s_zero(a: v128): v128;
+  /**
+   * Truncates each lane of a vector from 64-bit floating point to an unsigned 32-bit integer. The two higher
+   * integer lanes of the result are initialized to zero.
+   * 
+   * Unlike {@link i32x4.trunc_sat_f64x2_u_zero}, the result of lanes out of bounds of the target type is implementation
+   * defined, depending on hardware capabilities:
+   * - If the input lane contains `NaN`, the result is either `0` or the respective maximum integer value.
+   * - If the input lane contains a value otherwise out of bounds of the target type, the result is either the
+   *   saturatated result or maximum integer value.
+   */
+  export function relaxed_trunc_f64x2_u_zero(a: v128): v128;
+  /**
+   * Selects 32-bit integer lanes from `a` or `b` based on masks in `m`.
+   *
+   * Behaves like {@link v128.bitselect} if masks in `m` do have all bits either set (result is `a[i]`) or unset (result
+   * is `b[i]`). Otherwise the result is implementation-defined, depending on hardware capabilities: If the most
+   * significant bit of `m` is set, the result is either `bitselect(a[i], b[i], mask)` or `a[i]`, otherwise the result
+   * is `b[i]`.
+   */
+  export function relaxed_laneselect(a: v128, b: v128, m: v128): v128;
+  /**
+   * Computes the dot product of two 8-bit lanes each, yielding lanes two sizes wider than the input with the lanes of
+   * `c` accumulated into the result.
+   * 
+   * Unlike {@link v128.dot}, if the most significant bit of `b[i]` is set, whether `b[i]` is interpreted as signed or
+   * unsigned by the intermediate multiplication is implementation-defined.
+   */
+  export function relaxed_dot_i8x16_i7x16_add_s(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
@@ -1261,8 +1448,15 @@ declare namespace i64x2 {
   export function extmul_high_i32x4_u(a: v128, b: v128): v128;
   /** Selects 64-bit lanes from either vector according to the specified [0-1] respectively [2-3] lane indexes. */
   export function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
-  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
-  export function swizzle(a: v128, s: v128): v128;
+  /**
+   * Selects 64-bit integer lanes from `a` or `b` based on masks in `m`.
+   *
+   * Behaves like {@link v128.bitselect} if masks in `m` do have all bits either set (result is `a[i]`) or unset (result
+   * is `b[i]`). Otherwise the result is implementation-defined, depending on hardware capabilities: If the most
+   * significant bit of `m` is set, the result is either `bitselect(a[i], b[i], mask)` or `a[i]`, otherwise the result
+   * is `b[i]`.
+   */
+  export function relaxed_laneselect(a: v128, b: v128, m: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -1323,8 +1517,36 @@ declare namespace f32x4 {
   export function demote_f64x2_zero(a: v128): v128;
   /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
   export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
-  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
-  export function swizzle(a: v128, s: v128): v128;
+  /**
+   * Performs the fused multiply-add operation (`a * b + c`) on all 32-bit floating point lanes.
+   * 
+   * The result is implementation defined, depending on hardware capabilities:
+   * - Either `a * b` is rounded once and the final result rounded again, or
+   * - The expression is evaluated with higher precision and only rounded once
+   */
+  export function relaxed_madd(a: v128, b: v128, c: v128): v128;
+  /**
+   * Performs the fused negative multiply-add operation (`-(a * b) + c`) on all 32-bit floating point lanes.
+   * 
+   * The result is implementation defined, depending on hardware capabilities:
+   * - Either `a * b` is rounded once and the final result rounded again, or
+   * - The expression is evaluated with higher precision and only rounded once
+   */
+  export function relaxed_nmadd(a: v128, b: v128, c: v128): v128;
+  /**
+   * Computes the minimum of each 32-bit floating point lane.
+   * 
+   * Unlike {@link f32x4.min}, the result is implementation-defined if either value is `NaN`, `-0.0` or `+0.0`,
+   * depending on hardware capabilities: Either `a[i]` or `b[i]`.
+   */
+  export function relaxed_min(a: v128, b: v128): v128;
+  /**
+   * Computes the maximum of each 32-bit floating point lane.
+   * 
+   * Unlike {@link f32x4.max}, the result is implementation-defined if either value is `NaN`, `-0.0` or `+0.0`,
+   * depending on hardware capabilities: Either `a[i]` or `b[i]`.
+   */
+  export function relaxed_max(a: v128, b: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
 declare function f64x2(a: f64, b: f64): v128;
@@ -1385,8 +1607,36 @@ declare namespace f64x2 {
   export function promote_low_f32x4(a: v128): v128;
   /** Selects 64-bit lanes from either vector according to the specified [0-1] respectively [2-3] lane indexes. */
   export function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
-  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
-  export function swizzle(a: v128, s: v128): v128;
+  /**
+   * Performs the fused multiply-add operation (`a * b + c`) on all 64-bit floating point lanes.
+   * 
+   * The result is implementation defined, depending on hardware capabilities:
+   * - Either `a * b` is rounded once and the final result rounded again, or
+   * - The expression is evaluated with higher precision and only rounded once
+   */
+  export function relaxed_madd(a: v128, b: v128, c: v128): v128;
+  /**
+   * Performs the fused negative multiply-add operation (`-(a * b) + c`) on all 64-bit floating point lanes.
+   * 
+   * The result is implementation defined, depending on hardware capabilities:
+   * - Either `a * b` is rounded once and the final result rounded again, or
+   * - The expression is evaluated with higher precision and only rounded once
+   */
+  export function relaxed_nmadd(a: v128, b: v128, c: v128): v128;
+  /**
+   * Computes the minimum of each 64-bit floating point lane.
+   * 
+   * Unlike {@link f64x2.min}, the result is implementation-defined if either value is `NaN`, `-0.0` or `+0.0`,
+   * depending on hardware capabilities: Either `a[i]` or `b[i]`.
+   */
+  export function relaxed_min(a: v128, b: v128): v128;
+  /**
+   * Computes the maximum of each 64-bit floating point lane.
+   * 
+   * Unlike {@link f64x2.max}, the result is implementation-defined if either value is `NaN`, `-0.0` or `+0.0`,
+   * depending on hardware capabilities: Either `a[i]` or `b[i]`.
+   */
+  export function relaxed_max(a: v128, b: v128): v128;
 }
 
 declare abstract class i31 {
