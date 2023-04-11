@@ -990,15 +990,15 @@ declare namespace v128 {
   /**
    * Computes the minimum of each 32- or 64-bit floating point lane as indicated by `T`.
    * 
-   * Unlike {@link v128.min}, the result is implementation-defined if either value is `NaN`, `-0.0` or `+0.0`,
-   * depending on hardware capabilities: Either `a[i]` or `b[i]`.
+   * Unlike {@link v128.min}, the result is implementation-defined if either value is `NaN` or both are `-0.0` and
+   * `+0.0`, depending on hardware capabilities: Either `a[i]` or `b[i]`.
    */
   export function relaxed_min<T>(a: v128, b: v128): v128;
   /**
    * Computes the maximum of each 32- or 64-bit floating point lane as indicated by `T`.
    * 
-   * Unlike {@link v128.max}, the result is implementation-defined if either value is `NaN`, `-0.0` or `+0.0`,
-   * depending on hardware capabilities: Either `a[i]` or `b[i]`.
+   * Unlike {@link v128.max}, the result is implementation-defined if either value is `NaN` or both are `-0.0` and
+   * `+0.0`, depending on hardware capabilities: Either `a[i]` or `b[i]`.
    */
   export function relaxed_max<T>(a: v128, b: v128): v128;
   /**
