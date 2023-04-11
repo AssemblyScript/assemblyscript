@@ -14,7 +14,7 @@
  (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00g\00c\00.\00t\00s\00")
+ (data $0 (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00g\00c\00.\00t\00s\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "globalFunc" (global $features/gc/globalFunc))

@@ -195,8 +195,8 @@ import {
   _BinaryenStructGetGetIndex,
   _BinaryenArrayNewGetSize,
   _BinaryenArrayNewGetInit,
-  _BinaryenArrayInitGetNumValues,
-  _BinaryenArrayInitGetValueAt,
+  _BinaryenArrayNewFixedGetNumValues,
+  _BinaryenArrayNewFixedGetValueAt,
   _BinaryenArrayGetGetRef,
   _BinaryenArrayGetGetIndex,
   _BinaryenArraySetGetRef,
@@ -283,7 +283,7 @@ import {
   _BinaryenStringSliceWTFSetEnd,
   _BinaryenStringSliceIterSetRef,
   _BinaryenStringSliceIterSetNum,
-  _BinaryenArrayInitSetValueAt
+  _BinaryenArrayNewFixedSetValueAt
 } from "../glue/binaryen";
 
 /** Base class of custom Binaryen visitors. */
@@ -552,7 +552,7 @@ export abstract class Visitor {
     // unimp
   }
 
-  visitArrayInit(expr: ExpressionRef): void {
+  visitArrayNewFixed(expr: ExpressionRef): void {
     // unimp
   }
 
@@ -1127,16 +1127,16 @@ export abstract class Visitor {
         this.visitArrayNew(expr);
         break;
       }
-      case ExpressionId.ArrayInit: {
-        let numValues = _BinaryenArrayInitGetNumValues(expr);
+      case ExpressionId.ArrayNewFixed: {
+        let numValues = _BinaryenArrayNewFixedGetNumValues(expr);
         if (numValues) {
           this.stack.push(expr);
           for (let i: Index = 0; i < numValues; ++i) {
-            this.visit(_BinaryenArrayInitGetValueAt(expr, i));
+            this.visit(_BinaryenArrayNewFixedGetValueAt(expr, i));
           }
           assert(this.stack.pop() == expr);
         }
-        this.visitArrayInit(expr);
+        this.visitArrayNewFixed(expr);
         break;
       }
       case ExpressionId.ArrayGet: {
@@ -1985,12 +1985,12 @@ export function replaceChild(
       }
       break;
     }
-    case ExpressionId.ArrayInit: {
-      let numValues = _BinaryenArrayInitGetNumValues(parent);
+    case ExpressionId.ArrayNewFixed: {
+      let numValues = _BinaryenArrayNewFixedGetNumValues(parent);
       for (let i: Index = 0; i < numValues; ++i) {
-        let value = _BinaryenArrayInitGetValueAt(parent, i);
+        let value = _BinaryenArrayNewFixedGetValueAt(parent, i);
         if (value == search) {
-          _BinaryenArrayInitSetValueAt(parent, i, replacement);
+          _BinaryenArrayNewFixedSetValueAt(parent, i, replacement);
           return value;
         }
       }

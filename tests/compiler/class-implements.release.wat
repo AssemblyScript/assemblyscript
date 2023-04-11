@@ -27,19 +27,19 @@
  (global $class-implements/h (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34352))
  (memory $0 1)
- (data (i32.const 1036) "<")
- (data (i32.const 1048) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1100) "<")
- (data (i32.const 1112) "\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1228) "<")
- (data (i32.const 1240) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 1292) ",")
- (data (i32.const 1304) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
- (data (i32.const 1372) "<")
- (data (i32.const 1384) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1436) "<")
- (data (i32.const 1448) "\02\00\00\00&\00\00\00c\00l\00a\00s\00s\00-\00i\00m\00p\00l\00e\00m\00e\00n\00t\00s\00.\00t\00s")
- (data (i32.const 1504) "\13\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 ")
+ (data $0 (i32.const 1036) "<")
+ (data $0.1 (i32.const 1048) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data $1 (i32.const 1100) "<")
+ (data $1.1 (i32.const 1112) "\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
+ (data $4 (i32.const 1228) "<")
+ (data $4.1 (i32.const 1240) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data $5 (i32.const 1292) ",")
+ (data $5.1 (i32.const 1304) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
+ (data $7 (i32.const 1372) "<")
+ (data $7.1 (i32.const 1384) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data $8 (i32.const 1436) "<")
+ (data $8.1 (i32.const 1448) "\02\00\00\00&\00\00\00c\00l\00a\00s\00s\00-\00i\00m\00p\00l\00e\00m\00e\00n\00t\00s\00.\00t\00s")
+ (data $9 (i32.const 1504) "\13\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 ")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -2232,7 +2232,7 @@
    global.set $~lib/memory/__stack_pointer
    local.get $0
    global.set $class-implements/e
-   block $__inlined_func$class-implements/D#foo@override8 (result i32)
+   block $__inlined_func$class-implements/D#foo@override0 (result i32)
     global.get $~lib/memory/__stack_pointer
     global.get $class-implements/e
     local.tee $0
@@ -2244,7 +2244,7 @@
     i32.load $0
     i32.const 11
     i32.eq
-    br_if $__inlined_func$class-implements/D#foo@override8
+    br_if $__inlined_func$class-implements/D#foo@override0
     drop
     i32.const 3
    end
@@ -2265,7 +2265,7 @@
    i32.store $0
    call $class-implements/F#constructor
    global.set $class-implements/g
-   block $__inlined_func$class-implements/D#foo@override14 (result i32)
+   block $__inlined_func$class-implements/D#foo@override1 (result i32)
     global.get $~lib/memory/__stack_pointer
     global.get $class-implements/g
     local.tee $0
@@ -2277,7 +2277,7 @@
     i32.load $0
     i32.const 11
     i32.eq
-    br_if $__inlined_func$class-implements/D#foo@override14
+    br_if $__inlined_func$class-implements/D#foo@override1
     drop
     i32.const 3
    end
@@ -2298,18 +2298,18 @@
    local.tee $0
    i32.store $0
    block $__inlined_func$class-implements/I#foo@override
-    block $default19
+    block $default0
      block $case3
       block $case2
        block $case1
-        block $case020
+        block $case01
          local.get $0
          i32.const 8
          i32.sub
          i32.load $0
          i32.const 4
          i32.sub
-         br_table $case1 $default19 $case2 $default19 $case3 $default19 $case3 $case020 $default19
+         br_table $case1 $default0 $case2 $default0 $case3 $default0 $case3 $case01 $default0
         end
         i32.const 4
         local.set $0

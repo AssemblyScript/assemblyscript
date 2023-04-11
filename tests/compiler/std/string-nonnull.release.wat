@@ -5,8 +5,8 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33836))
  (memory $0 1)
- (data (i32.const 1036) "\1c")
- (data (i32.const 1048) "\02")
+ (data $0 (i32.const 1036) "\1c")
+ (data $0.1 (i32.const 1048) "\02")
  (export "memory" (memory $0))
  (start $~start)
  (func $~start

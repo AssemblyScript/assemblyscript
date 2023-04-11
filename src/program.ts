@@ -31,7 +31,7 @@
 // │ ├─Namespace              Namespace with static members
 // │ ├─FunctionPrototype      Prototype of concrete function instances
 // │ ├─PropertyPrototype      Prototype of concrete property instances
-// │ └─ClassPrototype         Prototype of concrete classe instances
+// │ └─ClassPrototype         Prototype of concrete class instances
 // └─File                     File, analogous to Source in the AST
 
 import {

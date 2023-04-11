@@ -19,19 +19,19 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34264))
  (memory $0 1)
- (data (i32.const 1036) "\1c")
- (data (i32.const 1048) "\02\00\00\00\0c\00\00\00f\00o\00r\00.\00t\00s")
- (data (i32.const 1068) "<")
- (data (i32.const 1080) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1132) "<")
- (data (i32.const 1144) "\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1260) "<")
- (data (i32.const 1272) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 1324) ",")
- (data (i32.const 1336) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
- (data (i32.const 1404) "<")
- (data (i32.const 1416) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1472) "\05\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 ")
+ (data $0 (i32.const 1036) "\1c")
+ (data $0.1 (i32.const 1048) "\02\00\00\00\0c\00\00\00f\00o\00r\00.\00t\00s")
+ (data $1 (i32.const 1068) "<")
+ (data $1.1 (i32.const 1080) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data $2 (i32.const 1132) "<")
+ (data $2.1 (i32.const 1144) "\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
+ (data $5 (i32.const 1260) "<")
+ (data $5.1 (i32.const 1272) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data $6 (i32.const 1324) ",")
+ (data $6.1 (i32.const 1336) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
+ (data $8 (i32.const 1404) "<")
+ (data $8.1 (i32.const 1416) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data $9 (i32.const 1472) "\05\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 ")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -1460,12 +1460,12 @@
   end
   i32.const 10
   local.set $0
-  loop $for-loop|04
+  loop $for-loop|03
    local.get $0
    i32.const 1
    i32.sub
    local.tee $0
-   br_if $for-loop|04
+   br_if $for-loop|03
   end
   local.get $0
   if
@@ -1478,14 +1478,14 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|06
+  loop $for-loop|04
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $for-loop|06
+   br_if $for-loop|04
   end
   local.get $0
   i32.const 10
@@ -1500,7 +1500,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|07
+  loop $for-loop|05
    local.get $0
    i32.const 10
    i32.lt_s
@@ -1509,7 +1509,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|07
+    br $for-loop|05
    end
   end
   local.get $0
@@ -1525,7 +1525,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|09
+  loop $for-loop|06
    local.get $0
    i32.const 10
    i32.lt_s
@@ -1562,7 +1562,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|09
+    br $for-loop|06
    end
   end
   local.get $0
@@ -1649,7 +1649,7 @@
    call $for/Ref#constructor
    local.tee $0
    i32.store $0
-   loop $for-loop|08
+   loop $for-loop|07
     local.get $0
     if
      local.get $1
@@ -1667,7 +1667,7 @@
       local.tee $0
       i32.store $0
      end
-     br $for-loop|08
+     br $for-loop|07
     end
    end
    local.get $1
@@ -1715,10 +1715,10 @@
    call $for/Ref#constructor
    local.tee $0
    i32.store $0
-   loop $for-loop|011
+   loop $for-loop|08
     call $for/Ref#constructor
     if
-     block $for-break010
+     block $for-break03
       local.get $1
       i32.const 1
       i32.add
@@ -1728,13 +1728,13 @@
       if
        i32.const 0
        local.set $0
-       br $for-break010
+       br $for-break03
       end
       global.get $~lib/memory/__stack_pointer
       call $for/Ref#constructor
       local.tee $0
       i32.store $0
-      br $for-loop|011
+      br $for-loop|08
      end
     end
    end
