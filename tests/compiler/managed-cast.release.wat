@@ -19,23 +19,23 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34492))
  (memory $0 1)
- (data (i32.const 1036) "<")
- (data (i32.const 1048) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1100) "<")
- (data (i32.const 1112) "\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1228) "<")
- (data (i32.const 1240) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 1292) ",")
- (data (i32.const 1304) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
- (data (i32.const 1372) "<")
- (data (i32.const 1384) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1436) "|")
- (data (i32.const 1448) "\02\00\00\00^\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00\'\00n\00u\00l\00l\00\'\00 \00(\00n\00o\00t\00 \00a\00s\00s\00i\00g\00n\00e\00d\00 \00o\00r\00 \00f\00a\00i\00l\00e\00d\00 \00c\00a\00s\00t\00)")
- (data (i32.const 1564) "<")
- (data (i32.const 1576) "\02\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s")
- (data (i32.const 1628) "<")
- (data (i32.const 1640) "\02\00\00\00 \00\00\00i\00n\00v\00a\00l\00i\00d\00 \00d\00o\00w\00n\00c\00a\00s\00t")
- (data (i32.const 1696) "\06\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 ")
+ (data $0 (i32.const 1036) "<")
+ (data $0.1 (i32.const 1048) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data $1 (i32.const 1100) "<")
+ (data $1.1 (i32.const 1112) "\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
+ (data $4 (i32.const 1228) "<")
+ (data $4.1 (i32.const 1240) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data $5 (i32.const 1292) ",")
+ (data $5.1 (i32.const 1304) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
+ (data $7 (i32.const 1372) "<")
+ (data $7.1 (i32.const 1384) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data $8 (i32.const 1436) "|")
+ (data $8.1 (i32.const 1448) "\02\00\00\00^\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00\'\00n\00u\00l\00l\00\'\00 \00(\00n\00o\00t\00 \00a\00s\00s\00i\00g\00n\00e\00d\00 \00o\00r\00 \00f\00a\00i\00l\00e\00d\00 \00c\00a\00s\00t\00)")
+ (data $9 (i32.const 1564) "<")
+ (data $9.1 (i32.const 1576) "\02\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s")
+ (data $10 (i32.const 1628) "<")
+ (data $10.1 (i32.const 1640) "\02\00\00\00 \00\00\00i\00n\00v\00a\00l\00i\00d\00 \00d\00o\00w\00n\00c\00a\00s\00t")
+ (data $11 (i32.const 1696) "\06\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 ")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -1589,7 +1589,7 @@
    local.get $1
    i32.const 0
    i32.store $0 offset=8
-   block $__inlined_func$~instanceof|managed-cast/Cat13 (result i32)
+   block $__inlined_func$~instanceof|managed-cast/Cat5 (result i32)
     local.get $1
     local.get $0
     i32.store $0 offset=4
@@ -1613,7 +1613,7 @@
     i32.load $0
     i32.const 4
     i32.ne
-    br_if $__inlined_func$~instanceof|managed-cast/Cat13
+    br_if $__inlined_func$~instanceof|managed-cast/Cat5
     drop
     i32.const 1
    end
@@ -1655,7 +1655,7 @@
    i32.const 0
    i32.store $0 offset=8
    local.get $1
-   block $__inlined_func$~instanceof|managed-cast/Cat16 (result i32)
+   block $__inlined_func$~instanceof|managed-cast/Cat6 (result i32)
     local.get $1
     local.get $0
     i32.store $0
@@ -1666,7 +1666,7 @@
     i32.load $0
     i32.const 4
     i32.ne
-    br_if $__inlined_func$~instanceof|managed-cast/Cat16
+    br_if $__inlined_func$~instanceof|managed-cast/Cat6
     drop
     i32.const 1
    end
