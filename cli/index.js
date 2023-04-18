@@ -300,6 +300,7 @@ export async function main(argv, options) {
   switch (opts.runtime) {
     case "stub": runtime = 0; break;
     case "minimal": runtime = 1; break;
+    case "minimal-mt": runtime = 4; break;
     /* incremental */
     default: runtime = 2; break;
   }

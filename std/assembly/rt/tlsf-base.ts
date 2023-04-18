@@ -5,6 +5,9 @@ import { E_ALLOCATION_TOO_LARGE } from "../util/error";
 // === The TLSF (Two-Level Segregate Fit) memory allocator ===
 // see: http://www.gii.upv.es/tlsf/
 
+// Split into single- and multi-threaded versions, the multi-threaded version just adds basic locks around
+//  allocation and deallocation.
+
 // - `ffs(x)` is equivalent to `ctz(x)` with x != 0
 // - `fls(x)` is equivalent to `sizeof(x) * 8 - clz(x) - 1`
 
@@ -137,7 +140,10 @@ import { E_ALLOCATION_TOO_LARGE } from "../util/error";
 @inline const ROOT_SIZE: usize = HL_END + sizeof<usize>();
 
 // @ts-ignore: decorator
-@lazy export let ROOT: Root = changetype<Root>(0); // unsafe initializion below
+@lazy export let ROOT: Root = changetype<Root>(memory.data(ROOT_SIZE)); // unsafe initializion below
+
+// @ts-ignore: decorator
+@inline export const ROOT_INIT: usize = memory.data(4);
 
 /** Gets the second level map of the specified first level. */
 // @ts-ignore: decorator
@@ -460,13 +466,13 @@ function prepareSize(size: usize): usize {
 }
 
 /** Initializes the root structure. */
-function initialize(): void {
+export function TLSFinitialize(): void {
   if (isDefined(ASC_RTRACE)) oninit(__heap_base);
   let rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
   let pagesBefore = memory.size();
   let pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
   if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
-  let root = changetype<Root>(rootOffset);
+  let root = ROOT;
   root.flMap = 0;
   SETTAIL(root, changetype<Block>(0));
   for (let fl: usize = 0; fl < FL_BITS; ++fl) {
@@ -483,7 +489,7 @@ function initialize(): void {
   } else {
     addMemory(root, memStart, memory.size() << 16);
   }
-  ROOT = root;
+  store<i32>(ROOT_INIT, 1);
 }
 
 /** Allocates a block of the specified size. */
@@ -536,7 +542,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
 }
 
 /** Moves a block to a new one of the specified size. */
-function moveBlock(root: Root, block: Block, newSize: usize): Block {
+export function moveBlock(root: Root, block: Block, newSize: usize): Block {
   let newBlock = allocateBlock(root, newSize);
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, block.mmInfo & ~TAGS_MASK);
   if (changetype<usize>(block) >= __heap_base) {
@@ -554,7 +560,7 @@ export function freeBlock(root: Root, block: Block): void {
 }
 
 /** Checks that a used block is valid to be freed or reallocated. */
-function checkUsedBlock(ptr: usize): Block {
+export function checkUsedBlock(ptr: usize): Block {
   let block = changetype<Block>(ptr - BLOCK_OVERHEAD);
   assert(
     ptr != 0 && !(ptr & AL_MASK) &&  // must exist and be aligned
@@ -563,27 +569,3 @@ function checkUsedBlock(ptr: usize): Block {
   return block;
 }
 
-// @ts-ignore: decorator
-@global @unsafe
-export function __alloc(size: usize): usize {
-  if (!ROOT) initialize();
-  return changetype<usize>(allocateBlock(ROOT, size)) + BLOCK_OVERHEAD;
-}
-
-// @ts-ignore: decorator
-@global @unsafe
-export function __realloc(ptr: usize, size: usize): usize {
-  if (!ROOT) initialize();
-  return (ptr < __heap_base
-    ? changetype<usize>(moveBlock(ROOT, checkUsedBlock(ptr), size))
-    : changetype<usize>(reallocateBlock(ROOT, checkUsedBlock(ptr), size))
-  ) + BLOCK_OVERHEAD;
-}
-
-// @ts-ignore: decorator
-@global @unsafe
-export function __free(ptr: usize): void {
-  if (ptr < __heap_base) return;
-  if (!ROOT) initialize();
-  freeBlock(ROOT, checkUsedBlock(ptr));
-}

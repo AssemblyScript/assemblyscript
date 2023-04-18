@@ -1,3 +1,3 @@
 import "rt/tlsf-base";
-import "rt/tlsf-st";
+import "rt/tlsf-mt";
 import "rt/tcms";
