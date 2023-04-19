@@ -715,6 +715,49 @@ export namespace BuiltinNames {
   export const i31_new = "~lib/builtins/i31.new";
   export const i31_get = "~lib/builtins/i31.get";
 
+  export const string_const = "~lib/builtins/string.const_";
+  export const string_new_utf8 = "~lib/builtins/string.new_utf8";
+  export const string_new_utf8_array = "~lib/builtins/string.new_utf8_array";
+  export const string_new_lossy_utf8 = "~lib/builtins/string.new_lossy_utf8";
+  export const string_new_lossy_utf8_array = "~lib/builtins/string.new_lossy_utf8_array";
+  export const string_new_wtf8 = "~lib/builtins/string.new_wtf8";
+  export const string_new_wtf8_array = "~lib/builtins/string.new_wtf8_array";
+  export const string_new_wtf16 = "~lib/builtins/string.new_wtf16";
+  export const string_new_wtf16_array = "~lib/builtins/string.new_wtf16_array";
+  export const string_from_code_point = "~lib/builtins/string.from_code_point";
+  export const string_hash = "~lib/builtins/string.hash";
+  export const string_measure_utf8 = "~lib/builtins/string.measure_utf8";
+  export const string_measure_wtf8 = "~lib/builtins/string.measure_wtf8";
+  export const string_measure_wtf16 = "~lib/builtins/string.measure_wtf16";
+  export const string_is_usv_sequence = "~lib/builtins/string.is_usv_sequence";
+  export const string_encode_utf8 = "~lib/builtins/string.encode_utf8";
+  export const string_encode_utf8_array = "~lib/builtins/string.encode_utf8_array";
+  // TODO: string_encode_lossy_utf8
+  // TODO: string_encode_lossy_utf8_array
+  export const string_encode_wtf8 = "~lib/builtins/string.encode_wtf8";
+  export const string_encode_wtf8_array = "~lib/builtins/string.encode_wtf8_array";
+  export const string_encode_wtf16 = "~lib/builtins/string.encode_wtf16";
+  export const string_encode_wtf16_array = "~lib/builtins/string.encode_wtf16_array";
+  export const string_concat = "~lib/builtins/string.concat";
+  export const string_eq = "~lib/builtins/string.eq";
+  export const string_compare = "~lib/builtins/string.compare";
+  export const string_as_wtf8 = "~lib/builtins/string.as_wtf8";
+  export const string_as_wtf16 = "~lib/builtins/string.as_wtf16";
+  export const string_as_iter = "~lib/builtins/string.as_iter";
+  export const stringview_wtf8_advance = "~lib/builtins/stringview_wtf8.advance";
+  // TODO: stringview_wtf8_encode_utf8
+  // TODO: stringview_wtf8_encode_lossy_utf8
+  // TODO: stringview_wtf8_encode_wtf8
+  export const stringview_wtf8_slice = "~lib/builtins/stringview_wtf8.slice";
+  export const stringview_wtf16_length = "~lib/builtins/stringview_wtf16.length";
+  export const stringview_wtf16_slice = "~lib/builtins/stringview_wtf16.slice";
+  export const stringview_wtf16_get_codeunit = "~lib/builtins/stringview_wtf16.get_codeunit";
+  // TODO: stringview_wtf16_encode
+  export const stringview_iter_next = "~lib/builtins/stringview_iter.next";
+  export const stringview_iter_advance = "~lib/builtins/stringview_iter.advance";
+  export const stringview_iter_rewind = "~lib/builtins/stringview_iter.rewind";
+  export const stringview_iter_slice = "~lib/builtins/stringview_iter.slice";
+
   // internals
   export const data_end = "~lib/memory/__data_end";
   export const stack_pointer = "~lib/memory/__stack_pointer";
@@ -10825,6 +10868,645 @@ function builtin_i32x4_relaxed_dot_i8x16_i7x16_add_s(ctx: BuiltinFunctionContext
   return builtin_v128_relaxed_dot_add(ctx);
 }
 builtinFunctions.set(BuiltinNames.i32x4_relaxed_dot_i8x16_i7x16_add_s, builtin_i32x4_relaxed_dot_i8x16_i7x16_add_s);
+
+// === Stringref ==============================================================================
+
+// string.const(str: string) -> stringref
+function builtin_string_const(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let node = operands[0];
+  if (node.kind == NodeKind.Literal) {
+    let literal = <LiteralExpression>node;
+    if (literal.literalKind == LiteralKind.String) {
+      compiler.currentType = Type.stringref;
+      return module.string_const((<StringLiteralExpression>literal).value);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.String_literal_expected,
+    node.range
+  );
+  compiler.currentType = Type.stringref;
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.string_const, builtin_string_const);
+
+// string.new_utf8(ptr: usize, bytes: i32, immMemory?: i32) -> stringref
+function builtin_string_new_utf8(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsOptional(ctx, 2, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  // TODO: immMemory
+  compiler.currentType = Type.stringref;
+  return module.string_new_utf8(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.string_new_utf8, builtin_string_new_utf8);
+
+// string.new_utf8_array(arr: array<i8>, start: i32, end: i32) -> stringref
+function builtin_string_new_utf8_array(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.arrayref, Constraints.ConvImplicit); // TODO
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringref;
+  return module.string_new_utf8_array(arg0, arg1, arg2);
+}
+builtinFunctions.set(BuiltinNames.string_new_utf8_array, builtin_string_new_utf8_array);
+
+// string.new_lossy_utf8(ptr: usize, bytes: i32, immMemory?: i32) -> stringref
+function builtin_string_new_lossy_utf8(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsOptional(ctx, 2, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  // TODO: immMemory
+  compiler.currentType = Type.stringref;
+  return module.string_new_lossy_utf8(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.string_new_lossy_utf8, builtin_string_new_lossy_utf8);
+
+// string.new_lossy_utf8_array(arr: array<i8>, start: i32, end: i32) -> stringref
+function builtin_string_new_lossy_utf8_array(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.arrayref, Constraints.ConvImplicit); // TODO
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringref;
+  return module.string_new_lossy_utf8_array(arg0, arg1, arg2);
+}
+builtinFunctions.set(BuiltinNames.string_new_lossy_utf8_array, builtin_string_new_lossy_utf8_array);
+
+// string.new_wtf8(ptr: usize, bytes: i32, immMemory?: i32) -> stringref
+function builtin_string_new_wtf8(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsOptional(ctx, 2, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  // TODO: immMemory
+  compiler.currentType = Type.stringref;
+  return module.string_new_wtf8(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.string_new_wtf8, builtin_string_new_wtf8);
+
+// string.new_wtf8_array(arr: array<i8>, start: i32, end: i32) -> stringref
+function builtin_string_new_wtf8_array(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.arrayref, Constraints.ConvImplicit); // TODO
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringref;
+  return module.string_new_wtf8_array(arg0, arg1, arg2);
+}
+builtinFunctions.set(BuiltinNames.string_new_wtf8_array, builtin_string_new_wtf8_array);
+
+// string.new_wtf16(ptr: usize, bytes: i32, immMemory?: i32) -> stringref
+function builtin_string_new_wtf16(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsOptional(ctx, 2, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  // TODO: immMemory
+  compiler.currentType = Type.stringref;
+  return module.string_new_wtf16(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.string_new_wtf16, builtin_string_new_wtf16);
+
+// string.new_wtf16_array(arr: array<i8>, start: i32, end: i32) -> stringref
+function builtin_string_new_wtf16_array(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsOptional(ctx, 2, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.arrayref, Constraints.ConvImplicit); // TODO
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringref;
+  return module.string_new_wtf16_array(arg0, arg1, arg2);
+}
+builtinFunctions.set(BuiltinNames.string_new_wtf16_array, builtin_string_new_wtf16_array);
+
+// string.from_code_point(codepoint: i32) -> stringref
+function builtin_string_from_code_point(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringref;
+  return module.string_from_code_point(arg0);
+}
+builtinFunctions.set(BuiltinNames.string_from_code_point, builtin_string_from_code_point);
+
+// string.hash(str: stringref) -> i32
+function builtin_string_hash(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.string_hash(arg0);
+}
+builtinFunctions.set(BuiltinNames.string_hash, builtin_string_hash);
+
+// string.measure_utf8(str: stringref) -> i32
+function builtin_string_measure_utf8(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.string_measure_utf8(arg0);
+}
+builtinFunctions.set(BuiltinNames.string_measure_utf8, builtin_string_measure_utf8);
+
+// string.measure_wtf8(str: stringref) -> i32
+function builtin_string_measure_wtf8(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.string_measure_wtf8(arg0);
+}
+builtinFunctions.set(BuiltinNames.string_measure_wtf8, builtin_string_measure_wtf8);
+
+// string.measure_wtf16(str: stringref) -> i32
+function builtin_string_measure_wtf16(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.string_measure_wtf16(arg0);
+}
+builtinFunctions.set(BuiltinNames.string_measure_wtf16, builtin_string_measure_wtf16);
+
+// string.is_usv_sequence(str: stringref) -> bool
+function builtin_string_is_usv_sequence(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.bool;
+  return module.string_is_usv_sequence(arg0);
+}
+builtinFunctions.set(BuiltinNames.string_is_usv_sequence, builtin_string_is_usv_sequence);
+
+// string.encode_utf8(str: stringref, ptr: usize) -> i32
+function builtin_string_encode_utf8(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsOptional(ctx, 2, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType, Constraints.ConvImplicit);
+  // TODO: immMemory
+  compiler.currentType = Type.i32;
+  return module.string_encode_utf8(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.string_encode_utf8, builtin_string_encode_utf8);
+
+// string.encode_utf8_array(str: stringref, arr: array<i8>, start: i32) -> i32
+function builtin_string_encode_utf8_array(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.arrayref, Constraints.ConvImplicit); // TODO: array<i8>
+  let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.string_encode_utf8_array(arg0, arg1, arg2);
+}
+builtinFunctions.set(BuiltinNames.string_encode_utf8_array, builtin_string_encode_utf8_array);
+
+// TOOD: string.encode_lossy_utf8(str: stringref, ptr: usize) -> i32
+// TODO: string.encode_lossy_utf8_array(str: stringref, arr: array<i8>, start: i32) -> i32
+
+// string.encode_wtf8(str: stringref, ptr: usize) -> i32
+function builtin_string_encode_wtf8(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsOptional(ctx, 2, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType, Constraints.ConvImplicit);
+  // TODO: immMemory
+  compiler.currentType = Type.i32;
+  return module.string_encode_wtf8(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.string_encode_wtf8, builtin_string_encode_wtf8);
+
+// string.encode_wtf8_array(str: stringref, arr: array<i8>, start: i32) -> i32
+function builtin_string_encode_wtf8_array(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.arrayref, Constraints.ConvImplicit); // TODO: array<i8>
+  let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.string_encode_wtf8_array(arg0, arg1, arg2);
+}
+builtinFunctions.set(BuiltinNames.string_encode_wtf8_array, builtin_string_encode_wtf8_array);
+
+// string.encode_wtf16(str: stringref, ptr: usize) -> i32
+function builtin_string_encode_wtf16(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsOptional(ctx, 2, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType, Constraints.ConvImplicit);
+  // TODO: immMemory
+  compiler.currentType = Type.i32;
+  return module.string_encode_wtf16(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.string_encode_wtf16, builtin_string_encode_wtf16);
+
+// string.encode_wtf16_array(str: stringref, arr: array<i8>, start: i32) -> i32
+function builtin_string_encode_wtf16_array(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.arrayref, Constraints.ConvImplicit); // TODO: array<i8>
+  let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.string_encode_wtf16_array(arg0, arg1, arg2);
+}
+builtinFunctions.set(BuiltinNames.string_encode_wtf16_array, builtin_string_encode_wtf16_array);
+
+// string.concat(left: stringref, right: stringref) -> stringref
+function builtin_string_concat(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringref;
+  return module.string_concat(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.string_concat, builtin_string_concat);
+
+// string.eq(left: stringref, right: stringref) -> bool
+function builtin_string_eq(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.bool;
+  return module.string_eq(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.string_eq, builtin_string_eq);
+
+// string.compare(left: stringref, right: stringref) -> i32
+function builtin_string_compare(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.string_compare(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.string_compare, builtin_string_compare);
+
+// string.as_wtf8(str: stringref) -> stringview_wtf8
+function builtin_string_as_wtf8(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringview_wtf8;
+  return module.string_as_wtf8(arg0);
+}
+builtinFunctions.set(BuiltinNames.string_as_wtf8, builtin_string_as_wtf8);
+
+// string.as_wtf16(str: stringref) -> stringview_wtf16
+function builtin_string_as_wtf16(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringview_wtf16;
+  return module.string_as_wtf16(arg0);
+}
+builtinFunctions.set(BuiltinNames.string_as_wtf16, builtin_string_as_wtf16);
+
+// string.as_iter(str: stringref) -> stringview_iter
+function builtin_string_as_iter(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringview_iter;
+  return module.string_as_iter(arg0);
+}
+builtinFunctions.set(BuiltinNames.string_as_iter, builtin_string_as_iter);
+
+// stringview_wtf8.advance(view: stringview_wtf8, pos: i32, bytes: i32) -> i32
+function builtin_stringview_wtf8_advance(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringview_wtf8, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.stringview_wtf8_advance(arg0, arg1, arg2);
+}
+builtinFunctions.set(BuiltinNames.stringview_wtf8_advance, builtin_stringview_wtf8_advance);
+
+// TODO: stringview_wtf8.encode_utf8
+// TODO: stringview_wtf8.encode_lossy_utf8
+// TODO: stringview_wtf8.encode_wtf8
+
+// stringview_wtf8.slice(view: stringview_wtf8, start: i32, end: i32) -> stringview_wtf8
+function builtin_stringview_wtf8_slice(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringview_wtf8, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringref;
+  return module.stringview_wtf8_slice(arg0, arg1, arg2);
+}
+builtinFunctions.set(BuiltinNames.stringview_wtf8_slice, builtin_stringview_wtf8_slice);
+
+// stringview_wtf16.length(view: stringview_wtf8) -> i32
+function builtin_stringview_wtf16_length(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringview_wtf16, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.stringview_wtf16_length(arg0);
+}
+builtinFunctions.set(BuiltinNames.stringview_wtf16_length, builtin_stringview_wtf16_length);
+
+// stringview_wtf16.slice(view: stringview_wtf16, start: i32, end: i32) -> stringref
+function builtin_stringview_wtf16_slice(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringview_wtf16, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringref;
+  return module.stringview_wtf16_slice(arg0, arg1, arg2);
+}
+builtinFunctions.set(BuiltinNames.stringview_wtf16_slice, builtin_stringview_wtf16_slice);
+
+// stringview_wtf16.get_codeunit(view: stringview_wtf16, pos: i32) -> i32
+function builtin_stringview_wtf16_get_codeunit(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringview_wtf16, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.stringview_wtf16_get_codeunit(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.stringview_wtf16_get_codeunit, builtin_stringview_wtf16_get_codeunit);
+
+// TODO: stringview_wtf16.encode
+
+// stringview_iter.next(view: stringview_iter) -> i32
+function builtin_stringview_iter_next(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringview_iter, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.stringview_iter_next(arg0);
+}
+builtinFunctions.set(BuiltinNames.stringview_iter_next, builtin_stringview_iter_next);
+
+// stringview_iter.advance(view: stringview_iter, count: i32) -> i32
+function builtin_stringview_iter_advance(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringview_iter, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.stringview_iter_advance(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.stringview_iter_advance, builtin_stringview_iter_advance);
+
+// stringview_iter.rewind(view: stringview_iter, count: i32) -> i32
+function builtin_stringview_iter_rewind(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringview_iter, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.i32;
+  return module.stringview_iter_rewind(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.stringview_iter_rewind, builtin_stringview_iter_rewind);
+
+// stringview_iter.slice(view: stringview_iter, count: i32) -> stringref
+function builtin_stringview_iter_slice(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.Stringref) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.stringview_iter, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
+  compiler.currentType = Type.stringref;
+  return module.stringview_iter_slice(arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.stringview_iter_slice, builtin_stringview_iter_slice);
 
 // === Internal helpers =======================================================================
 

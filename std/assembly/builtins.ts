@@ -2596,6 +2596,174 @@ export abstract class i31 { // FIXME: usage of 'new' requires a class :(
   static get(i31expr: i31ref): i32 { return unreachable(); }
 }
 
+export namespace string {
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function const_(str: string): stringref;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function new_utf8(ptr: usize, bytes: i32): stringref;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function new_utf8_array(array: arrayref, start: i32, end: i32): stringref;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function new_lossy_utf8(ptr: usize, bytes: i32): stringref;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function new_lossy_utf8_array(array: arrayref, start: i32, end: i32): stringref;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function new_wtf8(ptr: usize, bytes: i32): stringref;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function new_wtf8_array(arr: arrayref, start: i32, end: i32): stringref;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function new_wtf16(ptr: usize, units: i32): stringref;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function new_wtf16_array(arr: arrayref, start: i32, end: i32): stringref;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function from_code_point(codepoint: i32): stringref;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function hash(str: stringref): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function measure_utf8(str: stringref): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function measure_wtf8(str: stringref): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function measure_wtf16(str: stringref): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function is_usv_sequence(str: stringref): i32;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function encode_utf8(str: stringref, ptr: usize): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function encode_utf8_array(str: stringref, arr: arrayref, start: i32): i32;
+
+  // TODO: encode_lossy_utf8
+
+  // TODO: encode_lossy_utf8_array
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function encode_wtf8(str: stringref, ptr: usize): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function encode_wtf8_array(str: stringref, arr: arrayref, start: i32): i32;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function encode_wtf16(str: stringref, ptr: usize): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function encode_wtf16_array(str: stringref, arr: arrayref, start: i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function concat(left: stringref, right: stringref): stringref;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function eq(left: stringref, right: stringref): bool;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function compare(left: stringref, right: stringref): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function as_wtf8(str: stringref): stringview_wtf8;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function as_wtf16(str: stringref): stringview_wtf16;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function as_iter(str: stringref): stringview_iter;
+}
+
+export namespace stringview_wtf8 {
+
+    // @ts-ignore: decorator
+    @builtin
+    export declare function advance(view: stringview_wtf8, pos: i32, bytes: i32): i32;
+
+    // @ts-ignore: decorator
+    @builtin
+    export declare function slice(view: stringview_wtf8, start: i32, end: i32): stringref;
+
+    // TODO: encode_utf8
+
+    // TODO: encode_lossy_utf8
+
+    // TODO: encode_wtf8
+}
+
+export namespace stringview_wtf16 {
+
+    // @ts-ignore: decorator
+    @builtin
+    export declare function length(view: stringview_wtf16): i32;
+
+    // @ts-ignore: decorator
+    @builtin
+    export declare function slice(view: stringview_wtf16, start: i32, end: i32): stringref;
+
+    // @ts-ignore: decorator
+    @builtin
+    export declare function get_codeunit(view: stringview_wtf16, pos: i32): i32;
+
+    // TODO: encode
+}
+
+export namespace stringview_iter {
+
+    // @ts-ignore: decorator
+    @builtin
+    export declare function next(view: stringview_iter): i32;
+
+    // @ts-ignore: decorator
+    @builtin
+    export declare function advance(view: stringview_iter, count: i32): i32;
+
+    // @ts-ignore: decorator
+    @builtin
+    export declare function rewind(view: stringview_iter, count: i32): i32;
+
+    // @ts-ignore: decorator
+    @builtin
+    export declare function slice(view: stringview_iter, count: i32): stringref;
+}
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 // @ts-ignore: decorator

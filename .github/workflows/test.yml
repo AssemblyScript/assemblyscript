@@ -74,16 +74,16 @@ jobs:
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
-        node-version: 19.0.0-v8-canary202209029fc5a9347b
+        node-version: 21.0.0-v8-canary20230419061e93e884
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Build
       run: npm run build
     - name: Test experimental features
       env:
-        ASC_FEATURES: threads,reference-types,gc,exception-handling
+        ASC_FEATURES: threads,reference-types,gc,exception-handling,stringref
       run: |
-        npm run test:compiler features/threads features/reference-types features/gc features/exception-handling
+        npm run test:compiler features/threads features/reference-types features/gc features/exception-handling features/stringref
   runtimes:
     name: "Runtimes"
     runs-on: ubuntu-latest

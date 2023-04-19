@@ -48,5 +48,15 @@
     "v8_flags": [
       "--experimental-wasm-relaxed-simd"
     ]
+  },
+  "stringref": {
+    "asc_flags": [
+      "--enable reference-types",
+      "--enable stringref"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-gc",
+      "--experimental-wasm-stringref"
+    ]
   }
 }

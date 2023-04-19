@@ -1298,7 +1298,9 @@ export const enum StringMeasureOp {
   /** string.is_usv_sequence */
   IsUSV = 3 /* _BinaryenStringMeasureIsUSV */,
   /** stringview_wtf16.length */
-  WTF16View = 4 /* _BinaryenStringMeasureWTF16View */
+  WTF16View = 4 /* _BinaryenStringMeasureWTF16View */,
+  /** string.hash */
+  Hash = 5 /* TODO_BinaryenStringMeasureHash */
 }
 
 /** Binaryen StringEncode operation constants. */
@@ -1470,14 +1472,6 @@ export class Module {
 
   ref_eq(left: ExpressionRef, right: ExpressionRef): ExpressionRef {
     return binaryen._BinaryenRefEq(this.ref, left, right);
-  }
-
-  string_eq(left: ExpressionRef, right: ExpressionRef): ExpressionRef {
-    return binaryen._BinaryenStringEq(this.ref, StringEqOp.Equal, left, right);
-  }
-
-  string_compare(left: ExpressionRef, right: ExpressionRef): ExpressionRef {
-    return binaryen._BinaryenStringEq(this.ref, StringEqOp.Compare, left, right);
   }
 
   // expressions
@@ -2134,6 +2128,274 @@ export class Module {
     signed: bool
   ): ExpressionRef {
     return binaryen._BinaryenI31Get(this.ref, expr, signed);
+  }
+
+  // stringref
+
+  string_const(
+    str: string
+  ): ExpressionRef {
+    return binaryen._BinaryenStringConst(this.ref, this.allocStringCached(str));
+  }
+
+  string_new_utf8(
+    ptr: ExpressionRef,
+    length: ExpressionRef,
+    memory: string = CommonNames.DefaultMemory // TODO
+  ): ExpressionRef {
+    return binaryen._BinaryenStringNew(this.ref, StringNewOp.UTF8, ptr, length, 0, 0, false);
+  }
+
+  string_new_utf8_array(
+    arr: ExpressionRef,
+    start: ExpressionRef,
+    end: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringNew(this.ref, StringNewOp.UTF8Array, arr, 0, start, end, false);
+  }
+
+  string_new_lossy_utf8(
+    ptr: ExpressionRef,
+    length: ExpressionRef,
+    memory: string = CommonNames.DefaultMemory // TODO
+  ): ExpressionRef {
+    return binaryen._BinaryenStringNew(this.ref, StringNewOp.Replace, ptr, length, 0, 0, false);
+  }
+
+  string_new_lossy_utf8_array(
+    arr: ExpressionRef,
+    start: ExpressionRef,
+    end: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringNew(this.ref, StringNewOp.ReplaceArray, arr, 0, start, end, false);
+  }
+
+  string_new_wtf8(
+    ptr: ExpressionRef,
+    length: ExpressionRef,
+    memory: string = CommonNames.DefaultMemory // TODO
+  ): ExpressionRef {
+    return binaryen._BinaryenStringNew(this.ref, StringNewOp.WTF8, ptr, length, 0, 0, false);
+  }
+
+  string_new_wtf8_array(
+    arr: ExpressionRef,
+    start: ExpressionRef,
+    end: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringNew(this.ref, StringNewOp.WTF8Array, arr, 0, start, end, false);
+  }
+
+  string_new_wtf16(
+    ptr: ExpressionRef,
+    length: ExpressionRef,
+    memory: string = CommonNames.DefaultMemory // TODO
+  ): ExpressionRef {
+    return binaryen._BinaryenStringNew(this.ref, StringNewOp.WTF16, ptr, length, 0, 0, false);
+  }
+
+  string_new_wtf16_array(
+    arr: ExpressionRef,
+    start: ExpressionRef,
+    end: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringNew(this.ref, StringNewOp.WTF16Array, arr, 0, start, end, false);
+  }
+
+  string_from_code_point(
+    codepoint: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringNew(this.ref, StringNewOp.FromCodePoint, codepoint, 0, 0, 0, false);
+  }
+
+  string_hash(
+    str: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringMeasure(this.ref, StringMeasureOp.Hash, str);
+  }
+
+  string_measure_utf8(
+    str: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringMeasure(this.ref, StringMeasureOp.UTF8, str);
+  }
+
+  string_measure_wtf8(
+    str: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringMeasure(this.ref, StringMeasureOp.WTF8, str);
+  }
+
+  string_measure_wtf16(
+    str: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringMeasure(this.ref, StringMeasureOp.WTF16, str);
+  }
+
+  string_is_usv_sequence(
+    str: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringMeasure(this.ref, StringMeasureOp.IsUSV, str);
+  }
+
+  string_encode_utf8(
+    str: ExpressionRef,
+    ptr: ExpressionRef,
+    memory: string = CommonNames.DefaultMemory // TODO
+  ): ExpressionRef {
+    return binaryen._BinaryenStringEncode(this.ref, StringEncodeOp.UTF8, str, ptr, 0);
+  }
+
+  string_encode_utf8_array(
+    str: ExpressionRef,
+    arr: ExpressionRef,
+    start: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringEncode(this.ref, StringEncodeOp.UTF8Array, str, arr, start);
+  }
+
+  // TOOD: string_encode_lossy_utf8
+  // TODO: string_encode_lossy_utf8_array
+
+  string_encode_wtf8(
+    str: ExpressionRef,
+    ptr: ExpressionRef,
+    memory: string = CommonNames.DefaultMemory // TODO
+  ): ExpressionRef {
+    return binaryen._BinaryenStringEncode(this.ref, StringEncodeOp.WTF8, str, ptr, 0);
+  }
+
+  string_encode_wtf8_array(
+    str: ExpressionRef,
+    arr: ExpressionRef,
+    start: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringEncode(this.ref, StringEncodeOp.WTF8Array, str, arr, start);
+  }
+
+  string_encode_wtf16(
+    str: ExpressionRef,
+    ptr: ExpressionRef,
+    memory: string = CommonNames.DefaultMemory // TODO
+  ): ExpressionRef {
+    return binaryen._BinaryenStringEncode(this.ref, StringEncodeOp.WTF16, str, ptr, 0);
+  }
+
+  string_encode_wtf16_array(
+    str: ExpressionRef,
+    arr: ExpressionRef,
+    start: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringEncode(this.ref, StringEncodeOp.WTF16Array, str, arr, start);
+  }
+
+  string_concat(
+    left: ExpressionRef,
+    right: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringConcat(this.ref, left, right);
+  }
+
+  string_eq(
+    left: ExpressionRef,
+    right: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringEq(this.ref, StringEqOp.Equal, left, right);
+  }
+
+  string_compare(
+    left: ExpressionRef,
+    right: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringEq(this.ref, StringEqOp.Compare, left, right);
+  }
+
+  string_as_wtf8(
+    str: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringAs(this.ref, StringAsOp.WTF8, str);
+  }
+
+  string_as_wtf16(
+    str: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringAs(this.ref, StringAsOp.WTF16, str);
+  }
+
+  string_as_iter(
+    str: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringAs(this.ref, StringAsOp.Iter, str);
+  }
+
+  stringview_wtf8_advance(
+    view: ExpressionRef,
+    pos: ExpressionRef,
+    bytes: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringWTF8Advance(this.ref, view, pos, bytes);
+  }
+
+  // TODO: stringview_wtf8_encode_utf8
+  // TODO: stringview_wtf8_encode_lossy_utf8
+  // TODO: stringview_wtf8_encode_wtf8
+
+  stringview_wtf8_slice(
+    view: ExpressionRef,
+    start: ExpressionRef,
+    end: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringSliceWTF(this.ref, StringSliceWTFOp.WTF8, view, start, end);
+  }
+
+  stringview_wtf16_length(
+    view: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringMeasure(this.ref, StringMeasureOp.WTF16View, view);
+  }
+
+  stringview_wtf16_slice(
+    view: ExpressionRef,
+    start: ExpressionRef,
+    end: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringSliceWTF(this.ref, StringSliceWTFOp.WTF16, view, start, end);
+  }
+
+  stringview_wtf16_get_codeunit(
+    view: ExpressionRef,
+    pos: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringWTF16Get(this.ref, view, pos);
+  }
+
+  // TODO: stringview_wtf16_encode
+
+  stringview_iter_next(
+    view: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringIterNext(this.ref, view);
+  }
+
+  stringview_iter_advance(
+    view: ExpressionRef,
+    count: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringIterMove(this.ref, StringIterMoveOp.Advance, view, count);
+  }
+
+  stringview_iter_rewind(
+    view: ExpressionRef,
+    count: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringIterMove(this.ref, StringIterMoveOp.Rewind, view, count);
+  }
+
+  stringview_iter_slice(
+    view: ExpressionRef,
+    count: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenStringSliceIter(this.ref, view, count);
   }
 
   // globals

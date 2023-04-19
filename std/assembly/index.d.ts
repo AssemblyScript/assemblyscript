@@ -1646,6 +1646,96 @@ declare abstract class i31 {
   static get(i31expr: i31ref): i32;
 }
 
+declare namespace string {
+  /** Constructs a string reference from a string literal. Temporary! */
+  export function const_(str: string): stringref;
+  /** Creates a new string from memory using a strict UTF-8 decoder, decoding `bytes` bytes starting at `ptr`. */
+  export function new_utf8(ptr: usize, bytes: i32): stringref;
+  /** Creates a new string from `array` using a strict UTF-8 decoder, decoding from `start` inclusive to `end` exclusive. */
+  export function new_utf8_array(array: arrayref, start: i32, end: i32): stringref;
+  /** Creates a new string from memory using a lossy UTF-8 decoder, decoding `bytes` bytes starting at `ptr`. */
+  export function new_lossy_utf8(ptr: usize, bytes: i32): stringref;
+  /** Creates a new string from `array` using a lossy UTF-8 decoder, decoding from `start` inclusive to `end` exclusive. */
+  export function new_lossy_utf8_array(array: arrayref, start: i32, end: i32): stringref;
+  /** Creates a new string from memory using a strict WTF-8 decoder, decodiing `bytes` bytes starting at `ptr`. */
+  export function new_wtf8(ptr: usize, bytes: i32): stringref;
+  /** Creates a new string from `array` using a strict WTF-8 decoder, decoding from `start` inclusive to `end` exclusive. */
+  export function new_wtf8_array(array: arrayref, start: i32, end: i32): stringref;
+  /** Creates a new string from memory assuming WTF-16 encoding, reading `codeunits` code units starting at `ptr`. `ptr` must be two-byte aligned. */
+  export function new_wtf16(ptr: usize, codeunits: i32): stringref;
+  /** Creates a new string from `array` assuming WTF-16 encoding, reading from `start` inclusive to `end` exclusive. */
+  export function new_wtf16_array(array: arrayref, start: i32, end: i32): stringref;
+  /** Creates a new string from the given `codepoint`. */
+  export function from_code_point(codepoint: i32): stringref;
+  /** Obtains an implementation-defined 32-bit hash value of `str`. */
+  export function hash(str: stringref): i32;
+  /** Measures the number of bytes required to encode `str` to UTF-8. Returns `-1` if the string contains an isolated surrogate. */
+  export function measure_utf8(str: stringref): i32;
+  /** Measures the number of bytes required to encode `str` to WTF-8. */
+  export function measure_wtf8(str: stringref): i32;
+  /** Measures the number of 16-bit code units required to encode `str` to WTF-16. */
+  export function measure_wtf16(str: stringref): i32;
+  /** Tests whether `str` is a sequence of Unicode scalar values, i.e. does not contain isolated surrogates. */
+  export function is_usv_sequence(str: stringref): bool;
+  /** Encodes `str` to memory at `ptr` using a strict UTF-8 encoder. */
+  export function encode_utf8(str: stringref, ptr: usize): i32;
+  /** Encodes `str` to `arr` at `start` using a strict UTF-8 encoder. */
+  export function encode_utf8_array(str: stringref, arr: arrayref, start: i32): i32;
+  // TODO: encode_lossy_utf8
+  // TODO: encode_lossy_utf8_array
+  /** Encodes `str` to memory at `ptr` using a WTF-8 encoder. */
+  export function encode_wtf8(str: stringref, ptr: usize): i32;
+  /** Encodes `str` to `arr` at `start` using a WTF-8 encoder. */
+  export function encode_wtf8_array(str: stringref, arr: arrayref, start: i32): i32;
+  /** Encodes `str` to memory at `ptr` using a WTF-16 encoder. */
+  export function encode_wtf16(str: stringref, ptr: usize): i32;
+  /** Encodes `str` to `arr` at `start` using a WTF-16 encoder. */
+  export function encode_wtf16_array(str: stringref, arr: arrayref, start: i32): i32;
+  /** Concatenates `left` and `right` in this order. Traps if either operand is `null`. */
+  export function concat(left: stringref, right: stringref): stringref;
+  /** Tests whether `left` and `right` are equal, including if both are `null`. */
+  export function eq(left: stringref, right: stringref): bool;
+  /** Compares the contents of `left` and `right`, returning `-1` if `left < right`, `0` if `left == right` or `1` if `left > right`. Traps if either operand is `null`. */
+  export function compare(left: stringref, right: stringref): i32;
+  /** Obtains a WTF-8 view on `str`. */
+  export function as_wtf8(str: stringref): stringview_wtf8;
+  /** Obtains a WTF-16 view on `str`. */
+  export function as_wtf16(str: stringref): stringview_wtf16;
+  /** Obtains an iterator view on `str`. */
+  export function as_iter(str: stringref): stringview_iter;
+}
+
+declare namespace stringview_wtf8 {
+  /** Obtains the highest code point offset in `view` that is not greater than `pos + bytes`. If `pos` does not match the start of a code point, it is advanced to the next code point. */
+  export function advance(view: stringview_wtf8, pos: i32, bytes: i32): i32;
+  /** Returns a substring of `view` from `start` inclusive to `end` exclusive. If `start` or `end` do not match the start of a code point, these are advanced to the next code point. */
+  export function slice(view: stringview_wtf8, start: i32, end: i32): stringref;
+  // TODO: encode_utf8
+  // TODO: encode_lossy_utf8
+  // TODO: encode_wtf8
+}
+
+declare namespace stringview_wtf16 {
+  /** Obtains the number of 16-bit code units in `view`. */
+  export function length(view: stringview_wtf16): i32;
+  /** Returns a substring of `view` from `start` inclusive to `end` exclusive. */
+  export function slice(view: stringview_wtf16, start: i32, end: i32): stringref;
+  /** Obtains the 16-bit code unit at `pos` in `view`. Traps if `pos` is greater than or equal to the view's WTF-16 length. */
+  export function get_codeunit(view: stringview_wtf16, pos: i32): i32;
+  // TODO: encode
+}
+
+declare namespace stringview_iter {
+  /** Obtains the code point at the iterator's current position, advancing the iterator by one code point. Returns `-1` if already at the end. */
+  export function next(view: stringview_iter): i32;
+  /** Advances the iterator by up to `count` code points, returning the number of code points consumed. */
+  export function advance(view: stringview_iter, count: i32): i32;
+  /** Rewinds the iterator by up to `count` code points, returning the number of coode points consumed. */
+  export function rewind(view: stringview_iter, count: i32): i32;
+  /** Returns a substring of `view`, starting at the current position for up to `count` code points. */
+  export function slice(view: stringview_iter, count: i32): stringref;
+}
+
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
 /** Special type evaluating the indexed access index type. */

@@ -410,7 +410,8 @@ async function testInstantiate(binaryBuffer, glue, stderr) {
           return new Date().getTimezoneOffset();
         },
         ...toEnv("Date", Date),
-        ...toEnv("Math", Math)
+        ...toEnv("Math", Math),
+        ...toEnv("console", console)
       })
     });
 

@@ -29,3 +29,19 @@ export abstract class Structref extends Ref {
 @final @unmanaged
 export abstract class Arrayref extends Ref {
 }
+
+@final @unmanaged
+export abstract class Stringref extends Ref {
+}
+
+@final @unmanaged
+export abstract class StringviewWTF8 extends Ref {
+}
+
+@final @unmanaged
+export abstract class StringviewWTF16 extends Ref {
+}
+
+@final @unmanaged
+export abstract class StringviewIter extends Ref {
+}

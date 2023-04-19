@@ -2,6 +2,6 @@
   "asc_flags": [
   ],
   "features": [
-    "simd"
+    "stringref"
   ]
 }

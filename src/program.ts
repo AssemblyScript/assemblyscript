@@ -1297,6 +1297,12 @@ export class Program extends DiagnosticEmitter {
         this.registerWrapperClass(Type.arrayref, CommonNames.Arrayref);
         this.registerWrapperClass(Type.i31ref, CommonNames.I31ref);
       }
+      if (options.hasFeature(Feature.Stringref)) {
+        this.registerWrapperClass(Type.stringref, CommonNames.Stringref);
+        this.registerWrapperClass(Type.stringview_wtf8, CommonNames.StringviewWTF8);
+        this.registerWrapperClass(Type.stringview_wtf16, CommonNames.StringviewWTF16);
+        this.registerWrapperClass(Type.stringview_iter, CommonNames.StringviewIter);
+      }
     }
 
     // resolve prototypes of extended classes or interfaces

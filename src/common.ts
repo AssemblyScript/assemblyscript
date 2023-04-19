@@ -214,6 +214,10 @@ export namespace CommonNames {
   export const Structref = "Structref";
   export const Arrayref = "Arrayref";
   export const I31ref = "I31ref";
+  export const Stringref = "Stringref";
+  export const StringviewWTF8 = "StringviewWTF8";
+  export const StringviewWTF16 = "StringviewWTF16";
+  export const StringviewIter = "StringviewIter";
   export const String = "String";
   export const RegExp = "RegExp";
   export const Object = "Object";
