@@ -12,6 +12,7 @@ import { coreCount, threadCount } from "../util/cpu.js";
 import { diff } from "../util/text.js";
 import { Rtrace } from "../lib/rtrace/index.js";
 import asc from "../dist/asc.js";
+import {exec} from "child_process";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -143,7 +144,10 @@ async function runTest(basename) {
   // Makes sure to reset the environment after
   function prepareResult(code, message = null) {
     if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
-    if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".debug.wasm"), err => { /* nop */ });
+    if (!args.createBinary) {
+      fs.unlink(path.join(basedir, basename + ".debug.wasm"), err => { /* nop */ });
+      fs.unlink(path.join(basedir, basename + ".debug.wasm.map"), err => { /* nop */ });
+    }
     return { code, message };
   }
 
@@ -252,6 +256,40 @@ async function runTest(basename) {
         }
       }
       compareFixture.end(SUCCESS);
+    }
+
+    // compare fixture source map
+    const sourcemapCompareFixture = section("compare fixture source map");
+    const debugWasmPath = path.join(basedir, basename + ".debug.wasm");
+    const debugSourceMapPath = path.join(basedir, basename + ".debug.wasm.map");
+    const sourceMapFixturePath = path.join(basedir, basename + ".debug.sourcemap.wat");
+
+    if (fs.existsSync(debugSourceMapPath) && fs.existsSync(sourceMapFixturePath)) {
+      const sourceMapCmd = `node node_modules/.bin/wasm-opt ${debugWasmPath} -ism ${debugSourceMapPath} --print`;
+      exec(sourceMapCmd, (err, stdout, stderr) => {
+        const actual = stdout.toString().replace(/\r\n/g, "\n");
+        if (args.create) {
+          fs.writeFileSync(sourceMapFixturePath, actual, { encoding: "utf8" });
+          console.log("  " + stdoutColors.yellow("Created fixture"));
+          sourcemapCompareFixture.end(SKIPPED);
+        } else {
+          const expected = fs.readFileSync(sourceMapFixturePath, { encoding: "utf8" }).replace(/\r\n/g, "\n");
+          if (args.noDiff) {
+            if (expected != actual) {
+              compareFixture.end(FAILURE);
+              return prepareResult(FAILURE, "fixture mismatch");
+            }
+          } else {
+            let diffs = diff(basename + ".debug.sourcemap.wat", expected, actual);
+            if (diffs !== null) {
+              console.log(diffs);
+              compareFixture.end(FAILURE);
+              return prepareResult(FAILURE, "fixture mismatch");
+            }
+          }
+          compareFixture.end(SUCCESS);
+        }
+      });
     }
   }
 
