@@ -1662,10 +1662,10 @@ declare namespace f64x2 {
 }
 
 declare abstract class i31 {
-  /** Creates a new i31ref from the specified integer value. */
-  static new(value: i32): i31ref;
-  /** Gets the integer value of an i31ref. */
-  static get(i31expr: i31ref): i32;
+  /** Creates a new 31-bit integer reference from the specified integer value. */
+  static new(value: i32): ref_i31;
+  /** Gets the integer value of an 31-bit integer reference. */
+  static get(i31expr: ref_i31 | null): i32;
 }
 
 /** Macro type evaluating to the underlying native WebAssembly type. */
