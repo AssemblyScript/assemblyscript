@@ -4854,17 +4854,17 @@ export class Compiler extends DiagnosticEmitter {
           module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
         );
       }
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref: return module.ref_eq(leftExpr, rightExpr);
-      case TypeKind.Stringref: return module.string_eq(leftExpr, rightExpr);
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31: return module.ref_eq(leftExpr, rightExpr);
+      case TypeKind.String: return module.string_eq(leftExpr, rightExpr);
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter:
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref: {
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any: {
         this.error(
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
           reportNode.range,
@@ -4904,15 +4904,15 @@ export class Compiler extends DiagnosticEmitter {
           module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
         );
       }
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref: {
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31: {
         return module.unary(UnaryOp.EqzI32,
           module.ref_eq(leftExpr, rightExpr)
         );
       }
-      case TypeKind.Stringref: {
+      case TypeKind.String: {
         return module.unary(UnaryOp.EqzI32,
           module.string_eq(leftExpr, rightExpr)
         );
@@ -4920,9 +4920,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter:
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref: {
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any: {
         this.error(
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
           reportNode.range,
@@ -7424,7 +7424,7 @@ export class Compiler extends DiagnosticEmitter {
           // TODO: Concrete function types currently map to first class functions implemented in
           // linear memory (on top of `usize`), leaving only generic `funcref` for use here. In the
           // future, once functions become Wasm GC objects, the actual signature type can be used.
-          this.currentType = Type.funcref;
+          this.currentType = Type.func;
           return module.ref_func(functionInstance.internalName, ensureType(functionInstance.type));
         }
         let offset = this.ensureRuntimeFunction(functionInstance);
@@ -9897,20 +9897,21 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(0);
       case TypeKind.F64: return module.f64(0);
       case TypeKind.V128: return module.v128(v128_zero);
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {
-        // TODO: what if not nullable?
-        return module.ref_null(type.toRef());
+        if (type.is(TypeFlags.Nullable)) return module.ref_null(type.toRef());
+        assert(false); // TODO: check that refs are nullable in callers?
+        return module.unreachable();
       }
-      case TypeKind.I31ref: {
+      case TypeKind.I31: {
         if (type.is(TypeFlags.Nullable)) return module.ref_null(type.toRef());
         return module.i31_new(module.i32(0));
       }
@@ -9935,7 +9936,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: return module.i64(1);
       case TypeKind.F32: return module.f32(1);
       case TypeKind.F64: return module.f64(1);
-      case TypeKind.I31ref: return module.i31_new(module.i32(1));
+      case TypeKind.I31: return module.i31_new(module.i32(1));
     }
   }
 
@@ -9957,7 +9958,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(-1);
       case TypeKind.F64: return module.f64(-1);
       case TypeKind.V128: return module.v128(v128_ones);
-      case TypeKind.I31ref: return module.i31_new(module.i32(-1));
+      case TypeKind.I31: return module.i31_new(module.i32(-1));
     }
   }
 
@@ -10056,14 +10057,14 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.V128: {
         return module.unary(UnaryOp.AnyTrueV128, expr);
       }
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {

@@ -212,7 +212,7 @@ export class Resolver extends DiagnosticEmitter {
           }
         }
         if (node.isNullable) {
-          if (type.isInternalReference) return type.asNullable();
+          if (type.isReference) return type.asNullable();
           if (reportMode == ReportMode.Report) {
             this.error(
               DiagnosticCode.Type_0_cannot_be_nullable,
@@ -290,7 +290,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         let type = typeDefinition.type;
         if (node.isNullable) {
-          if (type.isInternalReference) return type.asNullable();
+          if (type.isReference) return type.asNullable();
           if (reportMode == ReportMode.Report) {
             this.error(
               DiagnosticCode.Type_0_cannot_be_nullable,
@@ -338,7 +338,7 @@ export class Resolver extends DiagnosticEmitter {
       );
       if (!type) return null;
       if (node.isNullable) {
-        if (type.isInternalReference) return type.asNullable();
+        if (type.isReference) return type.asNullable();
         if (reportMode == ReportMode.Report) {
           this.error(
             DiagnosticCode.Type_0_cannot_be_nullable,
