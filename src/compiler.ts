@@ -9830,7 +9830,7 @@ export class Compiler extends DiagnosticEmitter {
     let targetFunction = this.currentFlow.targetFunction;
     let source = range.source;
     if (source.debugInfoIndex < 0) source.debugInfoIndex = this.module.addDebugInfoFile(source.normalizedPath);
-    range.debugInfoRef = expr;
+    range.debugInfo.set(targetFunction.internalName, expr);
     targetFunction.debugLocations.push(range);
   }
 

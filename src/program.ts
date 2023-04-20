@@ -118,7 +118,8 @@ import {
   Module,
   FunctionRef,
   MemorySegment,
-  getFunctionName
+  getFunctionName,
+  ExpressionRef
 } from "./module";
 
 import {
@@ -3916,9 +3917,11 @@ export class Function extends TypedElement {
       for (let i = 0, k = debugLocations.length; i < k; ++i) {
         let range = debugLocations[i];
         let source = range.source;
+        const debugInfo = range.debugInfo.get(this.internalName);
+        assert(debugInfo);
         module.setDebugLocation(
           ref,
-          range.debugInfoRef,
+          debugInfo as ExpressionRef,
           source.debugInfoIndex,
           source.lineAt(range.start),
           source.columnAt() - 1 // source maps are 0-based
