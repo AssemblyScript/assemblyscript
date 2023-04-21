@@ -1,5 +1,5 @@
 {
-  "name": "assemblyscript",
+  "name": "@aldea/assemblyscript",
   "description": "A TypeScript-like language for WebAssembly.",
   "keywords": [
     "typescript",
