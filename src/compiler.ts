@@ -255,6 +255,8 @@ export class Options {
   uncheckedBehavior: UncheckedBehavior = UncheckedBehavior.Default;
   /** If given, exports the start function instead of calling it implicitly. */
   exportStart: string | null = null;
+  /** If true, allows the exported start function to be called more than once. */
+  allowRestarts: bool = false;
   /** Static memory start offset. */
   memoryBase: u32 = 0;
   /** Static table start offset. */
@@ -684,7 +686,7 @@ export class Compiler extends DiagnosticEmitter {
     let exportStart = options.exportStart;
     if (!startIsEmpty || exportStart != null) {
       let signature = startFunctionInstance.signature;
-      if (!startIsEmpty && exportStart != null) {
+      if (!startIsEmpty && exportStart != null && !options.allowRestarts) {
         module.addGlobal(BuiltinNames.started, TypeRef.I32, true, module.i32(0));
         startFunctionBody.unshift(
           module.global_set(BuiltinNames.started, module.i32(1))

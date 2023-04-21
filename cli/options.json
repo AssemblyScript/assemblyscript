@@ -178,6 +178,14 @@
     ],
     "type": "s"
   },
+  "allowRestarts": {
+    "category": "Features",
+    "description": [
+      "Allows the exported start function to be called more than once."
+    ],
+    "type": "b",
+    "default": false
+  },
   "runtime": {
     "category": "Features",
     "description": [

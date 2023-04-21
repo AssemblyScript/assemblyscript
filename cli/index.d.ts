@@ -130,6 +130,8 @@ export interface CompilerOptions {
   exportTable?: boolean;
   /** Exports the start function instead of calling it implicitly. */
   exportStart?: string;
+  /** Allows the exported start function to be called repeatedly. */
+  allowRestarts?: boolean;
   /** "Adds one or multiple paths to custom library components. */
   lib?: string | string[];
   /** Adds one or multiple paths to package resolution. */

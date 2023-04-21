@@ -323,6 +323,7 @@ export async function main(argv, options) {
   if (opts.exportStart != null) {
     assemblyscript.setExportStart(compilerOptions, isNonEmptyString(opts.exportStart) ? opts.exportStart : "_start");
   }
+  assemblyscript.setAllowRestarts(compilerOptions, opts.allowRestarts);
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
   assemblyscript.setTableBase(compilerOptions, opts.tableBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, opts.sourceMap != null);
