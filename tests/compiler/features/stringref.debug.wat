@@ -18,14 +18,14 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $features/stringref/test_utf8
+ (func $features/stringref/test_utf8 (type $none_=>_none)
   nop
  )
- (func $features/stringref/test_lossy_utf8
+ (func $features/stringref/test_lossy_utf8 (type $none_=>_none)
   nop
  )
- (func $features/stringref/test_wtf8
-  (local $str stringref)
+ (func $features/stringref/test_wtf8 (type $none_=>_none)
+  (local $str (ref string))
   (local $vl i32)
   (local $vr i32)
   (local $n i32)
@@ -37,7 +37,7 @@
   (local $9 i32)
   (local $a|10 i32)
   (local $b|11 i32)
-  (local $view stringview_wtf8)
+  (local $view (ref stringview_wtf8))
   global.get $features/stringref/utf8_data
   i32.const 3
   string.new_wtf8 wtf8
@@ -421,8 +421,8 @@
    unreachable
   end
  )
- (func $features/stringref/test_wtf16
-  (local $str stringref)
+ (func $features/stringref/test_wtf16 (type $none_=>_none)
+  (local $str (ref string))
   (local $vl i32)
   (local $vr i32)
   (local $n i32)
@@ -434,7 +434,7 @@
   (local $9 i32)
   (local $a|10 i32)
   (local $b|11 i32)
-  (local $view stringview_wtf16)
+  (local $view (ref stringview_wtf16))
   global.get $features/stringref/wtf16_data
   i32.const 3
   string.new_wtf16
@@ -783,9 +783,9 @@
    unreachable
   end
  )
- (func $features/stringref/test_iter
-  (local $str stringref)
-  (local $view stringview_iter)
+ (func $features/stringref/test_iter (type $none_=>_none)
+  (local $str (ref string))
+  (local $view (ref stringview_iter))
   global.get $features/stringref/wtf16_data
   i32.const 3
   string.new_wtf16
@@ -1083,14 +1083,14 @@
    unreachable
   end
  )
- (func $start:features/stringref
+ (func $start:features/stringref (type $none_=>_none)
   call $features/stringref/test_utf8
   call $features/stringref/test_lossy_utf8
   call $features/stringref/test_wtf8
   call $features/stringref/test_wtf16
   call $features/stringref/test_iter
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:features/stringref
  )
 )

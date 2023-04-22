@@ -9,10 +9,10 @@ test_i31();
 
 // constant globals
 
-export const globalFunc: funcref = null;
-export const globalExtern: externref = null;
-export const globalAny: anyref = null;
-export const globalEq: eqref = null;
-export const globalI31: i31ref = null;
-export const globalStruct: structref = null;
-export const globalArray: arrayref = null;
+export const globalFunc: ref_func | null = null;
+export const globalExtern: ref_extern | null = null;
+export const globalAny: ref_any | null = null;
+export const globalEq: ref_eq | null = null;
+export const globalI31: ref_i31 | null = null;
+export const globalStruct: ref_struct | null = null;
+export const globalArray: ref_array | null = null;

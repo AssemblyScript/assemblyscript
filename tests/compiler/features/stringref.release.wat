@@ -9,14 +9,14 @@
  (data $3.1 (i32.const 1080) "\02\00\00\00*\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00t\00r\00i\00n\00g\00r\00e\00f\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
- (func $features/stringref/test_wtf8
+ (func $features/stringref/test_wtf8 (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 stringview_wtf8)
+  (local $3 (ref stringview_wtf8))
   (local $4 i32)
   (local $5 i32)
-  (local $6 stringref)
+  (local $6 (ref string))
   (local $7 i32)
   i32.const 1024
   i32.const 3
@@ -335,14 +335,14 @@
    unreachable
   end
  )
- (func $features/stringref/test_wtf16
+ (func $features/stringref/test_wtf16 (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 stringview_wtf16)
-  (local $6 stringref)
+  (local $5 (ref stringview_wtf16))
+  (local $6 (ref string))
   (local $7 i32)
   i32.const 1028
   i32.const 3
@@ -566,9 +566,9 @@
    unreachable
   end
  )
- (func $features/stringref/test_iter
-  (local $0 stringview_iter)
-  (local $1 stringref)
+ (func $features/stringref/test_iter (type $none_=>_none)
+  (local $0 (ref stringview_iter))
+  (local $1 (ref string))
   i32.const 1028
   i32.const 3
   string.new_wtf16
@@ -838,7 +838,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $features/stringref/test_wtf8
   call $features/stringref/test_wtf16
   call $features/stringref/test_iter

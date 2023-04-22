@@ -372,7 +372,7 @@ export async function main(argv, options) {
       let name = features[i].trim();
       let flag = assemblyscript[`FEATURE_${toUpperSnakeCase(name)}`];
       if (!flag) return prepareResult(Error(`Feature '${name}' is unknown.`));
-      assemblyscript.disableFeature(compilerOptions, flag);
+      assemblyscript.setFeature(compilerOptions, flag, false);
     }
   }
 
@@ -383,7 +383,7 @@ export async function main(argv, options) {
       let name = features[i].trim();
       let flag = assemblyscript[`FEATURE_${toUpperSnakeCase(name)}`];
       if (!flag) return prepareResult(Error(`Feature '${name}' is unknown.`));
-      assemblyscript.enableFeature(compilerOptions, flag);
+      assemblyscript.setFeature(compilerOptions, flag, true);
     }
   }
 

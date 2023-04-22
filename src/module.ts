@@ -4052,28 +4052,28 @@ function tryEnsureBasicType(type: Type): TypeRef {
     case TypeKind.F32: return TypeRef.F32;
     case TypeKind.F64: return TypeRef.F64;
     case TypeKind.V128: return TypeRef.V128;
-    case TypeKind.Funcref: {
+    case TypeKind.Func: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Func, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Externref: {
+    case TypeKind.Extern: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Extern, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Anyref: {
+    case TypeKind.Any: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Any, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Eqref: {
+    case TypeKind.Eq: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Eq, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Structref: {
+    case TypeKind.Struct: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Struct, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Arrayref: {
+    case TypeKind.Array: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Array, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.I31ref: {
+    case TypeKind.I31: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Stringref: {
+    case TypeKind.String: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, type.is(TypeFlags.Nullable));
     }
     case TypeKind.StringviewWTF8: {

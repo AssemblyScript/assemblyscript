@@ -3566,7 +3566,7 @@ function builtin_i31_new(ctx: BuiltinFunctionContext): ExpressionRef {
   ) return module.unreachable();
   let operands = ctx.operands;
   let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.i31ref;
+  compiler.currentType = Type.i31;
   return module.i31_new(arg0);
 }
 builtinFunctions.set(BuiltinNames.i31_new, builtin_i31_new);
@@ -3579,7 +3579,7 @@ function builtin_i31_get(ctx: BuiltinFunctionContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.i31ref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.i31.asNullable(), Constraints.ConvImplicit);
   if (ctx.contextualType.is(TypeFlags.Unsigned)) {
     compiler.currentType = Type.u32;
     return module.i31_get(arg0, false);
@@ -3696,14 +3696,14 @@ function builtin_assert(ctx: BuiltinFunctionContext): ExpressionRef {
       // TODO: also check for NaN in float assertions, as in `Boolean(NaN) -> false`?
       case TypeKind.F32: return module.if(module.binary(BinaryOp.EqF32, arg0, module.f32(0)), abort);
       case TypeKind.F64: return module.if(module.binary(BinaryOp.EqF64, arg0, module.f64(0)), abort);
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: return module.if(module.ref_is_null(arg0), abort);
@@ -3777,14 +3777,14 @@ function builtin_assert(ctx: BuiltinFunctionContext): ExpressionRef {
         );
         return ret;
       }
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {
@@ -10885,7 +10885,7 @@ function builtin_string_const(ctx: BuiltinFunctionContext): ExpressionRef {
   if (node.kind == NodeKind.Literal) {
     let literal = <LiteralExpression>node;
     if (literal.literalKind == LiteralKind.String) {
-      compiler.currentType = Type.stringref;
+      compiler.currentType = Type.string;
       return module.string_const((<StringLiteralExpression>literal).value);
     }
   }
@@ -10893,7 +10893,7 @@ function builtin_string_const(ctx: BuiltinFunctionContext): ExpressionRef {
     DiagnosticCode.String_literal_expected,
     node.range
   );
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.unreachable();
 }
 builtinFunctions.set(BuiltinNames.string_const, builtin_string_const);
@@ -10911,7 +10911,7 @@ function builtin_string_new_utf8(ctx: BuiltinFunctionContext): ExpressionRef {
   let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   // TODO: immMemory
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.string_new_utf8(arg0, arg1);
 }
 builtinFunctions.set(BuiltinNames.string_new_utf8, builtin_string_new_utf8);
@@ -10926,10 +10926,10 @@ function builtin_string_new_utf8_array(ctx: BuiltinFunctionContext): ExpressionR
     checkArgsRequired(ctx, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.arrayref, Constraints.ConvImplicit); // TODO
+  let arg0 = compiler.compileExpression(operands[0], Type.array, Constraints.ConvImplicit); // TODO
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.string_new_utf8_array(arg0, arg1, arg2);
 }
 builtinFunctions.set(BuiltinNames.string_new_utf8_array, builtin_string_new_utf8_array);
@@ -10947,7 +10947,7 @@ function builtin_string_new_lossy_utf8(ctx: BuiltinFunctionContext): ExpressionR
   let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   // TODO: immMemory
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.string_new_lossy_utf8(arg0, arg1);
 }
 builtinFunctions.set(BuiltinNames.string_new_lossy_utf8, builtin_string_new_lossy_utf8);
@@ -10962,10 +10962,10 @@ function builtin_string_new_lossy_utf8_array(ctx: BuiltinFunctionContext): Expre
     checkArgsRequired(ctx, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.arrayref, Constraints.ConvImplicit); // TODO
+  let arg0 = compiler.compileExpression(operands[0], Type.array, Constraints.ConvImplicit); // TODO
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.string_new_lossy_utf8_array(arg0, arg1, arg2);
 }
 builtinFunctions.set(BuiltinNames.string_new_lossy_utf8_array, builtin_string_new_lossy_utf8_array);
@@ -10983,7 +10983,7 @@ function builtin_string_new_wtf8(ctx: BuiltinFunctionContext): ExpressionRef {
   let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   // TODO: immMemory
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.string_new_wtf8(arg0, arg1);
 }
 builtinFunctions.set(BuiltinNames.string_new_wtf8, builtin_string_new_wtf8);
@@ -10998,10 +10998,10 @@ function builtin_string_new_wtf8_array(ctx: BuiltinFunctionContext): ExpressionR
     checkArgsRequired(ctx, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.arrayref, Constraints.ConvImplicit); // TODO
+  let arg0 = compiler.compileExpression(operands[0], Type.array, Constraints.ConvImplicit); // TODO
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.string_new_wtf8_array(arg0, arg1, arg2);
 }
 builtinFunctions.set(BuiltinNames.string_new_wtf8_array, builtin_string_new_wtf8_array);
@@ -11019,7 +11019,7 @@ function builtin_string_new_wtf16(ctx: BuiltinFunctionContext): ExpressionRef {
   let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   // TODO: immMemory
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.string_new_wtf16(arg0, arg1);
 }
 builtinFunctions.set(BuiltinNames.string_new_wtf16, builtin_string_new_wtf16);
@@ -11034,10 +11034,10 @@ function builtin_string_new_wtf16_array(ctx: BuiltinFunctionContext): Expression
     checkArgsOptional(ctx, 2, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.arrayref, Constraints.ConvImplicit); // TODO
+  let arg0 = compiler.compileExpression(operands[0], Type.array, Constraints.ConvImplicit); // TODO
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.string_new_wtf16_array(arg0, arg1, arg2);
 }
 builtinFunctions.set(BuiltinNames.string_new_wtf16_array, builtin_string_new_wtf16_array);
@@ -11053,7 +11053,7 @@ function builtin_string_from_code_point(ctx: BuiltinFunctionContext): Expression
   ) return module.unreachable();
   let operands = ctx.operands;
   let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.string_from_code_point(arg0);
 }
 builtinFunctions.set(BuiltinNames.string_from_code_point, builtin_string_from_code_point);
@@ -11068,7 +11068,7 @@ function builtin_string_hash(ctx: BuiltinFunctionContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   compiler.currentType = Type.i32;
   return module.string_hash(arg0);
 }
@@ -11084,7 +11084,7 @@ function builtin_string_measure_utf8(ctx: BuiltinFunctionContext): ExpressionRef
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   compiler.currentType = Type.i32;
   return module.string_measure_utf8(arg0);
 }
@@ -11100,7 +11100,7 @@ function builtin_string_measure_wtf8(ctx: BuiltinFunctionContext): ExpressionRef
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   compiler.currentType = Type.i32;
   return module.string_measure_wtf8(arg0);
 }
@@ -11116,7 +11116,7 @@ function builtin_string_measure_wtf16(ctx: BuiltinFunctionContext): ExpressionRe
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   compiler.currentType = Type.i32;
   return module.string_measure_wtf16(arg0);
 }
@@ -11132,7 +11132,7 @@ function builtin_string_is_usv_sequence(ctx: BuiltinFunctionContext): Expression
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   compiler.currentType = Type.bool;
   return module.string_is_usv_sequence(arg0);
 }
@@ -11148,7 +11148,7 @@ function builtin_string_encode_utf8(ctx: BuiltinFunctionContext): ExpressionRef 
     checkArgsOptional(ctx, 2, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType, Constraints.ConvImplicit);
   // TODO: immMemory
   compiler.currentType = Type.i32;
@@ -11166,8 +11166,8 @@ function builtin_string_encode_utf8_array(ctx: BuiltinFunctionContext): Expressi
     checkArgsRequired(ctx, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
-  let arg1 = compiler.compileExpression(operands[1], Type.arrayref, Constraints.ConvImplicit); // TODO: array<i8>
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.array, Constraints.ConvImplicit); // TODO: array<i8>
   let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
   compiler.currentType = Type.i32;
   return module.string_encode_utf8_array(arg0, arg1, arg2);
@@ -11187,7 +11187,7 @@ function builtin_string_encode_wtf8(ctx: BuiltinFunctionContext): ExpressionRef 
     checkArgsOptional(ctx, 2, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType, Constraints.ConvImplicit);
   // TODO: immMemory
   compiler.currentType = Type.i32;
@@ -11205,8 +11205,8 @@ function builtin_string_encode_wtf8_array(ctx: BuiltinFunctionContext): Expressi
     checkArgsRequired(ctx, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
-  let arg1 = compiler.compileExpression(operands[1], Type.arrayref, Constraints.ConvImplicit); // TODO: array<i8>
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.array, Constraints.ConvImplicit); // TODO: array<i8>
   let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
   compiler.currentType = Type.i32;
   return module.string_encode_wtf8_array(arg0, arg1, arg2);
@@ -11223,7 +11223,7 @@ function builtin_string_encode_wtf16(ctx: BuiltinFunctionContext): ExpressionRef
     checkArgsOptional(ctx, 2, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType, Constraints.ConvImplicit);
   // TODO: immMemory
   compiler.currentType = Type.i32;
@@ -11241,8 +11241,8 @@ function builtin_string_encode_wtf16_array(ctx: BuiltinFunctionContext): Express
     checkArgsRequired(ctx, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
-  let arg1 = compiler.compileExpression(operands[1], Type.arrayref, Constraints.ConvImplicit); // TODO: array<i8>
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.array, Constraints.ConvImplicit); // TODO: array<i8>
   let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
   compiler.currentType = Type.i32;
   return module.string_encode_wtf16_array(arg0, arg1, arg2);
@@ -11259,9 +11259,9 @@ function builtin_string_concat(ctx: BuiltinFunctionContext): ExpressionRef {
     checkArgsRequired(ctx, 2)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
-  let arg1 = compiler.compileExpression(operands[1], Type.stringref, Constraints.ConvImplicit);
-  compiler.currentType = Type.stringref;
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.string, Constraints.ConvImplicit);
+  compiler.currentType = Type.string;
   return module.string_concat(arg0, arg1);
 }
 builtinFunctions.set(BuiltinNames.string_concat, builtin_string_concat);
@@ -11276,8 +11276,9 @@ function builtin_string_eq(ctx: BuiltinFunctionContext): ExpressionRef {
     checkArgsRequired(ctx, 2)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
-  let arg1 = compiler.compileExpression(operands[1], Type.stringref, Constraints.ConvImplicit);
+  let nullableString = Type.string.asNullable();
+  let arg0 = compiler.compileExpression(operands[0], nullableString, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], nullableString, Constraints.ConvImplicit);
   compiler.currentType = Type.bool;
   return module.string_eq(arg0, arg1);
 }
@@ -11293,8 +11294,8 @@ function builtin_string_compare(ctx: BuiltinFunctionContext): ExpressionRef {
     checkArgsRequired(ctx, 2)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
-  let arg1 = compiler.compileExpression(operands[1], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.string, Constraints.ConvImplicit);
   compiler.currentType = Type.i32;
   return module.string_compare(arg0, arg1);
 }
@@ -11310,7 +11311,7 @@ function builtin_string_as_wtf8(ctx: BuiltinFunctionContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   compiler.currentType = Type.stringview_wtf8;
   return module.string_as_wtf8(arg0);
 }
@@ -11326,7 +11327,7 @@ function builtin_string_as_wtf16(ctx: BuiltinFunctionContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   compiler.currentType = Type.stringview_wtf16;
   return module.string_as_wtf16(arg0);
 }
@@ -11342,7 +11343,7 @@ function builtin_string_as_iter(ctx: BuiltinFunctionContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.stringref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.string, Constraints.ConvImplicit);
   compiler.currentType = Type.stringview_iter;
   return module.string_as_iter(arg0);
 }
@@ -11383,7 +11384,7 @@ function builtin_stringview_wtf8_slice(ctx: BuiltinFunctionContext): ExpressionR
   let arg0 = compiler.compileExpression(operands[0], Type.stringview_wtf8, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.stringview_wtf8_slice(arg0, arg1, arg2);
 }
 builtinFunctions.set(BuiltinNames.stringview_wtf8_slice, builtin_stringview_wtf8_slice);
@@ -11417,7 +11418,7 @@ function builtin_stringview_wtf16_slice(ctx: BuiltinFunctionContext): Expression
   let arg0 = compiler.compileExpression(operands[0], Type.stringview_wtf16, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   let arg2 = compiler.compileExpression(operands[2], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.stringview_wtf16_slice(arg0, arg1, arg2);
 }
 builtinFunctions.set(BuiltinNames.stringview_wtf16_slice, builtin_stringview_wtf16_slice);
@@ -11503,7 +11504,7 @@ function builtin_stringview_iter_slice(ctx: BuiltinFunctionContext): ExpressionR
   let operands = ctx.operands;
   let arg0 = compiler.compileExpression(operands[0], Type.stringview_iter, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.stringref;
+  compiler.currentType = Type.string;
   return module.stringview_iter_slice(arg0, arg1);
 }
 builtinFunctions.set(BuiltinNames.stringview_iter_slice, builtin_stringview_iter_slice);
