@@ -35,28 +35,50 @@ declare type f32 = number;
 declare type f64 = number;
 /** A 128-bit vector. */
 declare type v128 = object;
-/** Function reference. */
-declare type funcref = object | null;
-/** External reference. */
-declare type externref = object | null;
-/** Any reference. */
-declare type anyref = object | null;
-/** Equatable reference. */
-declare type eqref = object | null;
-/** Struct reference. */
-declare type structref = object | null;
-/** Array reference. */
-declare type arrayref = object | null;
-/** 31-bit integer reference. */
-declare type i31ref = object | null;
-/** String reference. */
-declare type stringref = object | null;
-/** WTF-8 string view. */
-declare type stringview_wtf8 = object | null;
-/** WTF-16 string view. */
-declare type stringview_wtf16 = object | null;
-/** String iterator. */
-declare type stringview_iter = object | null;
+/** Non-nullable function reference. */
+declare type ref_func = object;
+/** Canonical nullable function reference. */
+declare type funcref = ref_func | null;
+/** Non-nullable external reference. */
+declare type ref_extern = object;
+/** Canonical nullable external reference. */
+declare type externref = ref_extern | null;
+/** Non-nullable any reference. */
+declare type ref_any = object;
+/** Canonical nullable any reference. */
+declare type anyref = ref_any | null;
+/** Non-nullable equatable reference. */
+declare type ref_eq = object;
+/** Canonical nullable equatable reference. */
+declare type eqref = ref_eq | null;
+/** Non-nullable struct reference. */
+declare type ref_struct = object;
+/** Canonical nullable struct reference. */
+declare type structref = ref_struct | null;
+/** Non-nullable array reference. */
+declare type ref_array = object;
+/** Canonical nullable array reference. */
+declare type arrayref = ref_array | null;
+/** Non-nullable 31-bit integer reference. */
+declare type ref_i31 = object;
+/** Canonical nullable 31-bit integer reference. */
+declare type i31ref = ref_i31 | null;
+/** Non-nullable string reference. */
+declare type ref_string = object;
+/** Canonical nullable string reference. */
+declare type stringref = ref_string | null;
+/** Non-nullable WTF-8 string view. */
+declare type ref_stringview_wtf8 = object;
+/** Canonical nullable WTF-8 string view. */
+declare type stringview_wtf8 = ref_stringview_wtf8 | null;
+/** Non-nullable WTF-16 string view. */
+declare type ref_stringview_wtf16 = object;
+/** Canonical nullable WTF-16 string view. */
+declare type stringview_wtf16 = ref_stringview_wtf16 | null;
+/** Non-nullable string iterator. */
+declare type ref_stringview_iter = object;
+/** Canonical nullable string iterator. */
+declare type stringview_iter = ref_stringview_iter | null;
 
 // Compiler hints
 
@@ -1640,10 +1662,10 @@ declare namespace f64x2 {
 }
 
 declare abstract class i31 {
-  /** Creates a new i31ref from the specified integer value. */
-  static new(value: i32): i31ref;
-  /** Gets the integer value of an i31ref. */
-  static get(i31expr: i31ref): i32;
+  /** Creates a new 31-bit integer reference from the specified integer value. */
+  static new(value: i32): ref_i31;
+  /** Gets the integer value of an 31-bit integer reference. */
+  static get(i31expr: ref_i31 | null): i32;
 }
 
 /** Macro type evaluating to the underlying native WebAssembly type. */

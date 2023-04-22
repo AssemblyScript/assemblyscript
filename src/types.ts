@@ -68,21 +68,21 @@ export const enum TypeKind {
   // references (keep in same order as in Binaryen)
 
   /** External reference. */
-  Externref,
+  Extern,
   /** Function reference. */
-  Funcref,
+  Func,
   /** Any reference. */
-  Anyref,
+  Any,
   /** Equatable reference. */
-  Eqref,
+  Eq,
   /** Struct reference. */
-  Structref,
+  Struct,
   /** Array reference. */
-  Arrayref,
+  Array,
   /** 31-bit integer reference. */
-  I31ref,
+  I31,
   /** String reference. */
-  Stringref,
+  String,
   /** WTF8 string view. */
   StringviewWTF8,
   /** WTF16 string view. */
@@ -278,6 +278,11 @@ export class Type {
     return this.is(TypeFlags.External | TypeFlags.Reference);
   }
 
+  /** Tests if this type represents a nullable external object. */
+  get isNullableExternalReference(): bool {
+    return this.is(TypeFlags.Nullable | TypeFlags.External | TypeFlags.Reference);
+  }
+
   /** Gets the underlying class of this type, if any. */
   getClass(): Class | null {
     return this.isInternalReference
@@ -365,15 +370,15 @@ export class Type {
 
   /** Gets the corresponding non-nullable type. */
   get nonNullableType(): Type {
-    if (this.isExternalReference) {
-      return this; // TODO
-    }
-    return assert(this._nonNullableType); // set either in ctor or asNullable
+    // Every type has a corresponding non-nullable type
+    return assert(this._nonNullableType);
   }
 
   /** Gets the corresponding nullable type, if applicable. */
   get nullableType(): Type | null {
-    return this._nullableType; // set either in ctor or asNullable
+    return this.isReference
+      ? this.asNullable() // Every reference type has a corresponding nullable type
+      : null;             // Other types do not have a nullable type
   }
 
   /** Computes the sign-extending shift in the target type. */
@@ -395,13 +400,13 @@ export class Type {
 
   /** Composes the respective nullable type of this type. */
   asNullable(): Type {
-    assert(this.isInternalReference);
+    assert(this.isReference);
     let nullableType = this._nullableType;
     if (!nullableType) {
       assert(!this.isNullableReference);
       this._nullableType = nullableType = new Type(this.kind, this.flags | TypeFlags.Nullable, this.size);
-      nullableType.classReference = this.classReference;         // either a class reference
-      nullableType.signatureReference = this.signatureReference; // or a function reference
+      nullableType.classReference = this.classReference;
+      nullableType.signatureReference = this.signatureReference;
       nullableType._nonNullableType = this;
     }
     return nullableType;
@@ -457,7 +462,7 @@ export class Type {
           } else if (this.isExternalReference) {
             if (
               this.kind == target.kind ||
-              (target.kind == TypeKind.Anyref && this.kind != TypeKind.Externref)
+              (target.kind == TypeKind.Any && this.kind != TypeKind.Extern)
             ) {
               return true;
             }
@@ -583,24 +588,8 @@ export class Type {
     return null;
   }
 
-  /** Converts this type to a string. */
-  toString(validWat: bool = false): string {
-    const nullablePostfix = validWat ? "|null" : " | null";
-    if (this.isReference) {
-      let classReference = this.getClass();
-      if (classReference) {
-        return this.isNullableReference
-          ? classReference.internalName + nullablePostfix
-          : classReference.internalName;
-      } else {
-        let signatureReference = this.getSignature();
-        if (signatureReference) {
-          return this.isNullableReference
-            ? `(${signatureReference.toString(validWat)})${nullablePostfix}`
-            : signatureReference.toString(validWat);
-        }
-      }
-    }
+  /** Converts this type's kind to a string. */
+  kindToString(): string {
     switch (this.kind) {
       case TypeKind.Bool: return CommonNames.bool;
       case TypeKind.I8: return CommonNames.i8;
@@ -616,20 +605,45 @@ export class Type {
       case TypeKind.F32: return CommonNames.f32;
       case TypeKind.F64: return CommonNames.f64;
       case TypeKind.V128: return CommonNames.v128;
-      case TypeKind.Funcref: return CommonNames.funcref;
-      case TypeKind.Externref: return CommonNames.externref;
-      case TypeKind.Anyref: return CommonNames.anyref;
-      case TypeKind.Eqref: return CommonNames.eqref;
-      case TypeKind.Structref: return CommonNames.structref;
-      case TypeKind.Arrayref: return CommonNames.arrayref;
-      case TypeKind.I31ref: return CommonNames.i31ref;
-      case TypeKind.Stringref: return CommonNames.stringref;
-      case TypeKind.StringviewWTF8: return CommonNames.stringview_wtf8;
-      case TypeKind.StringviewWTF16: return CommonNames.stringview_wtf16;
-      case TypeKind.StringviewIter: return CommonNames.stringview_iter;
+      case TypeKind.Func: return CommonNames.ref_func;
+      case TypeKind.Extern: return CommonNames.ref_extern;
+      case TypeKind.Any: return CommonNames.ref_any;
+      case TypeKind.Eq: return CommonNames.ref_eq;
+      case TypeKind.Struct: return CommonNames.ref_struct;
+      case TypeKind.Array: return CommonNames.ref_array;
+      case TypeKind.I31: return CommonNames.ref_i31;
+      case TypeKind.String: return CommonNames.ref_string;
+      case TypeKind.StringviewWTF8: return CommonNames.ref_stringview_wtf8;
+      case TypeKind.StringviewWTF16: return CommonNames.ref_stringview_wtf16;
+      case TypeKind.StringviewIter: return CommonNames.ref_stringview_iter;
       default: assert(false);
       case TypeKind.Void: return CommonNames.void_;
     }
+  }
+
+  /** Converts this type to a string. */
+  toString(validWat: bool = false): string {
+    const nullablePostfix = validWat ? "|null" : " | null";
+    if (this.isReference) {
+      let classReference = this.getClass();
+      if (classReference) {
+        return this.isNullableReference
+          ? classReference.internalName + nullablePostfix
+          : classReference.internalName;
+      } else {
+        let signatureReference = this.getSignature();
+        if (signatureReference) {
+          return this.isNullableReference
+            ? `(${signatureReference.toString(validWat)})${nullablePostfix}`
+            : signatureReference.toString(validWat);
+        } else {
+          return this.isNullableReference
+            ? `${this.kindToString()}${nullablePostfix}}`
+            : this.kindToString();
+        }
+      }
+    }
+    return this.kindToString();
   }
 
   // Binaryen specific
@@ -651,28 +665,28 @@ export class Type {
       case TypeKind.F32:  return TypeRef.F32;
       case TypeKind.F64:  return TypeRef.F64;
       case TypeKind.V128: return TypeRef.V128;
-      case TypeKind.Funcref: {
+      case TypeKind.Func: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Func, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.Externref: {
+      case TypeKind.Extern: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Extern, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.Anyref: {
+      case TypeKind.Any: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Any, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.Eqref: {
+      case TypeKind.Eq: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Eq, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.Structref: {
+      case TypeKind.Struct: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Struct, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.Arrayref: {
+      case TypeKind.Array: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Array, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.I31ref: {
+      case TypeKind.I31: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.Stringref: {
+      case TypeKind.String: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, this.is(TypeFlags.Nullable));
       }
       case TypeKind.StringviewWTF8: {
@@ -818,80 +832,69 @@ export class Type {
     TypeFlags.Value, 128
   );
 
-  /** Function reference. */
-  static readonly funcref: Type = new Type(TypeKind.Funcref,
+  /** Non-nullable function reference (`ref func`). */
+  static readonly func: Type = new Type(TypeKind.Func,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 
-  /** External reference. */
-  static readonly externref: Type = new Type(TypeKind.Externref,
+  /** Non-nullable external reference (`ref extern`). */
+  static readonly extern: Type = new Type(TypeKind.Extern,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 
-  /** Any reference. */
-  static readonly anyref: Type = new Type(TypeKind.Anyref,
+  /** Non-nullable any reference (`ref any`). */
+  static readonly any: Type = new Type(TypeKind.Any,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 
-  /** Equatable reference. */
-  static readonly eqref: Type = new Type(TypeKind.Eqref,
+  /** Non-nullable equatable reference (`ref eq`). */
+  static readonly eq: Type = new Type(TypeKind.Eq,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 
-  /** Struct reference. */
-  static readonly structref: Type = new Type(TypeKind.Structref,
+  /** Non-nullable struct reference (`ref struct`). */
+  static readonly struct: Type = new Type(TypeKind.Struct,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 
-  /** Array reference. */
-  static readonly arrayref: Type = new Type(TypeKind.Arrayref,
+  /** Non-nullable array reference (`ref array`). */
+  static readonly array: Type = new Type(TypeKind.Array,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 
-  /** 31-bit integer reference. */
-  static readonly i31ref: Type = new Type(TypeKind.I31ref,
+  /** Non-nullable 31-bit integer reference (`ref i31`). */
+  static readonly i31: Type = new Type(TypeKind.I31,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 
-  /** String reference. */
-  static readonly stringref: Type = new Type(TypeKind.Stringref,
+  /** Non-nullable string reference (`ref string`). */
+  static readonly string: Type = new Type(TypeKind.String,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 
-  /** WTF8 string view. */
+  /** Non-nullable WTF8 string view reference (`ref stringview_wtf8`). */
   static readonly stringview_wtf8: Type = new Type(TypeKind.StringviewWTF8,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 
-  /** WTF16 string view. */
+  /** Non-nullable WTF16 string view reference (`ref stringview_wtf16`). */
   static readonly stringview_wtf16: Type = new Type(TypeKind.StringviewWTF16,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 
-  /** String iterator. */
+  /** Non-nullable string iterator reference (`ref stringview_iter`). */
   static readonly stringview_iter: Type = new Type(TypeKind.StringviewIter,
     TypeFlags.External   |
-    TypeFlags.Nullable   |
     TypeFlags.Reference, 0
   );
 

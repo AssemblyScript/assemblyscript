@@ -1014,17 +1014,17 @@ export class Program extends DiagnosticEmitter {
     // compiler needs to check this condition whenever such a value is created
     // respectively stored or loaded.
     this.registerNativeType(CommonNames.v128, Type.v128);
-    this.registerNativeType(CommonNames.funcref, Type.funcref);
-    this.registerNativeType(CommonNames.externref, Type.externref);
-    this.registerNativeType(CommonNames.anyref, Type.anyref);
-    this.registerNativeType(CommonNames.eqref, Type.eqref);
-    this.registerNativeType(CommonNames.structref, Type.structref);
-    this.registerNativeType(CommonNames.arrayref, Type.arrayref);
-    this.registerNativeType(CommonNames.i31ref, Type.i31ref);
-    this.registerNativeType(CommonNames.stringref, Type.stringref);
-    this.registerNativeType(CommonNames.stringview_wtf8, Type.stringview_wtf8);
-    this.registerNativeType(CommonNames.stringview_wtf16, Type.stringview_wtf16);
-    this.registerNativeType(CommonNames.stringview_iter, Type.stringview_iter);
+    this.registerNativeType(CommonNames.ref_func, Type.func);
+    this.registerNativeType(CommonNames.ref_extern, Type.extern);
+    this.registerNativeType(CommonNames.ref_any, Type.any);
+    this.registerNativeType(CommonNames.ref_eq, Type.eq);
+    this.registerNativeType(CommonNames.ref_struct, Type.struct);
+    this.registerNativeType(CommonNames.ref_array, Type.array);
+    this.registerNativeType(CommonNames.ref_i31, Type.i31);
+    this.registerNativeType(CommonNames.ref_string, Type.string);
+    this.registerNativeType(CommonNames.ref_stringview_wtf8, Type.stringview_wtf8);
+    this.registerNativeType(CommonNames.ref_stringview_wtf16, Type.stringview_wtf16);
+    this.registerNativeType(CommonNames.ref_stringview_iter, Type.stringview_iter);
 
     // register compiler hints
     this.registerConstantInteger(CommonNames.ASC_TARGET, Type.i32,
@@ -1288,14 +1288,17 @@ export class Program extends DiagnosticEmitter {
     this.registerWrapperClass(Type.f64, CommonNames.F64);
     if (options.hasFeature(Feature.Simd)) this.registerWrapperClass(Type.v128, CommonNames.V128);
     if (options.hasFeature(Feature.ReferenceTypes)) {
-      this.registerWrapperClass(Type.funcref, CommonNames.Funcref);
-      this.registerWrapperClass(Type.externref, CommonNames.Externref);
+      this.registerWrapperClass(Type.func, CommonNames.RefFunc);
+      this.registerWrapperClass(Type.extern, CommonNames.RefExtern);
       if (options.hasFeature(Feature.GC)) {
-        this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
-        this.registerWrapperClass(Type.eqref, CommonNames.Eqref);
-        this.registerWrapperClass(Type.structref, CommonNames.Structref);
-        this.registerWrapperClass(Type.arrayref, CommonNames.Arrayref);
-        this.registerWrapperClass(Type.i31ref, CommonNames.I31ref);
+        this.registerWrapperClass(Type.any, CommonNames.RefAny);
+        this.registerWrapperClass(Type.eq, CommonNames.RefEq);
+        this.registerWrapperClass(Type.struct, CommonNames.RefStruct);
+        this.registerWrapperClass(Type.array, CommonNames.RefArray);
+        this.registerWrapperClass(Type.i31, CommonNames.RefI31);
+      }
+      if (options.hasFeature(Feature.Stringref)) {
+        this.registerWrapperClass(Type.string, CommonNames.RefString);
       }
     }
 
@@ -1950,18 +1953,20 @@ export class Program extends DiagnosticEmitter {
   checkTypeSupported(type: Type, reportNode: Node): bool {
     switch (type.kind) {
       case TypeKind.V128: return this.checkFeatureEnabled(Feature.Simd, reportNode);
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+        // Non-nullability is introduced by typed function references (here part of GC)
+        if (!type.is(TypeFlags.Nullable)) return this.checkFeatureEnabled(Feature.GC, reportNode);
         return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode);
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref: {
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31: {
         return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
             && this.checkFeatureEnabled(Feature.GC, reportNode);
       }
-      case TypeKind.Stringref:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {

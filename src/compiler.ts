@@ -221,6 +221,12 @@ import {
   lowerRequiresExportRuntime
 } from "./bindings/js";
 
+/** Features enabled by default. */
+export const defaultFeatures = Feature.MutableGlobals
+                             | Feature.SignExtension
+                             | Feature.NontrappingF2I
+                             | Feature.BulkMemory;
+
 /** Compiler options. */
 export class Options {
   constructor() { /* as internref */ }
@@ -261,11 +267,8 @@ export class Options {
   tableBase: u32 = 0;
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
-  /** Features to activate by default. These are the finished proposals. */
-  features: Feature = Feature.MutableGlobals
-                    | Feature.SignExtension
-                    | Feature.NontrappingF2I
-                    | Feature.BulkMemory;
+  /** Features to activate by default. */
+  features: Feature = defaultFeatures;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
@@ -315,6 +318,27 @@ export class Options {
   /** Gets if any optimizations will be performed. */
   get willOptimize(): bool {
     return this.optimizeLevelHint > 0 || this.shrinkLevelHint > 0;
+  }
+
+  /** Sets whether a feature is enabled. */
+  setFeature(feature: Feature, on: bool = true): void {
+    if (on) {
+      // Enabling Stringref also enables GC
+      if (feature & Feature.Stringref) feature |= Feature.GC;
+      // Enabling GC also enables Reference Types
+      if (feature & Feature.GC) feature |= Feature.ReferenceTypes;
+      // Enabling Relaxed SIMD also enables SIMD
+      if (feature & Feature.RelaxedSimd) feature |= Feature.Simd;
+      this.features |= feature;
+    } else {
+      // Disabling Reference Types also disables GC
+      if (feature & Feature.ReferenceTypes) feature |= Feature.GC;
+      // Disabling GC also disables Stringref
+      if (feature & Feature.GC) feature |= Feature.Stringref;
+      // Disabling SIMD also disables Relaxed SIMD
+      if (feature & Feature.Simd) feature |= Feature.RelaxedSimd;
+      this.features &= ~feature;
+    }
   }
 
   /** Tests if a specific feature is activated. */
@@ -1357,7 +1381,14 @@ export class Compiler extends DiagnosticEmitter {
           findDecorator(DecoratorKind.Inline, global.decoratorNodes)!.range, "inline"
         );
       }
-      module.addGlobal(internalName, typeRef, true, this.makeZero(type));
+      let internalType = type;
+      if (type.isExternalReference && !type.is(TypeFlags.Nullable)) {
+        // There is no default value for non-nullable external references, so
+        // make the global nullable internally and use `null`.
+        global.set(CommonFlags.InternallyNullable);
+        internalType = type.asNullable();
+      }
+      module.addGlobal(internalName, internalType.toRef(), true, this.makeZero(internalType));
       this.currentBody.push(
         module.global_set(internalName, initExpr)
       );
@@ -1757,7 +1788,7 @@ export class Compiler extends DiagnosticEmitter {
       // Implicitly return `this` if the flow falls through
       if (!flow.is(FlowFlags.Terminates)) {
         stmts.push(
-          module.local_get(thisLocal.index, this.options.sizeTypeRef)
+          module.local_get(thisLocal.index, thisLocal.type.toRef())
         );
         flow.set(FlowFlags.Returns | FlowFlags.ReturnsNonNull | FlowFlags.Terminates);
       }
@@ -4854,17 +4885,17 @@ export class Compiler extends DiagnosticEmitter {
           module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
         );
       }
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref: return module.ref_eq(leftExpr, rightExpr);
-      case TypeKind.Stringref: return module.string_eq(leftExpr, rightExpr);
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31: return module.ref_eq(leftExpr, rightExpr);
+      case TypeKind.String: return module.string_eq(leftExpr, rightExpr);
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter:
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref: {
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any: {
         this.error(
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
           reportNode.range,
@@ -4904,15 +4935,15 @@ export class Compiler extends DiagnosticEmitter {
           module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
         );
       }
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref: {
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31: {
         return module.unary(UnaryOp.EqzI32,
           module.ref_eq(leftExpr, rightExpr)
         );
       }
-      case TypeKind.Stringref: {
+      case TypeKind.String: {
         return module.unary(UnaryOp.EqzI32,
           module.string_eq(leftExpr, rightExpr)
         );
@@ -4920,9 +4951,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter:
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref: {
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any: {
         this.error(
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
           reportNode.range,
@@ -7332,10 +7363,12 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
         assert(localIndex >= 0);
-        if (localType.isNullableReference && flow.isLocalFlag(localIndex, LocalFlags.NonNull, false)) {
-          localType = localType.nonNullableType;
+        let isNonNull = flow.isLocalFlag(localIndex, LocalFlags.NonNull, false);
+        if (localType.isNullableReference && isNonNull && (!localType.isExternalReference || this.options.hasFeature(Feature.GC))) {
+          this.currentType = localType.nonNullableType;
+        } else {
+          this.currentType = localType;
         }
-        this.currentType = localType;
 
         if (target.parent != flow.targetFunction) {
           // TODO: closures
@@ -7346,7 +7379,14 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.unreachable();
         }
-        return module.local_get(localIndex, localType.toRef());
+        let expr = module.local_get(localIndex, localType.toRef());
+        if (isNonNull && localType.isNullableExternalReference && this.options.hasFeature(Feature.GC)) {
+          // If the local's type is nullable, but its value is known to be non-null, propagate
+          // non-nullability info to Binaryen. Only applicable if GC is enabled, since without
+          // GC, here incl. typed function references, there is no nullability dimension.
+          expr = module.ref_as_nonnull(expr);
+        }
+        return expr;
       }
       case ElementKind.Global: {
         let global = <Global>target;
@@ -7424,7 +7464,7 @@ export class Compiler extends DiagnosticEmitter {
           // TODO: Concrete function types currently map to first class functions implemented in
           // linear memory (on top of `usize`), leaving only generic `funcref` for use here. In the
           // future, once functions become Wasm GC objects, the actual signature type can be used.
-          this.currentType = Type.funcref;
+          this.currentType = Type.func;
           return module.ref_func(functionInstance.internalName, ensureType(functionInstance.type));
         }
         let offset = this.ensureRuntimeFunction(functionInstance);
@@ -9897,20 +9937,21 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(0);
       case TypeKind.F64: return module.f64(0);
       case TypeKind.V128: return module.v128(v128_zero);
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {
-        // TODO: what if not nullable?
-        return module.ref_null(type.toRef());
+        if (type.is(TypeFlags.Nullable)) return module.ref_null(type.toRef());
+        assert(false); // TODO: check that refs are nullable in callers?
+        return module.unreachable();
       }
-      case TypeKind.I31ref: {
+      case TypeKind.I31: {
         if (type.is(TypeFlags.Nullable)) return module.ref_null(type.toRef());
         return module.i31_new(module.i32(0));
       }
@@ -9935,7 +9976,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: return module.i64(1);
       case TypeKind.F32: return module.f32(1);
       case TypeKind.F64: return module.f64(1);
-      case TypeKind.I31ref: return module.i31_new(module.i32(1));
+      case TypeKind.I31: return module.i31_new(module.i32(1));
     }
   }
 
@@ -9957,7 +9998,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(-1);
       case TypeKind.F64: return module.f64(-1);
       case TypeKind.V128: return module.v128(v128_ones);
-      case TypeKind.I31ref: return module.i31_new(module.i32(-1));
+      case TypeKind.I31: return module.i31_new(module.i32(-1));
     }
   }
 
@@ -10056,14 +10097,14 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.V128: {
         return module.unary(UnaryOp.AnyTrueV128, expr);
       }
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {

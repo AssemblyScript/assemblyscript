@@ -34,6 +34,8 @@ export const enum Feature {
   ExtendedConst = 1 << 13, // see: https://github.com/WebAssembly/extended-const
   /** Reference typed strings. */
   Stringref = 1 << 14, // see: https://github.com/WebAssembly/stringref
+  /** All features. */
+  All = (1 << 15) - 1
 }
 
 /** Gets the name of the specified feature one would specify on the command line. */

@@ -3523,7 +3523,7 @@ function builtin_i31_new(ctx: BuiltinFunctionContext): ExpressionRef {
   ) return module.unreachable();
   let operands = ctx.operands;
   let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.i31ref;
+  compiler.currentType = Type.i31;
   return module.i31_new(arg0);
 }
 builtinFunctions.set(BuiltinNames.i31_new, builtin_i31_new);
@@ -3536,7 +3536,7 @@ function builtin_i31_get(ctx: BuiltinFunctionContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.i31ref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.i31.asNullable(), Constraints.ConvImplicit);
   if (ctx.contextualType.is(TypeFlags.Unsigned)) {
     compiler.currentType = Type.u32;
     return module.i31_get(arg0, false);
@@ -3653,14 +3653,14 @@ function builtin_assert(ctx: BuiltinFunctionContext): ExpressionRef {
       // TODO: also check for NaN in float assertions, as in `Boolean(NaN) -> false`?
       case TypeKind.F32: return module.if(module.binary(BinaryOp.EqF32, arg0, module.f32(0)), abort);
       case TypeKind.F64: return module.if(module.binary(BinaryOp.EqF64, arg0, module.f64(0)), abort);
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: return module.if(module.ref_is_null(arg0), abort);
@@ -3734,14 +3734,14 @@ function builtin_assert(ctx: BuiltinFunctionContext): ExpressionRef {
         );
         return ret;
       }
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {
