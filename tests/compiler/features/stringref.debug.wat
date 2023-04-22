@@ -2,7 +2,11 @@
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $features/stringref/stringGlobal (mut stringref) (ref.null none))
+ (global $features/stringref/stringGlobalNull (mut stringref) (ref.null none))
+ (global $features/stringref/stringviewWtf8GlobalNull (mut stringview_wtf8) (ref.null none))
+ (global $features/stringref/stringviewWtf16GlobalNull (mut stringview_wtf16) (ref.null none))
+ (global $features/stringref/stringviewIterGlobalNull (mut stringview_iter) (ref.null none))
+ (global $features/stringref/stringGlobal (mut (ref string)) (string.const ""))
  (global $features/stringref/stringviewWtf8Global (mut stringview_wtf8) (ref.null none))
  (global $features/stringref/stringviewWtf16Global (mut stringview_wtf16) (ref.null none))
  (global $features/stringref/stringviewIterGlobal (mut stringview_iter) (ref.null none))
@@ -23,25 +27,40 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $features/stringref/test_locals (type $none_=>_none)
-  (local $stringLocal stringref)
-  (local $stringviewWtf8Local stringview_wtf8)
-  (local $stringviewWtf16Local stringview_wtf16)
-  (local $stringviewIterLocal stringview_iter)
+  (local $stringLocalNull stringref)
+  (local $stringviewWtf8LocalNull stringview_wtf8)
+  (local $stringviewWtf16LocalNull stringview_wtf16)
+  (local $stringviewIterLocalNull stringview_iter)
+  (local $stringLocal (ref string))
+  (local $stringviewWtf8Local (ref stringview_wtf8))
+  (local $stringviewWtf16Local (ref stringview_wtf16))
+  (local $stringviewIterLocal (ref stringview_iter))
   ref.null none
+  local.set $stringLocalNull
+  ref.null none
+  local.set $stringLocalNull
+  ref.null none
+  local.set $stringviewWtf8LocalNull
+  ref.null none
+  local.set $stringviewWtf8LocalNull
+  ref.null none
+  local.set $stringviewWtf16LocalNull
+  ref.null none
+  local.set $stringviewWtf16LocalNull
+  ref.null none
+  local.set $stringviewIterLocalNull
+  ref.null none
+  local.set $stringviewIterLocalNull
+  string.const ""
   local.set $stringLocal
-  ref.null none
-  local.set $stringLocal
-  ref.null none
+  local.get $stringLocal
+  string.as_wtf8
   local.set $stringviewWtf8Local
-  ref.null none
-  local.set $stringviewWtf8Local
-  ref.null none
+  local.get $stringLocal
+  string.as_wtf16
   local.set $stringviewWtf16Local
-  ref.null none
-  local.set $stringviewWtf16Local
-  ref.null none
-  local.set $stringviewIterLocal
-  ref.null none
+  local.get $stringLocal
+  string.as_iter
   local.set $stringviewIterLocal
  )
  (func $features/stringref/test_utf8 (type $none_=>_none)
@@ -76,7 +95,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 46
+   i32.const 60
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -92,7 +111,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 48
+   i32.const 62
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -106,7 +125,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 49
+   i32.const 63
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -120,7 +139,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 50
+   i32.const 64
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -134,7 +153,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 51
+   i32.const 65
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -148,7 +167,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 52
+   i32.const 66
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -162,7 +181,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 53
+   i32.const 67
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -176,7 +195,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 54
+   i32.const 68
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -331,7 +350,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 55
+   i32.const 69
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -349,7 +368,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 58
+   i32.const 72
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -364,7 +383,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 59
+   i32.const 73
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -379,7 +398,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 60
+   i32.const 74
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -394,7 +413,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 61
+   i32.const 75
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -409,7 +428,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 62
+   i32.const 76
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -424,7 +443,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 63
+   i32.const 77
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -441,7 +460,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 64
+   i32.const 78
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -473,7 +492,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 72
+   i32.const 86
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -489,7 +508,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 74
+   i32.const 88
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -503,7 +522,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 75
+   i32.const 89
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -517,7 +536,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 76
+   i32.const 90
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -531,7 +550,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 77
+   i32.const 91
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -545,7 +564,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 78
+   i32.const 92
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -559,7 +578,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 79
+   i32.const 93
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -573,7 +592,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 80
+   i32.const 94
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -728,7 +747,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 81
+   i32.const 95
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -744,7 +763,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 84
+   i32.const 98
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -761,7 +780,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 85
+   i32.const 99
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -775,7 +794,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 86
+   i32.const 100
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -789,7 +808,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 87
+   i32.const 101
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -803,7 +822,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 88
+   i32.const 102
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -827,7 +846,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 97
+   i32.const 111
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -840,7 +859,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 98
+   i32.const 112
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -853,7 +872,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 99
+   i32.const 113
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -866,7 +885,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 100
+   i32.const 114
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -880,7 +899,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 101
+   i32.const 115
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -893,7 +912,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 102
+   i32.const 116
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -906,7 +925,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 103
+   i32.const 117
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -920,7 +939,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 104
+   i32.const 118
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -934,7 +953,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 105
+   i32.const 119
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -947,7 +966,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 106
+   i32.const 120
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -960,7 +979,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 107
+   i32.const 121
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -974,7 +993,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 108
+   i32.const 122
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -991,7 +1010,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 109
+   i32.const 123
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1011,7 +1030,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 110
+   i32.const 124
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1027,7 +1046,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 111
+   i32.const 125
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1043,7 +1062,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 112
+   i32.const 126
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1063,7 +1082,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 114
+   i32.const 128
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1083,7 +1102,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 115
+   i32.const 129
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1103,13 +1122,22 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 116
+   i32.const 130
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
  )
  (func $start:features/stringref (type $none_=>_none)
+  global.get $features/stringref/stringGlobal
+  string.as_wtf8
+  global.set $features/stringref/stringviewWtf8Global
+  global.get $features/stringref/stringGlobal
+  string.as_wtf16
+  global.set $features/stringref/stringviewWtf16Global
+  global.get $features/stringref/stringGlobal
+  string.as_iter
+  global.set $features/stringref/stringviewIterGlobal
   call $features/stringref/test_locals
   call $features/stringref/test_utf8
   call $features/stringref/test_lossy_utf8

@@ -3221,7 +3221,8 @@ export class Module {
       case ExpressionId.Const:
       case ExpressionId.RefNull:
       case ExpressionId.RefFunc:
-      case ExpressionId.I31New: return true;
+      case ExpressionId.I31New:
+      case ExpressionId.StringConst: return true;
       case ExpressionId.Binary: {
         if (this.getFeatures() & FeatureFlags.ExtendedConst) {
           switch (getBinaryOp(expr)) {

@@ -3,20 +3,34 @@ declare function log_s(s: ref_string | null): void;
 @external("env", "console.log")
 declare function log_i(i: i32): void;
 
-let stringGlobal: ref_string | null = null;
-let stringviewWtf8Global: ref_stringview_wtf8 | null = null;
-let stringviewWtf16Global: ref_stringview_wtf16 | null = null;
-let stringviewIterGlobal: ref_stringview_iter | null = null;
+let stringGlobalNull: ref_string | null = null;
+let stringviewWtf8GlobalNull: ref_stringview_wtf8 | null = null;
+let stringviewWtf16GlobalNull: ref_stringview_wtf16 | null = null;
+let stringviewIterGlobalNull: ref_stringview_iter | null = null;
+
+let stringGlobal: ref_string = string.const_("");
+let stringviewWtf8Global: ref_stringview_wtf8 = string.as_wtf8(stringGlobal); // internally nullable
+let stringviewWtf16Global: ref_stringview_wtf16 = string.as_wtf16(stringGlobal); // internally nullable
+let stringviewIterGlobal: ref_stringview_iter = string.as_iter(stringGlobal); // internally nullable
 
 function test_locals(): void {
-  let stringLocal: ref_string | null = null;
-  stringLocal = null;
-  let stringviewWtf8Local: ref_stringview_wtf8 | null = null;
-  stringviewWtf8Local = null;
-  let stringviewWtf16Local: ref_stringview_wtf16 | null = null;
-  stringviewWtf16Local = null;
-  let stringviewIterLocal: ref_stringview_iter | null = null;
-  stringviewIterLocal = null;
+  let stringLocalNull: ref_string | null = null;
+  stringLocalNull = null;
+  let stringviewWtf8LocalNull: ref_stringview_wtf8 | null = null;
+  stringviewWtf8LocalNull = null;
+  let stringviewWtf16LocalNull: ref_stringview_wtf16 | null = null;
+  stringviewWtf16LocalNull = null;
+  let stringviewIterLocalNull: ref_stringview_iter | null = null;
+  stringviewIterLocalNull = null;
+
+  let stringLocal: ref_string;
+  stringLocal = string.const_("");
+  let stringviewWtf8Local: ref_stringview_wtf8;
+  stringviewWtf8Local = string.as_wtf8(stringLocal);
+  let stringviewWtf16Local: ref_stringview_wtf16;
+  stringviewWtf16Local = string.as_wtf16(stringLocal);
+  let stringviewIterLocal: ref_stringview_iter;
+  stringviewIterLocal = string.as_iter(stringLocal);
 }
 test_locals();
 
