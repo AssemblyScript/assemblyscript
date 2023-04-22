@@ -1,7 +1,24 @@
 @external("env", "console.log")
-declare function log_s(s: stringref): void;
+declare function log_s(s: ref_string | null): void;
 @external("env", "console.log")
 declare function log_i(i: i32): void;
+
+let stringGlobal: ref_string | null = null;
+let stringviewWtf8Global: ref_stringview_wtf8 | null = null;
+let stringviewWtf16Global: ref_stringview_wtf16 | null = null;
+let stringviewIterGlobal: ref_stringview_iter | null = null;
+
+function test_locals(): void {
+  let stringLocal: ref_string | null = null;
+  stringLocal = null;
+  let stringviewWtf8Local: ref_stringview_wtf8 | null = null;
+  stringviewWtf8Local = null;
+  let stringviewWtf16Local: ref_stringview_wtf16 | null = null;
+  stringviewWtf16Local = null;
+  let stringviewIterLocal: ref_stringview_iter | null = null;
+  stringviewIterLocal = null;
+}
+test_locals();
 
 const utf8_data = memory.data<i8>([0x61, 0x62, 0x63]);
 const wtf16_data = memory.data<i16>([0x61, 0x62, 0x63]);
