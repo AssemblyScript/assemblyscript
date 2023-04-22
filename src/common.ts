@@ -217,9 +217,6 @@ export namespace CommonNames {
   export const RefArray = "RefArray";
   export const RefI31 = "RefI31";
   export const RefString = "RefString";
-  export const StringviewWTF8 = "StringviewWTF8";
-  export const StringviewWTF16 = "StringviewWTF16";
-  export const StringviewIter = "StringviewIter";
   export const String = "String";
   export const RegExp = "RegExp";
   export const Object = "Object";

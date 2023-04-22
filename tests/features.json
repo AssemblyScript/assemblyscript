@@ -46,7 +46,6 @@
   },
   "stringref": {
     "asc_flags": [
-      "--enable reference-types",
       "--enable stringref"
     ],
     "v8_flags": [

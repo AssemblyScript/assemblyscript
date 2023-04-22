@@ -2713,55 +2713,55 @@ export namespace string {
 
 export namespace stringview_wtf8 {
 
-    // @ts-ignore: decorator
-    @builtin
-    export declare function advance(view: stringview_wtf8, pos: i32, bytes: i32): i32;
+  // @ts-ignore: decorator
+  @builtin
+  export declare function advance(view: stringview_wtf8, pos: i32, bytes: i32): i32;
 
-    // @ts-ignore: decorator
-    @builtin
-    export declare function slice(view: stringview_wtf8, start: i32, end: i32): stringref;
+  // @ts-ignore: decorator
+  @builtin
+  export declare function slice(view: stringview_wtf8, start: i32, end: i32): stringref;
 
-    // TODO: encode_utf8
+  // TODO: encode_utf8
 
-    // TODO: encode_lossy_utf8
+  // TODO: encode_lossy_utf8
 
-    // TODO: encode_wtf8
+  // TODO: encode_wtf8
 }
 
 export namespace stringview_wtf16 {
 
-    // @ts-ignore: decorator
-    @builtin
-    export declare function length(view: stringview_wtf16): i32;
+  // @ts-ignore: decorator
+  @builtin
+  export declare function length(view: stringview_wtf16): i32;
 
-    // @ts-ignore: decorator
-    @builtin
-    export declare function slice(view: stringview_wtf16, start: i32, end: i32): stringref;
+  // @ts-ignore: decorator
+  @builtin
+  export declare function slice(view: stringview_wtf16, start: i32, end: i32): stringref;
 
-    // @ts-ignore: decorator
-    @builtin
-    export declare function get_codeunit(view: stringview_wtf16, pos: i32): i32;
+  // @ts-ignore: decorator
+  @builtin
+  export declare function get_codeunit(view: stringview_wtf16, pos: i32): i32;
 
-    // TODO: encode
+  // TODO: encode
 }
 
 export namespace stringview_iter {
 
-    // @ts-ignore: decorator
-    @builtin
-    export declare function next(view: stringview_iter): i32;
+  // @ts-ignore: decorator
+  @builtin
+  export declare function next(view: stringview_iter): i32;
 
-    // @ts-ignore: decorator
-    @builtin
-    export declare function advance(view: stringview_iter, count: i32): i32;
+  // @ts-ignore: decorator
+  @builtin
+  export declare function advance(view: stringview_iter, count: i32): i32;
 
-    // @ts-ignore: decorator
-    @builtin
-    export declare function rewind(view: stringview_iter, count: i32): i32;
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rewind(view: stringview_iter, count: i32): i32;
 
-    // @ts-ignore: decorator
-    @builtin
-    export declare function slice(view: stringview_iter, count: i32): stringref;
+  // @ts-ignore: decorator
+  @builtin
+  export declare function slice(view: stringview_iter, count: i32): stringref;
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
