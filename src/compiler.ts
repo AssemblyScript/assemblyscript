@@ -221,6 +221,12 @@ import {
   lowerRequiresExportRuntime
 } from "./bindings/js";
 
+/** Features enabled by default. */
+export const defaultFeatures = Feature.MutableGlobals
+                             | Feature.SignExtension
+                             | Feature.NontrappingF2I
+                             | Feature.BulkMemory;
+
 /** Compiler options. */
 export class Options {
   constructor() { /* as internref */ }
@@ -261,11 +267,8 @@ export class Options {
   tableBase: u32 = 0;
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
-  /** Features to activate by default. These are the finished proposals. */
-  features: Feature = Feature.MutableGlobals
-                    | Feature.SignExtension
-                    | Feature.NontrappingF2I
-                    | Feature.BulkMemory;
+  /** Features to activate by default. */
+  features: Feature = defaultFeatures;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
@@ -317,12 +320,29 @@ export class Options {
     return this.optimizeLevelHint > 0 || this.shrinkLevelHint > 0;
   }
 
+  /** Sets whether a feature is enabled. */
+  setFeature(feature: Feature, on: bool = true): void {
+    if (on) {
+      // Enabling Stringref also enables GC
+      if (feature & Feature.Stringref) feature |= Feature.GC;
+      // Enabling GC also enables Reference Types
+      if (feature & Feature.GC) feature |= Feature.ReferenceTypes;
+      // Enabling Relaxed SIMD also enables SIMD
+      if (feature & Feature.RelaxedSimd) feature |= Feature.Simd;
+      this.features |= feature;
+    } else {
+      // Disabling Reference Types also disables GC
+      if (feature & Feature.ReferenceTypes) feature |= Feature.GC;
+      // Disabling GC also disables Stringref
+      if (feature & Feature.GC) feature |= Feature.Stringref;
+      // Disabling SIMD also disables Relaxed SIMD
+      if (feature & Feature.Simd) feature |= Feature.RelaxedSimd;
+      this.features &= ~feature;
+    }
+  }
+
   /** Tests if a specific feature is activated. */
   hasFeature(feature: Feature): bool {
-    // GC also enables reference types
-    if (feature & Feature.ReferenceTypes) feature |= Feature.GC;
-    // Relaxed SIMD also enables SIMD
-    if (feature & Feature.RelaxedSimd) feature |= Feature.Simd;
     return (this.features & feature) != 0;
   }
 }
