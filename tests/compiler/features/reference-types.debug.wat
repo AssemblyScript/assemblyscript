@@ -37,7 +37,6 @@
  (start $~start)
  (func $features/reference-types/testLocal<ref_func|null}>
   (local $local funcref)
-  (local $localInit funcref)
   ref.null nofunc
   local.set $local
   local.get $local
@@ -64,21 +63,6 @@
    i32.const 0
    i32.const 32
    i32.const 72
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  ref.null nofunc
-  local.set $localInit
-  local.get $localInit
-  ref.is_null
-  i32.eqz
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 74
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -86,7 +70,6 @@
  )
  (func $features/reference-types/testLocal<ref_extern|null}>
   (local $local externref)
-  (local $localInit externref)
   ref.null noextern
   local.set $local
   local.get $local
@@ -113,21 +96,6 @@
    i32.const 0
    i32.const 32
    i32.const 72
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  ref.null noextern
-  local.set $localInit
-  local.get $localInit
-  ref.is_null
-  i32.eqz
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 74
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -297,7 +265,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 83
+   i32.const 81
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -307,7 +275,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 85
+   i32.const 83
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -319,7 +287,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 88
+   i32.const 86
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -330,7 +298,7 @@
   if (result funcref)
    i32.const 112
    i32.const 32
-   i32.const 97
+   i32.const 95
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -344,7 +312,7 @@
   if (result externref)
    i32.const 112
    i32.const 32
-   i32.const 98
+   i32.const 96
    i32.const 28
    call $~lib/builtins/abort
    unreachable

@@ -1955,6 +1955,8 @@ export class Program extends DiagnosticEmitter {
       case TypeKind.V128: return this.checkFeatureEnabled(Feature.Simd, reportNode);
       case TypeKind.Func:
       case TypeKind.Extern:
+        // Non-nullability is introduced by typed function references (here part of GC)
+        if (!type.is(TypeFlags.Nullable)) return this.checkFeatureEnabled(Feature.GC, reportNode);
         return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode);
       case TypeKind.Any:
       case TypeKind.Eq:

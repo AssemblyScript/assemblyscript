@@ -81,7 +81,9 @@ export const enum CommonFlags {
   // Other
 
   /** Is quoted. */
-  Quoted = 1 << 30
+  Quoted = 1 << 30,
+  /** Is internally nullable. */
+  InternallyNullable = 1 << 31
 }
 
 /** Path delimiter inserted between file system levels. */

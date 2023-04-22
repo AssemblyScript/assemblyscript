@@ -319,6 +319,10 @@ export class Options {
 
   /** Tests if a specific feature is activated. */
   hasFeature(feature: Feature): bool {
+    // GC also enables reference types
+    if (feature & Feature.ReferenceTypes) feature |= Feature.GC;
+    // Relaxed SIMD also enables SIMD
+    if (feature & Feature.RelaxedSimd) feature |= Feature.Simd;
     return (this.features & feature) != 0;
   }
 }
@@ -1357,7 +1361,14 @@ export class Compiler extends DiagnosticEmitter {
           findDecorator(DecoratorKind.Inline, global.decoratorNodes)!.range, "inline"
         );
       }
-      module.addGlobal(internalName, typeRef, true, this.makeZero(type));
+      let internalType = type;
+      if (type.isExternalReference && !type.is(TypeFlags.Nullable)) {
+        // There is no default value for non-nullable external references, so
+        // make the global nullable internally and use `null`.
+        global.set(CommonFlags.InternallyNullable);
+        internalType = type.asNullable();
+      }
+      module.addGlobal(internalName, internalType.toRef(), true, this.makeZero(internalType));
       this.currentBody.push(
         module.global_set(internalName, initExpr)
       );
@@ -1757,7 +1768,7 @@ export class Compiler extends DiagnosticEmitter {
       // Implicitly return `this` if the flow falls through
       if (!flow.is(FlowFlags.Terminates)) {
         stmts.push(
-          module.local_get(thisLocal.index, this.options.sizeTypeRef)
+          module.local_get(thisLocal.index, thisLocal.type.toRef())
         );
         flow.set(FlowFlags.Returns | FlowFlags.ReturnsNonNull | FlowFlags.Terminates);
       }
@@ -7332,10 +7343,12 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
         assert(localIndex >= 0);
-        if (localType.isNullableReference && flow.isLocalFlag(localIndex, LocalFlags.NonNull, false)) {
-          localType = localType.nonNullableType;
+        let isNonNull = flow.isLocalFlag(localIndex, LocalFlags.NonNull, false);
+        if (localType.isNullableReference && isNonNull && (!localType.isExternalReference || this.options.hasFeature(Feature.GC))) {
+          this.currentType = localType.nonNullableType;
+        } else {
+          this.currentType = localType;
         }
-        this.currentType = localType;
 
         if (target.parent != flow.targetFunction) {
           // TODO: closures
@@ -7346,7 +7359,14 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.unreachable();
         }
-        return module.local_get(localIndex, localType.toRef());
+        let expr = module.local_get(localIndex, localType.toRef());
+        if (isNonNull && localType.isNullableExternalReference && this.options.hasFeature(Feature.GC)) {
+          // If the local's type is nullable, but its value is known to be non-null, propagate
+          // non-nullability info to Binaryen. Only applicable if GC is enabled, since without
+          // GC, here incl. typed function references, there is no nullability dimension.
+          expr = module.ref_as_nonnull(expr);
+        }
+        return expr;
       }
       case ElementKind.Global: {
         let global = <Global>target;

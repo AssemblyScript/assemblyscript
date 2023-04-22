@@ -278,6 +278,11 @@ export class Type {
     return this.is(TypeFlags.External | TypeFlags.Reference);
   }
 
+  /** Tests if this type represents a nullable external object. */
+  get isNullableExternalReference(): bool {
+    return this.is(TypeFlags.Nullable | TypeFlags.External | TypeFlags.Reference);
+  }
+
   /** Gets the underlying class of this type, if any. */
   getClass(): Class | null {
     return this.isInternalReference
@@ -365,15 +370,15 @@ export class Type {
 
   /** Gets the corresponding non-nullable type. */
   get nonNullableType(): Type {
-    if (this.isExternalReference) {
-      return this; // TODO
-    }
-    return assert(this._nonNullableType); // set either in ctor or asNullable
+    // Every type has a corresponding non-nullable type
+    return assert(this._nonNullableType);
   }
 
   /** Gets the corresponding nullable type, if applicable. */
   get nullableType(): Type | null {
-    return this._nullableType; // set either in ctor or asNullable
+    return this.isReference
+      ? this.asNullable() // Every reference type has a corresponding nullable type
+      : null;             // Other types do not have a nullable type
   }
 
   /** Computes the sign-extending shift in the target type. */
