@@ -8,7 +8,7 @@ let stringviewWtf8GlobalNull: ref_stringview_wtf8 | null = null;
 let stringviewWtf16GlobalNull: ref_stringview_wtf16 | null = null;
 let stringviewIterGlobalNull: ref_stringview_iter | null = null;
 
-let stringGlobal: ref_string = string.const_("");
+let stringGlobal: ref_string = "";
 let stringviewWtf8Global: ref_stringview_wtf8 = string.as_wtf8(stringGlobal); // internally nullable
 let stringviewWtf16Global: ref_stringview_wtf16 = string.as_wtf16(stringGlobal); // internally nullable
 let stringviewIterGlobal: ref_stringview_iter = string.as_iter(stringGlobal); // internally nullable
@@ -24,7 +24,7 @@ function test_locals(): void {
   stringviewIterLocalNull = null;
 
   let stringLocal: ref_string;
-  stringLocal = string.const_("");
+  stringLocal = "";
   let stringviewWtf8Local: ref_stringview_wtf8;
   stringviewWtf8Local = string.as_wtf8(stringLocal);
   let stringviewWtf16Local: ref_stringview_wtf16;
@@ -61,10 +61,10 @@ function test_wtf8(): void {
   string.hash(str);
   assert(string.is_usv_sequence(str));
   assert(string.eq(str, str));
-  assert(string.eq(str, string.const_("abc")));
+  assert(string.eq(str, "abc"));
   assert(string.compare(str, str) == 0);
-  assert(string.compare(str, string.const_("b")) == -1);
-  assert(string.compare(str, string.const_("`")) == 1);
+  assert(string.compare(str, "b") == -1);
+  assert(string.compare(str, "`") == 1);
   assert(string.encode_wtf8(str, temp_data) == 3);
   assert(memory.compare(utf8_data, temp_data, 3) == 0);
 
@@ -87,10 +87,10 @@ function test_wtf16(): void {
   string.hash(str);
   assert(string.is_usv_sequence(str));
   assert(string.eq(str, str));
-  assert(string.eq(str, string.const_("abc")));
+  assert(string.eq(str, "abc"));
   assert(string.compare(str, str) == 0);
-  assert(string.compare(str, string.const_("b")) == -1);
-  assert(string.compare(str, string.const_("`")) == 1);
+  assert(string.compare(str, "b") == -1);
+  assert(string.compare(str, "`") == 1);
   assert(string.encode_wtf16(str, temp_data) == 3);
   assert(memory.compare(wtf16_data, temp_data, 6) == 0);
 
@@ -140,3 +140,24 @@ test_iter();
 // string.encode_lossy_utf8_array
 // string.encode_wtf8_array
 // string.encode_wtf16_array
+
+// POC
+assert(RefString.fromCodePoint(0x61) == "a");
+let str: ref_string = "abc";
+assert(str.length == 3);
+assert(str.at(1) == "b");
+assert(str.charAt(0) == "a");
+assert(str.charCodeAt(0) == 0x61);
+assert(str.codePointAt(0) == 0x61);
+assert(str.concat(str) == "abcabc");
+assert(str.endsWith("abc"));
+assert(str == str);
+assert(!str == false);
+assert(str != "");
+assert(str > "ab");
+assert(str >= "ab");
+assert(str < "abcd");
+assert(str <= "abcd");
+assert(str.includes("b"));
+assert(str.indexOf("b") == 1);
+assert(str.lastIndexOf("b") == 1);

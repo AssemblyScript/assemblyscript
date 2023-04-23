@@ -1,6 +1,15 @@
 (module
  (type $none_=>_none (func))
+ (type $ref|string|_ref|string|_i32_=>_i32 (func (param (ref string) (ref string) i32) (result i32)))
+ (type $ref|string|_ref|string|_=>_i32 (func (param (ref string) (ref string)) (result i32)))
+ (type $ref|string|_i32_=>_stringref (func (param (ref string) i32) (result stringref)))
+ (type $ref|string|_i32_=>_i32 (func (param (ref string) i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_ref|string| (func (param i32) (result (ref string))))
+ (type $stringref_stringref_=>_i32 (func (param stringref stringref) (result i32)))
+ (type $ref|string|_=>_i32 (func (param (ref string)) (result i32)))
+ (type $ref|string|_ref|string|_=>_ref|string| (func (param (ref string) (ref string)) (result (ref string))))
+ (type $stringref_=>_i32 (func (param stringref) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $features/stringref/stringGlobalNull (mut stringref) (ref.null none))
  (global $features/stringref/stringviewWtf8GlobalNull (mut stringview_wtf8) (ref.null none))
@@ -14,14 +23,21 @@
  (global $features/stringref/wtf16_data i32 (i32.const 12))
  (global $features/stringref/temp_data i32 (i32.const 32))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/memory/__data_end i32 (i32.const 124))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32892))
- (global $~lib/memory/__heap_base i32 (i32.const 32892))
+ (global $features/stringref/str (mut (ref string)) (string.const "abc"))
+ (global $~lib/reference/RefString.MAX_LENGTH i32 (i32.const 1073741823))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $~lib/memory/__data_end i32 (i32.const 316))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33084))
+ (global $~lib/memory/__heap_base i32 (i32.const 33084))
  (memory $0 1)
  (data $0 (i32.const 8) "abc")
  (data $1 (i32.const 12) "a\00b\00c\00")
  (data $2 (i32.const 32) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data $3 (i32.const 60) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00*\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00t\00r\00i\00n\00g\00r\00e\00f\00.\00t\00s\00\00\00")
+ (data $4 (i32.const 124) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00c\00o\00d\00e\00 \00p\00o\00i\00n\00t\00\00\00\00\00\00\00\00\00")
+ (data $5 (i32.const 188) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00~\00l\00i\00b\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
+ (data $6 (i32.const 252) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -1128,6 +1144,454 @@
    unreachable
   end
  )
+ (func $~lib/reference/RefString.fromCodePoint (type $i32_=>_ref|string|) (param $cp i32) (result (ref string))
+  local.get $cp
+  i32.const 1114111
+  i32.gt_u
+  if
+   i32.const 144
+   i32.const 208
+   i32.const 61
+   i32.const 29
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $cp
+  string.from_code_point
+  return
+ )
+ (func $~lib/reference/RefString.__eq (type $stringref_stringref_=>_i32) (param $left stringref) (param $right stringref) (result i32)
+  local.get $left
+  local.get $right
+  string.eq
+  return
+ )
+ (func $~lib/reference/RefString#get:length (type $ref|string|_=>_i32) (param $this (ref string)) (result i32)
+  local.get $this
+  string.measure_wtf16
+  return
+ )
+ (func $~lib/reference/RefString#at (type $ref|string|_i32_=>_stringref) (param $this (ref string)) (param $pos i32) (result stringref)
+  (local $len i32)
+  local.get $this
+  string.measure_wtf16
+  local.set $len
+  local.get $pos
+  i32.const 0
+  local.get $len
+  local.get $pos
+  i32.const 0
+  i32.ge_s
+  select
+  i32.add
+  local.set $pos
+  local.get $pos
+  local.get $len
+  i32.ge_u
+  if
+   i32.const 272
+   i32.const 208
+   i32.const 73
+   i32.const 31
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $this
+  string.as_wtf16
+  local.get $pos
+  stringview_wtf16.get_codeunit
+  string.from_code_point
+  return
+ )
+ (func $~lib/reference/RefString#charAt (type $ref|string|_i32_=>_stringref) (param $this (ref string)) (param $pos i32) (result stringref)
+  local.get $pos
+  local.get $this
+  string.measure_wtf16
+  i32.ge_u
+  if
+   string.const ""
+   return
+  end
+  local.get $this
+  string.as_wtf16
+  local.get $pos
+  stringview_wtf16.get_codeunit
+  string.from_code_point
+  return
+ )
+ (func $~lib/reference/RefString#charCodeAt (type $ref|string|_i32_=>_i32) (param $this (ref string)) (param $pos i32) (result i32)
+  local.get $pos
+  local.get $this
+  string.measure_wtf16
+  i32.ge_u
+  if
+   i32.const -1
+   return
+  end
+  local.get $this
+  string.as_wtf16
+  local.get $pos
+  stringview_wtf16.get_codeunit
+  return
+ )
+ (func $~lib/reference/RefString#codePointAt (type $ref|string|_i32_=>_i32) (param $this (ref string)) (param $pos i32) (result i32)
+  (local $len i32)
+  (local $view (ref stringview_wtf16))
+  (local $first i32)
+  (local $second i32)
+  local.get $this
+  string.measure_wtf16
+  local.set $len
+  local.get $pos
+  local.get $len
+  i32.ge_u
+  if
+   i32.const -1
+   return
+  end
+  local.get $this
+  string.as_wtf16
+  local.set $view
+  local.get $view
+  local.get $pos
+  stringview_wtf16.get_codeunit
+  local.set $first
+  local.get $first
+  i32.const 64512
+  i32.and
+  i32.const 55296
+  i32.ne
+  if (result i32)
+   i32.const 1
+  else
+   local.get $pos
+   i32.const 1
+   i32.add
+   local.get $len
+   i32.eq
+  end
+  if
+   local.get $first
+   return
+  end
+  local.get $view
+  local.get $pos
+  i32.const 1
+  i32.add
+  stringview_wtf16.get_codeunit
+  local.set $second
+  local.get $second
+  i32.const 64512
+  i32.and
+  i32.const 56320
+  i32.ne
+  if
+   local.get $first
+   return
+  end
+  local.get $first
+  i32.const 55296
+  i32.sub
+  i32.const 10
+  i32.shl
+  local.get $second
+  i32.const 56320
+  i32.sub
+  i32.add
+  i32.const 65536
+  i32.add
+  return
+ )
+ (func $~lib/reference/RefString#concat (type $ref|string|_ref|string|_=>_ref|string|) (param $this (ref string)) (param $other (ref string)) (result (ref string))
+  local.get $this
+  local.get $other
+  string.concat
+  return
+ )
+ (func $~lib/reference/RefString#endsWith (type $ref|string|_ref|string|_i32_=>_i32) (param $this (ref string)) (param $search (ref string)) (param $end i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $searchLength i32)
+  (local $searchStart i32)
+  local.get $end
+  local.tee $3
+  i32.const 0
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_s
+  select
+  local.tee $5
+  local.get $this
+  string.measure_wtf16
+  local.tee $6
+  local.get $5
+  local.get $6
+  i32.lt_s
+  select
+  local.set $end
+  local.get $search
+  string.measure_wtf16
+  local.set $searchLength
+  local.get $end
+  local.get $searchLength
+  i32.sub
+  local.set $searchStart
+  local.get $searchStart
+  i32.const 0
+  i32.lt_s
+  if
+   i32.const 0
+   return
+  end
+  local.get $this
+  string.as_wtf16
+  local.get $searchStart
+  local.get $searchStart
+  local.get $searchLength
+  i32.add
+  stringview_wtf16.slice
+  local.get $search
+  string.eq
+  return
+ )
+ (func $~lib/reference/RefString#endsWith@varargs (type $ref|string|_ref|string|_i32_=>_i32) (param $this (ref string)) (param $search (ref string)) (param $end i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/reference/RefString.MAX_LENGTH
+   local.set $end
+  end
+  local.get $this
+  local.get $search
+  local.get $end
+  call $~lib/reference/RefString#endsWith
+ )
+ (func $~lib/reference/RefString.__not (type $stringref_=>_i32) (param $str stringref) (result i32)
+  local.get $str
+  ref.null none
+  string.eq
+  return
+ )
+ (func $~lib/reference/RefString.__gt (type $ref|string|_ref|string|_=>_i32) (param $left (ref string)) (param $right (ref string)) (result i32)
+  local.get $left
+  local.get $right
+  string.compare
+  i32.const 0
+  i32.gt_s
+  return
+ )
+ (func $~lib/reference/RefString.__gte (type $ref|string|_ref|string|_=>_i32) (param $left (ref string)) (param $right (ref string)) (result i32)
+  local.get $left
+  local.get $right
+  string.compare
+  i32.const 0
+  i32.ge_s
+  return
+ )
+ (func $~lib/reference/RefString.__lt (type $ref|string|_ref|string|_=>_i32) (param $left (ref string)) (param $right (ref string)) (result i32)
+  local.get $left
+  local.get $right
+  string.compare
+  i32.const 0
+  i32.lt_s
+  return
+ )
+ (func $~lib/reference/RefString.__lte (type $ref|string|_ref|string|_=>_i32) (param $left (ref string)) (param $right (ref string)) (result i32)
+  local.get $left
+  local.get $right
+  string.compare
+  i32.const 0
+  i32.le_s
+  return
+ )
+ (func $~lib/reference/RefString#indexOf (type $ref|string|_ref|string|_i32_=>_i32) (param $this (ref string)) (param $search (ref string)) (param $start i32) (result i32)
+  (local $searchLen i32)
+  (local $len i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $searchStart i32)
+  (local $view (ref stringview_wtf16))
+  local.get $search
+  string.measure_wtf16
+  local.set $searchLen
+  local.get $searchLen
+  i32.eqz
+  if
+   i32.const 0
+   return
+  end
+  local.get $this
+  string.measure_wtf16
+  local.set $len
+  local.get $len
+  i32.eqz
+  if
+   i32.const -1
+   return
+  end
+  local.get $start
+  local.tee $5
+  i32.const 0
+  local.tee $6
+  local.get $5
+  local.get $6
+  i32.gt_s
+  select
+  local.tee $7
+  local.get $len
+  local.tee $8
+  local.get $7
+  local.get $8
+  i32.lt_s
+  select
+  local.set $searchStart
+  local.get $this
+  string.as_wtf16
+  local.set $view
+  local.get $len
+  local.get $searchLen
+  i32.sub
+  local.set $len
+  loop $for-loop|0
+   local.get $searchStart
+   local.get $len
+   i32.le_s
+   if
+    local.get $view
+    local.get $searchStart
+    local.get $searchStart
+    local.get $searchLen
+    i32.add
+    stringview_wtf16.slice
+    local.get $search
+    string.eq
+    if
+     local.get $searchStart
+     return
+    end
+    local.get $searchStart
+    i32.const 1
+    i32.add
+    local.set $searchStart
+    br $for-loop|0
+   end
+  end
+  i32.const -1
+  return
+ )
+ (func $~lib/reference/RefString#includes (type $ref|string|_ref|string|_i32_=>_i32) (param $this (ref string)) (param $search (ref string)) (param $start i32) (result i32)
+  local.get $this
+  local.get $search
+  local.get $start
+  call $~lib/reference/RefString#indexOf
+  i32.const -1
+  i32.ne
+  return
+ )
+ (func $~lib/reference/RefString#lastIndexOf (type $ref|string|_ref|string|_i32_=>_i32) (param $this (ref string)) (param $search (ref string)) (param $start i32) (result i32)
+  (local $searchLen i32)
+  (local $len i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $searchStart i32)
+  local.get $search
+  string.measure_wtf16
+  local.set $searchLen
+  local.get $searchLen
+  i32.eqz
+  if
+   local.get $this
+   string.measure_wtf16
+   return
+  end
+  local.get $this
+  string.measure_wtf16
+  local.set $len
+  local.get $len
+  i32.eqz
+  if
+   i32.const -1
+   return
+  end
+  local.get $start
+  local.tee $5
+  i32.const 0
+  local.tee $6
+  local.get $5
+  local.get $6
+  i32.gt_s
+  select
+  local.tee $7
+  local.get $len
+  local.get $searchLen
+  i32.sub
+  local.tee $8
+  local.get $7
+  local.get $8
+  i32.lt_s
+  select
+  local.set $searchStart
+  loop $for-loop|0
+   local.get $searchStart
+   i32.const 0
+   i32.ge_s
+   if
+    local.get $this
+    string.as_wtf16
+    local.get $searchStart
+    local.get $searchStart
+    local.get $searchLen
+    i32.add
+    stringview_wtf16.slice
+    local.get $search
+    string.eq
+    if
+     local.get $searchStart
+     return
+    end
+    local.get $searchStart
+    i32.const 1
+    i32.sub
+    local.set $searchStart
+    br $for-loop|0
+   end
+  end
+  i32.const -1
+  return
+ )
+ (func $~lib/reference/RefString#lastIndexOf@varargs (type $ref|string|_ref|string|_i32_=>_i32) (param $this (ref string)) (param $search (ref string)) (param $start i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $start
+  end
+  local.get $this
+  local.get $search
+  local.get $start
+  call $~lib/reference/RefString#lastIndexOf
+ )
  (func $start:features/stringref (type $none_=>_none)
   global.get $features/stringref/stringGlobal
   string.as_wtf8
@@ -1144,6 +1608,262 @@
   call $features/stringref/test_wtf8
   call $features/stringref/test_wtf16
   call $features/stringref/test_iter
+  i32.const 97
+  call $~lib/reference/RefString.fromCodePoint
+  string.const "a"
+  call $~lib/reference/RefString.__eq
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 145
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  call $~lib/reference/RefString#get:length
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 147
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  i32.const 1
+  call $~lib/reference/RefString#at
+  string.const "b"
+  string.eq
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 148
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  i32.const 0
+  call $~lib/reference/RefString#charAt
+  string.const "a"
+  string.eq
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 149
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  i32.const 0
+  call $~lib/reference/RefString#charCodeAt
+  i32.const 97
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 150
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  i32.const 0
+  call $~lib/reference/RefString#codePointAt
+  i32.const 97
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 151
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  global.get $features/stringref/str
+  call $~lib/reference/RefString#concat
+  string.const "abcabc"
+  call $~lib/reference/RefString.__eq
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 152
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  string.const "abc"
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/reference/RefString#endsWith@varargs
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 153
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  global.get $features/stringref/str
+  call $~lib/reference/RefString.__eq
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 154
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  call $~lib/reference/RefString.__not
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 155
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  string.const ""
+  string.eq
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 156
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  string.const "ab"
+  call $~lib/reference/RefString.__gt
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 157
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  string.const "ab"
+  call $~lib/reference/RefString.__gte
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 158
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  string.const "abcd"
+  call $~lib/reference/RefString.__lt
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 159
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  string.const "abcd"
+  call $~lib/reference/RefString.__lte
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 160
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  string.const "b"
+  i32.const 0
+  call $~lib/reference/RefString#includes
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 161
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  string.const "b"
+  i32.const 0
+  call $~lib/reference/RefString#indexOf
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 162
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $features/stringref/str
+  string.const "b"
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/reference/RefString#lastIndexOf@varargs
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 163
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~start (type $none_=>_none)
   call $start:features/stringref

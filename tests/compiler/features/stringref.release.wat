@@ -7,6 +7,12 @@
  (data $1 (i32.const 1028) "a\00b\00c")
  (data $3 (i32.const 1068) "<")
  (data $3.1 (i32.const 1080) "\02\00\00\00*\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00t\00r\00i\00n\00g\00r\00e\00f\00.\00t\00s")
+ (data $4 (i32.const 1132) "<")
+ (data $4.1 (i32.const 1144) "\02\00\00\00$\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00c\00o\00d\00e\00 \00p\00o\00i\00n\00t")
+ (data $5 (i32.const 1196) "<")
+ (data $5.1 (i32.const 1208) "\02\00\00\00\"\00\00\00~\00l\00i\00b\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00.\00t\00s")
+ (data $6 (i32.const 1260) "<")
+ (data $6.1 (i32.const 1272) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (export "memory" (memory $0))
  (start $~start)
  (func $features/stringref/test_wtf8 (type $none_=>_none)
@@ -838,7 +844,11 @@
    unreachable
   end
  )
- (func $~start (type $none_=>_none)
+ (func $start:features/stringref (type $none_=>_none)
+  (local $0 i32)
+  (local $1 (ref stringview_wtf16))
+  (local $2 i32)
+  (local $3 i32)
   string.const ""
   string.as_wtf8
   drop
@@ -851,5 +861,476 @@
   call $features/stringref/test_wtf8
   call $features/stringref/test_wtf16
   call $features/stringref/test_iter
+  i32.const 97
+  string.from_code_point
+  string.const "a"
+  string.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 145
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.measure_wtf16
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 147
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.measure_wtf16
+  i32.const 1
+  i32.le_u
+  if
+   i32.const 1280
+   i32.const 1216
+   i32.const 73
+   i32.const 31
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.as_wtf16
+  i32.const 1
+  stringview_wtf16.get_codeunit
+  string.from_code_point
+  string.const "b"
+  string.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 148
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.measure_wtf16
+  if (result (ref string))
+   string.const "abc"
+   string.as_wtf16
+   i32.const 0
+   stringview_wtf16.get_codeunit
+   string.from_code_point
+  else
+   string.const ""
+  end
+  string.const "a"
+  string.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 149
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.measure_wtf16
+  if (result i32)
+   string.const "abc"
+   string.as_wtf16
+   i32.const 0
+   stringview_wtf16.get_codeunit
+  else
+   i32.const -1
+  end
+  i32.const 97
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 150
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const -1
+  local.set $0
+  block $__inlined_func$~lib/reference/RefString#codePointAt
+   string.const "abc"
+   string.measure_wtf16
+   local.tee $2
+   i32.eqz
+   br_if $__inlined_func$~lib/reference/RefString#codePointAt
+   local.get $2
+   i32.const 1
+   i32.eq
+   string.const "abc"
+   string.as_wtf16
+   local.tee $1
+   i32.const 0
+   stringview_wtf16.get_codeunit
+   local.tee $0
+   i32.const 64512
+   i32.and
+   i32.const 55296
+   i32.ne
+   i32.or
+   br_if $__inlined_func$~lib/reference/RefString#codePointAt
+   local.get $1
+   i32.const 1
+   stringview_wtf16.get_codeunit
+   local.tee $2
+   i32.const 64512
+   i32.and
+   i32.const 56320
+   i32.ne
+   br_if $__inlined_func$~lib/reference/RefString#codePointAt
+   local.get $0
+   i32.const 10
+   i32.shl
+   local.get $2
+   i32.add
+   i32.const 56613888
+   i32.sub
+   local.set $0
+  end
+  local.get $0
+  i32.const 97
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 151
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.const "abc"
+  string.concat
+  string.const "abcabc"
+  string.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 152
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1073741823
+  string.const "abc"
+  string.measure_wtf16
+  local.tee $0
+  local.get $0
+  i32.const 1073741823
+  i32.gt_s
+  select
+  local.get $0
+  i32.sub
+  local.tee $2
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   i32.const 0
+  else
+   string.const "abc"
+   string.as_wtf16
+   local.get $2
+   local.get $0
+   local.get $2
+   i32.add
+   stringview_wtf16.slice
+   string.const "abc"
+   string.eq
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 153
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.const "abc"
+  string.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 154
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  ref.null none
+  string.eq
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 155
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.const ""
+  string.eq
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 156
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.const "ab"
+  string.compare
+  i32.const 0
+  i32.le_s
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 157
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.const "ab"
+  string.compare
+  i32.const 0
+  i32.lt_s
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 158
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.const "abcd"
+  string.compare
+  i32.const 0
+  i32.ge_s
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 159
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  string.const "abc"
+  string.const "abcd"
+  string.compare
+  i32.const 0
+  i32.gt_s
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 160
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  local.set $0
+  block $__inlined_func$~lib/reference/RefString#indexOf
+   string.const "b"
+   string.measure_wtf16
+   local.tee $2
+   i32.eqz
+   br_if $__inlined_func$~lib/reference/RefString#indexOf
+   i32.const -1
+   local.set $0
+   string.const "abc"
+   string.measure_wtf16
+   local.tee $3
+   i32.eqz
+   br_if $__inlined_func$~lib/reference/RefString#indexOf
+   local.get $3
+   i32.const 0
+   local.get $3
+   i32.const 0
+   i32.le_s
+   select
+   local.set $0
+   string.const "abc"
+   string.as_wtf16
+   local.set $1
+   local.get $3
+   local.get $2
+   i32.sub
+   local.set $3
+   loop $for-loop|0
+    local.get $0
+    local.get $3
+    i32.le_s
+    if
+     local.get $1
+     local.get $0
+     local.get $0
+     local.get $2
+     i32.add
+     stringview_wtf16.slice
+     string.const "b"
+     string.eq
+     br_if $__inlined_func$~lib/reference/RefString#indexOf
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
+     br $for-loop|0
+    end
+   end
+   i32.const -1
+   local.set $0
+  end
+  local.get $0
+  i32.const -1
+  i32.eq
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 161
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  local.set $0
+  block $__inlined_func$~lib/reference/RefString#indexOf0
+   string.const "b"
+   string.measure_wtf16
+   local.tee $2
+   i32.eqz
+   br_if $__inlined_func$~lib/reference/RefString#indexOf0
+   i32.const -1
+   local.set $0
+   string.const "abc"
+   string.measure_wtf16
+   local.tee $3
+   i32.eqz
+   br_if $__inlined_func$~lib/reference/RefString#indexOf0
+   local.get $3
+   i32.const 0
+   local.get $3
+   i32.const 0
+   i32.le_s
+   select
+   local.set $0
+   string.const "abc"
+   string.as_wtf16
+   local.set $1
+   local.get $3
+   local.get $2
+   i32.sub
+   local.set $3
+   loop $for-loop|01
+    local.get $0
+    local.get $3
+    i32.le_s
+    if
+     local.get $1
+     local.get $0
+     local.get $0
+     local.get $2
+     i32.add
+     stringview_wtf16.slice
+     string.const "b"
+     string.eq
+     br_if $__inlined_func$~lib/reference/RefString#indexOf0
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
+     br $for-loop|01
+    end
+   end
+   i32.const -1
+   local.set $0
+  end
+  local.get $0
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 162
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $__inlined_func$~lib/reference/RefString#lastIndexOf
+   string.const "b"
+   string.measure_wtf16
+   local.tee $2
+   i32.eqz
+   if
+    string.const "abc"
+    string.measure_wtf16
+    local.set $0
+    br $__inlined_func$~lib/reference/RefString#lastIndexOf
+   end
+   i32.const -1
+   local.set $0
+   string.const "abc"
+   string.measure_wtf16
+   local.tee $3
+   i32.eqz
+   br_if $__inlined_func$~lib/reference/RefString#lastIndexOf
+   local.get $3
+   local.get $2
+   i32.sub
+   local.set $0
+   loop $for-loop|03
+    local.get $0
+    i32.const 0
+    i32.ge_s
+    if
+     string.const "abc"
+     string.as_wtf16
+     local.get $0
+     local.get $0
+     local.get $2
+     i32.add
+     stringview_wtf16.slice
+     string.const "b"
+     string.eq
+     br_if $__inlined_func$~lib/reference/RefString#lastIndexOf
+     local.get $0
+     i32.const 1
+     i32.sub
+     local.set $0
+     br $for-loop|03
+    end
+   end
+   i32.const -1
+   local.set $0
+  end
+  local.get $0
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 163
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $~start (type $none_=>_none)
+  call $start:features/stringref
  )
 )
