@@ -2341,10 +2341,12 @@ export class Resolver extends DiagnosticEmitter {
         let fltType = ctxType == Type.f32 ? Type.f32 : Type.f64;
         return assert(fltType.getClassOrWrapper(this.program));
       }
-      case LiteralKind.String:
-      case LiteralKind.Template: {
+      case LiteralKind.String: {
         // Resolve to stringref if context indicates
         if (ctxType.kind == TypeKind.String) return this.program.refStringInstance;
+        // fall-through
+      }
+      case LiteralKind.Template: {
         return this.program.stringInstance;
       }
       case LiteralKind.RegExp: {
