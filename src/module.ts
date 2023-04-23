@@ -3553,6 +3553,10 @@ export function getMemoryGrowDelta(expr: ExpressionRef): ExpressionRef {
   return binaryen._BinaryenMemoryGrowGetDelta(expr);
 }
 
+export function getRefIsNullValue(expr: ExpressionRef): ExpressionRef {
+  return binaryen._BinaryenRefIsNullGetValue(expr);
+}
+
 // functions
 
 export function getFunctionBody(func: FunctionRef): ExpressionRef {

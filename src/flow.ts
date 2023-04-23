@@ -70,6 +70,7 @@ import {
   getUnaryValue,
   getCallOperandAt,
   getCallOperandCount,
+  getRefIsNullValue,
   isConstZero,
   isConstNonZero
 } from "./module";
@@ -1049,6 +1050,10 @@ export class Flow {
         }
         break;
       }
+      case ExpressionId.RefIsNull: {
+        this.inheritNonnullIfFalse(getRefIsNullValue(expr), iff); // value == null -> value must have been null
+        break;
+      }
     }
   }
 
@@ -1138,6 +1143,10 @@ export class Flow {
           assert(getCallOperandCount(expr) == 1);
           this.inheritNonnullIfFalse(getCallOperandAt(expr, 0), iff);
         }
+        break;
+      }
+      case ExpressionId.RefIsNull: {
+        this.inheritNonnullIfTrue(getRefIsNullValue(expr), iff); // value == null -> value must have been non-null
         break;
       }
     }
