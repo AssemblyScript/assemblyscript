@@ -11,7 +11,6 @@ import {
   DiagnosticCode,
   diagnosticCodeToString
 } from "./diagnosticMessages.generated";
-import { ExpressionRef } from "./module";
 
 import {
   isLineBreak,
@@ -46,7 +45,6 @@ export const enum DiagnosticCategory {
 export class Range {
 
   source!: Source;
-  debugInfo: Map<string, ExpressionRef> = new Map<string, ExpressionRef>();
 
   constructor(public start: i32, public end: i32) {}
 

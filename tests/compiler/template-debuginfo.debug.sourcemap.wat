@@ -1277,17 +1277,24 @@
     (local.set $block|3
      (local.get $block)
     )
+    ;;@ ~lib/rt/tlsf.ts:97:2
     (br $label$3
+     ;;@ ~lib/rt/tlsf.ts:97:9
      (i32.add
+      ;;@ ~lib/rt/tlsf.ts:97:27
       (i32.add
        (local.get $block|3)
+       ;;@ ~lib/rt/tlsf.ts:97:54
        (i32.const 4)
       )
+      ;;@ ~lib/rt/tlsf.ts:97:72
       (i32.and
        (call $~lib/rt/common/BLOCK#get:mmInfo
         (local.get $block|3)
        )
+       ;;@ ~lib/rt/tlsf.ts:97:87
        (i32.xor
+        ;;@ ~lib/rt/tlsf.ts:97:88
         (i32.const 3)
         (i32.const -1)
        )
@@ -3480,12 +3487,17 @@
      (local.set $fl|6
       (local.get $fl)
      )
+     ;;@ ~lib/rt/tlsf.ts:145:2
      (br $label$8
+      ;;@ ~lib/rt/tlsf.ts:145:9
       (i32.load offset=4
+       ;;@ ~lib/rt/tlsf.ts:146:4
        (i32.add
         (local.get $root|5)
+        ;;@ ~lib/rt/tlsf.ts:146:31
         (i32.shl
          (local.get $fl|6)
+         ;;@ ~lib/rt/tlsf.ts:146:37
          (i32.const 2)
         )
        )
@@ -3631,19 +3643,27 @@
           (local.get $slMap)
          )
         )
-        ;;@ ~lib/rt/tlsf.ts:344:31
+        ;;@ ~lib/rt/tlsf.ts:164:2
         (br $label$14
+         ;;@ ~lib/rt/tlsf.ts:164:9
          (i32.load offset=96
+          ;;@ ~lib/rt/tlsf.ts:165:4
           (i32.add
            (local.get $root|12)
+           ;;@ ~lib/rt/tlsf.ts:165:31
            (i32.shl
+            ;;@ ~lib/rt/tlsf.ts:165:32
             (i32.add
+             ;;@ ~lib/rt/tlsf.ts:165:33
              (i32.shl
               (local.get $fl|13)
+              ;;@ ~lib/rt/tlsf.ts:165:39
               (i32.const 4)
              )
+             ;;@ ~lib/rt/tlsf.ts:165:50
              (local.get $sl|14)
             )
+            ;;@ ~lib/rt/tlsf.ts:165:64
             (i32.const 2)
            )
           )
@@ -4076,22 +4096,29 @@
      (i32.and
       ;;@ ~lib/rt/tlsf.ts:371:4
       (call $~lib/rt/common/BLOCK#get:mmInfo
-       ;;@ ~lib/rt/tlsf.ts:97:2
        (block $label$5 (result i32)
+        ;;@ ~lib/rt/tlsf.ts:371:13
         (local.set $block|6
          (local.get $block)
         )
+        ;;@ ~lib/rt/tlsf.ts:97:2
         (br $label$5
+         ;;@ ~lib/rt/tlsf.ts:97:9
          (i32.add
+          ;;@ ~lib/rt/tlsf.ts:97:27
           (i32.add
            (local.get $block|6)
+           ;;@ ~lib/rt/tlsf.ts:97:54
            (i32.const 4)
           )
+          ;;@ ~lib/rt/tlsf.ts:97:72
           (i32.and
            (call $~lib/rt/common/BLOCK#get:mmInfo
             (local.get $block|6)
            )
+           ;;@ ~lib/rt/tlsf.ts:97:87
            (i32.xor
+            ;;@ ~lib/rt/tlsf.ts:97:88
             (i32.const 3)
             (i32.const -1)
            )

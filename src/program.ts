@@ -422,6 +422,13 @@ export namespace OperatorKind {
     return OperatorKind.Invalid;
   }
 }
+/** DebugLocation for debug info generation */
+export class DebugLocation {
+  /** Constructs a new Debug Location*/
+  constructor(
+    public expressionRef: ExpressionRef,
+    public range: Range) {}
+}
 
 /** Represents an AssemblyScript program. */
 export class Program extends DiagnosticEmitter {
@@ -3746,7 +3753,7 @@ export class Function extends TypedElement {
   /** Default control flow. */
   flow!: Flow;
   /** Remembered debug locations. */
-  debugLocations: Range[] = [];
+  debugLocations: DebugLocation[] = [];
   /** Function reference, if compiled. */
   ref: FunctionRef = 0;
   /** Varargs stub for calling with omitted arguments. */
@@ -3913,15 +3920,14 @@ export class Function extends TypedElement {
 
   addDebugInfo(module: Module, ref: FunctionRef): void {
     if (this.program.options.sourceMap) {
-      let debugLocations = this.debugLocations;
-      for (let i = 0, k = debugLocations.length; i < k; ++i) {
-        let range = debugLocations[i];
-        let source = range.source;
-        const debugInfo = range.debugInfo.get(this.internalName);
-        assert(debugInfo);
+      const debugLocations = this.debugLocations;
+      for (let i = 0; i < debugLocations.length; ++i) {
+        const debugLocation = debugLocations[i];
+        const range = debugLocation.range;
+        const source = range.source;
         module.setDebugLocation(
           ref,
-          debugInfo as ExpressionRef,
+          debugLocation.expressionRef,
           source.debugInfoIndex,
           source.lineAt(range.start),
           source.columnAt() - 1 // source maps are 0-based

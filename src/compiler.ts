@@ -93,7 +93,8 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName
+  mangleInternalName,
+  DebugLocation
 } from "./program";
 
 import {
@@ -9830,8 +9831,7 @@ export class Compiler extends DiagnosticEmitter {
     let targetFunction = this.currentFlow.targetFunction;
     let source = range.source;
     if (source.debugInfoIndex < 0) source.debugInfoIndex = this.module.addDebugInfoFile(source.normalizedPath);
-    range.debugInfo.set(targetFunction.internalName, expr);
-    targetFunction.debugLocations.push(range);
+    targetFunction.debugLocations.push(new DebugLocation(expr, range));
   }
 
   /** Checks whether a particular function signature is supported. */
