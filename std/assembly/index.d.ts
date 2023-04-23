@@ -64,7 +64,7 @@ declare type ref_i31 = object;
 /** Canonical nullable 31-bit integer reference. */
 declare type i31ref = ref_i31 | null;
 /** Non-nullable string reference. */
-declare type ref_string = object;
+declare type ref_string = string;
 /** Canonical nullable string reference. */
 declare type stringref = ref_string | null;
 /** Non-nullable WTF-8 string view. */
@@ -1669,8 +1669,6 @@ declare abstract class i31 {
 }
 
 declare namespace string {
-  /** Constructs a string reference from a string literal. Temporary! */
-  export function const_(str: string): ref_string;
   /** Creates a new string from memory using a strict UTF-8 decoder, decoding `bytes` bytes starting at `ptr`. */
   export function new_utf8(ptr: usize, bytes: i32): ref_string;
   /** Creates a new string from `array` using a strict UTF-8 decoder, decoding from `start` inclusive to `end` exclusive. */

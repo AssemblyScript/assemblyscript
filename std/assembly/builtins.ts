@@ -2599,10 +2599,6 @@ export abstract class i31 { // FIXME: usage of 'new' requires a class :(
 export namespace string {
 
   // @ts-ignore: decorator
-  @builtin
-  export declare function const_(str: string): ref_string;
-
-  // @ts-ignore: decorator
   @unsafe @builtin
   export declare function new_utf8(ptr: usize, bytes: i32): ref_string;
 

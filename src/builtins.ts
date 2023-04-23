@@ -715,7 +715,6 @@ export namespace BuiltinNames {
   export const i31_new = "~lib/builtins/i31.new";
   export const i31_get = "~lib/builtins/i31.get";
 
-  export const string_const = "~lib/builtins/string.const_";
   export const string_new_utf8 = "~lib/builtins/string.new_utf8";
   export const string_new_utf8_array = "~lib/builtins/string.new_utf8_array";
   export const string_new_lossy_utf8 = "~lib/builtins/string.new_lossy_utf8";
@@ -10870,33 +10869,6 @@ function builtin_i32x4_relaxed_dot_i8x16_i7x16_add_s(ctx: BuiltinFunctionContext
 builtinFunctions.set(BuiltinNames.i32x4_relaxed_dot_i8x16_i7x16_add_s, builtin_i32x4_relaxed_dot_i8x16_i7x16_add_s);
 
 // === Stringref ==============================================================================
-
-// string.const(str: string) -> stringref
-function builtin_string_const(ctx: BuiltinFunctionContext): ExpressionRef {
-  let compiler = ctx.compiler;
-  let module = compiler.module;
-  if (
-    checkFeatureEnabled(ctx, Feature.Stringref) |
-    checkTypeAbsent(ctx) |
-    checkArgsRequired(ctx, 1)
-  ) return module.unreachable();
-  let operands = ctx.operands;
-  let node = operands[0];
-  if (node.kind == NodeKind.Literal) {
-    let literal = <LiteralExpression>node;
-    if (literal.literalKind == LiteralKind.String) {
-      compiler.currentType = Type.string;
-      return module.string_const((<StringLiteralExpression>literal).value);
-    }
-  }
-  compiler.error(
-    DiagnosticCode.String_literal_expected,
-    node.range
-  );
-  compiler.currentType = Type.string;
-  return module.unreachable();
-}
-builtinFunctions.set(BuiltinNames.string_const, builtin_string_const);
 
 // string.new_utf8(ptr: usize, bytes: i32, immMemory?: i32) -> stringref
 function builtin_string_new_utf8(ctx: BuiltinFunctionContext): ExpressionRef {

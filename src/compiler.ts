@@ -7923,6 +7923,11 @@ export class Compiler extends DiagnosticEmitter {
       }
       case LiteralKind.String: {
         assert(!implicitlyNegate);
+        // Emit a stringref if context indicates
+        if (contextualType.kind == TypeKind.String) {
+          this.currentType = Type.string;
+          return module.string_const((<StringLiteralExpression>expression).value);
+        }
         return this.compileStringLiteral(<StringLiteralExpression>expression, constraints);
       }
       case LiteralKind.Template: {
