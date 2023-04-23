@@ -633,6 +633,14 @@ export class Program extends DiagnosticEmitter {
   }
   private _stringInstance: Class | null = null;
 
+  /** Gets the standard `RefString` instance. */
+  get refStringInstance(): Class {
+    let cached = this._refStringInstance;
+    if (!cached) this._refStringInstance = cached = this.requireClass(CommonNames.RefString);
+    return cached;
+  }
+  private _refStringInstance: Class | null = null;
+
   /** Gets the standard `RegExp` instance. */
   get regexpInstance(): Class {
     let cached = this._regexpInstance;

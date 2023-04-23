@@ -2343,6 +2343,8 @@ export class Resolver extends DiagnosticEmitter {
       }
       case LiteralKind.String:
       case LiteralKind.Template: {
+        // Resolve to stringref if context indicates
+        if (ctxType.kind == TypeKind.String) return this.program.refStringInstance;
         return this.program.stringInstance;
       }
       case LiteralKind.RegExp: {
