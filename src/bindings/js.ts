@@ -300,7 +300,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(escapeString(name, CharCode.DoubleQuote));
       sb.push("\"");
     }
-    if (isPlainFunction(signature, Mode.Import) && !code) {
+    if (isPlainFunction(signature, Mode.Import) && !code && isIdentifier(name)) {
       sb.push(": (\n");
       indent(sb, this.indentLevel + 1);
       sb.push("// ");
