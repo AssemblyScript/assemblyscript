@@ -792,7 +792,8 @@ export abstract class Node {
         return true;
       case NodeKind.UnaryPrefix: {
         const unaryPrefixExpr = <UnaryPrefixExpression>changetype<Node>(this);
-        if (unaryPrefixExpr.operator == Token.Minus || unaryPrefixExpr.operator == Token.Plus) {
+        const op = unaryPrefixExpr.operator;
+        if (op == Token.Minus || op == Token.Plus || op == Token.Exclamation || op == Token.Tilde) {
           // if expr can compile to const, +expr or -expr should also compile to const
           return unaryPrefixExpr.operand.isLiteral();
         }
