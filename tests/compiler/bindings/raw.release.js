@@ -18,12 +18,12 @@ export async function instantiate(module, imports = {}) {
         // ~lib/bindings/dom/Math.E: f64
         Math.E
       ),
-      "Math.log": (
+      "Math.log"(x) {
         // ~lib/bindings/dom/Math.log(f64) => f64
-        Math.log
-      ),
+        return Math.log(x);
+      },
       "globalThis.globalThis": (
-        // bindings/esm/immutableGlobalNested: externref
+        // bindings/esm/immutableGlobalNested: ref_extern | null}
         globalThis.globalThis
       ),
       "Date.getTimezoneOffset"() {
