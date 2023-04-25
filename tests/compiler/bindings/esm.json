@@ -1,7 +1,8 @@
 {
   "asc_flags": [
     "--exportStart _start",
-    "--bindings esm"
+    "--bindings esm",
+    "--exportRuntime"
   ],
   "features": [
     "reference-types"
