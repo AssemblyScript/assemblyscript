@@ -418,9 +418,9 @@ export namespace ExportNames {
 }
 
 /** Functions to export if `--exportRuntime` is set. */
-const runtimeFunctions = [ "__new", "__pin", "__unpin", "__collect" ];
+export const runtimeFunctions = [ "__new", "__pin", "__unpin", "__collect" ];
 /** Globals to export if `--exportRuntime` is set. */
-const runtimeGlobals = [ "__rtti_base" ];
+export const runtimeGlobals = [ "__rtti_base" ];
 
 /** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {

@@ -198,6 +198,20 @@ export class TSDBuilder extends ExportsWalker {
       indent(sb, this.indentLevel);
       sb.push(`export ${this.esm ? "declare " : ""}const table: WebAssembly.Table;\n`);
     }
+    if (this.program.options.exportRuntime) {
+      indent(sb, this.indentLevel);
+      sb.push("// Exported runtime interface\n");
+      indent(sb, this.indentLevel);
+      sb.push(`export ${this.esm ? "declare " : ""}function __new(size: number, id: number): number;\n`);
+      indent(sb, this.indentLevel);
+      sb.push(`export ${this.esm ? "declare " : ""}function __pin(ptr: number): number;\n`);
+      indent(sb, this.indentLevel);
+      sb.push(`export ${this.esm ? "declare " : ""}function __unpin(ptr: number): void;\n`);
+      indent(sb, this.indentLevel);
+      sb.push(`export ${this.esm ? "declare " : ""}function __collect(): void;\n`);
+      indent(sb, this.indentLevel);
+      sb.push(`export ${this.esm ? "declare " : ""}const __rtti_base: number;\n`);
+    }
     this.walk();
     if (!this.esm) {
       --this.indentLevel;
