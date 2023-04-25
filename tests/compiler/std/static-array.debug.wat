@@ -6,7 +6,7 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_i64_=>_i32 (func (param i32 i32 i64) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
@@ -1052,25 +1052,30 @@
   local.get $slMap
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $end i32) (result i32)
-  (local $root|3 i32)
+ (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $endU64 i64) (result i32)
+  (local $end i32)
+  (local $root|4 i32)
   (local $tail i32)
   (local $tailInfo i32)
   (local $size i32)
   (local $leftSize i32)
   (local $left i32)
-  (local $root|9 i32)
-  (local $tail|10 i32)
+  (local $root|10 i32)
+  (local $tail|11 i32)
+  local.get $endU64
+  i32.wrap_i64
+  local.set $end
   i32.const 1
   drop
   local.get $start
-  local.get $end
-  i32.le_u
+  i64.extend_i32_u
+  local.get $endU64
+  i64.le_u
   i32.eqz
   if
    i32.const 0
    i32.const 880
-   i32.const 377
+   i32.const 378
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1095,8 +1100,8 @@
   local.set $end
   block $~lib/rt/tlsf/GETTAIL|inlined.0 (result i32)
    local.get $root
-   local.set $root|3
-   local.get $root|3
+   local.set $root|4
+   local.get $root|4
    i32.load $0 offset=1568
    br $~lib/rt/tlsf/GETTAIL|inlined.0
   end
@@ -1116,7 +1121,7 @@
    if
     i32.const 0
     i32.const 880
-    i32.const 384
+    i32.const 385
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -1149,7 +1154,7 @@
    if
     i32.const 0
     i32.const 880
-    i32.const 397
+    i32.const 398
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -1205,11 +1210,11 @@
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $root
-  local.set $root|9
+  local.set $root|10
   local.get $tail
-  local.set $tail|10
-  local.get $root|9
-  local.get $tail|10
+  local.set $tail|11
+  local.get $root|10
+  local.get $tail|11
   i32.store $0 offset=1568
   local.get $root
   local.get $left
@@ -1355,8 +1360,9 @@
   local.get $root
   local.get $memStart
   memory.size $0
-  i32.const 16
-  i32.shl
+  i64.extend_i32_s
+  i64.const 16
+  i64.shl
   call $~lib/rt/tlsf/addMemory
   drop
   local.get $root
@@ -1392,7 +1398,7 @@
   if
    i32.const 0
    i32.const 880
-   i32.const 559
+   i32.const 560
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1721,7 +1727,7 @@
   if
    i32.const 608
    i32.const 880
-   i32.const 458
+   i32.const 459
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -2023,8 +2029,9 @@
   i32.const 16
   i32.shl
   local.get $pagesAfter
-  i32.const 16
-  i32.shl
+  i64.extend_i32_s
+  i64.const 16
+  i64.shl
   call $~lib/rt/tlsf/addMemory
   drop
  )
@@ -2164,7 +2171,7 @@
    if
     i32.const 0
     i32.const 880
-    i32.const 496
+    i32.const 497
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -2184,7 +2191,7 @@
   if
    i32.const 0
    i32.const 880
-   i32.const 498
+   i32.const 499
    i32.const 14
    call $~lib/builtins/abort
    unreachable

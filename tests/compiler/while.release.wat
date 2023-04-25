@@ -5,7 +5,7 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -610,16 +610,17 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
-  local.get $1
   local.get $2
-  i32.gt_u
+  local.get $1
+  i64.extend_i32_u
+  i64.lt_u
   if
    i32.const 0
    i32.const 1440
-   i32.const 377
+   i32.const 378
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -644,7 +645,7 @@
    if
     i32.const 0
     i32.const 1440
-    i32.const 384
+    i32.const 385
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -672,18 +673,19 @@
    if
     i32.const 0
     i32.const 1440
-    i32.const 397
+    i32.const 398
     i32.const 5
     call $~lib/builtins/abort
     unreachable
    end
   end
   local.get $2
+  i32.wrap_i64
   i32.const -16
   i32.and
   local.get $1
   i32.sub
-  local.tee $2
+  local.tee $4
   i32.const 20
   i32.lt_u
   if
@@ -693,10 +695,10 @@
   local.get $3
   i32.const 2
   i32.and
-  local.get $2
+  local.get $4
   i32.const 8
   i32.sub
-  local.tee $2
+  local.tee $3
   i32.const 1
   i32.or
   i32.or
@@ -710,13 +712,13 @@
   local.get $1
   i32.const 4
   i32.add
-  local.get $2
+  local.get $3
   i32.add
-  local.tee $2
+  local.tee $3
   i32.const 2
   i32.store $0
   local.get $0
-  local.get $2
+  local.get $3
   i32.store $0 offset=1568
   local.get $0
   local.get $1
@@ -795,8 +797,9 @@
   i32.const 34288
   i32.const 35860
   memory.size $0
-  i32.const 16
-  i32.shl
+  i64.extend_i32_s
+  i64.const 16
+  i64.shl
   call $~lib/rt/tlsf/addMemory
   i32.const 34288
   global.set $~lib/rt/tlsf/ROOT
@@ -1037,7 +1040,7 @@
       if
        i32.const 0
        i32.const 1440
-       i32.const 559
+       i32.const 560
        i32.const 3
        call $~lib/builtins/abort
        unreachable
@@ -1226,8 +1229,9 @@
    i32.const 16
    i32.shl
    memory.size $0
-   i32.const 16
-   i32.shl
+   i64.extend_i32_s
+   i64.const 16
+   i64.shl
    call $~lib/rt/tlsf/addMemory
    local.get $2
    call $~lib/rt/tlsf/searchBlock
@@ -1236,7 +1240,7 @@
    if
     i32.const 0
     i32.const 1440
-    i32.const 496
+    i32.const 497
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -1251,7 +1255,7 @@
   if
    i32.const 0
    i32.const 1440
-   i32.const 498
+   i32.const 499
    i32.const 14
    call $~lib/builtins/abort
    unreachable

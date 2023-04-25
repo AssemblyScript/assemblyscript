@@ -373,8 +373,9 @@ function prepareBlock(root: Root, block: Block, size: usize): void {
 }
 
 /** Adds more memory to the pool. */
-function addMemory(root: Root, start: usize, end: usize): bool {
-  if (DEBUG) assert(start <= end); // must be valid
+function addMemory(root: Root, start: usize, endU64: u64): bool {
+  let end = <usize>endU64;
+  if (DEBUG) assert(<u64>start <= endU64); // must be valid
   start = ((start + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
   end &= ~AL_MASK;
 
@@ -442,7 +443,7 @@ function growMemory(root: Root, size: usize): void {
     if (memory.grow(pagesNeeded) < 0) unreachable();
   }
   let pagesAfter = memory.size();
-  addMemory(root, <usize>pagesBefore << 16, <usize>pagesAfter << 16);
+  addMemory(root, <usize>pagesBefore << 16, <u64>pagesAfter << 16);
 }
 
 /** Computes the size (excl. header) of a block. */
@@ -477,11 +478,11 @@ function initialize(): void {
   }
   let memStart = rootOffset + ROOT_SIZE;
   if (ASC_LOW_MEMORY_LIMIT) {
-    const memEnd = <usize>ASC_LOW_MEMORY_LIMIT & ~AL_MASK;
+    const memEnd = <u64>ASC_LOW_MEMORY_LIMIT & ~AL_MASK;
     if (memStart <= memEnd) addMemory(root, memStart, memEnd);
     else unreachable(); // low memory limit already exceeded
   } else {
-    addMemory(root, memStart, memory.size() << 16);
+    addMemory(root, memStart, <u64>memory.size() << 16);
   }
   ROOT = root;
 }

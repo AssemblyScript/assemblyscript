@@ -634,8 +634,9 @@
  (func $~lib/rt/itcms/step
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
+  (local $2 i64)
   (local $3 i32)
+  (local $4 i32)
   block $break|0
    block $case2|0
     block $case1|0
@@ -717,9 +718,9 @@
       if
        local.get $0
        i32.load $0
-       local.tee $2
+       local.tee $3
        if
-        local.get $2
+        local.get $3
         call $byn-split-outlined-A$~lib/rt/itcms/__visit
        end
        local.get $0
@@ -792,13 +793,13 @@
    if
     local.get $0
     i32.load $0 offset=4
-    local.tee $2
+    local.tee $3
     i32.const -4
     i32.and
     global.set $~lib/rt/itcms/iter
     global.get $~lib/rt/itcms/white
     i32.eqz
-    local.get $2
+    local.get $3
     i32.const 3
     i32.and
     i32.ne
@@ -833,7 +834,7 @@
      local.get $0
      i32.const 4
      i32.add
-     local.tee $2
+     local.tee $3
      i32.const 34516
      i32.ge_u
      if
@@ -908,15 +909,19 @@
         end
        end
        memory.size $0
-       i32.const 16
-       i32.shl
-       local.tee $3
-       i32.const 36100
-       i32.lt_u
+       i64.extend_i32_s
+       i64.const 16
+       i64.shl
+       local.tee $2
+       i32.wrap_i64
+       local.set $4
+       local.get $2
+       i64.const 36100
+       i64.lt_u
        if
         i32.const 0
         i32.const 1632
-        i32.const 377
+        i32.const 378
         i32.const 14
         call $~lib/builtins/abort
         unreachable
@@ -935,7 +940,7 @@
         if
          i32.const 0
          i32.const 1632
-         i32.const 384
+         i32.const 385
          i32.const 16
          call $~lib/builtins/abort
          unreachable
@@ -955,12 +960,12 @@
         i32.const 0
        end
        local.set $0
-       local.get $3
+       local.get $4
        i32.const -16
        i32.and
        local.get $1
        i32.sub
-       local.tee $3
+       local.tee $4
        i32.const 20
        i32.ge_u
        if
@@ -968,7 +973,7 @@
         local.get $0
         i32.const 2
         i32.and
-        local.get $3
+        local.get $4
         i32.const 8
         i32.sub
         local.tee $0
@@ -1002,15 +1007,15 @@
       end
       global.get $~lib/rt/tlsf/ROOT
       local.set $0
-      local.get $2
+      local.get $3
       i32.const 4
       i32.sub
       local.set $1
-      local.get $2
+      local.get $3
       i32.const 15
       i32.and
       i32.const 1
-      local.get $2
+      local.get $3
       select
       if (result i32)
        i32.const 1
@@ -1023,7 +1028,7 @@
       if
        i32.const 0
        i32.const 1632
-       i32.const 559
+       i32.const 560
        i32.const 3
        call $~lib/builtins/abort
        unreachable
