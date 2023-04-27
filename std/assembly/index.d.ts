@@ -808,7 +808,7 @@ declare namespace v128 {
   /** Loads a single lane from memory into the specified lane of the given vector. Other lanes are bypassed as is. */
   export function load_lane<T>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
   /** Stores the single lane at the specified index of the given vector to memory. */
-  export function store_lane<T>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function store_lane<T>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): void;
   /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
   export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
   /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
@@ -844,13 +844,13 @@ declare namespace v128 {
   /** Loads a single 64-bit lane from memory into the specified lane of the given vector. Other lanes are bypassed as is. */
   export function load64_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
   /** Stores the 8-bit lane at the specified lane of the given vector to memory. */
-  export function store8_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function store8_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): void;
   /** Stores the 16-bit lane at the specified lane of the given vector to memory. */
-  export function store16_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function store16_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): void;
   /** Stores the 32-bit lane at the specified lane of the given vector to memory. */
-  export function store32_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function store32_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): void;
   /** Stores the 64-bit lane at the specified lane of the given vector to memory. */
-  export function store64_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export function store64_lane(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): void;
   /** Stores a vector to memory. */
   export function store(ptr: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
   /** Adds each lane. */
