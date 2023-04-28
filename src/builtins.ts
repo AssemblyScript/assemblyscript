@@ -4916,7 +4916,7 @@ function builtin_v128_load_lane(ctx: BuiltinFunctionContext): ExpressionRef {
 }
 builtinFunctions.set(BuiltinNames.v128_load_lane, builtin_v128_load_lane);
 
-// v128.store_lane<TFrom!>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize) -> v128
+// v128.store_lane<TFrom!>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize) -> void
 function builtin_v128_store_lane(ctx: BuiltinFunctionContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
@@ -4958,7 +4958,7 @@ function builtin_v128_store_lane(ctx: BuiltinFunctionContext): ExpressionRef {
       }
     }
   }
-  compiler.currentType = Type.v128;
+  compiler.currentType = Type.void;
   if (type.isValue) {
     let maxIdx = (16 / assert(type.byteSize)) - 1;
     if (idx < 0 || idx > maxIdx) {

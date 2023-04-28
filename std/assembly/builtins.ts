@@ -1273,7 +1273,7 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function store_lane<TFrom>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export declare function store_lane<TFrom>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): void;
 
   // @ts-ignore: decorator
   @builtin
@@ -1345,19 +1345,19 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function store8_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): v128;
+  export declare function store8_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): void;
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function store16_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): v128;
+  export declare function store16_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): void;
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function store32_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): v128;
+  export declare function store32_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): void;
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function store64_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): v128;
+  export declare function store64_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): void;
 
   // @ts-ignore: decorator
   @unsafe @builtin
