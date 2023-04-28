@@ -427,16 +427,16 @@ function growMemory(root: Root, size: usize): void {
     unreachable();
     return;
   }
-  // and additional BLOCK_OVERHEAD must be taken into account. If we are going
-  // to merge with the tail block, that's one time, otherwise it's two times.
-  let pagesBefore = memory.size();
-  size += BLOCK_OVERHEAD << usize((<usize>pagesBefore << 16) - BLOCK_OVERHEAD != changetype<usize>(GETTAIL(root)));
   // Here, both rounding performed in searchBlock ...
   const halfMaxSize = BLOCK_MAXSIZE >> 1;
   if (size < halfMaxSize) { // don't round last fl
     const invRound = (sizeof<usize>() * 8 - 1) - SL_BITS;
-    size += (1 << (invRound - clz<usize>(size))) - 1; // size should be larger than 15
+    size += (1 << (invRound - clz<usize>(size))) - 1;
   }
+  // and additional BLOCK_OVERHEAD must be taken into account. If we are going
+  // to merge with the tail block, that's one time, otherwise it's two times.
+  let pagesBefore = memory.size();
+  size += BLOCK_OVERHEAD << usize((<usize>pagesBefore << 16) - BLOCK_OVERHEAD != changetype<usize>(GETTAIL(root)));
   let pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
   let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
   if (memory.grow(pagesWanted) < 0) {
