@@ -432,7 +432,7 @@ function growMemory(root: Root, size: usize): void {
     return;
   }
   // Here, both rounding performed in searchBlock ...
-  if (size > SB_SIZE) { // don't round last fl
+  if (size >= SB_SIZE) {
     size = roundSize(size);
   }
   // and additional BLOCK_OVERHEAD must be taken into account. If we are going

@@ -847,7 +847,7 @@
    local.tee $3
    local.get $2
    i32.const 256
-   i32.gt_u
+   i32.ge_u
    if (result i32)
     local.get $2
     i32.const 1

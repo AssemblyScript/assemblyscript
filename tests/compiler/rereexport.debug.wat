@@ -1962,7 +1962,7 @@
   drop
   local.get $size
   i32.const 256
-  i32.gt_u
+  i32.ge_u
   if
    local.get $size
    call $~lib/rt/tlsf/roundSize
