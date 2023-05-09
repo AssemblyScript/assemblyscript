@@ -2081,21 +2081,18 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
+  local.get $0
+  i32.const 8
+  i32.shl
+  local.get $0
+  i32.const 65535
+  i32.and
+  i32.const 8
+  i32.shr_u
+  i32.or
   local.get $2
-  if (result i32)
-   local.get $0
-  else
-   local.get $0
-   i32.const 65535
-   i32.and
-   local.tee $0
-   i32.const 8
-   i32.shl
-   local.get $0
-   i32.const 8
-   i32.shr_u
-   i32.or
-  end
+  select
  )
  (func $~lib/dataview/DataView#getInt32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -2713,27 +2710,25 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $3
   local.get $0
   i32.store $0
   local.get $0
   i32.load $0 offset=4
+  local.get $1
+  local.get $1
+  i32.const 8
+  i32.shl
+  local.get $1
+  i32.const 65535
+  i32.and
+  i32.const 8
+  i32.shr_u
+  i32.or
   local.get $2
-  if (result i32)
-   local.get $1
-  else
-   local.get $1
-   i32.const 65535
-   i32.and
-   local.tee $0
-   i32.const 8
-   i32.shl
-   local.get $0
-   i32.const 8
-   i32.shr_u
-   i32.or
-  end
+  select
   i32.store16 $0
-  global.get $~lib/memory/__stack_pointer
+  local.get $3
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -2914,27 +2909,25 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $3
   local.get $0
   i32.store $0
   local.get $0
   i32.load $0 offset=4
+  local.get $1
+  local.get $1
+  i32.const 8
+  i32.shl
+  local.get $1
+  i32.const 65535
+  i32.and
+  i32.const 8
+  i32.shr_u
+  i32.or
   local.get $2
-  if (result i32)
-   local.get $1
-  else
-   local.get $1
-   i32.const 65535
-   i32.and
-   local.tee $0
-   i32.const 8
-   i32.shl
-   local.get $0
-   i32.const 8
-   i32.shr_u
-   i32.or
-  end
+  select
   i32.store16 $0
-  global.get $~lib/memory/__stack_pointer
+  local.get $3
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
