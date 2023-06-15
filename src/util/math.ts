@@ -14,7 +14,12 @@ export function accuratePow64(x: f64, y: f64): f64 {
     // This speculative optimization leads to loose precisions like 10 ** 208 != 1e208
     // or/and 10 ** -5 != 1e-5 anymore. For avoid this behaviour we are forcing exponent
     // to fractional form and compensate this afterwards.
-    if (isFinite(y) && Math.abs(y) >= 2 && Math.trunc(y) == y) {
+    if (
+      isFinite(y) &&
+      !isPowerOf2(x) &&
+      Math.abs(y) >= 2 &&
+      Math.trunc(y) == y
+    ) {
       if (x < 0) return (y % 2 ? -1 : 1) * accuratePow64(-x, y);
       if (y < 0) {
         return Math.pow(x, y + 0.5) / Math.pow(x, 0.5);
