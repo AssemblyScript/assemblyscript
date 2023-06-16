@@ -15,8 +15,9 @@ export function accuratePow64(x: f64, y: f64): f64 {
     // or/and 10 ** -5 != 1e-5 anymore. For avoid this behaviour we are forcing exponent
     // to fractional form and compensate this afterwards.
     if (
-      isFinite(y) &&
+      x != 0 &&
       !isPowerOf2(x) &&
+      isFinite(y) &&
       Math.abs(y) >= 2 &&
       Math.trunc(y) == y
     ) {
