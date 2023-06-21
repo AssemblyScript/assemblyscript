@@ -2392,13 +2392,13 @@
          i32.load
          i32.const 8
          i32.sub
-         br_table $case25 $default3 $case25 $case16 $case34 $case07 $default3
+         br_table $case25 $default3 $case25 $case07 $case34 $case16 $default3
         end
-        unreachable
+        i32.const 4
+        local.set $0
+        br $__inlined_func$class-implements/J#foo@override$169
        end
-       i32.const 4
-       local.set $0
-       br $__inlined_func$class-implements/J#foo@override$169
+       unreachable
       end
       i32.const 3
       local.set $0

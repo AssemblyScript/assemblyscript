@@ -2425,11 +2425,11 @@
        i32.load
        local.set $1
        local.get $1
-       i32.const 13
+       i32.const 11
        i32.eq
        br_if $case0
        local.get $1
-       i32.const 11
+       i32.const 13
        i32.eq
        br_if $case1
        local.get $1
@@ -2447,11 +2447,11 @@
        br $default
       end
       local.get $0
-      call $class-implements/K#foo
+      call $class-implements/F#foo
       return
      end
      local.get $0
-     call $class-implements/F#foo
+     call $class-implements/K#foo
      return
     end
     local.get $0

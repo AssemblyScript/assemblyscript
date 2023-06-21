@@ -1297,12 +1297,16 @@ export class ASTBuilder {
       }
       sb.push(">");
     }
-    let extendsType = node.extendsType;
-    if (extendsType) {
+    let implementsTypes = node.implementsTypes;
+    if (implementsTypes && implementsTypes.length > 0) {
       sb.push(" extends ");
-      this.visitTypeNode(extendsType);
+      this.visitTypeNode(implementsTypes[0]);
+      for (let i = 1, k = implementsTypes.length; i < k; ++i) {
+        sb.push(", ");
+        this.visitTypeNode(implementsTypes[i]);
+      }
     }
-    // must not have implementsTypes
+    // must not have extendsType
     sb.push(" {\n");
     let indentLevel = ++this.indentLevel;
     let members = node.members;
