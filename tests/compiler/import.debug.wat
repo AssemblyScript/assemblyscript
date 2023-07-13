@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
@@ -30,6 +30,12 @@
   i32.mul
   return
  )
+ (func $export/div (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
+  i32.div_s
+  return
+ )
  (func $export/ns.two
   nop
  )
@@ -47,6 +53,10 @@
   global.get $export/c
   global.get $export/a
   call $export/mul
+  i32.add
+  global.get $export/a
+  global.get $export/c
+  call $export/div
   i32.add
   drop
   call $export/ns.two

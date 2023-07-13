@@ -14,6 +14,12 @@ function mul(a: i32, b: i32): i32 { // not exported as "mul"
 
 export { mul as renamed_mul };
 
+function div(a: i32, b: i32): i32 { // not exported as "div"
+  return a / b;
+}
+
+export { div as "\\Not\"A;Brand" };
+
 export const a: i32 = 1;
 
 const b: i32 = 2;

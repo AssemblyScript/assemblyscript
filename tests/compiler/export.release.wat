@@ -7,6 +7,7 @@
  (export "add" (func $export/add))
  (export "sub" (func $export/sub))
  (export "renamed_mul" (func $export/mul))
+ (export "\Not"A;Brand" (func $export/div))
  (export "a" (global $export/a))
  (export "b" (global $export/b))
  (export "renamed_c" (global $export/c))
@@ -25,5 +26,10 @@
   local.get $0
   local.get $1
   i32.mul
+ )
+ (func $export/div (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.div_s
  )
 )

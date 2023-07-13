@@ -2,13 +2,14 @@ import {
   add,
   sub as sub,
   renamed_mul as mul,
+  "\\Not\"A;Brand" as div,
   a,
   b as b,
   renamed_c as c,
   ns as renamed_ns
 } from "./export";
 
-add(a, b) + sub(b, c) + mul(c, a);
+add(a, b) + sub(b, c) + mul(c, a) + div(a, c);
 
 renamed_ns.two();
 
