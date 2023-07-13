@@ -86,6 +86,7 @@ import {
   ArrowKind,
 
   Expression,
+  ExportName,
   IdentifierExpression,
   LiteralKind,
   StringLiteralExpression,
@@ -163,8 +164,8 @@ class QueuedImport {
     public localFile: File,
     /** Identifier within the local file. */
     public localIdentifier: IdentifierExpression,
-    /** Identifier within the other file. Is an `import *` if not set. */
-    public foreignIdentifier: IdentifierExpression | null,
+    /** Name within the other file. Is an `import *` if not set. */
+    public foreignName: ExportName | null,
     /** Path to the other file. */
     public foreignPath: string,
     /** Alternative path to the other file. */
@@ -177,8 +178,8 @@ class QueuedExport {
   constructor(
     /** Identifier within the local file. */
     public localIdentifier: IdentifierExpression,
-    /** Identifier within the other file. */
-    public foreignIdentifier: IdentifierExpression,
+    /** Name within the other file. */
+    public foreignName: ExportName,
     /** Path to the other file if a re-export. */
     public foreignPath: string | null,
     /** Alternative path to the other file if a re-export. */
@@ -1170,12 +1171,12 @@ export class Program extends DiagnosticEmitter {
       while (i < queuedImports.length) {
         let queuedImport = queuedImports[i];
         let localIdentifier = queuedImport.localIdentifier;
-        let foreignIdentifier = queuedImport.foreignIdentifier;
+        let foreignName = queuedImport.foreignName;
         // File must be found here, as it would otherwise already have been reported by the parser
         let foreignFile = assert(this.lookupForeignFile(queuedImport.foreignPath, queuedImport.foreignPathAlt));
-        if (foreignIdentifier) { // i.e. import { foo [as bar] } from "./baz"
+        if (foreignName) { // i.e. import { foo [as bar] } from "./baz"
           let element = this.lookupForeign(
-            foreignIdentifier.text,
+            foreignName.text,
             foreignFile,
             queuedExports
           );
@@ -1210,11 +1211,11 @@ export class Program extends DiagnosticEmitter {
         // report queued imports we were unable to resolve
         for (let j = 0, l = queuedImports.length; j < l; ++j) {
           let queuedImport = queuedImports[j];
-          let foreignIdentifier = queuedImport.foreignIdentifier;
-          if (foreignIdentifier) {
+          let foreignName = queuedImport.foreignName;
+          if (foreignName) {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
-              foreignIdentifier.range, queuedImport.foreignPath, foreignIdentifier.text
+              foreignName.range, queuedImport.foreignPath, foreignName.text
             );
           }
         }
@@ -1257,8 +1258,8 @@ export class Program extends DiagnosticEmitter {
             } else {
               this.error(
                 DiagnosticCode.Module_0_has_no_exported_member_1,
-                queuedExport.foreignIdentifier.range,
-                file.internalName, queuedExport.foreignIdentifier.text
+                queuedExport.foreignName.range,
+                file.internalName, queuedExport.foreignName.text
               );
             }
           }

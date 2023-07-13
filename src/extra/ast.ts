@@ -976,7 +976,7 @@ export class ASTBuilder {
     this.visitIdentifierExpression(node.localName);
     if (node.exportedName.text != node.localName.text) {
       this.sb.push(" as ");
-      this.visitIdentifierExpression(node.exportedName);
+      this.visitNode(<Node><Object>node.exportedName);
     }
   }
 
@@ -1227,7 +1227,7 @@ export class ASTBuilder {
   visitImportDeclaration(node: ImportDeclaration): void {
     let externalName = node.foreignName;
     let name = node.name;
-    this.visitIdentifierExpression(externalName);
+    this.visitNode(<Node><Object>externalName);
     if (externalName.text != name.text) {
       this.sb.push(" as ");
       this.visitIdentifierExpression(name);

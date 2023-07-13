@@ -48,6 +48,7 @@ import {
   AssertionKind,
   CallExpression,
   ClassExpression,
+  ExportName,
   FunctionExpression,
   IdentifierExpression,
   StringLiteralExpression,
@@ -2646,14 +2647,16 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer
   ): ExportMember | null {
 
-    // before: Identifier ('as' Identifier)?
+    // before: Identifier ('as' (Identifier | StringLiteral))?
 
     if (tn.skipIdentifier(IdentifierHandling.Always)) {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      let asIdentifier: IdentifierExpression | null = null;
+      let exportName: ExportName | null = null;
       if (tn.skip(Token.As)) {
-        if (tn.skipIdentifier(IdentifierHandling.Always)) {
-          asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+        if (tn.skip(Token.StringLiteral)) {
+          exportName = Node.createStringLiteralExpression(tn.readString(), tn.range());
+        } else if (tn.skipIdentifier(IdentifierHandling.Always)) {
+          exportName = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
         } else {
           this.error(
             DiagnosticCode.Identifier_expected,
@@ -2662,11 +2665,11 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      if (asIdentifier) {
+      if (exportName) {
         return Node.createExportMember(
           identifier,
-          asIdentifier,
-          Range.join(identifier.range, asIdentifier.range)
+          exportName,
+          Range.join(identifier.range, exportName.range)
         );
       }
       return Node.createExportMember(
@@ -2812,41 +2815,52 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer
   ): ImportDeclaration | null {
 
-    // before: Identifier ('as' Identifier)?
+    // before either: Identifier ('as' Identifier)?
+    //            or: StringLiteral 'as' Identifier
 
-    if (tn.skipIdentifier(IdentifierHandling.Always)) {
-      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      let asIdentifier: IdentifierExpression | null = null;
-      if (tn.skip(Token.As)) {
-        if (tn.skipIdentifier()) {
-          asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-        } else {
-          this.error(
-            DiagnosticCode.Identifier_expected,
-            tn.range()
-          );
-          return null;
-        }
-      }
-      if (asIdentifier) {
-        return Node.createImportDeclaration(
-          identifier,
-          asIdentifier,
-          Range.join(identifier.range, asIdentifier.range)
-        );
-      }
-      return Node.createImportDeclaration(
-        identifier,
-        null,
-        identifier.range
-      );
+    let exportName: ExportName;
+    let localIdentifier: IdentifierExpression | null = null;
+    let needsAs = false;
+
+    if (tn.skip(Token.StringLiteral)) {
+      exportName = Node.createStringLiteralExpression(tn.readString(), tn.range());
+      needsAs = true;
+    } else if (tn.skipIdentifier(IdentifierHandling.Always)) {
+      localIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      exportName = localIdentifier;
     } else {
       this.error(
         DiagnosticCode.Identifier_expected,
         tn.range()
       );
+      return null;
     }
-    return null;
+
+    if (tn.skip(Token.As)) {
+      if (tn.skipIdentifier()) {
+        localIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      } else {
+        this.error(
+          DiagnosticCode.Identifier_expected,
+          tn.range()
+        );
+        return null;
+      }
+    } else if (needsAs) {
+      this.error(
+        DiagnosticCode.Identifier_expected,
+        tn.range()
+      );
+      return null;
+    }
+
+    return Node.createImportDeclaration(
+      exportName,
+      assert(localIdentifier),
+      exportName == assert(localIdentifier)
+        ? assert(localIdentifier).range
+        : Range.join(exportName.range, assert(localIdentifier).range)
+    );
   }
 
   parseExportImport(

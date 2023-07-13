@@ -531,7 +531,7 @@ export abstract class Node {
 
   static createExportMember(
     localName: IdentifierExpression,
-    exportedName: IdentifierExpression | null,
+    exportedName: ExportName | null,
     range: Range
   ): ExportMember {
     if (!exportedName) exportedName = localName;
@@ -570,11 +570,10 @@ export abstract class Node {
   }
 
   static createImportDeclaration(
-    foreignName: IdentifierExpression,
-    name: IdentifierExpression | null,
+    foreignName: ExportName,
+    name: IdentifierExpression,
     range: Range
   ): ImportDeclaration {
-    if (!name) name = foreignName;
     return new ImportDeclaration(name, foreignName, range);
   }
 
@@ -1126,8 +1125,17 @@ export class CommentNode extends Node {
 /** Base class of all expression nodes. */
 export abstract class Expression extends Node { }
 
+/** Interface for nodes representing export names. */
+export interface ExportName {
+  /** Name of the exported member. */
+  readonly text: string;
+
+  /** Source range. */
+  range: Range;
+}
+
 /** Represents an identifier expression. */
-export class IdentifierExpression extends Expression {
+export class IdentifierExpression extends Expression implements ExportName {
   constructor(
     /** Textual name. */
     public text: string,
@@ -1480,7 +1488,7 @@ export class TernaryExpression extends Expression {
 }
 
 /** Represents a string literal expression. */
-export class StringLiteralExpression extends LiteralExpression {
+export class StringLiteralExpression extends LiteralExpression implements ExportName {
   constructor(
     /** String value without quotes. */
     public value: string,
@@ -1488,6 +1496,10 @@ export class StringLiteralExpression extends LiteralExpression {
     range: Range
   ) {
     super(LiteralKind.String, range);
+  }
+
+  get text(): string {
+    return this.value;
   }
 }
 
@@ -1928,8 +1940,8 @@ export class ExportMember extends Node {
   constructor(
     /** Local identifier. */
     public localName: IdentifierExpression,
-    /** Exported identifier. */
-    public exportedName: IdentifierExpression,
+    /** Exported name. */
+    public exportedName: ExportName,
     /** Source range. */
     range: Range
   ) {
@@ -2120,8 +2132,8 @@ export class ImportDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
     name: IdentifierExpression,
-    /** Identifier being imported. */
-    public foreignName: IdentifierExpression,
+    /** Name being imported. */
+    public foreignName: ExportName,
     /** Source range. */
     range: Range
   ) {
