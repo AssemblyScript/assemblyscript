@@ -2957,7 +2957,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=4
+  i32.store $0
   local.get $0
   call $duplicate-fields/B2#constructor
   global.set $duplicate-fields/raz

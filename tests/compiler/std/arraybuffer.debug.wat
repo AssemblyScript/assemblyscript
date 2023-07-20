@@ -3376,13 +3376,13 @@
   (local $4 i32)
   (local $5 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 20
+  i32.const 24
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.const 20
+  i32.const 24
   memory.fill $0
   memory.size $0
   i32.const 16
@@ -3827,7 +3827,7 @@
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
-  i32.store $0 offset=16
+  i32.store $0 offset=20
   local.get $5
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
   local.set $5
@@ -3859,7 +3859,7 @@
   global.set $~lib/memory/__stack_pointer
   call $~lib/rt/itcms/__collect
   global.get $~lib/memory/__stack_pointer
-  i32.const 20
+  i32.const 24
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

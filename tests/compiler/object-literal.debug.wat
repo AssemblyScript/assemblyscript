@@ -4459,7 +4459,7 @@
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
-  i32.store $0 offset=8
+  i32.store $0
   local.get $5
   call $object-literal/Unmanaged#set:baz
   local.get $1

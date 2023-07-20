@@ -2542,7 +2542,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    local.get $0
-   i32.store $0 offset=8
+   i32.store $0
    local.get $2
    local.get $0
    i32.store $0 offset=4

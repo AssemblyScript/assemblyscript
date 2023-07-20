@@ -4342,7 +4342,7 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0 offset=8
+  i32.store $0 offset=4
   local.get $2
   local.get $0
   local.set $2
@@ -6541,7 +6541,7 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0 offset=8
+  i32.store $0 offset=4
   local.get $2
   i32.const 0
   i32.const 1

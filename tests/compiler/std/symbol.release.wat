@@ -2457,7 +2457,7 @@
         i32.store $0 offset=12
         local.get $11
         local.get $10
-        i32.store $0 offset=16
+        i32.store $0 offset=8
         local.get $2
         local.get $10
         i32.store $0
@@ -2581,7 +2581,7 @@
     i32.store $0 offset=16
     local.get $2
     i32.const 1056
-    i32.store $0 offset=4
+    i32.store $0
     local.get $3
     local.get $4
     i32.const 12
@@ -2792,7 +2792,7 @@
    if
     global.get $~lib/memory/__stack_pointer
     i32.const 1056
-    i32.store $0 offset=4
+    i32.store $0
     local.get $2
     i32.const 1056
     i32.store $0 offset=4
@@ -2930,7 +2930,7 @@
         local.get $4
         i32.load $0 offset=4
         local.tee $11
-        i32.store $0 offset=12
+        i32.store $0 offset=8
         local.get $2
         local.get $11
         i32.store $0 offset=4
@@ -3081,7 +3081,7 @@
     i32.store $0
     local.get $2
     i32.const 1056
-    i32.store $0 offset=4
+    i32.store $0
     local.get $3
     i32.const 1056
     i32.store $0 offset=4
@@ -3145,7 +3145,7 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner1
@@ -3158,9 +3158,6 @@
     local.tee $0
     i64.const 0
     i64.store $0
-    local.get $0
-    i32.const 0
-    i32.store $0 offset=8
     local.get $0
     global.get $~lib/symbol/stringToId
     local.tee $1
@@ -3287,7 +3284,7 @@
     i32.store $0
     global.get $~lib/memory/__stack_pointer
     i32.const 1056
-    i32.store $0 offset=8
+    i32.store $0 offset=4
     local.get $1
     local.get $0
     call $~lib/map/Map<usize,~lib/string/String>#set
@@ -3301,7 +3298,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $0
