@@ -151,7 +151,6 @@ async function runTest(basename) {
     config.features.forEach(feature => {
       if (!features.includes(feature) && !features.includes("*")) {
         missing_features.push(feature);
-        return; // from forEach
       }
       let featureConfig = featuresConfig[feature];
       if (featureConfig.asc_flags) {
@@ -166,13 +165,8 @@ async function runTest(basename) {
           if (v8_no_flags) v8_no_flags += " ";
           v8_no_flags += "--no-" + flag.substring(2);
         });
-        v8.setFlagsFromString(v8_flags);
       }
     });
-    if (missing_features.length) {
-      console.log("- " + stdoutColors.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
-      return prepareResult(SKIPPED, "feature not enabled: " + missing_features.join(", "));
-    }
   }
   if (config.asc_flags) {
     config.asc_flags.forEach(flag => { asc_flags.push(...flag.split(" ")); });
@@ -283,6 +277,13 @@ async function runTest(basename) {
       return prepareResult(FAILURE, error.message);
     }
     compileRelease.end(SUCCESS);
+
+    if (missing_features.length) {
+      console.log("- " + stdoutColors.yellow("instantiate SKIPPED") + ": " + missing_features.join(", ") + " not enabled\n");
+      return prepareResult(SKIPPED, "feature not enabled: " + missing_features.join(", "));
+    } else if (v8_flags) {
+      v8.setFlagsFromString(v8_flags);
+    }
 
     const debugBuffer = fs.readFileSync(path.join(basedir, basename + ".debug.wasm"));
     const releaseBuffer = stdout.toBuffer();
