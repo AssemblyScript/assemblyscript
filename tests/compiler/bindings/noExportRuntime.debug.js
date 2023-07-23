@@ -159,7 +159,7 @@ export const {
   isArrayOfArray,
   returnsArrayOfArray,
   takesNonPlainObject,
-  takesFunction
+  takesFunction,
 } = await (async url => instantiate(
   await (async () => {
     try { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)); }
