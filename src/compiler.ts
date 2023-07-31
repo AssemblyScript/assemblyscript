@@ -9870,8 +9870,10 @@ export class Compiler extends DiagnosticEmitter {
     let targetFunction = this.currentFlow.targetFunction;
     let source = range.source;
     if (source.debugInfoIndex < 0) source.debugInfoIndex = this.module.addDebugInfoFile(source.normalizedPath);
-    range.debugInfoRef = expr;
-    targetFunction.debugLocations.push(range);
+    // It's possible that an `expr` is seen multiple times, for example when
+    // first adding debug information for an inner expression and later on for
+    // an expression supposedly wrapping it, where the wrapping became a noop.
+    targetFunction.debugLocations.set(expr, range);
   }
 
   /** Checks whether a particular function signature is supported. */
