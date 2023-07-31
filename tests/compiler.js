@@ -80,10 +80,11 @@ if (args.help) {
 const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
 const featuresConfig = require("./features.json");
 const basedir = path.join(dirname, "compiler");
+process.chdir(basedir);
 
 // Gets a list of all relevant tests
 function getTests() {
-  let tests = glob.sync("**/!(_*).ts", { cwd: basedir })
+  let tests = glob.sync("**/!(_*).ts")
     .map(name => name.replace(/\.ts$/, ""))
     .filter(name => !name.endsWith(".d") && !name.includes("node_modules"));
   if (argv.length) { // run matching tests only
@@ -134,6 +135,8 @@ async function runTest(basename) {
   const stdout = asc.createMemoryStream();
   const stderr = asc.createMemoryStream(chunk => process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  ")));
   stderr.isTTY = true;
+  const dummy = new Map();
+  const writeFile = Map.prototype.set.bind(dummy);
   let asc_flags = [];
   let asc_rtrace = !!config.asc_rtrace;
   let v8_flags = "";
@@ -143,15 +146,111 @@ async function runTest(basename) {
   // Makes sure to reset the environment after
   function prepareResult(code, message = null) {
     if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
-    if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".debug.wasm"), err => { /* nop */ });
+    // Delete the .wasm files in case the subsequent run doesn't specify the
+    // --createBinary flag, thereby preventing confusion. Also, the .debug.wasm
+    // file is used by the bindings/esm test.
+    if (!args.createBinary) {
+      fs.unlink(basename + ".debug.wasm", err => { /* nop */ });
+      fs.unlink(basename + ".release.wasm", err => { /* nop */ });
+    }
     return { code, message };
   }
+
+  function afterCompile(mode) {
+    // The ESM bindings test requires the .wasm file to be present. The file is
+    // promptly deleted after the test has completed, unless --createBinary is
+    // specified.
+    {
+      const filename = `${basename}.${mode}.wasm`;
+      fs.writeFileSync(filename, dummy.get(filename));
+    }
+
+    const compareFixture = section("compare fixture");
+    const fixtureExtensions = ["wat", "js", "d.ts"];
+
+    if (args.create) {
+      for (const extension of fixtureExtensions) {
+        const filename = `${basename}.${mode}.${extension}`;
+        if (!dummy.has(filename)) {
+          fs.unlink(filename, err => { /* nop */ });
+          continue;
+        }
+        fs.writeFileSync(filename, dummy.get(filename));
+        console.log("  " + stdoutColors.yellow(`Created fixture ${filename}`));
+      }
+      compareFixture.end(SKIPPED);
+      return;
+    }
+
+    // Displaying the diffs in console for release fixtures isn't usually
+    // meaningful, so release fixtures are compared as if --noDiff was passed.
+    if (args.noDiff || mode === "release") {
+      for (const extension of fixtureExtensions) {
+        const filename = `${basename}.${mode}.${extension}`;
+        const actual = (
+          dummy.has(filename) &&
+          dummy.get(filename).replace(/\r\n/g, "\n")
+        );
+        const expected = (
+          fs.existsSync(filename) &&
+          fs.readFileSync(filename, { encoding: "utf8" }).replace(/\r\n/g, "\n")
+        );
+
+        // If a fixture/generated file is missing, false will be compared to a
+        // string. If both are missing, nothing happens below (as it should).
+        if (actual !== expected) {
+          compareFixture.end(FAILURE);
+          return prepareResult(FAILURE, "fixture mismatch");
+        }
+      }
+      compareFixture.end(SUCCESS);
+      return;
+    }
+
+    let failed = false;
+
+    for (const extension of fixtureExtensions) {
+      const filename = `${basename}.${mode}.${extension}`;
+      const actualExists = dummy.has(filename);
+      const expectedExists = fs.existsSync(filename);
+
+      if (!actualExists && !expectedExists) {
+        // Neither exists, which is perfectly fine. Carry on.
+        continue;
+      } else if (actualExists != expectedExists) {
+        const message = actualExists
+          ? `Fixture ${filename} is missing!`
+          : `File ${filename} was not generated!`;
+
+        console.log("  " + stdoutColors.yellow(message));
+        failed = true;
+        continue;
+      }
+
+      const actual = dummy.has(filename) && dummy.get(filename).replace(/\r\n/g, "\n");
+      const expected = (
+        fs.existsSync(filename) &&
+        fs.readFileSync(filename, { encoding: "utf8" }).replace(/\r\n/g, "\n")
+      );
+
+      const diffResult = diff(filename, expected, actual);
+      if (diffResult !== null) {
+        console.log(diffResult);
+        failed = true;
+      }
+    }
+
+    if (failed) {
+      compareFixture.end(FAILURE);
+      return prepareResult(FAILURE, "fixture mismatch");
+    }
+    compareFixture.end(SUCCESS);
+  }  
 
   if (config.features) {
     config.features.forEach(feature => {
       if (!features.includes(feature) && !features.includes("*")) {
         missing_features.push(feature);
-        return; // from forEach
       }
       let featureConfig = featuresConfig[feature];
       if (featureConfig.asc_flags) {
@@ -166,13 +265,8 @@ async function runTest(basename) {
           if (v8_no_flags) v8_no_flags += " ";
           v8_no_flags += "--no-" + flag.substring(2);
         });
-        v8.setFlagsFromString(v8_flags);
       }
     });
-    if (missing_features.length) {
-      console.log("- " + stdoutColors.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
-      return prepareResult(SKIPPED, "feature not enabled: " + missing_features.join(", "));
-    }
   }
   if (config.asc_flags) {
     config.asc_flags.forEach(flag => { asc_flags.push(...flag.split(" ")); });
@@ -182,15 +276,14 @@ async function runTest(basename) {
   {
     const cmd = [
       basename + ".ts",
-      "--baseDir", basedir,
       "--debug",
-      "--textFile" // -> stdout
+      "--outFile", basename + ".debug.wasm",
+      "--textFile", basename + ".debug.wat"
     ];
     if (asc_flags) cmd.push(...asc_flags);
-    cmd.push("--outFile", basename + ".debug.wasm");
     if (args.noColors) cmd.push("--noColors");
     const compileDebug = section("compile debug");
-    const { error } = await asc.main(cmd, { stdout, stderr });
+    const { error } = await asc.main(cmd, { stdout, stderr, writeFile });
 
     let expectStderr = config.stderr;
     if (error) {
@@ -230,50 +323,28 @@ async function runTest(basename) {
       return prepareResult(SUCCESS);
     }
 
-    const compareFixture = section("compare fixture");
-    const actual = stdout.toString().replace(/\r\n/g, "\n");
-    if (args.create) {
-      fs.writeFileSync(path.join(basedir, basename + ".debug.wat"), actual, { encoding: "utf8" });
-      console.log("  " + stdoutColors.yellow("Created fixture"));
-      compareFixture.end(SKIPPED);
-    } else {
-      const expected = fs.readFileSync(path.join(basedir, basename + ".debug.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
-      if (args.noDiff) {
-        if (expected != actual) {
-          compareFixture.end(FAILURE);
-          return prepareResult(FAILURE, "fixture mismatch");
-        }
-      } else {
-        let diffs = diff(basename + ".debug.wat", expected, actual);
-        if (diffs !== null) {
-          console.log(diffs);
-          compareFixture.end(FAILURE);
-          return prepareResult(FAILURE, "fixture mismatch");
-        }
-      }
-      compareFixture.end(SUCCESS);
-    }
+    const afterCompileResult = afterCompile("debug");
+    if (afterCompileResult) return afterCompileResult;
   }
 
   stdout.length = 0;
   stderr.length = 0;
 
-  const gluePath = path.join(basedir, basename + ".js");
+  const gluePath = basename + ".js";
   const glue = fs.existsSync(gluePath) ? await import(pathToFileURL(gluePath)) : {};
 
   // Build release
   {
     const cmd = [
       basename + ".ts",
-      "--baseDir", basedir,
-      "--outFile", // -> stdout
+      "--outFile", basename + ".release.wasm",
+      "--textFile", basename + ".release.wat",
       "-O"
     ];
     if (asc_flags) cmd.push(...asc_flags);
-    if (args.create) cmd.push("--textFile", basename + ".release.wat");
     if (args.noColors) cmd.push("--noColors");
     const compileRelease = section("compile release");
-    const { error } = await asc.main(cmd, { stdout: stdout, stderr: stderr });
+    const { error } = await asc.main(cmd, { stdout, stderr, writeFile });
 
     if (error) {
       stderr.write("---\n");
@@ -284,8 +355,18 @@ async function runTest(basename) {
     }
     compileRelease.end(SUCCESS);
 
-    const debugBuffer = fs.readFileSync(path.join(basedir, basename + ".debug.wasm"));
-    const releaseBuffer = stdout.toBuffer();
+    const afterCompileResult = afterCompile("release");
+    if (afterCompileResult) return afterCompileResult;
+
+    if (missing_features.length) {
+      console.log("- " + stdoutColors.yellow("instantiate SKIPPED") + ": " + missing_features.join(", ") + " not enabled\n");
+      return prepareResult(SKIPPED, "feature not enabled: " + missing_features.join(", "));
+    } else if (v8_flags) {
+      v8.setFlagsFromString(v8_flags);
+    }
+
+    const debugBuffer = dummy.get(basename + ".debug.wasm");
+    const releaseBuffer = dummy.get(basename + ".release.wasm");
     const instantiateDebug = section("instantiate debug");
     if (config.skipInstantiate) {
       instantiateDebug.end(SKIPPED);
@@ -312,7 +393,6 @@ async function runTest(basename) {
   if (asc_rtrace) {
     const cmd = [
       basename + ".ts",
-      "--baseDir", basedir,
       "--outFile", // -> stdout
       "--debug",
       "--use", "ASC_RTRACE=1",
