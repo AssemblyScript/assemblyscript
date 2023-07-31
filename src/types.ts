@@ -1051,21 +1051,23 @@ export class Signature {
   isAssignableTo(target: Signature, checkCompatibleOverride: bool = false): bool {
     let thisThisType = this.thisType;
     let targetThisType = target.thisType;
-    if (checkCompatibleOverride) {
-      // check kind of `this` type
-      if (thisThisType) {
-        if (!targetThisType || !thisThisType.canExtendOrImplement(targetThisType)) {
+
+    if (
+      (thisThisType == null && targetThisType != null) ||
+      (thisThisType != null && targetThisType == null)
+    ) {
+      return false;
+    }else if(thisThisType != null && targetThisType != null){
+      if(checkCompatibleOverride){
+        // check kind of `this` type
+        if(!thisThisType.canExtendOrImplement(targetThisType)){
           return false;
         }
-      } else if (targetThisType) {
-        return false;
-      }
-    } else {
-      // check `this` type (invariant)
-      if (thisThisType) {
-        if (targetThisType != targetThisType) return false;
-      } else if (targetThisType) {
-        return false;
+      }else{
+        // check `this` type (invariant)
+        if(!targetThisType.isAssignableTo(thisThisType)){
+          return false;
+        }
       }
     }
 

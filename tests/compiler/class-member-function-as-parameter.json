@@ -1,0 +1,8 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "TS2322: Type '(this: class-member-function-as-parameter/C, i32) => i32' is not assignable to type '(i32) => i32'.",
+    "TS2322: Type '() => void' is not assignable to type '(this: class-member-function-as-parameter/B) => void'.",
+    "EOF"
+  ]
+}

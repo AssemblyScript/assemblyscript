@@ -6611,7 +6611,9 @@ export class Compiler extends DiagnosticEmitter {
         if (!overrideInstance.is(CommonFlags.Compiled)) continue; // errored
         let overrideType = overrideInstance.type;
         let originalType = instance.type;
-        if (!overrideType.isAssignableTo(originalType)) {
+
+        assert(originalType.getSignature() != null && overrideType.getSignature() != null);
+        if (!(overrideType.getSignature() as Signature).isAssignableTo(originalType.getSignature() as Signature, true)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             overrideInstance.identifierNode.range, overrideType.toString(), originalType.toString()
