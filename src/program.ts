@@ -116,6 +116,7 @@ import {
 
 import {
   Module,
+  ExpressionRef,
   FunctionRef,
   MemorySegment,
   getFunctionName
@@ -3749,8 +3750,8 @@ export class Function extends TypedElement {
   contextualTypeArguments: Map<string,Type> | null;
   /** Default control flow. */
   flow!: Flow;
-  /** Remembered debug locations. */
-  debugLocations: Range[] = [];
+  /** Ordered debug locations by Binaryen expression reference. */
+  debugLocations: Map<ExpressionRef, Range> = new Map();
   /** Function reference, if compiled. */
   ref: FunctionRef = 0;
   /** Varargs stub for calling with omitted arguments. */
@@ -3918,12 +3919,13 @@ export class Function extends TypedElement {
   addDebugInfo(module: Module, ref: FunctionRef): void {
     if (this.program.options.sourceMap) {
       let debugLocations = this.debugLocations;
-      for (let i = 0, k = debugLocations.length; i < k; ++i) {
-        let range = debugLocations[i];
+      for (let _keys = Map_keys(debugLocations), i = 0, k = _keys.length; i < k; ++i) {
+        let expressionRef = _keys[i];
+        let range = assert(debugLocations.get(expressionRef));
         let source = range.source;
         module.setDebugLocation(
           ref,
-          range.debugInfoRef,
+          expressionRef,
           source.debugInfoIndex,
           source.lineAt(range.start),
           source.columnAt() - 1 // source maps are 0-based
