@@ -307,6 +307,15 @@ function removeBlock(root: Root, block: Block): void {
   // must perform those updates.
 }
 
+function roundSize(size: usize): usize {
+  const halfMaxSize = BLOCK_MAXSIZE >> 1; // don't round last fl
+  const inv: usize = sizeof<usize>() * 8 - 1;
+  const invRound = inv - SL_BITS;
+  return size < halfMaxSize
+    ? size + (1 << (invRound - clz<usize>(size))) - 1
+    : size;
+}
+
 /** Searches for a free block of at least the specified size. */
 function searchBlock(root: Root, size: usize): Block | null {
   // size was already asserted by caller
@@ -317,13 +326,8 @@ function searchBlock(root: Root, size: usize): Block | null {
     fl = 0;
     sl = <u32>(size >> AL_BITS);
   } else {
-    const halfMaxSize = BLOCK_MAXSIZE >> 1; // don't round last fl
-    const inv: usize = sizeof<usize>() * 8 - 1;
-    const invRound = inv - SL_BITS;
-    let requestSize = size < halfMaxSize
-      ? size + (1 << (invRound - clz<usize>(size))) - 1
-      : size;
-    fl = inv - clz<usize>(requestSize);
+    const requestSize = roundSize(size);
+    fl = sizeof<usize>() * 8 - 1 - clz<usize>(requestSize);
     sl = <u32>((requestSize >> (fl - SL_BITS)) ^ (1 << SL_BITS));
     fl -= SB_BITS - 1;
   }
@@ -428,10 +432,8 @@ function growMemory(root: Root, size: usize): void {
     return;
   }
   // Here, both rounding performed in searchBlock ...
-  const halfMaxSize = BLOCK_MAXSIZE >> 1;
-  if (size < halfMaxSize) { // don't round last fl
-    const invRound = (sizeof<usize>() * 8 - 1) - SL_BITS;
-    size += (1 << (invRound - clz<usize>(size))) - 1;
+  if (size >= SB_SIZE) {
+    size = roundSize(size);
   }
   // and additional BLOCK_OVERHEAD must be taken into account. If we are going
   // to merge with the tail block, that's one time, otherwise it's two times.

@@ -678,7 +678,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 378
+   i32.const 382
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -724,7 +724,7 @@
    if
     i32.const 0
     i32.const 32
-    i32.const 385
+    i32.const 389
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -757,7 +757,7 @@
    if
     i32.const 0
     i32.const 32
-    i32.const 398
+    i32.const 402
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -999,13 +999,33 @@
   if
    i32.const 96
    i32.const 32
-   i32.const 459
+   i32.const 461
    i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
   local.get $size
   call $~lib/rt/tlsf/computeSize
+  return
+ )
+ (func $~lib/rt/tlsf/roundSize (param $size i32) (result i32)
+  local.get $size
+  i32.const 536870910
+  i32.lt_u
+  if (result i32)
+   local.get $size
+   i32.const 1
+   i32.const 27
+   local.get $size
+   i32.clz
+   i32.sub
+   i32.shl
+   i32.add
+   i32.const 1
+   i32.sub
+  else
+   local.get $size
+  end
   return
  )
  (func $~lib/rt/tlsf/searchBlock (param $root i32) (param $size i32) (result i32)
@@ -1037,24 +1057,13 @@
    local.set $sl
   else
    local.get $size
-   i32.const 536870910
-   i32.lt_u
-   if (result i32)
-    local.get $size
-    i32.const 1
-    i32.const 27
-    local.get $size
-    i32.clz
-    i32.sub
-    i32.shl
-    i32.add
-    i32.const 1
-    i32.sub
-   else
-    local.get $size
-   end
+   call $~lib/rt/tlsf/roundSize
    local.set $requestSize
-   i32.const 31
+   i32.const 4
+   i32.const 8
+   i32.mul
+   i32.const 1
+   i32.sub
    local.get $requestSize
    i32.clz
    i32.sub
@@ -1092,7 +1101,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 330
+   i32.const 334
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1163,7 +1172,7 @@
     if
      i32.const 0
      i32.const 32
-     i32.const 343
+     i32.const 347
      i32.const 18
      call $~lib/builtins/abort
      unreachable
@@ -1227,19 +1236,11 @@
   i32.const 0
   drop
   local.get $size
-  i32.const 536870910
-  i32.lt_u
+  i32.const 256
+  i32.ge_u
   if
    local.get $size
-   i32.const 1
-   i32.const 27
-   local.get $size
-   i32.clz
-   i32.sub
-   i32.shl
-   i32.const 1
-   i32.sub
-   i32.add
+   call $~lib/rt/tlsf/roundSize
    local.set $size
   end
   memory.size $0
@@ -1328,7 +1329,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 357
+   i32.const 361
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1443,7 +1444,7 @@
    if
     i32.const 0
     i32.const 32
-    i32.const 497
+    i32.const 499
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -1463,7 +1464,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 499
+   i32.const 501
    i32.const 14
    call $~lib/builtins/abort
    unreachable
