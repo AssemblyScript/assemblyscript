@@ -44,6 +44,7 @@
  (type $none_=>_i32 (func (result i32)))
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
+ (type $i64_=>_i64 (func (param i64) (result i64)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
@@ -4805,20 +4806,73 @@
   f64.const 2
   f64.eq
  )
+ (func $~lib/polyfills/bswap<u64> (param $value i64) (result i64)
+  (local $a i64)
+  (local $b i64)
+  (local $v i64)
+  i32.const 1
+  drop
+  i32.const 8
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $value
+  i64.const 8
+  i64.shr_u
+  i64.const 71777214294589695
+  i64.and
+  local.set $a
+  local.get $value
+  i64.const 71777214294589695
+  i64.and
+  i64.const 8
+  i64.shl
+  local.set $b
+  local.get $a
+  local.get $b
+  i64.or
+  local.set $v
+  local.get $v
+  i64.const 16
+  i64.shr_u
+  i64.const 281470681808895
+  i64.and
+  local.set $a
+  local.get $v
+  i64.const 281470681808895
+  i64.and
+  i64.const 16
+  i64.shl
+  local.set $b
+  local.get $a
+  local.get $b
+  i64.or
+  i64.const 32
+  i64.rotr
+  return
+ )
  (func $~lib/util/bytes/REVERSE<u8> (param $ptr i32) (param $len i32)
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
   (local $front i32)
   (local $back i32)
-  (local $7 i64)
-  (local $8 i64)
   (local $temp i64)
-  (local $10 i64)
-  (local $11 i64)
-  (local $front|12 i32)
-  (local $back|13 i32)
-  (local $temp|14 i32)
+  (local $front|8 i32)
+  (local $back|9 i32)
+  (local $temp|10 i32)
   local.get $len
   i32.const 1
   i32.gt_u
@@ -4860,58 +4914,12 @@
      local.set $back
      local.get $front
      i64.load $0
-     local.tee $7
-     i64.const 8
-     i64.shr_u
-     i64.const 71777214294589695
-     i64.and
-     local.get $7
-     i64.const 71777214294589695
-     i64.and
-     i64.const 8
-     i64.shl
-     i64.or
-     local.tee $8
-     i64.const 16
-     i64.shr_u
-     i64.const 281470681808895
-     i64.and
-     local.get $8
-     i64.const 281470681808895
-     i64.and
-     i64.const 16
-     i64.shl
-     i64.or
-     i64.const 32
-     i64.rotr
+     call $~lib/polyfills/bswap<u64>
      local.set $temp
      local.get $front
      local.get $back
      i64.load $0
-     local.tee $10
-     i64.const 8
-     i64.shr_u
-     i64.const 71777214294589695
-     i64.and
-     local.get $10
-     i64.const 71777214294589695
-     i64.and
-     i64.const 8
-     i64.shl
-     i64.or
-     local.tee $11
-     i64.const 16
-     i64.shr_u
-     i64.const 281470681808895
-     i64.and
-     local.get $11
-     i64.const 281470681808895
-     i64.and
-     i64.const 16
-     i64.shl
-     i64.or
-     i64.const 32
-     i64.rotr
+     call $~lib/polyfills/bswap<u64>
      i64.store $0
      local.get $back
      local.get $temp
@@ -4941,7 +4949,7 @@
      i32.const 0
      i32.shl
      i32.add
-     local.set $front|12
+     local.set $front|8
      local.get $ptr
      local.get $tail
      local.get $i
@@ -4949,16 +4957,16 @@
      i32.const 0
      i32.shl
      i32.add
-     local.set $back|13
-     local.get $front|12
+     local.set $back|9
+     local.get $front|8
      i32.load8_u $0
-     local.set $temp|14
-     local.get $front|12
-     local.get $back|13
+     local.set $temp|10
+     local.get $front|8
+     local.get $back|9
      i32.load8_u $0
      i32.store8 $0
-     local.get $back|13
-     local.get $temp|14
+     local.get $back|9
+     local.get $temp|10
      i32.store8 $0
      local.get $i
      i32.const 1
