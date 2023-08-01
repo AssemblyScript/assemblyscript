@@ -3661,7 +3661,7 @@
      local.set $14
      global.get $~lib/memory/__stack_pointer
      local.get $14
-     i32.store $0 offset=16
+     i32.store $0 offset=8
      local.get $14
      call $~lib/map/MapEntry<~lib/string/String,usize>#set:key
      local.get $newEntry
@@ -3924,7 +3924,7 @@
    local.set $8
    global.get $~lib/memory/__stack_pointer
    local.get $8
-   i32.store $0 offset=4
+   i32.store $0
    local.get $8
    call $~lib/map/MapEntry<~lib/string/String,usize>#set:key
    i32.const 1
@@ -4278,7 +4278,7 @@
      local.set $14
      global.get $~lib/memory/__stack_pointer
      local.get $14
-     i32.store $0 offset=12
+     i32.store $0 offset=8
      local.get $14
      call $~lib/map/MapEntry<usize,~lib/string/String>#set:value
      local.get $oldEntryKey
@@ -4416,7 +4416,7 @@
    local.set $8
    global.get $~lib/memory/__stack_pointer
    local.get $8
-   i32.store $0 offset=4
+   i32.store $0
    local.get $8
    call $~lib/map/MapEntry<usize,~lib/string/String>#set:value
    i32.const 1
@@ -4536,7 +4536,7 @@
    local.set $8
    global.get $~lib/memory/__stack_pointer
    local.get $8
-   i32.store $0 offset=4
+   i32.store $0
    local.get $8
    call $~lib/map/MapEntry<usize,~lib/string/String>#set:value
    i32.const 1
@@ -4603,16 +4603,13 @@
   (local $id i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0 offset=8
   global.get $~lib/symbol/stringToId
   local.set $3
   global.get $~lib/memory/__stack_pointer
@@ -4642,7 +4639,7 @@
    call $~lib/map/Map<~lib/string/String,usize>#get
    local.set $3
    global.get $~lib/memory/__stack_pointer
-   i32.const 12
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $3
@@ -4686,14 +4683,14 @@
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $3
-  i32.store $0 offset=8
+  i32.store $0 offset=4
   local.get $3
   call $~lib/map/Map<usize,~lib/string/String>#set
   drop
   local.get $id
   local.set $3
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3

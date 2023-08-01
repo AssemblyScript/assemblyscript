@@ -3,15 +3,12 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i64_=>_i32 (func (param i32 i32 i64) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
- (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
- (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -20,28 +17,27 @@
  (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
- (global $~lib/rt/__rtti_base i32 (i32.const 688))
- (global $~lib/memory/__data_end i32 (i32.const 716))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33484))
- (global $~lib/memory/__heap_base i32 (i32.const 33484))
+ (global $~lib/rt/__rtti_base i32 (i32.const 480))
+ (global $~lib/memory/__data_end i32 (i32.const 504))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33272))
+ (global $~lib/memory/__heap_base i32 (i32.const 33272))
  (memory $0 1)
- (data $0 (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
- (data $1 (i32.const 60) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data $2 (i32.const 108) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data $3 (i32.const 172) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $4 (i32.const 240) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $5 (i32.const 272) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $6 (i32.const 300) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
- (data $7 (i32.const 364) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data $8 (i32.const 416) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $9 (i32.const 444) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $10 (i32.const 508) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $11 (i32.const 636) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\001\006\009\009\00.\00t\00s\00")
- (data $12 (i32.const 688) "\06\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00\02A\00\00")
+ (data $0 (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data $1 (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $2 (i32.const 144) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $3 (i32.const 176) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $4 (i32.const 204) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
+ (data $5 (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data $6 (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $7 (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $8 (i32.const 412) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00r\00t\00/\00i\00s\00s\00u\00e\00-\002\007\001\009\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $9 (i32.const 480) "\05\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -110,7 +106,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 192
+     i32.const 96
      i32.const 160
      i32.const 16
      call $~lib/builtins/abort
@@ -180,7 +176,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 192
+    i32.const 96
     i32.const 128
     i32.const 18
     call $~lib/builtins/abort
@@ -197,7 +193,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 96
    i32.const 132
    i32.const 16
    call $~lib/builtins/abort
@@ -227,8 +223,8 @@
   i32.load $0
   i32.gt_u
   if
-   i32.const 320
-   i32.const 384
+   i32.const 224
+   i32.const 288
    i32.const 21
    i32.const 28
    call $~lib/builtins/abort
@@ -296,7 +292,7 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 192
+    i32.const 96
     i32.const 148
     i32.const 30
     call $~lib/builtins/abort
@@ -448,7 +444,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 268
    i32.const 14
    call $~lib/builtins/abort
@@ -468,7 +464,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 270
    i32.const 14
    call $~lib/builtins/abort
@@ -531,7 +527,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 284
    i32.const 14
    call $~lib/builtins/abort
@@ -684,7 +680,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 201
    i32.const 14
    call $~lib/builtins/abort
@@ -701,7 +697,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 203
    i32.const 14
    call $~lib/builtins/abort
@@ -790,7 +786,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 464
+    i32.const 368
     i32.const 221
     i32.const 16
     call $~lib/builtins/abort
@@ -833,7 +829,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 233
    i32.const 14
    call $~lib/builtins/abort
@@ -851,7 +847,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 234
    i32.const 14
    call $~lib/builtins/abort
@@ -919,7 +915,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 251
    i32.const 14
    call $~lib/builtins/abort
@@ -1036,7 +1032,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 382
    i32.const 14
    call $~lib/builtins/abort
@@ -1082,7 +1078,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 464
+    i32.const 368
     i32.const 389
     i32.const 16
     call $~lib/builtins/abort
@@ -1115,7 +1111,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 464
+    i32.const 368
     i32.const 402
     i32.const 5
     call $~lib/builtins/abort
@@ -1359,7 +1355,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 562
    i32.const 3
    call $~lib/builtins/abort
@@ -1579,7 +1575,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 192
+     i32.const 96
      i32.const 229
      i32.const 20
      call $~lib/builtins/abort
@@ -1687,8 +1683,8 @@
   i32.const 1073741820
   i32.gt_u
   if
-   i32.const 128
-   i32.const 464
+   i32.const 32
+   i32.const 368
    i32.const 461
    i32.const 29
    call $~lib/builtins/abort
@@ -1790,7 +1786,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 334
    i32.const 14
    call $~lib/builtins/abort
@@ -1861,7 +1857,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 464
+     i32.const 368
      i32.const 347
      i32.const 18
      call $~lib/builtins/abort
@@ -2018,7 +2014,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 361
    i32.const 14
    call $~lib/builtins/abort
@@ -2133,7 +2129,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 464
+    i32.const 368
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -2153,7 +2149,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 368
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -2201,8 +2197,8 @@
   i32.const 1073741804
   i32.ge_u
   if
-   i32.const 128
-   i32.const 192
+   i32.const 32
+   i32.const 96
    i32.const 261
    i32.const 31
    call $~lib/builtins/abort
@@ -2247,201 +2243,67 @@
   local.get $ptr
   return
  )
- (func $~lib/rt/itcms/__link (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
-  (local $child i32)
-  (local $parent i32)
-  (local $parentColor i32)
-  local.get $childPtr
-  i32.eqz
-  if
-   return
-  end
-  i32.const 1
+ (func $rt/issue-2719/issue2719_T#set:v (param $this i32) (param $v i32)
+  local.get $this
+  local.get $v
+  i32.store $0
+ )
+ (func $~lib/rt/itcms/__collect
+  i32.const 0
   drop
-  local.get $parentPtr
-  i32.eqz
+  global.get $~lib/rt/itcms/state
+  i32.const 0
+  i32.gt_s
   if
-   i32.const 0
-   i32.const 192
-   i32.const 295
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $childPtr
-  i32.const 20
-  i32.sub
-  local.set $child
-  local.get $child
-  call $~lib/rt/itcms/Object#get:color
-  global.get $~lib/rt/itcms/white
-  i32.eq
-  if
-   local.get $parentPtr
-   i32.const 20
-   i32.sub
-   local.set $parent
-   local.get $parent
-   call $~lib/rt/itcms/Object#get:color
-   local.set $parentColor
-   local.get $parentColor
-   global.get $~lib/rt/itcms/white
-   i32.eqz
-   i32.eq
-   if
-    local.get $expectMultiple
+   loop $while-continue|0
+    global.get $~lib/rt/itcms/state
+    i32.const 0
+    i32.ne
     if
-     local.get $parent
-     call $~lib/rt/itcms/Object#makeGray
-    else
-     local.get $child
-     call $~lib/rt/itcms/Object#makeGray
-    end
-   else
-    local.get $parentColor
-    i32.const 3
-    i32.eq
-    if (result i32)
-     global.get $~lib/rt/itcms/state
-     i32.const 1
-     i32.eq
-    else
-     i32.const 0
-    end
-    if
-     local.get $child
-     call $~lib/rt/itcms/Object#makeGray
+     call $~lib/rt/itcms/step
+     drop
+     br $while-continue|0
     end
    end
   end
- )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:buffer (param $this i32) (param $buffer i32)
-  local.get $this
-  local.get $buffer
-  i32.store $0
-  local.get $this
-  local.get $buffer
+  call $~lib/rt/itcms/step
+  drop
+  loop $while-continue|1
+   global.get $~lib/rt/itcms/state
+   i32.const 0
+   i32.ne
+   if
+    call $~lib/rt/itcms/step
+    drop
+    br $while-continue|1
+   end
+  end
+  global.get $~lib/rt/itcms/total
+  i64.extend_i32_u
+  i32.const 200
+  i64.extend_i32_u
+  i64.mul
+  i64.const 100
+  i64.div_u
+  i32.wrap_i64
+  i32.const 1024
+  i32.add
+  global.set $~lib/rt/itcms/threshold
   i32.const 0
-  call $~lib/rt/itcms/__link
+  drop
+  i32.const 0
+  drop
  )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:dataStart (param $this i32) (param $dataStart i32)
-  local.get $this
-  local.get $dataStart
-  i32.store $0 offset=4
- )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:byteLength (param $this i32) (param $byteLength i32)
-  local.get $this
-  local.get $byteLength
-  i32.store $0 offset=8
- )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:length_ (param $this i32) (param $length_ i32)
-  local.get $this
-  local.get $length_
-  i32.store $0 offset=12
- )
- (func $issues/1699/MultiAssignmentTest#set:test (param $this i32) (param $test i32)
-  local.get $this
-  local.get $test
-  i32.store $0
- )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:length_ (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
- )
- (func $~lib/arraybuffer/ArrayBufferView#get:byteLength (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=8
- )
- (func $~lib/arraybuffer/ArrayBufferView#get:buffer (param $this i32) (result i32)
+ (func $rt/issue-2719/issue2719_T#get:v (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/rt/itcms/Object#get:rtSize (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=16
- )
- (func $~lib/rt/itcms/__renew (param $oldPtr i32) (param $size i32) (result i32)
-  (local $oldObj i32)
-  (local $newPtr i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $oldPtr
-  i32.const 20
-  i32.sub
-  local.set $oldObj
-  local.get $size
-  local.get $oldObj
-  call $~lib/rt/common/BLOCK#get:mmInfo
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.const 16
-  i32.sub
-  i32.le_u
-  if
-   local.get $oldObj
-   local.get $size
-   call $~lib/rt/itcms/Object#set:rtSize
-   local.get $oldPtr
-   return
-  end
-  local.get $size
-  local.get $oldObj
-  call $~lib/rt/itcms/Object#get:rtId
-  call $~lib/rt/itcms/__new
-  local.set $newPtr
-  local.get $newPtr
-  local.get $oldPtr
-  local.get $size
-  local.tee $4
-  local.get $oldObj
-  call $~lib/rt/itcms/Object#get:rtSize
-  local.tee $5
-  local.get $4
-  local.get $5
-  i32.lt_u
-  select
-  memory.copy $0 $0
-  local.get $newPtr
-  return
- )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:dataStart (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=4
- )
- (func $start:issues/1699
-  memory.size $0
-  i32.const 16
-  i32.shl
-  global.get $~lib/memory/__heap_base
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 240
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 272
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 416
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/fromSpace
-  call $issues/1699/test
- )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
-  i32.const 320
+  i32.const 224
   local.get $0
   call $~lib/rt/itcms/__visit
   i32.const 32
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 528
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 128
   local.get $0
   call $~lib/rt/itcms/__visit
  )
@@ -2462,207 +2324,51 @@
  (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load $0
- )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__visit
- )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $~lib/array/Array<issues/1699/MultiAssignmentTest>
-    block $issues/1699/MultiAssignmentTest
-     block $~lib/arraybuffer/ArrayBufferView
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        block $~lib/object/Object
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load $0
-         br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $issues/1699/MultiAssignmentTest $~lib/array/Array<issues/1699/MultiAssignmentTest> $invalid
-        end
-        return
+   block $rt/issue-2719/issue2719_T
+    block $~lib/arraybuffer/ArrayBufferView
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       block $~lib/object/Object
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load $0
+        br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $rt/issue-2719/issue2719_T $invalid
        end
        return
       end
       return
      end
-     local.get $0
-     local.get $1
-     call $~lib/arraybuffer/ArrayBufferView~visit
      return
     end
+    local.get $0
+    local.get $1
+    call $~lib/arraybuffer/ArrayBufferView~visit
     return
    end
-   local.get $0
-   local.get $1
-   call $~lib/array/Array<issues/1699/MultiAssignmentTest>~visit
    return
   end
   unreachable
  )
  (func $~start
-  call $start:issues/1699
+  call $start:rt/issue-2719
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 33504
-   i32.const 33552
+   i32.const 33296
+   i32.const 33344
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#constructor (param $this i32) (param $length i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $bufferSize i32)
-  (local $buffer i32)
-  (local $6 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 16
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0 offset=8
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 16
-   i32.const 5
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:length_
-  local.get $length
-  i32.const 1073741820
-  i32.const 2
-  i32.shr_u
-  i32.gt_u
-  if
-   i32.const 32
-   i32.const 80
-   i32.const 70
-   i32.const 60
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $length
-  local.tee $2
-  i32.const 8
-  local.tee $3
-  local.get $2
-  local.get $3
-  i32.gt_u
-  select
-  i32.const 2
-  i32.shl
-  local.set $bufferSize
-  global.get $~lib/memory/__stack_pointer
-  local.get $bufferSize
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buffer
-  i32.store $0 offset=8
-  i32.const 2
-  global.get $~lib/shared/runtime/Runtime.Incremental
-  i32.ne
-  drop
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
-  local.get $buffer
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=12
-  local.get $6
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
-  local.get $buffer
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
-  local.get $bufferSize
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
-  local.get $length
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:length_
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  i32.const 16
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $6
- )
- (func $issues/1699/MultiAssignmentTest#constructor (param $this i32) (result i32)
+ (func $rt/issue-2719/issue2719_T#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -2698,8 +2404,8 @@
   local.get $1
   i32.store $0 offset=4
   local.get $1
-  i32.const 2
-  call $issues/1699/MultiAssignmentTest#set:test
+  i32.const 0
+  call $rt/issue-2719/issue2719_T#set:v
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -2708,201 +2414,9 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/array/ensureCapacity (param $array i32) (param $newSize i32) (param $alignLog2 i32) (param $canGrow i32)
-  (local $oldCapacity i32)
-  (local $oldData i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $newCapacity i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $newData i32)
-  (local $14 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $array
-  local.set $14
-  global.get $~lib/memory/__stack_pointer
-  local.get $14
-  i32.store $0
-  local.get $14
-  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
-  local.set $oldCapacity
-  local.get $newSize
-  local.get $oldCapacity
-  local.get $alignLog2
-  i32.shr_u
-  i32.gt_u
-  if
-   local.get $newSize
-   i32.const 1073741820
-   local.get $alignLog2
-   i32.shr_u
-   i32.gt_u
-   if
-    i32.const 32
-    i32.const 80
-    i32.const 19
-    i32.const 48
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $array
-   local.set $14
-   global.get $~lib/memory/__stack_pointer
-   local.get $14
-   i32.store $0
-   local.get $14
-   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-   local.set $oldData
-   local.get $newSize
-   local.tee $6
-   i32.const 8
-   local.tee $7
-   local.get $6
-   local.get $7
-   i32.gt_u
-   select
-   local.get $alignLog2
-   i32.shl
-   local.set $newCapacity
-   local.get $canGrow
-   if
-    local.get $oldCapacity
-    i32.const 1
-    i32.shl
-    local.tee $9
-    i32.const 1073741820
-    local.tee $10
-    local.get $9
-    local.get $10
-    i32.lt_u
-    select
-    local.tee $11
-    local.get $newCapacity
-    local.tee $12
-    local.get $11
-    local.get $12
-    i32.gt_u
-    select
-    local.set $newCapacity
-   end
-   local.get $oldData
-   local.get $newCapacity
-   call $~lib/rt/itcms/__renew
-   local.set $newData
-   i32.const 2
-   global.get $~lib/shared/runtime/Runtime.Incremental
-   i32.ne
-   drop
-   local.get $newData
-   local.get $oldData
-   i32.ne
-   if
-    local.get $array
-    local.get $newData
-    i32.store $0
-    local.get $array
-    local.get $newData
-    i32.store $0 offset=4
-    local.get $array
-    local.get $newData
-    i32.const 0
-    call $~lib/rt/itcms/__link
-   end
-   local.get $array
-   local.get $newCapacity
-   i32.store $0 offset=8
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#__set (param $this i32) (param $index i32) (param $value i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $index
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:length_
-  i32.ge_u
-  if
-   local.get $index
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 320
-    i32.const 80
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $this
-   local.get $index
-   i32.const 1
-   i32.add
-   i32.const 2
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $this
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.store $0
-   local.get $3
-   local.get $index
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:length_
-  end
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:dataStart
-  local.get $index
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $value
-  i32.store $0
-  i32.const 1
-  drop
-  local.get $this
-  local.get $value
-  i32.const 1
-  call $~lib/rt/itcms/__link
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get (param $this i32) (param $index i32) (result i32)
-  (local $value i32)
-  (local $3 i32)
+ (func $rt/issue-2719/issue2719_f2 (param $t i32) (result i32)
+  (local $c i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -2911,318 +2425,108 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $index
-  local.get $this
-  local.set $3
+  call $~lib/rt/itcms/__collect
   global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:length_
-  i32.ge_u
-  if
-   i32.const 320
-   i32.const 80
-   i32.const 114
-   i32.const 42
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:dataStart
-  local.get $index
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0
-  local.tee $value
-  i32.store $0 offset=4
-  i32.const 1
-  drop
   i32.const 0
-  i32.eqz
-  drop
-  local.get $value
-  i32.eqz
-  if
-   i32.const 528
-   i32.const 80
-   i32.const 118
-   i32.const 40
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $value
-  local.set $3
+  call $rt/issue-2719/issue2719_T#constructor
+  local.tee $c
+  i32.store $0
+  local.get $c
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  i32.const 100
+  call $rt/issue-2719/issue2719_T#set:v
+  i32.const 1
+  local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $3
-  return
- )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:length (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:length_
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $issues/1699/test
-  (local $testinstances i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $n i32)
-  (local $testinstance i32)
-  (local $5 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 28
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.const 28
-  memory.fill $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.const 3
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#constructor
-  local.tee $testinstances
-  i32.store $0
-  local.get $testinstances
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  i32.const 0
-  global.get $~lib/memory/__stack_pointer
-  local.get $testinstances
-  local.tee $1
-  i32.store $0 offset=20
-  local.get $1
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=12
-  local.get $5
-  i32.const 1
-  local.tee $2
-  i32.const 0
-  call $issues/1699/MultiAssignmentTest#constructor
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=16
-  local.get $5
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__set
-  local.get $1
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=12
-  local.get $5
   local.get $2
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get
-  local.set $5
+  return
+ )
+ (func $rt/issue-2719/issue2719_f1 (param $a i32) (param $t i32) (param $b i32)
+  (local $3 i32)
   global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=8
-  local.get $5
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__set
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
   i32.const 0
-  local.set $n
-  loop $for-loop|0
-   local.get $n
-   local.get $testinstances
-   local.set $5
-   global.get $~lib/memory/__stack_pointer
-   local.get $5
-   i32.store $0 offset=4
-   local.get $5
-   call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:length
-   i32.lt_s
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 0
-    call $issues/1699/MultiAssignmentTest#constructor
-    local.tee $testinstance
-    i32.store $0 offset=24
-    local.get $n
-    i32.const 1
-    i32.gt_s
-    if
-     local.get $testinstances
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     local.get $5
-     i32.store $0 offset=4
-     local.get $5
-     local.get $n
-     local.get $testinstance
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     local.get $5
-     i32.store $0 offset=8
-     local.get $5
-     call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__set
-    end
-    local.get $n
-    i32.const 1
-    i32.add
-    local.set $n
-    br $for-loop|0
-   end
-  end
-  local.get $testinstances
-  local.set $5
+  i32.store $0
+  local.get $t
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $rt/issue-2719/issue2719_T#get:v
   i32.const 0
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get
-  local.get $testinstances
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  i32.const 1
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 656
-   i32.const 15
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $testinstances
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  i32.const 2
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get
-  local.get $testinstances
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  i32.const 1
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 656
-   i32.const 16
+   i32.const 432
+   i32.const 6
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 28
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#__visit (param $this i32) (param $cookie i32)
-  (local $cur i32)
-  (local $end i32)
-  (local $val i32)
-  (local $5 i32)
+ (func $start:rt/issue-2719
+  (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 1
-  drop
-  local.get $this
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0
-  local.get $5
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:dataStart
-  local.set $cur
-  local.get $cur
-  local.get $this
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0
-  local.get $5
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:length_
-  i32.const 2
+  i64.const 0
+  i64.store $0
+  memory.size $0
+  i32.const 16
   i32.shl
-  i32.add
-  local.set $end
-  loop $while-continue|0
-   local.get $cur
-   local.get $end
-   i32.lt_u
-   if
-    local.get $cur
-    i32.load $0
-    local.set $val
-    local.get $val
-    if
-     local.get $val
-     local.get $cookie
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $cur
-    i32.const 4
-    i32.add
-    local.set $cur
-    br $while-continue|0
-   end
-  end
-  local.get $this
-  local.set $5
+  global.get $~lib/memory/__heap_base
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
+  i32.const 144
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/pinSpace
+  i32.const 176
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/toSpace
+  i32.const 320
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/fromSpace
+  i32.const 1
+  i32.const 0
+  call $rt/issue-2719/issue2719_T#constructor
+  local.set $0
   global.get $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $0
   i32.store $0
-  local.get $5
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
+  local.get $0
+  i32.const 0
+  call $rt/issue-2719/issue2719_T#constructor
+  local.set $0
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  local.get $0
+  i32.store $0 offset=4
+  local.get $0
+  call $rt/issue-2719/issue2719_f2
+  call $rt/issue-2719/issue2719_f1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

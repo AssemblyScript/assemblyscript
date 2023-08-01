@@ -3990,7 +3990,7 @@
   (local $9 i32)
   (local $10 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner1
@@ -4002,9 +4002,6 @@
    local.tee $1
    i64.const 0
    i64.store $0
-   local.get $1
-   i32.const 0
-   i32.store $0 offset=8
    local.get $1
    i32.const 0
    i32.const 7
@@ -4036,7 +4033,7 @@
      local.set $9
      global.get $~lib/memory/__stack_pointer
      local.get $0
-     i32.store $0 offset=8
+     i32.store $0 offset=4
      i32.const 3
      global.set $~argumentsLength
      local.get $9
@@ -4227,7 +4224,7 @@
     end
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 12
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $6
@@ -4245,7 +4242,7 @@
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -4261,8 +4258,8 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $3
-  i64.const 0
-  i64.store $0
+  i32.const 0
+  i32.store $0
   local.get $3
   local.get $0
   i32.store $0
@@ -4287,7 +4284,7 @@
     local.set $4
     global.get $~lib/memory/__stack_pointer
     local.get $0
-    i32.store $0 offset=4
+    i32.store $0
     i32.const 3
     global.set $~argumentsLength
     local.get $4
@@ -4298,7 +4295,7 @@
     call_indirect $0 (type $i32_i32_i32_=>_i32)
     if
      global.get $~lib/memory/__stack_pointer
-     i32.const 8
+     i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
      i32.const 1
@@ -4312,7 +4309,7 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   i32.const 0
@@ -4322,7 +4319,7 @@
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -4338,8 +4335,8 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $3
-  i64.const 0
-  i64.store $0
+  i32.const 0
+  i32.store $0
   local.get $3
   local.get $0
   i32.store $0
@@ -4364,7 +4361,7 @@
     local.set $4
     global.get $~lib/memory/__stack_pointer
     local.get $0
-    i32.store $0 offset=4
+    i32.store $0
     i32.const 3
     global.set $~argumentsLength
     local.get $4
@@ -4376,7 +4373,7 @@
     i32.eqz
     if
      global.get $~lib/memory/__stack_pointer
-     i32.const 8
+     i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
      i32.const 0
@@ -4390,7 +4387,7 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   i32.const 1
@@ -4400,7 +4397,7 @@
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -4416,8 +4413,8 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $3
-  i64.const 0
-  i64.store $0
+  i32.const 0
+  i32.store $0
   local.get $3
   local.get $0
   i32.store $0
@@ -4442,7 +4439,7 @@
     local.set $4
     global.get $~lib/memory/__stack_pointer
     local.get $0
-    i32.store $0 offset=4
+    i32.store $0
     i32.const 3
     global.set $~argumentsLength
     local.get $4
@@ -4453,7 +4450,7 @@
     call_indirect $0 (type $i32_i32_i32_=>_i32)
     if
      global.get $~lib/memory/__stack_pointer
-     i32.const 8
+     i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
      local.get $2
@@ -4467,7 +4464,7 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   i32.const -1
@@ -4476,7 +4473,7 @@
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -4492,8 +4489,8 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $2
-  i64.const 0
-  i64.store $0
+  i32.const 0
+  i32.store $0
   local.get $2
   local.get $0
   i32.store $0
@@ -4520,7 +4517,7 @@
     local.set $3
     global.get $~lib/memory/__stack_pointer
     local.get $0
-    i32.store $0 offset=4
+    i32.store $0
     i32.const 3
     global.set $~argumentsLength
     local.get $3
@@ -4531,7 +4528,7 @@
     call_indirect $0 (type $i32_i32_i32_=>_i32)
     if
      global.get $~lib/memory/__stack_pointer
-     i32.const 8
+     i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
      local.get $2
@@ -4545,7 +4542,7 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   i32.const -1
@@ -4564,7 +4561,7 @@
   (local $13 i64)
   (local $14 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -4579,12 +4576,8 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $4
-  i64.const 0
-  i64.store $0
-  local.get $4
   i32.const 0
-  i32.store $0 offset=8
+  i32.store $0
   block $folding-inner0
    local.get $1
    i32.const 48
@@ -4757,7 +4750,7 @@
    local.set $12
    global.get $~lib/memory/__stack_pointer
    local.get $2
-   i32.store $0 offset=4
+   i32.store $0
    local.get $0
    i32.const 0
    local.get $1
@@ -4800,7 +4793,7 @@
     if
      global.get $~lib/memory/__stack_pointer
      local.get $2
-     i32.store $0 offset=4
+     i32.store $0
      local.get $0
      local.get $4
      i32.const 1
@@ -4890,7 +4883,7 @@
         local.set $3
         global.get $~lib/memory/__stack_pointer
         local.get $2
-        i32.store $0 offset=8
+        i32.store $0
         local.get $0
         local.get $8
         local.get $3
@@ -4959,7 +4952,7 @@
       local.set $4
       global.get $~lib/memory/__stack_pointer
       local.get $2
-      i32.store $0 offset=8
+      i32.store $0
       local.get $0
       local.get $3
       local.get $4
@@ -4980,13 +4973,13 @@
    local.get $10
    call $~lib/rt/tlsf/__free
    global.get $~lib/memory/__stack_pointer
-   i32.const 12
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    return
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -7342,7 +7335,7 @@
    i32.const 3248
    i32.store $0 offset=24
    local.get $0
-   i32.const 12
+   i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -7353,9 +7346,6 @@
    local.tee $0
    i64.const 0
    i64.store $0
-   local.get $0
-   i32.const 0
-   i32.store $0 offset=8
    local.get $0
    local.get $5
    i32.store $0
@@ -7395,7 +7385,7 @@
      local.set $9
      global.get $~lib/memory/__stack_pointer
      local.get $5
-     i32.store $0 offset=8
+     i32.store $0
      i32.const 3
      global.set $~argumentsLength
      local.get $4
@@ -7416,7 +7406,7 @@
     end
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 12
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $6
@@ -7478,7 +7468,7 @@
    i32.const 3280
    i32.store $0 offset=24
    local.get $0
-   i32.const 8
+   i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -7487,8 +7477,8 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $1
-   i64.const 0
-   i64.store $0
+   i32.const 0
+   i32.store $0
    i32.const 0
    local.set $0
    local.get $1
@@ -7515,7 +7505,7 @@
      local.set $4
      global.get $~lib/memory/__stack_pointer
      local.get $5
-     i32.store $0 offset=4
+     i32.store $0
      i32.const 3
      global.set $~argumentsLength
      local.get $4
@@ -7532,7 +7522,7 @@
     end
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    global.get $std/staticarray/maxVal
@@ -7615,7 +7605,7 @@
    i32.const 0
    local.set $0
    local.get $1
-   i32.const 8
+   i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -7624,8 +7614,8 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $4
-   i64.const 0
-   i64.store $0
+   i32.const 0
+   i32.store $0
    i32.const 0
    local.set $1
    local.get $4
@@ -7652,7 +7642,7 @@
      local.set $6
      global.get $~lib/memory/__stack_pointer
      local.get $5
-     i32.store $0 offset=4
+     i32.store $0
      i32.const 4
      global.set $~argumentsLength
      local.get $0
@@ -7671,7 +7661,7 @@
     end
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $0
@@ -7695,7 +7685,7 @@
    i32.const 0
    local.set $0
    local.get $1
-   i32.const 8
+   i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -7704,8 +7694,8 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $1
-   i64.const 0
-   i64.store $0
+   i32.const 0
+   i32.store $0
    local.get $1
    local.get $5
    i32.store $0
@@ -7732,7 +7722,7 @@
      local.set $4
      global.get $~lib/memory/__stack_pointer
      local.get $5
-     i32.store $0 offset=4
+     i32.store $0
      i32.const 4
      global.set $~argumentsLength
      local.get $0
@@ -7751,7 +7741,7 @@
     end
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $0

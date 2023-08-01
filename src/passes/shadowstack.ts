@@ -350,7 +350,7 @@ export class ShadowStackPass extends Pass {
       }
       let currentFunction = this.currentFunction;
       let numLocals = _BinaryenFunctionGetNumLocals(currentFunction);
-      let slotIndex = this.noteSlot(currentFunction, numLocals + this.callSlotOffset + i);
+      let slotIndex = this.noteSlot(currentFunction, numLocals + this.callSlotOffset + numSlots);
       let temp = this.getSharedTemp(currentFunction, this.ptrType);
       let stmts = new Array<ExpressionRef>();
       // t = value

@@ -3308,7 +3308,7 @@
    local.get $2
    i32.load $0
    local.tee $3
-   i32.store $0 offset=8
+   i32.store $0 offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $2
    i32.store $0 offset=8
@@ -5232,7 +5232,7 @@
    local.get $2
    i32.load $0
    local.tee $2
-   i32.store $0 offset=8
+   i32.store $0 offset=4
    i32.const 1
    global.set $~argumentsLength
    local.get $0

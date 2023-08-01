@@ -1818,7 +1818,7 @@
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    local.get $2
-   i32.store $0 offset=4
+   i32.store $0
    global.get $~lib/memory/__stack_pointer
    i32.const 12
    i32.sub

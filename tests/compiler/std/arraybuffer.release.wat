@@ -1852,7 +1852,7 @@
   (local $4 i32)
   (local $5 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 20
+  i32.const 24
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner1
@@ -1863,7 +1863,7 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    i32.const 0
-   i32.const 20
+   i32.const 24
    memory.fill $0
    memory.size $0
    i32.const 16
@@ -2352,7 +2352,7 @@
    i32.store $0 offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   i32.store $0 offset=16
+   i32.store $0 offset=20
    global.get $~lib/memory/__stack_pointer
    local.get $3
    i32.load $0
@@ -2534,7 +2534,7 @@
    i32.add
    global.set $~lib/rt/itcms/threshold
    global.get $~lib/memory/__stack_pointer
-   i32.const 20
+   i32.const 24
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

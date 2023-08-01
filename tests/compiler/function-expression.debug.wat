@@ -2792,7 +2792,7 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
@@ -2800,8 +2800,8 @@
   i64.const 0
   i64.store $0
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0 offset=8
+  i32.const 0
+  i32.store $0 offset=8
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 1008
@@ -2821,13 +2821,13 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0 offset=8
+  i32.store $0
   local.get $2
   call $function-expression/FieldClass#get:fieldFunc
   i32.load $0
   call_indirect $0 (type $none_=>_i32)
   local.tee $1
-  i32.store $0 offset=12
+  i32.store $0 offset=8
   i32.const 1
   global.set $~argumentsLength
   local.get $1
@@ -2845,7 +2845,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
