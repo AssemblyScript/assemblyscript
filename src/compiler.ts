@@ -6610,8 +6610,8 @@ export class Compiler extends DiagnosticEmitter {
         let overrideInstance = overrideInstances[i];
         if (!overrideInstance.is(CommonFlags.Compiled)) continue; // errored
 
-        const overrideSignature = overrideInstance.signature;
-        const originalSignature = instance.signature;
+        let overrideSignature = overrideInstance.signature;
+        let originalSignature = instance.signature;
 
         if (!overrideSignature.isAssignableTo(originalSignature, true)) {
           this.error(

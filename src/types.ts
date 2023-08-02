@@ -1052,13 +1052,12 @@ export class Signature {
     let thisThisType = this.thisType;
     let targetThisType = target.thisType;
 
-    if (thisThisType != null && targetThisType != null){
-      const compatibleThisType = checkCompatibleOverride ? thisThisType.canExtendOrImplement(targetThisType)
+    if (thisThisType && targetThisType) {
+      const compatibleThisType = checkCompatibleOverride 
+        ? thisThisType.canExtendOrImplement(targetThisType)
         : targetThisType.isAssignableTo(thisThisType);
-      if (!compatibleThisType) {
-        return false;
-      }
-    }else if (thisThisType || targetThisType){
+      if (!compatibleThisType) return false; 
+    } else if (thisThisType || targetThisType) {
       return false;
     }
 
