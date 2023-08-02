@@ -321,6 +321,10 @@ async function runTest(basename) {
       }
       compareStderr.end(SUCCESS);
       return prepareResult(SUCCESS);
+    } else if (error) {
+      // Don't bother comparing fixtures or doing anything else if the
+      // compilation failed.
+      return prepareResult(FAILURE, "compile failed");
     }
 
     const afterCompileResult = afterCompile("debug");
