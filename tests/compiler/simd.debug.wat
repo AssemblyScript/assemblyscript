@@ -10,6 +10,7 @@
  (type $i32_i32_i64_=>_i32 (func (param i32 i32 i64) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_=>_v128 (func (param i32 i32) (result v128)))
  (type $none_=>_v128 (func (result v128)))
  (type $v128_=>_v128 (func (param v128) (result v128)))
  (type $i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
@@ -21,7 +22,6 @@
  (type $f32_f32_f32_f32_=>_v128 (func (param f32 f32 f32 f32) (result v128)))
  (type $f64_=>_v128 (func (param f64) (result v128)))
  (type $f64_f64_=>_v128 (func (param f64 f64) (result v128)))
- (type $i32_i32_=>_v128 (func (param i32 i32) (result v128)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
@@ -2373,6 +2373,33 @@
  (func $~lib/array/Array<v128>#get:dataStart (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
+ )
+ (func $~lib/array/Array<v128>#__get (param $this i32) (param $index i32) (result v128)
+  (local $value v128)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<v128>#get:length_
+  i32.ge_u
+  if
+   i32.const 272
+   i32.const 480
+   i32.const 114
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $this
+  call $~lib/array/Array<v128>#get:dataStart
+  local.get $index
+  i32.const 4
+  i32.shl
+  i32.add
+  v128.load $0
+  local.set $value
+  i32.const 0
+  drop
+  local.get $value
+  return
  )
  (func $simd/test_v128
   (local $ptr i32)
@@ -6648,6 +6675,85 @@
   local.get $one
   return
  )
+ (func $start:simd
+  (local $0 i32)
+  (local $1 i32)
+  (local $arr i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  memory.size $0
+  i32.const 16
+  i32.shl
+  global.get $~lib/memory/__heap_base
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
+  i32.const 192
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/pinSpace
+  i32.const 224
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/toSpace
+  i32.const 368
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/fromSpace
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1
+  i32.const 4
+  i32.const 4
+  i32.const 32
+  call $~lib/rt/__newArray
+  local.tee $arr
+  i32.store $0
+  local.get $arr
+  i32.const 0
+  call $~lib/array/Array<v128>#__get
+  i32x4.extract_lane 0
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 528
+   i32.const 5
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32x4.splat
+  global.set $simd/vec
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  call $simd/test_v128
+  call $simd/test_i8x16
+  call $simd/test_i16x8
+  call $simd/test_i32x4
+  call $simd/test_i64x2
+  call $simd/test_f32x4
+  call $simd/test_f64x2
+  call $simd/test_const
+  drop
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $simd/reexport (param $a v128) (result v128)
   local.get $a
   local.get $a
@@ -6826,6 +6932,14 @@
   local.get $this
   i32.load $0
  )
+ (func $~lib/array/Array<v128>#__visit (param $this i32) (param $cookie i32)
+  i32.const 0
+  drop
+  local.get $this
+  call $~lib/array/Array<v128>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+ )
  (func $~lib/array/Array<v128>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -6837,6 +6951,14 @@
  (func $~lib/array/Array<i32>#get:buffer (param $this i32) (result i32)
   local.get $this
   i32.load $0
+ )
+ (func $~lib/array/Array<i32>#__visit (param $this i32) (param $cookie i32)
+  i32.const 0
+  drop
+  local.get $this
+  call $~lib/array/Array<i32>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
  )
  (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
@@ -6898,196 +7020,6 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~lib/array/Array<v128>#__get (param $this i32) (param $index i32) (result v128)
-  (local $value v128)
-  (local $3 i32)
-  (local $4 v128)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $index
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  call $~lib/array/Array<v128>#get:length_
-  i32.ge_u
-  if
-   i32.const 272
-   i32.const 480
-   i32.const 114
-   i32.const 42
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  call $~lib/array/Array<v128>#get:dataStart
-  local.get $index
-  i32.const 4
-  i32.shl
-  i32.add
-  v128.load $0
-  local.set $value
-  i32.const 0
-  drop
-  local.get $value
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $4
-  return
- )
- (func $start:simd
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  memory.size $0
-  i32.const 16
-  i32.shl
-  global.get $~lib/memory/__heap_base
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 192
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 224
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 368
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/fromSpace
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1
-  i32.const 4
-  i32.const 4
-  i32.const 32
-  call $~lib/rt/__newArray
-  local.tee $2
-  i32.store $0
-  local.get $2
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  i32.const 0
-  call $~lib/array/Array<v128>#__get
-  i32x4.extract_lane 0
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 528
-   i32.const 5
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  i32x4.splat
-  global.set $simd/vec
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  call $simd/test_v128
-  call $simd/test_i8x16
-  call $simd/test_i16x8
-  call $simd/test_i32x4
-  call $simd/test_i64x2
-  call $simd/test_f32x4
-  call $simd/test_f64x2
-  call $simd/test_const
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<v128>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $~lib/array/Array<v128>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $~lib/array/Array<i32>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/rt/__newArray (param $length i32) (param $alignLog2 i32) (param $id i32) (param $data i32) (result i32)
   (local $bufferSize i32)

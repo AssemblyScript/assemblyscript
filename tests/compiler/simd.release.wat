@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_v128 (func (param i32 i32 i32) (result v128)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -1942,225 +1942,14 @@
   local.get $0
   call $~lib/rt/tlsf/__free
  )
- (func $simd/reexport (param $0 v128) (result v128)
-  local.get $0
-  local.get $0
-  i32x4.mul
- )
- (func $simd/test_vars_i8x16_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
-  v128.const i32x4 0x03000100 0x07000504 0x0b0a0908 0x000e0d0c
-  local.get $0
-  i8x16.replace_lane 2
-  local.get $1
-  i8x16.replace_lane 6
-  local.get $2
-  i8x16.replace_lane 15
- )
- (func $simd/test_vars_i8x16_full (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i32) (param $7 i32) (param $8 i32) (param $9 i32) (param $10 i32) (param $11 i32) (param $12 i32) (param $13 i32) (param $14 i32) (param $15 i32) (result v128)
-  local.get $0
-  i8x16.splat
-  local.get $1
-  i8x16.replace_lane 1
-  local.get $2
-  i8x16.replace_lane 2
-  local.get $3
-  i8x16.replace_lane 3
-  local.get $4
-  i8x16.replace_lane 4
-  local.get $5
-  i8x16.replace_lane 5
-  local.get $6
-  i8x16.replace_lane 6
-  local.get $7
-  i8x16.replace_lane 7
-  local.get $8
-  i8x16.replace_lane 8
-  local.get $9
-  i8x16.replace_lane 9
-  local.get $10
-  i8x16.replace_lane 10
-  local.get $11
-  i8x16.replace_lane 11
-  local.get $12
-  i8x16.replace_lane 12
-  local.get $13
-  i8x16.replace_lane 13
-  local.get $14
-  i8x16.replace_lane 14
-  local.get $15
-  i8x16.replace_lane 15
- )
- (func $simd/test_vars_i16x8_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
-  v128.const i32x4 0x00010000 0x00030000 0x00050000 0x00000006
-  local.get $0
-  i16x8.replace_lane 2
-  local.get $1
-  i16x8.replace_lane 4
-  local.get $2
-  i16x8.replace_lane 7
- )
- (func $simd/test_vars_i16x8_full (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i32) (param $7 i32) (result v128)
-  local.get $0
-  i16x8.splat
-  local.get $1
-  i16x8.replace_lane 1
-  local.get $2
-  i16x8.replace_lane 2
-  local.get $3
-  i16x8.replace_lane 3
-  local.get $4
-  i16x8.replace_lane 4
-  local.get $5
-  i16x8.replace_lane 5
-  local.get $6
-  i16x8.replace_lane 6
-  local.get $7
-  i16x8.replace_lane 7
- )
- (func $simd/test_vars_i32x4_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
-  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
-  local.get $0
-  i32x4.replace_lane 1
-  local.get $1
-  i32x4.replace_lane 2
-  local.get $2
-  i32x4.replace_lane 3
- )
- (func $simd/test_vars_i32x4_full (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result v128)
-  local.get $0
-  i32x4.splat
-  local.get $1
-  i32x4.replace_lane 1
-  local.get $2
-  i32x4.replace_lane 2
-  local.get $3
-  i32x4.replace_lane 3
- )
- (func $simd/test_vars_i64x2_partial (param $0 i64) (result v128)
-  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
-  local.get $0
-  i64x2.replace_lane 1
- )
- (func $simd/test_vars_i64x2_full (param $0 i64) (param $1 i64) (result v128)
-  local.get $0
-  i64x2.splat
-  local.get $1
-  i64x2.replace_lane 1
- )
- (func $simd/test_vars_f32x4_partial (param $0 f32) (param $1 f32) (param $2 f32) (result v128)
-  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
-  local.get $0
-  f32x4.replace_lane 1
-  local.get $1
-  f32x4.replace_lane 2
-  local.get $2
-  f32x4.replace_lane 3
- )
- (func $simd/test_vars_f32x4_full (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (result v128)
-  local.get $0
-  f32x4.splat
-  local.get $1
-  f32x4.replace_lane 1
-  local.get $2
-  f32x4.replace_lane 2
-  local.get $3
-  f32x4.replace_lane 3
- )
- (func $simd/test_vars_f64x2_partial (param $0 f64) (result v128)
-  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
-  local.get $0
-  f64x2.replace_lane 1
- )
- (func $simd/test_vars_f64x2_full (param $0 f64) (param $1 f64) (result v128)
-  local.get $0
-  f64x2.splat
-  local.get $1
-  f64x2.replace_lane 1
- )
- (func $~lib/array/Array<v128>~visit (param $0 i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  i32.const 0
-  i32.store $0
-  local.get $1
-  local.get $0
-  i32.store $0
-  local.get $0
-  i32.load $0
-  local.tee $0
-  if
-   local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/rt/__visit_members (param $0 i32)
-  block $invalid
-   block $~lib/array/Array<i32>
-    block $~lib/array/Array<v128>
-     block $~lib/arraybuffer/ArrayBufferView
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        block $~lib/object/Object
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load $0
-         br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<v128> $~lib/array/Array<i32> $invalid
-        end
-        return
-       end
-       return
-      end
-      return
-     end
-     local.get $0
-     i32.load $0
-     local.tee $0
-     if
-      local.get $0
-      call $byn-split-outlined-A$~lib/rt/itcms/__visit
-     end
-     return
-    end
-    local.get $0
-    call $~lib/array/Array<v128>~visit
-    return
-   end
-   local.get $0
-   call $~lib/array/Array<v128>~visit
-   return
-  end
-  unreachable
- )
- (func $~start
+ (func $start:simd
   (local $0 i32)
-  (local $1 v128)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
@@ -2169,9 +1958,9 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $4
-   i64.const 0
-   i64.store $0
+   local.tee $0
+   i32.const 0
+   i32.store $0
    memory.size $0
    i32.const 16
    i32.shl
@@ -2204,7 +1993,7 @@
    i32.store $0
    i32.const 1392
    global.set $~lib/rt/itcms/fromSpace
-   local.get $4
+   local.get $0
    i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -2213,26 +2002,26 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
+   local.tee $1
    i32.const 0
    i32.store $0
    i32.const 1
    call $~lib/rt/itcms/__new
-   local.tee $2
+   local.tee $3
    i32.const 1056
    v128.load $0 align=1
    v128.store $0 align=1
-   local.get $0
-   local.get $2
+   local.get $1
+   local.get $3
    i32.store $0
    i32.const 4
    call $~lib/rt/itcms/__new
-   local.tee $3
-   local.get $2
+   local.tee $2
+   local.get $3
    i32.store $0
-   local.get $2
+   local.get $3
    if
-    local.get $3
+    local.get $2
     i32.eqz
     if
      i32.const 0
@@ -2243,78 +2032,60 @@
      unreachable
     end
     global.get $~lib/rt/itcms/white
-    local.get $2
+    local.get $3
     i32.const 20
     i32.sub
-    local.tee $5
+    local.tee $4
     i32.load $0 offset=4
     i32.const 3
     i32.and
     i32.eq
     if
-     local.get $3
+     local.get $2
      i32.const 20
      i32.sub
      i32.load $0 offset=4
      i32.const 3
      i32.and
-     local.tee $0
+     local.tee $1
      global.get $~lib/rt/itcms/white
      i32.eqz
      i32.eq
      if
-      local.get $5
+      local.get $4
       call $~lib/rt/itcms/Object#makeGray
      else
       global.get $~lib/rt/itcms/state
       i32.const 1
       i32.eq
-      local.get $0
+      local.get $1
       i32.const 3
       i32.eq
       i32.and
       if
-       local.get $5
+       local.get $4
        call $~lib/rt/itcms/Object#makeGray
       end
      end
     end
    end
-   local.get $3
    local.get $2
-   i32.store $0 offset=4
    local.get $3
+   i32.store $0 offset=4
+   local.get $2
    i32.const 16
    i32.store $0 offset=8
-   local.get $3
+   local.get $2
    i32.const 1
    i32.store $0 offset=12
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $4
-   local.get $3
-   i32.store $0
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.store $0 offset=4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1612
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   i32.const 0
-   i32.store $0
    local.get $0
-   local.get $3
+   local.get $2
    i32.store $0
-   local.get $3
+   local.get $2
    i32.load $0 offset=12
    i32.eqz
    if
@@ -2325,19 +2096,9 @@
     call $~lib/builtins/abort
     unreachable
    end
-   global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   local.get $3
-   i32.store $0
-   local.get $3
+   local.get $2
    i32.load $0 offset=4
    v128.load $0
-   local.set $1
-   local.get $0
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $1
    i32x4.extract_lane 0
    i32.const 1
    i32.ne
@@ -2515,7 +2276,7 @@
    local.get $0
    call $~lib/rt/tlsf/__free
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    return
@@ -2526,6 +2287,172 @@
   i32.const 1
   call $~lib/builtins/abort
   unreachable
+ )
+ (func $simd/reexport (param $0 v128) (result v128)
+  local.get $0
+  local.get $0
+  i32x4.mul
+ )
+ (func $simd/test_vars_i8x16_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
+  v128.const i32x4 0x03000100 0x07000504 0x0b0a0908 0x000e0d0c
+  local.get $0
+  i8x16.replace_lane 2
+  local.get $1
+  i8x16.replace_lane 6
+  local.get $2
+  i8x16.replace_lane 15
+ )
+ (func $simd/test_vars_i8x16_full (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i32) (param $7 i32) (param $8 i32) (param $9 i32) (param $10 i32) (param $11 i32) (param $12 i32) (param $13 i32) (param $14 i32) (param $15 i32) (result v128)
+  local.get $0
+  i8x16.splat
+  local.get $1
+  i8x16.replace_lane 1
+  local.get $2
+  i8x16.replace_lane 2
+  local.get $3
+  i8x16.replace_lane 3
+  local.get $4
+  i8x16.replace_lane 4
+  local.get $5
+  i8x16.replace_lane 5
+  local.get $6
+  i8x16.replace_lane 6
+  local.get $7
+  i8x16.replace_lane 7
+  local.get $8
+  i8x16.replace_lane 8
+  local.get $9
+  i8x16.replace_lane 9
+  local.get $10
+  i8x16.replace_lane 10
+  local.get $11
+  i8x16.replace_lane 11
+  local.get $12
+  i8x16.replace_lane 12
+  local.get $13
+  i8x16.replace_lane 13
+  local.get $14
+  i8x16.replace_lane 14
+  local.get $15
+  i8x16.replace_lane 15
+ )
+ (func $simd/test_vars_i16x8_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
+  v128.const i32x4 0x00010000 0x00030000 0x00050000 0x00000006
+  local.get $0
+  i16x8.replace_lane 2
+  local.get $1
+  i16x8.replace_lane 4
+  local.get $2
+  i16x8.replace_lane 7
+ )
+ (func $simd/test_vars_i16x8_full (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i32) (param $7 i32) (result v128)
+  local.get $0
+  i16x8.splat
+  local.get $1
+  i16x8.replace_lane 1
+  local.get $2
+  i16x8.replace_lane 2
+  local.get $3
+  i16x8.replace_lane 3
+  local.get $4
+  i16x8.replace_lane 4
+  local.get $5
+  i16x8.replace_lane 5
+  local.get $6
+  i16x8.replace_lane 6
+  local.get $7
+  i16x8.replace_lane 7
+ )
+ (func $simd/test_vars_i32x4_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
+  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
+  local.get $0
+  i32x4.replace_lane 1
+  local.get $1
+  i32x4.replace_lane 2
+  local.get $2
+  i32x4.replace_lane 3
+ )
+ (func $simd/test_vars_i32x4_full (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result v128)
+  local.get $0
+  i32x4.splat
+  local.get $1
+  i32x4.replace_lane 1
+  local.get $2
+  i32x4.replace_lane 2
+  local.get $3
+  i32x4.replace_lane 3
+ )
+ (func $simd/test_vars_i64x2_partial (param $0 i64) (result v128)
+  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
+  local.get $0
+  i64x2.replace_lane 1
+ )
+ (func $simd/test_vars_i64x2_full (param $0 i64) (param $1 i64) (result v128)
+  local.get $0
+  i64x2.splat
+  local.get $1
+  i64x2.replace_lane 1
+ )
+ (func $simd/test_vars_f32x4_partial (param $0 f32) (param $1 f32) (param $2 f32) (result v128)
+  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
+  local.get $0
+  f32x4.replace_lane 1
+  local.get $1
+  f32x4.replace_lane 2
+  local.get $2
+  f32x4.replace_lane 3
+ )
+ (func $simd/test_vars_f32x4_full (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (result v128)
+  local.get $0
+  f32x4.splat
+  local.get $1
+  f32x4.replace_lane 1
+  local.get $2
+  f32x4.replace_lane 2
+  local.get $3
+  f32x4.replace_lane 3
+ )
+ (func $simd/test_vars_f64x2_partial (param $0 f64) (result v128)
+  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
+  local.get $0
+  f64x2.replace_lane 1
+ )
+ (func $simd/test_vars_f64x2_full (param $0 f64) (param $1 f64) (result v128)
+  local.get $0
+  f64x2.splat
+  local.get $1
+  f64x2.replace_lane 1
+ )
+ (func $~lib/rt/__visit_members (param $0 i32)
+  block $folding-inner0
+   block $invalid
+    block $~lib/string/String
+     block $~lib/arraybuffer/ArrayBuffer
+      block $~lib/object/Object
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load $0
+       br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $folding-inner0 $folding-inner0 $invalid
+      end
+      return
+     end
+     return
+    end
+    return
+   end
+   unreachable
+  end
+  local.get $0
+  i32.load $0
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
+ )
+ (func $~start
+  call $start:simd
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   global.get $~lib/rt/itcms/white

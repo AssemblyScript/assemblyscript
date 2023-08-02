@@ -214,6 +214,163 @@
    unreachable
   end
  )
+ (func $start:std/hash
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  i32.const 0
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  call $std/hash/check
+  drop
+  i32.const 32
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/util/hash/HASH<~lib/string/String>
+  call $std/hash/check
+  drop
+  i32.const 64
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/util/hash/HASH<~lib/string/String>
+  call $std/hash/check
+  drop
+  i32.const 96
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/util/hash/HASH<~lib/string/String>
+  call $std/hash/check
+  drop
+  i32.const 128
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/util/hash/HASH<~lib/string/String>
+  call $std/hash/check
+  drop
+  i32.const 160
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/util/hash/HASH<~lib/string/String>
+  call $std/hash/check
+  drop
+  i32.const 192
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/util/hash/HASH<~lib/string/String>
+  call $std/hash/check
+  drop
+  i32.const 224
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/util/hash/HASH<~lib/string/String>
+  call $std/hash/check
+  drop
+  i32.const 256
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/util/hash/HASH<~lib/string/String>
+  call $std/hash/check
+  drop
+  i32.const 304
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/util/hash/HASH<~lib/string/String>
+  call $std/hash/check
+  drop
+  i32.const 352
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/util/hash/HASH<~lib/string/String>
+  call $std/hash/check
+  drop
+  f32.const 0
+  call $~lib/util/hash/HASH<f32>
+  call $std/hash/check
+  drop
+  f32.const 1
+  call $~lib/util/hash/HASH<f32>
+  call $std/hash/check
+  drop
+  f32.const 1.100000023841858
+  call $~lib/util/hash/HASH<f32>
+  call $std/hash/check
+  drop
+  f32.const -0
+  call $~lib/util/hash/HASH<f32>
+  call $std/hash/check
+  drop
+  f32.const inf
+  call $~lib/util/hash/HASH<f32>
+  call $std/hash/check
+  drop
+  f32.const nan:0x400000
+  call $~lib/util/hash/HASH<f32>
+  call $std/hash/check
+  drop
+  f64.const 0
+  call $~lib/util/hash/HASH<f64>
+  call $std/hash/check
+  drop
+  f64.const 1
+  call $~lib/util/hash/HASH<f64>
+  call $std/hash/check
+  drop
+  f64.const 1.1
+  call $~lib/util/hash/HASH<f64>
+  call $std/hash/check
+  drop
+  f64.const -0
+  call $~lib/util/hash/HASH<f64>
+  call $std/hash/check
+  drop
+  f64.const inf
+  call $~lib/util/hash/HASH<f64>
+  call $std/hash/check
+  drop
+  f64.const nan:0x8000000000000
+  call $~lib/util/hash/HASH<f64>
+  call $std/hash/check
+  drop
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/util/hash/HASH<~lib/string/String|null> (param $key i32) (result i32)
   (local $key|1 i32)
   (local $h i32)
@@ -235,13 +392,13 @@
   (local $end|18 i32)
   (local $19 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
+  i32.const 0
+  i32.store $0
   i32.const 1
   drop
   block $~lib/util/hash/hashStr|inlined.0 (result i32)
@@ -257,11 +414,6 @@
     br $~lib/util/hash/hashStr|inlined.0
    end
    local.get $key|1
-   local.set $19
-   global.get $~lib/memory/__stack_pointer
-   local.get $19
-   i32.store $0 offset=4
-   local.get $19
    call $~lib/string/String#get:length
    i32.const 1
    i32.shl
@@ -497,7 +649,7 @@
   end
   local.set $19
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
@@ -524,13 +676,13 @@
   (local $end|18 i32)
   (local $19 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
+  i32.const 0
+  i32.store $0
   i32.const 1
   drop
   block $~lib/util/hash/hashStr|inlined.1 (result i32)
@@ -546,11 +698,6 @@
     br $~lib/util/hash/hashStr|inlined.1
    end
    local.get $key|1
-   local.set $19
-   global.get $~lib/memory/__stack_pointer
-   local.get $19
-   i32.store $0 offset=4
-   local.get $19
    call $~lib/string/String#get:length
    i32.const 1
    i32.shl
@@ -786,167 +933,10 @@
   end
   local.set $19
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
   return
- )
- (func $start:std/hash
-  (local $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  call $std/hash/check
-  drop
-  i32.const 32
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  call $~lib/util/hash/HASH<~lib/string/String>
-  call $std/hash/check
-  drop
-  i32.const 64
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  call $~lib/util/hash/HASH<~lib/string/String>
-  call $std/hash/check
-  drop
-  i32.const 96
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  call $~lib/util/hash/HASH<~lib/string/String>
-  call $std/hash/check
-  drop
-  i32.const 128
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  call $~lib/util/hash/HASH<~lib/string/String>
-  call $std/hash/check
-  drop
-  i32.const 160
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  call $~lib/util/hash/HASH<~lib/string/String>
-  call $std/hash/check
-  drop
-  i32.const 192
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  call $~lib/util/hash/HASH<~lib/string/String>
-  call $std/hash/check
-  drop
-  i32.const 224
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  call $~lib/util/hash/HASH<~lib/string/String>
-  call $std/hash/check
-  drop
-  i32.const 256
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  call $~lib/util/hash/HASH<~lib/string/String>
-  call $std/hash/check
-  drop
-  i32.const 304
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  call $~lib/util/hash/HASH<~lib/string/String>
-  call $std/hash/check
-  drop
-  i32.const 352
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  call $~lib/util/hash/HASH<~lib/string/String>
-  call $std/hash/check
-  drop
-  f32.const 0
-  call $~lib/util/hash/HASH<f32>
-  call $std/hash/check
-  drop
-  f32.const 1
-  call $~lib/util/hash/HASH<f32>
-  call $std/hash/check
-  drop
-  f32.const 1.100000023841858
-  call $~lib/util/hash/HASH<f32>
-  call $std/hash/check
-  drop
-  f32.const -0
-  call $~lib/util/hash/HASH<f32>
-  call $std/hash/check
-  drop
-  f32.const inf
-  call $~lib/util/hash/HASH<f32>
-  call $std/hash/check
-  drop
-  f32.const nan:0x400000
-  call $~lib/util/hash/HASH<f32>
-  call $std/hash/check
-  drop
-  f64.const 0
-  call $~lib/util/hash/HASH<f64>
-  call $std/hash/check
-  drop
-  f64.const 1
-  call $~lib/util/hash/HASH<f64>
-  call $std/hash/check
-  drop
-  f64.const 1.1
-  call $~lib/util/hash/HASH<f64>
-  call $std/hash/check
-  drop
-  f64.const -0
-  call $~lib/util/hash/HASH<f64>
-  call $std/hash/check
-  drop
-  f64.const inf
-  call $~lib/util/hash/HASH<f64>
-  call $std/hash/check
-  drop
-  f64.const nan:0x8000000000000
-  call $~lib/util/hash/HASH<f64>
-  call $std/hash/check
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
 )

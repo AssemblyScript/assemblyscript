@@ -2334,6 +2334,81 @@
   local.get $this
   i32.load $0 offset=4
  )
+ (func $std/operator-overloading/Tester.add (param $a i32) (param $b i32) (result i32)
+  i32.const 0
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.add
+  local.get $a
+  call $std/operator-overloading/Tester#get:y
+  local.get $b
+  call $std/operator-overloading/Tester#get:y
+  i32.add
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.sub (param $a i32) (param $b i32) (result i32)
+  i32.const 0
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.sub
+  local.get $a
+  call $std/operator-overloading/Tester#get:y
+  local.get $b
+  call $std/operator-overloading/Tester#get:y
+  i32.sub
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.mul (param $a i32) (param $b i32) (result i32)
+  i32.const 0
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.mul
+  local.get $a
+  call $std/operator-overloading/Tester#get:y
+  local.get $b
+  call $std/operator-overloading/Tester#get:y
+  i32.mul
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.div (param $a i32) (param $b i32) (result i32)
+  i32.const 0
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.div_s
+  local.get $a
+  call $std/operator-overloading/Tester#get:y
+  local.get $b
+  call $std/operator-overloading/Tester#get:y
+  i32.div_s
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.mod (param $a i32) (param $b i32) (result i32)
+  i32.const 0
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.rem_s
+  local.get $a
+  call $std/operator-overloading/Tester#get:y
+  local.get $b
+  call $std/operator-overloading/Tester#get:y
+  i32.rem_s
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
  (func $~lib/math/ipow32 (param $x i32) (param $e i32) (result i32)
   (local $out i32)
   (local $log i32)
@@ -2552,6 +2627,313 @@
   local.get $out
   return
  )
+ (func $std/operator-overloading/Tester.pow (param $a i32) (param $b i32) (result i32)
+  i32.const 0
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  call $~lib/math/ipow32
+  local.get $a
+  call $std/operator-overloading/Tester#get:y
+  local.get $b
+  call $std/operator-overloading/Tester#get:y
+  call $~lib/math/ipow32
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.and (param $a i32) (param $b i32) (result i32)
+  i32.const 0
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.and
+  local.get $a
+  call $std/operator-overloading/Tester#get:y
+  local.get $b
+  call $std/operator-overloading/Tester#get:y
+  i32.and
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.or (param $a i32) (param $b i32) (result i32)
+  i32.const 0
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.or
+  local.get $a
+  call $std/operator-overloading/Tester#get:y
+  local.get $b
+  call $std/operator-overloading/Tester#get:y
+  i32.or
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.xor (param $a i32) (param $b i32) (result i32)
+  i32.const 0
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.xor
+  local.get $a
+  call $std/operator-overloading/Tester#get:y
+  local.get $b
+  call $std/operator-overloading/Tester#get:y
+  i32.xor
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.equals (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.eq
+  if (result i32)
+   local.get $a
+   call $std/operator-overloading/Tester#get:y
+   local.get $b
+   call $std/operator-overloading/Tester#get:y
+   i32.eq
+  else
+   i32.const 0
+  end
+  return
+ )
+ (func $std/operator-overloading/Tester.notEquals (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.ne
+  if (result i32)
+   local.get $a
+   call $std/operator-overloading/Tester#get:y
+   local.get $b
+   call $std/operator-overloading/Tester#get:y
+   i32.ne
+  else
+   i32.const 0
+  end
+  return
+ )
+ (func $std/operator-overloading/Tester.greater (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.gt_s
+  if (result i32)
+   local.get $a
+   call $std/operator-overloading/Tester#get:y
+   local.get $b
+   call $std/operator-overloading/Tester#get:y
+   i32.gt_s
+  else
+   i32.const 0
+  end
+  return
+ )
+ (func $std/operator-overloading/Tester.greaterEquals (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.ge_s
+  if (result i32)
+   local.get $a
+   call $std/operator-overloading/Tester#get:y
+   local.get $b
+   call $std/operator-overloading/Tester#get:y
+   i32.ge_s
+  else
+   i32.const 0
+  end
+  return
+ )
+ (func $std/operator-overloading/Tester.less (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.lt_s
+  if (result i32)
+   local.get $a
+   call $std/operator-overloading/Tester#get:y
+   local.get $b
+   call $std/operator-overloading/Tester#get:y
+   i32.lt_s
+  else
+   i32.const 0
+  end
+  return
+ )
+ (func $std/operator-overloading/Tester.lessEquals (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  call $std/operator-overloading/Tester#get:x
+  local.get $b
+  call $std/operator-overloading/Tester#get:x
+  i32.le_s
+  if (result i32)
+   local.get $a
+   call $std/operator-overloading/Tester#get:y
+   local.get $b
+   call $std/operator-overloading/Tester#get:y
+   i32.le_s
+  else
+   i32.const 0
+  end
+  return
+ )
+ (func $std/operator-overloading/Tester.shr (param $value i32) (param $shift i32) (result i32)
+  i32.const 0
+  local.get $value
+  call $std/operator-overloading/Tester#get:x
+  local.get $shift
+  i32.shr_s
+  local.get $value
+  call $std/operator-overloading/Tester#get:y
+  local.get $shift
+  i32.shr_s
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.shu (param $value i32) (param $shift i32) (result i32)
+  i32.const 0
+  local.get $value
+  call $std/operator-overloading/Tester#get:x
+  local.get $shift
+  i32.shr_u
+  local.get $value
+  call $std/operator-overloading/Tester#get:y
+  local.get $shift
+  i32.shr_u
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.shl (param $value i32) (param $shift i32) (result i32)
+  i32.const 0
+  local.get $value
+  call $std/operator-overloading/Tester#get:x
+  local.get $shift
+  i32.shl
+  local.get $value
+  call $std/operator-overloading/Tester#get:y
+  local.get $shift
+  i32.shl
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.pos (param $value i32) (result i32)
+  i32.const 0
+  local.get $value
+  call $std/operator-overloading/Tester#get:x
+  local.get $value
+  call $std/operator-overloading/Tester#get:y
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.neg (param $value i32) (result i32)
+  i32.const 0
+  i32.const 0
+  local.get $value
+  call $std/operator-overloading/Tester#get:x
+  i32.sub
+  i32.const 0
+  local.get $value
+  call $std/operator-overloading/Tester#get:y
+  i32.sub
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.not (param $value i32) (result i32)
+  i32.const 0
+  local.get $value
+  call $std/operator-overloading/Tester#get:x
+  i32.const -1
+  i32.xor
+  local.get $value
+  call $std/operator-overloading/Tester#get:y
+  i32.const -1
+  i32.xor
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester.excl (param $value i32) (result i32)
+  local.get $value
+  call $std/operator-overloading/Tester#get:x
+  i32.eqz
+  if (result i32)
+   local.get $value
+   call $std/operator-overloading/Tester#get:y
+   i32.eqz
+  else
+   i32.const 0
+  end
+  return
+ )
+ (func $std/operator-overloading/Tester#inc (param $this i32) (result i32)
+  local.get $this
+  local.get $this
+  call $std/operator-overloading/Tester#get:x
+  i32.const 1
+  i32.add
+  call $std/operator-overloading/Tester#set:x
+  local.get $this
+  local.get $this
+  call $std/operator-overloading/Tester#get:y
+  i32.const 1
+  i32.add
+  call $std/operator-overloading/Tester#set:y
+  local.get $this
+  return
+ )
+ (func $std/operator-overloading/Tester#dec (param $this i32) (result i32)
+  local.get $this
+  local.get $this
+  call $std/operator-overloading/Tester#get:x
+  i32.const 1
+  i32.sub
+  call $std/operator-overloading/Tester#set:x
+  local.get $this
+  local.get $this
+  call $std/operator-overloading/Tester#get:y
+  i32.const 1
+  i32.sub
+  call $std/operator-overloading/Tester#set:y
+  local.get $this
+  return
+ )
+ (func $std/operator-overloading/Tester#postInc (param $this i32) (result i32)
+  i32.const 0
+  local.get $this
+  call $std/operator-overloading/Tester#get:x
+  i32.const 1
+  i32.add
+  local.get $this
+  call $std/operator-overloading/Tester#get:y
+  i32.const 1
+  i32.add
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
+ (func $std/operator-overloading/Tester#postDec (param $this i32) (result i32)
+  i32.const 0
+  local.get $this
+  call $std/operator-overloading/Tester#get:x
+  i32.const 1
+  i32.sub
+  local.get $this
+  call $std/operator-overloading/Tester#get:y
+  i32.const 1
+  i32.sub
+  call $std/operator-overloading/Tester#constructor
+  return
+ )
  (func $std/operator-overloading/TesterInlineStatic#set:x (param $this i32) (param $x i32)
   local.get $this
   local.get $x
@@ -2713,6 +3095,49 @@
    end
   end
   i32.const 0
+  return
+ )
+ (func $~lib/string/String.__eq (param $left i32) (param $right i32) (result i32)
+  (local $leftLength i32)
+  local.get $left
+  local.get $right
+  i32.eq
+  if
+   i32.const 1
+   return
+  end
+  local.get $left
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $right
+   i32.const 0
+   i32.eq
+  end
+  if
+   i32.const 0
+   return
+  end
+  local.get $left
+  call $~lib/string/String#get:length
+  local.set $leftLength
+  local.get $leftLength
+  local.get $right
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $left
+  i32.const 0
+  local.get $right
+  i32.const 0
+  local.get $leftLength
+  call $~lib/util/string/compareImpl
+  i32.eqz
   return
  )
  (func $std/operator-overloading/TesterElementAccess#get:x (param $this i32) (result i32)
@@ -3222,1570 +3647,66 @@
    unreachable
   end
  )
- (func $std/operator-overloading/Tester#constructor (param $this i32) (param $x i32) (param $y i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  local.get $x
-  call $std/operator-overloading/Tester#set:x
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  local.get $y
-  call $std/operator-overloading/Tester#set:y
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
- (func $std/operator-overloading/Tester.add (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.add
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  i32.add
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.sub (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.sub
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  i32.sub
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.mul (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.mul
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  i32.mul
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.div (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.div_s
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  i32.div_s
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.mod (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.rem_s
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  i32.rem_s
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.pow (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  call $~lib/math/ipow32
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  call $~lib/math/ipow32
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.and (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.and
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  i32.and
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.or (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.or
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  i32.or
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.xor (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.xor
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  i32.xor
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.equals (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.eq
-  if (result i32)
-   local.get $a
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   local.get $b
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   i32.eq
-  else
-   i32.const 0
-  end
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.notEquals (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.ne
-  if (result i32)
-   local.get $a
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   local.get $b
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   i32.ne
-  else
-   i32.const 0
-  end
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.greater (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.gt_s
-  if (result i32)
-   local.get $a
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   local.get $b
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   i32.gt_s
-  else
-   i32.const 0
-  end
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.greaterEquals (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.ge_s
-  if (result i32)
-   local.get $a
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   local.get $b
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   i32.ge_s
-  else
-   i32.const 0
-  end
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.less (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.lt_s
-  if (result i32)
-   local.get $a
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   local.get $b
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   i32.lt_s
-  else
-   i32.const 0
-  end
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.lessEquals (param $a i32) (param $b i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $a
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $b
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  i32.le_s
-  if (result i32)
-   local.get $a
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   local.get $b
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
-   call $std/operator-overloading/Tester#get:y
-   i32.le_s
-  else
-   i32.const 0
-  end
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.shr (param $value i32) (param $shift i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $value
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $shift
-  i32.shr_s
-  local.get $value
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $shift
-  i32.shr_s
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.shu (param $value i32) (param $shift i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $value
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $shift
-  i32.shr_u
-  local.get $value
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $shift
-  i32.shr_u
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.shl (param $value i32) (param $shift i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $value
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:x
-  local.get $shift
-  i32.shl
-  local.get $value
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $std/operator-overloading/Tester#get:y
-  local.get $shift
-  i32.shl
-  call $std/operator-overloading/Tester#constructor
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
-  return
- )
- (func $std/operator-overloading/Tester.pos (param $value i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $value
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:x
-  local.get $value
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:y
-  call $std/operator-overloading/Tester#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $std/operator-overloading/Tester.neg (param $value i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  i32.const 0
-  local.get $value
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:x
-  i32.sub
-  i32.const 0
-  local.get $value
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:y
-  i32.sub
-  call $std/operator-overloading/Tester#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $std/operator-overloading/Tester.not (param $value i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $value
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:x
-  i32.const -1
-  i32.xor
-  local.get $value
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:y
-  i32.const -1
-  i32.xor
-  call $std/operator-overloading/Tester#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $std/operator-overloading/Tester.excl (param $value i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $value
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:x
-  i32.eqz
-  if (result i32)
-   local.get $value
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store $0
-   local.get $1
-   call $std/operator-overloading/Tester#get:y
-   i32.eqz
-  else
-   i32.const 0
-  end
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $std/operator-overloading/Tester#inc (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $std/operator-overloading/Tester#get:x
-  i32.const 1
-  i32.add
-  call $std/operator-overloading/Tester#set:x
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $std/operator-overloading/Tester#get:y
-  i32.const 1
-  i32.add
-  call $std/operator-overloading/Tester#set:y
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $std/operator-overloading/Tester#dec (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $std/operator-overloading/Tester#get:x
-  i32.const 1
-  i32.sub
-  call $std/operator-overloading/Tester#set:x
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $std/operator-overloading/Tester#get:y
-  i32.const 1
-  i32.sub
-  call $std/operator-overloading/Tester#set:y
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $std/operator-overloading/Tester#postInc (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:x
-  i32.const 1
-  i32.add
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:y
-  i32.const 1
-  i32.add
-  call $std/operator-overloading/Tester#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $std/operator-overloading/Tester#postDec (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:x
-  i32.const 1
-  i32.sub
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $std/operator-overloading/Tester#get:y
-  i32.const 1
-  i32.sub
-  call $std/operator-overloading/Tester#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $std/operator-overloading/TesterInlineStatic#constructor (param $this i32) (param $x i32) (param $y i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 5
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  local.get $x
-  call $std/operator-overloading/TesterInlineStatic#set:x
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  local.get $y
-  call $std/operator-overloading/TesterInlineStatic#set:y
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
- (func $std/operator-overloading/TesterInlineInstance#constructor (param $this i32) (param $x i32) (param $y i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 6
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  local.get $x
-  call $std/operator-overloading/TesterInlineInstance#set:x
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  local.get $y
-  call $std/operator-overloading/TesterInlineInstance#set:y
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
- (func $std/operator-overloading/TesterElementAccess#constructor (param $this i32) (param $x i32) (param $y i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 7
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  local.get $x
-  call $std/operator-overloading/TesterElementAccess#set:x
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  local.get $y
-  call $std/operator-overloading/TesterElementAccess#set:y
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
- (func $~lib/string/String.__eq (param $left i32) (param $right i32) (result i32)
-  (local $leftLength i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $left
-  local.get $right
-  i32.eq
-  if
-   i32.const 1
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
-  local.get $left
-  i32.const 0
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $right
-   i32.const 0
-   i32.eq
-  end
-  if
-   i32.const 0
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
-  local.get $left
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  call $~lib/string/String#get:length
-  local.set $leftLength
-  local.get $leftLength
-  local.get $right
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  call $~lib/string/String#get:length
-  i32.ne
-  if
-   i32.const 0
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
-  local.get $left
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  i32.const 0
-  local.get $right
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  i32.const 0
-  local.get $leftLength
-  call $~lib/util/string/compareImpl
-  i32.eqz
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
-  return
- )
  (func $std/operator-overloading/TesterElementAccess#__set (param $this i32) (param $key i32) (param $value i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $key
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
+  i32.const 0
   i32.store $0
-  local.get $3
+  local.get $key
   i32.const 512
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $3
-  i32.store $0 offset=4
+  i32.store $0
   local.get $3
   call $~lib/string/String.__eq
   if
    local.get $this
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.store $0
-   local.get $3
    local.get $value
    call $std/operator-overloading/TesterElementAccess#set:x
   else
    local.get $this
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.store $0
-   local.get $3
    local.get $value
    call $std/operator-overloading/TesterElementAccess#set:y
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
  (func $std/operator-overloading/TesterElementAccess#__get (param $this i32) (param $key i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
+  i32.const 0
+  i32.store $0
   local.get $key
+  i32.const 512
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
   i32.store $0
   local.get $2
-  i32.const 512
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0 offset=4
-  local.get $2
   call $~lib/string/String.__eq
   if (result i32)
    local.get $this
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
    call $std/operator-overloading/TesterElementAccess#get:x
   else
    local.get $this
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store $0
-   local.get $2
    call $std/operator-overloading/TesterElementAccess#get:y
   end
   local.set $2
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
@@ -6051,11 +4972,6 @@
   local.tee $0
   i32.store $0 offset=8
   local.get $0
-  local.set $9
-  global.get $~lib/memory/__stack_pointer
-  local.get $9
-  i32.store $0
-  local.get $9
   call $std/operator-overloading/Tester#postInc
   global.set $std/operator-overloading/incdec
   local.get $0
@@ -6127,11 +5043,6 @@
   local.tee $1
   i32.store $0 offset=12
   local.get $1
-  local.set $9
-  global.get $~lib/memory/__stack_pointer
-  local.get $9
-  i32.store $0
-  local.get $9
   call $std/operator-overloading/Tester#postDec
   global.set $std/operator-overloading/incdec
   local.get $1
@@ -6215,20 +5126,10 @@
    i32.store $0 offset=16
    i32.const 0
    local.get $3
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineStatic#get:x
    i32.const 1
    i32.add
    local.get $3
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineStatic#get:y
    i32.const 1
    i32.add
@@ -6252,33 +5153,13 @@
    i32.store $0 offset=24
    i32.const 0
    local.get $4
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineStatic#get:x
    local.get $5
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineStatic#get:x
    i32.add
    local.get $4
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineStatic#get:y
    local.get $5
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineStatic#get:y
    i32.add
    call $std/operator-overloading/TesterInlineStatic#constructor
@@ -6328,20 +5209,10 @@
    i32.store $0 offset=28
    i32.const 0
    local.get $6
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineInstance#get:x
    i32.const 1
    i32.add
    local.get $6
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineInstance#get:y
    i32.const 1
    i32.add
@@ -6365,33 +5236,13 @@
    i32.store $0 offset=36
    i32.const 0
    local.get $7
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineInstance#get:x
    local.get $8
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineInstance#get:x
    i32.add
    local.get $7
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineInstance#get:y
    local.get $8
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store $0
-   local.get $9
    call $std/operator-overloading/TesterInlineInstance#get:y
    i32.add
    call $std/operator-overloading/TesterInlineInstance#constructor
@@ -6654,5 +5505,141 @@
   i32.const 48
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $std/operator-overloading/Tester#constructor (param $this i32) (param $x i32) (param $y i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  local.get $x
+  call $std/operator-overloading/Tester#set:x
+  local.get $this
+  local.get $y
+  call $std/operator-overloading/Tester#set:y
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+ )
+ (func $std/operator-overloading/TesterInlineStatic#constructor (param $this i32) (param $x i32) (param $y i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  local.get $x
+  call $std/operator-overloading/TesterInlineStatic#set:x
+  local.get $this
+  local.get $y
+  call $std/operator-overloading/TesterInlineStatic#set:y
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+ )
+ (func $std/operator-overloading/TesterInlineInstance#constructor (param $this i32) (param $x i32) (param $y i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.const 6
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  local.get $x
+  call $std/operator-overloading/TesterInlineInstance#set:x
+  local.get $this
+  local.get $y
+  call $std/operator-overloading/TesterInlineInstance#set:y
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+ )
+ (func $std/operator-overloading/TesterElementAccess#constructor (param $this i32) (param $x i32) (param $y i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.const 7
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  local.get $x
+  call $std/operator-overloading/TesterElementAccess#set:x
+  local.get $this
+  local.get $y
+  call $std/operator-overloading/TesterElementAccess#set:y
+  local.get $this
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
  )
 )

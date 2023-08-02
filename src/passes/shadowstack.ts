@@ -170,10 +170,27 @@ function matchPattern(module: Module, expr: ExpressionRef): ExpressionRef {
 }
 
 /** Tests whether a `value` matched by `matchTostack` needs a slot. */
-function needsSlot(module: Module, value: ExpressionRef): bool {
+function needsSlotInCall(module: Module, value: ExpressionRef): bool {
   switch (_BinaryenExpressionGetId(value)) {
     // no need to stack null pointers
-    case ExpressionId.Const: return !isConstZero(value);
+    case ExpressionId.Const:
+        return !isConstZero(value);
+    // note: can't omit a slot when assigning from another local since the other
+    // local might have shorter lifetime and become reassigned, say in a loop,
+    // then no longer holding on to the previous value in its stack slot.
+    case ExpressionId.LocalGet:
+    case ExpressionId.LocalSet: // Tee
+      return false;
+  }
+  return true;
+}
+
+/** Tests whether a `value` matched by `matchTostack` needs a slot. */
+function needsSlotInLocalSet(module: Module, value: ExpressionRef): bool {
+  switch (_BinaryenExpressionGetId(value)) {
+    // no need to stack null pointers
+    case ExpressionId.Const:
+        return !isConstZero(value);
     // note: can't omit a slot when assigning from another local since the other
     // local might have shorter lifetime and become reassigned, say in a loop,
     // then no longer holding on to the previous value in its stack slot.
@@ -344,7 +361,7 @@ export class ShadowStackPass extends Pass {
       let operand = operands[i];
       let match = matchPattern(module, operand);
       if (!match) continue;
-      if (!needsSlot(module, match)) {
+      if (!needsSlotInCall(module, match)) {
         operands[i] = match;
         continue;
       }
@@ -434,7 +451,7 @@ export class ShadowStackPass extends Pass {
     let value = _BinaryenLocalSetGetValue(localSet);
     let match = matchPattern(module, value);
     if (!match) return;
-    if (!needsSlot(module, match)) {
+    if (!needsSlotInLocalSet(module, match)) {
       _BinaryenLocalSetSetValue(localSet, match);
       return;
     }

@@ -1524,11 +1524,58 @@
   memory.fill $0
   local.get $1
  )
- (func $start:inlining
+ (func $~lib/rt/__visit_members (param $0 i32)
+  block $invalid
+   block $inlining/Baz
+    block $inlining/Bar
+     block $inlining/Foo
+      block $~lib/function/Function<%28i32%29=>i32>
+       block $~lib/arraybuffer/ArrayBufferView
+        block $~lib/string/String
+         block $~lib/arraybuffer/ArrayBuffer
+          block $~lib/object/Object
+           local.get $0
+           i32.const 8
+           i32.sub
+           i32.load $0
+           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28i32%29=>i32> $inlining/Foo $inlining/Bar $inlining/Baz $invalid
+          end
+          return
+         end
+         return
+        end
+        return
+       end
+       local.get $0
+       i32.load $0
+       local.tee $0
+       if
+        local.get $0
+        call $byn-split-outlined-A$~lib/rt/itcms/__visit
+       end
+       return
+      end
+      local.get $0
+      i32.load $0 offset=4
+      local.tee $0
+      if
+       local.get $0
+       call $byn-split-outlined-A$~lib/rt/itcms/__visit
+      end
+      return
+     end
+     return
+    end
+    return
+   end
+   return
+  end
+  unreachable
+ )
+ (func $~start
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -1590,7 +1637,7 @@
    i32.const 1424
    global.set $~lib/rt/itcms/fromSpace
    global.get $~lib/memory/__stack_pointer
-   i32.const 16
+   i32.const 12
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -1598,35 +1645,28 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   local.tee $3
+   local.tee $1
    i64.const 0
    i64.store $0
-   local.get $3
-   i64.const 0
-   i64.store $0 offset=8
-   local.get $0
+   local.get $1
+   i32.const 0
+   i32.store $0 offset=8
+   local.get $1
    i32.const 16
    i32.const 6
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store $0
+   local.get $0
+   i32.const 3
+   i32.store $0 offset=8
+   local.get $0
+   i32.const 0
+   i32.store $0 offset=12
    global.get $~lib/memory/__stack_pointer
    local.tee $2
    local.get $0
    i32.store $0 offset=4
-   local.get $0
-   i32.const 3
-   i32.store $0 offset=8
-   local.get $2
-   local.get $0
-   i32.store $0 offset=4
-   local.get $0
-   i32.const 0
-   i32.store $0 offset=12
-   local.get $2
-   local.get $0
-   i32.store $0 offset=8
    local.get $0
    i32.eqz
    if
@@ -1635,23 +1675,13 @@
     i32.const 7
     call $~lib/rt/itcms/__new
     local.tee $0
-    i32.store $0 offset=8
+    i32.store $0 offset=4
    end
-   global.get $~lib/memory/__stack_pointer
-   local.tee $1
-   local.get $0
-   i32.store $0 offset=4
    local.get $0
    i32.const 1
    i32.store $0
-   local.get $1
-   local.get $0
-   i32.store $0 offset=4
    local.get $0
    i32.const 0
-   i32.store $0 offset=4
-   local.get $1
-   local.get $0
    i32.store $0 offset=4
    local.get $0
    i32.const 2
@@ -1659,18 +1689,12 @@
    local.get $2
    local.get $0
    i32.store $0
-   local.get $1
-   local.get $0
-   i32.store $0 offset=4
    local.get $0
    i32.const 4
    i32.store $0 offset=12
-   local.get $3
-   local.get $0
-   i32.store $0 offset=12
    local.get $1
    local.get $0
-   i32.store $0 offset=4
+   i32.store $0 offset=8
    local.get $0
    i32.load $0
    i32.const 1
@@ -1683,9 +1707,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store $0 offset=4
    local.get $0
    i32.load $0 offset=4
    i32.const 2
@@ -1698,9 +1719,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store $0 offset=4
    local.get $0
    i32.load $0 offset=8
    i32.const 3
@@ -1713,9 +1731,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store $0 offset=4
    local.get $0
    i32.load $0 offset=12
    i32.const 4
@@ -1729,7 +1744,7 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 16
+   i32.const 12
    i32.add
    global.set $~lib/memory/__stack_pointer
    return
@@ -1740,84 +1755,6 @@
   i32.const 1
   call $~lib/builtins/abort
   unreachable
- )
- (func $~lib/rt/__visit_members (param $0 i32)
-  (local $1 i32)
-  block $invalid
-   block $inlining/Baz
-    block $inlining/Bar
-     block $inlining/Foo
-      block $~lib/function/Function<%28i32%29=>i32>
-       block $~lib/arraybuffer/ArrayBufferView
-        block $~lib/string/String
-         block $~lib/arraybuffer/ArrayBuffer
-          block $~lib/object/Object
-           local.get $0
-           i32.const 8
-           i32.sub
-           i32.load $0
-           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28i32%29=>i32> $inlining/Foo $inlining/Bar $inlining/Baz $invalid
-          end
-          return
-         end
-         return
-        end
-        return
-       end
-       local.get $0
-       i32.load $0
-       local.tee $0
-       if
-        local.get $0
-        call $byn-split-outlined-A$~lib/rt/itcms/__visit
-       end
-       return
-      end
-      global.get $~lib/memory/__stack_pointer
-      i32.const 4
-      i32.sub
-      global.set $~lib/memory/__stack_pointer
-      global.get $~lib/memory/__stack_pointer
-      i32.const 1556
-      i32.lt_s
-      if
-       i32.const 34352
-       i32.const 34400
-       i32.const 1
-       i32.const 1
-       call $~lib/builtins/abort
-       unreachable
-      end
-      global.get $~lib/memory/__stack_pointer
-      local.tee $1
-      i32.const 0
-      i32.store $0
-      local.get $1
-      local.get $0
-      i32.store $0
-      local.get $0
-      i32.load $0 offset=4
-      local.tee $0
-      if
-       local.get $0
-       call $byn-split-outlined-A$~lib/rt/itcms/__visit
-      end
-      global.get $~lib/memory/__stack_pointer
-      i32.const 4
-      i32.add
-      global.set $~lib/memory/__stack_pointer
-      return
-     end
-     return
-    end
-    return
-   end
-   return
-  end
-  unreachable
- )
- (func $~start
-  call $start:inlining
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   global.get $~lib/rt/itcms/white

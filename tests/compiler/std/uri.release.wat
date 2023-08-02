@@ -1,7 +1,6 @@
 (module
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
@@ -2119,6 +2118,123 @@
    local.get $3
   end
  )
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  local.get $1
+  i32.eq
+  if
+   i32.const 1
+   return
+  end
+  local.get $1
+  i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  i32.const 20
+  i32.sub
+  i32.load $0 offset=16
+  i32.const 1
+  i32.shr_u
+  local.tee $3
+  local.get $1
+  i32.const 20
+  i32.sub
+  i32.load $0 offset=16
+  i32.const 1
+  i32.shr_u
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  local.tee $2
+  i32.const 7
+  i32.and
+  local.get $1
+  i32.const 7
+  i32.and
+  i32.or
+  i32.eqz
+  local.get $3
+  local.tee $0
+  i32.const 4
+  i32.ge_u
+  i32.and
+  if
+   loop $do-loop|0
+    local.get $2
+    i64.load $0
+    local.get $1
+    i64.load $0
+    i64.eq
+    if
+     local.get $2
+     i32.const 8
+     i32.add
+     local.set $2
+     local.get $1
+     i32.const 8
+     i32.add
+     local.set $1
+     local.get $0
+     i32.const 4
+     i32.sub
+     local.tee $0
+     i32.const 4
+     i32.ge_u
+     br_if $do-loop|0
+    end
+   end
+  end
+  block $__inlined_func$~lib/util/string/compareImpl
+   loop $while-continue|1
+    local.get $0
+    local.tee $3
+    i32.const 1
+    i32.sub
+    local.set $0
+    local.get $3
+    if
+     local.get $2
+     i32.load16_u $0
+     local.tee $5
+     local.get $1
+     i32.load16_u $0
+     local.tee $4
+     i32.sub
+     local.set $3
+     local.get $4
+     local.get $5
+     i32.ne
+     br_if $__inlined_func$~lib/util/string/compareImpl
+     local.get $2
+     i32.const 2
+     i32.add
+     local.set $2
+     local.get $1
+     i32.const 2
+     i32.add
+     local.set $1
+     br $while-continue|1
+    end
+   end
+   i32.const 0
+   local.set $3
+  end
+  local.get $3
+  i32.eqz
+ )
  (func $~lib/util/uri/decode (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -2616,326 +2732,6 @@
  (func $~start
   call $start:std/uri
  )
- (func $~lib/uri/encodeURIComponent (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4356
-  i32.lt_s
-  if
-   i32.const 37152
-   i32.const 37200
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  i32.const 0
-  i32.store $0
-  local.get $1
-  local.get $0
-  i32.store $0
-  local.get $0
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1068
-  call $~lib/util/uri/encode
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
- (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4356
-  i32.lt_s
-  if
-   i32.const 37152
-   i32.const 37200
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $0
-  local.get $1
-  i32.eq
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   i32.const 1
-   return
-  end
-  block $folding-inner0
-   local.get $1
-   i32.eqz
-   local.get $0
-   i32.eqz
-   i32.or
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $2
-   local.get $0
-   i32.store $0
-   local.get $0
-   i32.const 20
-   i32.sub
-   i32.load $0 offset=16
-   i32.const 1
-   i32.shr_u
-   local.set $3
-   local.get $2
-   local.get $1
-   i32.store $0
-   local.get $3
-   local.get $1
-   i32.const 20
-   i32.sub
-   i32.load $0 offset=16
-   i32.const 1
-   i32.shr_u
-   i32.ne
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $2
-   local.get $0
-   i32.store $0
-   local.get $2
-   local.get $1
-   i32.store $0 offset=4
-   local.get $0
-   local.tee $2
-   i32.const 7
-   i32.and
-   local.get $1
-   i32.const 7
-   i32.and
-   i32.or
-   i32.eqz
-   local.get $3
-   local.tee $0
-   i32.const 4
-   i32.ge_u
-   i32.and
-   if
-    loop $do-loop|0
-     local.get $2
-     i64.load $0
-     local.get $1
-     i64.load $0
-     i64.eq
-     if
-      local.get $2
-      i32.const 8
-      i32.add
-      local.set $2
-      local.get $1
-      i32.const 8
-      i32.add
-      local.set $1
-      local.get $0
-      i32.const 4
-      i32.sub
-      local.tee $0
-      i32.const 4
-      i32.ge_u
-      br_if $do-loop|0
-     end
-    end
-   end
-   block $__inlined_func$~lib/util/string/compareImpl
-    loop $while-continue|1
-     local.get $0
-     local.tee $3
-     i32.const 1
-     i32.sub
-     local.set $0
-     local.get $3
-     if
-      local.get $2
-      i32.load16_u $0
-      local.tee $5
-      local.get $1
-      i32.load16_u $0
-      local.tee $4
-      i32.sub
-      local.set $3
-      local.get $4
-      local.get $5
-      i32.ne
-      br_if $__inlined_func$~lib/util/string/compareImpl
-      local.get $2
-      i32.const 2
-      i32.add
-      local.set $2
-      local.get $1
-      i32.const 2
-      i32.add
-      local.set $1
-      br $while-continue|1
-     end
-    end
-    i32.const 0
-    local.set $3
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   i32.eqz
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  i32.const 0
- )
- (func $~lib/uri/encodeURI (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4356
-  i32.lt_s
-  if
-   i32.const 37152
-   i32.const 37200
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  i32.const 0
-  i32.store $0
-  local.get $1
-  local.get $0
-  i32.store $0
-  local.get $0
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 3388
-  call $~lib/util/uri/encode
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
- (func $~lib/uri/decodeURIComponent (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4356
-  i32.lt_s
-  if
-   i32.const 37152
-   i32.const 37200
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  i32.const 0
-  i32.store $0
-  local.get $1
-  local.get $0
-  i32.store $0
-  local.get $0
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  call $~lib/util/uri/decode
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
- (func $~lib/uri/decodeURI (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4356
-  i32.lt_s
-  if
-   i32.const 37152
-   i32.const 37200
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  i32.const 0
-  i32.store $0
-  local.get $1
-  local.get $0
-  i32.store $0
-  local.get $0
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 0
-  call $~lib/util/uri/decode
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
  (func $start:std/uri
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2996,7 +2792,12 @@
   i32.const 1056
   i32.store $0 offset=8
   i32.const 1056
-  call $~lib/uri/encodeURIComponent
+  i32.const 1052
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3020,7 +2821,12 @@
   i32.const 1760
   i32.store $0 offset=8
   i32.const 1760
-  call $~lib/uri/encodeURIComponent
+  i32.const 1756
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3044,7 +2850,12 @@
   i32.const 1792
   i32.store $0 offset=8
   i32.const 1792
-  call $~lib/uri/encodeURIComponent
+  i32.const 1788
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3068,7 +2879,12 @@
   i32.const 1824
   i32.store $0 offset=8
   i32.const 1824
-  call $~lib/uri/encodeURIComponent
+  i32.const 1820
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3092,7 +2908,12 @@
   i32.const 1856
   i32.store $0 offset=8
   i32.const 1856
-  call $~lib/uri/encodeURIComponent
+  i32.const 1852
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3116,7 +2937,12 @@
   i32.const 1952
   i32.store $0 offset=8
   i32.const 1952
-  call $~lib/uri/encodeURIComponent
+  i32.const 1948
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3140,7 +2966,12 @@
   i32.const 2016
   i32.store $0 offset=8
   i32.const 2016
-  call $~lib/uri/encodeURIComponent
+  i32.const 2012
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3164,7 +2995,12 @@
   i32.const 2080
   i32.store $0 offset=8
   i32.const 2080
-  call $~lib/uri/encodeURIComponent
+  i32.const 2076
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3188,7 +3024,12 @@
   i32.const 2160
   i32.store $0 offset=8
   i32.const 2160
-  call $~lib/uri/encodeURIComponent
+  i32.const 2156
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3212,7 +3053,12 @@
   i32.const 2240
   i32.store $0 offset=8
   i32.const 2240
-  call $~lib/uri/encodeURIComponent
+  i32.const 2236
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3236,7 +3082,12 @@
   i32.const 2304
   i32.store $0 offset=8
   i32.const 2304
-  call $~lib/uri/encodeURIComponent
+  i32.const 2300
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3260,7 +3111,12 @@
   i32.const 2384
   i32.store $0 offset=8
   i32.const 2384
-  call $~lib/uri/encodeURIComponent
+  i32.const 2380
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3284,7 +3140,12 @@
   i32.const 2512
   i32.store $0 offset=8
   i32.const 2512
-  call $~lib/uri/encodeURIComponent
+  i32.const 2508
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3308,7 +3169,12 @@
   i32.const 2656
   i32.store $0 offset=8
   i32.const 2656
-  call $~lib/uri/encodeURIComponent
+  i32.const 2652
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3332,7 +3198,12 @@
   i32.const 2736
   i32.store $0 offset=8
   i32.const 2736
-  call $~lib/uri/encodeURIComponent
+  i32.const 2732
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3356,7 +3227,12 @@
   i32.const 2816
   i32.store $0 offset=8
   i32.const 2816
-  call $~lib/uri/encodeURIComponent
+  i32.const 2812
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3380,7 +3256,12 @@
   i32.const 2928
   i32.store $0 offset=8
   i32.const 2928
-  call $~lib/uri/encodeURIComponent
+  i32.const 2924
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3404,7 +3285,12 @@
   i32.const 3024
   i32.store $0 offset=8
   i32.const 3024
-  call $~lib/uri/encodeURIComponent
+  i32.const 3020
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3428,7 +3314,12 @@
   i32.const 3152
   i32.store $0 offset=8
   i32.const 3152
-  call $~lib/uri/encodeURIComponent
+  i32.const 3148
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1068
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3452,7 +3343,12 @@
   i32.const 1056
   i32.store $0 offset=8
   i32.const 1056
-  call $~lib/uri/encodeURI
+  i32.const 1052
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 3388
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3476,7 +3372,12 @@
   i32.const 1760
   i32.store $0 offset=8
   i32.const 1760
-  call $~lib/uri/encodeURI
+  i32.const 1756
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 3388
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3500,7 +3401,12 @@
   i32.const 3504
   i32.store $0 offset=8
   i32.const 3504
-  call $~lib/uri/encodeURI
+  i32.const 3500
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 3388
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3524,7 +3430,12 @@
   i32.const 1856
   i32.store $0 offset=8
   i32.const 1856
-  call $~lib/uri/encodeURI
+  i32.const 1852
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 3388
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3548,7 +3459,12 @@
   i32.const 3552
   i32.store $0 offset=8
   i32.const 3552
-  call $~lib/uri/encodeURI
+  i32.const 3548
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 3388
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3572,7 +3488,12 @@
   i32.const 2656
   i32.store $0 offset=8
   i32.const 2656
-  call $~lib/uri/encodeURI
+  i32.const 2652
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 3388
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3596,7 +3517,12 @@
   i32.const 2736
   i32.store $0 offset=8
   i32.const 2736
-  call $~lib/uri/encodeURI
+  i32.const 2732
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 3388
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3620,7 +3546,12 @@
   i32.const 2928
   i32.store $0 offset=8
   i32.const 2928
-  call $~lib/uri/encodeURI
+  i32.const 2924
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 3388
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3644,7 +3575,12 @@
   i32.const 3152
   i32.store $0 offset=8
   i32.const 3152
-  call $~lib/uri/encodeURI
+  i32.const 3148
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 3388
+  call $~lib/util/uri/encode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3668,7 +3604,12 @@
   i32.const 1056
   i32.store $0 offset=8
   i32.const 1056
-  call $~lib/uri/decodeURIComponent
+  i32.const 1052
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3692,7 +3633,12 @@
   i32.const 1760
   i32.store $0 offset=8
   i32.const 1760
-  call $~lib/uri/decodeURIComponent
+  i32.const 1756
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3716,7 +3662,12 @@
   i32.const 3648
   i32.store $0 offset=8
   i32.const 3648
-  call $~lib/uri/decodeURIComponent
+  i32.const 3644
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3740,7 +3691,12 @@
   i32.const 3712
   i32.store $0 offset=8
   i32.const 3712
-  call $~lib/uri/decodeURIComponent
+  i32.const 3708
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3764,7 +3720,12 @@
   i32.const 3776
   i32.store $0 offset=8
   i32.const 3776
-  call $~lib/uri/decodeURIComponent
+  i32.const 3772
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3788,7 +3749,12 @@
   i32.const 2736
   i32.store $0 offset=8
   i32.const 2736
-  call $~lib/uri/decodeURIComponent
+  i32.const 2732
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3812,7 +3778,12 @@
   i32.const 3808
   i32.store $0 offset=8
   i32.const 3808
-  call $~lib/uri/decodeURIComponent
+  i32.const 3804
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3836,7 +3807,12 @@
   i32.const 3936
   i32.store $0 offset=8
   i32.const 3936
-  call $~lib/uri/decodeURIComponent
+  i32.const 3932
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3860,7 +3836,12 @@
   i32.const 4016
   i32.store $0 offset=8
   i32.const 4016
-  call $~lib/uri/decodeURIComponent
+  i32.const 4012
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3884,7 +3865,12 @@
   i32.const 2416
   i32.store $0 offset=8
   i32.const 2416
-  call $~lib/uri/decodeURIComponent
+  i32.const 2412
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3908,7 +3894,12 @@
   i32.const 1056
   i32.store $0 offset=8
   i32.const 1056
-  call $~lib/uri/decodeURI
+  i32.const 1052
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3932,7 +3923,12 @@
   i32.const 1760
   i32.store $0 offset=8
   i32.const 1760
-  call $~lib/uri/decodeURI
+  i32.const 1756
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3956,7 +3952,12 @@
   i32.const 3648
   i32.store $0 offset=8
   i32.const 3648
-  call $~lib/uri/decodeURI
+  i32.const 3644
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3980,7 +3981,12 @@
   i32.const 4144
   i32.store $0 offset=8
   i32.const 4144
-  call $~lib/uri/decodeURI
+  i32.const 4140
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -4004,7 +4010,12 @@
   i32.const 4208
   i32.store $0 offset=8
   i32.const 4208
-  call $~lib/uri/decodeURI
+  i32.const 4204
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -4028,7 +4039,12 @@
   i32.const 3776
   i32.store $0 offset=8
   i32.const 3776
-  call $~lib/uri/decodeURI
+  i32.const 3772
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -4052,7 +4068,12 @@
   i32.const 2736
   i32.store $0 offset=8
   i32.const 2736
-  call $~lib/uri/decodeURI
+  i32.const 2732
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -4076,7 +4097,12 @@
   i32.const 3808
   i32.store $0 offset=8
   i32.const 3808
-  call $~lib/uri/decodeURI
+  i32.const 3804
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -4100,7 +4126,12 @@
   i32.const 2416
   i32.store $0 offset=8
   i32.const 2416
-  call $~lib/uri/decodeURI
+  i32.const 2412
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -4124,7 +4155,12 @@
   i32.const 4272
   i32.store $0 offset=8
   i32.const 4272
-  call $~lib/uri/decodeURI
+  i32.const 4268
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -4148,7 +4184,12 @@
   i32.const 4320
   i32.store $0 offset=8
   i32.const 4320
-  call $~lib/uri/decodeURI
+  i32.const 4316
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -4172,7 +4213,12 @@
   i32.const 4016
   i32.store $0 offset=8
   i32.const 4016
-  call $~lib/uri/decodeURI
+  i32.const 4012
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  i32.const 0
+  call $~lib/util/uri/decode
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0

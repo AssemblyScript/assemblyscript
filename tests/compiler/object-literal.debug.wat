@@ -2465,6 +2465,49 @@
   i32.const 0
   return
  )
+ (func $~lib/string/String.__eq (param $left i32) (param $right i32) (result i32)
+  (local $leftLength i32)
+  local.get $left
+  local.get $right
+  i32.eq
+  if
+   i32.const 1
+   return
+  end
+  local.get $left
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $right
+   i32.const 0
+   i32.eq
+  end
+  if
+   i32.const 0
+   return
+  end
+  local.get $left
+  call $~lib/string/String#get:length
+  local.set $leftLength
+  local.get $leftLength
+  local.get $right
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $left
+  i32.const 0
+  local.get $right
+  i32.const 0
+  local.get $leftLength
+  call $~lib/util/string/compareImpl
+  i32.eqz
+  return
+ )
  (func $object-literal/Unmanaged#set:bar (param $this i32) (param $bar i32)
   local.get $this
   local.get $bar
@@ -2624,6 +2667,198 @@
  (func $object-literal/OmittedTypes#get:isTrue (param $this i32) (result i32)
   local.get $this
   i32.load8_u $0 offset=64
+ )
+ (func $object-literal/testOmittedTypes (param $omitted i32)
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:int32
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 57
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:uint32
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 58
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:int64
+  i64.const 0
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 59
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:uint64
+  i64.const 0
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 60
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:float32
+  f32.const 0
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 61
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:float64
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 62
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:int8
+  i32.extend8_s
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 63
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:uint8
+  i32.const 255
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 64
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:int16
+  i32.extend16_s
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 65
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:uint16
+  i32.const 65535
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 66
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:intsize
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 67
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:uintsize
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 68
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:alias
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 69
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/OmittedTypes#get:isTrue
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 70
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $object-literal/MixedOmitted#set:simpleType (param $this i32) (param $simpleType i32)
   local.get $this
@@ -3010,175 +3245,17 @@
    unreachable
   end
  )
- (func $object-literal/Managed#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store $0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/Managed#set:bar
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/Managed#set:baz
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $~lib/string/String.__eq (param $left i32) (param $right i32) (result i32)
-  (local $leftLength i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $left
-  local.get $right
-  i32.eq
-  if
-   i32.const 1
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
-  local.get $left
-  i32.const 0
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $right
-   i32.const 0
-   i32.eq
-  end
-  if
-   i32.const 0
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
-  local.get $left
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  call $~lib/string/String#get:length
-  local.set $leftLength
-  local.get $leftLength
-  local.get $right
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  call $~lib/string/String#get:length
-  i32.ne
-  if
-   i32.const 0
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $3
-   return
-  end
-  local.get $left
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  i32.const 0
-  local.get $right
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0 offset=4
-  local.get $3
-  i32.const 0
-  local.get $leftLength
-  call $~lib/util/string/compareImpl
-  i32.eqz
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
-  return
- )
  (func $object-literal/testManaged (param $managed i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0 offset=8
   local.get $managed
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
   call $object-literal/Managed#get:bar
   i32.const 123
   i32.eq
@@ -3192,11 +3269,6 @@
    unreachable
   end
   local.get $managed
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=8
-  local.get $1
   call $object-literal/Managed#get:baz
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3220,9 +3292,662 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $object-literal/testUnmanaged (param $unmanaged i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $unmanaged
+  call $object-literal/Unmanaged#get:bar
+  i32.const 123
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 27
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $unmanaged
+  call $object-literal/Unmanaged#get:baz
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 576
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 28
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $unmanaged
+  call $~lib/rt/tlsf/__free
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $object-literal/testMixedOmitted (param $omitted i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $omitted
+  call $object-literal/MixedOmitted#get:simpleType
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 82
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/MixedOmitted#get:complexType
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 608
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 83
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $omitted
+  call $object-literal/MixedOmitted#get:anotherSimpleType
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 84
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $object-literal/OmittedFoo#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 40
+   i32.const 7
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  i32.const 640
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $object-literal/OmittedFoo#set:bar
+  local.get $this
+  i32.const 672
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $object-literal/OmittedFoo#set:baz
+  local.get $this
+  i32.const 0
+  call $object-literal/OmittedFoo#set:quux
+  local.get $this
+  i32.const 0
+  call $object-literal/OmittedFoo#set:quuz
+  local.get $this
+  i32.const 0
+  call $object-literal/OmittedFoo#set:corge
+  local.get $this
+  i32.const 0
+  call $object-literal/OmittedFoo#set:grault
+  local.get $this
+  i32.const 0
+  call $object-literal/OmittedFoo#set:garply
+  local.get $this
+  i32.const 0
+  call $object-literal/OmittedFoo#set:waldo
+  local.get $this
+  i32.const 0
+  call $object-literal/OmittedFoo#set:fred
+  local.get $this
+  i32.const -1
+  call $object-literal/OmittedFoo#set:qux
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $object-literal/testOmittedFoo (param $foo i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $foo
+  call $object-literal/OmittedFoo#get:bar
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 640
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 107
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $foo
+  call $object-literal/OmittedFoo#get:baz
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 672
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 108
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $foo
+  call $object-literal/OmittedFoo#get:quux
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 109
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $foo
+  call $object-literal/OmittedFoo#get:quuz
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 110
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $foo
+  call $object-literal/OmittedFoo#get:corge
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 111
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $foo
+  call $object-literal/OmittedFoo#get:grault
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 112
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $foo
+  call $object-literal/OmittedFoo#get:garply
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 113
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $foo
+  call $object-literal/OmittedFoo#get:waldo
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 114
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $foo
+  call $object-literal/OmittedFoo#get:fred
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 115
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $foo
+  call $object-literal/OmittedFoo#get:qux
+  i32.const -1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 480
+   i32.const 116
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $start:object-literal
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 24
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.const 24
+  memory.fill $0
+  i32.const 128
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/toSpace
+  memory.size $0
+  i32.const 16
+  i32.shl
+  global.get $~lib/memory/__heap_base
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
+  i32.const 336
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/pinSpace
+  i32.const 368
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/fromSpace
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $object-literal/Managed#constructor
+  local.tee $0
+  i32.store $0 offset=4
+  local.get $0
+  i32.const 123
+  call $object-literal/Managed#set:bar
+  local.get $0
+  i32.const 32
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0 offset=8
+  local.get $5
+  call $object-literal/Managed#set:baz
+  local.get $0
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $object-literal/testManaged
+  i32.const 0
+  call $object-literal/Unmanaged#constructor
+  local.set $1
+  local.get $1
+  i32.const 123
+  call $object-literal/Unmanaged#set:bar
+  local.get $1
+  i32.const 32
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0 offset=8
+  local.get $5
+  i32.const 0
+  i32.const 5
+  call $~lib/string/String#substring
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $object-literal/Unmanaged#set:baz
+  local.get $1
+  call $object-literal/testUnmanaged
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $object-literal/OmittedTypes#constructor
+  local.tee $2
+  i32.store $0 offset=12
+  local.get $2
+  i32.const 0
+  i32.store $0
+  local.get $2
+  i32.const 0
+  i32.store $0 offset=4
+  local.get $2
+  i64.const 0
+  i64.store $0 offset=8
+  local.get $2
+  i64.const 0
+  i64.store $0 offset=16
+  local.get $2
+  f32.const 0
+  f32.store $0 offset=24
+  local.get $2
+  f64.const 0
+  f64.store $0 offset=32
+  local.get $2
+  i32.const 0
+  i32.store8 $0 offset=40
+  local.get $2
+  i32.const 0
+  i32.store8 $0 offset=41
+  local.get $2
+  i32.const 0
+  i32.store16 $0 offset=42
+  local.get $2
+  i32.const 0
+  i32.store16 $0 offset=44
+  local.get $2
+  i32.const 0
+  i32.store $0 offset=48
+  local.get $2
+  i32.const 0
+  i32.store $0 offset=52
+  local.get $2
+  f64.const 0
+  f64.store $0 offset=56
+  local.get $2
+  i32.const 0
+  i32.store8 $0 offset=64
+  local.get $2
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $object-literal/testOmittedTypes
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $object-literal/MixedOmitted#constructor
+  local.tee $3
+  i32.store $0 offset=16
+  local.get $3
+  i32.const 0
+  call $object-literal/MixedOmitted#set:simpleType
+  local.get $3
+  i32.const 608
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0 offset=8
+  local.get $5
+  call $object-literal/MixedOmitted#set:complexType
+  local.get $3
+  f64.const 0
+  f64.store $0 offset=8
+  local.get $3
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $object-literal/testMixedOmitted
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $object-literal/OmittedFoo#constructor
+  local.tee $4
+  i32.store $0 offset=20
+  local.get $4
+  i32.const 0
+  i32.store $0 offset=8
+  local.get $4
+  i32.const 0
+  i32.store $0 offset=12
+  local.get $4
+  i32.const 0
+  i32.store $0 offset=16
+  local.get $4
+  i32.const 0
+  i32.store $0 offset=20
+  local.get $4
+  i32.const 0
+  i32.store $0 offset=24
+  local.get $4
+  i32.const 0
+  i32.store $0 offset=28
+  local.get $4
+  i32.const 0
+  i32.store $0 offset=32
+  local.get $4
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  call $object-literal/testOmittedFoo
+  global.get $~lib/memory/__heap_base
+  global.set $~lib/memory/__stack_pointer
+  call $~lib/rt/itcms/__collect
+  global.get $~lib/memory/__stack_pointer
+  i32.const 24
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/object/Object#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 0
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $object-literal/Managed#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  i32.const 0
+  call $object-literal/Managed#set:bar
+  local.get $this
+  i32.const 0
+  call $object-literal/Managed#set:baz
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
  )
  (func $~lib/string/String#substring (param $this i32) (param $start i32) (param $end i32) (result i32)
   (local $len i32)
@@ -3246,19 +3971,14 @@
   (local $out i32)
   (local $22 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $this
-  local.set $22
-  global.get $~lib/memory/__stack_pointer
-  local.get $22
+  i32.const 0
   i32.store $0
-  local.get $22
+  local.get $this
   call $~lib/string/String#get:length
   local.set $len
   local.get $start
@@ -3325,7 +4045,7 @@
    i32.const 544
    local.set $22
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $22
@@ -3346,7 +4066,7 @@
    local.get $this
    local.set $22
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $22
@@ -3357,7 +4077,7 @@
   i32.const 2
   call $~lib/rt/itcms/__new
   local.tee $out
-  i32.store $0 offset=4
+  i32.store $0
   local.get $out
   local.get $this
   local.get $fromPos
@@ -3367,75 +4087,22 @@
   local.get $out
   local.set $22
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $22
   return
  )
- (func $object-literal/testUnmanaged (param $unmanaged i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  local.get $unmanaged
-  call $object-literal/Unmanaged#get:bar
-  i32.const 123
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 27
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $unmanaged
-  call $object-literal/Unmanaged#get:baz
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  i32.const 576
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 28
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $unmanaged
-  call $~lib/rt/tlsf/__free
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
  (func $object-literal/OmittedTypes#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
+  i32.const 0
+  i32.store $0
   local.get $this
   i32.eqz
   if
@@ -3448,419 +4115,69 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store $0
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/OmittedTypes#set:int32
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/OmittedTypes#set:uint32
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i64.const 0
   call $object-literal/OmittedTypes#set:int64
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i64.const 0
   call $object-literal/OmittedTypes#set:uint64
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   f32.const 0
   call $object-literal/OmittedTypes#set:float32
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   f64.const 0
   call $object-literal/OmittedTypes#set:float64
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/OmittedTypes#set:int8
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/OmittedTypes#set:uint8
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/OmittedTypes#set:int16
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/OmittedTypes#set:uint16
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/OmittedTypes#set:intsize
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/OmittedTypes#set:uintsize
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   f64.const 0
   call $object-literal/OmittedTypes#set:alias
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/OmittedTypes#set:isTrue
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $object-literal/testOmittedTypes (param $omitted i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:int32
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 57
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:uint32
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 58
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:int64
-  i64.const 0
-  i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 59
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:uint64
-  i64.const 0
-  i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 60
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:float32
-  f32.const 0
-  f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 61
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:float64
-  f64.const 0
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 62
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:int8
-  i32.extend8_s
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 63
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:uint8
-  i32.const 255
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 64
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:int16
-  i32.extend16_s
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 65
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:uint16
-  i32.const 65535
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 66
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:intsize
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 67
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:uintsize
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 68
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:alias
-  f64.const 0
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 69
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedTypes#get:isTrue
-  i32.const 0
-  i32.ne
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 70
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $1
  )
  (func $object-literal/MixedOmitted#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
+  i32.const 0
+  i32.store $0
   local.get $this
   i32.eqz
   if
@@ -3873,748 +4190,18 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store $0
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/MixedOmitted#set:simpleType
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   i32.const 0
   call $object-literal/MixedOmitted#set:complexType
   local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
   f64.const 0
   call $object-literal/MixedOmitted#set:anotherSimpleType
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $object-literal/testMixedOmitted (param $omitted i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0 offset=8
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/MixedOmitted#get:simpleType
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 82
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=8
-  local.get $1
-  call $object-literal/MixedOmitted#get:complexType
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  i32.const 608
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 83
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $omitted
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/MixedOmitted#get:anotherSimpleType
-  f64.const 0
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 84
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $object-literal/OmittedFoo#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0 offset=8
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 40
-   i32.const 7
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store $0
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 640
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=8
-  local.get $1
-  call $object-literal/OmittedFoo#set:bar
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 672
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=8
-  local.get $1
-  call $object-literal/OmittedFoo#set:baz
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:quux
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:quuz
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:corge
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:grault
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:garply
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:waldo
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:fred
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  i32.const -1
-  call $object-literal/OmittedFoo#set:qux
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $object-literal/testOmittedFoo (param $foo i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0 offset=8
-  local.get $foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=8
-  local.get $1
-  call $object-literal/OmittedFoo#get:bar
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  i32.const 640
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 107
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=8
-  local.get $1
-  call $object-literal/OmittedFoo#get:baz
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  i32.const 672
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 108
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $object-literal/OmittedFoo#get:quux
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  i32.const 0
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 109
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $object-literal/OmittedFoo#get:quuz
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  i32.const 0
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 110
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $object-literal/OmittedFoo#get:corge
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  i32.const 0
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 111
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $object-literal/OmittedFoo#get:grault
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  i32.const 0
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 112
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $object-literal/OmittedFoo#get:garply
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  i32.const 0
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 113
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $object-literal/OmittedFoo#get:waldo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  i32.const 0
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 114
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedFoo#get:fred
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 115
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0
-  local.get $1
-  call $object-literal/OmittedFoo#get:qux
-  i32.const -1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 480
-   i32.const 116
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $start:object-literal
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 28
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.const 28
-  memory.fill $0
-  i32.const 128
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/toSpace
-  memory.size $0
-  i32.const 16
-  i32.shl
-  global.get $~lib/memory/__heap_base
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 336
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 368
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/fromSpace
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $object-literal/Managed#constructor
-  local.tee $0
-  i32.store $0 offset=4
-  local.get $0
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=8
-  local.get $5
-  i32.const 123
-  call $object-literal/Managed#set:bar
-  local.get $0
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=8
-  local.get $5
-  i32.const 32
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=12
-  local.get $5
-  call $object-literal/Managed#set:baz
-  local.get $0
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0
-  local.get $5
-  call $object-literal/testManaged
-  i32.const 0
-  call $object-literal/Unmanaged#constructor
-  local.set $1
-  local.get $1
-  i32.const 123
-  call $object-literal/Unmanaged#set:bar
-  local.get $1
-  i32.const 32
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=8
-  local.get $5
-  i32.const 0
-  i32.const 5
-  call $~lib/string/String#substring
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0
-  local.get $5
-  call $object-literal/Unmanaged#set:baz
-  local.get $1
-  call $object-literal/testUnmanaged
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $object-literal/OmittedTypes#constructor
-  local.tee $2
-  i32.store $0 offset=16
-  local.get $2
-  i32.const 0
-  i32.store $0
-  local.get $2
-  i32.const 0
-  i32.store $0 offset=4
-  local.get $2
-  i64.const 0
-  i64.store $0 offset=8
-  local.get $2
-  i64.const 0
-  i64.store $0 offset=16
-  local.get $2
-  f32.const 0
-  f32.store $0 offset=24
-  local.get $2
-  f64.const 0
-  f64.store $0 offset=32
-  local.get $2
-  i32.const 0
-  i32.store8 $0 offset=40
-  local.get $2
-  i32.const 0
-  i32.store8 $0 offset=41
-  local.get $2
-  i32.const 0
-  i32.store16 $0 offset=42
-  local.get $2
-  i32.const 0
-  i32.store16 $0 offset=44
-  local.get $2
-  i32.const 0
-  i32.store $0 offset=48
-  local.get $2
-  i32.const 0
-  i32.store $0 offset=52
-  local.get $2
-  f64.const 0
-  f64.store $0 offset=56
-  local.get $2
-  i32.const 0
-  i32.store8 $0 offset=64
-  local.get $2
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0
-  local.get $5
-  call $object-literal/testOmittedTypes
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $object-literal/MixedOmitted#constructor
-  local.tee $3
-  i32.store $0 offset=20
-  local.get $3
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=8
-  local.get $5
-  i32.const 0
-  call $object-literal/MixedOmitted#set:simpleType
-  local.get $3
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=8
-  local.get $5
-  i32.const 608
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=12
-  local.get $5
-  call $object-literal/MixedOmitted#set:complexType
-  local.get $3
-  f64.const 0
-  f64.store $0 offset=8
-  local.get $3
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0
-  local.get $5
-  call $object-literal/testMixedOmitted
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $object-literal/OmittedFoo#constructor
-  local.tee $4
-  i32.store $0 offset=24
-  local.get $4
-  i32.const 0
-  i32.store $0 offset=8
-  local.get $4
-  i32.const 0
-  i32.store $0 offset=12
-  local.get $4
-  i32.const 0
-  i32.store $0 offset=16
-  local.get $4
-  i32.const 0
-  i32.store $0 offset=20
-  local.get $4
-  i32.const 0
-  i32.store $0 offset=24
-  local.get $4
-  i32.const 0
-  i32.store $0 offset=28
-  local.get $4
-  i32.const 0
-  i32.store $0 offset=32
-  local.get $4
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0
-  local.get $5
-  call $object-literal/testOmittedFoo
-  global.get $~lib/memory/__heap_base
-  global.set $~lib/memory/__stack_pointer
-  call $~lib/rt/itcms/__collect
-  global.get $~lib/memory/__stack_pointer
-  i32.const 28
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/object/Object#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 0
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

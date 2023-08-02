@@ -2541,6 +2541,136 @@
   local.get $this
   i32.load $0 offset=12
  )
+ (func $inlining/test_ctor
+  (local $this i32)
+  (local $f i32)
+  (local $this|2 i32)
+  (local $c i32)
+  (local $bar i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  local.set $this
+  i32.const 4
+  local.set $f
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 16
+   i32.const 6
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  i32.const 3
+  call $inlining/Bar#set:d
+  local.get $this
+  i32.const 0
+  call $inlining/Bar#set:e
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.tee $this|2
+  i32.store $0 offset=4
+  i32.const 2
+  local.set $c
+  local.get $this|2
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.const 7
+   call $~lib/rt/itcms/__new
+   local.tee $this|2
+   i32.store $0 offset=4
+  end
+  local.get $this|2
+  i32.const 1
+  call $inlining/Baz#set:a
+  local.get $this|2
+  i32.const 0
+  call $inlining/Baz#set:b
+  local.get $this|2
+  local.get $c
+  call $inlining/Baz#set:b
+  local.get $this|2
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.get $f
+  call $inlining/Bar#set:e
+  local.get $this
+  local.tee $bar
+  i32.store $0 offset=8
+  local.get $bar
+  call $inlining/Baz#get:a
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 96
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $bar
+  call $inlining/Baz#get:b
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 97
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $bar
+  call $inlining/Bar#get:d
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 98
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $bar
+  call $inlining/Bar#get:e
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 99
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $start:inlining
   call $inlining/test
   i32.const 3
@@ -2603,6 +2733,12 @@
  (func $~lib/function/Function<%28i32%29=>i32>#get:_env (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
+ )
+ (func $~lib/function/Function<%28i32%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  local.get $this
+  call $~lib/function/Function<%28i32%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
  )
  (func $~lib/function/Function<%28i32%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
@@ -2667,210 +2803,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $inlining/test_ctor
-  (local $this i32)
-  (local $f i32)
-  (local $this|2 i32)
-  (local $c i32)
-  (local $bar i32)
-  (local $5 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 16
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0 offset=8
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  local.set $this
-  i32.const 4
-  local.set $f
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 16
-   i32.const 6
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  local.get $this
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  i32.const 3
-  call $inlining/Bar#set:d
-  local.get $this
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  i32.const 0
-  call $inlining/Bar#set:e
-  global.get $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.tee $this|2
-  i32.store $0 offset=8
-  i32.const 2
-  local.set $c
-  local.get $this|2
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 7
-   call $~lib/rt/itcms/__new
-   local.tee $this|2
-   i32.store $0 offset=8
-  end
-  local.get $this|2
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  i32.const 1
-  call $inlining/Baz#set:a
-  local.get $this|2
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  i32.const 0
-  call $inlining/Baz#set:b
-  local.get $this|2
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  local.get $c
-  call $inlining/Baz#set:b
-  local.get $this|2
-  local.tee $this
-  i32.store $0
-  local.get $this
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  local.get $f
-  call $inlining/Bar#set:e
-  local.get $this
-  local.tee $bar
-  i32.store $0 offset=12
-  local.get $bar
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  call $inlining/Baz#get:a
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 96
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $bar
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  call $inlining/Baz#get:b
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 97
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $bar
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  call $inlining/Bar#get:d
-  i32.const 3
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 98
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $bar
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store $0 offset=4
-  local.get $5
-  call $inlining/Bar#get:e
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 99
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 16
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i32%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $~lib/function/Function<%28i32%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
 )

@@ -198,6 +198,29 @@
   local.get $a
   return
  )
+ (func $possibly-null/testLogicalAnd (param $a i32)
+  local.get $a
+  if (result i32)
+   local.get $a
+   call $possibly-null/requireNonNull
+  else
+   i32.const 0
+  end
+  drop
+ )
+ (func $possibly-null/testLogicalOr (param $a i32)
+  local.get $a
+  i32.eqz
+  if (result i32)
+   i32.const 1
+  else
+   local.get $a
+   call $possibly-null/requireNonNull
+   i32.const 0
+   i32.ne
+  end
+  drop
+ )
  (func $possibly-null/testLogicalAndMulti (param $a i32) (param $b i32)
   local.get $a
   if (result i32)
@@ -281,65 +304,6 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $possibly-null/testLogicalAnd (param $a i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $a
-  if (result i32)
-   local.get $a
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store $0
-   local.get $1
-   call $possibly-null/requireNonNull
-  else
-   i32.const 0
-  end
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $possibly-null/testLogicalOr (param $a i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $a
-  i32.eqz
-  if (result i32)
-   i32.const 1
-  else
-   local.get $a
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store $0
-   local.get $1
-   call $possibly-null/requireNonNull
-   i32.const 0
-   i32.ne
-  end
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $export:possibly-null/testTrue (param $0 i32)
   global.get $~lib/memory/__stack_pointer

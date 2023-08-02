@@ -2389,6 +2389,14 @@
   local.get $this
   i32.load $0
  )
+ (func $~lib/array/Array<i32>#__visit (param $this i32) (param $cookie i32)
+  i32.const 0
+  drop
+  local.get $this
+  call $~lib/array/Array<i32>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+ )
  (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -2467,16 +2475,13 @@
   (local $buffer i32)
   (local $6 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0 offset=8
   local.get $this
   i32.eqz
   if
@@ -2488,35 +2493,15 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
   i32.const 0
   call $~lib/array/Array<i32>#set:buffer
   local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
   i32.const 0
   call $~lib/array/Array<i32>#set:dataStart
   local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
   i32.const 0
   call $~lib/array/Array<i32>#set:byteLength
   local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
   i32.const 0
   call $~lib/array/Array<i32>#set:length_
   local.get $length
@@ -2548,80 +2533,29 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store $0 offset=8
+  i32.store $0 offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
   drop
   local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
   local.get $buffer
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=12
-  local.get $6
   call $~lib/array/Array<i32>#set:buffer
   local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
   local.get $buffer
   call $~lib/array/Array<i32>#set:dataStart
   local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
   local.get $bufferSize
   call $~lib/array/Array<i32>#set:byteLength
   local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0 offset=4
-  local.get $6
   local.get $length
   call $~lib/array/Array<i32>#set:length_
   local.get $this
   local.set $6
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $6
- )
- (func $~lib/array/Array<i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0
-  local.get $2
-  call $~lib/array/Array<i32>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
 )

@@ -1408,7 +1408,6 @@
   i32.const 3
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  (local $1 i32)
   block $folding-inner0
    block $invalid
     block $function-call/Foo
@@ -1441,28 +1440,6 @@
    end
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1804
-  i32.lt_s
-  if
-   i32.const 34592
-   i32.const 34640
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  i32.const 0
-  i32.store $0
-  local.get $1
-  local.get $0
-  i32.store $0
   local.get $0
   i32.load $0 offset=4
   local.tee $0
@@ -1470,10 +1447,6 @@
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $~start
   (local $0 i32)
@@ -1564,7 +1537,7 @@
    i32.const 1568
    global.set $~lib/rt/itcms/fromSpace
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -1573,8 +1546,8 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i64.const 0
-   i64.store $0
+   i32.const 0
+   i32.store $0
    local.get $0
    i32.const 7
    call $~lib/rt/itcms/__new
@@ -1582,9 +1555,6 @@
    i32.store $0
    global.get $~lib/memory/__stack_pointer
    local.tee $1
-   local.get $0
-   i32.store $0 offset=4
-   local.get $1
    i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -1612,7 +1582,7 @@
    local.get $0
    i32.store $0
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $0
