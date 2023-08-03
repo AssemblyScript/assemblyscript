@@ -174,7 +174,7 @@ function needsSlotInCall(module: Module, value: ExpressionRef): bool {
   switch (_BinaryenExpressionGetId(value)) {
     // no need to stack null pointers
     case ExpressionId.Const:
-        return !isConstZero(value);
+      return !isConstZero(value);
     // note: can't omit a slot when assigning from another local since the other
     // local might have shorter lifetime and become reassigned, say in a loop,
     // then no longer holding on to the previous value in its stack slot.
