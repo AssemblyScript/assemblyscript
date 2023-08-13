@@ -35,7 +35,7 @@
  (export "nonNullReal" (global $features/reference-types/nonNullReal))
  (export "memory" (memory $0))
  (start $~start)
- (func $features/reference-types/testLocal<ref_func|null}>
+ (func $features/reference-types/testLocal<ref_func|null>
   (local $local funcref)
   ref.null nofunc
   local.set $local
@@ -68,7 +68,7 @@
    unreachable
   end
  )
- (func $features/reference-types/testLocal<ref_extern|null}>
+ (func $features/reference-types/testLocal<ref_extern|null>
   (local $local externref)
   ref.null noextern
   local.set $local
@@ -256,8 +256,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $features/reference-types/testLocal<ref_func|null}>
-  call $features/reference-types/testLocal<ref_extern|null}>
+  call $features/reference-types/testLocal<ref_func|null>
+  call $features/reference-types/testLocal<ref_extern|null>
   ref.func $features/reference-types/someFunc
   global.set $features/reference-types/funcGlobal
   global.get $features/reference-types/funcGlobal
