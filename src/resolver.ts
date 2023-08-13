@@ -3407,6 +3407,14 @@ export class Resolver extends DiagnosticEmitter {
               if (boundInstance) {
                 let fieldType = boundInstance.type;
                 if (fieldType == Type.void) break; // failed to resolve earlier
+                if (fieldType.isExternalReference) {
+                  this.error(
+                    DiagnosticCode.Not_implemented_0,
+                    assert(boundPrototype.typeNode).range,
+                    "Reference typed fields"
+                  );
+                  break;
+                }
                 let needsLayout = true;
                 if (base) {
                   let existingMember = base.getMember(boundPrototype.name);
