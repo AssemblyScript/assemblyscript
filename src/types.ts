@@ -638,7 +638,7 @@ export class Type {
             : signatureReference.toString(validWat);
         } else {
           return this.isNullableReference
-            ? `${this.kindToString()}${nullablePostfix}}`
+            ? `${this.kindToString()}${nullablePostfix}`
             : this.kindToString();
         }
       }
