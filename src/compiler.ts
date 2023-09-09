@@ -9035,6 +9035,16 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FunctionPrototype: {
         let functionPrototype = <FunctionPrototype>target;
+        let typeParameterNodes = functionPrototype.typeParameterNodes;
+
+        if (typeParameterNodes && typeParameterNodes.length != 0) {
+          this.error(
+            DiagnosticCode.Type_argument_expected,
+            expression.range
+          );
+          break; // also diagnose 'not a value at runtime'
+        }
+
         let functionInstance = this.resolver.resolveFunction(functionPrototype, null);
         if (!functionInstance) return module.unreachable();
         if (!this.compileFunction(functionInstance)) return module.unreachable();
