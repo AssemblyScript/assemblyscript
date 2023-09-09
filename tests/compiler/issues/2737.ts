@@ -6,4 +6,7 @@ namespace foo {
 foo.bar;
 memory.data;
 
+// Should error from lacking first-class builtins:
+atomic.fence;
+
 ERROR("EOF");

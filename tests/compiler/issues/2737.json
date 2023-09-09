@@ -8,6 +8,8 @@
     "memory.data;",
     "AS234: Expression does not compile to a value at runtime.",
     "memory.data;",
+    "AS100: Not implemented: First-class built-ins",
+    "atomic.fence;",
     "EOF"
   ]
 }

@@ -9049,6 +9049,15 @@ export class Compiler extends DiagnosticEmitter {
         if (!functionInstance) return module.unreachable();
         if (!this.compileFunction(functionInstance)) return module.unreachable();
         this.currentType = functionInstance.type;
+
+        if (functionInstance.hasDecorator(DecoratorFlags.Builtin)) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            expression.range, "First-class built-ins"
+          );
+          return module.unreachable();
+        }
+
         let offset = this.ensureRuntimeFunction(functionInstance);
         return this.options.isWasm64
           ? module.i64(i64_low(offset), i64_high(offset))
