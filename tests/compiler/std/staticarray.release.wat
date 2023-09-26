@@ -5756,7 +5756,7 @@
      i32.store $0
      local.get $7
      if
-      local.get $4
+      local.get $8
       local.get $7
       i32.const 1
       call $byn-split-outlined-A$~lib/rt/itcms/__link

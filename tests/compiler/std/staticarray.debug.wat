@@ -4309,7 +4309,7 @@
     i32.add
     local.get $ref
     i32.store $0
-    local.get $outStart
+    local.get $out
     local.get $ref
     i32.const 1
     call $~lib/rt/itcms/__link
@@ -4345,7 +4345,7 @@
     i32.add
     local.get $ref|14
     i32.store $0
-    local.get $outStart
+    local.get $out
     local.get $ref|14
     i32.const 1
     call $~lib/rt/itcms/__link
