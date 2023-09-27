@@ -70,6 +70,11 @@ arr4 = changetype<StaticArray<Ref>>(0);
   result = source.concat<StaticArray<i32>>([]);
   assert(result.length == source.length);
 }
+{
+  let source: StaticArray<string> = ["1", "2"];
+  let result = source.concat<StaticArray<string>>(["3"]);
+  assert(result.length == 3);
+}
 
 // slice
 {
