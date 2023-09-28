@@ -5596,13 +5596,23 @@ export class Compiler extends DiagnosticEmitter {
     // to compile just the value, we need to know the target's type
     let targetType: Type;
     switch (target.kind) {
-      case ElementKind.Global: {
-        if (!this.compileGlobalLazy(<Global>target, expression)) {
-          return this.module.unreachable();
-        }
-        // fall-through
-      }
+      case ElementKind.Global:
       case ElementKind.Local: {
+        if (target.kind == ElementKind.Global) {
+          if (!this.compileGlobalLazy(<Global>target, expression)) {
+            return this.module.unreachable();
+          }
+        } else {
+          if ((<Local>target).isClosure(flow)) {
+            // TODO: closures
+            this.error(
+              DiagnosticCode.Not_implemented_0,
+              expression.range,
+              "Closures"
+            );
+            return this.module.unreachable();
+          }
+        }
         if (this.pendingElements.has(target)) {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,
@@ -5611,6 +5621,7 @@ export class Compiler extends DiagnosticEmitter {
           );
           return this.module.unreachable();
         }
+
         targetType = (<VariableLikeElement>target).type;
         if (target.hasDecorator(DecoratorFlags.Unsafe)) this.checkUnsafe(expression);
         break;
@@ -7370,7 +7381,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = localType;
         }
 
-        if (target.parent != flow.targetFunction) {
+        if (local.isClosure(flow)) {
           // TODO: closures
           this.error(
             DiagnosticCode.Not_implemented_0,

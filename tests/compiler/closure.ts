@@ -28,4 +28,12 @@ function testFuncParam($local0: (x: i32) => void): () => void {
 }
 testFuncParam((x: i32) => {});
 
+function testAssign(): (value: i32) => void {
+  let $local0 = 0;
+  return function inner(value: i32): void {
+    $local0 = 10; // closure 5
+  };
+}
+testAssign();
+
 ERROR("EOF");
