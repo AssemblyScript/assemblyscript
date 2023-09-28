@@ -5603,7 +5603,7 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.unreachable();
           }
         } else {
-          if ((<Local>target).isClosure(flow)) {
+          if (!(<Local>target).isInCurrentFunction(flow)) {
             // TODO: closures
             this.error(
               DiagnosticCode.Not_implemented_0,
@@ -7381,7 +7381,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = localType;
         }
 
-        if (local.isClosure(flow)) {
+        if (!local.isInCurrentFunction(flow)) {
           // TODO: closures
           this.error(
             DiagnosticCode.Not_implemented_0,

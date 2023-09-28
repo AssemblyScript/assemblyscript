@@ -3635,8 +3635,8 @@ export class Local extends VariableLikeElement {
     this.setType(type);
   }
 
-  isClosure(flow: Flow): bool {
-    return this.parent != flow.targetFunction;
+  isInCurrentFunction(flow: Flow): bool {
+    return this.parent == flow.targetFunction;
   }
 }
 
