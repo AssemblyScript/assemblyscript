@@ -3628,7 +3628,12 @@ export class Local extends VariableLikeElement {
     /** Declaration reference. */
     declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
   ) {
-    super(ElementKind.Local, name, parent, declaration);
+    super(
+      ElementKind.Local,
+      name,
+      parent,
+      declaration
+    );
     this.originalName = name;
     this.index = index;
     assert(type != Type.void);

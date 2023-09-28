@@ -5602,16 +5602,14 @@ export class Compiler extends DiagnosticEmitter {
           if (!this.compileGlobalLazy(<Global>target, expression)) {
             return this.module.unreachable();
           }
-        } else {
-          if ((<Local>target).isClosure(flow)) {
-            // TODO: closures
-            this.error(
-              DiagnosticCode.Not_implemented_0,
-              expression.range,
-              "Closures"
-            );
-            return this.module.unreachable();
-          }
+        } else if ((<Local>target).isClosure(flow)) {
+          // TODO: closures
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            expression.range,
+            "Closures"
+          );
+          return this.module.unreachable();
         }
         if (this.pendingElements.has(target)) {
           this.error(
@@ -5621,7 +5619,6 @@ export class Compiler extends DiagnosticEmitter {
           );
           return this.module.unreachable();
         }
-
         targetType = (<VariableLikeElement>target).type;
         if (target.hasDecorator(DecoratorFlags.Unsafe)) this.checkUnsafe(expression);
         break;
