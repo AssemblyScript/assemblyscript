@@ -5602,7 +5602,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!this.compileGlobalLazy(<Global>target, expression)) {
             return this.module.unreachable();
           }
-        } else if (!(<Local>target).isInCurrentFunction(flow)) {
+        } else if (!(<Local>target).isInFunction(flow.targetFunction)) {
           // TODO: closures
           this.error(
             DiagnosticCode.Not_implemented_0,
@@ -7378,7 +7378,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = localType;
         }
 
-        if (!local.isInCurrentFunction(flow)) {
+        if (!local.isInFunction(flow.targetFunction)) {
           // TODO: closures
           this.error(
             DiagnosticCode.Not_implemented_0,
