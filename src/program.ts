@@ -3640,8 +3640,8 @@ export class Local extends VariableLikeElement {
     this.setType(type);
   }
 
-  isInFunction(fn: Function): bool {
-    return this.parent == fn;
+  declaredByFlow(flow: Flow): bool {
+    return this.parent == flow.targetFunction;
   }
 }
 
