@@ -18,6 +18,7 @@ function maybeGrowMemory(newOffset: usize): void {
     if (memory.grow(pagesWanted) < 0) {
       if (memory.grow(pagesNeeded) < 0) unreachable(); // out of memory
     }
+    if (isDefined(ASC_RT_GROW_HANDLER)) ASC_RT_GROW_HANDLER();
   }
   offset = newOffset;
 }

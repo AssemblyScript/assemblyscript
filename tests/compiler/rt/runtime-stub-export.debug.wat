@@ -80,6 +80,8 @@
      unreachable
     end
    end
+   i32.const 0
+   drop
   end
   local.get $newOffset
   global.set $~lib/rt/stub/offset
@@ -100,7 +102,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 33
+   i32.const 34
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -167,7 +169,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 86
+   i32.const 87
    i32.const 30
    call $~lib/builtins/abort
    unreachable
