@@ -6609,17 +6609,18 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0, k = overrideInstances.length; i < k; ++i) {
         let overrideInstance = overrideInstances[i];
         if (!overrideInstance.is(CommonFlags.Compiled)) continue; // errored
-        let overrideType = overrideInstance.type;
-        let originalType = instance.type;
-        if (!overrideType.isAssignableTo(originalType)) {
+
+        let overrideSignature = overrideInstance.signature;
+        let originalSignature = instance.signature;
+
+        if (!overrideSignature.isAssignableTo(originalSignature, true)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            overrideInstance.identifierNode.range, overrideType.toString(), originalType.toString()
+            overrideInstance.identifierNode.range, overrideSignature.toString(), originalSignature.toString()
           );
           continue;
         }
         // TODO: additional optional parameters are not permitted by `isAssignableTo` yet
-        let overrideSignature = overrideInstance.signature;
         let overrideParameterTypes = overrideSignature.parameterTypes;
         let overrideNumParameters = overrideParameterTypes.length;
         let paramExprs = new Array<ExpressionRef>(1 + overrideNumParameters);
