@@ -6,6 +6,10 @@ interface J {
   foo(): i32;
 }
 
+interface K extends J {
+  foo(): i32;
+}
+
 class A implements I {
   foo(): i32 { return 1; }
 }
@@ -48,6 +52,14 @@ assert(g.foo() == 4);
 
 let h: I = new F();
 assert(h.foo() == 4);
+
+class G implements K {
+  foo(): i32 {
+    return 1;
+  }
+}
+
+assert((new G() as J).foo() == 1);
 
 // can implement fields with fields or properties
 interface I2 {
