@@ -208,12 +208,17 @@ const common = {
   bundle: true,
   sourcemap: true,
   treeShaking: true,
-  minify: true,
-  watch,
-  incremental: watch
+  minify: true
 };
 
-const srcBuild = esbuild.build({
+async function invokeBuild(options) {
+  const ctx = await esbuild.context(options);
+  if (watch) await ctx.watch();
+  else await ctx.rebuild();
+  ctx.dispose();
+}
+
+const srcBuild = invokeBuild({
   entryPoints: [ "./src/index.ts" ],
   tsconfig: "./src/tsconfig.json",
   outfile: "./dist/assemblyscript.js",
@@ -222,7 +227,7 @@ const srcBuild = esbuild.build({
   ...common
 });
 
-const cliBuild = esbuild.build({
+const cliBuild = invokeBuild({
   entryPoints: [ "./cli/index.js" ],
   tsconfig: "./cli/tsconfig.json",
   outfile: "./dist/asc.js",
