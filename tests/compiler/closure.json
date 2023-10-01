@@ -10,6 +10,8 @@
     "$local0; // closure 3",
     "AS100: Not implemented: Closures",
     "$local0(123); // closure 4",
+    "AS100: Not implemented: Closures",
+    "$local0 = 10; // closure 5",
     "EOF"
   ]
 }

@@ -3639,6 +3639,10 @@ export class Local extends VariableLikeElement {
     assert(type != Type.void);
     this.setType(type);
   }
+
+  declaredByFlow(flow: Flow): bool {
+    return this.parent == flow.targetFunction;
+  }
 }
 
 /** A yet unresolved function prototype. */
