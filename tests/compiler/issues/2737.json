@@ -1,0 +1,15 @@
+{
+  "stderr": [
+    "TS1140: Type argument expected.",
+    "foo.bar;",
+    "AS234: Expression does not compile to a value at runtime.",
+    "foo.bar;",
+    "TS1140: Type argument expected.",
+    "memory.data;",
+    "AS234: Expression does not compile to a value at runtime.",
+    "memory.data;",
+    "AS100: Not implemented: First-class built-ins",
+    "atomic.fence;",
+    "EOF"
+  ]
+}

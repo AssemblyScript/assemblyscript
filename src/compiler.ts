@@ -5596,13 +5596,21 @@ export class Compiler extends DiagnosticEmitter {
     // to compile just the value, we need to know the target's type
     let targetType: Type;
     switch (target.kind) {
-      case ElementKind.Global: {
-        if (!this.compileGlobalLazy(<Global>target, expression)) {
+      case ElementKind.Global:
+      case ElementKind.Local: {
+        if (target.kind == ElementKind.Global) {
+          if (!this.compileGlobalLazy(<Global>target, expression)) {
+            return this.module.unreachable();
+          }
+        } else if (!(<Local>target).declaredByFlow(flow)) {
+          // TODO: closures
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            expression.range,
+            "Closures"
+          );
           return this.module.unreachable();
         }
-        // fall-through
-      }
-      case ElementKind.Local: {
         if (this.pendingElements.has(target)) {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,
@@ -6609,17 +6617,18 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0, k = overrideInstances.length; i < k; ++i) {
         let overrideInstance = overrideInstances[i];
         if (!overrideInstance.is(CommonFlags.Compiled)) continue; // errored
-        let overrideType = overrideInstance.type;
-        let originalType = instance.type;
-        if (!overrideType.isAssignableTo(originalType)) {
+
+        let overrideSignature = overrideInstance.signature;
+        let originalSignature = instance.signature;
+
+        if (!overrideSignature.isAssignableTo(originalSignature, true)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            overrideInstance.identifierNode.range, overrideType.toString(), originalType.toString()
+            overrideInstance.identifierNode.range, overrideSignature.toString(), originalSignature.toString()
           );
           continue;
         }
         // TODO: additional optional parameters are not permitted by `isAssignableTo` yet
-        let overrideSignature = overrideInstance.signature;
         let overrideParameterTypes = overrideSignature.parameterTypes;
         let overrideNumParameters = overrideParameterTypes.length;
         let paramExprs = new Array<ExpressionRef>(1 + overrideNumParameters);
@@ -7370,7 +7379,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = localType;
         }
 
-        if (target.parent != flow.targetFunction) {
+        if (!local.declaredByFlow(flow)) {
           // TODO: closures
           this.error(
             DiagnosticCode.Not_implemented_0,
@@ -9035,10 +9044,29 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FunctionPrototype: {
         let functionPrototype = <FunctionPrototype>target;
+        let typeParameterNodes = functionPrototype.typeParameterNodes;
+
+        if (typeParameterNodes && typeParameterNodes.length != 0) {
+          this.error(
+            DiagnosticCode.Type_argument_expected,
+            expression.range
+          );
+          break; // also diagnose 'not a value at runtime'
+        }
+
         let functionInstance = this.resolver.resolveFunction(functionPrototype, null);
         if (!functionInstance) return module.unreachable();
         if (!this.compileFunction(functionInstance)) return module.unreachable();
         this.currentType = functionInstance.type;
+
+        if (functionInstance.hasDecorator(DecoratorFlags.Builtin)) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            expression.range, "First-class built-ins"
+          );
+          return module.unreachable();
+        }
+
         let offset = this.ensureRuntimeFunction(functionInstance);
         return this.options.isWasm64
           ? module.i64(i64_low(offset), i64_high(offset))

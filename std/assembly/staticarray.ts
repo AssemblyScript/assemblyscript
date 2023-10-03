@@ -214,14 +214,14 @@ export class StaticArray<T> {
         for (let offset: usize = 0; offset < sourceSize; offset += sizeof<T>()) {
           let ref = load<usize>(thisStart + offset);
           store<usize>(outStart + offset, ref);
-          __link(outStart, ref, true);
+          __link(changetype<usize>(out), ref, true);
         }
         outStart += sourceSize;
         let otherSize = <usize>otherLen << alignof<T>();
         for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
           let ref = load<usize>(otherStart + offset);
           store<usize>(outStart + offset, ref);
-          __link(outStart, ref, true);
+          __link(changetype<usize>(out), ref, true);
         }
       } else {
         memory.copy(outStart, thisStart, sourceSize);
