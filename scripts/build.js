@@ -7,6 +7,8 @@ import glob from "glob";
 import { createRequire } from "module";
 import { stdoutColors } from "../util/terminal.js";
 
+import * as dts from "./build-dts.js";
+
 const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const watch = process.argv[2] === "--watch";
@@ -242,25 +244,24 @@ let buildingDefinitions = false;
 
 function buildDefinitions() {
   const startTime = Date.now();
-  const stdout = [];
-  console.log(`${time()} - ${"dts"} - Starting new build ...`);
+  console.log(`${time()} - dts - Starting new build ...`);
   buildingDefinitions = true;
-  childProcess.spawn("node", [ "./build-dts.js" ], {
-    cwd: dirname,
-    stdio: "pipe"
-  }).on("data", data => {
-    stdout.push(data.toString());
-  }).on("error", err => {
-    buildingDefinitions = false;
+
+  try {
+    dts.generateSrc();
+    dts.generateCli();
+
     const duration = Date.now() - startTime;
-    console.log(stdout.join(""));
-    console.log(`${time()}  - ${"dts"} - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
-  }).on("close", code => {
-    buildingDefinitions = false;
-    if (code) return;
+    console.log(`${time()} - dts - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
+    process.exitCode = 0;
+  } catch (e) {
     const duration = Date.now() - startTime;
-    console.log(`${time()} - ${"dts"} - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
-  });
+    console.error(e);
+    console.log(`${time()} - dts - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
+    process.exitCode = 1;
+  } finally {
+    buildingDefinitions = false;
+  }
 }
 
 if (watch) {

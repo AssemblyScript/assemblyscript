@@ -1,0 +1,4 @@
+*.generated.d.ts
+*.map
+asc.js
+assemblyscript.js

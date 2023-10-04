@@ -1,6 +1,5 @@
 node_modules/
 *debug.log
-dist/
 build/
 raw/
 .history
