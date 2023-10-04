@@ -4003,15 +4003,15 @@ export class Compiler extends DiagnosticEmitter {
       case Token.Exclamation_Equals_Equals:
       case Token.Exclamation_Equals: {
         let resolver = this.resolver;
-        let leftType = resolver.resolveExpression(left, this.currentFlow, Type.auto, ReportMode.Swallow);
-        if (leftType == this.options.usizeType || leftType == Type.auto || leftType == null) {
-          let rightType = this.resolver.resolveExpression(right, this.currentFlow, Type.auto, ReportMode.Swallow);
-          leftType = rightType;
+        let resolvedLeftType = resolver.resolveExpression(left, this.currentFlow, Type.auto, ReportMode.Swallow);
+        if (resolvedLeftType == this.options.usizeType || resolvedLeftType == Type.auto || resolvedLeftType == null) {
+          let resolvedRightType = this.resolver.resolveExpression(right, this.currentFlow, Type.auto, ReportMode.Swallow);
+          resolvedLeftType = resolvedRightType;
         }
-        if (leftType == null) {
-          leftType = Type.auto;
+        if (resolvedLeftType == null) {
+          resolvedLeftType = Type.auto;
         }
-        leftExpr = this.compileExpression(left, leftType);
+        leftExpr = this.compileExpression(left, resolvedLeftType);
         leftType = this.currentType;
 
         // check operator overload
