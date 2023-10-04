@@ -29,7 +29,7 @@ export namespace process {
   }
 
   export function time(): i64 {
-    return Date_binding.now();
+    return <i64>Date_binding.now();
   }
 
   export function hrtime(): u64 {

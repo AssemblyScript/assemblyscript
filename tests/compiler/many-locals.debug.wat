@@ -7,7 +7,7 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
  (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00m\00a\00n\00y\00-\00l\00o\00c\00a\00l\00s\00.\00t\00s\00")
+ (data $0 (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00m\00a\00n\00y\00-\00l\00o\00c\00a\00l\00s\00.\00t\00s\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "testI32" (func $many-locals/testI32))

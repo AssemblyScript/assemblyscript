@@ -165,7 +165,7 @@ export interface APIOptions {
   /** Reads a file from disk (or memory). */
   readFile?: (filename: string, baseDir: string) => (string | null) | Promise<string | null>;
   /** Writes a file to disk (or memory). */
-  writeFile?: (filename: string, contents: Uint8Array, baseDir: string) => void | Promise<void>;
+  writeFile?: (filename: string, contents: Uint8Array | string, baseDir: string) => void | Promise<void>;
   /** Lists all files within a directory. */
   listFiles?: (dirname: string, baseDir: string) => (string[] | null) | Promise<string[] | null>;
   /** Handler for diagnostic messages. */

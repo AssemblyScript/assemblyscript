@@ -221,6 +221,7 @@
       " reference-types     Reference types and operations.",
       " gc                  Garbage collection (WIP).",
       " stringref           String reference types.",
+      " relaxed-simd        Relaxed SIMD operations.",
       ""
     ],
     "TODO_doesNothingYet": [
@@ -228,7 +229,6 @@
       " tail-calls          Tail call operations.",
       " multi-value         Multi value types.",
       " memory64            Memory64 operations.",
-      " relaxed-simd        Relaxed SIMD operations.",
       " extended-const      Extended const expressions."
     ],
     "type": "S",

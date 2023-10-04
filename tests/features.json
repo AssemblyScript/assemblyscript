@@ -12,16 +12,13 @@
       "--enable reference-types"
     ],
     "v8_flags": [
-      "--experimental-wasm-reftypes"
     ]
   },
   "gc": {
     "asc_flags": [
-      "--enable reference-types",
       "--enable gc"
     ],
     "v8_flags": [
-      "--experimental-wasm-reftypes",
       "--experimental-wasm-gc"
     ]
   },
@@ -30,7 +27,21 @@
       "--enable exception-handling"
     ],
     "v8_flags": [
-      "--experimental-wasm-eh"
+    ]
+  },
+  "simd": {
+    "asc_flags": [
+      "--enable simd"
+    ],
+    "v8_flags": [
+    ]
+  },
+  "relaxed-simd": {
+    "asc_flags": [
+      "--enable relaxed-simd"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-relaxed-simd"
     ]
   }
 }

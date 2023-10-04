@@ -70,8 +70,6 @@ function testLocal<T>(): void {
   assert(!local);
   local = null;
   assert(!local);
-  let localInit: T = null;
-  assert(!localInit);
 }
 testLocal<funcref>();
 testLocal<externref>();

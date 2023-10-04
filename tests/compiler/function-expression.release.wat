@@ -6,7 +6,7 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -20,57 +20,57 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34924))
  (memory $0 1)
- (data (i32.const 1036) "\1c")
- (data (i32.const 1048) "\04\00\00\00\08\00\00\00\01")
- (data (i32.const 1068) "<")
- (data (i32.const 1080) "\02\00\00\00,\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
- (data (i32.const 1132) "\1c")
- (data (i32.const 1144) "\04\00\00\00\08\00\00\00\02")
- (data (i32.const 1164) "\1c")
- (data (i32.const 1176) "\05\00\00\00\08\00\00\00\03")
- (data (i32.const 1196) "\1c")
- (data (i32.const 1208) "\06\00\00\00\08\00\00\00\04")
- (data (i32.const 1228) "\1c")
- (data (i32.const 1240) "\07\00\00\00\08\00\00\00\05")
- (data (i32.const 1260) "\1c")
- (data (i32.const 1272) "\07\00\00\00\08\00\00\00\06")
- (data (i32.const 1292) "\1c")
- (data (i32.const 1304) "\07\00\00\00\08\00\00\00\07")
- (data (i32.const 1324) "\1c")
- (data (i32.const 1336) "\07\00\00\00\08\00\00\00\08")
- (data (i32.const 1356) "\1c")
- (data (i32.const 1368) "\07\00\00\00\08\00\00\00\t")
- (data (i32.const 1388) "\1c")
- (data (i32.const 1400) "\07\00\00\00\08\00\00\00\n")
- (data (i32.const 1420) "\1c")
- (data (i32.const 1432) "\06\00\00\00\08\00\00\00\0b")
- (data (i32.const 1452) "\1c")
- (data (i32.const 1464) "\04\00\00\00\08\00\00\00\0c")
- (data (i32.const 1484) "\1c")
- (data (i32.const 1496) "\08\00\00\00\08\00\00\00\r")
- (data (i32.const 1516) "\1c")
- (data (i32.const 1528) "\04\00\00\00\08\00\00\00\0e")
- (data (i32.const 1548) "\1c")
- (data (i32.const 1560) "\08\00\00\00\08\00\00\00\0f")
- (data (i32.const 1580) "<")
- (data (i32.const 1592) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1644) "<")
- (data (i32.const 1656) "\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1772) "<")
- (data (i32.const 1784) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 1836) ",")
- (data (i32.const 1848) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
- (data (i32.const 1916) "<")
- (data (i32.const 1928) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1980) "\1c")
- (data (i32.const 1992) "\04\00\00\00\08\00\00\00\10")
- (data (i32.const 2012) "\1c")
- (data (i32.const 2024) "\08\00\00\00\08\00\00\00\11")
- (data (i32.const 2044) "\1c")
- (data (i32.const 2056) "\04\00\00\00\08\00\00\00\12")
- (data (i32.const 2076) "\1c")
- (data (i32.const 2088) "\04\00\00\00\08\00\00\00\13")
- (data (i32.const 2112) "\n\00\00\00 \00\00\00 \00\00\00 ")
+ (data $0 (i32.const 1036) "\1c")
+ (data $0.1 (i32.const 1048) "\04\00\00\00\08\00\00\00\01")
+ (data $1 (i32.const 1068) "<")
+ (data $1.1 (i32.const 1080) "\02\00\00\00,\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
+ (data $2 (i32.const 1132) "\1c")
+ (data $2.1 (i32.const 1144) "\04\00\00\00\08\00\00\00\02")
+ (data $3 (i32.const 1164) "\1c")
+ (data $3.1 (i32.const 1176) "\05\00\00\00\08\00\00\00\03")
+ (data $4 (i32.const 1196) "\1c")
+ (data $4.1 (i32.const 1208) "\06\00\00\00\08\00\00\00\04")
+ (data $5 (i32.const 1228) "\1c")
+ (data $5.1 (i32.const 1240) "\07\00\00\00\08\00\00\00\05")
+ (data $6 (i32.const 1260) "\1c")
+ (data $6.1 (i32.const 1272) "\07\00\00\00\08\00\00\00\06")
+ (data $7 (i32.const 1292) "\1c")
+ (data $7.1 (i32.const 1304) "\07\00\00\00\08\00\00\00\07")
+ (data $8 (i32.const 1324) "\1c")
+ (data $8.1 (i32.const 1336) "\07\00\00\00\08\00\00\00\08")
+ (data $9 (i32.const 1356) "\1c")
+ (data $9.1 (i32.const 1368) "\07\00\00\00\08\00\00\00\t")
+ (data $10 (i32.const 1388) "\1c")
+ (data $10.1 (i32.const 1400) "\07\00\00\00\08\00\00\00\n")
+ (data $11 (i32.const 1420) "\1c")
+ (data $11.1 (i32.const 1432) "\06\00\00\00\08\00\00\00\0b")
+ (data $12 (i32.const 1452) "\1c")
+ (data $12.1 (i32.const 1464) "\04\00\00\00\08\00\00\00\0c")
+ (data $13 (i32.const 1484) "\1c")
+ (data $13.1 (i32.const 1496) "\08\00\00\00\08\00\00\00\r")
+ (data $14 (i32.const 1516) "\1c")
+ (data $14.1 (i32.const 1528) "\04\00\00\00\08\00\00\00\0e")
+ (data $15 (i32.const 1548) "\1c")
+ (data $15.1 (i32.const 1560) "\08\00\00\00\08\00\00\00\0f")
+ (data $16 (i32.const 1580) "<")
+ (data $16.1 (i32.const 1592) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data $17 (i32.const 1644) "<")
+ (data $17.1 (i32.const 1656) "\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
+ (data $20 (i32.const 1772) "<")
+ (data $20.1 (i32.const 1784) "\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data $21 (i32.const 1836) ",")
+ (data $21.1 (i32.const 1848) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
+ (data $23 (i32.const 1916) "<")
+ (data $23.1 (i32.const 1928) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data $24 (i32.const 1980) "\1c")
+ (data $24.1 (i32.const 1992) "\04\00\00\00\08\00\00\00\10")
+ (data $25 (i32.const 2012) "\1c")
+ (data $25.1 (i32.const 2024) "\08\00\00\00\08\00\00\00\11")
+ (data $26 (i32.const 2044) "\1c")
+ (data $26.1 (i32.const 2056) "\04\00\00\00\08\00\00\00\12")
+ (data $27 (i32.const 2076) "\1c")
+ (data $27.1 (i32.const 2088) "\04\00\00\00\08\00\00\00\13")
+ (data $28 (i32.const 2112) "\n\00\00\00 \00\00\00 \00\00\00 ")
  (table $0 20 20 funcref)
  (elem $0 (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|3 $start:function-expression~anonymous|7~anonymous|0 $start:function-expression~anonymous|7 $start:function-expression~anonymous|7~anonymous|0 $function-expression/testLocal~anonymous|0 $start:function-expression~anonymous|7~anonymous|0 $function-expression/testField~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~anonymous|0)
  (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
@@ -675,16 +675,17 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
-  local.get $1
   local.get $2
-  i32.gt_u
+  local.get $1
+  i64.extend_i32_u
+  i64.lt_u
   if
    i32.const 0
    i32.const 1936
-   i32.const 377
+   i32.const 382
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -709,7 +710,7 @@
    if
     i32.const 0
     i32.const 1936
-    i32.const 384
+    i32.const 389
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -737,18 +738,19 @@
    if
     i32.const 0
     i32.const 1936
-    i32.const 397
+    i32.const 402
     i32.const 5
     call $~lib/builtins/abort
     unreachable
    end
   end
   local.get $2
+  i32.wrap_i64
   i32.const -16
   i32.and
   local.get $1
   i32.sub
-  local.tee $2
+  local.tee $4
   i32.const 20
   i32.lt_u
   if
@@ -758,10 +760,10 @@
   local.get $3
   i32.const 2
   i32.and
-  local.get $2
+  local.get $4
   i32.const 8
   i32.sub
-  local.tee $2
+  local.tee $3
   i32.const 1
   i32.or
   i32.or
@@ -775,13 +777,13 @@
   local.get $1
   i32.const 4
   i32.add
-  local.get $2
+  local.get $3
   i32.add
-  local.tee $2
+  local.tee $3
   i32.const 2
   i32.store $0
   local.get $0
-  local.get $2
+  local.get $3
   i32.store $0 offset=1568
   local.get $0
   local.get $1
@@ -860,8 +862,9 @@
   i32.const 34928
   i32.const 36500
   memory.size $0
-  i32.const 16
-  i32.shl
+  i64.extend_i32_s
+  i64.const 16
+  i64.shl
   call $~lib/rt/tlsf/addMemory
   i32.const 34928
   global.set $~lib/rt/tlsf/ROOT
@@ -1102,7 +1105,7 @@
       if
        i32.const 0
        i32.const 1936
-       i32.const 559
+       i32.const 562
        i32.const 3
        call $~lib/builtins/abort
        unreachable
@@ -1169,7 +1172,7 @@
     if
      i32.const 0
      i32.const 1936
-     i32.const 343
+     i32.const 347
      i32.const 18
      call $~lib/builtins/abort
      unreachable
@@ -1291,8 +1294,9 @@
    i32.const 16
    i32.shl
    memory.size $0
-   i32.const 16
-   i32.shl
+   i64.extend_i32_s
+   i64.const 16
+   i64.shl
    call $~lib/rt/tlsf/addMemory
    local.get $1
    call $~lib/rt/tlsf/searchBlock
@@ -1301,7 +1305,7 @@
    if
     i32.const 0
     i32.const 1936
-    i32.const 496
+    i32.const 499
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -1316,7 +1320,7 @@
   if
    i32.const 0
    i32.const 1936
-   i32.const 498
+   i32.const 501
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1786,7 +1790,7 @@
    i32.const 1888
    global.set $~lib/rt/itcms/fromSpace
    global.get $~lib/memory/__stack_pointer
-   i32.const 16
+   i32.const 12
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -1798,8 +1802,8 @@
    i64.const 0
    i64.store $0
    local.get $0
-   i64.const 0
-   i64.store $0 offset=8
+   i32.const 0
+   i32.store $0 offset=8
    local.get $0
    i32.const 2032
    i32.store $0
@@ -1885,14 +1889,14 @@
    i32.store $0 offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $1
-   i32.store $0 offset=8
+   i32.store $0
    global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.load $0
    i32.load $0
    call_indirect $0 (type $none_=>_i32)
    local.tee $0
-   i32.store $0 offset=12
+   i32.store $0 offset=8
    i32.const 1
    local.get $0
    i32.load $0
@@ -1908,7 +1912,7 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 16
+   i32.const 12
    i32.add
    global.set $~lib/memory/__stack_pointer
    call $function-expression/semanticallyAnonymous

@@ -23,7 +23,8 @@ import {
 import {
   Compiler,
   Options,
-  UncheckedBehavior
+  UncheckedBehavior,
+  defaultFeatures
 } from "./compiler";
 
 import {
@@ -201,15 +202,14 @@ export const FEATURE_RELAXED_SIMD = Feature.RelaxedSimd;
 export const FEATURE_EXTENDED_CONST = Feature.ExtendedConst;
 /** String references. */
 export const FEATURE_STRINGREF = Feature.Stringref;
+/** All features. */
+export const FEATURES_ALL = Feature.All;
+/** Default features. */
+export const FEATURES_DEFAULT = defaultFeatures;
 
-/** Enables a specific feature. */
-export function enableFeature(options: Options, feature: Feature): void {
-  options.features |= feature;
-}
-
-/** Disables a specific feature. */
-export function disableFeature(options: Options, feature: Feature): void {
-  options.features &= ~feature;
+/** Sets whether a specific feature is enabled. */
+export function setFeature(options: Options, feature: Feature, on: bool): void {
+  options.setFeature(feature, on);
 }
 
 /** Gives the compiler a hint at the optimize levels that will be used later on. */

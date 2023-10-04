@@ -1,0 +1,8 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "TS2322: Type '() => void' is not assignable to type '(this: class-member-function-as-parameter/A) => void'.",
+    "TS2322: Type '(this: class-member-function-as-parameter/B) => void' is not assignable to type '(this: class-member-function-as-parameter/A) => void'.",
+    "EOF"
+  ]
+}

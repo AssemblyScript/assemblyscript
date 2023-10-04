@@ -46,11 +46,11 @@ Uses the AssemblyScript compiler compiled to JavaScript to compile itself to Web
 Running `asc` with the WebAssembly variant:
 
 ```ts
-asc [options...] --wasm build/assemblyscript.release-bootstrap.wasm
+asc [options...] --wasm build/assemblyscript.release-bootstrap.js
 ```
 
 Running the compiler tests with the WebAssembly variant:
 
 ```ts
-npm run test:compiler -- --wasm build/assemblyscript.release-bootstrap.wasm
+npm run test:compiler -- --wasm build/assemblyscript.release-bootstrap.js
 ```

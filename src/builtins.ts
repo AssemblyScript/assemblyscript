@@ -143,8 +143,6 @@ export namespace BuiltinNames {
   export const isManaged = "~lib/builtins/isManaged";
   export const isVoid = "~lib/builtins/isVoid";
 
-  export const bswap = "~lib/builtins/bswap";
-
   export const add = "~lib/builtins/add";
   export const sub = "~lib/builtins/sub";
   export const mul = "~lib/builtins/mul";
@@ -450,6 +448,17 @@ export namespace BuiltinNames {
   export const v128_q15mulr_sat = "~lib/builtins/v128.q15mulr_sat";
   export const v128_extmul_low = "~lib/builtins/v128.extmul_low";
   export const v128_extmul_high = "~lib/builtins/v128.extmul_high";
+  export const v128_relaxed_swizzle = "~lib/builtins/v128.relaxed_swizzle";
+  export const v128_relaxed_trunc = "~lib/builtins/v128.relaxed_trunc";
+  export const v128_relaxed_trunc_zero = "~lib/builtins/v128.relaxed_trunc_zero";
+  export const v128_relaxed_madd = "~lib/builtins/v128.relaxed_madd";
+  export const v128_relaxed_nmadd = "~lib/builtins/v128.relaxed_nmadd";
+  export const v128_relaxed_laneselect = "~lib/builtins/v128.relaxed_laneselect";
+  export const v128_relaxed_min = "~lib/builtins/v128.relaxed_min";
+  export const v128_relaxed_max = "~lib/builtins/v128.relaxed_max";
+  export const v128_relaxed_q15mulr = "~lib/builtins/v128.relaxed_q15mulr";
+  export const v128_relaxed_dot = "~lib/builtins/v128.relaxed_dot";
+  export const v128_relaxed_dot_add = "~lib/builtins/v128.relaxed_dot_add";
 
   export const i8x16 = "~lib/builtins/i8x16";
   export const i16x8 = "~lib/builtins/i16x8";
@@ -544,7 +553,6 @@ export namespace BuiltinNames {
   export const i16x8_extmul_high_i8x16_s = "~lib/builtins/i16x8.extmul_high_i8x16_s";
   export const i16x8_extmul_high_i8x16_u = "~lib/builtins/i16x8.extmul_high_i8x16_u";
   export const i16x8_shuffle = "~lib/builtins/i16x8.shuffle";
-  export const i16x8_swizzle = "~lib/builtins/i16x8.swizzle";
 
   export const i32x4_splat = "~lib/builtins/i32x4.splat";
   export const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
@@ -589,7 +597,6 @@ export namespace BuiltinNames {
   export const i32x4_extmul_high_i16x8_s = "~lib/builtins/i32x4.extmul_high_i16x8_s";
   export const i32x4_extmul_high_i16x8_u = "~lib/builtins/i32x4.extmul_high_i16x8_u";
   export const i32x4_shuffle = "~lib/builtins/i32x4.shuffle";
-  export const i32x4_swizzle = "~lib/builtins/i32x4.swizzle";
 
   export const i64x2_splat = "~lib/builtins/i64x2.splat";
   export const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
@@ -623,7 +630,6 @@ export namespace BuiltinNames {
   export const i64x2_extmul_high_i32x4_s = "~lib/builtins/i64x2.extmul_high_i32x4_s";
   export const i64x2_extmul_high_i32x4_u = "~lib/builtins/i64x2.extmul_high_i32x4_u";
   export const i64x2_shuffle = "~lib/builtins/i64x2.shuffle";
-  export const i64x2_swizzle = "~lib/builtins/i64x2.swizzle";
 
   export const f32x4_splat = "~lib/builtins/f32x4.splat";
   export const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
@@ -653,7 +659,6 @@ export namespace BuiltinNames {
   export const f32x4_convert_i32x4_u = "~lib/builtins/f32x4.convert_i32x4_u";
   export const f32x4_demote_f64x2_zero = "~lib/builtins/f32x4.demote_f64x2_zero";
   export const f32x4_shuffle = "~lib/builtins/f32x4.shuffle";
-  export const f32x4_swizzle = "~lib/builtins/f32x4.swizzle";
 
   export const f64x2_splat = "~lib/builtins/f64x2.splat";
   export const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
@@ -683,7 +688,27 @@ export namespace BuiltinNames {
   export const f64x2_convert_low_i32x4_u = "~lib/builtins/f64x2.convert_low_i32x4_u";
   export const f64x2_promote_low_f32x4 = "~lib/builtins/f64x2.promote_low_f32x4";
   export const f64x2_shuffle = "~lib/builtins/f64x2.shuffle";
-  export const f64x2_swizzle = "~lib/builtins/f64x2.swizzle";
+
+  export const i8x16_relaxed_swizzle = "~lib/builtins/i8x16.relaxed_swizzle";
+  export const i32x4_relaxed_trunc_f32x4_s = "~lib/builtins/i32x4.relaxed_trunc_f32x4_s";
+  export const i32x4_relaxed_trunc_f32x4_u = "~lib/builtins/i32x4.relaxed_trunc_f32x4_u";
+  export const i32x4_relaxed_trunc_f64x2_s_zero = "~lib/builtins/i32x4.relaxed_trunc_f64x2_s_zero";
+  export const i32x4_relaxed_trunc_f64x2_u_zero = "~lib/builtins/i32x4.relaxed_trunc_f64x2_u_zero";
+  export const f32x4_relaxed_madd = "~lib/builtins/f32x4.relaxed_madd";
+  export const f32x4_relaxed_nmadd = "~lib/builtins/f32x4.relaxed_nmadd";
+  export const f64x2_relaxed_madd = "~lib/builtins/f64x2.relaxed_madd";
+  export const f64x2_relaxed_nmadd = "~lib/builtins/f64x2.relaxed_nmadd";
+  export const i8x16_relaxed_laneselect = "~lib/builtins/i8x16.relaxed_laneselect";
+  export const i16x8_relaxed_laneselect = "~lib/builtins/i16x8.relaxed_laneselect";
+  export const i32x4_relaxed_laneselect = "~lib/builtins/i32x4.relaxed_laneselect";
+  export const i64x2_relaxed_laneselect = "~lib/builtins/i64x2.relaxed_laneselect";
+  export const f32x4_relaxed_min = "~lib/builtins/f32x4.relaxed_min";
+  export const f32x4_relaxed_max = "~lib/builtins/f32x4.relaxed_max";
+  export const f64x2_relaxed_min = "~lib/builtins/f64x2.relaxed_min";
+  export const f64x2_relaxed_max = "~lib/builtins/f64x2.relaxed_max";
+  export const i16x8_relaxed_q15mulr_s = "~lib/builtins/i16x8.relaxed_q15mulr_s";
+  export const i16x8_relaxed_dot_i8x16_i7x16_s = "~lib/builtins/i16x8.relaxed_dot_i8x16_i7x16_s";
+  export const i32x4_relaxed_dot_i8x16_i7x16_add_s = "~lib/builtins/i32x4.relaxed_dot_i8x16_i7x16_add_s";
 
   export const i31_new = "~lib/builtins/i31.new";
   export const i31_get = "~lib/builtins/i31.get";
@@ -1165,181 +1190,6 @@ function builtin_idof(ctx: BuiltinFunctionContext): ExpressionRef {
   return module.unreachable();
 }
 builtinFunctions.set(BuiltinNames.idof, builtin_idof);
-
-// bswap<T?>(value: T) -> T
-function builtin_bswap(ctx: BuiltinFunctionContext): ExpressionRef {
-  let compiler = ctx.compiler;
-  let module = compiler.module;
-  if (
-    checkTypeOptional(ctx, true) |
-    checkArgsRequired(ctx, 1)
-  ) return module.unreachable();
-
-  let typeArguments = ctx.typeArguments;
-  let arg0 = typeArguments
-    ? compiler.compileExpression(
-        ctx.operands[0],
-        typeArguments[0].toUnsigned(),
-        Constraints.ConvImplicit | Constraints.MustWrap
-      )
-    : compiler.compileExpression(
-        ctx.operands[0],
-        Type.u32,
-        Constraints.MustWrap
-      );
-
-  let type = compiler.currentType;
-  if (type.isValue) {
-    switch (type.kind) {
-      case TypeKind.Bool:
-      case TypeKind.I8:
-      case TypeKind.U8: return arg0;
-      case TypeKind.I16:
-      case TypeKind.U16: {
-        // <T>(x << 8 | x >> 8)
-        let flow = compiler.currentFlow;
-        let temp = flow.getTempLocal(type);
-        flow.setLocalFlag(temp.index, LocalFlags.Wrapped);
-
-        let res = module.binary(
-          BinaryOp.OrI32,
-          module.binary(
-            BinaryOp.ShlI32,
-            module.local_tee(temp.index, arg0, false),
-            module.i32(8)
-          ),
-          module.binary(
-            BinaryOp.ShrU32,
-            module.local_get(temp.index, TypeRef.I32),
-            module.i32(8)
-          )
-        );
-        // avoid wrapping for u16 due to it's already done for input arg
-        if (type.kind == TypeKind.I16) {
-          res = compiler.ensureSmallIntegerWrap(res, Type.i16);
-        }
-        return res;
-      }
-      case TypeKind.I32:
-      case TypeKind.U32:
-      case TypeKind.Isize:
-      case TypeKind.Usize: {
-        if (type.size == 32) {
-          // rotl(x & 0xFF00FF00, 8) | rotr(x & 0x00FF00FF, 8)
-          let flow = compiler.currentFlow;
-          let temp = flow.getTempLocal(type);
-          flow.setLocalFlag(temp.index, LocalFlags.Wrapped);
-
-          let res = module.binary(
-            BinaryOp.OrI32,
-            module.binary(
-              BinaryOp.RotlI32,
-              module.binary(
-                BinaryOp.AndI32,
-                module.local_tee(temp.index, arg0, false),
-                module.i32(0xFF00FF00)
-              ),
-              module.i32(8)
-            ),
-            module.binary(
-              BinaryOp.RotrI32,
-              module.binary(
-                BinaryOp.AndI32,
-                module.local_get(temp.index, TypeRef.I32),
-                module.i32(0x00FF00FF)
-              ),
-              module.i32(8)
-            ),
-          );
-          return res;
-        }
-        // fall-through
-      }
-      case TypeKind.I64:
-      case TypeKind.U64: {
-        // let t =
-        //   ((x >>> 8) & 0x00FF00FF00FF00FF) |
-        //   ((x & 0x00FF00FF00FF00FF) << 8)
-        //
-        // let res =
-        //   ((t >>> 16) & 0x0000FFFF0000FFFF) |
-        //   ((t & 0x0000FFFF0000FFFF) << 16)
-        //
-        // rotr(res, 32)
-
-        let flow = compiler.currentFlow;
-        let temp1 = flow.getTempLocal(type);
-        flow.setLocalFlag(temp1.index, LocalFlags.Wrapped);
-        let temp2 = flow.getTempLocal(type);
-        flow.setLocalFlag(temp2.index, LocalFlags.Wrapped);
-
-        // t = ((x >>> 8) & 0x00FF00FF00FF00FF) | ((x & 0x00FF00FF00FF00FF) << 8)
-        let expr = module.local_tee(
-          temp2.index,
-          module.binary(
-            BinaryOp.OrI64,
-            module.binary(
-              BinaryOp.AndI64,
-              module.binary(
-                BinaryOp.ShrU64,
-                module.local_tee(temp1.index, arg0, false),
-                module.i64(8)
-              ),
-              module.i64(0x00FF00FF, 0x00FF00FF)
-            ),
-            module.binary(
-              BinaryOp.ShlI64,
-              module.binary(
-                BinaryOp.AndI64,
-                module.local_get(temp1.index, TypeRef.I64),
-                module.i64(0x00FF00FF, 0x00FF00FF)
-              ),
-              module.i64(8)
-            ),
-          ),
-          false
-        );
-
-        // ((t >>> 16) & 0x0000FFFF0000FFFF) | ((t & 0x0000FFFF0000FFFF) << 16)
-        let res = module.binary(
-          BinaryOp.OrI64,
-          module.binary(
-            BinaryOp.AndI64,
-            module.binary(
-              BinaryOp.ShrU64,
-              expr,
-              module.i64(16)
-            ),
-            module.i64(0x0000FFFF, 0x0000FFFF)
-          ),
-          module.binary(
-            BinaryOp.ShlI64,
-            module.binary(
-              BinaryOp.AndI64,
-              module.local_get(temp2.index, TypeRef.I64),
-              module.i64(0x0000FFFF, 0x0000FFFF)
-            ),
-            module.i64(16)
-          ),
-        );
-
-        // rotr(res, 32)
-        res = module.binary(
-          BinaryOp.RotrI64,
-          res,
-          module.i64(32)
-        );
-        return res;
-      }
-    }
-  }
-  compiler.error(
-    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-    ctx.reportNode.typeArgumentsRange, "bswap", type.toString()
-  );
-  return module.unreachable();
-}
-builtinFunctions.set(BuiltinNames.bswap, builtin_bswap);
 
 // === Math ===================================================================================
 
@@ -3496,7 +3346,7 @@ function builtin_i31_new(ctx: BuiltinFunctionContext): ExpressionRef {
   ) return module.unreachable();
   let operands = ctx.operands;
   let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.ConvImplicit);
-  compiler.currentType = Type.i31ref;
+  compiler.currentType = Type.i31;
   return module.i31_new(arg0);
 }
 builtinFunctions.set(BuiltinNames.i31_new, builtin_i31_new);
@@ -3509,7 +3359,7 @@ function builtin_i31_get(ctx: BuiltinFunctionContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.i31ref, Constraints.ConvImplicit);
+  let arg0 = compiler.compileExpression(operands[0], Type.i31.asNullable(), Constraints.ConvImplicit);
   if (ctx.contextualType.is(TypeFlags.Unsigned)) {
     compiler.currentType = Type.u32;
     return module.i31_get(arg0, false);
@@ -3626,14 +3476,14 @@ function builtin_assert(ctx: BuiltinFunctionContext): ExpressionRef {
       // TODO: also check for NaN in float assertions, as in `Boolean(NaN) -> false`?
       case TypeKind.F32: return module.if(module.binary(BinaryOp.EqF32, arg0, module.f32(0)), abort);
       case TypeKind.F64: return module.if(module.binary(BinaryOp.EqF64, arg0, module.f64(0)), abort);
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: return module.if(module.ref_is_null(arg0), abort);
@@ -3707,14 +3557,14 @@ function builtin_assert(ctx: BuiltinFunctionContext): ExpressionRef {
         );
         return ret;
       }
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {
@@ -4889,7 +4739,7 @@ function builtin_v128_load_lane(ctx: BuiltinFunctionContext): ExpressionRef {
 }
 builtinFunctions.set(BuiltinNames.v128_load_lane, builtin_v128_load_lane);
 
-// v128.store_lane<TFrom!>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize) -> v128
+// v128.store_lane<TFrom!>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize) -> void
 function builtin_v128_store_lane(ctx: BuiltinFunctionContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
@@ -4931,7 +4781,7 @@ function builtin_v128_store_lane(ctx: BuiltinFunctionContext): ExpressionRef {
       }
     }
   }
-  compiler.currentType = Type.v128;
+  compiler.currentType = Type.void;
   if (type.isValue) {
     let maxIdx = (16 / assert(type.byteSize)) - 1;
     if (idx < 0 || idx > maxIdx) {
@@ -6346,7 +6196,8 @@ function builtin_v128_not(ctx: BuiltinFunctionContext): ExpressionRef {
 }
 builtinFunctions.set(BuiltinNames.v128_not, builtin_v128_not);
 
-function builtin_v128_bitwise_ternary(ctx: BuiltinFunctionContext, op: SIMDTernaryOp): ExpressionRef {
+// v128.bitselect(v1: v128, v2: v128, c: v128) -> v128
+function builtin_v128_bitselect(ctx: BuiltinFunctionContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
@@ -6361,12 +6212,7 @@ function builtin_v128_bitwise_ternary(ctx: BuiltinFunctionContext, op: SIMDTerna
   let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.ConvImplicit);
-  return module.simd_ternary(op, arg0, arg1, arg2);
-}
-
-// v128.bitselect(v1: v128, v2: v128, c: v128) -> v128
-function builtin_v128_bitselect(ctx: BuiltinFunctionContext): ExpressionRef {
-  return builtin_v128_bitwise_ternary(ctx, SIMDTernaryOp.Bitselect);
+  return module.simd_ternary(SIMDTernaryOp.Bitselect, arg0, arg1, arg2);
 }
 builtinFunctions.set(BuiltinNames.v128_bitselect, builtin_v128_bitselect);
 
@@ -6700,6 +6546,368 @@ function builtin_v128_extmul_high(ctx: BuiltinFunctionContext): ExpressionRef {
   return module.unreachable();
 }
 builtinFunctions.set(BuiltinNames.v128_extmul_high, builtin_v128_extmul_high);
+
+// === Relaxed SIMD ===========================================================================
+
+// v128.relaxed_swizzle(a: v128, s: v128) -> v128
+function builtin_v128_relaxed_swizzle(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  return module.binary(BinaryOp.RelaxedSwizzleI8x16, arg0, arg1);
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_swizzle, builtin_v128_relaxed_swizzle);
+
+// v128.relaxed_trunc<T!>(a: v128) -> v128
+function builtin_v128_relaxed_trunc(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let typeArguments = ctx.typeArguments!;
+  let type = typeArguments[0];
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.Isize: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.I32: return module.unary(UnaryOp.RelaxedTruncF32x4ToI32x4, arg0);
+      case TypeKind.Usize: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.U32: return module.unary(UnaryOp.RelaxedTruncF32x4ToU32x4, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.relaxed_trunc", type.toString()
+  );
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_trunc, builtin_v128_relaxed_trunc);
+
+// v128.relaxed_trunc_zero<T!>(a: v128) -> v128
+function builtin_v128_relaxed_trunc_zero(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let typeArguments = ctx.typeArguments!;
+  let type = typeArguments[0];
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.Isize: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.I32: return module.unary(UnaryOp.RelaxedTruncF64x2ToI32x4Zero, arg0);
+      case TypeKind.Usize: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.U32: return module.unary(UnaryOp.RelaxedTruncF64x2ToU32x4Zero, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.relaxed_trunc_zero", type.toString()
+  );
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_trunc_zero, builtin_v128_relaxed_trunc_zero);
+
+// v128.relaxed_madd<T!>(a: v128, b: v128, c: v128) -> v128
+function builtin_v128_relaxed_madd(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let typeArguments = ctx.typeArguments!;
+  let type = typeArguments[0];
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.ConvImplicit);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.simd_ternary(SIMDTernaryOp.RelaxedMaddF32x4, arg0, arg1, arg2);
+      case TypeKind.F64: return module.simd_ternary(SIMDTernaryOp.RelaxedMaddF64x2, arg0, arg1, arg2);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.relaxed_madd", type.toString()
+  );
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_madd, builtin_v128_relaxed_madd);
+
+// v128.relaxed_nmadd<T!>(a: v128, b: v128, c: v128) -> v128
+function builtin_v128_relaxed_nmadd(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let typeArguments = ctx.typeArguments!;
+  let type = typeArguments[0];
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.ConvImplicit);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.simd_ternary(SIMDTernaryOp.RelaxedNmaddF32x4, arg0, arg1, arg2);
+      case TypeKind.F64: return module.simd_ternary(SIMDTernaryOp.RelaxedNmaddF64x2, arg0, arg1, arg2);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.relaxed_nmadd", type.toString()
+  );
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_nmadd, builtin_v128_relaxed_nmadd);
+
+// v128.relaxed_laneselect<T!>(a: v128, b: v128, m: v128) -> v128
+function builtin_v128_relaxed_laneselect(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 3)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let typeArguments = ctx.typeArguments!;
+  let type = typeArguments[0];
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.ConvImplicit);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.U8: return module.simd_ternary(SIMDTernaryOp.RelaxedLaneselectI8x16, arg0, arg1, arg2);
+      case TypeKind.I16:
+      case TypeKind.U16: return module.simd_ternary(SIMDTernaryOp.RelaxedLaneselectI16x8, arg0, arg1, arg2);
+      case TypeKind.I32:
+      case TypeKind.U32: return module.simd_ternary(SIMDTernaryOp.RelaxedLaneselectI32x4, arg0, arg1, arg2);
+      case TypeKind.I64:
+      case TypeKind.U64: return module.simd_ternary(SIMDTernaryOp.RelaxedLaneselectI64x2, arg0, arg1, arg2);
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
+        return module.simd_ternary(
+          compiler.options.isWasm64
+            ? SIMDTernaryOp.RelaxedLaneselectI64x2
+            : SIMDTernaryOp.RelaxedLaneselectI32x4,
+          arg0, arg1, arg2
+        );
+      }
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.relaxed_laneselect", type.toString()
+  );
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_laneselect, builtin_v128_relaxed_laneselect);
+
+// v128.relaxed_min<T!>(a: v128, b: v128) -> v128
+function builtin_v128_relaxed_min(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let typeArguments = ctx.typeArguments!;
+  let type = typeArguments[0];
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.binary(BinaryOp.RelaxedMinF32x4, arg0, arg1);
+      case TypeKind.F64: return module.binary(BinaryOp.RelaxedMinF64x2, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.relaxed_min", type.toString()
+  );
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_min, builtin_v128_relaxed_min);
+
+// v128.relaxed_max<T!>(a: v128, b: v128) -> v128
+function builtin_v128_relaxed_max(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let typeArguments = ctx.typeArguments!;
+  let type = typeArguments[0];
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.binary(BinaryOp.RelaxedMaxF32x4, arg0, arg1);
+      case TypeKind.F64: return module.binary(BinaryOp.RelaxedMaxF64x2, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.relaxed_max", type.toString()
+  );
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_max, builtin_v128_relaxed_max);
+
+// v128.relaxed_q15mulr<T!>(a: v128, b: v128) -> v128
+function builtin_v128_relaxed_q15mulr(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let typeArguments = ctx.typeArguments!;
+  let type = typeArguments[0];
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.I16: return module.binary(BinaryOp.RelaxedQ15MulrI16x8, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.relaxed_q15mulr", type.toString()
+  );
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_q15mulr, builtin_v128_relaxed_q15mulr);
+
+// v128.relaxed_dot<T!>(a: v128, b: v128) -> v128
+function builtin_v128_relaxed_dot(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkArgsRequired(ctx, 2) |
+    checkTypeRequired(ctx)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let typeArguments = ctx.typeArguments!;
+  let type = typeArguments[0];
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  switch (type.kind) {
+    case TypeKind.I16: return module.binary(BinaryOp.RelaxedDotI8x16I7x16ToI16x8, arg0, arg1);
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.relaxed_dot", type.toString()
+  );
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_dot, builtin_v128_relaxed_dot);
+
+// v128.relaxed_dot_add<T!>(a: v128, b: v128, c: v128) -> v128
+function builtin_v128_relaxed_dot_add(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.RelaxedSimd) |
+    checkArgsRequired(ctx, 3) |
+    checkTypeRequired(ctx)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  let operands = ctx.operands;
+  let typeArguments = ctx.typeArguments!;
+  let type = typeArguments[0];
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.ConvImplicit);
+  switch (type.kind) {
+    // TOOD: emulate relaxed_dot_add of i16 with multiple instructions?
+    case TypeKind.Isize: {
+      if (compiler.options.isWasm64) break;
+      // fall-through
+    }
+    case TypeKind.I32: return module.simd_ternary(SIMDTernaryOp.RelaxedDotI8x16I7x16AddToI32x4, arg0, arg1, arg2);
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.relaxed_dot_add", type.toString()
+  );
+  return module.unreachable();
+}
+builtinFunctions.set(BuiltinNames.v128_relaxed_dot_add, builtin_v128_relaxed_dot_add);
 
 // === Internal runtime =======================================================================
 
@@ -8688,6 +8896,7 @@ builtinFunctions.set(BuiltinNames.i8x16_shuffle, builtin_i8x16_shuffle);
 
 // i8x16.swizzle -> v128.swizzle
 function builtin_i8x16_swizzle(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
   ctx.typeArguments = null;
   ctx.contextualType = Type.v128;
   return builtin_v128_swizzle(ctx);
@@ -9117,14 +9326,6 @@ function builtin_i16x8_shuffle(ctx: BuiltinFunctionContext): ExpressionRef {
 }
 builtinFunctions.set(BuiltinNames.i16x8_shuffle, builtin_i16x8_shuffle);
 
-// i16x8.swizzle -> v128.swizzle
-function builtin_i16x8_swizzle(ctx: BuiltinFunctionContext): ExpressionRef {
-  ctx.typeArguments = null;
-  ctx.contextualType = Type.v128;
-  return builtin_v128_swizzle(ctx);
-}
-builtinFunctions.set(BuiltinNames.i16x8_swizzle, builtin_i16x8_swizzle);
-
 // i32x4.splat -> v128.splat<i32>
 function builtin_i32x4_splat(ctx: BuiltinFunctionContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -9512,14 +9713,6 @@ function builtin_i32x4_shuffle(ctx: BuiltinFunctionContext): ExpressionRef {
 }
 builtinFunctions.set(BuiltinNames.i32x4_shuffle, builtin_i32x4_shuffle);
 
-// i32x4.swizzle -> v128.swizzle
-function builtin_i32x4_swizzle(ctx: BuiltinFunctionContext): ExpressionRef {
-  ctx.typeArguments = null;
-  ctx.contextualType = Type.v128;
-  return builtin_v128_swizzle(ctx);
-}
-builtinFunctions.set(BuiltinNames.i32x4_swizzle, builtin_i32x4_swizzle);
-
 // i64x2.splat -> v128.splat<i64>
 function builtin_i64x2_splat(ctx: BuiltinFunctionContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -9771,14 +9964,6 @@ function builtin_i64x2_shuffle(ctx: BuiltinFunctionContext): ExpressionRef {
   return builtin_v128_shuffle(ctx);
 }
 builtinFunctions.set(BuiltinNames.i64x2_shuffle, builtin_i64x2_shuffle);
-
-// i64x2.swizzle -> v128.swizzle
-function builtin_i64x2_swizzle(ctx: BuiltinFunctionContext): ExpressionRef {
-  ctx.typeArguments = null;
-  ctx.contextualType = Type.v128;
-  return builtin_v128_swizzle(ctx);
-}
-builtinFunctions.set(BuiltinNames.i64x2_swizzle, builtin_i64x2_swizzle);
 
 // f32x4.splat -> v128.splat<f32>
 function builtin_f32x4_splat(ctx: BuiltinFunctionContext): ExpressionRef {
@@ -10032,14 +10217,6 @@ function builtin_f32x4_shuffle(ctx: BuiltinFunctionContext): ExpressionRef {
 }
 builtinFunctions.set(BuiltinNames.f32x4_shuffle, builtin_f32x4_shuffle);
 
-// f32x4.swizzle -> v128.swizzle
-function builtin_f32x4_swizzle(ctx: BuiltinFunctionContext): ExpressionRef {
-  ctx.typeArguments = null;
-  ctx.contextualType = Type.v128;
-  return builtin_v128_swizzle(ctx);
-}
-builtinFunctions.set(BuiltinNames.f32x4_swizzle, builtin_f32x4_swizzle);
-
 // f64x2.splat -> v128.splat<f64>
 function builtin_f64x2_splat(ctx: BuiltinFunctionContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -10292,13 +10469,185 @@ function builtin_f64x2_shuffle(ctx: BuiltinFunctionContext): ExpressionRef {
 }
 builtinFunctions.set(BuiltinNames.f64x2_shuffle, builtin_f64x2_shuffle);
 
-// f64x2.swizzle -> v128.swizzle
-function builtin_f64x2_swizzle(ctx: BuiltinFunctionContext): ExpressionRef {
+// i8x16.relaxed_swizzle -> v128.relaxed_swizzle
+function builtin_i8x16_relaxed_swizzle(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
   ctx.typeArguments = null;
   ctx.contextualType = Type.v128;
-  return builtin_v128_swizzle(ctx);
+  return builtin_v128_relaxed_swizzle(ctx);
 }
-builtinFunctions.set(BuiltinNames.f64x2_swizzle, builtin_f64x2_swizzle);
+builtinFunctions.set(BuiltinNames.i8x16_relaxed_swizzle, builtin_i8x16_relaxed_swizzle);
+
+// i32x4.relaxed_trunc_f32x4_s -> v128.relaxed_trunc<i32>
+function builtin_i32x4_relaxed_trunc_f32x4_s(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_trunc(ctx);
+}
+builtinFunctions.set(BuiltinNames.i32x4_relaxed_trunc_f32x4_s, builtin_i32x4_relaxed_trunc_f32x4_s);
+
+// i32x4.relaxed_trunc_f32x4_u -> v128.relaxed_trunc<u32>
+function builtin_i32x4_relaxed_trunc_f32x4_u(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_trunc(ctx);
+}
+builtinFunctions.set(BuiltinNames.i32x4_relaxed_trunc_f32x4_u, builtin_i32x4_relaxed_trunc_f32x4_u);
+
+// i32x4.relaxed_trunc_f64x2_s_zero -> v128.relaxed_trunc_zero<i32>
+function builtin_i32x4_relaxed_trunc_f64x2_s_zero(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_trunc_zero(ctx);
+}
+builtinFunctions.set(BuiltinNames.i32x4_relaxed_trunc_f64x2_s_zero, builtin_i32x4_relaxed_trunc_f64x2_s_zero);
+
+// i32x4.relaxed_trunc_f64x2_u_zero -> v128.relaxed_trunc_zero<u32>
+function builtin_i32x4_relaxed_trunc_f64x2_u_zero(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_trunc_zero(ctx);
+}
+builtinFunctions.set(BuiltinNames.i32x4_relaxed_trunc_f64x2_u_zero, builtin_i32x4_relaxed_trunc_f64x2_u_zero);
+
+// f32x4.relaxed_madd -> v128.relaxed_madd<f32>
+function builtin_f32x4_relaxed_madd(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_madd(ctx);
+}
+builtinFunctions.set(BuiltinNames.f32x4_relaxed_madd, builtin_f32x4_relaxed_madd);
+
+// f32x4.relaxed_nmadd -> v128.relaxed_nmadd<f32>
+function builtin_f32x4_relaxed_nmadd(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_nmadd(ctx);
+}
+builtinFunctions.set(BuiltinNames.f32x4_relaxed_nmadd, builtin_f32x4_relaxed_nmadd);
+
+// f64x2.relaxed_madd -> v128.relaxed_madd<f64>
+function builtin_f64x2_relaxed_madd(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_madd(ctx);
+}
+builtinFunctions.set(BuiltinNames.f64x2_relaxed_madd, builtin_f64x2_relaxed_madd);
+
+// f64x2.relaxed_nmadd -> v128.relaxed_nmadd<f64>
+function builtin_f64x2_relaxed_nmadd(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_nmadd(ctx);
+}
+builtinFunctions.set(BuiltinNames.f64x2_relaxed_nmadd, builtin_f64x2_relaxed_nmadd);
+
+// i8x16.relaxed_laneselect -> v128.relaxed_laneselect<i8>
+function builtin_i8x16_relaxed_laneselect(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_laneselect(ctx);
+}
+builtinFunctions.set(BuiltinNames.i8x16_relaxed_laneselect, builtin_i8x16_relaxed_laneselect);
+
+// i16x8.relaxed_laneselect -> v128.relaxed_laneselect<i16>
+function builtin_i16x8_relaxed_laneselect(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_laneselect(ctx);
+}
+builtinFunctions.set(BuiltinNames.i16x8_relaxed_laneselect, builtin_i16x8_relaxed_laneselect);
+
+// i32x4.relaxed_laneselect -> v128.relaxed_laneselect<i32>
+function builtin_i32x4_relaxed_laneselect(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_laneselect(ctx);
+}
+builtinFunctions.set(BuiltinNames.i32x4_relaxed_laneselect, builtin_i32x4_relaxed_laneselect);
+
+// i64x2.relaxed_laneselect -> v128.relaxed_laneselect<i64>
+function builtin_i64x2_relaxed_laneselect(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_laneselect(ctx);
+}
+builtinFunctions.set(BuiltinNames.i64x2_relaxed_laneselect, builtin_i64x2_relaxed_laneselect);
+
+// f32x4.relaxed_min -> v128.relaxed_min<f32>
+function builtin_f32x4_relaxed_min(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_min(ctx);
+}
+builtinFunctions.set(BuiltinNames.f32x4_relaxed_min, builtin_f32x4_relaxed_min);
+
+// f32x4.relaxed_max -> v128.relaxed_max<f32>
+function builtin_f32x4_relaxed_max(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_max(ctx);
+}
+builtinFunctions.set(BuiltinNames.f32x4_relaxed_max, builtin_f32x4_relaxed_max);
+
+// f64x2.relaxed_min -> v128.relaxed_min<f64>
+function builtin_f64x2_relaxed_min(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_min(ctx);
+}
+builtinFunctions.set(BuiltinNames.f64x2_relaxed_min, builtin_f64x2_relaxed_min);
+
+// f64x2.relaxed_max -> v128.relaxed_max<f64>
+function builtin_f64x2_relaxed_max(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_max(ctx);
+}
+builtinFunctions.set(BuiltinNames.f64x2_relaxed_max, builtin_f64x2_relaxed_max);
+
+// i16x8.relaxed_q15mulr_s -> v128.relaxed_q15mulr<i16>
+function builtin_i16x8_relaxed_q15mulr_s(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_q15mulr(ctx);
+}
+builtinFunctions.set(BuiltinNames.i16x8_relaxed_q15mulr_s, builtin_i16x8_relaxed_q15mulr_s);
+
+// i16x8.relaxed_dot_i8x16_i7x16_s -> v128.relaxed_dot<i16>
+function builtin_i16x8_relaxed_dot_i8x16_i7x16_s(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_dot(ctx);
+}
+builtinFunctions.set(BuiltinNames.i16x8_relaxed_dot_i8x16_i7x16_s, builtin_i16x8_relaxed_dot_i8x16_i7x16_s);
+
+// i32x4.relaxed_dot_i8x16_i7x16_add_s -> v128.relaxed_dot_add<i32>
+function builtin_i32x4_relaxed_dot_i8x16_i7x16_add_s(ctx: BuiltinFunctionContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_relaxed_dot_add(ctx);
+}
+builtinFunctions.set(BuiltinNames.i32x4_relaxed_dot_i8x16_i7x16_add_s, builtin_i32x4_relaxed_dot_i8x16_i7x16_add_s);
 
 // === Internal helpers =======================================================================
 

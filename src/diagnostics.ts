@@ -45,7 +45,6 @@ export const enum DiagnosticCategory {
 export class Range {
 
   source!: Source;
-  debugInfoRef: usize = 0;
 
   constructor(public start: i32, public end: i32) {}
 

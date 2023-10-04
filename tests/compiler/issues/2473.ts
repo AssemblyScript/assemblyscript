@@ -11,7 +11,6 @@ if (voidFn()) {}
 
 store<void>(8, voidFn());
 load<void>(8);
-load<externref>(8);
-load<anyref>(8);
+load<ref_extern>(8);
 
 ERROR("EOF");

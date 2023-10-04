@@ -298,25 +298,27 @@ export const enum ExpressionId {
   StructSet = 62 /* _BinaryenStructSetId */,
   ArrayNew = 63 /* _BinaryenArrayNewId */,
   ArrayNewSeg = 64 /* TODO_BinaryenArraySegId */,
-  ArrayInit = 65 /* _BinaryenArrayInitId */,
+  ArrayNewFixed = 65 /* _BinaryenArrayNewFixedId */,
   ArrayGet = 66 /* _BinaryenArrayGetId */,
   ArraySet = 67 /* _BinaryenArraySetId */,
   ArrayLen = 68 /* _BinaryenArrayLenId */,
   ArrayCopy = 69 /* _BinaryenArrayCopyId */,
-  RefAs = 70 /* _BinaryenRefAsId */,
-  StringNew = 71 /* _BinaryenStringNewId */,
-  StringConst = 72 /* _BinaryenStringConstId */,
-  StringMeasure = 73 /* _BinaryenStringMeasureId */,
-  StringEncode = 74 /* _BinaryenStringEncodeId */,
-  StringConcat = 75 /* _BinaryenStringConcatId */,
-  StringEq = 76 /* _BinaryenStringEqId */,
-  StringAs = 77 /* _BinaryenStringAsId */,
-  StringWTF8Advance = 78 /* _BinaryenStringWTF8AdvanceId */,
-  StringWTF16Get = 79 /* _BinaryenStringWTF16GetId */,
-  StringIterNext = 80 /* _BinaryenStringIterNextId */,
-  StringIterMove = 81 /* _BinaryenStringIterMoveId */,
-  StringSliceWTF = 82 /* _BinaryenStringSliceWTFId */,
-  StringSliceIter = 83 /* _BinaryenStringSliceIterId */
+  ArrayFill = 70 /* _BinaryenArrayFillId */,
+  ArrayInit = 71 /* _BinaryenArrayInitId */,
+  RefAs = 72 /* _BinaryenRefAsId */,
+  StringNew = 73 /* _BinaryenStringNewId */,
+  StringConst = 74 /* _BinaryenStringConstId */,
+  StringMeasure = 75 /* _BinaryenStringMeasureId */,
+  StringEncode = 76 /* _BinaryenStringEncodeId */,
+  StringConcat = 77 /* _BinaryenStringConcatId */,
+  StringEq = 78 /* _BinaryenStringEqId */,
+  StringAs = 79 /* _BinaryenStringAsId */,
+  StringWTF8Advance = 80 /* _BinaryenStringWTF8AdvanceId */,
+  StringWTF16Get = 81 /* _BinaryenStringWTF16GetId */,
+  StringIterNext = 82 /* _BinaryenStringIterNextId */,
+  StringIterMove = 83 /* _BinaryenStringIterMoveId */,
+  StringSliceWTF = 84 /* _BinaryenStringSliceWTFId */,
+  StringSliceIter = 85 /* _BinaryenStringSliceIterId */
 }
 
 /** Binaryen external kind constants. */
@@ -3788,28 +3790,28 @@ function tryEnsureBasicType(type: Type): TypeRef {
     case TypeKind.F32: return TypeRef.F32;
     case TypeKind.F64: return TypeRef.F64;
     case TypeKind.V128: return TypeRef.V128;
-    case TypeKind.Funcref: {
+    case TypeKind.Func: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Func, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Externref: {
+    case TypeKind.Extern: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Extern, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Anyref: {
+    case TypeKind.Any: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Any, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Eqref: {
+    case TypeKind.Eq: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Eq, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Structref: {
+    case TypeKind.Struct: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Struct, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Arrayref: {
+    case TypeKind.Array: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Array, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.I31ref: {
+    case TypeKind.I31: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.Stringref: {
+    case TypeKind.String: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, type.is(TypeFlags.Nullable));
     }
     case TypeKind.StringviewWTF8: {

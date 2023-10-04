@@ -81,7 +81,9 @@ export const enum CommonFlags {
   // Other
 
   /** Is quoted. */
-  Quoted = 1 << 30
+  Quoted = 1 << 30,
+  /** Is internally nullable. */
+  InternallyNullable = 1 << 31
 }
 
 /** Path delimiter inserted between file system levels. */
@@ -126,17 +128,17 @@ export namespace CommonNames {
   export const f32 = "f32";
   export const f64 = "f64";
   export const v128 = "v128";
-  export const funcref = "funcref";
-  export const externref = "externref";
-  export const anyref = "anyref";
-  export const eqref = "eqref";
-  export const structref = "structref";
-  export const arrayref = "arrayref";
-  export const i31ref = "i31ref";
-  export const stringref = "stringref";
-  export const stringview_wtf8 = "stringview_wtf8";
-  export const stringview_wtf16 = "stringview_wtf16";
-  export const stringview_iter = "stringview_iter";
+  export const ref_func = "ref_func";
+  export const ref_extern = "ref_extern";
+  export const ref_any = "ref_any";
+  export const ref_eq = "ref_eq";
+  export const ref_struct = "ref_struct";
+  export const ref_array = "ref_array";
+  export const ref_i31 = "ref_i31";
+  export const ref_string = "ref_string";
+  export const ref_stringview_wtf8 = "ref_stringview_wtf8";
+  export const ref_stringview_wtf16 = "ref_stringview_wtf16";
+  export const ref_stringview_iter = "ref_stringview_iter";
   export const i8x16 = "i8x16";
   export const u8x16 = "u8x16";
   export const i16x8 = "i16x8";
@@ -207,13 +209,14 @@ export namespace CommonNames {
   export const F32 = "F32";
   export const F64 = "F64";
   export const V128 = "V128";
-  export const Funcref = "Funcref";
-  export const Externref = "Externref";
-  export const Anyref = "Anyref";
-  export const Eqref = "Eqref";
-  export const Structref = "Structref";
-  export const Arrayref = "Arrayref";
-  export const I31ref = "I31ref";
+  export const RefFunc = "RefFunc";
+  export const RefExtern = "RefExtern";
+  export const RefAny = "RefAny";
+  export const RefEq = "RefEq";
+  export const RefStruct = "RefStruct";
+  export const RefArray = "RefArray";
+  export const RefI31 = "RefI31";
+  export const RefString = "RefString";
   export const String = "String";
   export const RegExp = "RegExp";
   export const Object = "Object";

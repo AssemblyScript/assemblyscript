@@ -212,7 +212,7 @@ export class Resolver extends DiagnosticEmitter {
           }
         }
         if (node.isNullable) {
-          if (type.isInternalReference) return type.asNullable();
+          if (type.isReference) return type.asNullable();
           if (reportMode == ReportMode.Report) {
             this.error(
               DiagnosticCode.Type_0_cannot_be_nullable,
@@ -290,7 +290,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         let type = typeDefinition.type;
         if (node.isNullable) {
-          if (type.isInternalReference) return type.asNullable();
+          if (type.isReference) return type.asNullable();
           if (reportMode == ReportMode.Report) {
             this.error(
               DiagnosticCode.Type_0_cannot_be_nullable,
@@ -338,7 +338,7 @@ export class Resolver extends DiagnosticEmitter {
       );
       if (!type) return null;
       if (node.isNullable) {
-        if (type.isInternalReference) return type.asNullable();
+        if (type.isReference) return type.asNullable();
         if (reportMode == ReportMode.Report) {
           this.error(
             DiagnosticCode.Type_0_cannot_be_nullable,
@@ -3053,7 +3053,7 @@ export class Resolver extends DiagnosticEmitter {
       assert(!unboundOverridePrototype.isBound);
       let unboundOverrideParent = unboundOverridePrototype.parent;
       let classInstances: Map<string,Class> | null;
-      assert(unboundOverrideParent.kind == ElementKind.ClassPrototype);
+      assert(unboundOverrideParent.kind == ElementKind.ClassPrototype || unboundOverrideParent.kind == ElementKind.InterfacePrototype);
       classInstances = (<ClassPrototype>unboundOverrideParent).instances;
       if (!classInstances) continue;
       for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
@@ -3400,6 +3400,14 @@ export class Resolver extends DiagnosticEmitter {
               if (boundInstance) {
                 let fieldType = boundInstance.type;
                 if (fieldType == Type.void) break; // failed to resolve earlier
+                if (fieldType.isExternalReference) {
+                  this.error(
+                    DiagnosticCode.Not_implemented_0,
+                    assert(boundPrototype.typeNode).range,
+                    "Reference typed fields"
+                  );
+                  break;
+                }
                 let needsLayout = true;
                 if (base) {
                   let existingMember = base.getMember(boundPrototype.name);

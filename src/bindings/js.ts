@@ -14,6 +14,11 @@ import {
 } from "../common";
 
 import {
+  runtimeFunctions,
+  runtimeGlobals
+} from "../compiler";
+
+import {
   ElementKind,
   Element,
   Program,
@@ -300,7 +305,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(escapeString(name, CharCode.DoubleQuote));
       sb.push("\"");
     }
-    if (isPlainFunction(signature, Mode.Import) && !code) {
+    if (isPlainFunction(signature, Mode.Import) && !code && isIdentifier(name)) {
       sb.push(": (\n");
       indent(sb, this.indentLevel + 1);
       sb.push("// ");
@@ -945,19 +950,31 @@ export class JSBuilder extends ExportsWalker {
     assert(this.indentLevel == 0);
 
     if (this.esm) {
-      sb.push("export const {\n  ");
+      sb.push("export const {\n");
       if (this.program.options.exportMemory) {
-        sb.push("memory,\n  ");
+        sb.push("  memory,\n");
       }
       if (this.program.options.exportTable) {
-        sb.push("table,\n  ");
+        sb.push("  table,\n");
+      }
+      if (this.program.options.exportRuntime) {
+        for (let i = 0, k = runtimeFunctions.length; i < k; ++i) {
+          sb.push("  ");
+          sb.push(runtimeFunctions[i]);
+          sb.push(",\n");
+        }
+        for (let i = 0, k = runtimeGlobals.length; i < k; ++i) {
+          sb.push("  ");
+          sb.push(runtimeGlobals[i]);
+          sb.push(",\n");
+        }
       }
       for (let i = 0, k = exports.length; i < k; ++i) {
-        if (i > 0) sb.push(",\n  ");
+        sb.push("  ");
         sb.push(exports[i]);
+        sb.push(",\n");
       }
-      sb.push(`
-} = await (async url => instantiate(
+      sb.push(`} = await (async url => instantiate(
   await (async () => {
     try { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)); }
     catch { return globalThis.WebAssembly.compile(await (await import("node:fs/promises")).readFile(url)); }

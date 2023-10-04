@@ -209,6 +209,21 @@ function test_v128(): void {
     __free(ptr);
   }
   {
+    let ptr = __alloc(16);
+    let v: v128 = v128(42, 0, 0, 0, 43, 0, 0, 0, 44, 0, 0, 0, 0, 0, 0, 0);
+    v128.store_lane<i32>(ptr, v, 0);
+    assert(load<i32>(ptr) == 42);
+    v128.store8_lane(ptr, v, 4);
+    assert(load<i8>(ptr) == 43);
+    v128.store16_lane(ptr, v, 4);
+    assert(load<i16>(ptr) == 44);
+    v128.store32_lane(ptr, v, 1);
+    assert(load<i32>(ptr) == 43);
+    v128.store64_lane(ptr, v, 1, 1);
+    assert(load<i64>(ptr, 1) == 44);
+    __free(ptr);
+  }
+  {
     let v: v128 = v128.ceil<f32>(f32x4(1.1, -0.25, 70.01, 4.0));
     assert(v == f32x4(2, -0.0, 71, 4));
   }
@@ -580,11 +595,6 @@ function test_i16x8(): void {
     i16x8.shuffle(a, b, 0, 1, 2, 3, 12, 13, 14, 15)
     ==
     v128.shuffle<i16>(a, b, 0, 1, 2, 3, 12, 13, 14, 15)
-  );
-  assert(
-    i16x8.swizzle(a, b)
-    ==
-    v128.swizzle(a, b)
   );
   {
     let ptr = __alloc(16);

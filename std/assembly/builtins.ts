@@ -66,10 +66,6 @@ export declare function isVoid<T>(): bool;
 @builtin
 export declare function lengthof<T>(func?: T): i32;
 
-// @ts-ignore
-@builtin
-export declare function bswap<T>(value: T): T;
-
 // @ts-ignore: decorator
 @builtin
 export declare function clz<T>(value: T): T;
@@ -1273,7 +1269,7 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function store_lane<TFrom>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): v128;
+  export declare function store_lane<TFrom>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize): void;
 
   // @ts-ignore: decorator
   @builtin
@@ -1345,19 +1341,19 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function store8_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): v128;
+  export declare function store8_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): void;
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function store16_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): v128;
+  export declare function store16_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): void;
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function store32_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): v128;
+  export declare function store32_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): void;
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function store64_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): v128;
+  export declare function store64_lane(ptr: usize, vec: v128, idx: u8, immOffset?: u32, immAlign?: u32): void;
 
   // @ts-ignore: decorator
   @unsafe @builtin
@@ -1562,6 +1558,50 @@ export namespace v128 {
   // @ts-ignore: decorator
   @builtin
   export declare function extmul_high<T>(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_swizzle(a: v128, s: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_trunc<T>(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_trunc_zero<T>(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_madd<T>(a: v128, b: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_nmadd<T>(a: v128, b: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_laneselect<T>(a: v128, b: v128, m: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_min<T>(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_max<T>(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_q15mulr<T>(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_dot<T>(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_dot_add<T>(a: v128, b: v128, c: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1724,6 +1764,14 @@ export namespace i8x16 {
   // @ts-ignore: decorator
   @builtin
   export declare function swizzle(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_swizzle(a: v128, s: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_laneselect(a: v128, b: v128, m: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1925,7 +1973,15 @@ export namespace i16x8 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function swizzle(a: v128, b: v128): v128;
+  export declare function relaxed_laneselect(a: v128, b: v128, m: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_q15mulr_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_dot_i8x16_i7x16_s(a: v128, b: v128, c: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2108,7 +2164,27 @@ export namespace i32x4 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function swizzle(a: v128, b: v128): v128;
+  export declare function relaxed_trunc_f32x4_s(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_trunc_f32x4_u(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_trunc_f64x2_s_zero(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_trunc_f64x2_u_zero(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_laneselect(a: v128, b: v128, m: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_dot_i8x16_i7x16_add_s(a: v128, b: v128, c: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2231,7 +2307,7 @@ export namespace i64x2 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function swizzle(a: v128, b: v128): v128;
+  export declare function relaxed_laneselect(a: v128, b: v128, m: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2354,7 +2430,19 @@ export namespace f32x4 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function swizzle(a: v128, b: v128): v128;
+  export declare function relaxed_madd(a: v128, b: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_nmadd(a: v128, b: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_min(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_max(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2477,7 +2565,19 @@ export namespace f64x2 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function swizzle(a: v128, b: v128): v128;
+  export declare function relaxed_madd(a: v128, b: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_nmadd(a: v128, b: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_min(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function relaxed_max(a: v128, b: v128): v128;
 }
 
 @final

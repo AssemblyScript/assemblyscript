@@ -221,6 +221,12 @@ import {
   lowerRequiresExportRuntime
 } from "./bindings/js";
 
+/** Features enabled by default. */
+export const defaultFeatures = Feature.MutableGlobals
+                             | Feature.SignExtension
+                             | Feature.NontrappingF2I
+                             | Feature.BulkMemory;
+
 /** Compiler options. */
 export class Options {
   constructor() { /* as internref */ }
@@ -261,11 +267,8 @@ export class Options {
   tableBase: u32 = 0;
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
-  /** Features to activate by default. These are the finished proposals. */
-  features: Feature = Feature.MutableGlobals
-                    | Feature.SignExtension
-                    | Feature.NontrappingF2I
-                    | Feature.BulkMemory;
+  /** Features to activate by default. */
+  features: Feature = defaultFeatures;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
@@ -319,6 +322,27 @@ export class Options {
   /** Gets if any optimizations will be performed. */
   get willOptimize(): bool {
     return this.optimizeLevelHint > 0 || this.shrinkLevelHint > 0;
+  }
+
+  /** Sets whether a feature is enabled. */
+  setFeature(feature: Feature, on: bool = true): void {
+    if (on) {
+      // Enabling Stringref also enables GC
+      if (feature & Feature.Stringref) feature |= Feature.GC;
+      // Enabling GC also enables Reference Types
+      if (feature & Feature.GC) feature |= Feature.ReferenceTypes;
+      // Enabling Relaxed SIMD also enables SIMD
+      if (feature & Feature.RelaxedSimd) feature |= Feature.Simd;
+      this.features |= feature;
+    } else {
+      // Disabling Reference Types also disables GC
+      if (feature & Feature.ReferenceTypes) feature |= Feature.GC;
+      // Disabling GC also disables Stringref
+      if (feature & Feature.GC) feature |= Feature.Stringref;
+      // Disabling SIMD also disables Relaxed SIMD
+      if (feature & Feature.Simd) feature |= Feature.RelaxedSimd;
+      this.features &= ~feature;
+    }
   }
 
   /** Tests if a specific feature is activated. */
@@ -398,9 +422,9 @@ export namespace ExportNames {
 }
 
 /** Functions to export if `--exportRuntime` is set. */
-const runtimeFunctions = [ "__new", "__pin", "__unpin", "__collect" ];
+export const runtimeFunctions = [ "__new", "__pin", "__unpin", "__collect" ];
 /** Globals to export if `--exportRuntime` is set. */
-const runtimeGlobals = [ "__rtti_base" ];
+export const runtimeGlobals = [ "__rtti_base" ];
 
 /** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {
@@ -1361,7 +1385,14 @@ export class Compiler extends DiagnosticEmitter {
           findDecorator(DecoratorKind.Inline, global.decoratorNodes)!.range, "inline"
         );
       }
-      module.addGlobal(internalName, typeRef, true, this.makeZero(type));
+      let internalType = type;
+      if (type.isExternalReference && !type.is(TypeFlags.Nullable)) {
+        // There is no default value for non-nullable external references, so
+        // make the global nullable internally and use `null`.
+        global.set(CommonFlags.InternallyNullable);
+        internalType = type.asNullable();
+      }
+      module.addGlobal(internalName, internalType.toRef(), true, this.makeZero(internalType));
       this.currentBody.push(
         module.global_set(internalName, initExpr)
       );
@@ -1761,7 +1792,7 @@ export class Compiler extends DiagnosticEmitter {
       // Implicitly return `this` if the flow falls through
       if (!flow.is(FlowFlags.Terminates)) {
         stmts.push(
-          module.local_get(thisLocal.index, this.options.sizeTypeRef)
+          module.local_get(thisLocal.index, thisLocal.type.toRef())
         );
         flow.set(FlowFlags.Returns | FlowFlags.ReturnsNonNull | FlowFlags.Terminates);
       }
@@ -4867,17 +4898,17 @@ export class Compiler extends DiagnosticEmitter {
           module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
         );
       }
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref: return module.ref_eq(leftExpr, rightExpr);
-      case TypeKind.Stringref: return module.string_eq(leftExpr, rightExpr);
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31: return module.ref_eq(leftExpr, rightExpr);
+      case TypeKind.String: return module.string_eq(leftExpr, rightExpr);
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter:
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref: {
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any: {
         this.error(
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
           reportNode.range,
@@ -4917,15 +4948,15 @@ export class Compiler extends DiagnosticEmitter {
           module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
         );
       }
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref: {
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31: {
         return module.unary(UnaryOp.EqzI32,
           module.ref_eq(leftExpr, rightExpr)
         );
       }
-      case TypeKind.Stringref: {
+      case TypeKind.String: {
         return module.unary(UnaryOp.EqzI32,
           module.string_eq(leftExpr, rightExpr)
         );
@@ -4933,9 +4964,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter:
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref: {
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any: {
         this.error(
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
           reportNode.range,
@@ -5578,13 +5609,21 @@ export class Compiler extends DiagnosticEmitter {
     // to compile just the value, we need to know the target's type
     let targetType: Type;
     switch (target.kind) {
-      case ElementKind.Global: {
-        if (!this.compileGlobalLazy(<Global>target, expression)) {
+      case ElementKind.Global:
+      case ElementKind.Local: {
+        if (target.kind == ElementKind.Global) {
+          if (!this.compileGlobalLazy(<Global>target, expression)) {
+            return this.module.unreachable();
+          }
+        } else if (!(<Local>target).declaredByFlow(flow)) {
+          // TODO: closures
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            expression.range,
+            "Closures"
+          );
           return this.module.unreachable();
         }
-        // fall-through
-      }
-      case ElementKind.Local: {
         if (this.pendingElements.has(target)) {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,
@@ -6591,17 +6630,18 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0, k = overrideInstances.length; i < k; ++i) {
         let overrideInstance = overrideInstances[i];
         if (!overrideInstance.is(CommonFlags.Compiled)) continue; // errored
-        let overrideType = overrideInstance.type;
-        let originalType = instance.type;
-        if (!overrideType.isAssignableTo(originalType)) {
+
+        let overrideSignature = overrideInstance.signature;
+        let originalSignature = instance.signature;
+
+        if (!overrideSignature.isAssignableTo(originalSignature, true)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            overrideInstance.identifierNode.range, overrideType.toString(), originalType.toString()
+            overrideInstance.identifierNode.range, overrideSignature.toString(), originalSignature.toString()
           );
           continue;
         }
         // TODO: additional optional parameters are not permitted by `isAssignableTo` yet
-        let overrideSignature = overrideInstance.signature;
         let overrideParameterTypes = overrideSignature.parameterTypes;
         let overrideNumParameters = overrideParameterTypes.length;
         let paramExprs = new Array<ExpressionRef>(1 + overrideNumParameters);
@@ -7341,12 +7381,14 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
         assert(localIndex >= 0);
-        if (localType.isNullableReference && flow.isLocalFlag(localIndex, LocalFlags.NonNull, false)) {
-          localType = localType.nonNullableType;
+        let isNonNull = flow.isLocalFlag(localIndex, LocalFlags.NonNull, false);
+        if (localType.isNullableReference && isNonNull && (!localType.isExternalReference || this.options.hasFeature(Feature.GC))) {
+          this.currentType = localType.nonNullableType;
+        } else {
+          this.currentType = localType;
         }
-        this.currentType = localType;
 
-        if (target.parent != flow.targetFunction) {
+        if (!local.declaredByFlow(flow)) {
           // TODO: closures
           this.error(
             DiagnosticCode.Not_implemented_0,
@@ -7355,7 +7397,14 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.unreachable();
         }
-        return module.local_get(localIndex, localType.toRef());
+        let expr = module.local_get(localIndex, localType.toRef());
+        if (isNonNull && localType.isNullableExternalReference && this.options.hasFeature(Feature.GC)) {
+          // If the local's type is nullable, but its value is known to be non-null, propagate
+          // non-nullability info to Binaryen. Only applicable if GC is enabled, since without
+          // GC, here incl. typed function references, there is no nullability dimension.
+          expr = module.ref_as_nonnull(expr);
+        }
+        return expr;
       }
       case ElementKind.Global: {
         let global = <Global>target;
@@ -7433,7 +7482,7 @@ export class Compiler extends DiagnosticEmitter {
           // TODO: Concrete function types currently map to first class functions implemented in
           // linear memory (on top of `usize`), leaving only generic `funcref` for use here. In the
           // future, once functions become Wasm GC objects, the actual signature type can be used.
-          this.currentType = Type.funcref;
+          this.currentType = Type.func;
           return module.ref_func(functionInstance.internalName, ensureType(functionInstance.type));
         }
         let offset = this.ensureRuntimeFunction(functionInstance);
@@ -9004,10 +9053,29 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FunctionPrototype: {
         let functionPrototype = <FunctionPrototype>target;
+        let typeParameterNodes = functionPrototype.typeParameterNodes;
+
+        if (typeParameterNodes && typeParameterNodes.length != 0) {
+          this.error(
+            DiagnosticCode.Type_argument_expected,
+            expression.range
+          );
+          break; // also diagnose 'not a value at runtime'
+        }
+
         let functionInstance = this.resolver.resolveFunction(functionPrototype, null);
         if (!functionInstance) return module.unreachable();
         if (!this.compileFunction(functionInstance)) return module.unreachable();
         this.currentType = functionInstance.type;
+
+        if (functionInstance.hasDecorator(DecoratorFlags.Builtin)) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            expression.range, "First-class built-ins"
+          );
+          return module.unreachable();
+        }
+
         let offset = this.ensureRuntimeFunction(functionInstance);
         return this.options.isWasm64
           ? module.i64(i64_low(offset), i64_high(offset))
@@ -9839,8 +9907,10 @@ export class Compiler extends DiagnosticEmitter {
     let targetFunction = this.currentFlow.targetFunction;
     let source = range.source;
     if (source.debugInfoIndex < 0) source.debugInfoIndex = this.module.addDebugInfoFile(source.normalizedPath);
-    range.debugInfoRef = expr;
-    targetFunction.debugLocations.push(range);
+    // It's possible that an `expr` is seen multiple times, for example when
+    // first adding debug information for an inner expression and later on for
+    // an expression supposedly wrapping it, where the wrapping became a noop.
+    targetFunction.debugLocations.set(expr, range);
   }
 
   /** Checks whether a particular function signature is supported. */
@@ -9906,20 +9976,21 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(0);
       case TypeKind.F64: return module.f64(0);
       case TypeKind.V128: return module.v128(v128_zero);
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {
-        // TODO: what if not nullable?
-        return module.ref_null(type.toRef());
+        if (type.is(TypeFlags.Nullable)) return module.ref_null(type.toRef());
+        assert(false); // TODO: check that refs are nullable in callers?
+        return module.unreachable();
       }
-      case TypeKind.I31ref: {
+      case TypeKind.I31: {
         if (type.is(TypeFlags.Nullable)) return module.ref_null(type.toRef());
         return module.i31_new(module.i32(0));
       }
@@ -9944,7 +10015,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: return module.i64(1);
       case TypeKind.F32: return module.f32(1);
       case TypeKind.F64: return module.f64(1);
-      case TypeKind.I31ref: return module.i31_new(module.i32(1));
+      case TypeKind.I31: return module.i31_new(module.i32(1));
     }
   }
 
@@ -9966,7 +10037,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(-1);
       case TypeKind.F64: return module.f64(-1);
       case TypeKind.V128: return module.v128(v128_ones);
-      case TypeKind.I31ref: return module.i31_new(module.i32(-1));
+      case TypeKind.I31: return module.i31_new(module.i32(-1));
     }
   }
 
@@ -10065,14 +10136,14 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.V128: {
         return module.unary(UnaryOp.AnyTrueV128, expr);
       }
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.Structref:
-      case TypeKind.Arrayref:
-      case TypeKind.I31ref:
-      case TypeKind.Stringref:
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.I31:
+      case TypeKind.String:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {

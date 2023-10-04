@@ -6,7 +6,7 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33796))
  (global $~lib/memory/__heap_base i32 (i32.const 33796))
  (memory $0 1)
- (data (i32.const 1024) "\00")
+ (data $0 (i32.const 1024) "\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
