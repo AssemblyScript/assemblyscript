@@ -2,3 +2,5 @@
 *.map
 asc.js
 assemblyscript.js
+importmap.json
+web.js
