@@ -5,7 +5,7 @@ import v8 from "v8";
 import cluster from "cluster";
 import { createRequire } from "module";
 import { fileURLToPath, pathToFileURL } from "url";
-import glob from "glob";
+import { globSync } from "glob";
 import { stderrColors, stdoutColors } from "../util/terminal.js";
 import * as optionsUtil from "../util/options.js";
 import { coreCount, threadCount } from "../util/cpu.js";
@@ -84,7 +84,7 @@ process.chdir(basedir);
 
 // Gets a list of all relevant tests
 function getTests() {
-  let tests = glob.sync("**/!(_*).ts")
+  let tests = globSync("**/!(_*).ts", { posix: true })
     .map(name => name.replace(/\.ts$/, ""))
     .filter(name => !name.endsWith(".d") && !name.includes("node_modules"));
   if (argv.length) { // run matching tests only

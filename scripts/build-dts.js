@@ -1,5 +1,5 @@
 import fs from "fs";
-import glob from "glob";
+import { globSync } from "glob";
 import pathUtil from "path";
 import ts from "typescript";
 import { fileURLToPath } from 'url';
@@ -159,10 +159,8 @@ const generate = (() => {
     options.exclude ||= [];
     options.exclude.push("node_modules/**/*.d.ts");
 
-    for (const fileName of options.exclude) {
-      for (const globFileName of glob.sync(fileName, { cwd: baseDir })) {
-        exclusions.add(pathUtil.resolve(baseDir, globFileName));
-      }
+    for (const filename of globSync(options.exclude, { cwd: baseDir })) {
+      exclusions.add(pathUtil.resolve(baseDir, filename));
     }
 
     debug("exclude:");

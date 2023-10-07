@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import childProcess from "child_process";
 import esbuild from "esbuild";
-import glob from "glob";
+import { globSync } from "glob";
 import { createRequire } from "module";
 import { stdoutColors } from "../util/terminal.js";
 
@@ -63,7 +63,7 @@ const stdlibPlugin = {
     build.onResolve({ filter: /\bindex\.generated\.js$/ }, args => {
       return {
         path: path.join(args.resolveDir, args.path),
-        watchFiles: glob.sync(path.join(dirname, "..", "std", "assembly") + "/**/*.ts")
+        watchFiles: globSync(path.join(dirname, "..", "std", "assembly") + "/**/*.ts")
           .concat([
             path.join(dirname, "..", "package.json"),
             path.join(dirname, "..", "cli", "options.json"),
@@ -88,7 +88,7 @@ const stdlibPlugin = {
       );
       const libraryDir = path.join(dirname, "..", "std", "assembly");
       const libraryFiles = {};
-      for (const file of glob.sync("**/!(*.d).ts", { cwd: libraryDir })) {
+      for (const file of globSync("**/!(*.d).ts", { cwd: libraryDir, posix: true }).sort()) {
         libraryFiles[file.replace(/\.ts$/, "")] = bundleFile(path.join(libraryDir, file));
       }
       out.push(
