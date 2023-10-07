@@ -323,6 +323,10 @@ async function runTest(basename) {
       return prepareResult(SUCCESS);
     }
 
+    if (error) {
+      return prepareResult(FAILURE, "unexpected compiling error");
+    }
+
     const afterCompileResult = afterCompile("debug");
     if (afterCompileResult) return afterCompileResult;
   }
