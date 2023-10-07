@@ -1,12 +1,12 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import childProcess from "child_process";
 import esbuild from "esbuild";
 import { globSync } from "glob";
 import { createRequire } from "module";
 import { stdoutColors } from "../util/terminal.js";
 
+import {buildWeb} from "./build-web.js";
 import * as dts from "./build-dts.js";
 
 const require = createRequire(import.meta.url);
@@ -175,22 +175,22 @@ const webPlugin = {
   setup(build) {
     build.onEnd(() => {
       const startTime = Date.now();
-      const stdout = [];
-      console.log(`${time()} - ${"web"} - Starting new build ...`);
-      childProcess.spawn("node", [ "./build-web.js" ], {
-        cwd: dirname,
-        stdio: "pipe"
-      }).on("data", data => {
-        stdout.push(data.toString());
-      }).on("error", err => {
+      console.log(`${time()} - web - Starting new build ...`);
+
+      try {
+        buildWeb();
+
         const duration = Date.now() - startTime;
-        console.log(stdout.join(""));
-        console.log(`${time()}  - ${"web"} - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
-      }).on("close", code => {
-        if (code) return;
+        console.log(`${time()} - web - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
+        process.exitCode = 0;
+      } catch (e) {
         const duration = Date.now() - startTime;
-        console.log(`${time()} - ${"web"} - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
-      });
+        console.error(e);
+        console.log(`${time()} - web - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
+        process.exitCode = 1;
+      } finally {
+        buildingDefinitions = false;
+      }
     });
   }
 };
