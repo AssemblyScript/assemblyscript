@@ -392,7 +392,7 @@ export class Resolver extends DiagnosticEmitter {
           break;
         }
         case ParameterKind.Rest: {
-          assert(i == numParameters);
+          assert(i == numParameters - 1);
           hasRest = true;
           break;
         }
