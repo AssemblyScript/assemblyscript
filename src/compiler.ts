@@ -395,6 +395,13 @@ export const enum RuntimeFeatures {
   setArgumentsLength = 1 << 6
 }
 
+class CheckBinaryOperatorOverloadResult {
+  constructor(
+    public overload: Function | null,
+    public isAmbiguity: bool,
+  ) {}
+}
+
 /** Imported default names of compiler-generated elements. */
 export namespace ImportNames {
   /** Name of the default namespace */
@@ -3783,6 +3790,143 @@ export class Compiler extends DiagnosticEmitter {
   private i32PowInstance: Function | null = null;
   private i64PowInstance: Function | null = null;
 
+  private checkCommutativeBinaryOperatorOverload(
+    leftType: Type, rightType: Type, token: Token, reportNode: Expression
+  ): CheckBinaryOperatorOverloadResult {
+    // check operator overload
+    const operator = OperatorKind.fromBinaryToken(token);
+    const leftOverload = leftType.lookupOverload(operator, this.program);
+    const rightOverload = rightType.lookupOverload(operator, this.program);
+    if (leftOverload && rightOverload && leftOverload != rightOverload) {
+      this.error(DiagnosticCode.Operator_0_overloading_ambiguity, reportNode.range, operatorTokenToString(token));
+      return new CheckBinaryOperatorOverloadResult(null, true);
+    }
+    if (leftOverload) return new CheckBinaryOperatorOverloadResult(leftOverload, false);
+    if (rightOverload) return new CheckBinaryOperatorOverloadResult(rightOverload, false);
+    return new CheckBinaryOperatorOverloadResult(null, false);
+  }
+
+  private compileCommutativeBinaryExpression(
+    expression: BinaryExpression,
+    contextualType: Type,
+  ): ExpressionRef {
+    let module = this.module;
+    let left = expression.left;
+    let right = expression.right;
+
+    let leftExpr: ExpressionRef;
+    let leftType: Type;
+    let rightExpr: ExpressionRef;
+    let rightType: Type;
+    let commonType: Type | null;
+
+    let operator = expression.operator;
+    let operatorString = operatorTokenToString(operator);
+
+    leftExpr = this.compileExpression(left, contextualType);
+    leftType = this.currentType;
+
+    rightExpr = this.compileExpression(right, leftType);
+    rightType = this.currentType;
+
+    let checkOverloadResult = this.checkCommutativeBinaryOperatorOverload(leftType, rightType, operator, expression);
+    if (checkOverloadResult.isAmbiguity) {
+      this.currentType = contextualType;
+      return module.unreachable();
+    }
+    let overload = checkOverloadResult.overload;
+    if (overload) {
+      return this.compileCommutativeBinaryOverload(
+        overload,
+        left, leftExpr, leftType,
+        right, rightExpr, rightType,
+        expression
+      );
+    }
+    const signednessIsRelevant =
+      operator == Token.LessThan ||
+      operator == Token.GreaterThan ||
+      operator == Token.LessThan_Equals ||
+      operator == Token.GreaterThan_Equals;
+    commonType = Type.commonType(leftType, rightType, contextualType, signednessIsRelevant);
+    if (!commonType) {
+      this.error(
+        DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+        expression.range,
+        operatorString,
+        leftType.toString(),
+        rightType.toString()
+      );
+      this.currentType = contextualType;
+      return module.unreachable();
+    }
+
+    switch (operator) {
+      case Token.LessThan:
+      case Token.GreaterThan:
+      case Token.LessThan_Equals:
+      case Token.GreaterThan_Equals: {
+        if (!commonType.isNumericValue) {
+          this.error(
+            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+            expression.range,
+            operatorString,
+            leftType.toString(),
+            rightType.toString()
+          );
+          this.currentType = contextualType;
+          return module.unreachable();
+        }
+        break;
+      }
+      case Token.Equals_Equals_Equals:
+      case Token.Equals_Equals:
+      case Token.Exclamation_Equals_Equals:
+      case Token.Exclamation_Equals: {
+        if (commonType.isFloatValue) {
+          if (isConstExpressionNaN(module, rightExpr) || isConstExpressionNaN(module, leftExpr)) {
+            this.warning(
+              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
+              expression.range
+            );
+          }
+          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
+              expression.range
+            );
+          }
+        }
+      }
+    }
+
+    leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+    leftType = commonType;
+    rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+    rightType = commonType;
+
+    this.currentType = Type.bool;
+    switch (operator) {
+      case Token.LessThan:
+        return this.makeLt(leftExpr, rightExpr, commonType);
+      case Token.GreaterThan:
+        return this.makeGt(leftExpr, rightExpr, commonType);
+      case Token.LessThan_Equals:
+        return this.makeLe(leftExpr, rightExpr, commonType);
+      case Token.GreaterThan_Equals:
+        return this.makeGe(leftExpr, rightExpr, commonType);
+      case Token.Equals_Equals_Equals:
+      case Token.Equals_Equals:
+        return this.makeEq(leftExpr, rightExpr, commonType, expression);
+      case Token.Exclamation_Equals_Equals:
+      case Token.Exclamation_Equals:
+        return this.makeNe(leftExpr, rightExpr, commonType, expression);
+      default:
+        assert(false);
+        return module.unreachable();
+    }
+  }
+
   private compileBinaryExpression(
     expression: BinaryExpression,
     contextualType: Type,
@@ -3803,250 +3947,15 @@ export class Compiler extends DiagnosticEmitter {
 
     let operator = expression.operator;
     switch (operator) {
-      case Token.LessThan: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
-
-        // check operator overload
-        let classReference = leftType.getClassOrWrapper(this.program);
-        if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.Lt);
-          if (overload) {
-            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-            break;
-          }
-        }
-
-        rightExpr = this.compileExpression(right, leftType);
-        rightType = this.currentType;
-        commonType = Type.commonType(leftType, rightType, contextualType, true);
-        if (!commonType || !commonType.isNumericValue) {
-          this.error(
-            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range, "<", leftType.toString(), rightType.toString()
-          );
-          this.currentType = contextualType;
-          return module.unreachable();
-        }
-
-        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
-        leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
-        rightType = commonType;
-
-        expr = this.makeLt(leftExpr, rightExpr, commonType);
-        this.currentType = Type.bool;
-        break;
-      }
-      case Token.GreaterThan: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
-
-        // check operator overload
-        let classReference = leftType.getClassOrWrapper(this.program);
-        if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.Gt);
-          if (overload) {
-            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-            break;
-          }
-        }
-
-        rightExpr = this.compileExpression(right, leftType);
-        rightType = this.currentType;
-        commonType = Type.commonType(leftType, rightType, contextualType, true);
-        if (!commonType || !commonType.isNumericValue) {
-          this.error(
-            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range, ">", leftType.toString(), rightType.toString()
-          );
-          this.currentType = contextualType;
-          return module.unreachable();
-        }
-
-        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
-        leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
-        rightType = commonType;
-
-        expr = this.makeGt(leftExpr, rightExpr, commonType);
-        this.currentType = Type.bool;
-        break;
-      }
-      case Token.LessThan_Equals: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
-
-        // check operator overload
-        let classReference = leftType.getClassOrWrapper(this.program);
-        if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.Le);
-          if (overload) {
-            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-            break;
-          }
-        }
-
-        rightExpr = this.compileExpression(right, leftType);
-        rightType = this.currentType;
-        commonType = Type.commonType(leftType, rightType, contextualType, true);
-        if (!commonType || !commonType.isNumericValue) {
-          this.error(
-            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range, "<=", leftType.toString(), rightType.toString()
-          );
-          this.currentType = contextualType;
-          return module.unreachable();
-        }
-
-        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
-        leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
-        rightType = commonType;
-
-        expr = this.makeLe(leftExpr, rightExpr, commonType);
-        this.currentType = Type.bool;
-        break;
-      }
-      case Token.GreaterThan_Equals: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
-
-        // check operator overload
-        let classReference = leftType.getClassOrWrapper(this.program);
-        if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.Ge);
-          if (overload) {
-            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-            break;
-          }
-        }
-
-        rightExpr = this.compileExpression(right, leftType);
-        rightType = this.currentType;
-        commonType = Type.commonType(leftType, rightType, contextualType, true);
-        if (!commonType || !commonType.isNumericValue) {
-          this.error(
-            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range, ">=", leftType.toString(), rightType.toString()
-          );
-          this.currentType = contextualType;
-          return module.unreachable();
-        }
-
-        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
-        leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
-        rightType = commonType;
-
-        expr = this.makeGe(leftExpr, rightExpr, commonType);
-        this.currentType = Type.bool;
-        break;
-      }
-
+      case Token.LessThan:
+      case Token.GreaterThan:
+      case Token.LessThan_Equals:
+      case Token.GreaterThan_Equals:
       case Token.Equals_Equals_Equals:
-      case Token.Equals_Equals: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
-
-        // check operator overload
-        let classReference = leftType.getClassOrWrapper(this.program);
-        if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.Eq);
-          if (overload) {
-            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-            break;
-          }
-        }
-
-        rightExpr = this.compileExpression(right, leftType);
-        rightType = this.currentType;
-        commonType = Type.commonType(leftType, rightType, contextualType);
-        if (!commonType) {
-          this.error(
-            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range, operatorTokenToString(expression.operator), leftType.toString(), rightType.toString()
-          );
-          this.currentType = contextualType;
-          return module.unreachable();
-        }
-        if (commonType.isFloatValue) {
-          if (
-            isConstExpressionNaN(module, rightExpr) ||
-            isConstExpressionNaN(module, leftExpr)
-          ) {
-            this.warning(
-              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
-              expression.range
-            );
-          }
-          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
-            this.warning(
-              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
-              expression.range
-            );
-          }
-        }
-        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
-        leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
-        rightType = commonType;
-
-        expr = this.makeEq(leftExpr, rightExpr, commonType, expression);
-        this.currentType = Type.bool;
-        break;
-      }
+      case Token.Equals_Equals:
       case Token.Exclamation_Equals_Equals:
       case Token.Exclamation_Equals: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
-
-        // check operator overload
-        let classReference = leftType.getClass();
-        if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.Ne);
-          if (overload) {
-            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-            break;
-          }
-        }
-
-        rightExpr = this.compileExpression(right, leftType);
-        rightType = this.currentType;
-        commonType = Type.commonType(leftType, rightType, contextualType);
-        if (!commonType) {
-          this.error(
-            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range, operatorTokenToString(expression.operator), leftType.toString(), rightType.toString()
-          );
-          this.currentType = contextualType;
-          return module.unreachable();
-        }
-        if (commonType.isFloatValue) {
-          if (
-            isConstExpressionNaN(module, rightExpr) ||
-            isConstExpressionNaN(module, leftExpr)
-          ) {
-            this.warning(
-              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
-              expression.range
-            );
-          }
-          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
-            this.warning(
-              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
-              expression.range
-            );
-          }
-        }
-        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
-        leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
-        rightType = commonType;
-
-        expr = this.makeNe(leftExpr, rightExpr, commonType, expression);
-        this.currentType = Type.bool;
-        break;
+        return this.compileCommutativeBinaryExpression(expression, contextualType);
       }
       case Token.Equals: {
         return this.compileAssignment(left, right, contextualType);
@@ -4713,6 +4622,7 @@ export class Compiler extends DiagnosticEmitter {
       default: {
         assert(false);
         expr = this.module.unreachable();
+        break;
       }
     }
     if (!compound) return expr;
@@ -5577,6 +5487,29 @@ export class Compiler extends DiagnosticEmitter {
       rightType = parameterTypes[1];
     }
     let rightExpr = this.compileExpression(right, rightType, Constraints.ConvImplicit);
+    return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ], reportNode);
+  }
+
+
+  private compileCommutativeBinaryOverload(
+    operatorInstance: Function,
+    left: Expression,
+    leftExpr: ExpressionRef,
+    leftType: Type,
+    right: Expression,
+    rightExpr: ExpressionRef,
+    rightType: Type,
+    reportNode: Node
+  ): ExpressionRef {
+    let signature = operatorInstance.signature;
+    let parameterTypes = signature.parameterTypes;
+    if (operatorInstance.is(CommonFlags.Instance)) {
+      leftExpr = this.convertExpression(leftExpr, leftType, assert(signature.thisType), false, left);
+      rightExpr = this.convertExpression(rightExpr, rightType, parameterTypes[0], false, right);
+    } else {
+      leftExpr = this.convertExpression(leftExpr, leftType, parameterTypes[0], false, left);
+      rightExpr = this.convertExpression(rightExpr, rightType, parameterTypes[1], false, right);
+    }
     return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ], reportNode);
   }
 
