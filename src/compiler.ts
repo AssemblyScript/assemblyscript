@@ -395,13 +395,6 @@ export const enum RuntimeFeatures {
   setArgumentsLength = 1 << 6
 }
 
-class CheckBinaryOperatorOverloadResult {
-  constructor(
-    public overload: Function | null,
-    public isAmbiguity: bool,
-  ) {}
-}
-
 /** Imported default names of compiler-generated elements. */
 export namespace ImportNames {
   /** Name of the default namespace */
@@ -3790,22 +3783,6 @@ export class Compiler extends DiagnosticEmitter {
   private i32PowInstance: Function | null = null;
   private i64PowInstance: Function | null = null;
 
-  private checkCommutativeBinaryOperatorOverload(
-    leftType: Type, rightType: Type, token: Token, reportNode: Expression
-  ): CheckBinaryOperatorOverloadResult {
-    // check operator overload
-    const operator = OperatorKind.fromBinaryToken(token);
-    const leftOverload = leftType.lookupOverload(operator, this.program);
-    const rightOverload = rightType.lookupOverload(operator, this.program);
-    if (leftOverload && rightOverload && leftOverload != rightOverload) {
-      this.error(DiagnosticCode.Operator_0_overloading_ambiguity, reportNode.range, operatorTokenToString(token));
-      return new CheckBinaryOperatorOverloadResult(null, true);
-    }
-    if (leftOverload) return new CheckBinaryOperatorOverloadResult(leftOverload, false);
-    if (rightOverload) return new CheckBinaryOperatorOverloadResult(rightOverload, false);
-    return new CheckBinaryOperatorOverloadResult(null, false);
-  }
-
   private compileCommutativeBinaryExpression(
     expression: BinaryExpression,
     contextualType: Type,
@@ -3828,18 +3805,29 @@ export class Compiler extends DiagnosticEmitter {
 
     rightExpr = this.compileExpression(right, leftType);
     rightType = this.currentType;
-
-    let checkOverloadResult = this.checkCommutativeBinaryOperatorOverload(leftType, rightType, operator, expression);
-    if (checkOverloadResult.isAmbiguity) {
+    
+    // check operator overload
+    const operatorKind = OperatorKind.fromBinaryToken(operator);
+    const leftOverload = leftType.lookupOverload(operatorKind, this.program);
+    const rightOverload = rightType.lookupOverload(operatorKind, this.program);
+    if (leftOverload && rightOverload && leftOverload != rightOverload) {
+      this.error(DiagnosticCode.Operator_0_overloading_ambiguity, expression.range, operatorTokenToString(operator));
       this.currentType = contextualType;
       return module.unreachable();
     }
-    let overload = checkOverloadResult.overload;
-    if (overload) {
+    if (leftOverload) {
       return this.compileCommutativeBinaryOverload(
-        overload,
+        leftOverload,
         left, leftExpr, leftType,
         right, rightExpr, rightType,
+        expression
+      );
+    }
+    if (rightOverload) {
+      return this.compileCommutativeBinaryOverload(
+        rightOverload,
+        right, rightExpr, rightType,
+        left, leftExpr, leftType,
         expression
       );
     }
@@ -5493,24 +5481,24 @@ export class Compiler extends DiagnosticEmitter {
 
   private compileCommutativeBinaryOverload(
     operatorInstance: Function,
-    left: Expression,
-    leftExpr: ExpressionRef,
-    leftType: Type,
-    right: Expression,
-    rightExpr: ExpressionRef,
-    rightType: Type,
+    first: Expression,
+    firstExpr: ExpressionRef,
+    firstType: Type,
+    second: Expression,
+    secondExpr: ExpressionRef,
+    secondType: Type,
     reportNode: Node
   ): ExpressionRef {
     let signature = operatorInstance.signature;
     let parameterTypes = signature.parameterTypes;
     if (operatorInstance.is(CommonFlags.Instance)) {
-      leftExpr = this.convertExpression(leftExpr, leftType, assert(signature.thisType), false, left);
-      rightExpr = this.convertExpression(rightExpr, rightType, parameterTypes[0], false, right);
+      firstExpr = this.convertExpression(firstExpr, firstType, assert(signature.thisType), false, first);
+      secondExpr = this.convertExpression(secondExpr, secondType, parameterTypes[0], false, second);
     } else {
-      leftExpr = this.convertExpression(leftExpr, leftType, parameterTypes[0], false, left);
-      rightExpr = this.convertExpression(rightExpr, rightType, parameterTypes[1], false, right);
+      firstExpr = this.convertExpression(firstExpr, firstType, parameterTypes[0], false, first);
+      secondExpr = this.convertExpression(secondExpr, secondType, parameterTypes[1], false, second);
     }
-    return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ], reportNode);
+    return this.makeCallDirect(operatorInstance, [ firstExpr, secondExpr ], reportNode);
   }
 
   private compileAssignment(
