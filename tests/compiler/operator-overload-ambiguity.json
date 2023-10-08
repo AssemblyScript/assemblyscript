@@ -1,0 +1,14 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "AS240: Operator '==' overloading ambiguity.",
+    "compare_nonnull_a == compare_nonnull_b;",
+    "AS240: Operator '==' overloading ambiguity.",
+    "compare_nonnull_b == compare_nonnull_a;",
+    "AS240: Operator '==' overloading ambiguity.",
+    "compare_nonnull_c == compare_nonnull_d;",
+    "AS240: Operator '==' overloading ambiguity.",
+    "compare_extend_1 == compare_extend_2;",
+    "EOF"
+  ]
+}
