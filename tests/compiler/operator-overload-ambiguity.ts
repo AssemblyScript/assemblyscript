@@ -27,13 +27,11 @@ export function compare_null(compare_nonnull_c: C | null, compare_nonnull_d: D |
   compare_nonnull_c == compare_nonnull_d;
 }
 
-
 class PA extends A {}
 class PB extends B {}
 export function compare_extend(compare_extend_1: PA, compare_extend_2: PB): void {
   compare_extend_1 == compare_extend_2;
 }
-
 
 export function end(): void {
   ERROR("EOF");

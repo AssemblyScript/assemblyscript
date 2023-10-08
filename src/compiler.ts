@@ -3783,7 +3783,8 @@ export class Compiler extends DiagnosticEmitter {
   private i32PowInstance: Function | null = null;
   private i64PowInstance: Function | null = null;
 
-  private compileCommutativeBinaryExpression(
+  /** compile `==` `===` `!=` `!==` BinaryExpression */
+  private compileCommutativeCompareBinaryExpression(
     expression: BinaryExpression,
     contextualType: Type,
   ): ExpressionRef {
@@ -3811,7 +3812,12 @@ export class Compiler extends DiagnosticEmitter {
     const leftOverload = leftType.lookupOverload(operatorKind, this.program);
     const rightOverload = rightType.lookupOverload(operatorKind, this.program);
     if (leftOverload && rightOverload && leftOverload != rightOverload) {
-      this.error(DiagnosticCode.Operator_0_overloading_ambiguity, expression.range, operatorTokenToString(operator));
+      this.error(
+        DiagnosticCode.Operator_0_overloading_ambiguity_candidate_overloads_1_and_2, expression.range, 
+        operatorString,
+        leftOverload.internalName,
+        rightOverload.internalName
+      );
       this.currentType = contextualType;
       return module.unreachable();
     }
@@ -3831,11 +3837,7 @@ export class Compiler extends DiagnosticEmitter {
         expression
       );
     }
-    const signednessIsRelevant =
-      operator == Token.LessThan ||
-      operator == Token.GreaterThan ||
-      operator == Token.LessThan_Equals ||
-      operator == Token.GreaterThan_Equals;
+    const signednessIsRelevant = false;
     commonType = Type.commonType(leftType, rightType, contextualType, signednessIsRelevant);
     if (!commonType) {
       this.error(
@@ -3849,43 +3851,79 @@ export class Compiler extends DiagnosticEmitter {
       return module.unreachable();
     }
 
-    switch (operator) {
-      case Token.LessThan:
-      case Token.GreaterThan:
-      case Token.LessThan_Equals:
-      case Token.GreaterThan_Equals: {
-        if (!commonType.isNumericValue) {
-          this.error(
-            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range,
-            operatorString,
-            leftType.toString(),
-            rightType.toString()
-          );
-          this.currentType = contextualType;
-          return module.unreachable();
-        }
-        break;
+    if (commonType.isFloatValue) {
+      if (isConstExpressionNaN(module, rightExpr) || isConstExpressionNaN(module, leftExpr)) {
+        this.warning(
+          DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
+          expression.range
+        );
       }
+      if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
+        this.warning(
+          DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
+          expression.range
+        );
+      }
+    }
+
+    leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+    leftType = commonType;
+    rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+    rightType = commonType;
+
+    this.currentType = Type.bool;
+    switch (operator) {
       case Token.Equals_Equals_Equals:
       case Token.Equals_Equals:
+        return this.makeEq(leftExpr, rightExpr, commonType, expression);
       case Token.Exclamation_Equals_Equals:
-      case Token.Exclamation_Equals: {
-        if (commonType.isFloatValue) {
-          if (isConstExpressionNaN(module, rightExpr) || isConstExpressionNaN(module, leftExpr)) {
-            this.warning(
-              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
-              expression.range
-            );
-          }
-          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
-            this.warning(
-              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
-              expression.range
-            );
-          }
-        }
-      }
+      case Token.Exclamation_Equals:
+        return this.makeNe(leftExpr, rightExpr, commonType, expression);
+      default:
+        assert(false);
+        return module.unreachable();
+    }
+  }
+
+  /** compile `>` `>=` `<` `<=` BinaryExpression */
+  private compileNonCommutativeCompareBinaryExpression(
+    expression: BinaryExpression,
+    contextualType: Type,
+  ): ExpressionRef {
+    let module = this.module;
+    let left = expression.left;
+    let right = expression.right;
+    let leftExpr: ExpressionRef;
+    let leftType: Type;
+    let rightExpr: ExpressionRef;
+    let rightType: Type;
+    let commonType: Type | null;
+    let operator = expression.operator;
+    let operatorString = operatorTokenToString(operator);
+
+    leftExpr = this.compileExpression(left, contextualType);
+    leftType = this.currentType;
+    
+    // check operator overload
+    const operatorKind = OperatorKind.fromBinaryToken(operator);
+    const leftOverload = leftType.lookupOverload(operatorKind, this.program);
+    if (leftOverload) return this.compileBinaryOverload(leftOverload, left, leftExpr, leftType, right, expression);
+
+    rightExpr = this.compileExpression(right, leftType);
+    rightType = this.currentType;
+
+    const signednessIsRelevant = true;
+    commonType = Type.commonType(leftType, rightType, contextualType, signednessIsRelevant);
+    if (!commonType || !commonType.isNumericValue) {
+      this.error(
+        DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+        expression.range,
+        operatorString,
+        leftType.toString(),
+        rightType.toString()
+      );
+      this.currentType = contextualType;
+      return module.unreachable();
     }
 
     leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
@@ -3903,12 +3941,6 @@ export class Compiler extends DiagnosticEmitter {
         return this.makeLe(leftExpr, rightExpr, commonType);
       case Token.GreaterThan_Equals:
         return this.makeGe(leftExpr, rightExpr, commonType);
-      case Token.Equals_Equals_Equals:
-      case Token.Equals_Equals:
-        return this.makeEq(leftExpr, rightExpr, commonType, expression);
-      case Token.Exclamation_Equals_Equals:
-      case Token.Exclamation_Equals:
-        return this.makeNe(leftExpr, rightExpr, commonType, expression);
       default:
         assert(false);
         return module.unreachable();
@@ -3938,12 +3970,14 @@ export class Compiler extends DiagnosticEmitter {
       case Token.LessThan:
       case Token.GreaterThan:
       case Token.LessThan_Equals:
-      case Token.GreaterThan_Equals:
+      case Token.GreaterThan_Equals:{
+        return this.compileNonCommutativeCompareBinaryExpression(expression, contextualType);
+      }
       case Token.Equals_Equals_Equals:
-      case Token.Equals_Equals:
+      case Token.Equals_Equals: 
       case Token.Exclamation_Equals_Equals:
       case Token.Exclamation_Equals: {
-        return this.compileCommutativeBinaryExpression(expression, contextualType);
+        return this.compileCommutativeCompareBinaryExpression(expression, contextualType);
       }
       case Token.Equals: {
         return this.compileAssignment(left, right, contextualType);
