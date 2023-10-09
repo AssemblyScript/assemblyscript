@@ -3813,7 +3813,7 @@ export class Compiler extends DiagnosticEmitter {
     const rightOverload = rightType.lookupOverload(operatorKind, this.program);
     if (leftOverload && rightOverload && leftOverload != rightOverload) {
       this.error(
-        DiagnosticCode.Operator_0_overloading_ambiguity_candidate_overloads_1_and_2, expression.range, 
+        DiagnosticCode.Ambiguous_operator_overload_0_conflicting_overloads_1_and_2, expression.range, 
         operatorString,
         leftOverload.internalName,
         rightOverload.internalName
