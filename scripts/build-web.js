@@ -1,4 +1,4 @@
-import {dirname, join} from "path";
+import { dirname, join } from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 
