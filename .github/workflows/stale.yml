@@ -11,7 +11,7 @@ jobs:
         stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed in one week if no further activity occurs. Thank you for your contributions!'
         stale-issue-label: 'stale'
         stale-pr-message: 'This PR has been automatically marked as stale because it has not had recent activity. It will be closed in one week if no further activity occurs. Thank you for your contributions!'
-        close-pr-message: 'Automatically close due to lack of recent activity, but feel free to reopen with a rebase.'
+        close-pr-message: 'This PR has been automatically closed due to lack of recent activity, but feel free to reopen it as long as you merge in the main branch afterwards.'
         exempt-issue-labels: 'bug,enhancement,compatibility'
         exempt-pr-labels: 'breaking change'
         exempt-draft-pr: true
