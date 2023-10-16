@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
@@ -19,7 +19,6 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 55572))
  (memory $0 1)
  (data $0 (i32.const 1036) "\1c")
@@ -2046,12 +2045,11 @@
    local.get $0
    i32.const 1056
    i32.store $0
-   i32.const 1
-   global.set $~argumentsLength
    local.get $0
    i32.const 1056
    i32.const 0
-   call $~lib/string/String.UTF8.encode@varargs
+   i32.const 0
+   call $~lib/string/String.UTF8.encode
    local.tee $0
    i32.store $0 offset=4
    global.get $~lib/memory/__stack_pointer
@@ -2376,12 +2374,11 @@
    local.get $0
    i32.const 1056
    i32.store $0
-   i32.const 1
-   global.set $~argumentsLength
    local.get $0
    i32.const 1056
    i32.const 0
-   call $~lib/string/String.UTF8.encode@varargs
+   i32.const 0
+   call $~lib/string/String.UTF8.encode
    local.tee $0
    i32.store $0 offset=4
    global.get $~lib/memory/__stack_pointer
@@ -2429,12 +2426,11 @@
    local.get $0
    i32.const 1056
    i32.store $0
-   i32.const 2
-   global.set $~argumentsLength
    local.get $0
    i32.const 1056
    i32.const 1
-   call $~lib/string/String.UTF8.encode@varargs
+   i32.const 0
+   call $~lib/string/String.UTF8.encode
    local.tee $0
    i32.store $0 offset=4
    global.get $~lib/memory/__stack_pointer
@@ -2486,12 +2482,11 @@
    local.tee $0
    i32.const 2000
    i32.store $0
-   i32.const 2
-   global.set $~argumentsLength
    local.get $0
    i32.const 2000
    i32.const 1
-   call $~lib/string/String.UTF8.encode@varargs
+   i32.const 0
+   call $~lib/string/String.UTF8.encode
    local.tee $0
    i32.store $0 offset=20
    global.get $~lib/memory/__stack_pointer
@@ -2560,12 +2555,11 @@
    local.tee $0
    i32.const 2000
    i32.store $0
-   i32.const 2
-   global.set $~argumentsLength
    local.get $0
    i32.const 2000
    i32.const 0
-   call $~lib/string/String.UTF8.encode@varargs
+   i32.const 0
+   call $~lib/string/String.UTF8.encode
    local.tee $0
    i32.store $0 offset=28
    global.get $~lib/memory/__stack_pointer
@@ -3361,52 +3355,6 @@
   global.set $~lib/memory/__stack_pointer
   local.get $5
  )
- (func $~lib/string/String.UTF8.encode@varargs (param $0 i32) (param $1 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 22804
-  i32.lt_s
-  if
-   i32.const 55600
-   i32.const 55648
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $0of2
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of2 $2of2 $2of2 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $1
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  local.get $1
-  i32.const 0
-  call $~lib/string/String.UTF8.encode
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
  (func $std/string-encoding/testUTF8EncodeNullTerminated
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3434,12 +3382,11 @@
   local.get $0
   i32.const 1056
   i32.store $0
-  i32.const 2
-  global.set $~argumentsLength
   local.get $0
   i32.const 1056
   i32.const 1
-  call $~lib/string/String.UTF8.encode@varargs
+  i32.const 0
+  call $~lib/string/String.UTF8.encode
   local.tee $0
   i32.store $0 offset=4
   global.get $~lib/memory/__stack_pointer
@@ -3596,12 +3543,11 @@
   local.get $0
   i32.const 1824
   i32.store $0
-  i32.const 2
-  global.set $~argumentsLength
   local.get $0
   i32.const 1824
   i32.const 1
-  call $~lib/string/String.UTF8.encode@varargs
+  i32.const 0
+  call $~lib/string/String.UTF8.encode
   local.tee $0
   i32.store $0 offset=12
   global.get $~lib/memory/__stack_pointer
@@ -3700,12 +3646,11 @@
   local.get $0
   i32.const 1056
   i32.store $0
-  i32.const 2
-  global.set $~argumentsLength
   local.get $0
   i32.const 1056
   i32.const 1
-  call $~lib/string/String.UTF8.encode@varargs
+  i32.const 0
+  call $~lib/string/String.UTF8.encode
   local.tee $0
   i32.store $0 offset=4
   global.get $~lib/memory/__stack_pointer
@@ -3972,12 +3917,11 @@
   local.get $1
   local.get $0
   i32.store $0
-  i32.const 1
-  global.set $~argumentsLength
   local.get $1
   local.get $0
   i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
+  i32.const 0
+  call $~lib/string/String.UTF8.encode
   local.tee $1
   i32.store $0 offset=4
   global.get $~lib/memory/__stack_pointer

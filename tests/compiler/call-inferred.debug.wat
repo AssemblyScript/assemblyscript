@@ -5,7 +5,6 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 76))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32844))
  (global $~lib/memory/__heap_base i32 (i32.const 32844))
@@ -30,21 +29,6 @@
  (func $call-inferred/bar<f32> (param $a f32) (result f32)
   local.get $a
   return
- )
- (func $call-inferred/bar<f32>@varargs (param $a f32) (result f32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   f32.const 42
-   local.set $a
-  end
-  local.get $a
-  call $call-inferred/bar<f32>
  )
  (func $start:call-inferred
   i32.const 42
@@ -86,10 +70,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  global.set $~argumentsLength
-  f32.const 0
-  call $call-inferred/bar<f32>@varargs
+  f32.const 42
+  call $call-inferred/bar<f32>
   f32.const 42
   f32.eq
   i32.eqz

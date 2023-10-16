@@ -27,7 +27,6 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 21760))
  (global $~lib/memory/__data_end i32 (i32.const 21780))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 54548))
@@ -3712,49 +3711,6 @@
   local.get $4
   return
  )
- (func $~lib/string/String.UTF8.encode@varargs (param $str i32) (param $nullTerminated i32) (param $errorMode i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $nullTerminated
-   end
-   i32.const 0
-   local.set $errorMode
-  end
-  local.get $str
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $nullTerminated
-  local.get $errorMode
-  call $~lib/string/String.UTF8.encode
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $std/string-encoding/testUTF8Encode
   (local $buf i32)
   (local $ptr i32)
@@ -3775,10 +3731,8 @@
   i32.store $0
   local.get $2
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/string/String.UTF8.encode
   local.tee $buf
   i32.store $0 offset=4
   local.get $buf
@@ -3961,10 +3915,8 @@
   i32.store $0
   local.get $4
   i32.const 1
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/string/String.UTF8.encode
   local.tee $buf
   i32.store $0 offset=4
   local.get $buf
@@ -4142,10 +4094,8 @@
   i32.store $0
   local.get $4
   i32.const 1
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/string/String.UTF8.encode
   local.tee $buf2
   i32.store $0 offset=12
   local.get $buf2
@@ -4411,10 +4361,8 @@
   i32.store $0
   local.get $1
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/string/String.UTF8.encode
   local.tee $buf
   i32.store $0 offset=4
   local.get $buf
@@ -4475,10 +4423,8 @@
   i32.store $0
   local.get $5
   i32.const 1
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/string/String.UTF8.encode
   local.tee $buf
   i32.store $0 offset=4
   local.get $buf
@@ -4541,10 +4487,8 @@
   i32.store $0
   local.get $5
   i32.const 1
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/string/String.UTF8.encode
   local.tee $buf2
   i32.store $0 offset=20
   local.get $buf2
@@ -4625,10 +4569,8 @@
   i32.store $0
   local.get $5
   i32.const 0
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/string/String.UTF8.encode
   local.tee $buf3
   i32.store $0 offset=28
   local.get $buf3
@@ -4689,10 +4631,8 @@
   i32.store $0
   local.get $3
   i32.const 1
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/string/String.UTF8.encode
   local.tee $buf
   i32.store $0 offset=4
   global.get $std/string-encoding/str
@@ -4969,10 +4909,8 @@
   i32.store $0
   local.get $3
   i32.const 0
-  i32.const 1
-  global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/string/String.UTF8.encode
   local.tee $buf8
   i32.store $0 offset=4
   local.get $buf8

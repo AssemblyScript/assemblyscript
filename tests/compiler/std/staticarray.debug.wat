@@ -3,8 +3,8 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -36,8 +36,8 @@
  (global $std/staticarray/arr4 (mut i32) (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $std/staticarray/maxVal (mut i32) (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/rt/__rtti_base i32 (i32.const 2864))
@@ -4526,47 +4526,6 @@
   local.get $20
   return
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>@varargs (param $this i32) (param $start i32) (param $end i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $start
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $end
-  end
-  local.get $this
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store $0
-  local.get $3
-  local.get $start
-  local.get $end
-  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $~lib/staticarray/StaticArray<~lib/string/String>#__get (param $this i32) (param $index i32) (result i32)
   (local $value i32)
   (local $3 i32)
@@ -5852,50 +5811,6 @@
   local.get $4
   return
  )
- (func $~lib/staticarray/StaticArray<i32>#fill@varargs (param $this i32) (param $value i32) (param $start i32) (param $end i32) (result i32)
-  (local $4 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $start
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $end
-  end
-  local.get $this
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0
-  local.get $4
-  local.get $value
-  local.get $start
-  local.get $end
-  call $~lib/staticarray/StaticArray<i32>#fill
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $4
- )
  (func $~lib/staticarray/StaticArray<i32>#reverse (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -6085,46 +6000,6 @@
   global.set $~lib/memory/__stack_pointer
   local.get $26
   return
- )
- (func $~lib/staticarray/StaticArray<i32>#copyWithin@varargs (param $this i32) (param $target i32) (param $start i32) (param $end i32) (result i32)
-  (local $4 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 2
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $end
-  end
-  local.get $this
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0
-  local.get $4
-  local.get $target
-  local.get $start
-  local.get $end
-  call $~lib/staticarray/StaticArray<i32>#copyWithin
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $4
  )
  (func $~lib/staticarray/StaticArray<i32>#map<i32> (param $this i32) (param $fn i32) (result i32)
   (local $len i32)
@@ -7460,61 +7335,6 @@
   local.get $2
   return
  )
- (func $~lib/staticarray/StaticArray<i32>#sort@varargs (param $this i32) (param $comparator i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0 offset=8
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   block $~lib/util/sort/COMPARATOR<i32>|inlined.0 (result i32)
-    i32.const 1
-    drop
-    i32.const 4
-    i32.const 4
-    i32.le_u
-    drop
-    i32.const 2848
-    br $~lib/util/sort/COMPARATOR<i32>|inlined.0
-   end
-   local.tee $comparator
-   i32.store $0
-  end
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0 offset=4
-  local.get $2
-  local.get $comparator
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0 offset=8
-  local.get $2
-  call $~lib/staticarray/StaticArray<i32>#sort
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
- )
  (func $start:std/staticarray
   (local $0 i32)
   (local $1 i32)
@@ -8222,10 +8042,8 @@
   i32.store $0
   local.get $56
   i32.const 0
-  i32.const 0
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>@varargs
+  i32.const 2147483647
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $23
   i32.store $0 offset=44
   local.get $23
@@ -8404,10 +8222,8 @@
   i32.store $0
   local.get $56
   i32.const 1
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>@varargs
+  i32.const 2147483647
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $23
   i32.store $0 offset=44
   local.get $23
@@ -8480,10 +8296,8 @@
   i32.store $0
   local.get $56
   i32.const 100
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>@varargs
+  i32.const 2147483647
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $23
   i32.store $0 offset=44
   local.get $23
@@ -8512,10 +8326,8 @@
   i32.store $0
   local.get $56
   i32.const -1
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>@varargs
+  i32.const 2147483647
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $23
   i32.store $0 offset=44
   local.get $23
@@ -9344,10 +9156,8 @@
   local.get $56
   i32.const 1
   i32.const 1
-  i32.const 2
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/staticarray/StaticArray<i32>#fill@varargs
+  i32.const 2147483647
+  call $~lib/staticarray/StaticArray<i32>#fill
   drop
   local.get $43
   local.set $56
@@ -9474,10 +9284,8 @@
   local.get $56
   i32.const 0
   i32.const 3
-  i32.const 2
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/staticarray/StaticArray<i32>#copyWithin@varargs
+  i32.const 2147483647
+  call $~lib/staticarray/StaticArray<i32>#copyWithin
   drop
   local.get $47
   local.set $56
@@ -10004,10 +9812,13 @@
   local.get $56
   i32.store $0
   local.get $56
-  i32.const 0
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/staticarray/StaticArray<i32>#sort@varargs
+  i32.const 2848
+  local.set $56
+  global.get $~lib/memory/__stack_pointer
+  local.get $56
+  i32.store $0 offset=24
+  local.get $56
+  call $~lib/staticarray/StaticArray<i32>#sort
   drop
   local.get $55
   local.set $56

@@ -6816,14 +6816,6 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = numArguments; i < maxArguments; ++i) {
         let initializer = parameterNodes[i].initializer;
         if (initializer) {
-          if (initializer.compilesToConst) {
-            operands.push(this.compileExpression(
-              initializer,
-              parameterTypes[i],
-              Constraints.ConvImplicit
-            ));
-            continue;
-          }
           let resolved = this.resolver.lookupExpression(initializer, instance.flow, parameterTypes[i], ReportMode.Swallow);
           if (resolved && resolved.kind == ElementKind.Global) {
             let global = <Global>resolved;
@@ -6833,6 +6825,19 @@ export class Compiler extends DiagnosticEmitter {
               );
               continue;
             }
+          }
+          let previousFlow = this.currentFlow;
+          this.currentFlow = instance.flow;
+          const expr = this.compileExpression(
+            initializer,
+            parameterTypes[i],
+            Constraints.ConvImplicit
+          );
+          this.currentFlow = previousFlow;
+          const precomp = module.runExpression(expr, ExpressionRunnerFlags.Default);
+          if (precomp) {
+            operands.push(precomp);
+            continue;
           }
         }
         operands.push(this.makeZero(parameterTypes[i]));

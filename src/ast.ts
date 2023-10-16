@@ -775,24 +775,6 @@ export abstract class Node {
     return false;
   }
 
-  /** Tests whether this node is guaranteed to compile to a constant value. */
-  get compilesToConst(): bool {
-    switch (this.kind) {
-      case NodeKind.Literal: {
-        switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
-          case LiteralKind.Float:
-          case LiteralKind.Integer:
-          case LiteralKind.String: return true;
-        }
-        break;
-      }
-      case NodeKind.Null:
-      case NodeKind.True:
-      case NodeKind.False: return true;
-    }
-    return false;
-  }
-
   private isAccessOn(kind: NodeKind): bool {
     let node = changetype<Node>(this);
     if (node.kind == NodeKind.Call) {
