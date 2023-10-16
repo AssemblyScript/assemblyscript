@@ -6834,7 +6834,7 @@ export class Compiler extends DiagnosticEmitter {
             Constraints.ConvImplicit
           );
           this.currentFlow = previousFlow;
-          const precomp = module.runExpression(expr, ExpressionRunnerFlags.Default);
+          const precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
           if (precomp) {
             operands.push(precomp);
             continue;
