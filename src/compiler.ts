@@ -5814,7 +5814,7 @@ export class Compiler extends DiagnosticEmitter {
           let tempThis = flow.getTempLocal(thisType);
           let ret = module.block(null, [
             this.makeCallDirect(setterInstance, [
-              module.local_tee(tempThis.index, thisExpr, /*isManaged=*/false, thisType.toRef()), // thisType is managed but here it must be alive
+              module.local_tee(tempThis.index, thisExpr, /* isManaged=*/false, thisType.toRef()), // thisType is managed but here it must be alive
               valueExpr
             ], valueExpression),
             this.makeCallDirect(getterInstance, [
