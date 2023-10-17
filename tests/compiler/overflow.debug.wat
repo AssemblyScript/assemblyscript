@@ -16,18 +16,34 @@
   (local $ctx i32)
   (local $2 i32)
   (local $3 i32)
-  (local $val|4 i32)
-  (local $ctx|5 i32)
+  (local $4 i32)
+  (local $5 i32)
   (local $6 i32)
   (local $7 i32)
   (local $val|8 i32)
   (local $ctx|9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $val|12 i32)
-  (local $ctx|13 i32)
+  (local $12 i32)
+  (local $13 i32)
   (local $14 i32)
   (local $15 i32)
+  (local $val|16 i32)
+  (local $ctx|17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
+  (local $21 i32)
+  (local $22 i32)
+  (local $23 i32)
+  (local $val|24 i32)
+  (local $ctx|25 i32)
+  (local $26 i32)
+  (local $27 i32)
+  (local $28 i32)
+  (local $29 i32)
+  (local $30 i32)
+  (local $31 i32)
   (local $b4 i32)
   (local $b5 i32)
   (local $b6 i32)
@@ -37,6 +53,8 @@
   local.get $val
   i32.const 1
   i32.add
+  local.set $2
+  local.get $2
   local.set $val
   local.get $val
   i32.extend8_s
@@ -54,6 +72,8 @@
   local.get $val
   i32.const 1
   i32.sub
+  local.set $3
+  local.get $3
   local.set $val
   local.get $val
   i32.extend8_s
@@ -69,11 +89,13 @@
    unreachable
   end
   local.get $val
-  local.tee $2
+  local.tee $4
   i32.const 1
   i32.add
+  local.set $5
+  local.get $5
   local.set $val
-  local.get $2
+  local.get $4
   local.set $ctx
   local.get $val
   i32.extend8_s
@@ -89,11 +111,13 @@
    unreachable
   end
   local.get $val
-  local.tee $3
+  local.tee $6
   i32.const 1
   i32.sub
+  local.set $7
+  local.get $7
   local.set $val
-  local.get $3
+  local.get $6
   local.set $ctx
   local.get $val
   i32.extend8_s
@@ -194,12 +218,14 @@
    unreachable
   end
   i32.const 32767
-  local.set $val|4
-  local.get $val|4
+  local.set $val|8
+  local.get $val|8
   i32.const 1
   i32.add
-  local.set $val|4
-  local.get $val|4
+  local.set $10
+  local.get $10
+  local.set $val|8
+  local.get $val|8
   i32.extend16_s
   i32.const -32768
   i32.eq
@@ -212,11 +238,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|4
+  local.get $val|8
   i32.const 1
   i32.sub
-  local.set $val|4
-  local.get $val|4
+  local.set $11
+  local.get $11
+  local.set $val|8
+  local.get $val|8
   i32.extend16_s
   i32.const 32767
   i32.eq
@@ -229,14 +257,16 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|4
-  local.tee $6
+  local.get $val|8
+  local.tee $12
   i32.const 1
   i32.add
-  local.set $val|4
-  local.get $6
-  local.set $ctx|5
-  local.get $val|4
+  local.set $13
+  local.get $13
+  local.set $val|8
+  local.get $12
+  local.set $ctx|9
+  local.get $val|8
   i32.extend16_s
   i32.const -32768
   i32.eq
@@ -249,14 +279,16 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|4
-  local.tee $7
+  local.get $val|8
+  local.tee $14
   i32.const 1
   i32.sub
-  local.set $val|4
-  local.get $7
-  local.set $ctx|5
-  local.get $val|4
+  local.set $15
+  local.get $15
+  local.set $val|8
+  local.get $14
+  local.set $ctx|9
+  local.get $val|8
   i32.extend16_s
   i32.const 32767
   i32.eq
@@ -269,11 +301,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|4
+  local.get $val|8
   i32.const 1
   i32.add
-  local.set $val|4
-  local.get $val|4
+  local.set $val|8
+  local.get $val|8
   i32.extend16_s
   i32.const -32768
   i32.eq
@@ -286,11 +318,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|4
+  local.get $val|8
   i32.const 1
   i32.sub
-  local.set $val|4
-  local.get $val|4
+  local.set $val|8
+  local.get $val|8
   i32.extend16_s
   i32.const 32767
   i32.eq
@@ -303,12 +335,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|4
+  local.get $val|8
   i32.const 1
   i32.add
-  local.tee $val|4
-  local.set $ctx|5
-  local.get $val|4
+  local.tee $val|8
+  local.set $ctx|9
+  local.get $val|8
   i32.extend16_s
   i32.const -32768
   i32.eq
@@ -321,12 +353,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|4
+  local.get $val|8
   i32.const 1
   i32.sub
-  local.tee $val|4
-  local.set $ctx|5
-  local.get $val|4
+  local.tee $val|8
+  local.set $ctx|9
+  local.get $val|8
   i32.extend16_s
   i32.const 32767
   i32.eq
@@ -339,7 +371,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|4
+  local.get $val|8
   i32.const 1
   i32.add
   i32.extend16_s
@@ -355,12 +387,14 @@
    unreachable
   end
   i32.const 0
-  local.set $val|8
-  local.get $val|8
+  local.set $val|16
+  local.get $val|16
   i32.const 1
   i32.sub
-  local.set $val|8
-  local.get $val|8
+  local.set $18
+  local.get $18
+  local.set $val|16
+  local.get $val|16
   i32.const 255
   i32.and
   i32.const 255
@@ -374,11 +408,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|8
+  local.get $val|16
   i32.const 1
   i32.add
-  local.set $val|8
-  local.get $val|8
+  local.set $19
+  local.get $19
+  local.set $val|16
+  local.get $val|16
   i32.const 255
   i32.and
   i32.const 0
@@ -392,14 +428,16 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|8
-  local.tee $10
+  local.get $val|16
+  local.tee $20
   i32.const 1
   i32.sub
-  local.set $val|8
-  local.get $10
-  local.set $ctx|9
-  local.get $val|8
+  local.set $21
+  local.get $21
+  local.set $val|16
+  local.get $20
+  local.set $ctx|17
+  local.get $val|16
   i32.const 255
   i32.and
   i32.const 255
@@ -413,14 +451,16 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|8
-  local.tee $11
+  local.get $val|16
+  local.tee $22
   i32.const 1
   i32.add
-  local.set $val|8
-  local.get $11
-  local.set $ctx|9
-  local.get $val|8
+  local.set $23
+  local.get $23
+  local.set $val|16
+  local.get $22
+  local.set $ctx|17
+  local.get $val|16
   i32.const 255
   i32.and
   i32.const 0
@@ -434,11 +474,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|8
+  local.get $val|16
   i32.const 1
   i32.sub
-  local.set $val|8
-  local.get $val|8
+  local.set $val|16
+  local.get $val|16
   i32.const 255
   i32.and
   i32.const 255
@@ -452,11 +492,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|8
+  local.get $val|16
   i32.const 1
   i32.add
-  local.set $val|8
-  local.get $val|8
+  local.set $val|16
+  local.get $val|16
   i32.const 255
   i32.and
   i32.const 0
@@ -470,12 +510,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|8
+  local.get $val|16
   i32.const 1
   i32.sub
-  local.tee $val|8
-  local.set $ctx|9
-  local.get $val|8
+  local.tee $val|16
+  local.set $ctx|17
+  local.get $val|16
   i32.const 255
   i32.and
   i32.const 255
@@ -489,12 +529,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|8
+  local.get $val|16
   i32.const 1
   i32.add
-  local.tee $val|8
-  local.set $ctx|9
-  local.get $val|8
+  local.tee $val|16
+  local.set $ctx|17
+  local.get $val|16
   i32.const 255
   i32.and
   i32.const 0
@@ -508,7 +548,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|8
+  local.get $val|16
   i32.const 1
   i32.sub
   i32.const 255
@@ -525,12 +565,14 @@
    unreachable
   end
   i32.const 0
-  local.set $val|12
-  local.get $val|12
+  local.set $val|24
+  local.get $val|24
   i32.const 1
   i32.sub
-  local.set $val|12
-  local.get $val|12
+  local.set $26
+  local.get $26
+  local.set $val|24
+  local.get $val|24
   i32.const 65535
   i32.and
   i32.const 65535
@@ -544,11 +586,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|12
+  local.get $val|24
   i32.const 1
   i32.add
-  local.set $val|12
-  local.get $val|12
+  local.set $27
+  local.get $27
+  local.set $val|24
+  local.get $val|24
   i32.const 65535
   i32.and
   i32.const 0
@@ -562,14 +606,16 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|12
-  local.tee $14
+  local.get $val|24
+  local.tee $28
   i32.const 1
   i32.sub
-  local.set $val|12
-  local.get $14
-  local.set $ctx|13
-  local.get $val|12
+  local.set $29
+  local.get $29
+  local.set $val|24
+  local.get $28
+  local.set $ctx|25
+  local.get $val|24
   i32.const 65535
   i32.and
   i32.const 65535
@@ -583,14 +629,16 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|12
-  local.tee $15
+  local.get $val|24
+  local.tee $30
   i32.const 1
   i32.add
-  local.set $val|12
-  local.get $15
-  local.set $ctx|13
-  local.get $val|12
+  local.set $31
+  local.get $31
+  local.set $val|24
+  local.get $30
+  local.set $ctx|25
+  local.get $val|24
   i32.const 65535
   i32.and
   i32.const 0
@@ -604,11 +652,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|12
+  local.get $val|24
   i32.const 1
   i32.sub
-  local.set $val|12
-  local.get $val|12
+  local.set $val|24
+  local.get $val|24
   i32.const 65535
   i32.and
   i32.const 65535
@@ -622,11 +670,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|12
+  local.get $val|24
   i32.const 1
   i32.add
-  local.set $val|12
-  local.get $val|12
+  local.set $val|24
+  local.get $val|24
   i32.const 65535
   i32.and
   i32.const 0
@@ -640,12 +688,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|12
+  local.get $val|24
   i32.const 1
   i32.sub
-  local.tee $val|12
-  local.set $ctx|13
-  local.get $val|12
+  local.tee $val|24
+  local.set $ctx|25
+  local.get $val|24
   i32.const 65535
   i32.and
   i32.const 65535
@@ -659,12 +707,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|12
+  local.get $val|24
   i32.const 1
   i32.add
-  local.tee $val|12
-  local.set $ctx|13
-  local.get $val|12
+  local.tee $val|24
+  local.set $ctx|25
+  local.get $val|24
   i32.const 65535
   i32.and
   i32.const 0
@@ -678,7 +726,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $val|12
+  local.get $val|24
   i32.const 1
   i32.sub
   i32.const 65535

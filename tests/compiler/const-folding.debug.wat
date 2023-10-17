@@ -34,6 +34,8 @@
   (local $mod2 i64)
   (local $rlo i64)
   (local $rhi i64)
+  (local $5 i64)
+  (local $6 i64)
   i64.const -1
   local.set $mod1
   i64.const -1
@@ -53,6 +55,8 @@
   i64.const 1
   i64.shl
   i64.or
+  local.set $5
+  local.get $5
   local.set $rhi
   local.get $rhi
   local.get $value
@@ -61,6 +65,8 @@
   local.get $mod1
   i64.and
   i64.or
+  local.set $6
+  local.get $6
   local.set $rhi
   local.get $rlo
   local.get $rhi

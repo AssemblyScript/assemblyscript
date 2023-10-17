@@ -1553,7 +1553,7 @@ export class Resolver extends DiagnosticEmitter {
         let indexSignature = classReference.indexSignature;
         if (indexSignature) {
           this.currentThisExpression = targetExpression;
-          this.currentElementExpression = node.elementExpression;
+          this.currentElementExpression = node.getElementExpression(ctxFlow.targetFunction.internalName);
           return indexSignature;
         }
         classReference = classReference.base;

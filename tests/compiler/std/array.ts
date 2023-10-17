@@ -1276,6 +1276,14 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assert(mapResult[3] == 3);
 }
 
+{
+  // Test case for bug: https://github.com/AssemblyScript/assemblyscript/issues/2730
+  let arrInc: i32[] = [1,2,3];
+  let b = 0;
+  arrInc[b++] += 5;
+  assert(arrInc[0] == 6);
+}
+
 // Unleak globals
 arr = changetype<Array<i32>>(0);
 inputStabArr = changetype<Array<Dim>>(0);

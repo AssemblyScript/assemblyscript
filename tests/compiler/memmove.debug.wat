@@ -20,6 +20,14 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
   local.get $dest
   local.set $ret
   local.get $dest
@@ -60,14 +68,18 @@
       local.tee $4
       i32.const 1
       i32.add
+      local.set $5
+      local.get $5
       local.set $dest
       local.get $4
       local.get $src
-      local.tee $5
+      local.tee $6
       i32.const 1
       i32.add
+      local.set $7
+      local.get $7
       local.set $src
-      local.get $5
+      local.get $6
       i32.load8_u $0
       i32.store8 $0
       br $while-continue|0
@@ -85,14 +97,20 @@
       local.get $n
       i32.const 8
       i32.sub
+      local.set $8
+      local.get $8
       local.set $n
       local.get $dest
       i32.const 8
       i32.add
+      local.set $9
+      local.get $9
       local.set $dest
       local.get $src
       i32.const 8
       i32.add
+      local.set $10
+      local.get $10
       local.set $src
       br $while-continue|1
      end
@@ -102,17 +120,21 @@
     local.get $n
     if
      local.get $dest
-     local.tee $6
+     local.tee $11
      i32.const 1
      i32.add
+     local.set $12
+     local.get $12
      local.set $dest
-     local.get $6
+     local.get $11
      local.get $src
-     local.tee $7
+     local.tee $13
      i32.const 1
      i32.add
+     local.set $14
+     local.get $14
      local.set $src
-     local.get $7
+     local.get $13
      i32.load8_u $0
      i32.store8 $0
      local.get $n
@@ -166,6 +188,8 @@
       local.get $n
       i32.const 8
       i32.sub
+      local.set $15
+      local.get $15
       local.set $n
       local.get $dest
       local.get $n

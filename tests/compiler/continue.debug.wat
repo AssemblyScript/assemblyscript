@@ -10,6 +10,7 @@
  (export "memory" (memory $0))
  (func $continue/testInherit (param $b i32)
   (local $i i32)
+  (local $2 i32)
   i32.const 0
   local.set $i
   loop $for-loop|0
@@ -31,6 +32,8 @@
     local.get $i
     i32.const 1
     i32.add
+    local.set $2
+    local.get $2
     local.set $i
     br $for-loop|0
    end

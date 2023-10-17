@@ -15,11 +15,19 @@
  (start $~start)
  (func $start:comma
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
   (local $c i32)
+  (local $6 i32)
+  (local $7 i32)
   global.get $comma/a
   local.tee $0
   i32.const 1
   i32.add
+  local.set $1
+  local.get $1
   global.set $comma/a
   local.get $0
   global.set $comma/b
@@ -52,6 +60,8 @@
   global.get $comma/a
   i32.const 1
   i32.add
+  local.set $2
+  local.get $2
   global.set $comma/a
   global.get $comma/a
   global.set $comma/b
@@ -86,6 +96,8 @@
   global.get $comma/a
   i32.const 1
   i32.add
+  local.set $3
+  local.get $3
   global.set $comma/a
   global.get $comma/a
   global.set $comma/b
@@ -116,6 +128,8 @@
   global.get $comma/a
   i32.const 1
   i32.add
+  local.set $4
+  local.get $4
   global.set $comma/a
   global.get $comma/a
   global.set $comma/b
@@ -156,10 +170,14 @@
     global.get $comma/a
     i32.const 1
     i32.sub
+    local.set $6
+    local.get $6
     global.set $comma/a
     local.get $c
     i32.const 1
     i32.add
+    local.set $7
+    local.get $7
     local.set $c
     br $for-loop|0
    end

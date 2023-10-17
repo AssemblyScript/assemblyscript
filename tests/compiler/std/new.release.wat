@@ -1401,6 +1401,7 @@
  (func $~start
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
   memory.size $0
   i32.const 16
   i32.shl
@@ -1434,7 +1435,7 @@
   i32.const 1344
   global.set $~lib/rt/itcms/fromSpace
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -1453,48 +1454,47 @@
   i64.const 0
   i64.store $0
   local.get $0
-  i32.const 0
-  i32.store $0 offset=8
-  local.get $0
   call $~lib/rt/itcms/__new
-  local.tee $1
+  local.tee $2
   i32.store $0
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
-  local.get $1
+  local.tee $1
+  local.get $2
   i32.store $0 offset=4
-  local.get $1
+  local.get $2
   i32.const 1
   i32.store $0
-  local.get $0
   local.get $1
+  local.get $2
   i32.store $0 offset=4
-  local.get $1
+  local.get $2
   f32.const 2
   f32.store $0 offset=4
-  local.get $0
   local.get $1
+  local.get $2
   i32.store $0 offset=4
-  local.get $0
-  local.get $1
-  i32.store $0 offset=8
-  local.get $1
-  local.get $1
+  local.get $2
   i32.load $0
   i32.const 1
   i32.add
-  i32.store $0
-  local.get $0
+  local.set $0
   local.get $1
+  local.get $2
   i32.store $0 offset=4
+  local.get $2
+  local.get $0
+  i32.store $0
   local.get $1
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
   f32.const 3
   f32.store $0 offset=4
-  local.get $0
-  i32.const 12
+  local.get $1
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $2
   global.set $std/new/aClass
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)

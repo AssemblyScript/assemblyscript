@@ -1933,10 +1933,11 @@
        i32.or
        i32.store $0 offset=2
       else
+       local.get $3
        local.get $6
        i32.const 65536
        i32.lt_u
-       if
+       if (result i32)
         local.get $3
         local.get $7
         i32.add
@@ -1967,6 +1968,9 @@
         i32.shl
         i32.or
         i32.store $0 offset=2
+        local.get $7
+        i32.const 6
+        i32.add
        else
         local.get $3
         local.get $7
@@ -1996,16 +2000,16 @@
         i32.shl
         i32.or
         i32.store $0 offset=2
-        local.get $3
         local.get $7
         i32.const 6
         i32.add
-        local.tee $7
-        i32.add
         local.tee $5
+        local.get $3
+        i32.add
+        local.tee $7
         i32.const 37
         i32.store16 $0
-        local.get $5
+        local.get $7
         local.get $6
         i32.const 12
         i32.shr_u
@@ -2013,13 +2017,13 @@
         i32.and
         i32.const 128
         i32.or
-        local.tee $5
+        local.tee $7
         i32.const 4
         i32.shr_u
         i32.const 1676
         i32.add
         i32.load8_u $0
-        local.get $5
+        local.get $7
         i32.const 15
         i32.and
         i32.const 1676
@@ -2029,11 +2033,10 @@
         i32.shl
         i32.or
         i32.store $0 offset=2
+        local.get $5
+        i32.const 6
+        i32.add
        end
-       local.get $3
-       local.get $7
-       i32.const 6
-       i32.add
        local.tee $7
        i32.add
        local.tee $5

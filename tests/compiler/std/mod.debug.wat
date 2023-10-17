@@ -29,7 +29,23 @@
   (local $uy1 i64)
   (local $m f64)
   (local $ux1 i64)
+  (local $10 i64)
+  (local $11 i64)
+  (local $12 i64)
+  (local $13 i64)
+  (local $14 i64)
+  (local $15 i64)
+  (local $16 i64)
+  (local $17 i64)
+  (local $18 i64)
+  (local $19 i64)
+  (local $20 i64)
   (local $shift i64)
+  (local $22 i64)
+  (local $23 i64)
+  (local $24 i64)
+  (local $25 i64)
+  (local $26 i64)
   local.get $y
   f64.abs
   f64.const 1
@@ -123,12 +139,16 @@
    i64.shl
    i64.clz
    i64.sub
+   local.set $10
+   local.get $10
    local.set $ex
    local.get $ux
    i64.const 1
    local.get $ex
    i64.sub
    i64.shl
+   local.set $11
+   local.get $11
    local.set $ux
   else
    local.get $ux
@@ -136,12 +156,16 @@
    i64.const 12
    i64.shr_u
    i64.and
+   local.set $12
+   local.get $12
    local.set $ux
    local.get $ux
    i64.const 1
    i64.const 52
    i64.shl
    i64.or
+   local.set $13
+   local.get $13
    local.set $ux
   end
   local.get $ey
@@ -155,12 +179,16 @@
    i64.shl
    i64.clz
    i64.sub
+   local.set $14
+   local.get $14
    local.set $ey
    local.get $uy
    i64.const 1
    local.get $ey
    i64.sub
    i64.shl
+   local.set $15
+   local.get $15
    local.set $uy
   else
    local.get $uy
@@ -168,12 +196,16 @@
    i64.const 12
    i64.shr_u
    i64.and
+   local.set $16
+   local.get $16
    local.set $uy
    local.get $uy
    i64.const 1
    i64.const 52
    i64.shl
    i64.or
+   local.set $17
+   local.get $17
    local.set $uy
   end
   loop $while-continue|0
@@ -197,11 +229,15 @@
      local.get $ux
      local.get $uy
      i64.sub
+     local.set $18
+     local.get $18
      local.set $ux
     end
     local.get $ux
     i64.const 1
     i64.shl
+    local.set $19
+    local.get $19
     local.set $ux
     local.get $ex
     i64.const 1
@@ -226,6 +262,8 @@
    local.get $ux
    local.get $uy
    i64.sub
+   local.set $20
+   local.get $20
    local.set $ux
   end
   local.get $ux
@@ -236,10 +274,14 @@
   local.get $ex
   local.get $shift
   i64.sub
+  local.set $22
+  local.get $22
   local.set $ex
   local.get $ux
   local.get $shift
   i64.shl
+  local.set $23
+  local.get $23
   local.set $ux
   local.get $ex
   i64.const 0
@@ -250,12 +292,16 @@
    i64.const 52
    i64.shl
    i64.sub
+   local.set $24
+   local.get $24
    local.set $ux
    local.get $ux
    local.get $ex
    i64.const 52
    i64.shl
    i64.or
+   local.set $25
+   local.get $25
    local.set $ux
   else
    local.get $ux
@@ -265,6 +311,8 @@
    i64.const 1
    i64.add
    i64.shr_u
+   local.set $26
+   local.get $26
    local.set $ux
   end
   local.get $ux
@@ -330,7 +378,23 @@
   (local $uy1 i32)
   (local $m f32)
   (local $ux1 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
   (local $shift i32)
+  (local $22 i32)
+  (local $23 i32)
+  (local $24 i32)
+  (local $25 i32)
+  (local $26 i32)
   local.get $y
   f32.abs
   f32.const 1
@@ -422,12 +486,16 @@
    i32.shl
    i32.clz
    i32.sub
+   local.set $10
+   local.get $10
    local.set $ex
    local.get $ux
    i32.const 1
    local.get $ex
    i32.sub
    i32.shl
+   local.set $11
+   local.get $11
    local.set $ux
   else
    local.get $ux
@@ -435,12 +503,16 @@
    i32.const 9
    i32.shr_u
    i32.and
+   local.set $12
+   local.get $12
    local.set $ux
    local.get $ux
    i32.const 1
    i32.const 23
    i32.shl
    i32.or
+   local.set $13
+   local.get $13
    local.set $ux
   end
   local.get $ey
@@ -452,12 +524,16 @@
    i32.shl
    i32.clz
    i32.sub
+   local.set $14
+   local.get $14
    local.set $ey
    local.get $uy
    i32.const 1
    local.get $ey
    i32.sub
    i32.shl
+   local.set $15
+   local.get $15
    local.set $uy
   else
    local.get $uy
@@ -465,12 +541,16 @@
    i32.const 9
    i32.shr_u
    i32.and
+   local.set $16
+   local.get $16
    local.set $uy
    local.get $uy
    i32.const 1
    i32.const 23
    i32.shl
    i32.or
+   local.set $17
+   local.get $17
    local.set $uy
   end
   loop $while-continue|0
@@ -494,11 +574,15 @@
      local.get $ux
      local.get $uy
      i32.sub
+     local.set $18
+     local.get $18
      local.set $ux
     end
     local.get $ux
     i32.const 1
     i32.shl
+    local.set $19
+    local.get $19
     local.set $ux
     local.get $ex
     i32.const 1
@@ -523,6 +607,8 @@
    local.get $ux
    local.get $uy
    i32.sub
+   local.set $20
+   local.get $20
    local.set $ux
   end
   local.get $ux
@@ -533,10 +619,14 @@
   local.get $ex
   local.get $shift
   i32.sub
+  local.set $22
+  local.get $22
   local.set $ex
   local.get $ux
   local.get $shift
   i32.shl
+  local.set $23
+  local.get $23
   local.set $ux
   local.get $ex
   i32.const 0
@@ -547,12 +637,16 @@
    i32.const 23
    i32.shl
    i32.sub
+   local.set $24
+   local.get $24
    local.set $ux
    local.get $ux
    local.get $ex
    i32.const 23
    i32.shl
    i32.or
+   local.set $25
+   local.get $25
    local.set $ux
   else
    local.get $ux
@@ -562,6 +656,8 @@
    i32.const 1
    i32.add
    i32.shr_u
+   local.set $26
+   local.get $26
    local.set $ux
   end
   local.get $ux

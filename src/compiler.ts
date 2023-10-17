@@ -220,6 +220,7 @@ import {
   liftRequiresExportRuntime,
   lowerRequiresExportRuntime
 } from "./bindings/js";
+import { _BinaryenCallGetOperandAt, _BinaryenCallSetOperandAt } from "./glue/binaryen";
 
 /** Features enabled by default. */
 export const defaultFeatures = Feature.MutableGlobals
@@ -4716,6 +4717,11 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     if (!compound) return expr;
+
+    let exprTempLocal = this.currentFlow.getTempLocal(this.currentType);
+    let calculationResRef = module.local_set(exprTempLocal.index, expr, false);
+
+    let valueExprRef = module.local_get(exprTempLocal.index, this.currentType.toRef());
     let resolver = this.resolver;
     let target = resolver.lookupExpression(left, this.currentFlow);
     if (!target) return module.unreachable();
@@ -4728,15 +4734,18 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.unreachable();
     }
-    return this.makeAssignment(
+
+    let assignmentExprRef = this.makeAssignment(
       target,
-      expr,
+      valueExprRef,
       this.currentType,
       right,
       resolver.currentThisExpression,
       resolver.currentElementExpression,
       contextualType != Type.void
     );
+
+    return module.block(null, [calculationResRef, assignmentExprRef], this.currentType.toRef());
   }
 
   makeLt(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
@@ -6295,7 +6304,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Inline if explicitly requested
-    if (instance.hasDecorator(DecoratorFlags.Inline) && (!instance.is(CommonFlags.Overridden) || reportNode.isAccessOnSuper)) {
+    if (instance.canInline() && (!instance.is(CommonFlags.Overridden) || reportNode.isAccessOnSuper)) {
       assert(!instance.is(CommonFlags.Stub)); // doesn't make sense
       let inlineStack = this.inlineStack;
       if (inlineStack.includes(instance)) {
@@ -6757,7 +6766,7 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node,
     immediatelyDropped: bool = false
   ): ExpressionRef {
-    if (instance.hasDecorator(DecoratorFlags.Inline)) {
+    if (instance.canInline()) {
       if (!instance.is(CommonFlags.Overridden)) {
         assert(!instance.is(CommonFlags.Stub)); // doesn't make sense
         let inlineStack = this.inlineStack;
@@ -7022,9 +7031,27 @@ export class Compiler extends DiagnosticEmitter {
               expression.range
             );
           }
-          return this.compileCallDirect(indexedGet, [
-            expression.elementExpression
+
+          let indexLocal = this.currentFlow.getTempLocal(Type.i32);
+          let indexExpression = expression.getElementExpression(this.currentFlow.targetFunction.internalName);
+
+          indexedGet.setNoInline();
+
+          let callExprRef = this.compileCallDirect(indexedGet, [
+            indexExpression
           ], expression, thisArg, constraints);
+
+          if(indexExpression === expression.elementExpression){
+            let indexType = indexedGet.signature.parameterTypes[0];
+            let indexExpressionRef = _BinaryenCallGetOperandAt(callExprRef, 1);
+            let teeExprRef = module.local_tee(indexLocal.index, indexExpressionRef, false, TypeRef.I32);
+            _BinaryenCallSetOperandAt(callExprRef, 1, teeExprRef);
+            let indexGetExpr = module.local_get(indexLocal.index, TypeRef.I32);
+            
+            expression.addCached(this.currentFlow.targetFunction.internalName, Node.createCompiledExpression(indexGetExpr, indexType, expression.elementExpression.range));
+          }
+
+          return callExprRef;
         }
       }
       this.error(
@@ -8727,7 +8754,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!classInstance) return module.unreachable();
     if (contextualType == Type.void) constraints |= Constraints.WillDrop;
     let ctor = this.ensureConstructor(classInstance, expression);
-    if (!ctor.hasDecorator(DecoratorFlags.Inline)) {
+    if (!ctor.canInline()) {
       // Inlined ctors haven't been compiled yet and are checked upon inline
       // compilation of their body instead.
       this.checkFieldInitialization(classInstance, expression);
@@ -8747,7 +8774,7 @@ export class Compiler extends DiagnosticEmitter {
       // shortcut if already compiled
       if (instance.is(CommonFlags.Compiled)) return instance;
       // do not attempt to compile if inlined anyway
-      if (!instance.hasDecorator(DecoratorFlags.Inline)) this.compileFunction(instance);
+      if (!instance.canInline()) this.compileFunction(instance);
     } else {
       // clone base constructor if a derived class. note that we cannot just
       // call the base ctor since the derived class may have additional fields.
@@ -9355,23 +9382,14 @@ export class Compiler extends DiagnosticEmitter {
       return module.unreachable();
     }
 
-    // simplify if dropped anyway
-    if (!tempLocal) {
-      return this.makeAssignment(
-        target,
-        expr,
-        this.currentType,
-        expression.operand,
-        resolver.currentThisExpression,
-        resolver.currentElementExpression,
-        false
-      );
-    }
+    let exprTempLocal = this.currentFlow.getTempLocal(this.currentType);
+    let calculationResRef = module.local_set(exprTempLocal.index, expr, false);
 
-    // otherwise use the temp. local for the intermediate value (always possibly overflows)
+    let valueExprRef = module.local_get(exprTempLocal.index, this.currentType.toRef());
+
     let setValue = this.makeAssignment(
       target,
-      expr, // includes a tee of getValue to tempLocal
+      valueExprRef, // includes a tee of getValue to tempLocal
       this.currentType,
       expression.operand,
       resolver.currentThisExpression,
@@ -9379,13 +9397,16 @@ export class Compiler extends DiagnosticEmitter {
       false
     );
 
-    this.currentType = tempLocal.type;
-    let typeRef = tempLocal.type.toRef();
+    let blockExpressions = [calculationResRef, setValue,];
 
-    return module.block(null, [
-      setValue,
-      module.local_get(tempLocal.index, typeRef)
-    ], typeRef); // result of 'x++' / 'x--' might overflow
+    // otherwise use the temp. local for the intermediate value (always possibly overflows)
+    if(tempLocal){
+      this.currentType = tempLocal.type;
+      let typeRef = tempLocal.type.toRef();
+      blockExpressions.push(module.local_get(tempLocal.index, typeRef));
+    }
+
+    return module.block(null, blockExpressions, this.currentType.toRef()); // result of 'x++' / 'x--' might overflow
   }
 
   private compileUnaryPrefixExpression(

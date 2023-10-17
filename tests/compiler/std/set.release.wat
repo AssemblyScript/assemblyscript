@@ -1933,23 +1933,23 @@
   i32.const 668265263
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 15
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 13
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 16
   i32.shr_u
+  local.get $0
   i32.xor
   call $~lib/set/Set<i8>#find
   i32.const 0
@@ -2061,23 +2061,23 @@
      i32.const 668265263
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 15
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -2048144777
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 13
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -1028477379
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 16
      i32.shr_u
-     local.get $8
      i32.xor
      i32.and
      i32.const 2
@@ -2285,22 +2285,23 @@
    i32.store $0
    local.get $0
    i32.load $0 offset=8
+   local.set $5
+   local.get $4
+   local.get $0
+   i32.store $0
+   local.get $0
+   i32.load $0 offset=16
    local.set $2
    local.get $4
    local.get $0
    i32.store $0
-   local.get $4
    local.get $0
-   i32.store $0 offset=4
-   local.get $0
-   local.get $0
-   i32.load $0 offset=16
-   local.tee $5
+   local.get $2
    i32.const 1
    i32.add
    i32.store $0 offset=16
-   local.get $2
    local.get $5
+   local.get $2
    i32.const 3
    i32.shl
    i32.add
@@ -3681,23 +3682,23 @@
   i32.const 668265263
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 15
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 13
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 16
   i32.shr_u
+  local.get $0
   i32.xor
   call $~lib/set/Set<i8>#find
   i32.const 0
@@ -3808,23 +3809,23 @@
      i32.const 668265263
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 15
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -2048144777
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 13
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -1028477379
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 16
      i32.shr_u
-     local.get $8
      i32.xor
      i32.and
      i32.const 2
@@ -4033,22 +4034,23 @@
    i32.store $0
    local.get $0
    i32.load $0 offset=8
+   local.set $5
+   local.get $4
+   local.get $0
+   i32.store $0
+   local.get $0
+   i32.load $0 offset=16
    local.set $2
    local.get $4
    local.get $0
    i32.store $0
-   local.get $4
    local.get $0
-   i32.store $0 offset=4
-   local.get $0
-   local.get $0
-   i32.load $0 offset=16
-   local.tee $5
+   local.get $2
    i32.const 1
    i32.add
    i32.store $0 offset=16
-   local.get $2
    local.get $5
+   local.get $2
    i32.const 3
    i32.shl
    i32.add
@@ -5108,23 +5110,23 @@
   i32.const 668265263
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 15
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 13
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 16
   i32.shr_u
+  local.get $0
   i32.xor
   call $~lib/set/Set<i16>#find
   i32.const 0
@@ -5236,23 +5238,23 @@
      i32.const 668265263
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 15
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -2048144777
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 13
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -1028477379
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 16
      i32.shr_u
-     local.get $8
      i32.xor
      i32.and
      i32.const 2
@@ -5460,22 +5462,23 @@
    i32.store $0
    local.get $0
    i32.load $0 offset=8
+   local.set $5
+   local.get $4
+   local.get $0
+   i32.store $0
+   local.get $0
+   i32.load $0 offset=16
    local.set $2
    local.get $4
    local.get $0
    i32.store $0
-   local.get $4
    local.get $0
-   i32.store $0 offset=4
-   local.get $0
-   local.get $0
-   i32.load $0 offset=16
-   local.tee $5
+   local.get $2
    i32.const 1
    i32.add
    i32.store $0 offset=16
-   local.get $2
    local.get $5
+   local.get $2
    i32.const 3
    i32.shl
    i32.add
@@ -6566,23 +6569,23 @@
   i32.const 668265263
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 15
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 13
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 16
   i32.shr_u
+  local.get $0
   i32.xor
   call $~lib/set/Set<i16>#find
   i32.const 0
@@ -6693,23 +6696,23 @@
      i32.const 668265263
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 15
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -2048144777
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 13
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -1028477379
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 16
      i32.shr_u
-     local.get $8
      i32.xor
      i32.and
      i32.const 2
@@ -6918,22 +6921,23 @@
    i32.store $0
    local.get $0
    i32.load $0 offset=8
+   local.set $5
+   local.get $4
+   local.get $0
+   i32.store $0
+   local.get $0
+   i32.load $0 offset=16
    local.set $2
    local.get $4
    local.get $0
    i32.store $0
-   local.get $4
    local.get $0
-   i32.store $0 offset=4
-   local.get $0
-   local.get $0
-   i32.load $0 offset=16
-   local.tee $5
+   local.get $2
    i32.const 1
    i32.add
    i32.store $0 offset=16
-   local.get $2
    local.get $5
+   local.get $2
    i32.const 3
    i32.shl
    i32.add
@@ -7994,23 +7998,23 @@
   i32.const 668265263
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 15
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 13
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 16
   i32.shr_u
+  local.get $0
   i32.xor
   call $~lib/set/Set<i32>#find
   i32.const 0
@@ -8121,23 +8125,23 @@
      i32.const 668265263
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 15
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -2048144777
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 13
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -1028477379
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 16
      i32.shr_u
-     local.get $8
      i32.xor
      i32.and
      i32.const 2
@@ -8344,22 +8348,23 @@
    i32.store $0
    local.get $0
    i32.load $0 offset=8
+   local.set $5
+   local.get $4
+   local.get $0
+   i32.store $0
+   local.get $0
+   i32.load $0 offset=16
    local.set $2
    local.get $4
    local.get $0
    i32.store $0
-   local.get $4
    local.get $0
-   i32.store $0 offset=4
-   local.get $0
-   local.get $0
-   i32.load $0 offset=16
-   local.tee $5
+   local.get $2
    i32.const 1
    i32.add
    i32.store $0 offset=16
-   local.get $2
    local.get $5
+   local.get $2
    i32.const 3
    i32.shl
    i32.add
@@ -9525,23 +9530,23 @@
   i32.const 668265263
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 15
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 13
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 16
   i32.shr_u
+  local.get $0
   i32.xor
   call $~lib/set/Set<u32>#find
   i32.const 0
@@ -9652,23 +9657,23 @@
      i32.const 668265263
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 15
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -2048144777
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 13
      i32.shr_u
-     local.get $8
      i32.xor
      i32.const -1028477379
      i32.mul
      local.tee $8
+     local.get $8
      i32.const 16
      i32.shr_u
-     local.get $8
      i32.xor
      i32.and
      i32.const 2
@@ -9875,22 +9880,23 @@
    i32.store $0
    local.get $0
    i32.load $0 offset=8
+   local.set $5
+   local.get $4
+   local.get $0
+   i32.store $0
+   local.get $0
+   i32.load $0 offset=16
    local.set $2
    local.get $4
    local.get $0
    i32.store $0
-   local.get $4
    local.get $0
-   i32.store $0 offset=4
-   local.get $0
-   local.get $0
-   i32.load $0 offset=16
-   local.tee $5
+   local.get $2
    i32.const 1
    i32.add
    i32.store $0 offset=16
-   local.get $2
    local.get $5
+   local.get $2
    i32.const 3
    i32.shl
    i32.add
@@ -11340,13 +11346,14 @@
    local.get $3
    local.get $0
    i32.store $0
-   local.get $3
-   local.get $0
-   i32.store $0 offset=4
-   local.get $0
    local.get $0
    i32.load $0 offset=16
-   local.tee $5
+   local.set $5
+   local.get $3
+   local.get $0
+   i32.store $0
+   local.get $0
+   local.get $5
    i32.const 1
    i32.add
    i32.store $0 offset=16
@@ -13011,13 +13018,14 @@
    local.get $3
    local.get $0
    i32.store $0
-   local.get $3
-   local.get $0
-   i32.store $0 offset=4
-   local.get $0
    local.get $0
    i32.load $0 offset=16
-   local.tee $5
+   local.set $5
+   local.get $3
+   local.get $0
+   i32.store $0
+   local.get $0
+   local.get $5
    i32.const 1
    i32.add
    i32.store $0 offset=16
@@ -14097,23 +14105,23 @@
   i32.const 668265263
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 15
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 13
   i32.shr_u
+  local.get $0
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $0
-  local.get $0
   i32.const 16
   i32.shr_u
+  local.get $0
   i32.xor
   call $~lib/set/Set<f32>#find
   i32.const 0
@@ -14226,23 +14234,23 @@
      i32.const 668265263
      i32.mul
      local.tee $9
+     local.get $9
      i32.const 15
      i32.shr_u
-     local.get $9
      i32.xor
      i32.const -2048144777
      i32.mul
      local.tee $9
+     local.get $9
      i32.const 13
      i32.shr_u
-     local.get $9
      i32.xor
      i32.const -1028477379
      i32.mul
      local.tee $9
+     local.get $9
      i32.const 16
      i32.shr_u
-     local.get $9
      i32.xor
      i32.and
      i32.const 2
@@ -14454,13 +14462,14 @@
    local.get $3
    local.get $0
    i32.store $0
-   local.get $3
-   local.get $0
-   i32.store $0 offset=4
-   local.get $0
    local.get $0
    i32.load $0 offset=16
-   local.tee $5
+   local.set $5
+   local.get $3
+   local.get $0
+   i32.store $0
+   local.get $0
+   local.get $5
    i32.const 1
    i32.add
    i32.store $0 offset=16
@@ -16004,13 +16013,14 @@
    local.get $4
    local.get $0
    i32.store $0
-   local.get $4
-   local.get $0
-   i32.store $0 offset=4
-   local.get $0
    local.get $0
    i32.load $0 offset=16
-   local.tee $6
+   local.set $6
+   local.get $4
+   local.get $0
+   i32.store $0
+   local.get $0
+   local.get $6
    i32.const 1
    i32.add
    i32.store $0 offset=16

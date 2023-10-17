@@ -370,6 +370,7 @@
  )
  (func $~lib/rt/itcms/visitStack (param $cookie i32)
   (local $ptr i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
   loop $while-continue|0
@@ -384,6 +385,8 @@
     local.get $ptr
     i32.const 4
     i32.add
+    local.set $2
+    local.get $2
     local.set $ptr
     br $while-continue|0
    end
@@ -444,21 +447,24 @@
   (local $6 i32)
   (local $7 i32)
   (local $boundedSize i32)
+  (local $9 i32)
   (local $prev i32)
   (local $next i32)
-  (local $root|11 i32)
-  (local $fl|12 i32)
-  (local $sl|13 i32)
-  (local $root|14 i32)
-  (local $fl|15 i32)
-  (local $sl|16 i32)
+  (local $root|12 i32)
+  (local $fl|13 i32)
+  (local $sl|14 i32)
+  (local $root|15 i32)
+  (local $fl|16 i32)
+  (local $sl|17 i32)
   (local $head i32)
-  (local $root|18 i32)
-  (local $fl|19 i32)
+  (local $root|19 i32)
+  (local $fl|20 i32)
   (local $slMap i32)
-  (local $root|21 i32)
-  (local $fl|22 i32)
-  (local $slMap|23 i32)
+  (local $22 i32)
+  (local $root|23 i32)
+  (local $fl|24 i32)
+  (local $slMap|25 i32)
+  (local $26 i32)
   local.get $block
   call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
@@ -536,6 +542,8 @@
    i32.const 1
    i32.sub
    i32.sub
+   local.set $9
+   local.get $9
    local.set $fl
   end
   i32.const 1
@@ -580,16 +588,16 @@
   local.get $block
   block $~lib/rt/tlsf/GETHEAD|inlined.0 (result i32)
    local.get $root
-   local.set $root|11
+   local.set $root|12
    local.get $fl
-   local.set $fl|12
+   local.set $fl|13
    local.get $sl
-   local.set $sl|13
-   local.get $root|11
-   local.get $fl|12
+   local.set $sl|14
+   local.get $root|12
+   local.get $fl|13
    i32.const 4
    i32.shl
-   local.get $sl|13
+   local.get $sl|14
    i32.add
    i32.const 2
    i32.shl
@@ -600,18 +608,18 @@
   i32.eq
   if
    local.get $root
-   local.set $root|14
+   local.set $root|15
    local.get $fl
-   local.set $fl|15
+   local.set $fl|16
    local.get $sl
-   local.set $sl|16
+   local.set $sl|17
    local.get $next
    local.set $head
-   local.get $root|14
-   local.get $fl|15
+   local.get $root|15
+   local.get $fl|16
    i32.const 4
    i32.shl
-   local.get $sl|16
+   local.get $sl|17
    i32.add
    i32.const 2
    i32.shl
@@ -623,11 +631,11 @@
    if
     block $~lib/rt/tlsf/GETSL|inlined.0 (result i32)
      local.get $root
-     local.set $root|18
+     local.set $root|19
      local.get $fl
-     local.set $fl|19
-     local.get $root|18
-     local.get $fl|19
+     local.set $fl|20
+     local.get $root|19
+     local.get $fl|20
      i32.const 2
      i32.shl
      i32.add
@@ -636,9 +644,9 @@
     end
     local.set $slMap
     local.get $root
-    local.set $root|21
+    local.set $root|23
     local.get $fl
-    local.set $fl|22
+    local.set $fl|24
     local.get $slMap
     i32.const 1
     local.get $sl
@@ -646,19 +654,20 @@
     i32.const -1
     i32.xor
     i32.and
+    local.set $22
+    local.get $22
     local.tee $slMap
-    local.set $slMap|23
-    local.get $root|21
-    local.get $fl|22
+    local.set $slMap|25
+    local.get $root|23
+    local.get $fl|24
     i32.const 2
     i32.shl
     i32.add
-    local.get $slMap|23
+    local.get $slMap|25
     i32.store $0 offset=4
     local.get $slMap
     i32.eqz
     if
-     local.get $root
      local.get $root
      call $~lib/rt/tlsf/Root#get:flMap
      i32.const 1
@@ -667,6 +676,9 @@
      i32.const -1
      i32.xor
      i32.and
+     local.set $26
+     local.get $root
+     local.get $26
      call $~lib/rt/tlsf/Root#set:flMap
     end
    end
@@ -687,18 +699,20 @@
   (local $13 i32)
   (local $14 i32)
   (local $boundedSize i32)
-  (local $root|16 i32)
-  (local $fl|17 i32)
-  (local $sl|18 i32)
+  (local $16 i32)
+  (local $root|17 i32)
+  (local $fl|18 i32)
+  (local $sl|19 i32)
   (local $head i32)
-  (local $root|20 i32)
-  (local $fl|21 i32)
-  (local $sl|22 i32)
-  (local $head|23 i32)
-  (local $root|24 i32)
-  (local $fl|25 i32)
+  (local $root|21 i32)
+  (local $fl|22 i32)
+  (local $sl|23 i32)
+  (local $head|24 i32)
+  (local $25 i32)
   (local $root|26 i32)
   (local $fl|27 i32)
+  (local $root|28 i32)
+  (local $fl|29 i32)
   (local $slMap i32)
   i32.const 1
   drop
@@ -924,6 +938,8 @@
    i32.const 1
    i32.sub
    i32.sub
+   local.set $16
+   local.get $16
    local.set $fl
   end
   i32.const 1
@@ -949,16 +965,16 @@
   end
   block $~lib/rt/tlsf/GETHEAD|inlined.1 (result i32)
    local.get $root
-   local.set $root|16
+   local.set $root|17
    local.get $fl
-   local.set $fl|17
+   local.set $fl|18
    local.get $sl
-   local.set $sl|18
-   local.get $root|16
-   local.get $fl|17
+   local.set $sl|19
+   local.get $root|17
+   local.get $fl|18
    i32.const 4
    i32.shl
-   local.get $sl|18
+   local.get $sl|19
    i32.add
    i32.const 2
    i32.shl
@@ -980,43 +996,45 @@
    call $~lib/rt/tlsf/Block#set:prev
   end
   local.get $root
-  local.set $root|20
+  local.set $root|21
   local.get $fl
-  local.set $fl|21
+  local.set $fl|22
   local.get $sl
-  local.set $sl|22
+  local.set $sl|23
   local.get $block
-  local.set $head|23
-  local.get $root|20
-  local.get $fl|21
+  local.set $head|24
+  local.get $root|21
+  local.get $fl|22
   i32.const 4
   i32.shl
-  local.get $sl|22
+  local.get $sl|23
   i32.add
   i32.const 2
   i32.shl
   i32.add
-  local.get $head|23
+  local.get $head|24
   i32.store $0 offset=96
-  local.get $root
   local.get $root
   call $~lib/rt/tlsf/Root#get:flMap
   i32.const 1
   local.get $fl
   i32.shl
   i32.or
+  local.set $25
+  local.get $root
+  local.get $25
   call $~lib/rt/tlsf/Root#set:flMap
   local.get $root
-  local.set $root|26
+  local.set $root|28
   local.get $fl
-  local.set $fl|27
+  local.set $fl|29
   block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
    local.get $root
-   local.set $root|24
+   local.set $root|26
    local.get $fl
-   local.set $fl|25
-   local.get $root|24
-   local.get $fl|25
+   local.set $fl|27
+   local.get $root|26
+   local.get $fl|27
    i32.const 2
    i32.shl
    i32.add
@@ -1028,8 +1046,8 @@
   i32.shl
   i32.or
   local.set $slMap
-  local.get $root|26
-  local.get $fl|27
+  local.get $root|28
+  local.get $fl|29
   i32.const 2
   i32.shl
   i32.add
@@ -1038,14 +1056,16 @@
  )
  (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $endU64 i64) (result i32)
   (local $end i32)
-  (local $root|4 i32)
+  (local $4 i32)
+  (local $root|5 i32)
   (local $tail i32)
   (local $tailInfo i32)
+  (local $8 i32)
   (local $size i32)
   (local $leftSize i32)
   (local $left i32)
-  (local $root|10 i32)
-  (local $tail|11 i32)
+  (local $root|12 i32)
+  (local $tail|13 i32)
   local.get $endU64
   i32.wrap_i64
   local.set $end
@@ -1081,11 +1101,13 @@
   i32.const -1
   i32.xor
   i32.and
+  local.set $4
+  local.get $4
   local.set $end
   block $~lib/rt/tlsf/GETTAIL|inlined.0 (result i32)
    local.get $root
-   local.set $root|4
-   local.get $root|4
+   local.set $root|5
+   local.get $root|5
    i32.load $0 offset=1568
    br $~lib/rt/tlsf/GETTAIL|inlined.0
   end
@@ -1119,6 +1141,8 @@
     local.get $start
     i32.const 16
     i32.sub
+    local.set $8
+    local.get $8
     local.set $start
     local.get $tail
     call $~lib/rt/common/BLOCK#get:mmInfo
@@ -1194,11 +1218,11 @@
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $root
-  local.set $root|10
+  local.set $root|12
   local.get $tail
-  local.set $tail|11
-  local.get $root|10
-  local.get $tail|11
+  local.set $tail|13
+  local.get $root|12
+  local.get $tail|13
   i32.store $0 offset=1568
   local.get $root
   local.get $left
@@ -1421,6 +1445,7 @@
   call $~lib/rt/tlsf/freeBlock
  )
  (func $~lib/rt/itcms/free (param $obj i32)
+  (local $1 i32)
   local.get $obj
   global.get $~lib/memory/__heap_base
   i32.lt_u
@@ -1436,6 +1461,8 @@
    local.get $obj
    call $~lib/rt/itcms/Object#get:size
    i32.sub
+   local.set $1
+   local.get $1
    global.set $~lib/rt/itcms/total
    i32.const 0
    drop
@@ -1627,6 +1654,7 @@
  )
  (func $~lib/rt/itcms/interrupt
   (local $budget i32)
+  (local $1 i32)
   i32.const 0
   drop
   i32.const 0
@@ -1641,6 +1669,8 @@
    local.get $budget
    call $~lib/rt/itcms/step
    i32.sub
+   local.set $1
+   local.get $1
    local.set $budget
    global.get $~lib/rt/itcms/state
    i32.const 0
@@ -1744,19 +1774,20 @@
   (local $fl i32)
   (local $sl i32)
   (local $requestSize i32)
-  (local $root|5 i32)
-  (local $fl|6 i32)
+  (local $5 i32)
+  (local $root|6 i32)
+  (local $fl|7 i32)
   (local $slMap i32)
   (local $head i32)
   (local $flMap i32)
-  (local $root|10 i32)
-  (local $fl|11 i32)
-  (local $root|12 i32)
-  (local $fl|13 i32)
-  (local $sl|14 i32)
-  (local $root|15 i32)
-  (local $fl|16 i32)
-  (local $sl|17 i32)
+  (local $root|11 i32)
+  (local $fl|12 i32)
+  (local $root|13 i32)
+  (local $fl|14 i32)
+  (local $sl|15 i32)
+  (local $root|16 i32)
+  (local $fl|17 i32)
+  (local $sl|18 i32)
   local.get $size
   i32.const 256
   i32.lt_u
@@ -1795,6 +1826,8 @@
    i32.const 1
    i32.sub
    i32.sub
+   local.set $5
+   local.get $5
    local.set $fl
   end
   i32.const 1
@@ -1820,11 +1853,11 @@
   end
   block $~lib/rt/tlsf/GETSL|inlined.2 (result i32)
    local.get $root
-   local.set $root|5
+   local.set $root|6
    local.get $fl
-   local.set $fl|6
-   local.get $root|5
-   local.get $fl|6
+   local.set $fl|7
+   local.get $root|6
+   local.get $fl|7
    i32.const 2
    i32.shl
    i32.add
@@ -1865,11 +1898,11 @@
     local.set $fl
     block $~lib/rt/tlsf/GETSL|inlined.3 (result i32)
      local.get $root
-     local.set $root|10
+     local.set $root|11
      local.get $fl
-     local.set $fl|11
-     local.get $root|10
-     local.get $fl|11
+     local.set $fl|12
+     local.get $root|11
+     local.get $fl|12
      i32.const 2
      i32.shl
      i32.add
@@ -1891,17 +1924,17 @@
     end
     block $~lib/rt/tlsf/GETHEAD|inlined.2 (result i32)
      local.get $root
-     local.set $root|12
+     local.set $root|13
      local.get $fl
-     local.set $fl|13
+     local.set $fl|14
      local.get $slMap
      i32.ctz
-     local.set $sl|14
-     local.get $root|12
-     local.get $fl|13
+     local.set $sl|15
+     local.get $root|13
+     local.get $fl|14
      i32.const 4
      i32.shl
-     local.get $sl|14
+     local.get $sl|15
      i32.add
      i32.const 2
      i32.shl
@@ -1914,17 +1947,17 @@
   else
    block $~lib/rt/tlsf/GETHEAD|inlined.3 (result i32)
     local.get $root
-    local.set $root|15
+    local.set $root|16
     local.get $fl
-    local.set $fl|16
+    local.set $fl|17
     local.get $slMap
     i32.ctz
-    local.set $sl|17
-    local.get $root|15
-    local.get $fl|16
+    local.set $sl|18
+    local.get $root|16
+    local.get $fl|17
     i32.const 4
     i32.shl
-    local.get $sl|17
+    local.get $sl|18
     i32.add
     i32.const 2
     i32.shl
@@ -1940,9 +1973,10 @@
  (func $~lib/rt/tlsf/growMemory (param $root i32) (param $size i32)
   (local $pagesBefore i32)
   (local $root|3 i32)
+  (local $4 i32)
   (local $pagesNeeded i32)
-  (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   (local $pagesWanted i32)
   (local $pagesAfter i32)
   i32.const 0
@@ -1974,6 +2008,8 @@
   i32.ne
   i32.shl
   i32.add
+  local.set $4
+  local.get $4
   local.set $size
   local.get $size
   i32.const 65535
@@ -1986,11 +2022,11 @@
   i32.shr_u
   local.set $pagesNeeded
   local.get $pagesBefore
-  local.tee $5
-  local.get $pagesNeeded
   local.tee $6
-  local.get $5
+  local.get $pagesNeeded
+  local.tee $7
   local.get $6
+  local.get $7
   i32.gt_s
   select
   local.set $pagesWanted
@@ -2025,7 +2061,8 @@
   (local $remaining i32)
   (local $spare i32)
   (local $block|6 i32)
-  (local $block|7 i32)
+  (local $7 i32)
+  (local $block|8 i32)
   local.get $block
   call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
@@ -2091,21 +2128,6 @@
    i32.xor
    i32.and
    call $~lib/rt/common/BLOCK#set:mmInfo
-   block $~lib/rt/tlsf/GETRIGHT|inlined.3 (result i32)
-    local.get $block
-    local.set $block|7
-    local.get $block|7
-    i32.const 4
-    i32.add
-    local.get $block|7
-    call $~lib/rt/common/BLOCK#get:mmInfo
-    i32.const 3
-    i32.const -1
-    i32.xor
-    i32.and
-    i32.add
-    br $~lib/rt/tlsf/GETRIGHT|inlined.3
-   end
    block $~lib/rt/tlsf/GETRIGHT|inlined.2 (result i32)
     local.get $block
     local.set $block|6
@@ -2126,6 +2148,23 @@
    i32.const -1
    i32.xor
    i32.and
+   local.set $7
+   block $~lib/rt/tlsf/GETRIGHT|inlined.3 (result i32)
+    local.get $block
+    local.set $block|8
+    local.get $block|8
+    i32.const 4
+    i32.add
+    local.get $block|8
+    call $~lib/rt/common/BLOCK#get:mmInfo
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+    br $~lib/rt/tlsf/GETRIGHT|inlined.3
+   end
+   local.get $7
    call $~lib/rt/common/BLOCK#set:mmInfo
   end
  )
@@ -2218,6 +2257,7 @@
  )
  (func $~lib/rt/itcms/__new (param $size i32) (param $id i32) (result i32)
   (local $obj i32)
+  (local $3 i32)
   (local $ptr i32)
   local.get $size
   i32.const 1073741804
@@ -2257,6 +2297,8 @@
   local.get $obj
   call $~lib/rt/itcms/Object#get:size
   i32.add
+  local.set $3
+  local.get $3
   global.set $~lib/rt/itcms/total
   local.get $obj
   i32.const 20
@@ -2379,6 +2421,12 @@
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 0
   drop
   i32.const 0
@@ -2406,6 +2454,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $4
+   local.get $4
    local.set $h
    local.get $h
    i32.const 17
@@ -2418,26 +2468,36 @@
    i32.const 15
    i32.shr_u
    i32.xor
+   local.set $5
+   local.get $5
    local.set $h
    local.get $h
    i32.const -2048144777
    i32.mul
+   local.set $6
+   local.get $6
    local.set $h
    local.get $h
    local.get $h
    i32.const 13
    i32.shr_u
    i32.xor
+   local.set $7
+   local.get $7
    local.set $h
    local.get $h
    i32.const -1028477379
    i32.mul
+   local.set $8
+   local.get $8
    local.set $h
    local.get $h
    local.get $h
    i32.const 16
    i32.shr_u
    i32.xor
+   local.set $9
+   local.get $9
    local.set $h
    local.get $h
    br $~lib/util/hash/hash32|inlined.0
@@ -2618,6 +2678,12 @@
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 0
   drop
   i32.const 0
@@ -2646,6 +2712,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $4
+   local.get $4
    local.set $h
    local.get $h
    i32.const 17
@@ -2658,26 +2726,36 @@
    i32.const 15
    i32.shr_u
    i32.xor
+   local.set $5
+   local.get $5
    local.set $h
    local.get $h
    i32.const -2048144777
    i32.mul
+   local.set $6
+   local.get $6
    local.set $h
    local.get $h
    local.get $h
    i32.const 13
    i32.shr_u
    i32.xor
+   local.set $7
+   local.get $7
    local.set $h
    local.get $h
    i32.const -1028477379
    i32.mul
+   local.set $8
+   local.get $8
    local.set $h
    local.get $h
    local.get $h
    i32.const 16
    i32.shr_u
    i32.xor
+   local.set $9
+   local.get $9
    local.set $h
    local.get $h
    br $~lib/util/hash/hash32|inlined.1
@@ -2800,6 +2878,12 @@
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 0
   drop
   i32.const 0
@@ -2827,6 +2911,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $4
+   local.get $4
    local.set $h
    local.get $h
    i32.const 17
@@ -2839,26 +2925,36 @@
    i32.const 15
    i32.shr_u
    i32.xor
+   local.set $5
+   local.get $5
    local.set $h
    local.get $h
    i32.const -2048144777
    i32.mul
+   local.set $6
+   local.get $6
    local.set $h
    local.get $h
    local.get $h
    i32.const 13
    i32.shr_u
    i32.xor
+   local.set $7
+   local.get $7
    local.set $h
    local.get $h
    i32.const -1028477379
    i32.mul
+   local.set $8
+   local.get $8
    local.set $h
    local.get $h
    local.get $h
    i32.const 16
    i32.shr_u
    i32.xor
+   local.set $9
+   local.get $9
    local.set $h
    local.get $h
    br $~lib/util/hash/hash32|inlined.2
@@ -2981,6 +3077,12 @@
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 0
   drop
   i32.const 0
@@ -3009,6 +3111,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $4
+   local.get $4
    local.set $h
    local.get $h
    i32.const 17
@@ -3021,26 +3125,36 @@
    i32.const 15
    i32.shr_u
    i32.xor
+   local.set $5
+   local.get $5
    local.set $h
    local.get $h
    i32.const -2048144777
    i32.mul
+   local.set $6
+   local.get $6
    local.set $h
    local.get $h
    local.get $h
    i32.const 13
    i32.shr_u
    i32.xor
+   local.set $7
+   local.get $7
    local.set $h
    local.get $h
    i32.const -1028477379
    i32.mul
+   local.set $8
+   local.get $8
    local.set $h
    local.get $h
    local.get $h
    i32.const 16
    i32.shr_u
    i32.xor
+   local.set $9
+   local.get $9
    local.set $h
    local.get $h
    br $~lib/util/hash/hash32|inlined.3
@@ -3163,6 +3277,12 @@
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 0
   drop
   i32.const 0
@@ -3189,6 +3309,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $4
+   local.get $4
    local.set $h
    local.get $h
    i32.const 17
@@ -3201,26 +3323,36 @@
    i32.const 15
    i32.shr_u
    i32.xor
+   local.set $5
+   local.get $5
    local.set $h
    local.get $h
    i32.const -2048144777
    i32.mul
+   local.set $6
+   local.get $6
    local.set $h
    local.get $h
    local.get $h
    i32.const 13
    i32.shr_u
    i32.xor
+   local.set $7
+   local.get $7
    local.set $h
    local.get $h
    i32.const -1028477379
    i32.mul
+   local.set $8
+   local.get $8
    local.set $h
    local.get $h
    local.get $h
    i32.const 16
    i32.shr_u
    i32.xor
+   local.set $9
+   local.get $9
    local.set $h
    local.get $h
    br $~lib/util/hash/hash32|inlined.4
@@ -3343,6 +3475,12 @@
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 0
   drop
   i32.const 0
@@ -3369,6 +3507,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $4
+   local.get $4
    local.set $h
    local.get $h
    i32.const 17
@@ -3381,26 +3521,36 @@
    i32.const 15
    i32.shr_u
    i32.xor
+   local.set $5
+   local.get $5
    local.set $h
    local.get $h
    i32.const -2048144777
    i32.mul
+   local.set $6
+   local.get $6
    local.set $h
    local.get $h
    local.get $h
    i32.const 13
    i32.shr_u
    i32.xor
+   local.set $7
+   local.get $7
    local.set $h
    local.get $h
    i32.const -1028477379
    i32.mul
+   local.set $8
+   local.get $8
    local.set $h
    local.get $h
    local.get $h
    i32.const 16
    i32.shr_u
    i32.xor
+   local.set $9
+   local.get $9
    local.set $h
    local.get $h
    br $~lib/util/hash/hash32|inlined.5
@@ -3522,6 +3672,13 @@
  (func $~lib/util/hash/HASH<i64> (param $key i64) (result i32)
   (local $key|1 i64)
   (local $h i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 0
   drop
   i32.const 0
@@ -3551,6 +3708,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $3
+   local.get $3
    local.set $h
    local.get $h
    i32.const 17
@@ -3566,6 +3725,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $4
+   local.get $4
    local.set $h
    local.get $h
    i32.const 17
@@ -3578,26 +3739,36 @@
    i32.const 15
    i32.shr_u
    i32.xor
+   local.set $5
+   local.get $5
    local.set $h
    local.get $h
    i32.const -2048144777
    i32.mul
+   local.set $6
+   local.get $6
    local.set $h
    local.get $h
    local.get $h
    i32.const 13
    i32.shr_u
    i32.xor
+   local.set $7
+   local.get $7
    local.set $h
    local.get $h
    i32.const -1028477379
    i32.mul
+   local.set $8
+   local.get $8
    local.set $h
    local.get $h
    local.get $h
    i32.const 16
    i32.shr_u
    i32.xor
+   local.set $9
+   local.get $9
    local.set $h
    local.get $h
    br $~lib/util/hash/hash64|inlined.0
@@ -3719,6 +3890,13 @@
  (func $~lib/util/hash/HASH<u64> (param $key i64) (result i32)
   (local $key|1 i64)
   (local $h i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 0
   drop
   i32.const 0
@@ -3748,6 +3926,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $3
+   local.get $3
    local.set $h
    local.get $h
    i32.const 17
@@ -3763,6 +3943,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $4
+   local.get $4
    local.set $h
    local.get $h
    i32.const 17
@@ -3775,26 +3957,36 @@
    i32.const 15
    i32.shr_u
    i32.xor
+   local.set $5
+   local.get $5
    local.set $h
    local.get $h
    i32.const -2048144777
    i32.mul
+   local.set $6
+   local.get $6
    local.set $h
    local.get $h
    local.get $h
    i32.const 13
    i32.shr_u
    i32.xor
+   local.set $7
+   local.get $7
    local.set $h
    local.get $h
    i32.const -1028477379
    i32.mul
+   local.set $8
+   local.get $8
    local.set $h
    local.get $h
    local.get $h
    i32.const 16
    i32.shr_u
    i32.xor
+   local.set $9
+   local.get $9
    local.set $h
    local.get $h
    br $~lib/util/hash/hash64|inlined.1
@@ -3917,6 +4109,12 @@
   (local $key|1 i32)
   (local $len i32)
   (local $h i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 0
   drop
   i32.const 0
@@ -3944,6 +4142,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $4
+   local.get $4
    local.set $h
    local.get $h
    i32.const 17
@@ -3956,26 +4156,36 @@
    i32.const 15
    i32.shr_u
    i32.xor
+   local.set $5
+   local.get $5
    local.set $h
    local.get $h
    i32.const -2048144777
    i32.mul
+   local.set $6
+   local.get $6
    local.set $h
    local.get $h
    local.get $h
    i32.const 13
    i32.shr_u
    i32.xor
+   local.set $7
+   local.get $7
    local.set $h
    local.get $h
    i32.const -1028477379
    i32.mul
+   local.set $8
+   local.get $8
    local.set $h
    local.get $h
    local.get $h
    i32.const 16
    i32.shr_u
    i32.xor
+   local.set $9
+   local.get $9
    local.set $h
    local.get $h
    br $~lib/util/hash/hash32|inlined.6
@@ -4097,6 +4307,13 @@
  (func $~lib/util/hash/HASH<f64> (param $key f64) (result i32)
   (local $key|1 i64)
   (local $h i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 0
   drop
   i32.const 0
@@ -4127,6 +4344,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $3
+   local.get $3
    local.set $h
    local.get $h
    i32.const 17
@@ -4142,6 +4361,8 @@
    i32.const -1028477379
    i32.mul
    i32.add
+   local.set $4
+   local.get $4
    local.set $h
    local.get $h
    i32.const 17
@@ -4154,26 +4375,36 @@
    i32.const 15
    i32.shr_u
    i32.xor
+   local.set $5
+   local.get $5
    local.set $h
    local.get $h
    i32.const -2048144777
    i32.mul
+   local.set $6
+   local.get $6
    local.set $h
    local.get $h
    local.get $h
    i32.const 13
    i32.shr_u
    i32.xor
+   local.set $7
+   local.get $7
    local.set $h
    local.get $h
    i32.const -1028477379
    i32.mul
+   local.set $8
+   local.get $8
    local.set $h
    local.get $h
    local.get $h
    i32.const 16
    i32.shr_u
    i32.xor
+   local.set $9
+   local.get $9
    local.set $h
    local.get $h
    br $~lib/util/hash/hash64|inlined.2
@@ -4947,6 +5178,8 @@
   (local $newBucketIndex i32)
   (local $newBucketPtrBase i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -4988,20 +5221,20 @@
   local.tee $newEntries
   i32.store $0 offset=4
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i8>#get:entries
   local.set $oldPtr
   local.get $oldPtr
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i8>#get:entriesOffset
   block $~lib/set/ENTRY_SIZE<i8>|inlined.2 (result i32)
    i32.const 8
@@ -5057,6 +5290,8 @@
       br $~lib/set/ENTRY_SIZE<i8>|inlined.3
      end
      i32.add
+     local.set $14
+     local.get $14
      local.set $newPtr
     end
     local.get $oldPtr
@@ -5065,64 +5300,66 @@
      br $~lib/set/ENTRY_SIZE<i8>|inlined.4
     end
     i32.add
+    local.set $15
+    local.get $15
     local.set $oldPtr
     br $while-continue|0
    end
   end
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBuckets
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i8>#set:buckets
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBucketsMask
   call $~lib/set/Set<i8>#set:bucketsMask
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntries
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i8>#set:entries
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntriesCapacity
   call $~lib/set/Set<i8>#set:entriesCapacity
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i8>#get:entriesCount
   call $~lib/set/Set<i8>#set:entriesOffset
   global.get $~lib/memory/__stack_pointer
@@ -5134,8 +5371,9 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
+  (local $5 i32)
   (local $bucketPtrBase i32)
-  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -5148,11 +5386,11 @@
   call $~lib/util/hash/HASH<i8>
   local.set $hashCode
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $hashCode
   call $~lib/set/Set<i8>#find
@@ -5161,40 +5399,40 @@
   i32.eqz
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i8>#get:entriesOffset
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i8>#get:entriesCapacity
    i32.eq
    if
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0
-    local.get $6
+    local.get $7
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<i8>#get:entriesCount
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<i8>#get:entriesCapacity
     i32.const 3
     i32.mul
@@ -5203,19 +5441,19 @@
     i32.lt_s
     if (result i32)
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<i8>#get:bucketsMask
     else
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<i8>#get:bucketsMask
      i32.const 1
      i32.shl
@@ -5225,28 +5463,30 @@
     call $~lib/set/Set<i8>#rehash
    end
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i8>#get:entries
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
-   local.get $this
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i8>#get:entriesOffset
    local.tee $4
    i32.const 1
    i32.add
+   local.set $5
+   local.get $this
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   local.get $7
+   i32.store $0
+   local.get $7
+   local.get $5
    call $~lib/set/Set<i8>#set:entriesOffset
    local.get $4
    block $~lib/set/ENTRY_SIZE<i8>|inlined.5 (result i32)
@@ -5262,35 +5502,35 @@
    i32.const 0
    drop
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i8>#get:entriesCount
    i32.const 1
    i32.add
    call $~lib/set/Set<i8>#set:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i8>#get:buckets
    local.get $hashCode
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i8>#get:bucketsMask
    i32.and
    i32.const 4
@@ -5306,12 +5546,12 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<i8>#get:size (param $this i32) (result i32)
@@ -5702,6 +5942,7 @@
   (local $entry i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -5711,19 +5952,19 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<i8>#get:entries
   local.set $start
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<i8>#get:entriesOffset
   local.set $size
   global.get $~lib/memory/__stack_pointer
@@ -5757,15 +5998,17 @@
     i32.eqz
     if
      local.get $values
-     local.set $8
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $9
      i32.store $0
-     local.get $8
+     local.get $9
      local.get $length
      local.tee $7
      i32.const 1
      i32.add
+     local.set $8
+     local.get $8
      local.set $length
      local.get $7
      local.get $entry
@@ -5780,20 +6023,20 @@
    end
   end
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   local.get $length
   call $~lib/array/Array<i8>#set:length
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   return
  )
  (func $~lib/array/Array<i8>#get:length (param $this i32) (result i32)
@@ -5875,10 +6118,11 @@
  )
  (func $~lib/set/Set<i8>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
+  (local $3 i32)
   (local $halfBucketsMask i32)
-  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -5888,11 +6132,11 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $key
   call $~lib/util/hash/HASH<i8>
@@ -5902,42 +6146,44 @@
   i32.eqz
   if
    i32.const 0
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    return
   end
-  local.get $entry
   local.get $entry
   call $~lib/set/SetEntry<i8>#get:taggedNext
   i32.const 1
   i32.or
+  local.set $3
+  local.get $entry
+  local.get $3
   call $~lib/set/SetEntry<i8>#set:taggedNext
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0 offset=4
-  local.get $6
+  local.get $7
   call $~lib/set/Set<i8>#get:entriesCount
   i32.const 1
   i32.sub
   call $~lib/set/Set<i8>#set:entriesCount
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   call $~lib/set/Set<i8>#get:bucketsMask
   i32.const 1
   i32.shr_u
@@ -5946,34 +6192,34 @@
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $4
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0
-  local.get $6
-  call $~lib/set/Set<i8>#get:entriesCount
   local.tee $5
-  local.get $4
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/set/Set<i8>#get:entriesCount
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
   if (result i32)
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i8>#get:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i8>#get:entriesCapacity
    i32.const 3
    i32.mul
@@ -5985,21 +6231,21 @@
   end
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $halfBucketsMask
    call $~lib/set/Set<i8>#rehash
   end
   i32.const 1
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<i8>#clear (param $this i32)
@@ -6095,9 +6341,11 @@
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $k|6 i32)
-  (local $k|7 i32)
-  (local $8 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $k|8 i32)
+  (local $k|9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -6120,11 +6368,11 @@
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i8>#has
     i32.eqz
@@ -6138,20 +6386,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i8>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i8>#has
     i32.eqz
@@ -6171,11 +6419,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i8>#get:size
   i32.const 100
   i32.eq
@@ -6196,11 +6444,11 @@
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i8>#has
     i32.eqz
@@ -6213,20 +6461,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i8>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i8>#has
     i32.eqz
@@ -6246,11 +6494,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i8>#get:size
   i32.const 100
   i32.eq
@@ -6265,11 +6513,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i8>#values
   local.tee $vals
   i32.store $0 offset=8
@@ -6283,27 +6531,28 @@
   loop $for-loop|2
    local.get $index
    local.get $vals
-   local.set $8
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $10
    i32.store $0 offset=4
-   local.get $8
+   local.get $10
    call $~lib/array/Array<i8>#get:length
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $6
     call $~lib/array/Array<i8>#__get
     call $~lib/set/Set<i8>#has
     i32.eqz
@@ -6316,18 +6565,19 @@
      unreachable
     end
     local.get $valSet
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $7
     call $~lib/array/Array<i8>#__get
     call $~lib/set/Set<i8>#add
     drop
@@ -6339,18 +6589,18 @@
    end
   end
   local.get $valSet
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i8>#get:size
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i8>#get:size
   i32.eq
   i32.eqz
@@ -6363,19 +6613,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|6
+  local.set $k|8
   loop $for-loop|3
-   local.get $k|6
+   local.get $k|8
    i32.const 50
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -6387,21 +6637,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i8>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i8>#has
     i32.eqz
     i32.eqz
@@ -6413,19 +6663,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|6
+    local.get $k|8
     i32.const 1
     i32.add
-    local.set $k|6
+    local.set $k|8
     br $for-loop|3
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i8>#get:size
   i32.const 50
   i32.eq
@@ -6439,19 +6689,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|7
+  local.set $k|9
   loop $for-loop|4
-   local.get $k|7
+   local.get $k|9
    i32.const 50
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i8>#has
     i32.eqz
     i32.eqz
@@ -6464,21 +6714,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i8>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -6490,21 +6740,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i8>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i8>#has
     i32.eqz
     i32.eqz
@@ -6516,19 +6766,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|7
+    local.get $k|9
     i32.const 1
     i32.add
-    local.set $k|7
+    local.set $k|9
     br $for-loop|4
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i8>#get:size
   i32.const 50
   i32.eq
@@ -6542,18 +6792,18 @@
    unreachable
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i8>#clear
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i8>#get:size
   i32.const 0
   i32.eq
@@ -6800,6 +7050,8 @@
   (local $newBucketIndex i32)
   (local $newBucketPtrBase i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -6841,20 +7093,20 @@
   local.tee $newEntries
   i32.store $0 offset=4
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u8>#get:entries
   local.set $oldPtr
   local.get $oldPtr
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u8>#get:entriesOffset
   block $~lib/set/ENTRY_SIZE<u8>|inlined.2 (result i32)
    i32.const 8
@@ -6910,6 +7162,8 @@
       br $~lib/set/ENTRY_SIZE<u8>|inlined.3
      end
      i32.add
+     local.set $14
+     local.get $14
      local.set $newPtr
     end
     local.get $oldPtr
@@ -6918,64 +7172,66 @@
      br $~lib/set/ENTRY_SIZE<u8>|inlined.4
     end
     i32.add
+    local.set $15
+    local.get $15
     local.set $oldPtr
     br $while-continue|0
    end
   end
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBuckets
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u8>#set:buckets
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBucketsMask
   call $~lib/set/Set<u8>#set:bucketsMask
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntries
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u8>#set:entries
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntriesCapacity
   call $~lib/set/Set<u8>#set:entriesCapacity
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u8>#get:entriesCount
   call $~lib/set/Set<u8>#set:entriesOffset
   global.get $~lib/memory/__stack_pointer
@@ -6987,8 +7243,9 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
+  (local $5 i32)
   (local $bucketPtrBase i32)
-  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -7001,11 +7258,11 @@
   call $~lib/util/hash/HASH<u8>
   local.set $hashCode
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $hashCode
   call $~lib/set/Set<u8>#find
@@ -7014,40 +7271,40 @@
   i32.eqz
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u8>#get:entriesOffset
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u8>#get:entriesCapacity
    i32.eq
    if
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0
-    local.get $6
+    local.get $7
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<u8>#get:entriesCount
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<u8>#get:entriesCapacity
     i32.const 3
     i32.mul
@@ -7056,19 +7313,19 @@
     i32.lt_s
     if (result i32)
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<u8>#get:bucketsMask
     else
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<u8>#get:bucketsMask
      i32.const 1
      i32.shl
@@ -7078,28 +7335,30 @@
     call $~lib/set/Set<u8>#rehash
    end
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u8>#get:entries
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
-   local.get $this
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u8>#get:entriesOffset
    local.tee $4
    i32.const 1
    i32.add
+   local.set $5
+   local.get $this
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   local.get $7
+   i32.store $0
+   local.get $7
+   local.get $5
    call $~lib/set/Set<u8>#set:entriesOffset
    local.get $4
    block $~lib/set/ENTRY_SIZE<u8>|inlined.5 (result i32)
@@ -7115,35 +7374,35 @@
    i32.const 0
    drop
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u8>#get:entriesCount
    i32.const 1
    i32.add
    call $~lib/set/Set<u8>#set:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u8>#get:buckets
    local.get $hashCode
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u8>#get:bucketsMask
    i32.and
    i32.const 4
@@ -7159,12 +7418,12 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<u8>#get:size (param $this i32) (result i32)
@@ -7436,6 +7695,7 @@
   (local $entry i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -7445,19 +7705,19 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<u8>#get:entries
   local.set $start
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<u8>#get:entriesOffset
   local.set $size
   global.get $~lib/memory/__stack_pointer
@@ -7491,15 +7751,17 @@
     i32.eqz
     if
      local.get $values
-     local.set $8
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $9
      i32.store $0
-     local.get $8
+     local.get $9
      local.get $length
      local.tee $7
      i32.const 1
      i32.add
+     local.set $8
+     local.get $8
      local.set $length
      local.get $7
      local.get $entry
@@ -7514,20 +7776,20 @@
    end
   end
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   local.get $length
   call $~lib/array/Array<u8>#set:length
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   return
  )
  (func $~lib/array/Array<u8>#get:length (param $this i32) (result i32)
@@ -7609,10 +7871,11 @@
  )
  (func $~lib/set/Set<u8>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
+  (local $3 i32)
   (local $halfBucketsMask i32)
-  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -7622,11 +7885,11 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $key
   call $~lib/util/hash/HASH<u8>
@@ -7636,42 +7899,44 @@
   i32.eqz
   if
    i32.const 0
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    return
   end
-  local.get $entry
   local.get $entry
   call $~lib/set/SetEntry<u8>#get:taggedNext
   i32.const 1
   i32.or
+  local.set $3
+  local.get $entry
+  local.get $3
   call $~lib/set/SetEntry<u8>#set:taggedNext
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0 offset=4
-  local.get $6
+  local.get $7
   call $~lib/set/Set<u8>#get:entriesCount
   i32.const 1
   i32.sub
   call $~lib/set/Set<u8>#set:entriesCount
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   call $~lib/set/Set<u8>#get:bucketsMask
   i32.const 1
   i32.shr_u
@@ -7680,34 +7945,34 @@
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $4
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0
-  local.get $6
-  call $~lib/set/Set<u8>#get:entriesCount
   local.tee $5
-  local.get $4
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/set/Set<u8>#get:entriesCount
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
   if (result i32)
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u8>#get:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u8>#get:entriesCapacity
    i32.const 3
    i32.mul
@@ -7719,21 +7984,21 @@
   end
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $halfBucketsMask
    call $~lib/set/Set<u8>#rehash
   end
   i32.const 1
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<u8>#clear (param $this i32)
@@ -7829,9 +8094,11 @@
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $k|6 i32)
-  (local $k|7 i32)
-  (local $8 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $k|8 i32)
+  (local $k|9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -7854,11 +8121,11 @@
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u8>#has
     i32.eqz
@@ -7872,20 +8139,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u8>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u8>#has
     i32.eqz
@@ -7905,11 +8172,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u8>#get:size
   i32.const 100
   i32.eq
@@ -7930,11 +8197,11 @@
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u8>#has
     i32.eqz
@@ -7947,20 +8214,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u8>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u8>#has
     i32.eqz
@@ -7980,11 +8247,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u8>#get:size
   i32.const 100
   i32.eq
@@ -7999,11 +8266,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u8>#values
   local.tee $vals
   i32.store $0 offset=8
@@ -8017,27 +8284,28 @@
   loop $for-loop|2
    local.get $index
    local.get $vals
-   local.set $8
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $10
    i32.store $0 offset=4
-   local.get $8
+   local.get $10
    call $~lib/array/Array<u8>#get:length
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $6
     call $~lib/array/Array<u8>#__get
     call $~lib/set/Set<u8>#has
     i32.eqz
@@ -8050,18 +8318,19 @@
      unreachable
     end
     local.get $valSet
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $7
     call $~lib/array/Array<u8>#__get
     call $~lib/set/Set<u8>#add
     drop
@@ -8073,18 +8342,18 @@
    end
   end
   local.get $valSet
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u8>#get:size
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u8>#get:size
   i32.eq
   i32.eqz
@@ -8097,19 +8366,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|6
+  local.set $k|8
   loop $for-loop|3
-   local.get $k|6
+   local.get $k|8
    i32.const 50
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -8121,21 +8390,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u8>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u8>#has
     i32.eqz
     i32.eqz
@@ -8147,19 +8416,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|6
+    local.get $k|8
     i32.const 1
     i32.add
-    local.set $k|6
+    local.set $k|8
     br $for-loop|3
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u8>#get:size
   i32.const 50
   i32.eq
@@ -8173,19 +8442,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|7
+  local.set $k|9
   loop $for-loop|4
-   local.get $k|7
+   local.get $k|9
    i32.const 50
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u8>#has
     i32.eqz
     i32.eqz
@@ -8198,21 +8467,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u8>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -8224,21 +8493,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u8>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u8>#has
     i32.eqz
     i32.eqz
@@ -8250,19 +8519,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|7
+    local.get $k|9
     i32.const 1
     i32.add
-    local.set $k|7
+    local.set $k|9
     br $for-loop|4
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u8>#get:size
   i32.const 50
   i32.eq
@@ -8276,18 +8545,18 @@
    unreachable
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u8>#clear
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u8>#get:size
   i32.const 0
   i32.eq
@@ -8532,6 +8801,8 @@
   (local $newBucketIndex i32)
   (local $newBucketPtrBase i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -8573,20 +8844,20 @@
   local.tee $newEntries
   i32.store $0 offset=4
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i16>#get:entries
   local.set $oldPtr
   local.get $oldPtr
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i16>#get:entriesOffset
   block $~lib/set/ENTRY_SIZE<i16>|inlined.2 (result i32)
    i32.const 8
@@ -8642,6 +8913,8 @@
       br $~lib/set/ENTRY_SIZE<i16>|inlined.3
      end
      i32.add
+     local.set $14
+     local.get $14
      local.set $newPtr
     end
     local.get $oldPtr
@@ -8650,64 +8923,66 @@
      br $~lib/set/ENTRY_SIZE<i16>|inlined.4
     end
     i32.add
+    local.set $15
+    local.get $15
     local.set $oldPtr
     br $while-continue|0
    end
   end
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBuckets
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i16>#set:buckets
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBucketsMask
   call $~lib/set/Set<i16>#set:bucketsMask
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntries
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i16>#set:entries
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntriesCapacity
   call $~lib/set/Set<i16>#set:entriesCapacity
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i16>#get:entriesCount
   call $~lib/set/Set<i16>#set:entriesOffset
   global.get $~lib/memory/__stack_pointer
@@ -8719,8 +8994,9 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
+  (local $5 i32)
   (local $bucketPtrBase i32)
-  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -8733,11 +9009,11 @@
   call $~lib/util/hash/HASH<i16>
   local.set $hashCode
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $hashCode
   call $~lib/set/Set<i16>#find
@@ -8746,40 +9022,40 @@
   i32.eqz
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i16>#get:entriesOffset
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i16>#get:entriesCapacity
    i32.eq
    if
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0
-    local.get $6
+    local.get $7
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<i16>#get:entriesCount
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<i16>#get:entriesCapacity
     i32.const 3
     i32.mul
@@ -8788,19 +9064,19 @@
     i32.lt_s
     if (result i32)
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<i16>#get:bucketsMask
     else
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<i16>#get:bucketsMask
      i32.const 1
      i32.shl
@@ -8810,28 +9086,30 @@
     call $~lib/set/Set<i16>#rehash
    end
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i16>#get:entries
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
-   local.get $this
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i16>#get:entriesOffset
    local.tee $4
    i32.const 1
    i32.add
+   local.set $5
+   local.get $this
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   local.get $7
+   i32.store $0
+   local.get $7
+   local.get $5
    call $~lib/set/Set<i16>#set:entriesOffset
    local.get $4
    block $~lib/set/ENTRY_SIZE<i16>|inlined.5 (result i32)
@@ -8847,35 +9125,35 @@
    i32.const 0
    drop
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i16>#get:entriesCount
    i32.const 1
    i32.add
    call $~lib/set/Set<i16>#set:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i16>#get:buckets
    local.get $hashCode
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i16>#get:bucketsMask
    i32.and
    i32.const 4
@@ -8891,12 +9169,12 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<i16>#get:size (param $this i32) (result i32)
@@ -9168,6 +9446,7 @@
   (local $entry i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -9177,19 +9456,19 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<i16>#get:entries
   local.set $start
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<i16>#get:entriesOffset
   local.set $size
   global.get $~lib/memory/__stack_pointer
@@ -9223,15 +9502,17 @@
     i32.eqz
     if
      local.get $values
-     local.set $8
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $9
      i32.store $0
-     local.get $8
+     local.get $9
      local.get $length
      local.tee $7
      i32.const 1
      i32.add
+     local.set $8
+     local.get $8
      local.set $length
      local.get $7
      local.get $entry
@@ -9246,20 +9527,20 @@
    end
   end
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   local.get $length
   call $~lib/array/Array<i16>#set:length
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   return
  )
  (func $~lib/array/Array<i16>#get:length (param $this i32) (result i32)
@@ -9341,10 +9622,11 @@
  )
  (func $~lib/set/Set<i16>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
+  (local $3 i32)
   (local $halfBucketsMask i32)
-  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -9354,11 +9636,11 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $key
   call $~lib/util/hash/HASH<i16>
@@ -9368,42 +9650,44 @@
   i32.eqz
   if
    i32.const 0
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    return
   end
-  local.get $entry
   local.get $entry
   call $~lib/set/SetEntry<i16>#get:taggedNext
   i32.const 1
   i32.or
+  local.set $3
+  local.get $entry
+  local.get $3
   call $~lib/set/SetEntry<i16>#set:taggedNext
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0 offset=4
-  local.get $6
+  local.get $7
   call $~lib/set/Set<i16>#get:entriesCount
   i32.const 1
   i32.sub
   call $~lib/set/Set<i16>#set:entriesCount
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   call $~lib/set/Set<i16>#get:bucketsMask
   i32.const 1
   i32.shr_u
@@ -9412,34 +9696,34 @@
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $4
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0
-  local.get $6
-  call $~lib/set/Set<i16>#get:entriesCount
   local.tee $5
-  local.get $4
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/set/Set<i16>#get:entriesCount
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
   if (result i32)
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i16>#get:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i16>#get:entriesCapacity
    i32.const 3
    i32.mul
@@ -9451,21 +9735,21 @@
   end
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $halfBucketsMask
    call $~lib/set/Set<i16>#rehash
   end
   i32.const 1
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<i16>#clear (param $this i32)
@@ -9561,9 +9845,11 @@
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $k|6 i32)
-  (local $k|7 i32)
-  (local $8 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $k|8 i32)
+  (local $k|9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -9586,11 +9872,11 @@
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i16>#has
     i32.eqz
@@ -9604,20 +9890,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i16>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i16>#has
     i32.eqz
@@ -9637,11 +9923,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i16>#get:size
   i32.const 100
   i32.eq
@@ -9662,11 +9948,11 @@
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i16>#has
     i32.eqz
@@ -9679,20 +9965,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i16>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i16>#has
     i32.eqz
@@ -9712,11 +9998,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i16>#get:size
   i32.const 100
   i32.eq
@@ -9731,11 +10017,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i16>#values
   local.tee $vals
   i32.store $0 offset=8
@@ -9749,27 +10035,28 @@
   loop $for-loop|2
    local.get $index
    local.get $vals
-   local.set $8
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $10
    i32.store $0 offset=4
-   local.get $8
+   local.get $10
    call $~lib/array/Array<i16>#get:length
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $6
     call $~lib/array/Array<i16>#__get
     call $~lib/set/Set<i16>#has
     i32.eqz
@@ -9782,18 +10069,19 @@
      unreachable
     end
     local.get $valSet
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $7
     call $~lib/array/Array<i16>#__get
     call $~lib/set/Set<i16>#add
     drop
@@ -9805,18 +10093,18 @@
    end
   end
   local.get $valSet
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i16>#get:size
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i16>#get:size
   i32.eq
   i32.eqz
@@ -9829,19 +10117,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|6
+  local.set $k|8
   loop $for-loop|3
-   local.get $k|6
+   local.get $k|8
    i32.const 50
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -9853,21 +10141,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i16>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i16>#has
     i32.eqz
     i32.eqz
@@ -9879,19 +10167,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|6
+    local.get $k|8
     i32.const 1
     i32.add
-    local.set $k|6
+    local.set $k|8
     br $for-loop|3
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i16>#get:size
   i32.const 50
   i32.eq
@@ -9905,19 +10193,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|7
+  local.set $k|9
   loop $for-loop|4
-   local.get $k|7
+   local.get $k|9
    i32.const 50
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i16>#has
     i32.eqz
     i32.eqz
@@ -9930,21 +10218,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i16>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -9956,21 +10244,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i16>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i16>#has
     i32.eqz
     i32.eqz
@@ -9982,19 +10270,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|7
+    local.get $k|9
     i32.const 1
     i32.add
-    local.set $k|7
+    local.set $k|9
     br $for-loop|4
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i16>#get:size
   i32.const 50
   i32.eq
@@ -10008,18 +10296,18 @@
    unreachable
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i16>#clear
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i16>#get:size
   i32.const 0
   i32.eq
@@ -10266,6 +10554,8 @@
   (local $newBucketIndex i32)
   (local $newBucketPtrBase i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -10307,20 +10597,20 @@
   local.tee $newEntries
   i32.store $0 offset=4
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u16>#get:entries
   local.set $oldPtr
   local.get $oldPtr
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u16>#get:entriesOffset
   block $~lib/set/ENTRY_SIZE<u16>|inlined.2 (result i32)
    i32.const 8
@@ -10376,6 +10666,8 @@
       br $~lib/set/ENTRY_SIZE<u16>|inlined.3
      end
      i32.add
+     local.set $14
+     local.get $14
      local.set $newPtr
     end
     local.get $oldPtr
@@ -10384,64 +10676,66 @@
      br $~lib/set/ENTRY_SIZE<u16>|inlined.4
     end
     i32.add
+    local.set $15
+    local.get $15
     local.set $oldPtr
     br $while-continue|0
    end
   end
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBuckets
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u16>#set:buckets
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBucketsMask
   call $~lib/set/Set<u16>#set:bucketsMask
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntries
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u16>#set:entries
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntriesCapacity
   call $~lib/set/Set<u16>#set:entriesCapacity
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u16>#get:entriesCount
   call $~lib/set/Set<u16>#set:entriesOffset
   global.get $~lib/memory/__stack_pointer
@@ -10453,8 +10747,9 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
+  (local $5 i32)
   (local $bucketPtrBase i32)
-  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -10467,11 +10762,11 @@
   call $~lib/util/hash/HASH<u16>
   local.set $hashCode
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $hashCode
   call $~lib/set/Set<u16>#find
@@ -10480,40 +10775,40 @@
   i32.eqz
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u16>#get:entriesOffset
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u16>#get:entriesCapacity
    i32.eq
    if
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0
-    local.get $6
+    local.get $7
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<u16>#get:entriesCount
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<u16>#get:entriesCapacity
     i32.const 3
     i32.mul
@@ -10522,19 +10817,19 @@
     i32.lt_s
     if (result i32)
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<u16>#get:bucketsMask
     else
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<u16>#get:bucketsMask
      i32.const 1
      i32.shl
@@ -10544,28 +10839,30 @@
     call $~lib/set/Set<u16>#rehash
    end
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u16>#get:entries
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
-   local.get $this
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u16>#get:entriesOffset
    local.tee $4
    i32.const 1
    i32.add
+   local.set $5
+   local.get $this
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   local.get $7
+   i32.store $0
+   local.get $7
+   local.get $5
    call $~lib/set/Set<u16>#set:entriesOffset
    local.get $4
    block $~lib/set/ENTRY_SIZE<u16>|inlined.5 (result i32)
@@ -10581,35 +10878,35 @@
    i32.const 0
    drop
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u16>#get:entriesCount
    i32.const 1
    i32.add
    call $~lib/set/Set<u16>#set:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u16>#get:buckets
    local.get $hashCode
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u16>#get:bucketsMask
    i32.and
    i32.const 4
@@ -10625,12 +10922,12 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<u16>#get:size (param $this i32) (result i32)
@@ -10902,6 +11199,7 @@
   (local $entry i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -10911,19 +11209,19 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<u16>#get:entries
   local.set $start
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<u16>#get:entriesOffset
   local.set $size
   global.get $~lib/memory/__stack_pointer
@@ -10957,15 +11255,17 @@
     i32.eqz
     if
      local.get $values
-     local.set $8
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $9
      i32.store $0
-     local.get $8
+     local.get $9
      local.get $length
      local.tee $7
      i32.const 1
      i32.add
+     local.set $8
+     local.get $8
      local.set $length
      local.get $7
      local.get $entry
@@ -10980,20 +11280,20 @@
    end
   end
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   local.get $length
   call $~lib/array/Array<u16>#set:length
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   return
  )
  (func $~lib/array/Array<u16>#get:length (param $this i32) (result i32)
@@ -11075,10 +11375,11 @@
  )
  (func $~lib/set/Set<u16>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
+  (local $3 i32)
   (local $halfBucketsMask i32)
-  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -11088,11 +11389,11 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $key
   call $~lib/util/hash/HASH<u16>
@@ -11102,42 +11403,44 @@
   i32.eqz
   if
    i32.const 0
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    return
   end
-  local.get $entry
   local.get $entry
   call $~lib/set/SetEntry<u16>#get:taggedNext
   i32.const 1
   i32.or
+  local.set $3
+  local.get $entry
+  local.get $3
   call $~lib/set/SetEntry<u16>#set:taggedNext
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0 offset=4
-  local.get $6
+  local.get $7
   call $~lib/set/Set<u16>#get:entriesCount
   i32.const 1
   i32.sub
   call $~lib/set/Set<u16>#set:entriesCount
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   call $~lib/set/Set<u16>#get:bucketsMask
   i32.const 1
   i32.shr_u
@@ -11146,34 +11449,34 @@
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $4
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0
-  local.get $6
-  call $~lib/set/Set<u16>#get:entriesCount
   local.tee $5
-  local.get $4
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/set/Set<u16>#get:entriesCount
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
   if (result i32)
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u16>#get:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u16>#get:entriesCapacity
    i32.const 3
    i32.mul
@@ -11185,21 +11488,21 @@
   end
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $halfBucketsMask
    call $~lib/set/Set<u16>#rehash
   end
   i32.const 1
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<u16>#clear (param $this i32)
@@ -11295,9 +11598,11 @@
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $k|6 i32)
-  (local $k|7 i32)
-  (local $8 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $k|8 i32)
+  (local $k|9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -11320,11 +11625,11 @@
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u16>#has
     i32.eqz
@@ -11338,20 +11643,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u16>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u16>#has
     i32.eqz
@@ -11371,11 +11676,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u16>#get:size
   i32.const 100
   i32.eq
@@ -11396,11 +11701,11 @@
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u16>#has
     i32.eqz
@@ -11413,20 +11718,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u16>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u16>#has
     i32.eqz
@@ -11446,11 +11751,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u16>#get:size
   i32.const 100
   i32.eq
@@ -11465,11 +11770,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u16>#values
   local.tee $vals
   i32.store $0 offset=8
@@ -11483,27 +11788,28 @@
   loop $for-loop|2
    local.get $index
    local.get $vals
-   local.set $8
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $10
    i32.store $0 offset=4
-   local.get $8
+   local.get $10
    call $~lib/array/Array<u16>#get:length
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $6
     call $~lib/array/Array<u16>#__get
     call $~lib/set/Set<u16>#has
     i32.eqz
@@ -11516,18 +11822,19 @@
      unreachable
     end
     local.get $valSet
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $7
     call $~lib/array/Array<u16>#__get
     call $~lib/set/Set<u16>#add
     drop
@@ -11539,18 +11846,18 @@
    end
   end
   local.get $valSet
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u16>#get:size
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u16>#get:size
   i32.eq
   i32.eqz
@@ -11563,19 +11870,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|6
+  local.set $k|8
   loop $for-loop|3
-   local.get $k|6
+   local.get $k|8
    i32.const 50
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -11587,21 +11894,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u16>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u16>#has
     i32.eqz
     i32.eqz
@@ -11613,19 +11920,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|6
+    local.get $k|8
     i32.const 1
     i32.add
-    local.set $k|6
+    local.set $k|8
     br $for-loop|3
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u16>#get:size
   i32.const 50
   i32.eq
@@ -11639,19 +11946,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|7
+  local.set $k|9
   loop $for-loop|4
-   local.get $k|7
+   local.get $k|9
    i32.const 50
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u16>#has
     i32.eqz
     i32.eqz
@@ -11664,21 +11971,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u16>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -11690,21 +11997,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u16>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u16>#has
     i32.eqz
     i32.eqz
@@ -11716,19 +12023,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|7
+    local.get $k|9
     i32.const 1
     i32.add
-    local.set $k|7
+    local.set $k|9
     br $for-loop|4
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u16>#get:size
   i32.const 50
   i32.eq
@@ -11742,18 +12049,18 @@
    unreachable
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u16>#clear
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u16>#get:size
   i32.const 0
   i32.eq
@@ -11996,6 +12303,8 @@
   (local $newBucketIndex i32)
   (local $newBucketPtrBase i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -12037,20 +12346,20 @@
   local.tee $newEntries
   i32.store $0 offset=4
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i32>#get:entries
   local.set $oldPtr
   local.get $oldPtr
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i32>#get:entriesOffset
   block $~lib/set/ENTRY_SIZE<i32>|inlined.2 (result i32)
    i32.const 8
@@ -12106,6 +12415,8 @@
       br $~lib/set/ENTRY_SIZE<i32>|inlined.3
      end
      i32.add
+     local.set $14
+     local.get $14
      local.set $newPtr
     end
     local.get $oldPtr
@@ -12114,64 +12425,66 @@
      br $~lib/set/ENTRY_SIZE<i32>|inlined.4
     end
     i32.add
+    local.set $15
+    local.get $15
     local.set $oldPtr
     br $while-continue|0
    end
   end
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBuckets
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i32>#set:buckets
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBucketsMask
   call $~lib/set/Set<i32>#set:bucketsMask
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntries
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i32>#set:entries
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntriesCapacity
   call $~lib/set/Set<i32>#set:entriesCapacity
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i32>#get:entriesCount
   call $~lib/set/Set<i32>#set:entriesOffset
   global.get $~lib/memory/__stack_pointer
@@ -12183,8 +12496,9 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
+  (local $5 i32)
   (local $bucketPtrBase i32)
-  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -12197,11 +12511,11 @@
   call $~lib/util/hash/HASH<i32>
   local.set $hashCode
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $hashCode
   call $~lib/set/Set<i32>#find
@@ -12210,40 +12524,40 @@
   i32.eqz
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i32>#get:entriesOffset
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i32>#get:entriesCapacity
    i32.eq
    if
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0
-    local.get $6
+    local.get $7
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<i32>#get:entriesCount
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<i32>#get:entriesCapacity
     i32.const 3
     i32.mul
@@ -12252,19 +12566,19 @@
     i32.lt_s
     if (result i32)
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<i32>#get:bucketsMask
     else
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<i32>#get:bucketsMask
      i32.const 1
      i32.shl
@@ -12274,28 +12588,30 @@
     call $~lib/set/Set<i32>#rehash
    end
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i32>#get:entries
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
-   local.get $this
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i32>#get:entriesOffset
    local.tee $4
    i32.const 1
    i32.add
+   local.set $5
+   local.get $this
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   local.get $7
+   i32.store $0
+   local.get $7
+   local.get $5
    call $~lib/set/Set<i32>#set:entriesOffset
    local.get $4
    block $~lib/set/ENTRY_SIZE<i32>|inlined.5 (result i32)
@@ -12311,35 +12627,35 @@
    i32.const 0
    drop
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i32>#get:entriesCount
    i32.const 1
    i32.add
    call $~lib/set/Set<i32>#set:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i32>#get:buckets
    local.get $hashCode
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i32>#get:bucketsMask
    i32.and
    i32.const 4
@@ -12355,12 +12671,12 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<i32>#get:size (param $this i32) (result i32)
@@ -12632,6 +12948,7 @@
   (local $entry i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -12641,19 +12958,19 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<i32>#get:entries
   local.set $start
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<i32>#get:entriesOffset
   local.set $size
   global.get $~lib/memory/__stack_pointer
@@ -12687,15 +13004,17 @@
     i32.eqz
     if
      local.get $values
-     local.set $8
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $9
      i32.store $0
-     local.get $8
+     local.get $9
      local.get $length
      local.tee $7
      i32.const 1
      i32.add
+     local.set $8
+     local.get $8
      local.set $length
      local.get $7
      local.get $entry
@@ -12710,20 +13029,20 @@
    end
   end
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   local.get $length
   call $~lib/array/Array<i32>#set:length
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   return
  )
  (func $~lib/array/Array<i32>#get:length (param $this i32) (result i32)
@@ -12805,10 +13124,11 @@
  )
  (func $~lib/set/Set<i32>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
+  (local $3 i32)
   (local $halfBucketsMask i32)
-  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -12818,11 +13138,11 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $key
   call $~lib/util/hash/HASH<i32>
@@ -12832,42 +13152,44 @@
   i32.eqz
   if
    i32.const 0
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    return
   end
-  local.get $entry
   local.get $entry
   call $~lib/set/SetEntry<i32>#get:taggedNext
   i32.const 1
   i32.or
+  local.set $3
+  local.get $entry
+  local.get $3
   call $~lib/set/SetEntry<i32>#set:taggedNext
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0 offset=4
-  local.get $6
+  local.get $7
   call $~lib/set/Set<i32>#get:entriesCount
   i32.const 1
   i32.sub
   call $~lib/set/Set<i32>#set:entriesCount
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   call $~lib/set/Set<i32>#get:bucketsMask
   i32.const 1
   i32.shr_u
@@ -12876,34 +13198,34 @@
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $4
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0
-  local.get $6
-  call $~lib/set/Set<i32>#get:entriesCount
   local.tee $5
-  local.get $4
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/set/Set<i32>#get:entriesCount
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
   if (result i32)
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i32>#get:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i32>#get:entriesCapacity
    i32.const 3
    i32.mul
@@ -12915,21 +13237,21 @@
   end
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $halfBucketsMask
    call $~lib/set/Set<i32>#rehash
   end
   i32.const 1
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<i32>#clear (param $this i32)
@@ -13025,9 +13347,11 @@
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $k|6 i32)
-  (local $k|7 i32)
-  (local $8 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $k|8 i32)
+  (local $k|9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -13050,11 +13374,11 @@
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i32>#has
     i32.eqz
@@ -13068,20 +13392,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i32>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i32>#has
     i32.eqz
@@ -13101,11 +13425,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i32>#get:size
   i32.const 100
   i32.eq
@@ -13126,11 +13450,11 @@
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i32>#has
     i32.eqz
@@ -13143,20 +13467,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i32>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i32>#has
     i32.eqz
@@ -13176,11 +13500,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i32>#get:size
   i32.const 100
   i32.eq
@@ -13195,11 +13519,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i32>#values
   local.tee $vals
   i32.store $0 offset=8
@@ -13213,27 +13537,28 @@
   loop $for-loop|2
    local.get $index
    local.get $vals
-   local.set $8
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $10
    i32.store $0 offset=4
-   local.get $8
+   local.get $10
    call $~lib/array/Array<i32>#get:length
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $6
     call $~lib/array/Array<i32>#__get
     call $~lib/set/Set<i32>#has
     i32.eqz
@@ -13246,18 +13571,19 @@
      unreachable
     end
     local.get $valSet
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $7
     call $~lib/array/Array<i32>#__get
     call $~lib/set/Set<i32>#add
     drop
@@ -13269,18 +13595,18 @@
    end
   end
   local.get $valSet
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i32>#get:size
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i32>#get:size
   i32.eq
   i32.eqz
@@ -13293,19 +13619,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|6
+  local.set $k|8
   loop $for-loop|3
-   local.get $k|6
+   local.get $k|8
    i32.const 50
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -13317,21 +13643,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i32>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i32>#has
     i32.eqz
     i32.eqz
@@ -13343,19 +13669,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|6
+    local.get $k|8
     i32.const 1
     i32.add
-    local.set $k|6
+    local.set $k|8
     br $for-loop|3
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i32>#get:size
   i32.const 50
   i32.eq
@@ -13369,19 +13695,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|7
+  local.set $k|9
   loop $for-loop|4
-   local.get $k|7
+   local.get $k|9
    i32.const 50
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i32>#has
     i32.eqz
     i32.eqz
@@ -13394,21 +13720,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i32>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -13420,21 +13746,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i32>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i32>#has
     i32.eqz
     i32.eqz
@@ -13446,19 +13772,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|7
+    local.get $k|9
     i32.const 1
     i32.add
-    local.set $k|7
+    local.set $k|9
     br $for-loop|4
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i32>#get:size
   i32.const 50
   i32.eq
@@ -13472,18 +13798,18 @@
    unreachable
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i32>#clear
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i32>#get:size
   i32.const 0
   i32.eq
@@ -13726,6 +14052,8 @@
   (local $newBucketIndex i32)
   (local $newBucketPtrBase i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -13767,20 +14095,20 @@
   local.tee $newEntries
   i32.store $0 offset=4
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u32>#get:entries
   local.set $oldPtr
   local.get $oldPtr
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u32>#get:entriesOffset
   block $~lib/set/ENTRY_SIZE<u32>|inlined.2 (result i32)
    i32.const 8
@@ -13836,6 +14164,8 @@
       br $~lib/set/ENTRY_SIZE<u32>|inlined.3
      end
      i32.add
+     local.set $14
+     local.get $14
      local.set $newPtr
     end
     local.get $oldPtr
@@ -13844,64 +14174,66 @@
      br $~lib/set/ENTRY_SIZE<u32>|inlined.4
     end
     i32.add
+    local.set $15
+    local.get $15
     local.set $oldPtr
     br $while-continue|0
    end
   end
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBuckets
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u32>#set:buckets
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBucketsMask
   call $~lib/set/Set<u32>#set:bucketsMask
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntries
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u32>#set:entries
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntriesCapacity
   call $~lib/set/Set<u32>#set:entriesCapacity
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u32>#get:entriesCount
   call $~lib/set/Set<u32>#set:entriesOffset
   global.get $~lib/memory/__stack_pointer
@@ -13913,8 +14245,9 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
+  (local $5 i32)
   (local $bucketPtrBase i32)
-  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -13927,11 +14260,11 @@
   call $~lib/util/hash/HASH<u32>
   local.set $hashCode
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $hashCode
   call $~lib/set/Set<u32>#find
@@ -13940,40 +14273,40 @@
   i32.eqz
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u32>#get:entriesOffset
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u32>#get:entriesCapacity
    i32.eq
    if
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0
-    local.get $6
+    local.get $7
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<u32>#get:entriesCount
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<u32>#get:entriesCapacity
     i32.const 3
     i32.mul
@@ -13982,19 +14315,19 @@
     i32.lt_s
     if (result i32)
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<u32>#get:bucketsMask
     else
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<u32>#get:bucketsMask
      i32.const 1
      i32.shl
@@ -14004,28 +14337,30 @@
     call $~lib/set/Set<u32>#rehash
    end
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u32>#get:entries
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
-   local.get $this
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u32>#get:entriesOffset
    local.tee $4
    i32.const 1
    i32.add
+   local.set $5
+   local.get $this
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   local.get $7
+   i32.store $0
+   local.get $7
+   local.get $5
    call $~lib/set/Set<u32>#set:entriesOffset
    local.get $4
    block $~lib/set/ENTRY_SIZE<u32>|inlined.5 (result i32)
@@ -14041,35 +14376,35 @@
    i32.const 0
    drop
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u32>#get:entriesCount
    i32.const 1
    i32.add
    call $~lib/set/Set<u32>#set:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u32>#get:buckets
    local.get $hashCode
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u32>#get:bucketsMask
    i32.and
    i32.const 4
@@ -14085,12 +14420,12 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<u32>#get:size (param $this i32) (result i32)
@@ -14362,6 +14697,7 @@
   (local $entry i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -14371,19 +14707,19 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<u32>#get:entries
   local.set $start
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<u32>#get:entriesOffset
   local.set $size
   global.get $~lib/memory/__stack_pointer
@@ -14417,15 +14753,17 @@
     i32.eqz
     if
      local.get $values
-     local.set $8
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $9
      i32.store $0
-     local.get $8
+     local.get $9
      local.get $length
      local.tee $7
      i32.const 1
      i32.add
+     local.set $8
+     local.get $8
      local.set $length
      local.get $7
      local.get $entry
@@ -14440,20 +14778,20 @@
    end
   end
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   local.get $length
   call $~lib/array/Array<u32>#set:length
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   return
  )
  (func $~lib/array/Array<u32>#get:length (param $this i32) (result i32)
@@ -14535,10 +14873,11 @@
  )
  (func $~lib/set/Set<u32>#delete (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
+  (local $3 i32)
   (local $halfBucketsMask i32)
-  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -14548,11 +14887,11 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $key
   call $~lib/util/hash/HASH<u32>
@@ -14562,42 +14901,44 @@
   i32.eqz
   if
    i32.const 0
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    return
   end
-  local.get $entry
   local.get $entry
   call $~lib/set/SetEntry<u32>#get:taggedNext
   i32.const 1
   i32.or
+  local.set $3
+  local.get $entry
+  local.get $3
   call $~lib/set/SetEntry<u32>#set:taggedNext
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0 offset=4
-  local.get $6
+  local.get $7
   call $~lib/set/Set<u32>#get:entriesCount
   i32.const 1
   i32.sub
   call $~lib/set/Set<u32>#set:entriesCount
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   call $~lib/set/Set<u32>#get:bucketsMask
   i32.const 1
   i32.shr_u
@@ -14606,34 +14947,34 @@
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $4
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0
-  local.get $6
-  call $~lib/set/Set<u32>#get:entriesCount
   local.tee $5
-  local.get $4
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/set/Set<u32>#get:entriesCount
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
   if (result i32)
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u32>#get:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u32>#get:entriesCapacity
    i32.const 3
    i32.mul
@@ -14645,21 +14986,21 @@
   end
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $halfBucketsMask
    call $~lib/set/Set<u32>#rehash
   end
   i32.const 1
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<u32>#clear (param $this i32)
@@ -14755,9 +15096,11 @@
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $k|6 i32)
-  (local $k|7 i32)
-  (local $8 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $k|8 i32)
+  (local $k|9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -14780,11 +15123,11 @@
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u32>#has
     i32.eqz
@@ -14798,20 +15141,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u32>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u32>#has
     i32.eqz
@@ -14831,11 +15174,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u32>#get:size
   i32.const 100
   i32.eq
@@ -14856,11 +15199,11 @@
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u32>#has
     i32.eqz
@@ -14873,20 +15216,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u32>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u32>#has
     i32.eqz
@@ -14906,11 +15249,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u32>#get:size
   i32.const 100
   i32.eq
@@ -14925,11 +15268,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u32>#values
   local.tee $vals
   i32.store $0 offset=8
@@ -14943,27 +15286,28 @@
   loop $for-loop|2
    local.get $index
    local.get $vals
-   local.set $8
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $10
    i32.store $0 offset=4
-   local.get $8
+   local.get $10
    call $~lib/array/Array<u32>#get:length
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $6
     call $~lib/array/Array<u32>#__get
     call $~lib/set/Set<u32>#has
     i32.eqz
@@ -14976,18 +15320,19 @@
      unreachable
     end
     local.get $valSet
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $7
     call $~lib/array/Array<u32>#__get
     call $~lib/set/Set<u32>#add
     drop
@@ -14999,18 +15344,18 @@
    end
   end
   local.get $valSet
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u32>#get:size
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u32>#get:size
   i32.eq
   i32.eqz
@@ -15023,19 +15368,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|6
+  local.set $k|8
   loop $for-loop|3
-   local.get $k|6
+   local.get $k|8
    i32.const 50
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -15047,21 +15392,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u32>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u32>#has
     i32.eqz
     i32.eqz
@@ -15073,19 +15418,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|6
+    local.get $k|8
     i32.const 1
     i32.add
-    local.set $k|6
+    local.set $k|8
     br $for-loop|3
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u32>#get:size
   i32.const 50
   i32.eq
@@ -15099,19 +15444,19 @@
    unreachable
   end
   i32.const 0
-  local.set $k|7
+  local.set $k|9
   loop $for-loop|4
-   local.get $k|7
+   local.get $k|9
    i32.const 50
    i32.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u32>#has
     i32.eqz
     i32.eqz
@@ -15124,21 +15469,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u32>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -15150,21 +15495,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u32>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u32>#has
     i32.eqz
     i32.eqz
@@ -15176,19 +15521,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|7
+    local.get $k|9
     i32.const 1
     i32.add
-    local.set $k|7
+    local.set $k|9
     br $for-loop|4
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u32>#get:size
   i32.const 50
   i32.eq
@@ -15202,18 +15547,18 @@
    unreachable
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u32>#clear
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u32>#get:size
   i32.const 0
   i32.eq
@@ -15456,6 +15801,8 @@
   (local $newBucketIndex i32)
   (local $newBucketPtrBase i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -15497,20 +15844,20 @@
   local.tee $newEntries
   i32.store $0 offset=4
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i64>#get:entries
   local.set $oldPtr
   local.get $oldPtr
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i64>#get:entriesOffset
   block $~lib/set/ENTRY_SIZE<i64>|inlined.2 (result i32)
    i32.const 16
@@ -15566,6 +15913,8 @@
       br $~lib/set/ENTRY_SIZE<i64>|inlined.3
      end
      i32.add
+     local.set $14
+     local.get $14
      local.set $newPtr
     end
     local.get $oldPtr
@@ -15574,64 +15923,66 @@
      br $~lib/set/ENTRY_SIZE<i64>|inlined.4
     end
     i32.add
+    local.set $15
+    local.get $15
     local.set $oldPtr
     br $while-continue|0
    end
   end
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBuckets
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i64>#set:buckets
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBucketsMask
   call $~lib/set/Set<i64>#set:bucketsMask
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntries
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i64>#set:entries
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntriesCapacity
   call $~lib/set/Set<i64>#set:entriesCapacity
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<i64>#get:entriesCount
   call $~lib/set/Set<i64>#set:entriesOffset
   global.get $~lib/memory/__stack_pointer
@@ -15643,8 +15994,9 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
+  (local $5 i32)
   (local $bucketPtrBase i32)
-  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -15657,11 +16009,11 @@
   call $~lib/util/hash/HASH<i64>
   local.set $hashCode
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $hashCode
   call $~lib/set/Set<i64>#find
@@ -15670,40 +16022,40 @@
   i32.eqz
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i64>#get:entriesOffset
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i64>#get:entriesCapacity
    i32.eq
    if
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0
-    local.get $6
+    local.get $7
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<i64>#get:entriesCount
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<i64>#get:entriesCapacity
     i32.const 3
     i32.mul
@@ -15712,19 +16064,19 @@
     i32.lt_s
     if (result i32)
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<i64>#get:bucketsMask
     else
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<i64>#get:bucketsMask
      i32.const 1
      i32.shl
@@ -15734,28 +16086,30 @@
     call $~lib/set/Set<i64>#rehash
    end
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i64>#get:entries
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
-   local.get $this
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i64>#get:entriesOffset
    local.tee $4
    i32.const 1
    i32.add
+   local.set $5
+   local.get $this
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   local.get $7
+   i32.store $0
+   local.get $7
+   local.get $5
    call $~lib/set/Set<i64>#set:entriesOffset
    local.get $4
    block $~lib/set/ENTRY_SIZE<i64>|inlined.5 (result i32)
@@ -15771,35 +16125,35 @@
    i32.const 0
    drop
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i64>#get:entriesCount
    i32.const 1
    i32.add
    call $~lib/set/Set<i64>#set:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i64>#get:buckets
    local.get $hashCode
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i64>#get:bucketsMask
    i32.and
    i32.const 4
@@ -15815,12 +16169,12 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<i64>#get:size (param $this i32) (result i32)
@@ -16092,6 +16446,7 @@
   (local $entry i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -16101,19 +16456,19 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<i64>#get:entries
   local.set $start
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<i64>#get:entriesOffset
   local.set $size
   global.get $~lib/memory/__stack_pointer
@@ -16147,15 +16502,17 @@
     i32.eqz
     if
      local.get $values
-     local.set $8
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $9
      i32.store $0
-     local.get $8
+     local.get $9
      local.get $length
      local.tee $7
      i32.const 1
      i32.add
+     local.set $8
+     local.get $8
      local.set $length
      local.get $7
      local.get $entry
@@ -16170,20 +16527,20 @@
    end
   end
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   local.get $length
   call $~lib/array/Array<i64>#set:length
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   return
  )
  (func $~lib/array/Array<i64>#get:length (param $this i32) (result i32)
@@ -16266,10 +16623,11 @@
  )
  (func $~lib/set/Set<i64>#delete (param $this i32) (param $key i64) (result i32)
   (local $entry i32)
+  (local $3 i32)
   (local $halfBucketsMask i32)
-  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -16279,11 +16637,11 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $key
   call $~lib/util/hash/HASH<i64>
@@ -16293,42 +16651,44 @@
   i32.eqz
   if
    i32.const 0
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    return
   end
-  local.get $entry
   local.get $entry
   call $~lib/set/SetEntry<i64>#get:taggedNext
   i32.const 1
   i32.or
+  local.set $3
+  local.get $entry
+  local.get $3
   call $~lib/set/SetEntry<i64>#set:taggedNext
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0 offset=4
-  local.get $6
+  local.get $7
   call $~lib/set/Set<i64>#get:entriesCount
   i32.const 1
   i32.sub
   call $~lib/set/Set<i64>#set:entriesCount
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   call $~lib/set/Set<i64>#get:bucketsMask
   i32.const 1
   i32.shr_u
@@ -16337,34 +16697,34 @@
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $4
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0
-  local.get $6
-  call $~lib/set/Set<i64>#get:entriesCount
   local.tee $5
-  local.get $4
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/set/Set<i64>#get:entriesCount
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
   if (result i32)
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i64>#get:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<i64>#get:entriesCapacity
    i32.const 3
    i32.mul
@@ -16376,21 +16736,21 @@
   end
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $halfBucketsMask
    call $~lib/set/Set<i64>#rehash
   end
   i32.const 1
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<i64>#clear (param $this i32)
@@ -16486,9 +16846,11 @@
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $k|6 i64)
-  (local $k|7 i64)
-  (local $8 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $k|8 i64)
+  (local $k|9 i64)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -16511,11 +16873,11 @@
    i64.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i64>#has
     i32.eqz
@@ -16529,20 +16891,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i64>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<i64>#has
     i32.eqz
@@ -16562,11 +16924,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i64>#get:size
   i32.const 100
   i32.eq
@@ -16587,11 +16949,11 @@
    i64.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i64>#has
     i32.eqz
@@ -16604,20 +16966,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i64>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<i64>#has
     i32.eqz
@@ -16637,11 +16999,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i64>#get:size
   i32.const 100
   i32.eq
@@ -16656,11 +17018,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i64>#values
   local.tee $vals
   i32.store $0 offset=8
@@ -16674,27 +17036,28 @@
   loop $for-loop|2
    local.get $index
    local.get $vals
-   local.set $8
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $10
    i32.store $0 offset=4
-   local.get $8
+   local.get $10
    call $~lib/array/Array<i64>#get:length
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $6
     call $~lib/array/Array<i64>#__get
     call $~lib/set/Set<i64>#has
     i32.eqz
@@ -16707,18 +17070,19 @@
      unreachable
     end
     local.get $valSet
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $7
     call $~lib/array/Array<i64>#__get
     call $~lib/set/Set<i64>#add
     drop
@@ -16730,18 +17094,18 @@
    end
   end
   local.get $valSet
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i64>#get:size
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i64>#get:size
   i32.eq
   i32.eqz
@@ -16754,19 +17118,19 @@
    unreachable
   end
   i64.const 0
-  local.set $k|6
+  local.set $k|8
   loop $for-loop|3
-   local.get $k|6
+   local.get $k|8
    i64.const 50
    i64.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -16778,21 +17142,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i64>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<i64>#has
     i32.eqz
     i32.eqz
@@ -16804,19 +17168,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|6
+    local.get $k|8
     i64.const 1
     i64.add
-    local.set $k|6
+    local.set $k|8
     br $for-loop|3
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i64>#get:size
   i32.const 50
   i32.eq
@@ -16830,19 +17194,19 @@
    unreachable
   end
   i64.const 0
-  local.set $k|7
+  local.set $k|9
   loop $for-loop|4
-   local.get $k|7
+   local.get $k|9
    i64.const 50
    i64.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i64>#has
     i32.eqz
     i32.eqz
@@ -16855,21 +17219,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i64>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -16881,21 +17245,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i64>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<i64>#has
     i32.eqz
     i32.eqz
@@ -16907,19 +17271,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|7
+    local.get $k|9
     i64.const 1
     i64.add
-    local.set $k|7
+    local.set $k|9
     br $for-loop|4
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i64>#get:size
   i32.const 50
   i32.eq
@@ -16933,18 +17297,18 @@
    unreachable
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i64>#clear
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<i64>#get:size
   i32.const 0
   i32.eq
@@ -17187,6 +17551,8 @@
   (local $newBucketIndex i32)
   (local $newBucketPtrBase i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -17228,20 +17594,20 @@
   local.tee $newEntries
   i32.store $0 offset=4
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u64>#get:entries
   local.set $oldPtr
   local.get $oldPtr
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u64>#get:entriesOffset
   block $~lib/set/ENTRY_SIZE<u64>|inlined.2 (result i32)
    i32.const 16
@@ -17297,6 +17663,8 @@
       br $~lib/set/ENTRY_SIZE<u64>|inlined.3
      end
      i32.add
+     local.set $14
+     local.get $14
      local.set $newPtr
     end
     local.get $oldPtr
@@ -17305,64 +17673,66 @@
      br $~lib/set/ENTRY_SIZE<u64>|inlined.4
     end
     i32.add
+    local.set $15
+    local.get $15
     local.set $oldPtr
     br $while-continue|0
    end
   end
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBuckets
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u64>#set:buckets
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBucketsMask
   call $~lib/set/Set<u64>#set:bucketsMask
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntries
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u64>#set:entries
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntriesCapacity
   call $~lib/set/Set<u64>#set:entriesCapacity
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<u64>#get:entriesCount
   call $~lib/set/Set<u64>#set:entriesOffset
   global.get $~lib/memory/__stack_pointer
@@ -17374,8 +17744,9 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
+  (local $5 i32)
   (local $bucketPtrBase i32)
-  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -17388,11 +17759,11 @@
   call $~lib/util/hash/HASH<u64>
   local.set $hashCode
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $hashCode
   call $~lib/set/Set<u64>#find
@@ -17401,40 +17772,40 @@
   i32.eqz
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u64>#get:entriesOffset
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u64>#get:entriesCapacity
    i32.eq
    if
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0
-    local.get $6
+    local.get $7
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<u64>#get:entriesCount
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<u64>#get:entriesCapacity
     i32.const 3
     i32.mul
@@ -17443,19 +17814,19 @@
     i32.lt_s
     if (result i32)
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<u64>#get:bucketsMask
     else
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<u64>#get:bucketsMask
      i32.const 1
      i32.shl
@@ -17465,28 +17836,30 @@
     call $~lib/set/Set<u64>#rehash
    end
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u64>#get:entries
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
-   local.get $this
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u64>#get:entriesOffset
    local.tee $4
    i32.const 1
    i32.add
+   local.set $5
+   local.get $this
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   local.get $7
+   i32.store $0
+   local.get $7
+   local.get $5
    call $~lib/set/Set<u64>#set:entriesOffset
    local.get $4
    block $~lib/set/ENTRY_SIZE<u64>|inlined.5 (result i32)
@@ -17502,35 +17875,35 @@
    i32.const 0
    drop
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u64>#get:entriesCount
    i32.const 1
    i32.add
    call $~lib/set/Set<u64>#set:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u64>#get:buckets
    local.get $hashCode
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u64>#get:bucketsMask
    i32.and
    i32.const 4
@@ -17546,12 +17919,12 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<u64>#get:size (param $this i32) (result i32)
@@ -17823,6 +18196,7 @@
   (local $entry i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -17832,19 +18206,19 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<u64>#get:entries
   local.set $start
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<u64>#get:entriesOffset
   local.set $size
   global.get $~lib/memory/__stack_pointer
@@ -17878,15 +18252,17 @@
     i32.eqz
     if
      local.get $values
-     local.set $8
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $9
      i32.store $0
-     local.get $8
+     local.get $9
      local.get $length
      local.tee $7
      i32.const 1
      i32.add
+     local.set $8
+     local.get $8
      local.set $length
      local.get $7
      local.get $entry
@@ -17901,20 +18277,20 @@
    end
   end
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   local.get $length
   call $~lib/array/Array<u64>#set:length
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   return
  )
  (func $~lib/array/Array<u64>#get:length (param $this i32) (result i32)
@@ -17997,10 +18373,11 @@
  )
  (func $~lib/set/Set<u64>#delete (param $this i32) (param $key i64) (result i32)
   (local $entry i32)
+  (local $3 i32)
   (local $halfBucketsMask i32)
-  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -18010,11 +18387,11 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $key
   call $~lib/util/hash/HASH<u64>
@@ -18024,42 +18401,44 @@
   i32.eqz
   if
    i32.const 0
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    return
   end
-  local.get $entry
   local.get $entry
   call $~lib/set/SetEntry<u64>#get:taggedNext
   i32.const 1
   i32.or
+  local.set $3
+  local.get $entry
+  local.get $3
   call $~lib/set/SetEntry<u64>#set:taggedNext
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0 offset=4
-  local.get $6
+  local.get $7
   call $~lib/set/Set<u64>#get:entriesCount
   i32.const 1
   i32.sub
   call $~lib/set/Set<u64>#set:entriesCount
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   call $~lib/set/Set<u64>#get:bucketsMask
   i32.const 1
   i32.shr_u
@@ -18068,34 +18447,34 @@
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $4
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0
-  local.get $6
-  call $~lib/set/Set<u64>#get:entriesCount
   local.tee $5
-  local.get $4
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/set/Set<u64>#get:entriesCount
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
   if (result i32)
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u64>#get:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<u64>#get:entriesCapacity
    i32.const 3
    i32.mul
@@ -18107,21 +18486,21 @@
   end
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $halfBucketsMask
    call $~lib/set/Set<u64>#rehash
   end
   i32.const 1
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<u64>#clear (param $this i32)
@@ -18217,9 +18596,11 @@
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $k|6 i64)
-  (local $k|7 i64)
-  (local $8 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $k|8 i64)
+  (local $k|9 i64)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -18242,11 +18623,11 @@
    i64.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u64>#has
     i32.eqz
@@ -18260,20 +18641,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u64>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<u64>#has
     i32.eqz
@@ -18293,11 +18674,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u64>#get:size
   i32.const 100
   i32.eq
@@ -18318,11 +18699,11 @@
    i64.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u64>#has
     i32.eqz
@@ -18335,20 +18716,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u64>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<u64>#has
     i32.eqz
@@ -18368,11 +18749,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u64>#get:size
   i32.const 100
   i32.eq
@@ -18387,11 +18768,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u64>#values
   local.tee $vals
   i32.store $0 offset=8
@@ -18405,27 +18786,28 @@
   loop $for-loop|2
    local.get $index
    local.get $vals
-   local.set $8
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $10
    i32.store $0 offset=4
-   local.get $8
+   local.get $10
    call $~lib/array/Array<u64>#get:length
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $6
     call $~lib/array/Array<u64>#__get
     call $~lib/set/Set<u64>#has
     i32.eqz
@@ -18438,18 +18820,19 @@
      unreachable
     end
     local.get $valSet
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $7
     call $~lib/array/Array<u64>#__get
     call $~lib/set/Set<u64>#add
     drop
@@ -18461,18 +18844,18 @@
    end
   end
   local.get $valSet
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u64>#get:size
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u64>#get:size
   i32.eq
   i32.eqz
@@ -18485,19 +18868,19 @@
    unreachable
   end
   i64.const 0
-  local.set $k|6
+  local.set $k|8
   loop $for-loop|3
-   local.get $k|6
+   local.get $k|8
    i64.const 50
    i64.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -18509,21 +18892,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u64>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<u64>#has
     i32.eqz
     i32.eqz
@@ -18535,19 +18918,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|6
+    local.get $k|8
     i64.const 1
     i64.add
-    local.set $k|6
+    local.set $k|8
     br $for-loop|3
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u64>#get:size
   i32.const 50
   i32.eq
@@ -18561,19 +18944,19 @@
    unreachable
   end
   i64.const 0
-  local.set $k|7
+  local.set $k|9
   loop $for-loop|4
-   local.get $k|7
+   local.get $k|9
    i64.const 50
    i64.lt_u
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u64>#has
     i32.eqz
     i32.eqz
@@ -18586,21 +18969,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u64>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -18612,21 +18995,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u64>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<u64>#has
     i32.eqz
     i32.eqz
@@ -18638,19 +19021,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|7
+    local.get $k|9
     i64.const 1
     i64.add
-    local.set $k|7
+    local.set $k|9
     br $for-loop|4
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u64>#get:size
   i32.const 50
   i32.eq
@@ -18664,18 +19047,18 @@
    unreachable
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u64>#clear
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<u64>#get:size
   i32.const 0
   i32.eq
@@ -18918,6 +19301,8 @@
   (local $newBucketIndex i32)
   (local $newBucketPtrBase i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -18959,20 +19344,20 @@
   local.tee $newEntries
   i32.store $0 offset=4
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<f32>#get:entries
   local.set $oldPtr
   local.get $oldPtr
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<f32>#get:entriesOffset
   block $~lib/set/ENTRY_SIZE<f32>|inlined.2 (result i32)
    i32.const 8
@@ -19028,6 +19413,8 @@
       br $~lib/set/ENTRY_SIZE<f32>|inlined.3
      end
      i32.add
+     local.set $14
+     local.get $14
      local.set $newPtr
     end
     local.get $oldPtr
@@ -19036,64 +19423,66 @@
      br $~lib/set/ENTRY_SIZE<f32>|inlined.4
     end
     i32.add
+    local.set $15
+    local.get $15
     local.set $oldPtr
     br $while-continue|0
    end
   end
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBuckets
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<f32>#set:buckets
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBucketsMask
   call $~lib/set/Set<f32>#set:bucketsMask
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntries
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<f32>#set:entries
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntriesCapacity
   call $~lib/set/Set<f32>#set:entriesCapacity
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<f32>#get:entriesCount
   call $~lib/set/Set<f32>#set:entriesOffset
   global.get $~lib/memory/__stack_pointer
@@ -19105,8 +19494,9 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
+  (local $5 i32)
   (local $bucketPtrBase i32)
-  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -19119,11 +19509,11 @@
   call $~lib/util/hash/HASH<f32>
   local.set $hashCode
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $hashCode
   call $~lib/set/Set<f32>#find
@@ -19132,40 +19522,40 @@
   i32.eqz
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f32>#get:entriesOffset
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f32>#get:entriesCapacity
    i32.eq
    if
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0
-    local.get $6
+    local.get $7
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<f32>#get:entriesCount
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<f32>#get:entriesCapacity
     i32.const 3
     i32.mul
@@ -19174,19 +19564,19 @@
     i32.lt_s
     if (result i32)
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<f32>#get:bucketsMask
     else
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<f32>#get:bucketsMask
      i32.const 1
      i32.shl
@@ -19196,28 +19586,30 @@
     call $~lib/set/Set<f32>#rehash
    end
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f32>#get:entries
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
-   local.get $this
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f32>#get:entriesOffset
    local.tee $4
    i32.const 1
    i32.add
+   local.set $5
+   local.get $this
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   local.get $7
+   i32.store $0
+   local.get $7
+   local.get $5
    call $~lib/set/Set<f32>#set:entriesOffset
    local.get $4
    block $~lib/set/ENTRY_SIZE<f32>|inlined.5 (result i32)
@@ -19233,35 +19625,35 @@
    i32.const 0
    drop
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f32>#get:entriesCount
    i32.const 1
    i32.add
    call $~lib/set/Set<f32>#set:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f32>#get:buckets
    local.get $hashCode
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f32>#get:bucketsMask
    i32.and
    i32.const 4
@@ -19277,12 +19669,12 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<f32>#get:size (param $this i32) (result i32)
@@ -19554,6 +19946,7 @@
   (local $entry i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -19563,19 +19956,19 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<f32>#get:entries
   local.set $start
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<f32>#get:entriesOffset
   local.set $size
   global.get $~lib/memory/__stack_pointer
@@ -19609,15 +20002,17 @@
     i32.eqz
     if
      local.get $values
-     local.set $8
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $9
      i32.store $0
-     local.get $8
+     local.get $9
      local.get $length
      local.tee $7
      i32.const 1
      i32.add
+     local.set $8
+     local.get $8
      local.set $length
      local.get $7
      local.get $entry
@@ -19632,20 +20027,20 @@
    end
   end
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   local.get $length
   call $~lib/array/Array<f32>#set:length
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   return
  )
  (func $~lib/array/Array<f32>#get:length (param $this i32) (result i32)
@@ -19728,10 +20123,11 @@
  )
  (func $~lib/set/Set<f32>#delete (param $this i32) (param $key f32) (result i32)
   (local $entry i32)
+  (local $3 i32)
   (local $halfBucketsMask i32)
-  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -19741,11 +20137,11 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $key
   call $~lib/util/hash/HASH<f32>
@@ -19755,42 +20151,44 @@
   i32.eqz
   if
    i32.const 0
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    return
   end
-  local.get $entry
   local.get $entry
   call $~lib/set/SetEntry<f32>#get:taggedNext
   i32.const 1
   i32.or
+  local.set $3
+  local.get $entry
+  local.get $3
   call $~lib/set/SetEntry<f32>#set:taggedNext
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0 offset=4
-  local.get $6
+  local.get $7
   call $~lib/set/Set<f32>#get:entriesCount
   i32.const 1
   i32.sub
   call $~lib/set/Set<f32>#set:entriesCount
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   call $~lib/set/Set<f32>#get:bucketsMask
   i32.const 1
   i32.shr_u
@@ -19799,34 +20197,34 @@
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $4
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0
-  local.get $6
-  call $~lib/set/Set<f32>#get:entriesCount
   local.tee $5
-  local.get $4
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/set/Set<f32>#get:entriesCount
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
   if (result i32)
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f32>#get:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f32>#get:entriesCapacity
    i32.const 3
    i32.mul
@@ -19838,21 +20236,21 @@
   end
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $halfBucketsMask
    call $~lib/set/Set<f32>#rehash
   end
   i32.const 1
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<f32>#clear (param $this i32)
@@ -19948,9 +20346,11 @@
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $k|6 f32)
-  (local $k|7 f32)
-  (local $8 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $k|8 f32)
+  (local $k|9 f32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -19973,11 +20373,11 @@
    f32.lt
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<f32>#has
     i32.eqz
@@ -19991,20 +20391,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<f32>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<f32>#has
     i32.eqz
@@ -20024,11 +20424,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f32>#get:size
   i32.const 100
   i32.eq
@@ -20049,11 +20449,11 @@
    f32.lt
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<f32>#has
     i32.eqz
@@ -20066,20 +20466,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<f32>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<f32>#has
     i32.eqz
@@ -20099,11 +20499,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f32>#get:size
   i32.const 100
   i32.eq
@@ -20118,11 +20518,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f32>#values
   local.tee $vals
   i32.store $0 offset=8
@@ -20136,27 +20536,28 @@
   loop $for-loop|2
    local.get $index
    local.get $vals
-   local.set $8
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $10
    i32.store $0 offset=4
-   local.get $8
+   local.get $10
    call $~lib/array/Array<f32>#get:length
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $6
     call $~lib/array/Array<f32>#__get
     call $~lib/set/Set<f32>#has
     i32.eqz
@@ -20169,18 +20570,19 @@
      unreachable
     end
     local.get $valSet
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $7
     call $~lib/array/Array<f32>#__get
     call $~lib/set/Set<f32>#add
     drop
@@ -20192,18 +20594,18 @@
    end
   end
   local.get $valSet
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f32>#get:size
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f32>#get:size
   i32.eq
   i32.eqz
@@ -20216,19 +20618,19 @@
    unreachable
   end
   f32.const 0
-  local.set $k|6
+  local.set $k|8
   loop $for-loop|3
-   local.get $k|6
+   local.get $k|8
    f32.const 50
    f32.lt
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -20240,21 +20642,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<f32>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<f32>#has
     i32.eqz
     i32.eqz
@@ -20266,19 +20668,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|6
+    local.get $k|8
     f32.const 1
     f32.add
-    local.set $k|6
+    local.set $k|8
     br $for-loop|3
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f32>#get:size
   i32.const 50
   i32.eq
@@ -20292,19 +20694,19 @@
    unreachable
   end
   f32.const 0
-  local.set $k|7
+  local.set $k|9
   loop $for-loop|4
-   local.get $k|7
+   local.get $k|9
    f32.const 50
    f32.lt
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<f32>#has
     i32.eqz
     i32.eqz
@@ -20317,21 +20719,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<f32>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -20343,21 +20745,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<f32>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<f32>#has
     i32.eqz
     i32.eqz
@@ -20369,19 +20771,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|7
+    local.get $k|9
     f32.const 1
     f32.add
-    local.set $k|7
+    local.set $k|9
     br $for-loop|4
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f32>#get:size
   i32.const 50
   i32.eq
@@ -20395,18 +20797,18 @@
    unreachable
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f32>#clear
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f32>#get:size
   i32.const 0
   i32.eq
@@ -20649,6 +21051,8 @@
   (local $newBucketIndex i32)
   (local $newBucketPtrBase i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -20690,20 +21094,20 @@
   local.tee $newEntries
   i32.store $0 offset=4
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<f64>#get:entries
   local.set $oldPtr
   local.get $oldPtr
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   call $~lib/set/Set<f64>#get:entriesOffset
   block $~lib/set/ENTRY_SIZE<f64>|inlined.2 (result i32)
    i32.const 16
@@ -20759,6 +21163,8 @@
       br $~lib/set/ENTRY_SIZE<f64>|inlined.3
      end
      i32.add
+     local.set $14
+     local.get $14
      local.set $newPtr
     end
     local.get $oldPtr
@@ -20767,64 +21173,66 @@
      br $~lib/set/ENTRY_SIZE<f64>|inlined.4
     end
     i32.add
+    local.set $15
+    local.get $15
     local.set $oldPtr
     br $while-continue|0
    end
   end
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBuckets
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<f64>#set:buckets
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newBucketsMask
   call $~lib/set/Set<f64>#set:bucketsMask
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntries
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<f64>#set:entries
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $newEntriesCapacity
   call $~lib/set/Set<f64>#set:entriesCapacity
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=8
-  local.get $14
+  local.get $16
   local.get $this
-  local.set $14
+  local.set $16
   global.get $~lib/memory/__stack_pointer
-  local.get $14
+  local.get $16
   i32.store $0 offset=12
-  local.get $14
+  local.get $16
   call $~lib/set/Set<f64>#get:entriesCount
   call $~lib/set/Set<f64>#set:entriesOffset
   global.get $~lib/memory/__stack_pointer
@@ -20836,8 +21244,9 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $4 i32)
+  (local $5 i32)
   (local $bucketPtrBase i32)
-  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -20850,11 +21259,11 @@
   call $~lib/util/hash/HASH<f64>
   local.set $hashCode
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $hashCode
   call $~lib/set/Set<f64>#find
@@ -20863,40 +21272,40 @@
   i32.eqz
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f64>#get:entriesOffset
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f64>#get:entriesCapacity
    i32.eq
    if
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0
-    local.get $6
+    local.get $7
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<f64>#get:entriesCount
     local.get $this
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store $0 offset=4
-    local.get $6
+    local.get $7
     call $~lib/set/Set<f64>#get:entriesCapacity
     i32.const 3
     i32.mul
@@ -20905,19 +21314,19 @@
     i32.lt_s
     if (result i32)
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<f64>#get:bucketsMask
     else
      local.get $this
-     local.set $6
+     local.set $7
      global.get $~lib/memory/__stack_pointer
-     local.get $6
+     local.get $7
      i32.store $0 offset=4
-     local.get $6
+     local.get $7
      call $~lib/set/Set<f64>#get:bucketsMask
      i32.const 1
      i32.shl
@@ -20927,28 +21336,30 @@
     call $~lib/set/Set<f64>#rehash
    end
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f64>#get:entries
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
-   local.get $this
-   local.set $6
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f64>#get:entriesOffset
    local.tee $4
    i32.const 1
    i32.add
+   local.set $5
+   local.get $this
+   local.set $7
+   global.get $~lib/memory/__stack_pointer
+   local.get $7
+   i32.store $0
+   local.get $7
+   local.get $5
    call $~lib/set/Set<f64>#set:entriesOffset
    local.get $4
    block $~lib/set/ENTRY_SIZE<f64>|inlined.5 (result i32)
@@ -20964,35 +21375,35 @@
    i32.const 0
    drop
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0 offset=4
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f64>#get:entriesCount
    i32.const 1
    i32.add
    call $~lib/set/Set<f64>#set:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f64>#get:buckets
    local.get $hashCode
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f64>#get:bucketsMask
    i32.and
    i32.const 4
@@ -21008,12 +21419,12 @@
    i32.store $0
   end
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<f64>#get:size (param $this i32) (result i32)
@@ -21285,6 +21696,7 @@
   (local $entry i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -21294,19 +21706,19 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<f64>#get:entries
   local.set $start
   local.get $this
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   call $~lib/set/Set<f64>#get:entriesOffset
   local.set $size
   global.get $~lib/memory/__stack_pointer
@@ -21340,15 +21752,17 @@
     i32.eqz
     if
      local.get $values
-     local.set $8
+     local.set $9
      global.get $~lib/memory/__stack_pointer
-     local.get $8
+     local.get $9
      i32.store $0
-     local.get $8
+     local.get $9
      local.get $length
      local.tee $7
      i32.const 1
      i32.add
+     local.set $8
+     local.get $8
      local.set $length
      local.get $7
      local.get $entry
@@ -21363,20 +21777,20 @@
    end
   end
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   i32.store $0
-  local.get $8
+  local.get $9
   local.get $length
   call $~lib/array/Array<f64>#set:length
   local.get $values
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $9
   return
  )
  (func $~lib/array/Array<f64>#get:length (param $this i32) (result i32)
@@ -21459,10 +21873,11 @@
  )
  (func $~lib/set/Set<f64>#delete (param $this i32) (param $key f64) (result i32)
   (local $entry i32)
+  (local $3 i32)
   (local $halfBucketsMask i32)
-  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -21472,11 +21887,11 @@
   i64.const 0
   i64.store $0
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $key
   local.get $key
   call $~lib/util/hash/HASH<f64>
@@ -21486,42 +21901,44 @@
   i32.eqz
   if
    i32.const 0
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    return
   end
-  local.get $entry
   local.get $entry
   call $~lib/set/SetEntry<f64>#get:taggedNext
   i32.const 1
   i32.or
+  local.set $3
+  local.get $entry
+  local.get $3
   call $~lib/set/SetEntry<f64>#set:taggedNext
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0 offset=4
-  local.get $6
+  local.get $7
   call $~lib/set/Set<f64>#get:entriesCount
   i32.const 1
   i32.sub
   call $~lib/set/Set<f64>#set:entriesCount
   local.get $this
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.store $0
-  local.get $6
+  local.get $7
   call $~lib/set/Set<f64>#get:bucketsMask
   i32.const 1
   i32.shr_u
@@ -21530,34 +21947,34 @@
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $4
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store $0
-  local.get $6
-  call $~lib/set/Set<f64>#get:entriesCount
   local.tee $5
-  local.get $4
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0
+  local.get $7
+  call $~lib/set/Set<f64>#get:entriesCount
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
   if (result i32)
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f64>#get:entriesCount
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    call $~lib/set/Set<f64>#get:entriesCapacity
    i32.const 3
    i32.mul
@@ -21569,21 +21986,21 @@
   end
   if
    local.get $this
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store $0
-   local.get $6
+   local.get $7
    local.get $halfBucketsMask
    call $~lib/set/Set<f64>#rehash
   end
   i32.const 1
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $~lib/set/Set<f64>#clear (param $this i32)
@@ -21679,9 +22096,11 @@
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $k|6 f64)
-  (local $k|7 f64)
-  (local $8 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $k|8 f64)
+  (local $k|9 f64)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -21704,11 +22123,11 @@
    f64.lt
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<f64>#has
     i32.eqz
@@ -21722,20 +22141,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<f64>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k
     call $~lib/set/Set<f64>#has
     i32.eqz
@@ -21755,11 +22174,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f64>#get:size
   i32.const 100
   i32.eq
@@ -21780,11 +22199,11 @@
    f64.lt
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<f64>#has
     i32.eqz
@@ -21797,20 +22216,20 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<f64>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $k|2
     call $~lib/set/Set<f64>#has
     i32.eqz
@@ -21830,11 +22249,11 @@
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f64>#get:size
   i32.const 100
   i32.eq
@@ -21849,11 +22268,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f64>#values
   local.tee $vals
   i32.store $0 offset=8
@@ -21867,27 +22286,28 @@
   loop $for-loop|2
    local.get $index
    local.get $vals
-   local.set $8
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $10
    i32.store $0 offset=4
-   local.get $8
+   local.get $10
    call $~lib/array/Array<f64>#get:length
    i32.lt_s
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $6
     call $~lib/array/Array<f64>#__get
     call $~lib/set/Set<f64>#has
     i32.eqz
@@ -21900,18 +22320,19 @@
      unreachable
     end
     local.get $valSet
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
+    local.get $10
     local.get $vals
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=16
-    local.get $8
+    local.get $10
     local.get $index
+    local.tee $7
     call $~lib/array/Array<f64>#__get
     call $~lib/set/Set<f64>#add
     drop
@@ -21923,18 +22344,18 @@
    end
   end
   local.get $valSet
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f64>#get:size
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f64>#get:size
   i32.eq
   i32.eqz
@@ -21947,19 +22368,19 @@
    unreachable
   end
   f64.const 0
-  local.set $k|6
+  local.set $k|8
   loop $for-loop|3
-   local.get $k|6
+   local.get $k|8
    f64.const 50
    f64.lt
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -21971,21 +22392,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<f64>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|6
+    local.get $10
+    local.get $k|8
     call $~lib/set/Set<f64>#has
     i32.eqz
     i32.eqz
@@ -21997,19 +22418,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|6
+    local.get $k|8
     f64.const 1
     f64.add
-    local.set $k|6
+    local.set $k|8
     br $for-loop|3
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f64>#get:size
   i32.const 50
   i32.eq
@@ -22023,19 +22444,19 @@
    unreachable
   end
   f64.const 0
-  local.set $k|7
+  local.set $k|9
   loop $for-loop|4
-   local.get $k|7
+   local.get $k|9
    f64.const 50
    f64.lt
    if
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<f64>#has
     i32.eqz
     i32.eqz
@@ -22048,21 +22469,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<f64>#add
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -22074,21 +22495,21 @@
      unreachable
     end
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<f64>#delete
     drop
     local.get $set
-    local.set $8
+    local.set $10
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $10
     i32.store $0 offset=4
-    local.get $8
-    local.get $k|7
+    local.get $10
+    local.get $k|9
     call $~lib/set/Set<f64>#has
     i32.eqz
     i32.eqz
@@ -22100,19 +22521,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|7
+    local.get $k|9
     f64.const 1
     f64.add
-    local.set $k|7
+    local.set $k|9
     br $for-loop|4
    end
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f64>#get:size
   i32.const 50
   i32.eq
@@ -22126,18 +22547,18 @@
    unreachable
   end
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f64>#clear
   local.get $set
-  local.set $8
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
   i32.store $0 offset=4
-  local.get $8
+  local.get $10
   call $~lib/set/Set<f64>#get:size
   i32.const 0
   i32.eq

@@ -17,6 +17,8 @@
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $start:mutable-globals
+  (local $0 i32)
+  (local $1 i32)
   global.get $mutable-globals/external
   i32.const 123
   i32.eq
@@ -44,10 +46,14 @@
   global.get $mutable-globals/external
   i32.const 10
   i32.add
+  local.set $0
+  local.get $0
   global.set $mutable-globals/external
   global.get $mutable-globals/internal
   i32.const 10
   i32.add
+  local.set $1
+  local.get $1
   global.set $mutable-globals/internal
   global.get $mutable-globals/external
   i32.const 133

@@ -1292,6 +1292,7 @@ export class ConstructorExpression extends IdentifierExpression {
 
 /** Represents an element access expression, e.g., array access. */
 export class ElementAccessExpression extends Expression {
+  private elementExpressionCompiledCache:Map<string, Expression>;
   constructor(
     /** Expression being accessed. */
     public expression: Expression,
@@ -1301,6 +1302,19 @@ export class ElementAccessExpression extends Expression {
     range: Range
   ) {
     super(NodeKind.ElementAccess, range);
+    this.elementExpressionCompiledCache = new Map<string, Expression>();
+  }
+
+  public addCached(key: string, value:Expression): void {
+    this.elementExpressionCompiledCache.set(key, value);
+  }
+
+  public getElementExpression(key: string): Expression {
+    if(this.elementExpressionCompiledCache.has(key)){
+      return this.elementExpressionCompiledCache.get(key) as Expression;
+    }else{
+      return this.elementExpression;
+    }
   }
 }
 

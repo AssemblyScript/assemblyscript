@@ -3766,6 +3766,8 @@ export class Function extends TypedElement {
   memorySegment: MemorySegment | null = null;
   /** Original function, if a stub. Otherwise `this`. */
   original!: Function;
+  /** force the function to be compiled as no inline */
+  noInline: bool = false;
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
@@ -3948,6 +3950,14 @@ export class Function extends TypedElement {
         module.setLocalName(ref, i, localName);
       }
     }
+  }
+
+  setNoInline(): void {
+    this.noInline = true;
+  }
+
+  canInline(): bool {
+    return this.hasDecorator(DecoratorFlags.Inline) && (!this.noInline);
   }
 }
 

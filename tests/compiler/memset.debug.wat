@@ -16,8 +16,15 @@
  (func $memset/memset (param $dest i32) (param $c i32) (param $n i32) (result i32)
   (local $ret i32)
   (local $k i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   (local $c32 i32)
+  (local $9 i32)
+  (local $10 i32)
   (local $c64 i64)
+  (local $12 i32)
+  (local $13 i32)
   local.get $dest
   local.set $ret
   local.get $n
@@ -102,14 +109,20 @@
   local.get $dest
   local.get $k
   i32.add
+  local.set $5
+  local.get $5
   local.set $dest
   local.get $n
   local.get $k
   i32.sub
+  local.set $6
+  local.get $6
   local.set $n
   local.get $n
   i32.const -4
   i32.and
+  local.set $7
+  local.get $7
   local.set $n
   i32.const -1
   i32.const 255
@@ -224,10 +237,14 @@
   local.get $dest
   local.get $k
   i32.add
+  local.set $9
+  local.get $9
   local.set $dest
   local.get $n
   local.get $k
   i32.sub
+  local.set $10
+  local.get $10
   local.set $n
   local.get $c32
   i64.extend_i32_u
@@ -263,10 +280,14 @@
     local.get $n
     i32.const 32
     i32.sub
+    local.set $12
+    local.get $12
     local.set $n
     local.get $dest
     i32.const 32
     i32.add
+    local.set $13
+    local.get $13
     local.set $dest
     br $while-continue|0
    end
