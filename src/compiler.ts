@@ -5811,14 +5811,14 @@ export class Compiler extends DiagnosticEmitter {
           assert(getterInstance.signature.thisType == thisType);
           let returnType = getterInstance.signature.returnType;
           let returnTypeRef = returnType.toRef();
-          let tempThis = flow.getTempLocal(returnType);
+          let tempThis = flow.getTempLocal(thisType);
           let ret = module.block(null, [
             this.makeCallDirect(setterInstance, [
-              module.local_tee(tempThis.index, thisExpr, returnType.isManaged),
+              module.local_tee(tempThis.index, thisExpr, /* isManaged=*/false, thisType.toRef()), // thisType is managed but here it must be alive
               valueExpr
             ], valueExpression),
             this.makeCallDirect(getterInstance, [
-              module.local_get(tempThis.index, returnTypeRef)
+              module.local_get(tempThis.index, thisType.toRef())
             ], valueExpression)
           ], returnTypeRef);
           return ret;
