@@ -5703,10 +5703,12 @@ export class Compiler extends DiagnosticEmitter {
     assert(targetType != Type.void);
     let valueExpr = this.compileExpression(valueExpression, targetType);
     let valueType = this.currentType;
+    if (targetType.isNullableReference && this.currentFlow.isNonnull(valueExpr, valueType)) targetType = targetType.nonNullableType;
+    valueExpr = this.convertExpression(valueExpr, valueType, targetType, false, valueExpression);
     return this.makeAssignment(
       target,
-      this.convertExpression(valueExpr, valueType, targetType, false, valueExpression),
-      valueType,
+      valueExpr,
+      targetType,
       valueExpression,
       thisExpression,
       elementExpression,
