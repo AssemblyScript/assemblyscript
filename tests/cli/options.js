@@ -52,3 +52,6 @@ optionsUtil.addDefaults(config, merged);
 assert.deepStrictEqual(merged.enable, ["a", "c"]);
 assert.deepStrictEqual(merged.disable, ["b", "d"]);
 assert.deepStrictEqual(merged.other, ["x"]);
+
+let value = optionsUtil.sanitizeValue(false, "s");
+assert.deepStrictEqual(value, null);

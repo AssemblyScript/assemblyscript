@@ -141,7 +141,7 @@ export function help(config, options) {
 }
 
 /** Sanitizes an option value to be a valid value of the option's type. */
-function sanitizeValue(value, type) {
+export function sanitizeValue(value, type) {
   if (value != null) {
     switch (type) {
       case undefined:
@@ -150,6 +150,7 @@ function sanitizeValue(value, type) {
       case "f": return Number(value) || 0;
       case "s": {
         if (value === true) return "";
+        if (value === false) return null;
         return String(value);
       }
       case "I": {
@@ -232,6 +233,7 @@ export function merge(config, currentOptions, parentOptions, parentBaseDir) {
   }
   return mergedOptions;
 }
+
 
 /** Normalizes a path. */
 export function normalizePath(p) {
