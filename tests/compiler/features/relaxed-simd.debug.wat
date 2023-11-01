@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $0 (func))
  (global $features/relaxed-simd/v v128 (v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000))
  (global $features/relaxed-simd/r (mut v128) (v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000))
  (memory $0 0)

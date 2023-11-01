@@ -175,9 +175,9 @@ import {
   _BinaryenRefEqSetLeft,
   _BinaryenRefEqSetRight,
   _BinaryenFunctionSetBody,
-  _BinaryenI31NewGetValue,
+  _BinaryenRefI31GetValue,
   _BinaryenI31GetGetI31,
-  _BinaryenI31NewSetValue,
+  _BinaryenRefI31SetValue,
   _BinaryenI31GetSetI31,
   _BinaryenCallRefGetNumOperands,
   _BinaryenCallRefGetOperandAt,
@@ -512,7 +512,7 @@ export abstract class Visitor {
     // unimp
   }
 
-  visitI31New(expr: ExpressionRef): void {
+  visitRefI31(expr: ExpressionRef): void {
     // unimp
   }
 
@@ -1040,11 +1040,11 @@ export abstract class Visitor {
         this.visitTupleExtract(expr);
         break;
       }
-      case ExpressionId.I31New: {
+      case ExpressionId.RefI31: {
         this.stack.push(expr);
-        this.visit(_BinaryenI31NewGetValue(expr));
+        this.visit(_BinaryenRefI31GetValue(expr));
         assert(this.stack.pop() == expr);
-        this.visitI31New(expr);
+        this.visitRefI31(expr);
         break;
       }
       case ExpressionId.I31Get: {
@@ -1884,10 +1884,10 @@ export function replaceChild(
       }
       break;
     }
-    case ExpressionId.I31New: {
-      let value = _BinaryenI31NewGetValue(parent);
+    case ExpressionId.RefI31: {
+      let value = _BinaryenRefI31GetValue(parent);
       if (value == search) {
-        _BinaryenI31NewSetValue(parent, replacement);
+        _BinaryenRefI31SetValue(parent, replacement);
         return value;
       }
       break;

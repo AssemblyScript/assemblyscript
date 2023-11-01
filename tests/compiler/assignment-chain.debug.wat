@@ -1,9 +1,9 @@
 (module
- (type $i32_i64_=>_none (func (param i32 i64)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_=>_i64 (func (param i32) (result i64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_none (func))
+ (type $0 (func (param i32 i64)))
+ (type $1 (func (param i32)))
+ (type $2 (func (param i32) (result i64)))
+ (type $3 (func (param i32 i32 i32 i32)))
+ (type $4 (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
@@ -16,16 +16,16 @@
  (func $assignment-chain/A#set:y (param $this i32) (param $y i64)
   local.get $this
   local.get $y
-  i64.store $0 offset=8
+  i64.store offset=8
  )
  (func $assignment-chain/A#get:y (param $this i32) (result i64)
   local.get $this
-  i64.load $0 offset=8
+  i64.load offset=8
  )
  (func $assignment-chain/A#set:x (param $this i32) (param $x i64)
   local.get $this
   local.get $x
-  i64.store $0
+  i64.store
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
@@ -50,19 +50,19 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store
   local.get $a
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0
+  i32.store
   local.get $2
   local.get $a
   local.tee $1
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $2
   i64.const 1
   call $assignment-chain/A#set:y
@@ -70,7 +70,7 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $2
   call $assignment-chain/A#get:y
   call $assignment-chain/A#set:x
@@ -87,7 +87,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $assignment-chain/foo
   global.get $~lib/memory/__stack_pointer

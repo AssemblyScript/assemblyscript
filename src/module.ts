@@ -202,13 +202,6 @@ export namespace TypeBuilderErrorReason {
   }
 }
 
-/** Type system constants. */
-export type TypeSystem = binaryen.TypeSystem;
-export namespace TypeSystem {
-  export const Isorecursive: TypeSystem = 0 /* _BinaryenTypeSystemIsorecursive */;
-  export const Nominal: TypeSystem = 1 /* _BinaryenTypeSystemNominal */;
-}
-
 /** Binaryen feature constants. */
 export const enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
@@ -233,92 +226,96 @@ export const enum FeatureFlags {
 
 /** Binaryen expression id constants. */
 export const enum ExpressionId {
-  Invalid = 0 /* _BinaryenInvalidId */,
-  Block = 1 /* _BinaryenBlockId */,
-  If = 2 /* _BinaryenIfId */,
-  Loop = 3 /* _BinaryenLoopId */,
-  Break = 4 /* _BinaryenBreakId */,
-  Switch = 5 /* _BinaryenSwitchId */,
-  Call = 6 /* _BinaryenCallId */,
-  CallIndirect = 7 /* _BinaryenCallIndirectId */,
-  LocalGet = 8 /* _BinaryenLocalGetId */,
-  LocalSet = 9 /* _BinaryenLocalSetId */,
-  GlobalGet = 10 /* _BinaryenGlobalGetId */,
-  GlobalSet = 11 /* _BinaryenGlobalSetId */,
-  Load = 12 /* _BinaryenLoadId */,
-  Store = 13 /* _BinaryenStoreId */,
-  Const = 14 /* _BinaryenConstId */,
-  Unary = 15 /* _BinaryenUnaryId */,
-  Binary = 16 /* _BinaryenBinaryId */,
-  Select = 17 /* _BinaryenSelectId */,
-  Drop = 18 /* _BinaryenDropId */,
-  Return = 19 /* _BinaryenReturnId */,
-  MemorySize = 20 /* _BinaryenMemorySizeId */,
-  MemoryGrow = 21 /* _BinaryenMemoryGrowId */,
-  Nop = 22 /* _BinaryenNopId */,
-  Unreachable = 23 /* _BinaryenUnreachableId */,
-  AtomicRMW = 24 /* _BinaryenAtomicRMWId */,
-  AtomicCmpxchg = 25 /* _BinaryenAtomicCmpxchgId */,
-  AtomicWait = 26 /* _BinaryenAtomicWaitId */,
-  AtomicNotify = 27 /* _BinaryenAtomicNotifyId */,
-  AtomicFence = 28 /* _BinaryenAtomicFenceId */,
-  SIMDExtract = 29 /* _BinaryenSIMDExtractId */,
-  SIMDReplace = 30 /* _BinaryenSIMDReplaceId */,
-  SIMDShuffle = 31 /* _BinaryenSIMDShuffleId */,
-  SIMDTernary = 32 /* _BinaryenSIMDTernaryId */,
-  SIMDShift = 33 /* _BinaryenSIMDShiftId */,
-  SIMDLoad = 34 /* _BinaryenSIMDLoadId */,
-  SIMDLoadStoreLane = 35 /* _BinaryenSIMDLoadStoreLaneId */,
-  MemoryInit = 36 /* _BinaryenMemoryInitId */,
-  DataDrop = 37 /* _BinaryenDataDropId */,
-  MemoryCopy = 38 /* _BinaryenMemoryCopyId */,
-  MemoryFill = 39 /* _BinaryenMemoryFillId */,
-  Pop = 40 /* _BinaryenPopId */,
-  RefNull = 41 /* _BinaryenRefNullId */,
-  RefIsNull = 42 /* _BinaryenRefIsNullId */,
-  RefFunc = 43 /* _BinaryenRefFuncId */,
-  RefEq = 44 /* _BinaryenRefEqId */,
-  TableGet = 45 /* _BinaryenTableGetId */,
-  TableSet = 46 /* _BinaryenTableSetId */,
-  TableSize = 47 /* _BinaryenTableSizeId */,
-  TableGrow = 48 /* _BinaryenTableGrowId */,
-  Try = 49 /* _BinaryenTryId */,
-  Throw = 50 /* _BinaryenThrowId */,
-  Rethrow = 51 /* _BinaryenRethrowId */,
-  TupleMake = 52 /* _BinaryenTupleMakeId */,
-  TupleExtract = 53 /* _BinaryenTupleExtractId */,
-  I31New = 54 /* _BinaryenI31NewId */,
-  I31Get = 55 /* _BinaryenI31GetId */,
-  CallRef = 56 /* _BinaryenCallRefId */,
-  RefTest = 57 /* _BinaryenRefTestId */,
-  RefCast = 58 /* _BinaryenRefCastId */,
-  BrOn = 59 /* _BinaryenBrOnId */,
-  StructNew = 60 /* _BinaryenStructNewId */,
-  StructGet = 61 /* _BinaryenStructGetId */,
-  StructSet = 62 /* _BinaryenStructSetId */,
-  ArrayNew = 63 /* _BinaryenArrayNewId */,
-  ArrayNewSeg = 64 /* TODO_BinaryenArraySegId */,
-  ArrayNewFixed = 65 /* _BinaryenArrayNewFixedId */,
-  ArrayGet = 66 /* _BinaryenArrayGetId */,
-  ArraySet = 67 /* _BinaryenArraySetId */,
-  ArrayLen = 68 /* _BinaryenArrayLenId */,
-  ArrayCopy = 69 /* _BinaryenArrayCopyId */,
-  ArrayFill = 70 /* _BinaryenArrayFillId */,
-  ArrayInit = 71 /* _BinaryenArrayInitId */,
-  RefAs = 72 /* _BinaryenRefAsId */,
-  StringNew = 73 /* _BinaryenStringNewId */,
-  StringConst = 74 /* _BinaryenStringConstId */,
-  StringMeasure = 75 /* _BinaryenStringMeasureId */,
-  StringEncode = 76 /* _BinaryenStringEncodeId */,
-  StringConcat = 77 /* _BinaryenStringConcatId */,
-  StringEq = 78 /* _BinaryenStringEqId */,
-  StringAs = 79 /* _BinaryenStringAsId */,
-  StringWTF8Advance = 80 /* _BinaryenStringWTF8AdvanceId */,
-  StringWTF16Get = 81 /* _BinaryenStringWTF16GetId */,
-  StringIterNext = 82 /* _BinaryenStringIterNextId */,
-  StringIterMove = 83 /* _BinaryenStringIterMoveId */,
-  StringSliceWTF = 84 /* _BinaryenStringSliceWTFId */,
-  StringSliceIter = 85 /* _BinaryenStringSliceIterId */
+  Invalid = 0,
+  Block,
+  If,
+  Loop,
+  Break,
+  Switch,
+  Call,
+  CallIndirect,
+  LocalGet,
+  LocalSet,
+  GlobalGet,
+  GlobalSet,
+  Load,
+  Store,
+  Const,
+  Unary,
+  Binary,
+  Select,
+  Drop,
+  Return,
+  MemorySize,
+  MemoryGrow,
+  Nop,
+  Unreachable,
+  AtomicRMW,
+  AtomicCmpxchg,
+  AtomicWait,
+  AtomicNotify,
+  AtomicFence,
+  SIMDExtract,
+  SIMDReplace,
+  SIMDShuffle,
+  SIMDTernary,
+  SIMDShift,
+  SIMDLoad,
+  SIMDLoadStoreLane,
+  MemoryInit,
+  DataDrop,
+  MemoryCopy,
+  MemoryFill,
+  Pop,
+  RefNull,
+  RefIsNull,
+  RefFunc,
+  RefEq,
+  TableGet,
+  TableSet,
+  TableSize,
+  TableGrow,
+  TableFill,
+  Try,
+  Throw,
+  Rethrow,
+  TupleMake,
+  TupleExtract,
+  RefI31,
+  I31Get,
+  CallRef,
+  RefTest,
+  RefCast,
+  BrOn,
+  StructNew,
+  StructGet,
+  StructSet,
+  ArrayNew,
+  ArrayNewData,
+  ArrayNewElem,
+  ArrayNewFixed,
+  ArrayGet,
+  ArraySet,
+  ArrayLen,
+  ArrayCopy,
+  ArrayFill,
+  ArrayInitData,
+  ArrayInitElem,
+  RefAs,
+  StringNew,
+  StringConst,
+  StringMeasure,
+  StringEncode,
+  StringConcat,
+  StringEq,
+  StringAs,
+  StringWTF8Advance,
+  StringWTF16Get,
+  StringIterNext,
+  StringIterMove,
+  StringSliceWTF,
+  StringSliceIter,
+  NumExpressionIds
 }
 
 /** Binaryen external kind constants. */
@@ -327,7 +324,8 @@ export const enum ExternalKind {
   Table = 1 /* _BinaryenExternalTable */,
   Memory = 2 /* _BinaryenExternalMemory */,
   Global = 3 /* _BinaryenExternalGlobal */,
-  Tag = 4 /* _BinaryenExternalTag */
+  Tag = 4 /* _BinaryenExternalTag */,
+  Invalid = -1
 }
 
 /** Binaryen unary operation constants. */
@@ -1378,7 +1376,6 @@ export class Module {
   ) {
     assert(sizeType == TypeRef.I32 || sizeType == TypeRef.I64);
     this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
-    binaryen._BinaryenSetTypeSystem(TypeSystem.Nominal);
   }
 
   private lit: usize;
@@ -2126,7 +2123,7 @@ export class Module {
   i31_new(
     value: ExpressionRef
   ): ExpressionRef {
-    return binaryen._BinaryenI31New(this.ref, value);
+    return binaryen._BinaryenRefI31(this.ref, value);
   }
 
   i31_get(
@@ -2959,7 +2956,7 @@ export class Module {
       case ExpressionId.Const:
       case ExpressionId.RefNull:
       case ExpressionId.RefFunc:
-      case ExpressionId.I31New: return true;
+      case ExpressionId.RefI31: return true;
       case ExpressionId.Binary: {
         if (this.getFeatures() & FeatureFlags.ExtendedConst) {
           switch (getBinaryOp(expr)) {
@@ -3713,7 +3710,6 @@ export function ensureType(type: Type): TypeRef {
     // @ts-ignore: Wasm only
     assert(sizeof<usize>() == 4); // ABI code below assumes 32-bit pointers
   }
-  assert(binaryen._BinaryenGetTypeSystem() == TypeSystem.Nominal);
   let builder = binaryen._TypeBuilderCreate(0);
   let seen = new Map<Type,HeapTypeRef>();
   prepareType(builder, seen, type); // drop temp return

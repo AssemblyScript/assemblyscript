@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
+ (type $0 (func))
+ (type $1 (func (param i32)))
  (global $scoped/aGlobal (mut i32) (i32.const 1))
  (global $scoped/aConstant i32 (i32.const 3))
  (global $scoped/aStartFunctionLocal (mut i32) (i32.const 2))
@@ -32,7 +32,6 @@
    i32.const 1
    i32.lt_s
    if
-    nop
     local.get $anotherStartFunctionLocal
     i32.const 1
     i32.add

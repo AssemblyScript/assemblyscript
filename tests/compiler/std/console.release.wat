@@ -1,8 +1,8 @@
 (module
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $0 (func (param i32)))
+ (type $1 (func (param i32 i32)))
+ (type $2 (func))
+ (type $3 (func (param i32 i32 i32 i32)))
  (import "env" "console.assert" (func $~lib/bindings/dom/console.assert (param i32 i32)))
  (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
  (import "env" "console.debug" (func $~lib/bindings/dom/console.debug (param i32)))
@@ -59,27 +59,27 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
-   i32.store $0
+   i32.store
    local.get $0
    i32.const 1056
-   i32.store $0
+   i32.store
    i32.const 0
    i32.const 1056
    call $~lib/console/console.assert<bool>
    global.get $~lib/memory/__stack_pointer
    i32.const 1088
-   i32.store $0
+   i32.store
    i32.const 1
    i32.const 1088
    call $~lib/console/console.assert<bool>
    global.get $~lib/memory/__stack_pointer
    i32.const 1120
-   i32.store $0
+   i32.store
    i32.const 1120
    call $~lib/console/console.log
    global.get $~lib/memory/__stack_pointer
    i32.const 1168
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
@@ -91,10 +91,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
-   i32.store $0
+   i32.store
    local.get $0
    i32.const 1168
-   i32.store $0
+   i32.store
    i32.const 1168
    call $~lib/bindings/dom/console.debug
    global.get $~lib/memory/__stack_pointer
@@ -103,7 +103,7 @@
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1216
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
@@ -115,10 +115,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
-   i32.store $0
+   i32.store
    local.get $0
    i32.const 1216
-   i32.store $0
+   i32.store
    i32.const 1216
    call $~lib/bindings/dom/console.info
    global.get $~lib/memory/__stack_pointer
@@ -127,7 +127,7 @@
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1264
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
@@ -139,10 +139,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
-   i32.store $0
+   i32.store
    local.get $0
    i32.const 1264
-   i32.store $0
+   i32.store
    i32.const 1264
    call $~lib/bindings/dom/console.warn
    global.get $~lib/memory/__stack_pointer
@@ -151,7 +151,7 @@
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1312
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
@@ -163,10 +163,10 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
-   i32.store $0
+   i32.store
    local.get $0
    i32.const 1312
-   i32.store $0
+   i32.store
    i32.const 1312
    call $~lib/bindings/dom/console.error
    global.get $~lib/memory/__stack_pointer
@@ -175,57 +175,57 @@
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1360
-   i32.store $0
+   i32.store
    i32.const 1360
    call $~lib/console/console.time
    global.get $~lib/memory/__stack_pointer
    i32.const 1360
-   i32.store $0
+   i32.store
    i32.const 1360
    call $~lib/console/console.timeLog
    global.get $~lib/memory/__stack_pointer
    i32.const 1360
-   i32.store $0
+   i32.store
    i32.const 1360
    call $~lib/console/console.timeEnd
    global.get $~lib/memory/__stack_pointer
    i32.const 1408
-   i32.store $0
+   i32.store
    i32.const 1408
    call $~lib/console/console.timeLog
    global.get $~lib/memory/__stack_pointer
    i32.const 1408
-   i32.store $0
+   i32.store
    i32.const 1408
    call $~lib/console/console.timeEnd
    global.get $~lib/memory/__stack_pointer
    i32.const 1456
-   i32.store $0
+   i32.store
    i32.const 1456
    call $~lib/console/console.time
    global.get $~lib/memory/__stack_pointer
    i32.const 1456
-   i32.store $0
+   i32.store
    i32.const 1456
    call $~lib/console/console.time
    global.get $~lib/memory/__stack_pointer
    i32.const 1504
-   i32.store $0
+   i32.store
    i32.const 1504
    call $~lib/console/console.log
    global.get $~lib/memory/__stack_pointer
    i32.const 1536
-   i32.store $0
+   i32.store
    i32.const 1536
    call $~lib/console/console.log
    global.get $~lib/memory/__stack_pointer
    i32.const 1568
-   i32.store $0
+   i32.store
    i32.const 1568
    call $~lib/console/console.log
    global.get $~lib/memory/__stack_pointer
    i32.const 1600
-   i32.store $0
+   i32.store
    i32.const 1600
    call $~lib/console/console.log
    global.get $~lib/memory/__stack_pointer
@@ -261,10 +261,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $2
   local.get $1
-  i32.store $0
+  i32.store
   local.get $0
   i32.const 0
   i32.ne
@@ -295,10 +295,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $1
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/bindings/dom/console.log
   global.get $~lib/memory/__stack_pointer
@@ -326,10 +326,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $1
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/bindings/dom/console.time
   global.get $~lib/memory/__stack_pointer
@@ -357,10 +357,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $1
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/bindings/dom/console.timeLog
   global.get $~lib/memory/__stack_pointer
@@ -388,10 +388,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $1
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/bindings/dom/console.timeEnd
   global.get $~lib/memory/__stack_pointer

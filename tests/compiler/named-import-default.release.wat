@@ -1,5 +1,5 @@
 (module
- (type $none_=>_i32 (func (result i32)))
+ (type $0 (func (result i32)))
  (memory $0 0)
  (export "getValue" (func $named-import-default/getValue))
  (export "memory" (memory $0))

@@ -1,8 +1,8 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $0 (func (param i32 i32)))
+ (type $1 (func (param i32) (result i32)))
+ (type $2 (func))
+ (type $3 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/pointer/one (mut i32) (i32.const 0))
  (global $std/pointer/two (mut i32) (i32.const 0))
@@ -22,20 +22,20 @@
  (func $std/pointer/Entry#set:key (param $this i32) (param $key i32)
   local.get $this
   local.get $key
-  i32.store $0
+  i32.store
  )
  (func $std/pointer/Entry#set:val (param $this i32) (param $val i32)
   local.get $this
   local.get $val
-  i32.store $0 offset=4
+  i32.store offset=4
  )
  (func $std/pointer/Entry#get:key (param $this i32) (result i32)
   local.get $this
-  i32.load $0
+  i32.load
  )
  (func $std/pointer/Entry#get:val (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=4
+  i32.load offset=4
  )
  (func $start:std/pointer
   (local $this i32)
@@ -435,12 +435,12 @@
    local.get $this|26
    i32.const 0
    i32.const 8
-   memory.fill $0
+   memory.fill
   else
    local.get $this|26
    local.get $value
    i32.const 8
-   memory.copy $0 $0
+   memory.copy
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.8 (result i32)
    global.get $std/pointer/one
@@ -525,7 +525,7 @@
   i32.mul
   i32.add
   local.get $value|36
-  f32.store $0
+  f32.store
   global.get $std/pointer/buf
   local.set $this|37
   i32.const 1
@@ -538,7 +538,7 @@
   i32.mul
   i32.add
   local.get $value|39
-  f32.store $0
+  f32.store
   block $std/pointer/Pointer<f32>#get|inlined.0 (result f32)
    global.get $std/pointer/buf
    local.set $this|40
@@ -549,7 +549,7 @@
    i32.const 4
    i32.mul
    i32.add
-   f32.load $0
+   f32.load
    br $std/pointer/Pointer<f32>#get|inlined.0
   end
   f32.const 1.100000023841858
@@ -573,7 +573,7 @@
    i32.const 4
    i32.mul
    i32.add
-   f32.load $0
+   f32.load
    br $std/pointer/Pointer<f32>#get|inlined.1
   end
   f32.const 1.2000000476837158
@@ -597,7 +597,7 @@
    i32.const 4
    i32.mul
    i32.add
-   f32.load $0
+   f32.load
    br $std/pointer/Pointer<f32>#get|inlined.2
   end
   f32.const 1.100000023841858
@@ -621,7 +621,7 @@
    i32.const 4
    i32.mul
    i32.add
-   f32.load $0
+   f32.load
    br $std/pointer/Pointer<f32>#get|inlined.3
   end
   f32.const 1.2000000476837158
@@ -636,7 +636,7 @@
    unreachable
   end
   i32.const 0
-  f32.load $0
+  f32.load
   f32.const 1.100000023841858
   f32.eq
   i32.eqz
@@ -649,7 +649,7 @@
    unreachable
   end
   i32.const 4
-  f32.load $0
+  f32.load
   f32.const 1.2000000476837158
   f32.eq
   i32.eqz
@@ -673,7 +673,7 @@
   i32.mul
   i32.add
   local.get $value|50
-  f32.store $0
+  f32.store
   block $std/pointer/Pointer<f32>#get|inlined.4 (result f32)
    global.get $std/pointer/buf
    local.set $this|51
@@ -684,7 +684,7 @@
    i32.const 4
    i32.mul
    i32.add
-   f32.load $0
+   f32.load
    br $std/pointer/Pointer<f32>#get|inlined.4
   end
   f32.const 1.2999999523162842
@@ -708,7 +708,7 @@
    i32.const 4
    i32.mul
    i32.add
-   f32.load $0
+   f32.load
    br $std/pointer/Pointer<f32>#get|inlined.5
   end
   f32.const 1.2999999523162842
@@ -723,7 +723,7 @@
    unreachable
   end
   i32.const 8
-  f32.load $0
+  f32.load
   f32.const 1.2999999523162842
   f32.eq
   i32.eqz
@@ -743,14 +743,14 @@
   drop
   local.get $this|55
   local.get $value|56
-  f32.store $0
+  f32.store
   block $std/pointer/Pointer<f32>#get:value|inlined.0 (result f32)
    global.get $std/pointer/buf
    local.set $this|57
    i32.const 0
    drop
    local.get $this|57
-   f32.load $0
+   f32.load
    br $std/pointer/Pointer<f32>#get:value|inlined.0
   end
   f32.const 1.399999976158142
@@ -765,7 +765,7 @@
    unreachable
   end
   i32.const 0
-  f32.load $0
+  f32.load
   f32.const 1.399999976158142
   f32.eq
   i32.eqz

@@ -1,11 +1,11 @@
 (module
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $none_=>_none (func))
- (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
- (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $0 (func (param i32 i32) (result i32)))
+ (type $1 (func (result i32)))
+ (type $2 (func (param i32 i32 i32) (result i32)))
+ (type $3 (func))
+ (type $4 (func (param i64 i64) (result i64)))
+ (type $5 (func (param f64 f64) (result f64)))
+ (type $6 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
@@ -59,8 +59,8 @@
   i32.const 2
   global.set $~argumentsLength
   local.get $fn
-  i32.load $0
-  call_indirect $0 (type $i32_i32_=>_i32)
+  i32.load
+  call_indirect (type $0)
   return
  )
  (func $function-types/doAdd<i32> (param $a i32) (param $b i32) (result i32)
@@ -69,8 +69,8 @@
   i32.const 2
   global.set $~argumentsLength
   call $function-types/makeAdder<i32>
-  i32.load $0
-  call_indirect $0 (type $i32_i32_=>_i32)
+  i32.load
+  call_indirect (type $0)
   return
  )
  (func $function-types/addI32 (param $a i32) (param $b i32) (result i32)
@@ -85,8 +85,8 @@
   i32.const 2
   global.set $~argumentsLength
   local.get $adder
-  i32.load $0
-  call_indirect $0 (type $i32_i32_=>_i32)
+  i32.load
+  call_indirect (type $0)
   return
  )
  (func $~start
@@ -114,7 +114,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store
   block $1of1
    block $0of1
     block $outOfRange
@@ -128,7 +128,7 @@
    global.get $~lib/memory/__stack_pointer
    call $function-types/makeAdder<i32>
    local.tee $adder
-   i32.store $0
+   i32.store
   end
   local.get $a
   local.get $b
@@ -136,7 +136,7 @@
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $3
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $3
   call $function-types/makeAndAdd<i32>
   local.set $3
@@ -155,7 +155,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.store
   call $function-types/makeAdder<i32>
   global.set $function-types/i32Adder
   i32.const 1
@@ -163,8 +163,8 @@
   i32.const 2
   global.set $~argumentsLength
   global.get $function-types/i32Adder
-  i32.load $0
-  call_indirect $0 (type $i32_i32_=>_i32)
+  i32.load
+  call_indirect (type $0)
   i32.const 3
   i32.eq
   i32.eqz
@@ -183,8 +183,8 @@
   i32.const 2
   global.set $~argumentsLength
   global.get $function-types/i64Adder
-  i32.load $0
-  call_indirect $0 (type $i64_i64_=>_i64)
+  i32.load
+  call_indirect (type $4)
   i64.const 30
   i64.eq
   i32.eqz
@@ -201,8 +201,8 @@
   i32.const 2
   global.set $~argumentsLength
   call $function-types/makeAdder<f64>
-  i32.load $0
-  call_indirect $0 (type $f64_f64_=>_f64)
+  i32.load
+  call_indirect (type $5)
   f64.const 4
   f64.eq
   i32.eqz
@@ -220,7 +220,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $function-types/doAddWithFn<i32>
   i32.const 5
@@ -254,7 +254,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $function-types/doAddWithFn<i32>
   i32.const 9
@@ -291,7 +291,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $function-types/makeAndAdd<i32>
   i32.const 3
