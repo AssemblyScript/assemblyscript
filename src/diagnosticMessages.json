@@ -194,6 +194,7 @@
   "Cannot extend a class '{0}'. Class constructor is marked as private.": 2675,
   "The 'this' types of each signature are incompatible.": 2685,
   "Namespace '{0}' has no exported member '{1}'.": 2694,
+  "Namespace can only have declarations.": 2695,
   "Required type parameters may not follow optional type parameters.": 2706,
   "Duplicate property '{0}'.": 2718,
   "Property '{0}' is missing in type '{1}' but required in type '{2}'.": 2741,
