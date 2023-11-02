@@ -665,18 +665,16 @@
    local.tee $2
    i32.const 0
    i32.le_s
-   if (result i32)
+   if
     i32.const 1
     local.get $2
     i32.sub
     memory.grow $0
     i32.const 0
     i32.lt_s
-   else
-    i32.const 0
-   end
-   if
-    unreachable
+    if
+     unreachable
+    end
    end
    i32.const 33936
    i32.const 0
@@ -746,7 +744,7 @@
   if
    i32.const 1120
    i32.const 1056
-   i32.const 461
+   i32.const 462
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -844,7 +842,7 @@
    if
     i32.const 0
     i32.const 1056
-    i32.const 499
+    i32.const 503
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -859,7 +857,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 501
+   i32.const 505
    i32.const 14
    call $~lib/builtins/abort
    unreachable

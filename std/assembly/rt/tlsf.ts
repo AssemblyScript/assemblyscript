@@ -444,6 +444,7 @@ function growMemory(root: Root, size: usize): void {
   if (memory.grow(pagesWanted) < 0) {
     if (memory.grow(pagesNeeded) < 0) unreachable();
   }
+  if (isDefined(ASC_RT_GROW_HANDLER)) ASC_RT_GROW_HANDLER();
   let pagesAfter = memory.size();
   addMemory(root, <usize>pagesBefore << 16, <u64>pagesAfter << 16);
 }
@@ -468,7 +469,10 @@ function initialize(): void {
   let rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
   let pagesBefore = memory.size();
   let pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
-  if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
+  if (pagesNeeded > pagesBefore) {
+    if (memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
+    if (isDefined(ASC_RT_GROW_HANDLER)) ASC_RT_GROW_HANDLER();
+  }
   let root = changetype<Root>(rootOffset);
   root.flMap = 0;
   SETTAIL(root, changetype<Block>(0));

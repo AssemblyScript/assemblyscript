@@ -1319,18 +1319,18 @@
   local.get $pagesNeeded
   local.get $pagesBefore
   i32.gt_s
-  if (result i32)
+  if
    local.get $pagesNeeded
    local.get $pagesBefore
    i32.sub
    memory.grow $0
    i32.const 0
    i32.lt_s
-  else
+   if
+    unreachable
+   end
    i32.const 0
-  end
-  if
-   unreachable
+   drop
   end
   local.get $rootOffset
   local.set $root
@@ -1451,7 +1451,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 562
+   i32.const 566
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1780,7 +1780,7 @@
   if
    i32.const 256
    i32.const 592
-   i32.const 461
+   i32.const 462
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -2076,6 +2076,8 @@
     unreachable
    end
   end
+  i32.const 0
+  drop
   memory.size $0
   local.set $pagesAfter
   local.get $root
@@ -2225,7 +2227,7 @@
    if
     i32.const 0
     i32.const 592
-    i32.const 499
+    i32.const 503
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -2245,7 +2247,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 501
+   i32.const 505
    i32.const 14
    call $~lib/builtins/abort
    unreachable

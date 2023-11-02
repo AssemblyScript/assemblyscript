@@ -1337,18 +1337,18 @@
   local.get $pagesNeeded
   local.get $pagesBefore
   i32.gt_s
-  if (result i32)
+  if
    local.get $pagesNeeded
    local.get $pagesBefore
    i32.sub
    memory.grow $0
    i32.const 0
    i32.lt_s
-  else
+   if
+    unreachable
+   end
    i32.const 0
-  end
-  if
-   unreachable
+   drop
   end
   local.get $rootOffset
   local.set $root
@@ -1469,7 +1469,7 @@
   if
    i32.const 0
    i32.const 608
-   i32.const 562
+   i32.const 566
    i32.const 3
    call $~lib/builtins/abort
    unreachable

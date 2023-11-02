@@ -29,6 +29,9 @@ declare function __finalize(ptr: usize): void;
 declare const ASC_RTRACE: bool;
 declare const ASC_PROFILE: bool;
 
+// Memory growth handling
+declare function ASC_RT_GROW_HANDLER(): void;
+
 // Incremental GC constants
 declare const ASC_GC_GRANULARITY: i32;
 declare const ASC_GC_SWEEPFACTOR: i32;
