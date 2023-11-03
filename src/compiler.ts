@@ -6353,7 +6353,7 @@ export class Compiler extends DiagnosticEmitter {
     // Create a new inline flow and use it to compile the function as a block
     let previousFlow = this.currentFlow;
     let flow = Flow.createInline(previousFlow.targetFunction, instance);
-    let body = [];
+    let body: ExpressionRef[] = [];
 
     if (thisArg) {
       let parent = assert(instance.parent);
@@ -7240,11 +7240,11 @@ export class Compiler extends DiagnosticEmitter {
           }
           return this.makeZero(contextualType);
         }
-        this.currentType = options.usizeType;
-        this.warning(
-          DiagnosticCode.Expression_resolves_to_unusual_type_0,
-          expression.range, this.currentType.toString()
-        );
+        this.currentType = this.program.objectInstance.type.asNullable();
+        // this.warning(
+        //   DiagnosticCode.Expression_resolves_to_unusual_type_0,
+        //   expression.range, this.currentType.toString()
+        // );
         return options.isWasm64
           ? module.i64(0)
           : module.i32(0);

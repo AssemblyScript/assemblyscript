@@ -803,6 +803,13 @@ export class Type {
     TypeFlags.Value,  64
   );
 
+  static readonly nullType32: Type = new Type(TypeKind.Usize,
+    TypeFlags.Unsigned |
+    TypeFlags.Integer  |
+    TypeFlags.Reference|
+    TypeFlags.Value,  32
+  );
+
   /** A 1-bit unsigned integer. */
   static readonly bool: Type = new Type(TypeKind.Bool,
     TypeFlags.Unsigned |

@@ -44,21 +44,13 @@ class Ref {}
   let arr = [null, "a"];
   assert(isNullable(arr[0]));
 }
-{ // only nulls infers as usize[]
+{ // only nulls infers as (Object | null)[]
   let arr1 = [null];
-  assert(isInteger(arr1[0]));
-  assert(!isNullable(arr1[0]));
+  assert(isReference(arr1[0]));
+  assert(isNullable(arr1[0]));
   let arr2 = [null, null];
-  assert(isInteger(arr2[0]));
-  assert(!isNullable(arr2[0]));
-}
-{ // null in integer contexts infers as usize
-  let arr1 = [1, null];
-  assert(isInteger(arr1[0]));
-  assert(!isNullable(arr1[0]));
-  let arr2 = [null, 1];
-  assert(isInteger(arr2[0]));
-  assert(!isNullable(arr2[0]));
+  assert(isReference(arr2[0]));
+  assert(isNullable(arr2[0]));
 }
 { // nesting works as well
   let arr = [[1], [2]];

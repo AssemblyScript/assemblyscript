@@ -1279,7 +1279,7 @@ export class Resolver extends DiagnosticEmitter {
             return ctxType; // TODO: nullable?
           }
         }
-        return this.program.options.usizeType;
+        return this.program.objectInstance.type.asNullable();
       }
     }
     let element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
@@ -2358,10 +2358,10 @@ export class Resolver extends DiagnosticEmitter {
         let length = expressions.length;
         let elementType = Type.auto;
         let numNullLiterals = 0;
-        for (let i = 0, k = length; i < k; ++i) {
+        for (let i = 0; i < length; ++i) {
           let expression = expressions[i];
           if (expression) {
-            if (expression.kind == NodeKind.Null && length > 1) {
+            if (expression.kind == NodeKind.Null) {
               ++numNullLiterals;
             } else {
               let currentType = this.resolveExpression(expression, ctxFlow, elementType);
@@ -2376,8 +2376,8 @@ export class Resolver extends DiagnosticEmitter {
           }
         }
         if (elementType /* still */ == Type.auto) {
-          if (numNullLiterals == length) { // all nulls infers as usize
-            elementType = this.program.options.usizeType;
+          if (numNullLiterals == length && length > 0) { // all nulls infers as usize
+            elementType = this.program.objectInstance.type.asNullable();
           } else {
             if (reportMode == ReportMode.Report) {
               this.error(
