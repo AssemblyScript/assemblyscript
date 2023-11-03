@@ -1,9 +1,9 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
+ (type $0 (func))
+ (type $1 (func (param i32 i32 i32 i32)))
+ (type $2 (func (param i32 i32) (result i32)))
+ (type $3 (func (param i32) (result i32)))
+ (type $4 (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1168))
@@ -67,7 +67,7 @@
   local.tee $4
   i32.add
   local.tee $5
-  memory.size $0
+  memory.size
   local.tee $6
   i32.const 16
   i32.shl
@@ -93,12 +93,12 @@
    local.get $7
    i32.gt_s
    select
-   memory.grow $0
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     local.get $7
-    memory.grow $0
+    memory.grow
     i32.const 0
     i32.lt_s
     if
@@ -110,22 +110,22 @@
   global.set $~lib/rt/stub/offset
   local.get $3
   local.get $4
-  i32.store $0
+  i32.store
   local.get $2
   i32.const 4
   i32.sub
   local.tee $3
   i32.const 0
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $3
   i32.const 0
-  i32.store $0 offset=8
+  i32.store offset=8
   local.get $3
   local.get $1
-  i32.store $0 offset=12
+  i32.store offset=12
   local.get $3
   local.get $0
-  i32.store $0 offset=16
+  i32.store offset=16
   local.get $2
   i32.const 16
   i32.add
@@ -134,10 +134,8 @@
   local.get $0
  )
  (func $~lib/rt/stub/__unpin (param $0 i32)
-  nop
  )
  (func $~lib/rt/stub/__collect
-  nop
  )
  (func $~start
   i32.const 1196

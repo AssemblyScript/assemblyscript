@@ -1,7 +1,7 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $0 (func))
+ (type $1 (func (param i32 i32 i32 i32)))
+ (type $2 (func (param i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
@@ -303,7 +303,7 @@
  (func $retain-i32/testLocalRetain
   (local $ri i32)
   i32.const 0
-  i32.load8_s $0
+  i32.load8_s
   local.set $ri
   i32.const 1
   drop
@@ -741,7 +741,7 @@
    unreachable
   end
   i32.const 0
-  i32.load8_s $0
+  i32.load8_s
   global.set $retain-i32/ri
   i32.const 1
   drop

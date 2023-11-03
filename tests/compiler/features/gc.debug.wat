@@ -1,7 +1,7 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (type $0 (func))
+ (type $1 (func (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (type $1) (param i32 i32 i32 i32)))
  (global $features/gc/globalFunc funcref (ref.null nofunc))
  (global $features/gc/globalExtern externref (ref.null noextern))
  (global $features/gc/globalAny anyref (ref.null none))
@@ -26,12 +26,12 @@
  (export "globalArray" (global $features/gc/globalArray))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $features/gc/test_i31 (type $none_=>_none)
+ (func $features/gc/test_i31 (type $0)
   (local $ref (ref i31))
   (local $val i32)
   (local $uval i32)
   i32.const 123
-  i31.new
+  ref.i31
   local.set $ref
   local.get $ref
   ref.is_null
@@ -50,10 +50,10 @@
   i31.get_u
   local.set $uval
  )
- (func $start:features/gc (type $none_=>_none)
+ (func $start:features/gc (type $0)
   call $features/gc/test_i31
  )
- (func $~start (type $none_=>_none)
+ (func $~start (type $0)
   global.get $~started
   if
    return

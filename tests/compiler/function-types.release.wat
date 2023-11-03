@@ -1,12 +1,11 @@
 (module
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
- (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_none (func))
+ (type $0 (func (param i32 i32) (result i32)))
+ (type $1 (func (param i64 i64) (result i64)))
+ (type $2 (func (param f64 f64) (result f64)))
+ (type $3 (func (param i32 i32 i32 i32)))
+ (type $4 (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33996))
  (memory $0 1)
  (data $0 (i32.const 1036) "\1c")
@@ -36,7 +35,6 @@
  )
  (func $~start
   (local $0 i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -48,16 +46,14 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.store $0
+   i32.store
    i32.const 1056
    global.set $function-types/i32Adder
-   i32.const 2
-   global.set $~argumentsLength
    i32.const 1
    i32.const 2
    i32.const 1056
-   i32.load $0
-   call_indirect $0 (type $i32_i32_=>_i32)
+   i32.load
+   call_indirect (type $0)
    i32.const 3
    i32.ne
    if
@@ -68,13 +64,11 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 2
-   global.set $~argumentsLength
    i64.const 10
    i64.const 20
    i32.const 1152
-   i32.load $0
-   call_indirect $0 (type $i64_i64_=>_i64)
+   i32.load
+   call_indirect (type $1)
    i64.const 30
    i64.ne
    if
@@ -85,13 +79,11 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 2
-   global.set $~argumentsLength
    f64.const 1.5
    f64.const 2.5
    i32.const 1184
-   i32.load $0
-   call_indirect $0 (type $f64_f64_=>_f64)
+   i32.load
+   call_indirect (type $2)
    f64.const 4
    f64.ne
    if
@@ -104,15 +96,13 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $function-types/i32Adder
-   local.tee $1
-   i32.store $0
-   i32.const 2
-   global.set $~argumentsLength
+   local.tee $0
+   i32.store
    i32.const 2
    i32.const 3
-   local.get $1
-   i32.load $0
-   call_indirect $0 (type $i32_i32_=>_i32)
+   local.get $0
+   i32.load
+   call_indirect (type $0)
    i32.const 5
    i32.ne
    if
@@ -123,13 +113,11 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 2
-   global.set $~argumentsLength
    i32.const 3
    i32.const 4
    i32.const 1056
-   i32.load $0
-   call_indirect $0 (type $i32_i32_=>_i32)
+   i32.load
+   call_indirect (type $0)
    i32.const 7
    i32.ne
    if
@@ -142,14 +130,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 1216
-   i32.store $0
-   i32.const 2
-   global.set $~argumentsLength
+   i32.store
    i32.const 4
    i32.const 5
    i32.const 1216
-   i32.load $0
-   call_indirect $0 (type $i32_i32_=>_i32)
+   i32.load
+   call_indirect (type $0)
    i32.const 9
    i32.ne
    if
@@ -160,8 +146,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 2
-   global.set $~argumentsLength
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.sub
@@ -172,33 +156,18 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
-   i64.store $0
-   block $1of1
-    block $0of1
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 2
-      i32.sub
-      br_table $0of1 $1of1 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 1056
-    local.set $0
-    global.get $~lib/memory/__stack_pointer
-    i32.const 1056
-    i32.store $0
-   end
+   i64.store
    global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store $0 offset=4
-   i32.const 2
-   global.set $~argumentsLength
+   i32.const 1056
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1056
+   i32.store offset=4
    i32.const 1
    i32.const 2
-   local.get $0
-   i32.load $0
-   call_indirect $0 (type $i32_i32_=>_i32)
+   i32.const 1056
+   i32.load
+   call_indirect (type $0)
    local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -217,14 +186,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 1056
-   i32.store $0
-   i32.const 2
-   global.set $~argumentsLength
+   i32.store
    i32.const 1
    i32.const 2
    i32.const 1056
-   i32.load $0
-   call_indirect $0 (type $i32_i32_=>_i32)
+   i32.load
+   call_indirect (type $0)
    i32.const 3
    i32.ne
    if

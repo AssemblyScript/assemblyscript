@@ -1,5 +1,5 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $0 (func (param i32) (result i32)))
  (memory $0 0)
  (export "alias" (func $typealias/alias))
  (export "memory" (memory $0))

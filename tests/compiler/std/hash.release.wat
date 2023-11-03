@@ -1,7 +1,7 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_none (func (param i32)))
+ (type $0 (func))
+ (type $1 (func (param i32 i32 i32 i32)))
+ (type $2 (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34172))
  (memory $0 1)
@@ -45,57 +45,57 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1056
-  i32.store $0
+  i32.store
   i32.const 1056
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1088
-  i32.store $0
+  i32.store
   i32.const 1088
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1120
-  i32.store $0
+  i32.store
   i32.const 1120
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1152
-  i32.store $0
+  i32.store
   i32.const 1152
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1184
-  i32.store $0
+  i32.store
   i32.const 1184
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1216
-  i32.store $0
+  i32.store
   i32.const 1216
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1248
-  i32.store $0
+  i32.store
   i32.const 1248
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1280
-  i32.store $0
+  i32.store
   i32.const 1280
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1328
-  i32.store $0
+  i32.store
   i32.const 1328
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1376
-  i32.store $0
+  i32.store
   i32.const 1376
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
@@ -129,20 +129,20 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i64.const 0
-  i64.store $0
+  i64.store
   local.get $1
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   if
-   global.get $~lib/memory/__stack_pointer
+   local.get $1
    local.get $0
    local.tee $1
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $1
    i32.const 20
    i32.sub
-   i32.load $0 offset=16
+   i32.load offset=16
    i32.const -2
    i32.and
    local.tee $3
@@ -168,7 +168,7 @@
      if
       local.get $2
       local.get $1
-      i32.load $0
+      i32.load
       i32.const -2048144777
       i32.mul
       i32.add
@@ -179,7 +179,7 @@
       local.set $2
       local.get $4
       local.get $1
-      i32.load $0 offset=4
+      i32.load offset=4
       i32.const -2048144777
       i32.mul
       i32.add
@@ -190,7 +190,7 @@
       local.set $4
       local.get $6
       local.get $1
-      i32.load $0 offset=8
+      i32.load offset=8
       i32.const -2048144777
       i32.mul
       i32.add
@@ -201,7 +201,7 @@
       local.set $6
       local.get $5
       local.get $1
-      i32.load $0 offset=12
+      i32.load offset=12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -253,7 +253,7 @@
     if
      local.get $2
      local.get $1
-     i32.load $0
+     i32.load
      i32.const -1028477379
      i32.mul
      i32.add
@@ -280,7 +280,7 @@
     if
      local.get $2
      local.get $1
-     i32.load8_u $0
+     i32.load8_u
      i32.const 374761393
      i32.mul
      i32.add

@@ -1,7 +1,7 @@
 (module
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $0 (func (param i32 i32 i32) (result i32)))
+ (type $1 (func))
+ (type $2 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 96))
@@ -102,8 +102,8 @@
   i32.const 1
   global.set $~argumentsLength
   global.get $call-optional/optIndirect
-  i32.load $0
-  call_indirect $0 (type $i32_i32_i32_=>_i32)
+  i32.load
+  call_indirect (type $0)
   i32.const 0
   i32.eq
   i32.eqz
@@ -121,8 +121,8 @@
   i32.const 2
   global.set $~argumentsLength
   global.get $call-optional/optIndirect
-  i32.load $0
-  call_indirect $0 (type $i32_i32_i32_=>_i32)
+  i32.load
+  call_indirect (type $0)
   i32.const 5
   i32.eq
   i32.eqz
@@ -140,8 +140,8 @@
   i32.const 3
   global.set $~argumentsLength
   global.get $call-optional/optIndirect
-  i32.load $0
-  call_indirect $0 (type $i32_i32_i32_=>_i32)
+  i32.load
+  call_indirect (type $0)
   i32.const 12
   i32.eq
   i32.eqz
