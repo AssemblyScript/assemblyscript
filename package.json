@@ -72,7 +72,7 @@
   "scripts": {
     "check": "npm run check:config && npm run check:import && npm run lint",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
-    "check:import": "tsc --noEmit --target ESNEXT --module es6 --experimentalDecorators tests/import/index",
+    "check:import": "tsc --noEmit --target ESNEXT --module nodenext --moduleResolution nodenext --experimentalDecorators tests/import/index",
     "lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
     "build": "node scripts/build",
     "watch": "node scripts/build --watch",
