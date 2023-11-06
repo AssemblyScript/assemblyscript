@@ -4278,6 +4278,24 @@ export class Parser extends DiagnosticEmitter {
         case Token.In: {
           let next = this.parseExpression(tn, nextPrecedence + 1);
           if (!next) return null;
+          let state = tn.mark();
+          if (
+            expr.kind != NodeKind.Literal &&
+            token == Token.LessThan &&
+            tn.skip(Token.GreaterThan) &&
+            tn.skip(Token.OpenParen) &&
+            tn.skip(Token.CloseParen) &&
+            !(tn.skip(Token.Equals_GreaterThan) || tn.skip(Token.Colon))
+          ) {
+            // detect Expr '<' Expr '>' '(' ')'
+            //   except Expr '<' Expr '>' '(' ')' '=>'
+            //   except Expr '<' Expr '>' '(' ')' ':'
+            this.error(DiagnosticCode.Type_expected, next.range);
+            tn.discard(state);
+            return null;
+          }
+          tn.reset(state);
+          tn.discard(state);
           expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
           break;
         }
