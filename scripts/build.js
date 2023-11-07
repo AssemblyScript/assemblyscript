@@ -1,11 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import childProcess from "child_process";
 import esbuild from "esbuild";
-import glob from "glob";
+import { globSync } from "glob";
 import { createRequire } from "module";
 import { stdoutColors } from "../util/terminal.js";
+
+import {buildWeb} from "./build-web.js";
+import * as dts from "./build-dts.js";
 
 const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -61,7 +63,7 @@ const stdlibPlugin = {
     build.onResolve({ filter: /\bindex\.generated\.js$/ }, args => {
       return {
         path: path.join(args.resolveDir, args.path),
-        watchFiles: glob.sync(path.join(dirname, "..", "std", "assembly") + "/**/*.ts")
+        watchFiles: globSync(path.join(dirname, "..", "std", "assembly") + "/**/*.ts")
           .concat([
             path.join(dirname, "..", "package.json"),
             path.join(dirname, "..", "cli", "options.json"),
@@ -86,7 +88,7 @@ const stdlibPlugin = {
       );
       const libraryDir = path.join(dirname, "..", "std", "assembly");
       const libraryFiles = {};
-      for (const file of glob.sync("**/!(*.d).ts", { cwd: libraryDir })) {
+      for (const file of globSync("**/!(*.d).ts", { cwd: libraryDir, posix: true }).sort()) {
         libraryFiles[file.replace(/\.ts$/, "")] = bundleFile(path.join(libraryDir, file));
       }
       out.push(
@@ -173,22 +175,22 @@ const webPlugin = {
   setup(build) {
     build.onEnd(() => {
       const startTime = Date.now();
-      const stdout = [];
-      console.log(`${time()} - ${"web"} - Starting new build ...`);
-      childProcess.spawn("node", [ "./build-web.js" ], {
-        cwd: dirname,
-        stdio: "pipe"
-      }).on("data", data => {
-        stdout.push(data.toString());
-      }).on("error", err => {
+      console.log(`${time()} - web - Starting new build ...`);
+
+      try {
+        buildWeb();
+
         const duration = Date.now() - startTime;
-        console.log(stdout.join(""));
-        console.log(`${time()}  - ${"web"} - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
-      }).on("close", code => {
-        if (code) return;
+        console.log(`${time()} - web - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
+        process.exitCode = 0;
+      } catch (e) {
         const duration = Date.now() - startTime;
-        console.log(`${time()} - ${"web"} - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
-      });
+        console.error(e);
+        console.log(`${time()} - web - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
+        process.exitCode = 1;
+      } finally {
+        buildingDefinitions = false;
+      }
     });
   }
 };
@@ -208,12 +210,17 @@ const common = {
   bundle: true,
   sourcemap: true,
   treeShaking: true,
-  minify: true,
-  watch,
-  incremental: watch
+  minify: true
 };
 
-const srcBuild = esbuild.build({
+async function invokeBuild(options) {
+  const ctx = await esbuild.context(options);
+  if (watch) await ctx.watch();
+  else await ctx.rebuild();
+  ctx.dispose();
+}
+
+const srcBuild = invokeBuild({
   entryPoints: [ "./src/index.ts" ],
   tsconfig: "./src/tsconfig.json",
   outfile: "./dist/assemblyscript.js",
@@ -222,7 +229,7 @@ const srcBuild = esbuild.build({
   ...common
 });
 
-const cliBuild = esbuild.build({
+const cliBuild = invokeBuild({
   entryPoints: [ "./cli/index.js" ],
   tsconfig: "./cli/tsconfig.json",
   outfile: "./dist/asc.js",
@@ -237,25 +244,24 @@ let buildingDefinitions = false;
 
 function buildDefinitions() {
   const startTime = Date.now();
-  const stdout = [];
-  console.log(`${time()} - ${"dts"} - Starting new build ...`);
+  console.log(`${time()} - dts - Starting new build ...`);
   buildingDefinitions = true;
-  childProcess.spawn("node", [ "./build-dts.js" ], {
-    cwd: dirname,
-    stdio: "pipe"
-  }).on("data", data => {
-    stdout.push(data.toString());
-  }).on("error", err => {
-    buildingDefinitions = false;
+
+  try {
+    dts.generateSrc();
+    dts.generateCli();
+
     const duration = Date.now() - startTime;
-    console.log(stdout.join(""));
-    console.log(`${time()}  - ${"dts"} - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
-  }).on("close", code => {
-    buildingDefinitions = false;
-    if (code) return;
+    console.log(`${time()} - dts - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
+    process.exitCode = 0;
+  } catch (e) {
     const duration = Date.now() - startTime;
-    console.log(`${time()} - ${"dts"} - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
-  });
+    console.error(e);
+    console.log(`${time()} - dts - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
+    process.exitCode = 1;
+  } finally {
+    buildingDefinitions = false;
+  }
 }
 
 if (watch) {

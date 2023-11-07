@@ -1,32 +1,19 @@
 import fs from "fs";
-import glob from "glob";
-import os from "os";
+import { globSync } from "glob";
 import pathUtil from "path";
 import ts from "typescript";
-import stream from "stream";
-import util from "util";
 import { fileURLToPath } from 'url';
+import { debuglog } from "util";
 
 const __dirname = pathUtil.dirname(fileURLToPath(import.meta.url));
+const debug = debuglog("dts");
 
 // © 2015-2019 SitePen, Inc. New BSD License.
 // see: https://github.com/SitePen/dts-generator
-const generate = (function() {
+const generate = (() => {
   // declare some constants so we don't have magic integers without explanation
-  const DTSLEN = '.d.ts'.length;
-  const filenameToMid = (function () {
-    if (pathUtil.sep === '/') {
-      return function (filename) {
-        return filename;
-      };
-    }
-    else {
-      const separatorExpression = new RegExp(pathUtil.sep.replace('\\', '\\\\'), 'g');
-      return function (filename) {
-        return filename.replace(separatorExpression, '/');
-      };
-    }
-  })();
+  const DTS = ".d.ts";
+  const DTSLEN = DTS.length;
 
   /**
    * A helper function that takes TypeScript diagnostic errors and returns an error
@@ -34,8 +21,8 @@ const generate = (function() {
    * @param diagnostics The array of TypeScript Diagnostic objects
    */
   function getError(diagnostics) {
-    let message = 'Declaration generation failed';
-    diagnostics.forEach(function (diagnostic) {
+    let message = "Declaration generation failed";
+    for (const diagnostic of diagnostics) {
       // not all errors have an associated file: in particular, problems with a
       // the tsconfig.json don't; the messageText is enough to diagnose in those
       // cases.
@@ -44,26 +31,27 @@ const generate = (function() {
         message +=
           `\n${diagnostic.file.fileName}(${position.line + 1},${position.character + 1}): ` +
           `error TS${diagnostic.code}: ${diagnostic.messageText}`;
-      }
-      else {
+      } else {
         message += `\nerror TS${diagnostic.code}: ${diagnostic.messageText}`;
       }
-    });
+    }
+
     const error = new Error(message);
-    error.name = 'EmitterError';
+    error.name = "EmitterError";
     return error;
   }
+
   function getFilenames(baseDir, files) {
     return files.map(function (filename) {
       const resolvedFilename = pathUtil.resolve(filename);
-      if (resolvedFilename.indexOf(baseDir) === 0) {
-        return resolvedFilename;
-      }
-      return pathUtil.resolve(baseDir, filename);
+      return resolvedFilename.indexOf(baseDir) === 0
+        ? resolvedFilename
+        : pathUtil.resolve(baseDir, filename);
     });
   }
+
   function processTree(sourceFile, replacer) {
-    let code = '';
+    let code = "";
     let cursorPosition = 0;
     function skip(node) {
       cursorPosition = node.end;
@@ -78,8 +66,7 @@ const generate = (function() {
       if (replacement != null) {
         code += replacement;
         skip(node);
-      }
-      else {
+      } else {
         ts.forEachChild(node, visit);
       }
     }
@@ -87,6 +74,7 @@ const generate = (function() {
     code += sourceFile.text.slice(cursorPosition);
     return code;
   }
+
   /**
    * Load and parse a TSConfig File
    * @param options The dts-generator options to load config into
@@ -95,7 +83,7 @@ const generate = (function() {
   function getTSConfig(fileName) {
     // TODO this needs a better design than merging stuff into options.
     // the trouble is what to do when no tsconfig is specified...
-    const configText = fs.readFileSync(fileName, { encoding: 'utf8' });
+    const configText = fs.readFileSync(fileName, { encoding: "utf8" });
     const result = ts.parseConfigFileTextToJson(fileName, configText);
     if (result.error) {
       throw getError([result.error]);
@@ -110,144 +98,95 @@ const generate = (function() {
       configParseResult.options
     ];
   }
-  function isNodeKindImportDeclaration(value) {
-    return value && value.kind === ts.SyntaxKind.ImportDeclaration;
-  }
-  function isNodeKindExternalModuleReference(value) {
-    return value && value.kind === ts.SyntaxKind.ExternalModuleReference;
-  }
-  function isNodeKindStringLiteral(value) {
-    return value && value.kind === ts.SyntaxKind.StringLiteral;
-  }
-  function isNodeKindExportDeclaration(value) {
-    return value && value.kind === ts.SyntaxKind.ExportDeclaration;
-  }
-  function isNodeKindExportAssignment(value) {
-    return value && value.kind === ts.SyntaxKind.ExportAssignment;
-  }
-  function isNodeKindModuleDeclaration(value) {
-    return value && value.kind === ts.SyntaxKind.ModuleDeclaration;
-  }
+
+  const isNodeKind = kind => value => value?.kind === kind;
+  const isNodeKindImportDeclaration = isNodeKind(ts.SyntaxKind.ImportDeclaration);
+  const isNodeKindStringLiteral = isNodeKind(ts.SyntaxKind.StringLiteral);
+  const isNodeKindExportDeclaration = isNodeKind(ts.SyntaxKind.ExportDeclaration);
+  const isNodeKindModuleDeclaration = isNodeKind(ts.SyntaxKind.ModuleDeclaration);
+
   function generate(options) {
-    if (Boolean(options.main) !== Boolean(options.name)) {
-      if (options.name) {
-        // since options.name used to do double duty as the prefix, let's be
-        // considerate and point out that name should be replaced with prefix.
-        // TODO update this error message when we finalize which version this change
-        // will be released in.
-        throw new Error(`name and main must be used together.  Perhaps you want prefix instead of
-        name? In dts-generator version 2.1, name did double duty as the option to
-        use to prefix module names with, but in >=2.2 the name option was split
-        into two; prefix is what is now used to prefix imports and module names
-        in the output.`);
-      }
-      else {
-        throw new Error('name and main must be used together.');
-      }
-    }
-    const noop = function () { /* nop */ };
-    const sendMessage = options.sendMessage || noop;
-    const verboseMessage = options.verbose ? sendMessage : noop;
     let compilerOptions = {};
     let files = options.files;
     /* following tsc behaviour, if a project is specified, or if no files are specified then
       * attempt to load tsconfig.json */
     if (options.project || !options.files || options.files.length === 0) {
-      verboseMessage(`project = "${options.project || options.baseDir}"`);
+      debug(`project = "${options.project || options.baseDir}"`);
       // if project isn't specified, use baseDir.  If it is and it's a directory,
       // assume we want tsconfig.json in that directory.  If it is a file, though
       // use that as our tsconfig.json.  This allows for projects that have more
       // than one tsconfig.json file.
       let tsconfigFilename;
-      if (options.project) {
-        if (fs.lstatSync(options.project).isDirectory()) {
-          tsconfigFilename = pathUtil.join(options.project, 'tsconfig.json');
-        }
-        else {
-          // project isn't a diretory, it's a file
-          tsconfigFilename = options.project;
-        }
-      }
-      else {
-        tsconfigFilename = pathUtil.join(options.baseDir, 'tsconfig.json');
+      if (!options.project) {
+        tsconfigFilename = pathUtil.join(options.baseDir, "tsconfig.json");
+      } else if (fs.lstatSync(options.project).isDirectory()) {
+        tsconfigFilename = pathUtil.join(options.project, "tsconfig.json");
+      } else {
+        // project isn't a directory, it's a file
+        tsconfigFilename = options.project;
       }
       if (fs.existsSync(tsconfigFilename)) {
-        verboseMessage(`  parsing "${tsconfigFilename}"`);
+        debug(`  parsing "${tsconfigFilename}"`);
         [files, compilerOptions] = getTSConfig(tsconfigFilename);
-      }
-      else {
-        sendMessage(`No "tsconfig.json" found at "${tsconfigFilename}"!`);
-        return new Promise(function (resolve, reject) {
-          reject(new SyntaxError('Unable to resolve configuration.'));
-        });
+      } else {
+        debug(`No "tsconfig.json" found at "${tsconfigFilename}"!`);
+        throw new Error("Unable to resolve configuration.");
       }
     }
-    const eol = options.eol || os.EOL;
-    const nonEmptyLineStart = new RegExp(eol + '(?!' + eol + '|$)', 'g');
-    const indent = options.indent === undefined ? '\t' : options.indent;
+
+    const nonEmptyLineStart = /\n(?!\n|$)/g;
     // use input values if tsconfig leaves any of these undefined.
     // this is for backwards compatibility
     compilerOptions.declaration = true;
-    compilerOptions.target = compilerOptions.target || ts.ScriptTarget.Latest; // is this necessary?
-    compilerOptions.moduleResolution = compilerOptions.moduleResolution || options.moduleResolution;
-    compilerOptions.outDir = compilerOptions.outDir || options.outDir;
+    compilerOptions.target ||= ts.ScriptTarget.Latest; // is this necessary?
     // TODO should compilerOptions.baseDir come into play?
     const baseDir = pathUtil.resolve(compilerOptions.rootDir || options.project || options.baseDir);
     const outDir = compilerOptions.outDir;
-    verboseMessage(`baseDir = "${baseDir}"`);
-    verboseMessage(`target = ${compilerOptions.target}`);
-    verboseMessage(`outDir = ${compilerOptions.outDir}`);
-    verboseMessage(`rootDir = ${compilerOptions.rootDir}`);
-    verboseMessage(`moduleResolution = ${compilerOptions.moduleResolution}`);
+
+    debug(`baseDir = "${baseDir}"`);
+    debug(`target = ${compilerOptions.target}`);
+    debug(`outDir = ${compilerOptions.outDir}`);
+    debug(`rootDir = ${compilerOptions.rootDir}`);
+    debug(`moduleResolution = ${compilerOptions.moduleResolution}`);
+
     const filenames = getFilenames(baseDir, files);
-    verboseMessage('filenames:');
-    filenames.forEach(name => { verboseMessage('  ' + name); });
-    const excludesMap = {};
-    options.exclude = options.exclude || ['node_modules/**/*.d.ts'];
-    options.exclude && options.exclude.forEach(function (filename) {
-      glob.sync(filename, { cwd: baseDir }).forEach(function (globFileName) {
-        excludesMap[filenameToMid(pathUtil.resolve(baseDir, globFileName))] = true;
-      });
-    });
-    if (options.exclude) {
-      verboseMessage('exclude:');
-      options.exclude.forEach(name => { verboseMessage('  ' + name); });
+
+    debug("filenames:");
+    for (const name of filenames) debug("  " + name);
+
+    const exclusions = new Set();
+
+    options.exclude ||= [];
+    options.exclude.push("node_modules/**/*.d.ts");
+
+    for (const filename of globSync(options.exclude, { cwd: baseDir })) {
+      exclusions.add(pathUtil.resolve(baseDir, filename));
     }
-    if (!options.stdout) fs.mkdirSync(pathUtil.dirname(options.out), { recursive: true });
-    /* node.js typings are missing the optional mode in createWriteStream options and therefore
-      * in TS 1.6 the strict object literal checking is throwing, therefore a hammer to the nut */
-    const output = options.stdout || fs.createWriteStream(options.out, { mode: parseInt('644', 8) });
+
+    debug("exclude:");
+    for (const name of exclusions) debug("  " + name);
+
+    const output = options.stdout;
     const host = ts.createCompilerHost(compilerOptions);
     const program = ts.createProgram(filenames, compilerOptions, host);
     function writeFile(filename, data) {
       // Compiler is emitting the non-declaration file, which we do not care about
-      if (filename.slice(-DTSLEN) !== '.d.ts') {
-        return;
-      }
+      if (filename.slice(-DTSLEN) !== DTS) return;
       writeDeclaration(ts.createSourceFile(filename, data, compilerOptions.target, true), true);
     }
     let declaredExternalModules = [];
-    return new Promise(function (resolve, reject) {
-      output.on('close', () => { resolve(undefined); });
-      output.on('error', reject);
+
+    {
       if (options.externs) {
-        options.externs.forEach(function (path) {
-          sendMessage(`Writing external dependency ${path}`);
-          output.write(`/// <reference path="${path}" />` + eol);
-        });
+        for (const path of options.externs) {
+          debug(`Writing external dependency ${path}`);
+          output.push(`/// <reference path="${path}" />\n`);
+        }
       }
-      if (options.types) {
-        options.types.forEach(function (type) {
-          sendMessage(`Writing external @types package dependency ${type}`);
-          output.write(`/// <reference types="${type}" />` + eol);
-        });
-      }
-      sendMessage('processing:');
-      let mainExportDeclaration = false;
-      let mainExportAssignment = false;
-      let foundMain = false;
-      program.getSourceFiles().forEach(function (sourceFile) {
-        processTree(sourceFile, function (node) {
+
+      debug("processing:");
+      for (const sourceFile of program.getSourceFiles()) {
+        processTree(sourceFile, node => {
           if (isNodeKindModuleDeclaration(node)) {
             const name = node.name;
             if (isNodeKindStringLiteral(name)) {
@@ -256,64 +195,31 @@ const generate = (function() {
           }
           return null;
         });
-      });
-      program.getSourceFiles().some(function (sourceFile) {
+
         // Source file is a default library, or other dependency from another project, that should not be included in
         // our bundled output
-        if (pathUtil.normalize(sourceFile.fileName).indexOf(baseDir + pathUtil.sep) !== 0) {
-          return;
-        }
-        if (excludesMap[filenameToMid(pathUtil.normalize(sourceFile.fileName))]) {
-          return;
-        }
-        sendMessage(`  ${sourceFile.fileName}`);
+        const normalizedFileName = pathUtil.normalize(sourceFile.fileName);
+        if (normalizedFileName.indexOf(baseDir + pathUtil.sep) !== 0) continue;
+        if (exclusions.has(normalizedFileName)) continue;
+
+        debug(`  ${sourceFile.fileName}`);
         // Source file is already a declaration file so should does not need to be pre-processed by the emitter
-        if (sourceFile.fileName.slice(-DTSLEN) === '.d.ts') {
+        if (sourceFile.fileName.slice(-DTSLEN) === DTS) {
           writeDeclaration(sourceFile, false);
-          return;
-        }
-        // We can optionally output the main module if there's something to export.
-        if (options.main && options.main === (options.prefix + filenameToMid(sourceFile.fileName.slice(baseDir.length, -3)))) {
-          foundMain = true;
-          ts.forEachChild(sourceFile, function (node) {
-            mainExportDeclaration = mainExportDeclaration || isNodeKindExportDeclaration(node);
-            mainExportAssignment = mainExportAssignment || isNodeKindExportAssignment(node);
-          });
+          continue;
         }
         const emitOutput = program.emit(sourceFile, writeFile);
         if (emitOutput.emitSkipped || emitOutput.diagnostics.length > 0) {
-          reject(getError(emitOutput.diagnostics
-            .concat(program.getSemanticDiagnostics(sourceFile))
-            .concat(program.getSyntacticDiagnostics(sourceFile))
-            .concat(program.getDeclarationDiagnostics(sourceFile))));
-          return true;
+          const diagnostics = emitOutput.diagnostics.concat(
+            program.getSemanticDiagnostics(sourceFile),
+            program.getSyntacticDiagnostics(sourceFile),
+            program.getDeclarationDiagnostics(sourceFile)
+          );
+          throw getError(diagnostics);
         }
-      });
-      if (options.main && !foundMain) {
-        throw new Error(`main module ${options.main} was not found`);
       }
-      if (options.main) {
-        output.write(`declare module '${options.name}' {` + eol + indent);
-        if (compilerOptions.target >= ts.ScriptTarget.ES2015) {
-          if (mainExportAssignment) {
-            output.write(`export {default} from '${options.main}';` + eol + indent);
-          }
-          if (mainExportDeclaration) {
-            output.write(`export * from '${options.main}';` + eol);
-          }
-        }
-        else {
-          output.write(`import main = require('${options.main}');` + eol + indent);
-          output.write('export = main;' + eol);
-        }
-        output.write('}' + eol);
-        sendMessage(`Aliased main module ${options.name} to ${options.main}`);
-      }
-      if (!options.stdout) {
-        sendMessage(`output to "${options.out}"`);
-        output.end();
-      }
-    });
+    }
+
     function writeDeclaration(declarationFile, isOutput) {
       // resolving is important for dealting with relative outDirs
       const filename = pathUtil.resolve(declarationFile.fileName);
@@ -323,26 +229,27 @@ const generate = (function() {
       // is also used for.  Also if no outDir is used, the compiled code ends up
       // alongside the source, so use baseDir in that case too.
       const outputDir = (isOutput && Boolean(outDir)) ? pathUtil.resolve(outDir) : baseDir;
-      const sourceModuleId = filenameToMid(filename.slice(outputDir.length + 1, -DTSLEN));
-      const currentModuleId = filenameToMid(filename.slice(outputDir.length + 1, -DTSLEN));
+      // I give up; this needs Windows-to-POSIX conversion:
+      const sourceModuleId = pathUtil
+        .relative(outputDir, filename)
+        .slice(0, -DTSLEN)
+        .replaceAll(pathUtil.sep, "/");
       function resolveModuleImport(moduleId) {
         const isDeclaredExternalModule = declaredExternalModules.indexOf(moduleId) !== -1;
         let resolved;
         if (options.resolveModuleImport) {
           resolved = options.resolveModuleImport({
             importedModuleId: moduleId,
-            currentModuleId: currentModuleId,
-            isDeclaredExternalModule: isDeclaredExternalModule
+            currentModuleId: sourceModuleId,
+            isDeclaredExternalModule
           });
         }
         if (!resolved) {
           // resolve relative imports relative to the current module id.
-          if (moduleId.charAt(0) === '.') {
-            resolved = filenameToMid(pathUtil.join(pathUtil.dirname(sourceModuleId), moduleId));
-          }
-          else {
-            resolved = moduleId;
-          }
+          resolved = moduleId.charAt(0) === "."
+            ? pathUtil.posix.join(pathUtil.posix.dirname(sourceModuleId), moduleId)
+            : moduleId;
+
           // prefix the import with options.prefix, so that both non-relative imports
           // and relative imports end up prefixed with options.prefix.  We only
           // do this when no resolveModuleImport function is given so that that
@@ -350,97 +257,53 @@ const generate = (function() {
           // NOTE: we may want to revisit the isDeclaredExternalModule behavior.
           // discussion is on https://github.com/SitePen/dts-generator/pull/94
           // but currently there's no strong argument against this behavior.
-          if (Boolean(options.prefix) && !isDeclaredExternalModule) {
-            resolved = `${options.prefix}/${resolved}`;
-          }
+          if (!isDeclaredExternalModule) resolved = `${options.prefix}/${resolved}`;
         }
         return resolved;
       }
       /* For some reason, SourceFile.externalModuleIndicator is missing from 1.6+, so having
         * to use a sledgehammer on the nut */
       if (declarationFile.externalModuleIndicator) {
-        let resolvedModuleId = sourceModuleId;
-        if (options.resolveModuleId) {
-          const resolveModuleIdResult = options.resolveModuleId({
-            currentModuleId: currentModuleId
-          });
-          if (resolveModuleIdResult) {
-            resolvedModuleId = resolveModuleIdResult;
-          }
-          else if (options.prefix) {
-            resolvedModuleId = `${options.prefix}/${resolvedModuleId}`;
-          }
-        }
-        else if (options.prefix) {
-          resolvedModuleId = `${options.prefix}/${resolvedModuleId}`;
-        }
-        output.write('declare module \'' + resolvedModuleId + '\' {' + eol + indent);
-        const content = processTree(declarationFile, function (node) {
-          if (isNodeKindExternalModuleReference(node)) {
-            // TODO figure out if this branch is possible, and if so, write a test
-            // that covers it.
-            const expression = node.expression;
-            // convert both relative and non-relative module names in import = require(...)
-            // statements.
-            const resolved = resolveModuleImport(expression.text);
-            return ` require('${resolved}')`;
-          }
-          else if (node.kind === ts.SyntaxKind.DeclareKeyword) {
-            return '';
-          }
-          else if (isNodeKindStringLiteral(node) && node.parent &&
-            (isNodeKindExportDeclaration(node.parent) || isNodeKindImportDeclaration(node.parent))) {
+        let resolvedModuleId = `${options.prefix}/${sourceModuleId}`;
+        output.push(`declare module '${resolvedModuleId}' {\n\t`);
+        const content = processTree(declarationFile, node => {
+          if (node.kind === ts.SyntaxKind.DeclareKeyword) return "";
+          if (
+            isNodeKindStringLiteral(node) &&
+            (isNodeKindExportDeclaration(node.parent) || isNodeKindImportDeclaration(node.parent))
+          ) {
             // This block of code is modifying the names of imported modules
             const text = node.text;
             const resolved = resolveModuleImport(text);
-            if (resolved) {
-              return ` '${resolved}'`;
-            }
+            if (resolved) return ` '${resolved}'`;
           }
         });
-        output.write(content.replace(nonEmptyLineStart, '$&' + indent));
-        output.write(eol + '}' + eol);
-      }
-      else {
-        output.write(declarationFile.text);
+        output.push(content.replace(nonEmptyLineStart, "$&\t"));
+        output.push("\n}\n");
+      } else {
+        output.push(declarationFile.text);
       }
     }
   }
   return generate;
 })();
 
-function OutputStream(options) {
-  stream.Writable.call(this, options);
-  this.chunks = [];
-}
-util.inherits(OutputStream, stream.Writable);
-OutputStream.prototype._write = function (chunk, enc, cb) {
-  this.chunks.push(chunk);
-  cb();
-};
-OutputStream.prototype.toBuffer = function () {
-  return Buffer.concat(this.chunks);
-};
-OutputStream.prototype.toString = function () {
-  return this.toBuffer().toString("utf8");
-};
-
 function transformTypes(sourceFile) {
   let numReplaced = 0;
-  console.log("transforming:");
+  debug("transforming:");
   let result = ts.transform(sourceFile, [
-    function (context) {
+    context => {
       const visit = node => {
         node = ts.visitEachChild(node, visit, context);
         if (ts.isTypeNode(node)) {
           const name = node.getText(sourceFile);
           switch (name) {
             // this is wrong, but works
-            case "bool": ++numReplaced; return ts.createIdentifier("boolean");
+            case "bool": ++numReplaced; return context.factory.createIdentifier("boolean");
             default: if (!/^(?:Binaryen|Relooper)/.test(name)) break;
             case "i8": case "i16": case "i32": case "isize":
             case "u8": case "u16": case "u32": case "usize":
-            case "f32": case "f64": ++numReplaced; return ts.createIdentifier("number");
+            case "f32": case "f64": ++numReplaced; return context.factory.createIdentifier("number");
           }
         }
         return node;
@@ -448,14 +311,14 @@ function transformTypes(sourceFile) {
       return node => ts.visitNode(node, visit);
     }
   ]);
-  console.log("  replaced " + numReplaced + " AS types with TS types");
+  debug("  replaced " + numReplaced + " AS types with TS types");
   return result;
 }
 
 const prefix = "types:assemblyscript";
 
-function generateSrc() {
-  const stdout = new OutputStream();
+export function generateSrc() {
+  const stdout = [];
 
   generate({
     project: pathUtil.resolve(__dirname, "..", "src"),
@@ -463,23 +326,19 @@ function generateSrc() {
     exclude: [
       "glue/**",
     ],
-    verbose: true,
-    sendMessage: console.log,
-    stdout: stdout
+    stdout
   });
 
-  stdout.write("\n");
+  stdout.push("\n");
 
   generate({
     project: pathUtil.resolve(__dirname, "..", "std", "assembly", "shared"),
     prefix: prefix + "/std/assembly/shared",
     exclude: [],
-    verbose: true,
-    sendMessage: console.log,
-    stdout: stdout
+    stdout
   });
 
-  stdout.write("\n");
+  stdout.push("\n");
 
   generate({
     project: pathUtil.resolve(__dirname, "..", "src", "glue"),
@@ -488,33 +347,20 @@ function generateSrc() {
       "js/index.ts",
       "js/node.d.ts"
     ],
-    verbose: true,
-    sendMessage: console.log,
-    stdout: stdout
+    stdout
   });
 
-  const source = stdout.toString().replace(/\/\/\/ <reference[^>]*>\r?\n/g, "");
+  const source = stdout.join("").replace(/\/\/\/ <reference[^>]*>\r?\n/g, "");
   const sourceFile = ts.createSourceFile("assemblyscript.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
   const result = transformTypes(sourceFile);
-  if (!fs.existsSync(pathUtil.join(__dirname, "..", "dist"))) {
-    fs.mkdirSync(pathUtil.join(__dirname, "..", "dist"));
-  }
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.generated.d.ts"),
     ts.createPrinter().printFile(result.transformed[0])
   );
-  fs.writeFileSync(
-    pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
-    [ `/// <reference path="./assemblyscript.generated.d.ts" />\n`,
-      `export * from "${prefix}/src/index";\n`,
-      `import * as assemblyscript from "${prefix}/src/index";\n`,
-      `export default assemblyscript;\n`
-    ].join("")
-  );
 }
 
-function generateCli() {
-  const stdout = new OutputStream();
+export function generateCli() {
+  const stdout = [];
 
   generate({
     baseDir: pathUtil.resolve(__dirname, ".."),
@@ -525,58 +371,19 @@ function generateCli() {
       "./assemblyscript.generated.d.ts"
     ],
     prefix,
-    verbose: true,
-    sendMessage: console.log,
-    stdout: stdout,
+    stdout,
     resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
-      if (currentModuleId == "cli/index") {
-        if (importedModuleId == "../src") return prefix + "/src/index";
-      }
-      return null;
+      return currentModuleId == "cli/index" && importedModuleId == "../src"
+        ? prefix + "/src/index"
+        : null;
     },
   });
 
-  const source = stdout.toString();
+  const source = stdout.join("");
   const sourceFile = ts.createSourceFile("asc.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
   const result = transformTypes(sourceFile);
-  if (!fs.existsSync(pathUtil.join(__dirname, "..", "dist"))) {
-    fs.mkdirSync(pathUtil.join(__dirname, "..", "dist"));
-  }
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "asc.generated.d.ts"),
     ts.createPrinter().printFile(result.transformed[0])
   );
-  fs.writeFileSync(
-    pathUtil.resolve(__dirname, "..", "dist", "asc.d.ts"),
-    [ `/// <reference path="./asc.generated.d.ts" />\n`,
-      `export * from "${prefix}/cli/index";\n`,
-      `import * as asc from "${prefix}/cli/index";\n`,
-      `export default asc;\n`
-    ].join("")
-  );
 }
-
-function generateTransform() {
-  fs.writeFileSync(
-    pathUtil.resolve(__dirname, "..", "dist", "transform.js"),
-    [
-      `export function Transform() { /* stub */ }\n`
-    ].join("")
-  );
-  fs.writeFileSync(
-    pathUtil.resolve(__dirname, "..", "dist", "transform.cjs"),
-    [
-      `module.exports = function Transform() { /* stub */ }\n`
-    ].join("")
-  );
-  fs.writeFileSync(
-    pathUtil.resolve(__dirname, "..", "dist", "transform.d.ts"),
-    [
-      `export { Transform } from "./asc";\n`
-    ].join("")
-  );
-}
-
-generateSrc();
-generateCli();
-generateTransform();
