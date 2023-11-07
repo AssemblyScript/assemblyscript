@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
+ (type $0 (func))
+ (type $1 (func (param i32)))
  (memory $0 0)
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))

@@ -12,7 +12,7 @@ jobs:
       with:
         ref: main
         fetch-depth: 0
-    - uses: dcodeIO/setup-node-nvm@master
+    - uses: actions/setup-node@v3
       with:
         node-version: current
     - name: Install dependencies

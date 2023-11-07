@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
+ (type $0 (func))
+ (type $1 (func (result i32)))
  (global $void/u8Val1 (mut i32) (i32.const 1))
  (global $void/u8Val2 (mut i32) (i32.const 255))
  (global $~lib/memory/__data_end i32 (i32.const 8))

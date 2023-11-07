@@ -398,9 +398,14 @@ export class Parser extends DiagnosticEmitter {
               tn.range(declareStart, declareEnd), "declare"
             ); // recoverable
           }
-          if (!namespace) {
+          if (namespace) {
+            this.error(
+              DiagnosticCode.Namespace_can_only_have_declarations,
+              tn.range(startPos)
+            );
+          } else {
             statement = this.parseStatement(tn, true);
-          } // TODO: else?
+          }
         }
         break;
       }

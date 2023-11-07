@@ -1,11 +1,11 @@
 (module
- (type $i32_=>_none (func (param i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
+ (type $0 (func (param i32) (result i32)))
+ (type $1 (func (param i32)))
+ (type $2 (func))
+ (type $3 (func (param i32 i32)))
+ (type $4 (func (result i32)))
+ (type $5 (func (param i32 i32 i32 i32)))
+ (type $6 (func (param i32 i32 i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -56,99 +56,99 @@
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/b
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/an
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/child
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/childAsParent
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/animal
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/cat
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/blackcat
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/nullableAnimal
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/nullableCat
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/nullableBlackcat
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/w
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/x
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/y
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   global.get $instanceof/z
   local.tee $0
   if
    local.get $0
-   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   call $~lib/rt/itcms/__visit
   end
   i32.const 1248
-  call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  call $~lib/rt/itcms/__visit
   i32.const 1056
-  call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  call $~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1
-  i32.load $0 offset=4
+  i32.load offset=4
   i32.const -4
   i32.and
   local.set $0
@@ -158,7 +158,7 @@
    i32.ne
    if
     local.get $0
-    i32.load $0 offset=4
+    i32.load offset=4
     i32.const 3
     i32.and
     i32.const 3
@@ -176,7 +176,7 @@
     i32.add
     call $~lib/rt/__visit_members
     local.get $0
-    i32.load $0 offset=4
+    i32.load offset=4
     i32.const -4
     i32.and
     local.set $0
@@ -184,137 +184,157 @@
    end
   end
  )
- (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
+ (func $~lib/rt/itcms/__visit (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  global.get $~lib/rt/itcms/iter
+  i32.eqz
+  if
+   return
+  end
+  global.get $~lib/rt/itcms/white
+  local.get $0
+  i32.const 20
+  i32.sub
+  local.tee $1
+  i32.load offset=4
+  i32.const 3
+  i32.and
   i32.eq
   if
-   local.get $0
-   i32.load $0 offset=8
-   local.tee $1
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1120
-    i32.const 148
-    i32.const 30
-    call $~lib/builtins/abort
-    unreachable
-   end
    local.get $1
-   global.set $~lib/rt/itcms/iter
-  end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink
-   local.get $0
-   i32.load $0 offset=4
-   i32.const -4
-   i32.and
-   local.tee $1
-   i32.eqz
+   global.get $~lib/rt/itcms/iter
+   i32.eq
    if
-    local.get $0
-    i32.load $0 offset=8
-    i32.eqz
-    local.get $0
-    i32.const 34356
-    i32.lt_u
-    i32.and
+    local.get $1
+    i32.load offset=8
+    local.tee $0
     i32.eqz
     if
      i32.const 0
      i32.const 1120
-     i32.const 128
-     i32.const 18
+     i32.const 148
+     i32.const 30
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink
+    local.get $0
+    global.set $~lib/rt/itcms/iter
    end
-   local.get $0
-   i32.load $0 offset=8
-   local.tee $2
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$241
+    local.get $1
+    i32.load offset=4
+    i32.const -4
+    i32.and
+    local.tee $0
+    i32.eqz
+    if
+     local.get $1
+     i32.load offset=8
+     i32.eqz
+     local.get $1
+     i32.const 34356
+     i32.lt_u
+     i32.and
+     i32.eqz
+     if
+      i32.const 0
+      i32.const 1120
+      i32.const 128
+      i32.const 18
+      call $~lib/builtins/abort
+      unreachable
+     end
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$241
+    end
+    local.get $1
+    i32.load offset=8
+    local.tee $2
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 1120
+     i32.const 132
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $2
+    i32.store offset=8
+    local.get $2
+    local.get $0
+    local.get $2
+    i32.load offset=4
+    i32.const 3
+    i32.and
+    i32.or
+    i32.store offset=4
+   end
+   global.get $~lib/rt/itcms/toSpace
+   local.set $2
+   local.get $1
+   i32.load offset=12
+   local.tee $0
+   i32.const 2
+   i32.le_u
+   if (result i32)
+    i32.const 1
+   else
+    local.get $0
+    i32.const 1488
+    i32.load
+    i32.gt_u
+    if
+     i32.const 1248
+     i32.const 1312
+     i32.const 21
+     i32.const 28
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    i32.const 2
+    i32.shl
+    i32.const 1492
+    i32.add
+    i32.load
+    i32.const 32
+    i32.and
+   end
+   local.set $3
+   local.get $2
+   i32.load offset=8
+   local.set $0
+   local.get $1
+   global.get $~lib/rt/itcms/white
    i32.eqz
-   if
-    i32.const 0
-    i32.const 1120
-    i32.const 132
-    i32.const 16
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.const 2
+   local.get $3
+   select
+   local.get $2
+   i32.or
+   i32.store offset=4
    local.get $1
-   local.get $2
-   i32.store $0 offset=8
-   local.get $2
+   local.get $0
+   i32.store offset=8
+   local.get $0
    local.get $1
-   local.get $2
-   i32.load $0 offset=4
+   local.get $0
+   i32.load offset=4
    i32.const 3
    i32.and
    i32.or
-   i32.store $0 offset=4
-  end
-  global.get $~lib/rt/itcms/toSpace
-  local.set $2
-  local.get $0
-  i32.load $0 offset=12
-  local.tee $1
-  i32.const 2
-  i32.le_u
-  if (result i32)
+   i32.store offset=4
+   local.get $2
+   local.get $1
+   i32.store offset=8
+   global.get $~lib/rt/itcms/visitCount
    i32.const 1
-  else
-   local.get $1
-   i32.const 1488
-   i32.load $0
-   i32.gt_u
-   if
-    i32.const 1248
-    i32.const 1312
-    i32.const 21
-    i32.const 28
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
-   i32.const 2
-   i32.shl
-   i32.const 1492
    i32.add
-   i32.load $0
-   i32.const 32
-   i32.and
+   global.set $~lib/rt/itcms/visitCount
   end
-  local.set $3
-  local.get $2
-  i32.load $0 offset=8
-  local.set $1
-  local.get $0
-  global.get $~lib/rt/itcms/white
-  i32.eqz
-  i32.const 2
-  local.get $3
-  select
-  local.get $2
-  i32.or
-  i32.store $0 offset=4
-  local.get $0
-  local.get $1
-  i32.store $0 offset=8
-  local.get $1
-  local.get $0
-  local.get $1
-  i32.load $0 offset=4
-  i32.const 3
-  i32.and
-  i32.or
-  i32.store $0 offset=4
-  local.get $2
-  local.get $0
-  i32.store $0 offset=8
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -322,8 +342,8 @@
   (local $4 i32)
   (local $5 i32)
   local.get $1
-  i32.load $0
-  local.tee $2
+  i32.load
+  local.tee $3
   i32.const 1
   i32.and
   i32.eqz
@@ -335,10 +355,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
   i32.const -4
   i32.and
-  local.tee $2
+  local.tee $3
   i32.const 12
   i32.lt_u
   if
@@ -349,29 +369,29 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
   i32.const 256
   i32.lt_u
   if (result i32)
-   local.get $2
+   local.get $3
    i32.const 4
    i32.shr_u
   else
    i32.const 31
    i32.const 1073741820
-   local.get $2
-   local.get $2
+   local.get $3
+   local.get $3
    i32.const 1073741820
    i32.ge_u
    select
-   local.tee $2
+   local.tee $3
    i32.clz
    i32.sub
    local.tee $4
    i32.const 7
    i32.sub
-   local.set $3
-   local.get $2
+   local.set $2
+   local.get $3
    local.get $4
    i32.const 4
    i32.sub
@@ -379,10 +399,10 @@
    i32.const 16
    i32.xor
   end
-  local.tee $2
+  local.tee $3
   i32.const 16
   i32.lt_u
-  local.get $3
+  local.get $2
   i32.const 23
   i32.lt_u
   i32.and
@@ -396,75 +416,68 @@
    unreachable
   end
   local.get $1
-  i32.load $0 offset=8
+  i32.load offset=8
   local.set $5
   local.get $1
-  i32.load $0 offset=4
+  i32.load offset=4
   local.tee $4
   if
    local.get $4
    local.get $5
-   i32.store $0 offset=8
+   i32.store offset=8
   end
   local.get $5
   if
    local.get $5
    local.get $4
-   i32.store $0 offset=4
+   i32.store offset=4
   end
   local.get $1
   local.get $0
-  local.get $3
+  local.get $2
   i32.const 4
   i32.shl
-  local.get $2
+  local.get $3
   i32.add
   i32.const 2
   i32.shl
   i32.add
-  i32.load $0 offset=96
+  local.tee $1
+  i32.load offset=96
   i32.eq
   if
-   local.get $0
-   local.get $3
-   i32.const 4
-   i32.shl
-   local.get $2
-   i32.add
-   i32.const 2
-   i32.shl
-   i32.add
+   local.get $1
    local.get $5
-   i32.store $0 offset=96
+   i32.store offset=96
    local.get $5
    i32.eqz
    if
     local.get $0
-    local.get $3
+    local.get $2
     i32.const 2
     i32.shl
     i32.add
     local.tee $1
-    i32.load $0 offset=4
+    i32.load offset=4
     i32.const -2
-    local.get $2
+    local.get $3
     i32.rotl
     i32.and
-    local.set $2
+    local.set $3
     local.get $1
-    local.get $2
-    i32.store $0 offset=4
-    local.get $2
+    local.get $3
+    i32.store offset=4
+    local.get $3
     i32.eqz
     if
      local.get $0
      local.get $0
-     i32.load $0
+     i32.load
      i32.const -2
-     local.get $3
+     local.get $2
      i32.rotl
      i32.and
-     i32.store $0
+     i32.store
     end
    end
   end
@@ -486,7 +499,7 @@
    unreachable
   end
   local.get $1
-  i32.load $0
+  i32.load
   local.tee $3
   i32.const 1
   i32.and
@@ -503,12 +516,12 @@
   i32.const 4
   i32.add
   local.get $1
-  i32.load $0
+  i32.load
   i32.const -4
   i32.and
   i32.add
   local.tee $4
-  i32.load $0
+  i32.load
   local.tee $2
   i32.const 1
   i32.and
@@ -525,17 +538,17 @@
    i32.and
    i32.add
    local.tee $3
-   i32.store $0
+   i32.store
    local.get $1
    i32.const 4
    i32.add
    local.get $1
-   i32.load $0
+   i32.load
    i32.const -4
    i32.and
    i32.add
    local.tee $4
-   i32.load $0
+   i32.load
    local.set $2
   end
   local.get $3
@@ -545,9 +558,9 @@
    local.get $1
    i32.const 4
    i32.sub
-   i32.load $0
+   i32.load
    local.tee $1
-   i32.load $0
+   i32.load
    local.tee $6
    i32.const 1
    i32.and
@@ -572,13 +585,13 @@
    i32.and
    i32.add
    local.tee $3
-   i32.store $0
+   i32.store
   end
   local.get $4
   local.get $2
   i32.const 2
   i32.or
-  i32.store $0
+  i32.store
   local.get $3
   i32.const -4
   i32.and
@@ -612,7 +625,7 @@
   i32.const 4
   i32.sub
   local.get $1
-  i32.store $0
+  i32.store
   local.get $2
   i32.const 256
   i32.lt_u
@@ -668,19 +681,19 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.load $0 offset=96
+  i32.load offset=96
   local.set $3
   local.get $1
   i32.const 0
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $1
   local.get $3
-  i32.store $0 offset=8
+  i32.store offset=8
   local.get $3
   if
    local.get $3
    local.get $1
-   i32.store $0 offset=4
+   i32.store offset=4
   end
   local.get $0
   local.get $5
@@ -692,15 +705,15 @@
   i32.shl
   i32.add
   local.get $1
-  i32.store $0 offset=96
+  i32.store offset=96
   local.get $0
   local.get $0
-  i32.load $0
+  i32.load
   i32.const 1
   local.get $5
   i32.shl
   i32.or
-  i32.store $0
+  i32.store
   local.get $0
   local.get $5
   i32.const 2
@@ -708,16 +721,17 @@
   i32.add
   local.tee $0
   local.get $0
-  i32.load $0 offset=4
+  i32.load offset=4
   i32.const 1
   local.get $2
   i32.shl
   i32.or
-  i32.store $0 offset=4
+  i32.store offset=4
  )
  (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   local.get $2
   local.get $1
   i64.extend_i32_u
@@ -739,10 +753,10 @@
   i32.sub
   local.set $1
   local.get $0
-  i32.load $0 offset=1568
-  local.tee $4
+  i32.load offset=1568
+  local.tee $3
   if
-   local.get $4
+   local.get $3
    i32.const 4
    i32.add
    local.get $1
@@ -755,18 +769,17 @@
     call $~lib/builtins/abort
     unreachable
    end
+   local.get $3
    local.get $1
    i32.const 16
    i32.sub
-   local.get $4
+   local.tee $5
    i32.eq
    if
-    local.get $4
-    i32.load $0
-    local.set $3
-    local.get $1
-    i32.const 16
-    i32.sub
+    local.get $3
+    i32.load
+    local.set $4
+    local.get $5
     local.set $1
    end
   else
@@ -790,30 +803,30 @@
   i32.and
   local.get $1
   i32.sub
-  local.tee $4
+  local.tee $3
   i32.const 20
   i32.lt_u
   if
    return
   end
   local.get $1
-  local.get $3
+  local.get $4
   i32.const 2
   i32.and
-  local.get $4
+  local.get $3
   i32.const 8
   i32.sub
   local.tee $3
   i32.const 1
   i32.or
   i32.or
-  i32.store $0
+  i32.store
   local.get $1
   i32.const 0
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $1
   i32.const 0
-  i32.store $0 offset=8
+  i32.store offset=8
   local.get $1
   i32.const 4
   i32.add
@@ -821,10 +834,10 @@
   i32.add
   local.tee $3
   i32.const 2
-  i32.store $0
+  i32.store
   local.get $0
   local.get $3
-  i32.store $0 offset=1568
+  i32.store offset=1568
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock
@@ -832,7 +845,7 @@
  (func $~lib/rt/tlsf/initialize
   (local $0 i32)
   (local $1 i32)
-  memory.size $0
+  memory.size
   local.tee $1
   i32.const 0
   i32.le_s
@@ -840,7 +853,7 @@
    i32.const 1
    local.get $1
    i32.sub
-   memory.grow $0
+   memory.grow
    i32.const 0
    i32.lt_s
   else
@@ -851,10 +864,10 @@
   end
   i32.const 34368
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 35936
   i32.const 0
-  i32.store $0
+  i32.store
   loop $for-loop|0
    local.get $0
    i32.const 23
@@ -866,7 +879,7 @@
     i32.const 34368
     i32.add
     i32.const 0
-    i32.store $0 offset=4
+    i32.store offset=4
     i32.const 0
     local.set $1
     loop $for-loop|1
@@ -884,7 +897,7 @@
       i32.const 34368
       i32.add
       i32.const 0
-      i32.store $0 offset=96
+      i32.store offset=96
       local.get $1
       i32.const 1
       i32.add
@@ -901,7 +914,7 @@
   end
   i32.const 34368
   i32.const 35940
-  memory.size $0
+  memory.size
   i64.extend_i32_s
   i64.const 16
   i64.shl
@@ -934,7 +947,7 @@
     i32.eqz
     local.set $1
     global.get $~lib/rt/itcms/iter
-    i32.load $0 offset=4
+    i32.load offset=4
     i32.const -4
     i32.and
     local.set $0
@@ -947,19 +960,19 @@
       global.set $~lib/rt/itcms/iter
       local.get $1
       local.get $0
-      i32.load $0 offset=4
+      i32.load offset=4
+      local.tee $2
       i32.const 3
       i32.and
       i32.ne
       if
        local.get $0
-       local.get $0
-       i32.load $0 offset=4
+       local.get $2
        i32.const -4
        i32.and
        local.get $1
        i32.or
-       i32.store $0 offset=4
+       i32.store offset=4
        i32.const 0
        global.set $~lib/rt/itcms/visitCount
        local.get $0
@@ -970,7 +983,7 @@
        return
       end
       local.get $0
-      i32.load $0 offset=4
+      i32.load offset=4
       i32.const -4
       i32.and
       local.set $0
@@ -982,7 +995,7 @@
     call $~lib/rt/itcms/visitRoots
     global.get $~lib/rt/itcms/toSpace
     global.get $~lib/rt/itcms/iter
-    i32.load $0 offset=4
+    i32.load offset=4
     i32.const -4
     i32.and
     i32.eq
@@ -995,12 +1008,8 @@
       i32.lt_u
       if
        local.get $0
-       i32.load $0
-       local.tee $2
-       if
-        local.get $2
-        call $byn-split-outlined-A$~lib/rt/itcms/__visit
-       end
+       i32.load
+       call $~lib/rt/itcms/__visit
        local.get $0
        i32.const 4
        i32.add
@@ -1009,7 +1018,7 @@
       end
      end
      global.get $~lib/rt/itcms/iter
-     i32.load $0 offset=4
+     i32.load offset=4
      i32.const -4
      i32.and
      local.set $0
@@ -1020,26 +1029,26 @@
       if
        local.get $1
        local.get $0
-       i32.load $0 offset=4
+       i32.load offset=4
+       local.tee $2
        i32.const 3
        i32.and
        i32.ne
        if
         local.get $0
-        local.get $0
-        i32.load $0 offset=4
+        local.get $2
         i32.const -4
         i32.and
         local.get $1
         i32.or
-        i32.store $0 offset=4
+        i32.store offset=4
         local.get $0
         i32.const 20
         i32.add
         call $~lib/rt/__visit_members
        end
        local.get $0
-       i32.load $0 offset=4
+       i32.load offset=4
        i32.const -4
        i32.and
        local.set $0
@@ -1055,7 +1064,7 @@
      local.get $1
      global.set $~lib/rt/itcms/white
      local.get $0
-     i32.load $0 offset=4
+     i32.load offset=4
      i32.const -4
      i32.and
      global.set $~lib/rt/itcms/iter
@@ -1071,7 +1080,7 @@
    i32.ne
    if
     local.get $0
-    i32.load $0 offset=4
+    i32.load offset=4
     local.tee $1
     i32.const -4
     i32.and
@@ -1096,14 +1105,14 @@
     if
      local.get $0
      i32.const 0
-     i32.store $0 offset=4
+     i32.store offset=4
      local.get $0
      i32.const 0
-     i32.store $0 offset=8
+     i32.store offset=8
     else
      global.get $~lib/rt/itcms/total
      local.get $0
-     i32.load $0
+     i32.load
      i32.const -4
      i32.and
      i32.const 4
@@ -1138,7 +1147,7 @@
        i32.const 1
       else
        local.get $2
-       i32.load $0
+       i32.load
        i32.const 1
        i32.and
       end
@@ -1152,10 +1161,10 @@
       end
       local.get $2
       local.get $2
-      i32.load $0
+      i32.load
       i32.const 1
       i32.or
-      i32.store $0
+      i32.store
       local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
@@ -1167,10 +1176,10 @@
    global.get $~lib/rt/itcms/toSpace
    local.tee $0
    local.get $0
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $0
    local.get $0
-   i32.store $0 offset=8
+   i32.store offset=8
    i32.const 0
    global.set $~lib/rt/itcms/state
   end
@@ -1180,7 +1189,7 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.load $0 offset=4
+  i32.load offset=4
   i32.const -2
   i32.and
   local.tee $1
@@ -1191,10 +1200,10 @@
    i32.const 2
    i32.shl
    i32.add
-   i32.load $0 offset=96
+   i32.load offset=96
   else
    local.get $0
-   i32.load $0
+   i32.load
    i32.const -2
    i32.and
    local.tee $1
@@ -1206,7 +1215,7 @@
     i32.const 2
     i32.shl
     i32.add
-    i32.load $0 offset=4
+    i32.load offset=4
     local.tee $1
     i32.eqz
     if
@@ -1227,7 +1236,7 @@
     i32.const 2
     i32.shl
     i32.add
-    i32.load $0 offset=96
+    i32.load offset=96
    else
     i32.const 0
    end
@@ -1242,7 +1251,7 @@
   global.get $~lib/rt/itcms/threshold
   i32.ge_u
   if
-   block $__inlined_func$~lib/rt/itcms/interrupt
+   block $__inlined_func$~lib/rt/itcms/interrupt$69
     i32.const 2048
     local.set $1
     loop $do-loop|0
@@ -1263,7 +1272,7 @@
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
-      br $__inlined_func$~lib/rt/itcms/interrupt
+      br $__inlined_func$~lib/rt/itcms/interrupt$69
      end
      local.get $1
      i32.const 0
@@ -1294,11 +1303,11 @@
   local.tee $1
   i32.eqz
   if
-   memory.size $0
+   memory.size
    local.tee $1
    i32.const 4
    local.get $2
-   i32.load $0 offset=1568
+   i32.load offset=1568
    local.get $1
    i32.const 16
    i32.shl
@@ -1317,12 +1326,12 @@
    local.get $3
    i32.gt_s
    select
-   memory.grow $0
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     local.get $3
-    memory.grow $0
+    memory.grow
     i32.const 0
     i32.lt_s
     if
@@ -1333,7 +1342,7 @@
    local.get $1
    i32.const 16
    i32.shl
-   memory.size $0
+   memory.size
    i64.extend_i32_s
    i64.const 16
    i64.shl
@@ -1352,7 +1361,7 @@
    end
   end
   local.get $1
-  i32.load $0
+  i32.load
   i32.const -4
   i32.and
   i32.const 28
@@ -1369,7 +1378,7 @@
   local.get $1
   call $~lib/rt/tlsf/removeBlock
   local.get $1
-  i32.load $0
+  i32.load
   local.tee $3
   i32.const -4
   i32.and
@@ -1385,7 +1394,7 @@
    i32.and
    i32.const 28
    i32.or
-   i32.store $0
+   i32.store
    local.get $1
    i32.const 32
    i32.add
@@ -1395,7 +1404,7 @@
    i32.sub
    i32.const 1
    i32.or
-   i32.store $0
+   i32.store
    local.get $2
    local.get $3
    call $~lib/rt/tlsf/insertBlock
@@ -1404,54 +1413,54 @@
    local.get $3
    i32.const -2
    i32.and
-   i32.store $0
+   i32.store
    local.get $1
    i32.const 4
    i32.add
    local.get $1
-   i32.load $0
+   i32.load
    i32.const -4
    i32.and
    i32.add
    local.tee $2
    local.get $2
-   i32.load $0
+   i32.load
    i32.const -3
    i32.and
-   i32.store $0
+   i32.store
   end
   local.get $1
   local.get $0
-  i32.store $0 offset=12
+  i32.store offset=12
   local.get $1
   i32.const 0
-  i32.store $0 offset=16
+  i32.store offset=16
   global.get $~lib/rt/itcms/fromSpace
   local.tee $0
-  i32.load $0 offset=8
+  i32.load offset=8
   local.set $2
   local.get $1
   local.get $0
   global.get $~lib/rt/itcms/white
   i32.or
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $1
   local.get $2
-  i32.store $0 offset=8
+  i32.store offset=8
   local.get $2
   local.get $1
   local.get $2
-  i32.load $0 offset=4
+  i32.load offset=4
   i32.const 3
   i32.and
   i32.or
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $0
   local.get $1
-  i32.store $0 offset=8
+  i32.store offset=8
   global.get $~lib/rt/itcms/total
   local.get $1
-  i32.load $0
+  i32.load
   i32.const -4
   i32.and
   i32.const 4
@@ -1464,7 +1473,7 @@
   local.tee $0
   i32.const 0
   i32.const 0
-  memory.fill $0
+  memory.fill
   local.get $0
  )
  (func $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X> (param $0 i32)
@@ -1487,25 +1496,25 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $1
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   if (result i32)
-   block $__inlined_func$~instanceof|instanceof/X (result i32)
+   block $__inlined_func$~instanceof|instanceof/X$76 (result i32)
     block $is_instance
      block $tablify|0
       local.get $0
       i32.const 8
       i32.sub
-      i32.load $0
+      i32.load
       i32.const 16
       i32.sub
       br_table $is_instance $tablify|0 $tablify|0 $is_instance $tablify|0 $tablify|0 $is_instance $tablify|0
      end
      i32.const 0
-     br $__inlined_func$~instanceof|instanceof/X
+     br $__inlined_func$~instanceof|instanceof/X$76
     end
     i32.const 1
    end
@@ -1546,18 +1555,18 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $1
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   if (result i32)
-   block $__inlined_func$~instanceof|instanceof/Y (result i32)
+   block $__inlined_func$~instanceof|instanceof/Y$78 (result i32)
     block $is_instance
      local.get $0
      i32.const 8
      i32.sub
-     i32.load $0
+     i32.load
      local.tee $0
      i32.const 19
      i32.eq
@@ -1567,7 +1576,7 @@
      i32.eq
      br_if $is_instance
      i32.const 0
-     br $__inlined_func$~instanceof|instanceof/Y
+     br $__inlined_func$~instanceof|instanceof/Y$78
     end
     i32.const 1
    end
@@ -1608,16 +1617,16 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $1
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   if (result i32)
    local.get $0
    i32.const 8
    i32.sub
-   i32.load $0
+   i32.load
    i32.const 22
    i32.eq
   else
@@ -1657,18 +1666,18 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $1
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   if (result i32)
-   block $__inlined_func$~instanceof|instanceof/Y (result i32)
+   block $__inlined_func$~instanceof|instanceof/Y$82 (result i32)
     block $is_instance
      local.get $0
      i32.const 8
      i32.sub
-     i32.load $0
+     i32.load
      local.tee $0
      i32.const 19
      i32.eq
@@ -1678,7 +1687,7 @@
      i32.eq
      br_if $is_instance
      i32.const 0
-     br $__inlined_func$~instanceof|instanceof/Y
+     br $__inlined_func$~instanceof|instanceof/Y$82
     end
     i32.const 1
    end
@@ -1718,16 +1727,16 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $1
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   if (result i32)
    local.get $0
    i32.const 8
    i32.sub
-   i32.load $0
+   i32.load
    i32.const 22
    i32.eq
   else
@@ -1775,7 +1784,7 @@
                            local.get $0
                            i32.const 8
                            i32.sub
-                           i32.load $0
+                           i32.load
                            br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $instanceof/A $instanceof/B $instanceof/C $instanceof/Child<i32> $instanceof/Parent<i32> $instanceof/Child<f32> $instanceof/Parent<f32> $instanceof/SomethingElse<i32> $instanceof/Animal $instanceof/Cat $instanceof/BlackCat $instanceof/W $instanceof/X $instanceof/IB $instanceof/IA $instanceof/Y $instanceof/ID $instanceof/IC $instanceof/Z $instanceof/IE $invalid
                           end
                           return
@@ -1785,11 +1794,11 @@
                         return
                        end
                        local.get $0
-                       i32.load $0
+                       i32.load
                        local.tee $0
                        if
                         local.get $0
-                        call $byn-split-outlined-A$~lib/rt/itcms/__visit
+                        call $~lib/rt/itcms/__visit
                        end
                        return
                       end
@@ -1856,26 +1865,27 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $1
   i64.const 0
-  i64.store $0
+  i64.store
   local.get $0
   i32.eqz
   if
-   global.get $~lib/memory/__stack_pointer
+   local.get $1
    i32.const 4
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   local.get $0
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $1
   local.get $0
   call $~lib/object/Object#constructor
   local.tee $0
-  i32.store $0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -1900,26 +1910,27 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $1
   i64.const 0
-  i64.store $0
+  i64.store
   local.get $0
   i32.eqz
   if
-   global.get $~lib/memory/__stack_pointer
+   local.get $1
    i32.const 12
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   local.get $0
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $1
   local.get $0
   call $~lib/object/Object#constructor
   local.tee $0
-  i32.store $0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -1944,26 +1955,27 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $1
   i64.const 0
-  i64.store $0
+  i64.store
   local.get $0
   i32.eqz
   if
-   global.get $~lib/memory/__stack_pointer
+   local.get $1
    i32.const 13
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   local.get $0
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $1
   local.get $0
   call $instanceof/Animal#constructor
   local.tee $0
-  i32.store $0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -1991,21 +2003,21 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i64.const 0
-  i64.store $0
+  i64.store
   local.get $0
   i32.const 14
   call $~lib/rt/itcms/__new
   local.tee $0
-  i32.store $0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   local.get $0
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $1
   local.get $0
   call $instanceof/Cat#constructor
   local.tee $0
-  i32.store $0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -2030,26 +2042,27 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $1
   i64.const 0
-  i64.store $0
+  i64.store
   local.get $0
   i32.eqz
   if
-   global.get $~lib/memory/__stack_pointer
+   local.get $1
    i32.const 16
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   local.get $0
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $1
   local.get $0
   call $~lib/object/Object#constructor
   local.tee $0
-  i32.store $0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -2074,26 +2087,27 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $1
   i64.const 0
-  i64.store $0
+  i64.store
   local.get $0
   i32.eqz
   if
-   global.get $~lib/memory/__stack_pointer
+   local.get $1
    i32.const 19
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   local.get $0
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $1
   local.get $0
   call $instanceof/X#constructor
   local.tee $0
-  i32.store $0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -2117,8 +2131,8 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 88
-   memory.fill $0
-   memory.size $0
+   memory.fill
+   memory.size
    i32.const 16
    i32.shl
    i32.const 34356
@@ -2128,26 +2142,26 @@
    global.set $~lib/rt/itcms/threshold
    i32.const 1172
    i32.const 1168
-   i32.store $0
+   i32.store
    i32.const 1176
    i32.const 1168
-   i32.store $0
+   i32.store
    i32.const 1168
    global.set $~lib/rt/itcms/pinSpace
    i32.const 1204
    i32.const 1200
-   i32.store $0
+   i32.store
    i32.const 1208
    i32.const 1200
-   i32.store $0
+   i32.store
    i32.const 1200
    global.set $~lib/rt/itcms/toSpace
    i32.const 1348
    i32.const 1344
-   i32.store $0
+   i32.store
    i32.const 1352
    i32.const 1344
-   i32.store $0
+   i32.store
    i32.const 1344
    global.set $~lib/rt/itcms/fromSpace
    i32.const 0
@@ -2164,21 +2178,21 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store
    local.get $0
    i32.const 5
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    local.get $0
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $1
    local.get $0
    call $instanceof/A#constructor
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2196,32 +2210,32 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store
    local.get $0
    i32.const 6
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    local.get $0
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $1
    local.get $0
    call $instanceof/A#constructor
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store $0
+   i32.store
    local.get $0
    i32.const 8
    i32.sub
-   i32.load $0
+   i32.load
    i32.const 6
    i32.eq
    if
@@ -2236,17 +2250,17 @@
     global.get $~lib/memory/__stack_pointer
     local.tee $0
     i32.const 0
-    i32.store $0
+    i32.store
     local.get $0
     global.get $instanceof/a
     local.tee $0
-    i32.store $0
+    i32.store
     local.get $0
     if
      local.get $0
      i32.const 8
      i32.sub
-     i32.load $0
+     i32.load
      drop
     end
     global.get $~lib/memory/__stack_pointer
@@ -2257,13 +2271,13 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/a
    local.tee $0
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $0
    if (result i32)
     local.get $0
     i32.const 8
     i32.sub
-    i32.load $0
+    i32.load
     i32.const 5
     i32.eq
    else
@@ -2299,16 +2313,16 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store
    local.get $0
    i32.const 7
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    local.get $0
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $1
    i32.const 8
    i32.sub
@@ -2318,33 +2332,34 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
+   local.tee $2
    i64.const 0
-   i64.store $0
+   i64.store
    local.get $0
    i32.eqz
    if
-    global.get $~lib/memory/__stack_pointer
+    local.get $2
     i32.const 8
     call $~lib/rt/itcms/__new
     local.tee $0
-    i32.store $0
+    i32.store
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $2
    local.get $0
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $2
    local.get $0
    call $~lib/object/Object#constructor
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $1
    local.get $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2362,16 +2377,16 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store
    local.get $0
    i32.const 9
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    local.get $0
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $1
    i32.const 8
    i32.sub
@@ -2381,33 +2396,34 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
+   local.tee $2
    i64.const 0
-   i64.store $0
+   i64.store
    local.get $0
    i32.eqz
    if
-    global.get $~lib/memory/__stack_pointer
+    local.get $2
     i32.const 10
     call $~lib/rt/itcms/__new
     local.tee $0
-    i32.store $0
+    i32.store
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $2
    local.get $0
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $2
    local.get $0
    call $~lib/object/Object#constructor
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $1
    local.get $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2417,13 +2433,13 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/childAsParent
    local.tee $0
-   i32.store $0 offset=8
+   i32.store offset=8
    local.get $0
    if (result i32)
     local.get $0
     i32.const 8
     i32.sub
-    i32.load $0
+    i32.load
     i32.const 9
     i32.eq
    else
@@ -2441,15 +2457,15 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/childAsParent
    local.tee $0
-   i32.store $0 offset=12
+   i32.store offset=12
    local.get $0
    if (result i32)
-    block $__inlined_func$~anyinstanceof|instanceof/Child (result i32)
+    block $__inlined_func$~anyinstanceof|instanceof/Child$110 (result i32)
      block $is_instance1
       local.get $0
       i32.const 8
       i32.sub
-      i32.load $0
+      i32.load
       local.tee $0
       i32.const 7
       i32.eq
@@ -2459,7 +2475,7 @@
       i32.eq
       br_if $is_instance1
       i32.const 0
-      br $__inlined_func$~anyinstanceof|instanceof/Child
+      br $__inlined_func$~anyinstanceof|instanceof/Child$110
      end
      i32.const 1
     end
@@ -2486,15 +2502,15 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/animal
    local.tee $0
-   i32.store $0 offset=16
+   i32.store offset=16
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$111 (result i32)
      block $is_instance2
       local.get $0
       i32.const 8
       i32.sub
-      i32.load $0
+      i32.load
       local.tee $0
       i32.const 13
       i32.eq
@@ -2504,7 +2520,7 @@
       i32.eq
       br_if $is_instance2
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat
+      br $__inlined_func$~instanceof|instanceof/Cat$111
      end
      i32.const 1
     end
@@ -2522,13 +2538,13 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/animal
    local.tee $0
-   i32.store $0 offset=20
+   i32.store offset=20
    local.get $0
    if (result i32)
     local.get $0
     i32.const 8
     i32.sub
-    i32.load $0
+    i32.load
     i32.const 14
     i32.eq
    else
@@ -2545,15 +2561,15 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/cat
    local.tee $0
-   i32.store $0 offset=24
+   i32.store offset=24
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat0 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$113 (result i32)
      block $is_instance4
       local.get $0
       i32.const 8
       i32.sub
-      i32.load $0
+      i32.load
       local.tee $0
       i32.const 13
       i32.eq
@@ -2563,7 +2579,7 @@
       i32.eq
       br_if $is_instance4
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat0
+      br $__inlined_func$~instanceof|instanceof/Cat$113
      end
      i32.const 1
     end
@@ -2582,13 +2598,13 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/cat
    local.tee $0
-   i32.store $0 offset=28
+   i32.store offset=28
    local.get $0
    if (result i32)
     local.get $0
     i32.const 8
     i32.sub
-    i32.load $0
+    i32.load
     i32.const 14
     i32.eq
    else
@@ -2605,15 +2621,15 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/blackcat
    local.tee $0
-   i32.store $0 offset=32
+   i32.store offset=32
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat1 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$115 (result i32)
      block $is_instance6
       local.get $0
       i32.const 8
       i32.sub
-      i32.load $0
+      i32.load
       local.tee $0
       i32.const 13
       i32.eq
@@ -2623,7 +2639,7 @@
       i32.eq
       br_if $is_instance6
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat1
+      br $__inlined_func$~instanceof|instanceof/Cat$115
      end
      i32.const 1
     end
@@ -2642,13 +2658,13 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/blackcat
    local.tee $0
-   i32.store $0 offset=36
+   i32.store offset=36
    local.get $0
    if (result i32)
     local.get $0
     i32.const 8
     i32.sub
-    i32.load $0
+    i32.load
     i32.const 14
     i32.eq
    else
@@ -2684,15 +2700,15 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/nullableAnimal
    local.tee $0
-   i32.store $0 offset=40
+   i32.store offset=40
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat2 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$117 (result i32)
      block $is_instance8
       local.get $0
       i32.const 8
       i32.sub
-      i32.load $0
+      i32.load
       local.tee $0
       i32.const 13
       i32.eq
@@ -2702,7 +2718,7 @@
       i32.eq
       br_if $is_instance8
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat2
+      br $__inlined_func$~instanceof|instanceof/Cat$117
      end
      i32.const 1
     end
@@ -2720,13 +2736,13 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/nullableAnimal
    local.tee $0
-   i32.store $0 offset=44
+   i32.store offset=44
    local.get $0
    if (result i32)
     local.get $0
     i32.const 8
     i32.sub
-    i32.load $0
+    i32.load
     i32.const 14
     i32.eq
    else
@@ -2753,15 +2769,15 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/nullableCat
    local.tee $0
-   i32.store $0 offset=48
+   i32.store offset=48
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat3 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$119 (result i32)
      block $is_instance10
       local.get $0
       i32.const 8
       i32.sub
-      i32.load $0
+      i32.load
       local.tee $0
       i32.const 13
       i32.eq
@@ -2771,7 +2787,7 @@
       i32.eq
       br_if $is_instance10
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat3
+      br $__inlined_func$~instanceof|instanceof/Cat$119
      end
      i32.const 1
     end
@@ -2790,13 +2806,13 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/nullableCat
    local.tee $0
-   i32.store $0 offset=52
+   i32.store offset=52
    local.get $0
    if (result i32)
     local.get $0
     i32.const 8
     i32.sub
-    i32.load $0
+    i32.load
     i32.const 14
     i32.eq
    else
@@ -2823,15 +2839,15 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/nullableBlackcat
    local.tee $0
-   i32.store $0 offset=56
+   i32.store offset=56
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat4 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$121 (result i32)
      block $is_instance12
       local.get $0
       i32.const 8
       i32.sub
-      i32.load $0
+      i32.load
       local.tee $0
       i32.const 13
       i32.eq
@@ -2841,7 +2857,7 @@
       i32.eq
       br_if $is_instance12
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat4
+      br $__inlined_func$~instanceof|instanceof/Cat$121
      end
      i32.const 1
     end
@@ -2860,13 +2876,13 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/nullableBlackcat
    local.tee $0
-   i32.store $0 offset=60
+   i32.store offset=60
    local.get $0
    if (result i32)
     local.get $0
     i32.const 8
     i32.sub
-    i32.load $0
+    i32.load
     i32.const 14
     i32.eq
    else
@@ -2884,22 +2900,22 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
-   i32.store $0 offset=64
+   i32.store offset=64
    local.get $0
    i32.const 0
-   i32.store $0 offset=68
+   i32.store offset=68
    local.get $0
    i32.const 0
-   i32.store $0 offset=72
+   i32.store offset=72
    local.get $0
    i32.const 0
-   i32.store $0 offset=76
+   i32.store offset=76
    local.get $0
    i32.const 0
-   i32.store $0 offset=80
+   i32.store offset=80
    local.get $0
    i32.const 0
-   i32.store $0 offset=84
+   i32.store offset=84
    local.get $0
    i32.const 8
    i32.sub
@@ -2911,21 +2927,21 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store
    local.get $0
    i32.const 15
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    local.get $0
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $1
    local.get $0
    call $~lib/object/Object#constructor
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2949,21 +2965,21 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
-   i64.store $0
+   i64.store
    local.get $0
    i32.const 22
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    local.get $0
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $1
    local.get $0
    call $instanceof/Y#constructor
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2973,52 +2989,52 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/w
    local.tee $1
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $2
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $3
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $2
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $2
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $3
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $1
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
@@ -3030,16 +3046,16 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
-   i32.store $0
+   i32.store
    local.get $0
    local.get $1
-   i32.store $0
+   i32.store
    local.get $1
    if (result i32)
     local.get $1
     i32.const 8
     i32.sub
-    i32.load $0
+    i32.load
     i32.const 15
     i32.eq
    else
@@ -3061,533 +3077,533 @@
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/w
    local.tee $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Z>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Z>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Z>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
-   local.get $0
-   call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
-   global.get $~lib/memory/__stack_pointer
-   global.get $instanceof/y
-   local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   local.tee $0
+   i32.store
+   local.get $0
+   call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   global.get $instanceof/y
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
-   i32.store $0
-   global.get $~lib/memory/__stack_pointer
-   global.get $instanceof/x
-   local.tee $0
-   i32.store $0
-   local.get $0
-   call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
+   i32.store
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/x
    local.tee $0
-   i32.store $0
+   i32.store
+   local.get $0
+   call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
+   global.get $~lib/memory/__stack_pointer
+   global.get $instanceof/x
+   local.tee $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/y
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
-   local.get $0
-   call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>
-   global.get $~lib/memory/__stack_pointer
-   global.get $instanceof/z
-   local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>
    global.get $~lib/memory/__stack_pointer
    global.get $instanceof/z
    local.tee $0
-   i32.store $0
+   i32.store
+   local.get $0
+   call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>
+   global.get $~lib/memory/__stack_pointer
+   global.get $instanceof/z
+   local.tee $0
+   i32.store
    local.get $0
    call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>
    global.get $~lib/memory/__stack_pointer
@@ -3604,6 +3620,7 @@
   unreachable
  )
  (func $~lib/object/Object#constructor (param $0 i32) (result i32)
+  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -3620,40 +3637,22 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $1
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $0
   i32.eqz
   if
-   global.get $~lib/memory/__stack_pointer
+   local.get $1
    i32.const 0
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store $0
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $0
- )
- (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
-  global.get $~lib/rt/itcms/white
-  local.get $0
-  i32.const 20
-  i32.sub
-  local.tee $0
-  i32.load $0 offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   local.get $0
-   call $~lib/rt/itcms/Object#makeGray
-   global.get $~lib/rt/itcms/visitCount
-   i32.const 1
-   i32.add
-   global.set $~lib/rt/itcms/visitCount
-  end
  )
 )

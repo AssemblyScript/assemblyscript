@@ -1,8 +1,8 @@
 (module
- (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_none (func (param i32)))
+ (type $0 (func))
+ (type $1 (func (result i32)))
+ (type $2 (func (param i32 i32 i32 i32)))
+ (type $3 (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $getter-setter/Foo._bar (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 76))

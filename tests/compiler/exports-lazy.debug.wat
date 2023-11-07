@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $0 (func))
  (global $exports-lazy/lazyGlobalUsed i32 (i32.const 64))
  (global $exports-lazy/lazyGlobalUnused i32 (i32.const 144))
  (global $~lib/memory/__data_end i32 (i32.const 172))
@@ -24,10 +24,8 @@
   call $exports-lazy/lazyFuncUsed
  )
  (func $exports-lazy/lazyFuncUsed
-  nop
  )
  (func $exports-lazy/lazyFuncUnused
-  nop
  )
  (func $~start
   call $start:exports-lazy

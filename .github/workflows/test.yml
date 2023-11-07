@@ -27,10 +27,10 @@ jobs:
     strategy:
       matrix:
         os: ["ubuntu", "macos", "windows"]
-        node_version: ["current", "lts_latest"]
+        node_version: ["current", "lts/*"]
     steps:
     - uses: actions/checkout@v3
-    - uses: dcodeIO/setup-node-nvm@master
+    - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node_version }}
     - name: Install dependencies
@@ -50,7 +50,7 @@ jobs:
         target: ["debug", "release"]
     steps:
     - uses: actions/checkout@v3
-    - uses: dcodeIO/setup-node-nvm@master
+    - uses: actions/setup-node@v3
       with:
         node-version: current
     - name: Install dependencies
@@ -71,10 +71,9 @@ jobs:
     needs: check
     steps:
     - uses: actions/checkout@v3
-    - uses: dcodeIO/setup-node-nvm@master
+    - uses: actions/setup-node@v3
       with:
-        node-mirror: https://nodejs.org/download/v8-canary/
-        node-version: 21.0.0-v8-canary20230419061e93e884
+        node-version: 21-v8-canary
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Build
@@ -90,7 +89,7 @@ jobs:
     needs: check
     steps:
     - uses: actions/checkout@v3
-    - uses: dcodeIO/setup-node-nvm@master
+    - uses: actions/setup-node@v3
       with:
         node-version: current
     - name: Install dependencies
@@ -115,7 +114,7 @@ jobs:
     needs: check
     steps:
     - uses: actions/checkout@v3
-    - uses: dcodeIO/setup-node-nvm@master
+    - uses: actions/setup-node@v3
       with:
         node-version: current
     - name: Install dependencies

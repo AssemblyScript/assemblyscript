@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i64_=>_i64 (func (param i64) (result i64)))
+ (type $0 (func))
+ (type $1 (func (param i64) (result i64)))
  (global $const-folding/w (mut i32) (i32.const 0))
  (global $const-folding/x (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 8))
