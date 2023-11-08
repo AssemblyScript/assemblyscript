@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import { fileURLToPath } from "url";
-import glob from "glob";
+import { globSync } from "glob";
 import { diff } from "../util/text.js";
 import { stdoutColors } from "../util/terminal.js";
 import * as optionsUtil from "../util/options.js";
@@ -42,7 +42,7 @@ if (args.help) {
 const basedir = path.join(dirname, "parser");
 
 // Get a list of all tests
-let tests = glob.sync("**/!(_*).ts", { cwd: basedir });
+let tests = globSync("**/!(_*).ts", { cwd: basedir, posix: true });
 
 // Run specific tests only if arguments are provided
 if (argv.length) {
