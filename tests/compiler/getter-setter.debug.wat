@@ -23,6 +23,7 @@
   global.set $getter-setter/Foo._bar
  )
  (func $start:getter-setter
+  (local $0 i32)
   call $getter-setter/Foo.get:bar
   i32.const 0
   i32.eq
@@ -50,8 +51,9 @@
    unreachable
   end
   i32.const 2
+  local.tee $0
   call $getter-setter/Foo.set:bar
-  call $getter-setter/Foo.get:bar
+  local.get $0
   i32.const 2
   i32.eq
   i32.eqz
