@@ -215,9 +215,12 @@ const common = {
 
 async function invokeBuild(options) {
   const ctx = await esbuild.context(options);
-  if (watch) await ctx.watch();
-  else await ctx.rebuild();
-  ctx.dispose();
+  if (watch) {
+    await ctx.watch();
+  } else {
+    await ctx.rebuild();
+    ctx.dispose();
+  }
 }
 
 const srcBuild = invokeBuild({
