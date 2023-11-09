@@ -1,5 +1,8 @@
 name: Publish
 on:
+  # Note that the main branch will be used regardless of the branch chosen
+  # in the web interface.
+  workflow_dispatch:
   schedule:
   - cron: '0 0 * * *'
 jobs:
