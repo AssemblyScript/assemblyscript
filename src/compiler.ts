@@ -188,7 +188,8 @@ import {
   TypeKind,
   TypeFlags,
   Signature,
-  typesToRefs
+  typesToRefs,
+  SignatureFlags
 } from "./types";
 
 import {
@@ -2054,20 +2055,23 @@ export class Compiler extends DiagnosticEmitter {
 
   // === Table ====================================================================================
 
+  private registerFunctionInTable(instance: Function): u32 {
+    // Add to the function table
+    let functionTable = this.functionTable;
+    let tableBase = this.options.tableBase;
+    if (!tableBase) tableBase = 1; // leave first elem blank
+    let index = tableBase + functionTable.length;
+    functionTable.push(instance);
+    return index;
+  }
+
   /** Ensures that a runtime counterpart of the specified function exists and returns its address. */
   ensureRuntimeFunction(instance: Function): i64 {
     assert(instance.is(CommonFlags.Compiled) && !instance.is(CommonFlags.Stub));
     let program = this.program;
     let memorySegment = instance.memorySegment;
     if (!memorySegment) {
-
-      // Add to the function table
-      let functionTable = this.functionTable;
-      let tableBase = this.options.tableBase;
-      if (!tableBase) tableBase = 1; // leave first elem blank
-      let index = tableBase + functionTable.length;
-      functionTable.push(instance);
-
+      let index = this.registerFunctionInTable(instance);
       // Create runtime function
       let rtInstance = assert(this.resolver.resolveClass(program.functionPrototype, [ instance.type ]));
       let buf = rtInstance.createBuffer();
@@ -6085,12 +6089,13 @@ export class Compiler extends DiagnosticEmitter {
     let functionArg = this.compileExpression(expression.expression, Type.auto);
     let signature = this.currentType.getSignature();
     if (signature) {
+      const thisArg = signature.hasEnv ? functionArg : 0;
       return this.compileCallIndirect(
         signature,
         functionArg,
         expression.args,
         expression,
-        0,
+        thisArg,
         contextualType == Type.void
       );
     }
@@ -7036,6 +7041,38 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     return module.unreachable();
+  }
+
+  compileFirstClassFunction(
+    expression: FunctionExpression
+  ): ExpressionRef {
+    let module = this.module;
+    let flow = this.currentFlow;
+    let sourceFunction = flow.sourceFunction;
+    let declaration = expression.declaration.clone();
+    let anonymousId = sourceFunction.nextAnonymousId++;
+    let contextualTypeArguments = cloneMap(flow.contextualTypeArguments);
+
+    let prototype = new FunctionPrototype(
+      `${sourceFunction.internalName}|anonymous|${anonymousId}`,
+      sourceFunction,
+      declaration
+    );
+    let instance = this.resolver.resolveFirstClassFunction(prototype, contextualTypeArguments, ReportMode.Report);
+    if (!instance) return this.module.unreachable();
+    instance.flow.outer = flow;
+
+    let worked = this.compileFunction(instance);
+    this.currentType = instance.signature.type;
+    if (!worked) return module.unreachable();
+
+    const currentType = this.currentType;
+    if (!instance) return module.unreachable(); 
+    const functionIndexInTable = this.registerFunctionInTable(instance);
+    let ctor = this.ensureConstructor(this.program.firstClassFunctionInstance, expression);
+    let expr = this.makeCallDirect(ctor, [module.i32(0), module.i32(functionIndexInTable), module.usize(0)], expression, /* immediatelyDropped */ false);
+    this.currentType = currentType;
+    return expr;
   }
 
   private compileFunctionExpression(
@@ -8774,7 +8811,7 @@ export class Compiler extends DiagnosticEmitter {
             classInstance.type,
             classInstance.type,
             baseCtor.signature.requiredParameters,
-            baseCtor.signature.hasRest
+            baseCtor.signature.hasRest ? SignatureFlags.Rest : SignatureFlags.None
           ),
           contextualTypeArguments
         );

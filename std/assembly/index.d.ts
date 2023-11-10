@@ -281,6 +281,11 @@ declare function decodeURI(str: string): string;
 /** Decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent. */
 declare function decodeURIComponent(str: string): string;
 
+/** Experimental closure support, mark function expression as closure function */
+declare function experimental_first_class_function<T extends Function>(fn: T): experimental_first_class_function<T>;
+/** Experimental closure support, mark function type as closure function */
+declare type experimental_first_class_function<T extends Function> = T;
+
 /** Atomic operations. */
 declare namespace atomic {
   /** Atomically loads an integer value from memory and returns it. */
@@ -2306,6 +2311,11 @@ interface Function {
   call(thisArg: unknown, ...args: unknown[]): any;
   /** Returns a string representation of this function. */
   toString(): string;
+}
+
+interface FirstClassFunctionBase {
+  readonly _index: u32;
+  _env: usize;
 }
 
 /**

@@ -926,6 +926,14 @@ export function typesToString(types: Type[]): string {
   return sb.join(",");
 }
 
+export enum SignatureFlags {
+  None = 0,
+  /** rest parameters */
+  Rest = 1 << 0,
+  /** first-class function, this argument */
+  Env = 1 << 1,
+}
+
 /** Represents a fully resolved function signature. */
 export class Signature {
   /** Construct a new signature. */
@@ -940,8 +948,8 @@ export class Signature {
     thisType: Type | null = null,
     /** Number of required parameters excluding `this`. Other parameters are considered optional. */
     requiredParameters: i32 = parameterTypes ? parameterTypes.length : 0,
-    /** Whether the last parameter is a rest parameter. */
-    hasRest: bool = false,
+    /** signature flags */
+    flags: SignatureFlags = SignatureFlags.None,
   ): Signature {
     // get the usize type, and the type of the signature
     let usizeType = program.options.usizeType;
@@ -956,7 +964,7 @@ export class Signature {
     let nextId = program.nextSignatureId;
     
     // construct the signature and calculate it's unique key
-    let signature = new Signature(program, parameterTypes, returnType, thisType, requiredParameters, hasRest, nextId, type);
+    let signature = new Signature(program, parameterTypes, returnType, thisType, requiredParameters, flags, nextId, type);
     let uniqueKey = signature.toString();
 
     // check if it exists, and return it
@@ -986,12 +994,24 @@ export class Signature {
     /** Number of required parameters excluding `this`. Other parameters are considered optional. */
     public readonly requiredParameters: i32,
     /** Whether the last parameter is a rest parameter. */
-    public readonly hasRest: bool,
+    public readonly flags: SignatureFlags,
     /** Unique id representing this signature. */
     public readonly id: u32,
     /** Respective function type. */
     public readonly type: Type,
-  ) {}
+  ) {
+    if (this.hasEnv) assert(thisType != null);
+    assert(!(this.hasEnv && this.hasRest), "not implement first class function with rest parameters");
+  }
+
+  get hasRest(): bool {
+    return (this.flags & SignatureFlags.Rest) == SignatureFlags.Rest;
+  }
+
+  /** signature is first-class function */
+  get hasEnv(): bool {
+    return (this.flags & SignatureFlags.Env) == SignatureFlags.Env;
+  }
 
   get paramRefs(): TypeRef {
     let thisType = this.thisType;
@@ -1028,7 +1048,7 @@ export class Signature {
     }
 
     // check rest parameter
-    if (this.hasRest != other.hasRest) return false;
+    if (this.flags != other.flags) return false;
 
     // check return type
     if (!this.returnType.equals(other.returnType)) return false;
@@ -1049,16 +1069,19 @@ export class Signature {
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
   isAssignableTo(target: Signature, checkCompatibleOverride: bool = false): bool {
-    let thisThisType = this.thisType;
-    let targetThisType = target.thisType;
-
-    if (thisThisType && targetThisType) {
-      const compatibleThisType = checkCompatibleOverride 
-        ? thisThisType.canExtendOrImplement(targetThisType)
-        : targetThisType.isAssignableTo(thisThisType);
-      if (!compatibleThisType) return false; 
-    } else if (thisThisType || targetThisType) {
-      return false;
+    if (!target.hasEnv) {
+      // first class function don't need to check this type
+      let thisThisType = this.thisType;
+      let targetThisType = target.thisType;
+  
+      if (thisThisType && targetThisType) {
+        const compatibleThisType = checkCompatibleOverride 
+          ? thisThisType.canExtendOrImplement(targetThisType)
+          : targetThisType.isAssignableTo(thisThisType);
+        if (!compatibleThisType) return false; 
+      } else if (thisThisType || targetThisType) {
+        return false;
+      }
     }
 
     // check rest parameter
@@ -1155,7 +1178,8 @@ export class Signature {
     let index = 0;
     let thisType = this.thisType;
     if (thisType) {
-      sb.push(validWat ? "this:" : "this: ");
+      sb.push(this.hasEnv ? "env" : "this");
+      sb.push(validWat ? ":" : ": ");
       sb.push(thisType.toString(validWat));
       index = 1;
     }
@@ -1177,7 +1201,7 @@ export class Signature {
   }
 
   /** Creates a clone of this signature that is safe to modify. */
-  clone(requiredParameters: i32 = this.requiredParameters, hasRest: bool = this.hasRest): Signature {
+  clone(requiredParameters: i32 = this.requiredParameters): Signature {
     let parameterTypes = this.parameterTypes;
     let numParameterTypes = parameterTypes.length;
     let cloneParameterTypes = new Array<Type>(numParameterTypes);
@@ -1190,7 +1214,7 @@ export class Signature {
       this.returnType,
       this.thisType,
       requiredParameters,
-      hasRest
+      this.flags
     );
   }
 }

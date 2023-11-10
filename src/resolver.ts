@@ -36,7 +36,7 @@ import {
   IndexSignature,
   isTypedElement,
   InterfacePrototype,
-  DeclaredElement
+  DeclaredElement,
 } from "./program";
 
 import {
@@ -84,7 +84,8 @@ import {
   Signature,
   typesToString,
   TypeKind,
-  TypeFlags
+  TypeFlags,
+  SignatureFlags,
 } from "./types";
 
 import {
@@ -309,6 +310,9 @@ export class Resolver extends DiagnosticEmitter {
         if (text == CommonNames.valueof)  return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
         if (text == CommonNames.returnof) return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
         if (text == CommonNames.nonnull)  return this.resolveBuiltinNotNullableType(node, ctxElement, ctxTypes, reportMode);
+        if (text == CommonNames.experimental_first_class_function) {
+          return this.resolveBuiltinFirstClassFunctionType(node, ctxElement, ctxTypes, reportMode);
+        }
       }
 
       // Resolve normally
@@ -383,7 +387,7 @@ export class Resolver extends DiagnosticEmitter {
     let numParameters = parameterNodes.length;
     let parameterTypes = new Array<Type>(numParameters);
     let requiredParameters = 0;
-    let hasRest = false;
+    let flags = SignatureFlags.None;
     for (let i = 0; i < numParameters; ++i) {
       let parameterNode = parameterNodes[i];
       switch (parameterNode.parameterKind) {
@@ -393,7 +397,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         case ParameterKind.Rest: {
           assert(i == numParameters - 1);
-          hasRest = true;
+          flags |= SignatureFlags.Rest;
           break;
         }
       }
@@ -435,7 +439,67 @@ export class Resolver extends DiagnosticEmitter {
       );
       if (!returnType) return null;
     }
-    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest);
+    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, flags);
+    return node.isNullable ? signature.type.asNullable() : signature.type;
+  }
+
+  /** Resolves a {@link FunctionTypeNode} to a concrete {@link Type}. */
+  private resolveFirstClassFunctionType(
+    /** The type to resolve. */
+    node: FunctionTypeNode,
+    /** Contextual element. */
+    ctxElement: Element,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> | null = null,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.Report
+  ): Type | null {
+    const explicitThisType = node.explicitThisType;
+    if (explicitThisType) {
+      if (reportMode == ReportMode.Report) {
+        this.error(DiagnosticCode.Not_implemented_0, explicitThisType.range, "first class with this");
+      }
+      return null;
+    }
+
+    const parameterNodes = node.parameters;
+    const numParameters = parameterNodes.length;
+    let parameterTypes = new Array<Type>(numParameters);
+    for (let i = 0; i < numParameters; ++i) {
+      let parameterNode = parameterNodes[i];
+      switch (parameterNode.parameterKind) {
+        case ParameterKind.Default:
+          break;
+        case ParameterKind.Rest:
+          if (reportMode == ReportMode.Report) {
+            this.error(DiagnosticCode.Not_implemented_0, parameterNode.range, "first class with rest parameter");
+          }
+          return null;
+      }
+      let parameterTypeNode = parameterNode.type;
+      if (isTypeOmitted(parameterTypeNode)) {
+        if (reportMode == ReportMode.Report) {
+          this.error(DiagnosticCode.Type_expected, parameterTypeNode.range);
+        }
+        return null;
+      }
+      let parameterType = this.resolveType(parameterTypeNode, ctxElement, ctxTypes, ReportMode.Report);
+      if (!parameterType) return null;
+      parameterTypes[i] = parameterType;
+    }
+    let returnTypeNode = node.returnType;
+    let returnType: Type | null;
+    if (isTypeOmitted(returnTypeNode)) {
+      if (reportMode == ReportMode.Report) {
+        this.error(DiagnosticCode.Type_expected, returnTypeNode.range);
+      }
+      returnType = Type.void;
+    } else {
+      returnType = this.resolveType(returnTypeNode, ctxElement, ctxTypes, ReportMode.Report);
+      if (!returnType) return null;
+    }
+    let thisType = this.program.firstClassFunctionInstance.type;
+    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, numParameters, SignatureFlags.Env);
     return node.isNullable ? signature.type.asNullable() : signature.type;
   }
 
@@ -587,6 +651,28 @@ export class Resolver extends DiagnosticEmitter {
     if (!typeArgument) return null;
     if (!typeArgument.isNullableReference) return typeArgument;
     return typeArgument.nonNullableType;
+  }
+
+  private resolveBuiltinFirstClassFunctionType(
+    /** The type to resolve. */
+    node: NamedTypeNode,
+    /** Contextual element. */
+    ctxElement: Element,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> | null = null,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.Report
+  ): Type | null {
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
+    if (!typeArgumentNode) return null;
+    if (typeArgumentNode.kind != NodeKind.FunctionType) {
+      return null; // FIXME
+    }
+    let typeArgument = this.resolveFirstClassFunctionType(<FunctionTypeNode>typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    if (!typeArgument) return null;
+    let signature = typeArgument.getSignature();
+    if (!signature) return null;
+    return typeArgument;
   }
 
   /** Resolves a type name to the program element it refers to. */
@@ -2761,7 +2847,7 @@ export class Resolver extends DiagnosticEmitter {
           type,
           signatureReference.thisType,
           signatureReference.requiredParameters,
-          signatureReference.hasRest,
+          signatureReference.flags,
         );
       }
     }
@@ -3042,6 +3128,91 @@ export class Resolver extends DiagnosticEmitter {
       ctxTypes,
       reportMode
     );
+  }
+
+  /** Resolves a function prototype using the specified concrete type arguments. */
+  resolveFirstClassFunction(
+    /** The prototype of the function. */
+    prototype: FunctionPrototype,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> = new Map(),
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.Report
+  ): Function | null {
+    let signatureNode = prototype.functionTypeNode;
+    let parent = prototype.parent;
+    let name = prototype.name;
+
+    let classInstance = this.program.firstClassFunctionInstance;
+
+    let explicitThisType = signatureNode.explicitThisType;
+    if (explicitThisType) {
+      if (reportMode == ReportMode.Report) {
+        this.error(DiagnosticCode.Not_implemented_0, explicitThisType.range, "first class with this");
+      }
+      return null;
+    }
+    let envType = classInstance.type;
+
+    // resolve parameter types
+    let signatureParameters = signatureNode.parameters;
+    let numSignatureParameters = signatureParameters.length;
+    let parameterTypes = new Array<Type>(numSignatureParameters);
+    for (let i = 0; i < numSignatureParameters; ++i) {
+      let parameterDeclaration = signatureParameters[i];
+      if (parameterDeclaration.parameterKind == ParameterKind.Default) {
+        if (reportMode == ReportMode.Report) {
+          this.error(DiagnosticCode.Not_implemented_0, parameterDeclaration.range, "first class with default parameter");
+        }
+      }
+      let typeNode = parameterDeclaration.type;
+      if (isTypeOmitted(typeNode)) {
+        if (reportMode == ReportMode.Report) {
+          this.error(DiagnosticCode.Type_expected, typeNode.range);
+        }
+        return null;
+      }
+      let parameterType = this.resolveType(
+        typeNode,
+        parent, // relative to function
+        ctxTypes,
+        reportMode
+      );
+      if (!parameterType) return null;
+      if (parameterType == Type.void) {
+        if (reportMode == ReportMode.Report) {
+          this.error(DiagnosticCode.Type_expected, typeNode.range);
+        }
+        return null;
+      }
+      parameterTypes[i] = parameterType;
+    }
+
+    // resolve return type
+    let typeNode = signatureNode.returnType;
+    if (isTypeOmitted(typeNode)) {
+      if (reportMode == ReportMode.Report) {
+        this.error(DiagnosticCode.Type_expected, typeNode.range);
+      }
+      return null;
+    }
+    let returnType = this.resolveType(
+      typeNode,
+      parent, // relative to function
+      ctxTypes,
+      reportMode
+    );
+    if (!returnType) return null;
+
+    let signature = Signature.create(this.program, parameterTypes, returnType, envType, numSignatureParameters, SignatureFlags.Env);
+    let instance = new Function(
+      name,
+      prototype,
+      null,
+      signature,
+      ctxTypes
+    );
+    return instance;
   }
 
   /** Resolves reachable overrides of the given instance method. */

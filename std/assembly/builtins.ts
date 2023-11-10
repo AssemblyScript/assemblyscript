@@ -204,6 +204,10 @@ export declare function unchecked<T>(expr: T): T;
 
 // @ts-ignore: decorator
 @unsafe @builtin
+export declare function experimental_first_class_function<T>(expr: T): T;
+
+// @ts-ignore: decorator
+@unsafe @builtin
 export declare function call_indirect<T>(index: u32, ...args: auto[]): T;
 
 // @ts-ignore: decorator

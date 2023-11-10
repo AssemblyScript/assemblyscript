@@ -538,6 +538,14 @@ export class Program extends DiagnosticEmitter {
   }
   private _functionPrototype: ClassPrototype | null = null;
 
+  /** Get the first class `Function` instance */
+  get firstClassFunctionInstance(): Class {
+    let cached = this._firstClassFunctionInstance;
+    if (!cached) this._firstClassFunctionInstance = cached = this.requireClass(CommonNames.FirstClassFunction);
+    return cached;
+  }
+  private _firstClassFunctionInstance: Class | null = null;
+
   /** Gets the standard `Int8Array` prototype. */
   get int8ArrayPrototype(): ClassPrototype {
     let cached = this._int8ArrayPrototype;
@@ -1008,6 +1016,12 @@ export class Program extends DiagnosticEmitter {
       CommonNames.nonnull,
       this.nativeFile,
       this.makeNativeTypeDeclaration(CommonNames.nonnull, CommonFlags.Export | CommonFlags.Generic),
+      DecoratorFlags.Builtin
+    ));
+    this.nativeFile.add(CommonNames.experimental_first_class_function, new TypeDefinition(
+      CommonNames.experimental_first_class_function,
+      this.nativeFile,
+      this.makeNativeTypeDeclaration(CommonNames.experimental_first_class_function, CommonFlags.Export | CommonFlags.Generic),
       DecoratorFlags.Builtin
     ));
 
@@ -3741,7 +3755,6 @@ export class FunctionPrototype extends DeclaredElement {
 
 /** A resolved function. */
 export class Function extends TypedElement {
-
   /** Function prototype. */
   prototype: FunctionPrototype;
   /** Function signature. */
