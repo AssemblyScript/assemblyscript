@@ -131,7 +131,8 @@ import {
   writeF64,
   writeI64,
   writeI32AsI64,
-  writeI64AsI32
+  writeI64AsI32,
+  cloneMap
 } from "./util";
 
 import {
@@ -4885,6 +4886,78 @@ export class Class extends TypedElement {
       }
     }
     return false;
+  }
+
+  get nonParameterMembers(): Property[] | null {
+    let members = this.members;
+    if (!members) return null;
+
+    let nonParameterFields: Property[] | null = null;
+    for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+      let member = unchecked(_values[i]);
+      if (member.kind != ElementKind.PropertyPrototype) continue;
+      // only interested in fields (resolved during class finalization)
+      let property = (<PropertyPrototype>member).instance;
+      if (!property || !property.isField || property.getBoundClassOrInterface() != this) continue;
+      assert(!property.is(CommonFlags.Const));
+      let fieldPrototype = property.prototype;
+      if (fieldPrototype.parameterIndex < 0) {
+        if (!nonParameterFields) nonParameterFields = new Array();
+        nonParameterFields.push(property);
+      }
+    }
+    return nonParameterFields;
+  }
+
+  get parameterMembers(): Property[] | null {
+    let members = this.members;
+    if (!members) return null;
+
+    let parameterFields: Property[] | null = null;
+    for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+      let member = unchecked(_values[i]);
+      if (member.kind != ElementKind.PropertyPrototype) continue;
+      // only interested in fields (resolved during class finalization)
+      let property = (<PropertyPrototype>member).instance;
+      if (!property || !property.isField || property.getBoundClassOrInterface() != this) continue;
+      assert(!property.is(CommonFlags.Const));
+      let fieldPrototype = property.prototype;
+      if (fieldPrototype.parameterIndex >= 0) {
+        if (!parameterFields) parameterFields = new Array();
+        parameterFields.push(property);
+      }
+    }
+    return parameterFields;
+  }
+
+  /** Creates a native function. */
+  makeNativeMethod(
+    /** The simple name of the function. */
+    name: string,
+    /** Function signature parameter types. */
+    parameterTypes: Type[],
+    /** Function signature return type. */
+    returnType: Type,
+    /** Flags indicating specific traits, e.g. `GENERIC`. */
+    flags: CommonFlags = CommonFlags.None,
+    /** Decorator flags representing built-in decorators. */
+    decoratorFlags: DecoratorFlags = DecoratorFlags.None
+  ): Function {
+    return new Function(
+      name,
+      new FunctionPrototype(
+        name,
+        this,
+        this.program.makeNativeFunctionDeclaration(
+          name,
+          CommonFlags.Instance | flags
+        ),
+        decoratorFlags
+      ),
+      null,
+      Signature.create(this.program, parameterTypes, returnType, this.type),
+      cloneMap(this.contextualTypeArguments)
+    );
   }
 }
 
