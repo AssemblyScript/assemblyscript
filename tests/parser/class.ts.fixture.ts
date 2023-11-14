@@ -19,6 +19,11 @@ export class Invalid<T> {
   declare declareMethod(): i32 {}
   overrideMethod(): void {}
 }
+export class MemberTypeInfer {
+  a = 1;
+  b = 1.2;
+  c = "hhh";
+}
 // ERROR 1092: "Type parameters cannot appear on a constructor declaration." in class.ts(15,14+3)
 // ERROR 1110: "Type expected." in class.ts(18,21+0)
 // ERROR 1094: "An accessor cannot have type parameters." in class.ts(23,21+3)

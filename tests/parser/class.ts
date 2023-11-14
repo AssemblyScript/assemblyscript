@@ -41,3 +41,9 @@ export class Invalid<T> {
   // ERROR 1042: "'override' modifier cannot be used here."
   override overrideMethod(): void {}
 }
+
+export class MemberTypeInfer {
+  a = 1;
+  b = 1.2;
+  c = "hhh";
+}

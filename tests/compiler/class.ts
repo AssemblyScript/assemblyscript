@@ -40,3 +40,16 @@ class GenericInitializer<T> {
 export function testGenericInitializer(): void {
   new GenericInitializer<i32>();
 }
+
+
+let outsideF32: f32 = 1.2;
+class MemberTypeInfer {
+  a = 1;
+  b = outsideF32;
+  c = "hhh";
+}
+
+let memberTypeInfer = new MemberTypeInfer();
+assert(nameof(memberTypeInfer.a) == nameof<i32>());
+assert(nameof(memberTypeInfer.b) == nameof<f32>());
+assert(nameof(memberTypeInfer.c) == nameof<string>());
