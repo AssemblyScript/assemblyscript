@@ -120,7 +120,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$137
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$139
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -144,7 +144,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$137
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$139
    end
    local.get $0
    i32.load offset=8
@@ -1861,18 +1861,33 @@
    global.get $~lib/memory/__stack_pointer
    local.get $5
    i32.store offset=4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1740
+   i32.lt_s
+   br_if $folding-inner1
+   global.get $~lib/memory/__stack_pointer
+   local.tee $1
+   i32.const 0
+   i32.store
+   local.get $1
+   local.get $5
+   i32.store
    local.get $5
    f64.const 0
    f64.store
-   global.get $~lib/memory/__stack_pointer
+   local.get $1
    local.get $5
-   i32.store offset=4
+   i32.store
    local.get $5
    f64.const 0
    f64.store offset=8
-   global.get $~lib/memory/__stack_pointer
+   local.get $1
    local.get $5
-   i32.store offset=4
+   i32.store
    local.get $5
    i32.const 0
    i32.store offset=16
@@ -1880,6 +1895,10 @@
    i32.const 0
    i32.const 0
    call $~lib/rt/itcms/__link
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -1953,7 +1972,7 @@
     global.get $~lib/memory/__stack_pointer
     i32.const 1168
     i32.store
-    block $__inlined_func$~lib/rt/itcms/__renew$136
+    block $__inlined_func$~lib/rt/itcms/__renew$138
      i32.const 1073741820
      local.get $1
      i32.const 1
@@ -1996,7 +2015,7 @@
       i32.store offset=16
       local.get $1
       local.set $0
-      br $__inlined_func$~lib/rt/itcms/__renew$136
+      br $__inlined_func$~lib/rt/itcms/__renew$138
      end
      local.get $2
      local.get $6

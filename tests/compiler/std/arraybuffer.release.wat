@@ -113,7 +113,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$172
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$170
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -137,7 +137,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$172
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$170
    end
    local.get $0
    i32.load offset=8
@@ -1759,6 +1759,53 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
  )
+ (func $~lib/arraybuffer/ArrayBufferView#constructor|default (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1784
+  i32.lt_s
+  if
+   i32.const 34576
+   i32.const 34624
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $1
+  i32.const 0
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  call $~lib/rt/itcms/__link
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -1797,23 +1844,7 @@
   local.get $0
   i32.store offset=4
   local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
+  call $~lib/arraybuffer/ArrayBufferView#constructor|default
   i32.const 1073741820
   local.get $1
   i32.shr_u
@@ -2383,23 +2414,7 @@
      local.get $0
      i32.store offset=4
      local.get $0
-     i32.const 0
-     i32.store
-     local.get $0
-     i32.const 0
-     call $~lib/rt/itcms/__link
-     global.get $~lib/memory/__stack_pointer
-     local.get $0
-     i32.store offset=4
-     local.get $0
-     i32.const 0
-     i32.store offset=4
-     global.get $~lib/memory/__stack_pointer
-     local.get $0
-     i32.store offset=4
-     local.get $0
-     i32.const 0
-     i32.store offset=8
+     call $~lib/arraybuffer/ArrayBufferView#constructor|default
      global.get $~lib/memory/__stack_pointer
      local.get $1
      i32.store offset=4

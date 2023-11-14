@@ -2437,6 +2437,29 @@
    unreachable
   end
  )
+ (func $extends-recursive/Parent#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $extends-recursive/Parent#set:child
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $extends-recursive/Parent#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2473,8 +2496,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $extends-recursive/Parent#set:child
+  call $extends-recursive/Parent#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

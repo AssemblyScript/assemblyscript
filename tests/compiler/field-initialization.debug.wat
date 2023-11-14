@@ -3092,6 +3092,29 @@
    unreachable
   end
  )
+ (func $field-initialization/Value_Init#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 1
+  call $field-initialization/Value_Init#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $field-initialization/Value_Init#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3128,8 +3151,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 1
-  call $field-initialization/Value_Init#set:a
+  call $field-initialization/Value_Init#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3137,6 +3159,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $field-initialization/Value#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/Value#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $field-initialization/Value#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3174,8 +3219,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $field-initialization/Value#set:a
+  call $field-initialization/Value#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3184,19 +3228,46 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Ref_Init#constructor (param $this i32) (result i32)
+ (func $field-initialization/Ref_Init#constructor|default (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  local.get $this
+  local.set $1
   global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
   i32.const 0
-  i32.store offset=8
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $field-initialization/Ref_Init#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $field-initialization/Ref_Init#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   local.get $this
   i32.eqz
   if
@@ -3223,36 +3294,55 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=8
-  local.get $1
-  call $field-initialization/Ref_Init#set:a
+  call $field-initialization/Ref_Init#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Nullable_Init#constructor (param $this i32) (result i32)
+ (func $field-initialization/Nullable_Init#constructor|default (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  local.get $this
+  local.set $1
   global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
   i32.const 0
-  i32.store offset=8
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $field-initialization/Nullable_Init#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $field-initialization/Nullable_Init#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   local.get $this
   i32.eqz
   if
@@ -3279,22 +3369,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=8
-  local.get $1
-  call $field-initialization/Nullable_Init#set:a
+  call $field-initialization/Nullable_Init#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $field-initialization/Nullable#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/Nullable#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $field-initialization/Nullable#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3332,8 +3437,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $field-initialization/Nullable#set:a
+  call $field-initialization/Nullable#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3341,6 +3445,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $field-initialization/Value_Ctor#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/Value_Ctor#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $field-initialization/Value_Ctor#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3368,8 +3495,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $field-initialization/Value_Ctor#set:a
+  call $field-initialization/Value_Ctor#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3377,6 +3503,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $field-initialization/Value_Init_Ctor#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 1
+  call $field-initialization/Value_Init_Ctor#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $field-initialization/Value_Init_Ctor#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3404,8 +3553,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 1
-  call $field-initialization/Value_Init_Ctor#set:a
+  call $field-initialization/Value_Init_Ctor#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3413,6 +3561,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $field-initialization/Value_Ctor_Init#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/Value_Ctor_Init#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $field-initialization/Value_Ctor_Init#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3440,8 +3611,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $field-initialization/Value_Ctor_Init#set:a
+  call $field-initialization/Value_Ctor_Init#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3458,19 +3628,46 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Ref_Init_Ctor#constructor (param $this i32) (result i32)
+ (func $field-initialization/Ref_Init_Ctor#constructor|default (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  local.get $this
+  local.set $1
   global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
   i32.const 0
-  i32.store offset=8
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $field-initialization/Ref_Init_Ctor#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $field-initialization/Ref_Init_Ctor#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   local.get $this
   i32.eqz
   if
@@ -3487,22 +3684,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=8
-  local.get $1
-  call $field-initialization/Ref_Init_Ctor#set:a
+  call $field-initialization/Ref_Init_Ctor#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $field-initialization/Ref_Ctor_Init#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/Ref_Ctor_Init#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $field-initialization/Ref_Ctor_Init#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3533,8 +3745,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $field-initialization/Ref_Ctor_Init#set:a
+  call $field-initialization/Ref_Ctor_Init#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3602,6 +3813,29 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
+ (func $field-initialization/Nullable_Ctor#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/Nullable_Ctor#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $field-initialization/Nullable_Ctor#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3628,8 +3862,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $field-initialization/Nullable_Ctor#set:a
+  call $field-initialization/Nullable_Ctor#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3638,19 +3871,46 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Nullable_Init_Ctor#constructor (param $this i32) (result i32)
+ (func $field-initialization/Nullable_Init_Ctor#constructor|default (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  local.get $this
+  local.set $1
   global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
   i32.const 0
-  i32.store offset=8
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $field-initialization/Nullable_Init_Ctor#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $field-initialization/Nullable_Init_Ctor#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   local.get $this
   i32.eqz
   if
@@ -3667,22 +3927,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=8
-  local.get $1
-  call $field-initialization/Nullable_Init_Ctor#set:a
+  call $field-initialization/Nullable_Init_Ctor#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $field-initialization/Nullable_Ctor_Init#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/Nullable_Ctor_Init#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $field-initialization/Nullable_Ctor_Init#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3713,8 +3988,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $field-initialization/Nullable_Ctor_Init#set:a
+  call $field-initialization/Nullable_Ctor_Init#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3738,19 +4012,46 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Inherit_Base#constructor (param $this i32) (result i32)
+ (func $field-initialization/Inherit_Base#constructor|default (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  local.get $this
+  local.set $1
   global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
   i32.const 0
-  i32.store offset=8
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $field-initialization/Inherit_Base#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $field-initialization/Inherit_Base#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   local.get $this
   i32.eqz
   if
@@ -3777,19 +4078,11 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=8
-  local.get $1
-  call $field-initialization/Inherit_Base#set:a
+  call $field-initialization/Inherit_Base#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
@@ -3870,6 +4163,37 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
+ (func $field-initialization/SomeObject#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/SomeObject#set:a
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/SomeObject#set:b
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $field-initialization/SomeObject#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3906,16 +4230,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $field-initialization/SomeObject#set:a
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $field-initialization/SomeObject#set:b
+  call $field-initialization/SomeObject#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4020,6 +4335,29 @@
   local.get $3
   return
  )
+ (func $field-initialization/SomeOtherObject#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/SomeOtherObject#set:c
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $field-initialization/SomeOtherObject#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -4056,8 +4394,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $field-initialization/SomeOtherObject#set:c
+  call $field-initialization/SomeOtherObject#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4065,6 +4402,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $field-initialization/Flow_Balanced#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/Flow_Balanced#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $field-initialization/Flow_Balanced#constructor (param $this i32) (param $cond i32) (result i32)
   (local $2 i32)
@@ -4095,8 +4455,7 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 0
-  call $field-initialization/Flow_Balanced#set:a
+  call $field-initialization/Flow_Balanced#constructor|default
   local.get $cond
   if
    local.get $this
@@ -4138,6 +4497,59 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+ )
+ (func $field-initialization/Ref_Init_InlineCtor#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $field-initialization/Ref_Init_InlineCtor#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $field-initialization/Ref_InlineCtor_Init#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $field-initialization/Ref_InlineCtor_Init#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $start:field-initialization
   (local $0 i32)
@@ -5102,15 +5514,7 @@
   local.get $34
   i32.store offset=4
   local.get $34
-  i32.const 0
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $34
-  global.get $~lib/memory/__stack_pointer
-  local.get $34
-  i32.store offset=80
-  local.get $34
-  call $field-initialization/Ref_Init_InlineCtor#set:a
+  call $field-initialization/Ref_Init_InlineCtor#constructor|default
   local.get $30
   local.tee $31
   i32.store offset=136
@@ -5151,8 +5555,7 @@
   local.get $34
   i32.store offset=4
   local.get $34
-  i32.const 0
-  call $field-initialization/Ref_InlineCtor_Init#set:a
+  call $field-initialization/Ref_InlineCtor_Init#constructor|default
   local.get $32
   local.set $34
   global.get $~lib/memory/__stack_pointer

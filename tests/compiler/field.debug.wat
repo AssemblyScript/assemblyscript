@@ -2536,21 +2536,50 @@
    unreachable
   end
  )
- (func $field/NoStaticConflict#constructor (param $this i32) (result i32)
+ (func $field/NoStaticConflict#constructor|default (param $this i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  local.get $this
+  local.set $3
   global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store
+  local.get $3
   i32.const 0
-  i32.store offset=8
+  i32.const 2
+  i32.const 5
+  i32.const 432
+  call $~lib/rt/__newArray
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store offset=4
+  local.get $3
+  call $field/NoStaticConflict#set:a
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $field/NoStaticConflict#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   local.get $this
   i32.eqz
   if
@@ -2563,38 +2592,28 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  local.set $3
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $1
   i32.store offset=4
-  local.get $3
+  local.get $1
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store
   local.get $this
-  local.set $3
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $1
   i32.store offset=4
-  local.get $3
-  i32.const 0
-  i32.const 2
-  i32.const 5
-  i32.const 432
-  call $~lib/rt/__newArray
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store offset=8
-  local.get $3
-  call $field/NoStaticConflict#set:a
+  local.get $1
+  call $field/NoStaticConflict#constructor|default
   local.get $this
-  local.set $3
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $1
  )
  (func $field/testNoStaticConflict
   (local $inst i32)

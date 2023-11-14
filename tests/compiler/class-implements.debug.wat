@@ -3065,6 +3065,29 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
+ (func $class-implements/A2#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 1
+  call $class-implements/A2#set:foo
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $class-implements/A2#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3101,8 +3124,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 1
-  call $class-implements/A2#set:foo
+  call $class-implements/A2#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3110,6 +3132,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $class-implements/A3#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 5
+  call $class-implements/A3#set:foo
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $class-implements/A3#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3147,8 +3192,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 5
-  call $class-implements/A3#set:foo
+  call $class-implements/A3#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3156,6 +3200,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $class-implements/A4#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 7
+  call $class-implements/A4#set:foo
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $class-implements/A4#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3193,8 +3260,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 7
-  call $class-implements/A4#set:foo
+  call $class-implements/A4#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3202,6 +3268,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $class-implements/B2#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 3
+  call $class-implements/B2#set:_foo
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $class-implements/B2#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3239,8 +3328,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 3
-  call $class-implements/B2#set:_foo
+  call $class-implements/B2#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3273,6 +3361,29 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
   return
+ )
+ (func $class-implements/B3#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 9
+  call $class-implements/B3#set:_foo2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $class-implements/B3#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3310,8 +3421,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 9
-  call $class-implements/B3#set:_foo2
+  call $class-implements/B3#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3344,6 +3454,29 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
   return
+ )
+ (func $class-implements/B4#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 11
+  call $class-implements/B4#set:_foo2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $class-implements/B4#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -3381,8 +3514,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 11
-  call $class-implements/B4#set:_foo2
+  call $class-implements/B4#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

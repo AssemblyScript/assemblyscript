@@ -1,8 +1,8 @@
 (module
  (type $0 (func (param i32) (result i32)))
  (type $1 (func (param i32 i32)))
- (type $2 (func))
- (type $3 (func (param i32)))
+ (type $2 (func (param i32)))
+ (type $3 (func))
  (type $4 (func (param i32 i32) (result i32)))
  (type $5 (func (result i32)))
  (type $6 (func (param i32 i32 i32)))
@@ -2666,6 +2666,68 @@
    unreachable
   end
  )
+ (func $inlining/Baz#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 1
+  call $inlining/Baz#set:a
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $inlining/Baz#set:b
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $inlining/Bar#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 3
+  call $inlining/Bar#set:d
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $inlining/Bar#set:e
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $inlining/test_ctor
   (local $this i32)
   (local $f i32)
@@ -2705,16 +2767,7 @@
   local.get $5
   i32.store offset=4
   local.get $5
-  i32.const 3
-  call $inlining/Bar#set:d
-  local.get $this
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store offset=4
-  local.get $5
-  i32.const 0
-  call $inlining/Bar#set:e
+  call $inlining/Bar#constructor|default
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   local.get $this
@@ -2738,16 +2791,7 @@
   local.get $5
   i32.store offset=4
   local.get $5
-  i32.const 1
-  call $inlining/Baz#set:a
-  local.get $this|2
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $5
-  i32.store offset=4
-  local.get $5
-  i32.const 0
-  call $inlining/Baz#set:b
+  call $inlining/Baz#constructor|default
   local.get $this|2
   local.set $5
   global.get $~lib/memory/__stack_pointer

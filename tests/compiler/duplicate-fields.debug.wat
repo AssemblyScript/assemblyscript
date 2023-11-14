@@ -1,8 +1,8 @@
 (module
  (type $0 (func (param i32 i32)))
  (type $1 (func (param i32) (result i32)))
- (type $2 (func (param i32 i32) (result i32)))
- (type $3 (func (param i32)))
+ (type $2 (func (param i32)))
+ (type $3 (func (param i32 i32) (result i32)))
  (type $4 (func))
  (type $5 (func (param i32 i32 i32)))
  (type $6 (func (param i32 i32 i32 i32)))
@@ -2512,6 +2512,29 @@
    unreachable
   end
  )
+ (func $duplicate-fields/A#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/A#set:bar
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $duplicate-fields/A#constructor (param $this i32) (param $bar i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2538,8 +2561,7 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 0
-  call $duplicate-fields/A#set:bar
+  call $duplicate-fields/A#constructor|default
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -2555,6 +2577,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+ )
+ (func $duplicate-fields/B#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/B#set:bar
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $duplicate-fields/B#constructor (param $this i32) (param $bar i32) (result i32)
   (local $2 i32)
@@ -2582,8 +2627,7 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 0
-  call $duplicate-fields/B#set:bar
+  call $duplicate-fields/B#constructor|default
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.set $2
@@ -2610,6 +2654,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+ )
+ (func $duplicate-fields/A2#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/A2#set:bar
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $duplicate-fields/A2#constructor (param $this i32) (param $bar i32) (result i32)
   (local $2 i32)
@@ -2640,8 +2707,7 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 0
-  call $duplicate-fields/A2#set:bar
+  call $duplicate-fields/A2#constructor|default
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -2662,6 +2728,29 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+ )
+ (func $duplicate-fields/B2#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/B2#set:bar
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $duplicate-fields/B2#constructor (param $this i32) (param $bar i32) (result i32)
   (local $2 i32)
@@ -2692,8 +2781,7 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 0
-  call $duplicate-fields/B2#set:bar
+  call $duplicate-fields/B2#constructor|default
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.set $2
@@ -2731,6 +2819,29 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
+ (func $duplicate-fields/Foo#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/Foo#set:foo
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $duplicate-fields/Foo#constructor (param $this i32) (param $foo i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2757,8 +2868,7 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 0
-  call $duplicate-fields/Foo#set:foo
+  call $duplicate-fields/Foo#constructor|default
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -2774,6 +2884,37 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+ )
+ (func $duplicate-fields/A3#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/A3#set:prot
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/A3#set:pub
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $duplicate-fields/A3#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -2811,16 +2952,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $duplicate-fields/A3#set:prot
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $duplicate-fields/A3#set:pub
+  call $duplicate-fields/A3#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -2828,6 +2960,37 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $duplicate-fields/B3#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/B3#set:prot
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/B3#set:pub
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $duplicate-fields/B3#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -2865,16 +3028,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $duplicate-fields/B3#set:prot
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $duplicate-fields/B3#set:pub
+  call $duplicate-fields/B3#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

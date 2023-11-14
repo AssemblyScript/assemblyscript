@@ -118,7 +118,7 @@
     local.get $0
     global.set $~lib/rt/itcms/iter
    end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink$158
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$152
     local.get $1
     i32.load offset=4
     i32.const -4
@@ -142,7 +142,7 @@
       call $~lib/builtins/abort
       unreachable
      end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink$158
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$152
     end
     local.get $1
     i32.load offset=8
@@ -1596,16 +1596,16 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 2
-   i32.store offset=4
-   local.get $2
+   call $call-super/B#constructor|default
+   global.get $~lib/memory/__stack_pointer
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -1628,13 +1628,11 @@
     i32.store
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $3
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 1
-   i32.store
-   local.get $3
+   call $call-super/A#constructor|default
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
    local.get $0
@@ -1758,16 +1756,16 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 2
-   i32.store offset=4
-   local.get $2
+   call $call-super/B#constructor|default
+   global.get $~lib/memory/__stack_pointer
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -1802,8 +1800,7 @@
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 1
-   i32.store
+   call $call-super/A#constructor|default
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -1939,13 +1936,11 @@
     i32.store
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $3
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 1
-   i32.store
-   local.get $3
+   call $call-super/A#constructor|default
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
    local.get $0
@@ -1971,8 +1966,7 @@
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 2
-   i32.store offset=4
+   call $call-super/B#constructor|default
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2083,8 +2077,7 @@
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 1
-   i32.store
+   call $call-super/A#constructor|default
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2096,8 +2089,7 @@
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 2
-   i32.store offset=4
+   call $call-super/B#constructor|default
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2196,13 +2188,11 @@
     i32.store
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $3
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 1
-   i32.store
-   local.get $3
+   call $call-super/A#constructor|default
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
@@ -2213,8 +2203,7 @@
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 2
-   i32.store offset=4
+   call $call-super/B#constructor|default
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2326,6 +2315,70 @@
  )
  (func $~start
   call $start:call-super
+ )
+ (func $call-super/A#constructor|default (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1548
+  i32.lt_s
+  if
+   i32.const 34336
+   i32.const 34384
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $1
+  i32.const 0
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 1
+  i32.store
+  local.get $1
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $call-super/B#constructor|default (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1548
+  i32.lt_s
+  if
+   i32.const 34336
+   i32.const 34384
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $1
+  i32.const 0
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 2
+  i32.store offset=4
+  local.get $1
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/object/Object#constructor (param $0 i32) (result i32)
   (local $1 i32)

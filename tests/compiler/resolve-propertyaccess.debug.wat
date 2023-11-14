@@ -2995,6 +2995,29 @@
   local.get $3
   return
  )
+ (func $resolve-propertyaccess/Class#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 6
+  call $resolve-propertyaccess/Class#set:instanceField
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $resolve-propertyaccess/Class#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3031,8 +3054,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 6
-  call $resolve-propertyaccess/Class#set:instanceField
+  call $resolve-propertyaccess/Class#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

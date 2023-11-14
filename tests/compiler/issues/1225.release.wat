@@ -126,7 +126,7 @@
     local.get $0
     global.set $~lib/rt/itcms/iter
    end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink$119
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$121
     local.get $1
     i32.load offset=4
     i32.const -4
@@ -150,7 +150,7 @@
       call $~lib/builtins/abort
       unreachable
      end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink$119
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$121
     end
     local.get $1
     i32.load offset=8
@@ -1415,46 +1415,178 @@
  (func $~start
   (local $0 i32)
   (local $1 i32)
-  memory.size
-  i32.const 16
-  i32.shl
-  i32.const 34280
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 1172
-  i32.const 1168
-  i32.store
-  i32.const 1176
-  i32.const 1168
-  i32.store
-  i32.const 1168
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 1204
-  i32.const 1200
-  i32.store
-  i32.const 1208
-  i32.const 1200
-  i32.store
-  i32.const 1200
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 1348
-  i32.const 1344
-  i32.store
-  i32.const 1352
-  i32.const 1344
-  i32.store
-  i32.const 1344
-  global.set $~lib/rt/itcms/fromSpace
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1512
-  i32.lt_s
-  if
+  block $__inlined_func$start:issues/1225$1
+   memory.size
+   i32.const 16
+   i32.shl
+   i32.const 34280
+   i32.sub
+   i32.const 1
+   i32.shr_u
+   global.set $~lib/rt/itcms/threshold
+   i32.const 1172
+   i32.const 1168
+   i32.store
+   i32.const 1176
+   i32.const 1168
+   i32.store
+   i32.const 1168
+   global.set $~lib/rt/itcms/pinSpace
+   i32.const 1204
+   i32.const 1200
+   i32.store
+   i32.const 1208
+   i32.const 1200
+   i32.store
+   i32.const 1200
+   global.set $~lib/rt/itcms/toSpace
+   i32.const 1348
+   i32.const 1344
+   i32.store
+   i32.const 1352
+   i32.const 1344
+   i32.store
+   i32.const 1344
+   global.set $~lib/rt/itcms/fromSpace
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   block $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1512
+    i32.lt_s
+    br_if $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
+    i64.const 0
+    i64.store
+    local.get $0
+    i32.const 0
+    i32.store offset=8
+    local.get $0
+    call $~lib/rt/itcms/__new
+    local.tee $0
+    i32.store
+    global.get $~lib/memory/__stack_pointer
+    local.tee $1
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.store offset=8
+    local.get $1
+    local.get $0
+    i32.store offset=4
+    local.get $1
+    i32.const 4
+    i32.sub
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1512
+    i32.lt_s
+    br_if $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    local.tee $1
+    i32.const 0
+    i32.store
+    local.get $1
+    local.get $0
+    i32.store
+    local.get $0
+    i32.const 0
+    i32.store
+    local.get $1
+    local.get $0
+    i32.store
+    local.get $0
+    i32.const 0
+    i32.store offset=4
+    local.get $1
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=8
+    local.get $0
+    local.get $0
+    i32.load offset=8
+    i32.store offset=4
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.store
+    global.get $~lib/memory/__stack_pointer
+    i32.const 12
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $0
+    global.set $issues/1225/x
+    call $issues/1225/normal
+    i32.const 4
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1456
+     i32.const 18
+     i32.const 1
+     call $~lib/builtins/abort
+     unreachable
+    end
+    call $issues/1225/viaThis
+    i32.const 4
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1456
+     i32.const 19
+     i32.const 1
+     call $~lib/builtins/abort
+     unreachable
+    end
+    i32.const 0
+    global.set $issues/1225/x
+    global.get $~lib/rt/itcms/state
+    i32.const 0
+    i32.gt_s
+    if
+     loop $while-continue|0
+      global.get $~lib/rt/itcms/state
+      if
+       call $~lib/rt/itcms/step
+       drop
+       br $while-continue|0
+      end
+     end
+    end
+    call $~lib/rt/itcms/step
+    drop
+    loop $while-continue|1
+     global.get $~lib/rt/itcms/state
+     if
+      call $~lib/rt/itcms/step
+      drop
+      br $while-continue|1
+     end
+    end
+    global.get $~lib/rt/itcms/total
+    i64.extend_i32_u
+    i64.const 200
+    i64.mul
+    i64.const 100
+    i64.div_u
+    i32.wrap_i64
+    i32.const 1024
+    i32.add
+    global.set $~lib/rt/itcms/threshold
+    br $__inlined_func$start:issues/1225$1
+   end
    i32.const 34304
    i32.const 34352
    i32.const 1
@@ -1462,115 +1594,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $0
-  i64.const 0
-  i64.store
-  local.get $0
-  i32.const 0
-  i32.store offset=8
-  local.get $0
-  call $~lib/rt/itcms/__new
-  local.tee $1
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.tee $0
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 4
-  i32.store offset=8
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.get $1
-  i32.store offset=8
-  local.get $1
-  local.get $1
-  i32.load offset=8
-  i32.store offset=4
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 4
-  i32.store
-  local.get $0
-  i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  global.set $issues/1225/x
-  call $issues/1225/normal
-  i32.const 4
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1456
-   i32.const 18
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  call $issues/1225/viaThis
-  i32.const 4
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1456
-   i32.const 19
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  global.set $issues/1225/x
-  global.get $~lib/rt/itcms/state
-  i32.const 0
-  i32.gt_s
-  if
-   loop $while-continue|0
-    global.get $~lib/rt/itcms/state
-    if
-     call $~lib/rt/itcms/step
-     drop
-     br $while-continue|0
-    end
-   end
-  end
-  call $~lib/rt/itcms/step
-  drop
-  loop $while-continue|1
-   global.get $~lib/rt/itcms/state
-   if
-    call $~lib/rt/itcms/step
-    drop
-    br $while-continue|1
-   end
-  end
-  global.get $~lib/rt/itcms/total
-  i64.extend_i32_u
-  i64.const 200
-  i64.mul
-  i64.const 100
-  i64.div_u
-  i32.wrap_i64
-  i32.const 1024
-  i32.add
-  global.set $~lib/rt/itcms/threshold
  )
  (func $issues/1225/normal (result i32)
   (local $0 i32)

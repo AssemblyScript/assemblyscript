@@ -8738,6 +8738,63 @@ export class Compiler extends DiagnosticEmitter {
     return this.compileInstantiate(ctor, expression.args, constraints, expression);
   }
 
+  ensureDefaultConstructor(
+    /** Class wanting a constructor. */
+    classInstance: Class,
+  ): Function | null {
+    let nonParameterFields = classInstance.nonParameterMembers;
+    // should not have default constructor when there are not nonParameterMembers
+    if (!nonParameterFields) return null;
+
+    let module = this.module;
+    let sizeTypeRef = this.options.sizeTypeRef;
+    let instance = classInstance.makeNativeMethod(
+      CommonNames.defaultConstructor,
+      [],
+      Type.void
+    );
+    instance.set(CommonFlags.Compiled);
+    instance.prototype.setResolvedInstance("", instance);
+    let stmts = new Array<ExpressionRef>();
+
+    let previousFlow = this.currentFlow;
+    let flow = instance.flow;
+    this.currentFlow = flow;
+
+    let thisLocalIndex = flow.lookupLocal(CommonNames.this_)!.index;
+    for (let i = 0, k = nonParameterFields.length; i < k; ++i) {
+      let field = unchecked(nonParameterFields[i]);
+      let fieldType = field.type;
+      let fieldPrototype = field.prototype;
+      let initializerNode = fieldPrototype.initializerNode;
+      assert(fieldPrototype.parameterIndex < 0);
+      let setterInstance = assert(field.setterInstance);
+      let expr = this.makeCallDirect(setterInstance, [
+        module.local_get(thisLocalIndex, sizeTypeRef),
+        initializerNode // use initializer if present, otherwise initialize with zero
+          ? this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit)
+          : this.makeZero(fieldType)
+      ], field.identifierNode, true);
+      if (this.currentType != Type.void) { // in case
+        expr = module.drop(expr);
+      }
+      stmts.push(expr);
+    }
+
+    let signature = instance.signature;
+    let funcRef = module.addFunction(
+      instance.internalName,
+      signature.paramRefs,
+      signature.resultRefs,
+      typesToRefs(instance.getNonParameterLocalTypes()),
+      module.flatten(stmts)
+    );
+    instance.finalize(module, funcRef);
+    
+    this.currentFlow = previousFlow;
+    return instance;
+  }
+
   /** Gets the compiled constructor of the specified class or generates one if none is present. */
   ensureConstructor(
     /** Class wanting a constructor. */
@@ -10264,7 +10321,7 @@ export class Compiler extends DiagnosticEmitter {
     let parameterFields: Property[] | null = classInstance.parameterMembers;
     if (parameterFields) {
       for (let i = 0, k = parameterFields.length; i < k; ++i) {
-        let property = parameterFields[i];
+        let property = unchecked(parameterFields[i]);
         let fieldPrototype = property.prototype;
         let fieldType = property.type;
         let fieldTypeRef = fieldType.toRef();
@@ -10285,28 +10342,17 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Initialize deferred non-parameter fields
-    let nonParameterFields: Property[] | null = classInstance.nonParameterMembers;
-    if (nonParameterFields) {
-      for (let i = 0, k = nonParameterFields.length; i < k; ++i) {
-        let field = unchecked(nonParameterFields[i]);
-        let fieldType = field.type;
-        let fieldPrototype = field.prototype;
-        let initializerNode = fieldPrototype.initializerNode;
-        assert(fieldPrototype.parameterIndex < 0);
-        let setterInstance = assert(field.setterInstance);
-        let expr = this.makeCallDirect(setterInstance, [
-          module.local_get(thisLocalIndex, sizeTypeRef),
-          initializerNode // use initializer if present, otherwise initialize with zero
-            ? this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit)
-            : this.makeZero(fieldType)
-        ], field.identifierNode, true);
-        if (this.currentType != Type.void) { // in case
-          expr = module.drop(expr);
-        }
-        stmts.push(expr);
-      }
+    let defaultConstructor = this.ensureDefaultConstructor(classInstance);
+    if (defaultConstructor) {
+      stmts.push(
+        this.makeCallDirect(
+          defaultConstructor,
+          [module.local_get(thisLocalIndex, sizeTypeRef)],
+          classInstance.declaration,
+          true
+        )
+      );
     }
-
     this.currentType = Type.void;
     return stmts;
   }

@@ -2411,19 +2411,44 @@
    unreachable
   end
  )
- (func $issues/1095/Foo#constructor (param $this i32) (result i32)
+ (func $issues/1095/Foo#constructor|default (param $this i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  local.get $this
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=8
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 432
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $issues/1095/Foo#set:bar
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $issues/1095/Foo#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   local.get $this
   i32.eqz
   if
@@ -2450,17 +2475,11 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 432
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=8
-  local.get $1
-  call $issues/1095/Foo#set:bar
+  call $issues/1095/Foo#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1

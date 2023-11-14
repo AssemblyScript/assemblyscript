@@ -165,6 +165,7 @@ export namespace CommonNames {
   // objects
   export const this_ = "this";
   export const super_ = "super";
+  export const defaultConstructor = "constructor|default";
   export const constructor = "constructor";
   // constants
   export const ASC_TARGET = "ASC_TARGET";

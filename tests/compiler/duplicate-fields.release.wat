@@ -1,6 +1,6 @@
 (module
- (type $0 (func))
- (type $1 (func (param i32)))
+ (type $0 (func (param i32)))
+ (type $1 (func))
  (type $2 (func (param i32 i32)))
  (type $3 (func (param i32 i32) (result i32)))
  (type $4 (func (param i32 i32 i32 i32)))
@@ -116,7 +116,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$136
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$135
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -140,7 +140,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$136
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$135
    end
    local.get $0
    i32.load offset=8
@@ -1724,16 +1724,16 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 0
-   i32.store
-   local.get $1
+   call $duplicate-fields/A#constructor|default
+   global.get $~lib/memory/__stack_pointer
+   local.set $1
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -1756,19 +1756,17 @@
     i32.store
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 0
-   i32.store
-   local.get $2
+   call $duplicate-fields/A#constructor|default
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
    local.get $0
    i32.const 10
    i32.store
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
@@ -1822,19 +1820,17 @@
    local.tee $1
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    local.get $1
    i32.store offset=4
    local.get $1
-   i32.const 0
-   i32.store
-   local.get $0
+   call $duplicate-fields/A#constructor|default
+   global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store offset=4
    local.get $1
    i32.const 1
    i32.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
@@ -1866,8 +1862,7 @@
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 0
-   call $duplicate-fields/A2#set:bar
+   call $duplicate-fields/A2#constructor|default
    global.get $~lib/memory/__stack_pointer
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -1905,8 +1900,7 @@
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 0
-   call $duplicate-fields/A2#set:bar
+   call $duplicate-fields/A2#constructor|default
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -2040,14 +2034,7 @@
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.store offset=4
+   call $duplicate-fields/A3#constructor|default
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2059,14 +2046,7 @@
    local.get $0
    i32.store offset=4
    local.get $0
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.store offset=4
+   call $duplicate-fields/A3#constructor|default
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -2083,5 +2063,107 @@
   i32.const 1
   call $~lib/builtins/abort
   unreachable
+ )
+ (func $duplicate-fields/A#constructor|default (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1552
+  i32.lt_s
+  if
+   i32.const 34352
+   i32.const 34400
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $1
+  i32.const 0
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $1
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $duplicate-fields/A2#constructor|default (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1552
+  i32.lt_s
+  if
+   i32.const 34352
+   i32.const 34400
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $1
+  i32.const 0
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 0
+  call $duplicate-fields/A2#set:bar
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $duplicate-fields/A3#constructor|default (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1552
+  i32.lt_s
+  if
+   i32.const 34352
+   i32.const 34400
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $1
+  i32.const 0
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $1
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )

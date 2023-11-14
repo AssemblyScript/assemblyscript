@@ -5,11 +5,11 @@
  (type $3 (func (param i32 i32 i32) (result i32)))
  (type $4 (func (param i32 i32 i32 i32) (result i32)))
  (type $5 (func (param i32 i32 i32)))
- (type $6 (func (param i32 i32 i32 i32 i32)))
- (type $7 (func (param f32 f32) (result i32)))
- (type $8 (func (param f64 f64) (result i32)))
- (type $9 (func (param i32 i32 i32 i32 i32 i32)))
- (type $10 (func (param i32)))
+ (type $6 (func (param i32)))
+ (type $7 (func (param i32 i32 i32 i32 i32)))
+ (type $8 (func (param f32 f32) (result i32)))
+ (type $9 (func (param f64 f64) (result i32)))
+ (type $10 (func (param i32 i32 i32 i32 i32 i32)))
  (type $11 (func))
  (type $12 (func (param i64 i32) (result i32)))
  (type $13 (func (result f64)))
@@ -4383,7 +4383,7 @@
     global.set $~argumentsLength
     local.get $comparator
     i32.load
-    call_indirect (type $7)
+    call_indirect (type $8)
     i32.const 0
     i32.le_s
     if
@@ -4415,7 +4415,7 @@
        global.set $~argumentsLength
        local.get $comparator
        i32.load
-       call_indirect (type $7)
+       call_indirect (type $8)
        i32.const 0
        i32.gt_s
        if
@@ -4463,7 +4463,7 @@
        global.set $~argumentsLength
        local.get $comparator
        i32.load
-       call_indirect (type $7)
+       call_indirect (type $8)
        i32.const 0
        i32.gt_s
        if
@@ -4532,7 +4532,7 @@
   global.set $~argumentsLength
   local.get $comparator
   i32.load
-  call_indirect (type $7)
+  call_indirect (type $8)
   i32.const 0
   i32.gt_s
   if
@@ -4557,7 +4557,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $7)
+     call_indirect (type $8)
      i32.const 31
      i32.shr_u
     else
@@ -4637,7 +4637,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $7)
+     call_indirect (type $8)
      i32.const 0
      i32.ge_s
     else
@@ -4808,7 +4808,7 @@
     global.set $~argumentsLength
     local.get $comparator
     i32.load
-    call_indirect (type $7)
+    call_indirect (type $8)
     i32.const 0
     i32.lt_s
     if
@@ -4942,7 +4942,7 @@
     global.set $~argumentsLength
     local.get $comparator
     i32.load
-    call_indirect (type $8)
+    call_indirect (type $9)
     i32.const 0
     i32.le_s
     if
@@ -4974,7 +4974,7 @@
        global.set $~argumentsLength
        local.get $comparator
        i32.load
-       call_indirect (type $8)
+       call_indirect (type $9)
        i32.const 0
        i32.gt_s
        if
@@ -5022,7 +5022,7 @@
        global.set $~argumentsLength
        local.get $comparator
        i32.load
-       call_indirect (type $8)
+       call_indirect (type $9)
        i32.const 0
        i32.gt_s
        if
@@ -5091,7 +5091,7 @@
   global.set $~argumentsLength
   local.get $comparator
   i32.load
-  call_indirect (type $8)
+  call_indirect (type $9)
   i32.const 0
   i32.gt_s
   if
@@ -5116,7 +5116,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $8)
+     call_indirect (type $9)
      i32.const 31
      i32.shr_u
     else
@@ -5196,7 +5196,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $8)
+     call_indirect (type $9)
      i32.const 0
      i32.ge_s
     else
@@ -5316,7 +5316,7 @@
     global.set $~argumentsLength
     local.get $comparator
     i32.load
-    call_indirect (type $8)
+    call_indirect (type $9)
     i32.const 0
     i32.lt_s
     if
@@ -10004,6 +10004,53 @@
    unreachable
   end
  )
+ (func $~lib/array/Array<i32>#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<i32>#set:buffer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<i32>#set:dataStart
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<i32>#set:byteLength
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<i32>#set:length_
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/array/Array<i32>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -10037,32 +10084,7 @@
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:length_
+  call $~lib/array/Array<i32>#constructor|default
   local.get $length
   i32.const 1073741820
   i32.const 2
@@ -10178,6 +10200,45 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
+ (func $~lib/arraybuffer/ArrayBufferView#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#set:buffer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#set:dataStart
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#set:byteLength
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (param $this i32) (param $length i32) (param $alignLog2 i32) (result i32)
   (local $buffer i32)
   (local $4 i32)
@@ -10208,24 +10269,7 @@
   local.get $4
   i32.store offset=4
   local.get $4
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBufferView#set:buffer
-  local.get $this
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store offset=4
-  local.get $4
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBufferView#set:dataStart
-  local.get $this
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store offset=4
-  local.get $4
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBufferView#set:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#constructor|default
   local.get $length
   i32.const 1073741820
   local.get $alignLog2
@@ -16053,6 +16097,37 @@
   local.get $4
   return
  )
+ (func $std/array/Dim#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $std/array/Dim#set:height
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $std/array/Dim#set:width
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $std/array/Dim#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -16089,16 +16164,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 0
-  call $std/array/Dim#set:height
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $std/array/Dim#set:width
+  call $std/array/Dim#constructor|default
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -16266,7 +16332,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $7)
+     call_indirect (type $8)
      i32.const 0
      i32.gt_s
      local.set $c
@@ -16290,7 +16356,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $7)
+     call_indirect (type $8)
      i32.const 0
      i32.gt_s
      local.set $c
@@ -16319,7 +16385,7 @@
     global.set $~argumentsLength
     local.get $comparator
     i32.load
-    call_indirect (type $7)
+    call_indirect (type $8)
     i32.const 0
     i32.gt_s
     local.set $c|9
@@ -16837,7 +16903,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $8)
+     call_indirect (type $9)
      i32.const 0
      i32.gt_s
      local.set $c
@@ -16861,7 +16927,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $8)
+     call_indirect (type $9)
      i32.const 0
      i32.gt_s
      local.set $c
@@ -16890,7 +16956,7 @@
     global.set $~argumentsLength
     local.get $comparator
     i32.load
-    call_indirect (type $8)
+    call_indirect (type $9)
     i32.const 0
     i32.gt_s
     local.set $c|9
@@ -20658,6 +20724,53 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $~lib/array/Array<~lib/array/Array<i32>>#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<~lib/array/Array<i32>>#set:buffer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<~lib/array/Array<i32>>#set:dataStart
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<~lib/array/Array<i32>>#set:byteLength
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<~lib/array/Array<i32>>#set:length_
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/array/Array<~lib/array/Array<i32>>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -20691,32 +20804,7 @@
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/array/Array<i32>>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/array/Array<i32>>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/array/Array<i32>>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/array/Array<i32>>#set:length_
+  call $~lib/array/Array<~lib/array/Array<i32>>#constructor|default
   local.get $length
   i32.const 1073741820
   i32.const 2
@@ -22393,6 +22481,53 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $~lib/array/Array<std/array/Proxy<i32>>#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<std/array/Proxy<i32>>#set:buffer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<std/array/Proxy<i32>>#set:dataStart
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<std/array/Proxy<i32>>#set:byteLength
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<std/array/Proxy<i32>>#set:length_
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/array/Array<std/array/Proxy<i32>>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -22426,32 +22561,7 @@
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 0
-  call $~lib/array/Array<std/array/Proxy<i32>>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<std/array/Proxy<i32>>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<std/array/Proxy<i32>>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<std/array/Proxy<i32>>#set:length_
+  call $~lib/array/Array<std/array/Proxy<i32>>#constructor|default
   local.get $length
   i32.const 1073741820
   i32.const 2
@@ -25989,6 +26099,53 @@
   local.get $4
   return
  )
+ (func $~lib/array/Array<~lib/string/String>#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<~lib/string/String>#set:buffer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<~lib/string/String>#set:dataStart
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<~lib/string/String>#set:byteLength
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<~lib/string/String>#set:length_
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/array/Array<~lib/string/String>#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -26022,32 +26179,7 @@
   local.get $6
   i32.store offset=4
   local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/string/String>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/string/String>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/string/String>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/string/String>#set:length_
+  call $~lib/array/Array<~lib/string/String>#constructor|default
   local.get $length
   i32.const 1073741820
   i32.const 2

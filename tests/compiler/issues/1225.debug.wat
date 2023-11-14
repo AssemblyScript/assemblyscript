@@ -2444,6 +2444,37 @@
    unreachable
   end
  )
+ (func $issues/1225/X#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $issues/1225/X#set:normal
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $issues/1225/X#set:viaThis
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $issues/1225/X#constructor (param $this i32) (param $x i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2481,16 +2512,7 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 0
-  call $issues/1225/X#set:normal
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  call $issues/1225/X#set:viaThis
+  call $issues/1225/X#constructor|default
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer

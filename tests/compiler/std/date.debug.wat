@@ -3,8 +3,8 @@
  (type $1 (func (param i32 i32)))
  (type $2 (func (param i32 i32) (result i32)))
  (type $3 (func (param i32 i32 i32) (result i32)))
- (type $4 (func (param i32 i32 i32)))
- (type $5 (func (param i32)))
+ (type $4 (func (param i32)))
+ (type $5 (func (param i32 i32 i32)))
  (type $6 (func))
  (type $7 (func (param i32 i32 i32 i32)))
  (type $8 (func (param i64) (result i32)))
@@ -3822,6 +3822,45 @@
    unreachable
   end
  )
+ (func $~lib/date/Date#constructor|default (param $this i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/date/Date#set:year
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/date/Date#set:month
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/date/Date#set:day
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/date/Date#constructor (param $this i32) (param $epochMillis i64) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3856,24 +3895,7 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 0
-  call $~lib/date/Date#set:year
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  call $~lib/date/Date#set:month
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  call $~lib/date/Date#set:day
+  call $~lib/date/Date#constructor|default
   local.get $epochMillis
   call $~lib/date/invalidDate
   if
