@@ -1,0 +1,242 @@
+(module
+ (type $0 (func (param i32 i32)))
+ (type $1 (func (param i32)))
+ (type $2 (func (param i32 i32) (result i32)))
+ (type $3 (func))
+ (type $4 (func (param i32 i32 i32 i32)))
+ (type $5 (func (param i32) (result i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $class-default-init/a (mut i32) (i32.const 0))
+ (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
+ (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $~lib/memory/__heap_base i32 (i32.const 172))
+ (memory $0 1)
+ (data $0 (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data $1 (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $2 (i32.const 140) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (table $0 1 1 funcref)
+ (elem $0 (i32.const 1))
+ (export "memory" (memory $0))
+ (start $~start)
+ (func $~lib/rt/stub/maybeGrowMemory (param $newOffset i32)
+  (local $pagesBefore i32)
+  (local $maxOffset i32)
+  (local $pagesNeeded i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $pagesWanted i32)
+  memory.size
+  local.set $pagesBefore
+  local.get $pagesBefore
+  i32.const 16
+  i32.shl
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  local.set $maxOffset
+  local.get $newOffset
+  local.get $maxOffset
+  i32.gt_u
+  if
+   local.get $newOffset
+   local.get $maxOffset
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const 65535
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.set $pagesNeeded
+   local.get $pagesBefore
+   local.tee $4
+   local.get $pagesNeeded
+   local.tee $5
+   local.get $4
+   local.get $5
+   i32.gt_s
+   select
+   local.set $pagesWanted
+   local.get $pagesWanted
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $pagesNeeded
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $newOffset
+  global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/common/BLOCK#set:mmInfo (param $this i32) (param $mmInfo i32)
+  local.get $this
+  local.get $mmInfo
+  i32.store
+ )
+ (func $~lib/rt/stub/__alloc (param $size i32) (result i32)
+  (local $block i32)
+  (local $ptr i32)
+  (local $size|3 i32)
+  (local $payloadSize i32)
+  local.get $size
+  i32.const 1073741820
+  i32.gt_u
+  if
+   i32.const 32
+   i32.const 96
+   i32.const 33
+   i32.const 29
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/rt/stub/offset
+  local.set $block
+  global.get $~lib/rt/stub/offset
+  i32.const 4
+  i32.add
+  local.set $ptr
+  block $~lib/rt/stub/computeSize|inlined.0 (result i32)
+   local.get $size
+   local.set $size|3
+   local.get $size|3
+   i32.const 4
+   i32.add
+   i32.const 15
+   i32.add
+   i32.const 15
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.const 4
+   i32.sub
+   br $~lib/rt/stub/computeSize|inlined.0
+  end
+  local.set $payloadSize
+  local.get $ptr
+  local.get $payloadSize
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
+  local.get $block
+  local.get $payloadSize
+  call $~lib/rt/common/BLOCK#set:mmInfo
+  local.get $ptr
+  return
+ )
+ (func $~lib/rt/common/OBJECT#set:gcInfo (param $this i32) (param $gcInfo i32)
+  local.get $this
+  local.get $gcInfo
+  i32.store offset=4
+ )
+ (func $~lib/rt/common/OBJECT#set:gcInfo2 (param $this i32) (param $gcInfo2 i32)
+  local.get $this
+  local.get $gcInfo2
+  i32.store offset=8
+ )
+ (func $~lib/rt/common/OBJECT#set:rtId (param $this i32) (param $rtId i32)
+  local.get $this
+  local.get $rtId
+  i32.store offset=12
+ )
+ (func $~lib/rt/common/OBJECT#set:rtSize (param $this i32) (param $rtSize i32)
+  local.get $this
+  local.get $rtSize
+  i32.store offset=16
+ )
+ (func $~lib/rt/stub/__new (param $size i32) (param $id i32) (result i32)
+  (local $ptr i32)
+  (local $object i32)
+  local.get $size
+  i32.const 1073741804
+  i32.gt_u
+  if
+   i32.const 32
+   i32.const 96
+   i32.const 86
+   i32.const 30
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 16
+  local.get $size
+  i32.add
+  call $~lib/rt/stub/__alloc
+  local.set $ptr
+  local.get $ptr
+  i32.const 4
+  i32.sub
+  local.set $object
+  local.get $object
+  i32.const 0
+  call $~lib/rt/common/OBJECT#set:gcInfo
+  local.get $object
+  i32.const 0
+  call $~lib/rt/common/OBJECT#set:gcInfo2
+  local.get $object
+  local.get $id
+  call $~lib/rt/common/OBJECT#set:rtId
+  local.get $object
+  local.get $size
+  call $~lib/rt/common/OBJECT#set:rtSize
+  local.get $ptr
+  i32.const 16
+  i32.add
+  return
+ )
+ (func $class-default-init/ClassDefaultInit#set:v (param $this i32) (param $v i32)
+  local.get $this
+  local.get $v
+  i32.store
+ )
+ (func $class-default-init/ClassDefaultInit#constructor|default (param $this i32)
+  local.get $this
+  global.get $class-default-init/a
+  call $class-default-init/ClassDefaultInit#set:v
+ )
+ (func $class-default-init/ClassDefaultInit#constructor (param $this i32) (param $a i32) (result i32)
+  local.get $this
+  i32.eqz
+  if
+   i32.const 4
+   i32.const 4
+   call $~lib/rt/stub/__new
+   local.set $this
+  end
+  local.get $this
+  call $class-default-init/ClassDefaultInit#constructor|default
+  local.get $this
+ )
+ (func $start:class-default-init
+  global.get $~lib/memory/__heap_base
+  i32.const 4
+  i32.add
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  i32.const 4
+  i32.sub
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
+  i32.const 0
+  i32.const 160
+  call $class-default-init/ClassDefaultInit#constructor
+  drop
+ )
+ (func $~start
+  call $start:class-default-init
+ )
+)
