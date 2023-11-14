@@ -76,7 +76,8 @@ import {
   NewExpression,
   ArrayLiteralExpression,
   ArrowKind,
-  ExpressionStatement
+  ExpressionStatement,
+  ResolvedType
 } from "./ast";
 
 import {
@@ -159,6 +160,9 @@ export class Resolver extends DiagnosticEmitter {
     node.currentlyResolving = true;
     let resolved: Type | null = null;
     switch (node.kind) {
+      case NodeKind.ResolvedType:
+        resolved = (<ResolvedType>node).type;
+        break;
       case NodeKind.NamedType: {
         resolved = this.resolveNamedType(
           <NamedTypeNode>node,
@@ -3679,6 +3683,23 @@ export class Resolver extends DiagnosticEmitter {
       prototype.parent // same level as prototype
     );
     let getterPrototype = prototype.getterPrototype;
+    let setterPrototype = prototype.setterPrototype;
+
+    let initializerNode = prototype.initializerNode;
+    if (initializerNode != null && prototype.typeNode == null) {
+      let initialzerType = this.resolveExpression(initializerNode, instance.file.startFunction.flow);
+      if (initialzerType) {
+        if (getterPrototype) {
+          assert(isTypeOmitted(getterPrototype.functionTypeNode.returnType));
+          getterPrototype.functionTypeNode.returnType = Node.createResolvedType(initialzerType);
+        }
+        if (setterPrototype) {
+          assert(isTypeOmitted(setterPrototype.functionTypeNode.parameters[0].type));
+          setterPrototype.functionTypeNode.parameters[0].type = Node.createResolvedType(initialzerType);
+        }
+      }
+    }
+
     if (getterPrototype) {
       let getterInstance = this.resolveFunction(
         getterPrototype,
@@ -3691,7 +3712,6 @@ export class Resolver extends DiagnosticEmitter {
         instance.setType(getterInstance.signature.returnType);
       }
     }
-    let setterPrototype = prototype.setterPrototype;
     if (setterPrototype) {
       let setterInstance = this.resolveFunction(
         setterPrototype,

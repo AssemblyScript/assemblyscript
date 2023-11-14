@@ -49,6 +49,7 @@ export const enum NodeKind {
   Source,
 
   // types
+  ResolvedType,
   NamedType,
   FunctionType,
   TypeName,
@@ -166,6 +167,10 @@ export abstract class Node {
     range: Range
   ): NamedTypeNode {
     return new NamedTypeNode(Node.createSimpleTypeName("", range), null, false, range);
+  }
+
+  static createResolvedType(type: Type): ResolvedType {
+    return new ResolvedType(type);
   }
 
   static createTypeParameter(
@@ -863,10 +868,21 @@ export abstract class TypeNode extends Node {
       if (functionTypeNode.returnType.hasGenericComponent(typeParameterNodes)) return true;
       let explicitThisType = functionTypeNode.explicitThisType;
       if (explicitThisType && explicitThisType.hasGenericComponent(typeParameterNodes)) return true;
+    } else if (this.kind == NodeKind.ResolvedType) {
+      return false;
     } else {
       assert(false);
     }
     return false;
+  }
+}
+
+/** Represents a resolved type. Will be generated when  */
+export class ResolvedType extends TypeNode {
+  constructor(
+    public type: Type
+  ) {
+    super(NodeKind.ResolvedType, false, Source.native.range);
   }
 }
 
