@@ -1440,8 +1440,10 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.InterfacePrototype:
       case ElementKind.Class:
       case ElementKind.Interface: {
+        let classLikeTarget = target;
+        let findBase = false; 
         do {
-          let member = target.getMember(propertyName);
+          let member = classLikeTarget.getMember(propertyName);
           if (member) {
             if (member.kind == ElementKind.PropertyPrototype) {
               let propertyInstance = this.resolveProperty(<PropertyPrototype>member, reportMode);
@@ -1458,34 +1460,30 @@ export class Resolver extends DiagnosticEmitter {
             this.currentElementExpression = null;
             return member; // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE, PROPERTY...
           }
-          // traverse inherited static members on the base prototype if target is a class prototype
-          if (
-            target.kind == ElementKind.ClassPrototype ||
-            target.kind == ElementKind.InterfacePrototype
-          ) {
-            let classPrototype = <ClassPrototype>target;
-            let basePrototype = classPrototype.basePrototype;
-            if (basePrototype) {
-              target = basePrototype;
-            } else {
+          findBase = false;
+          switch (classLikeTarget.kind) {
+            case ElementKind.ClassPrototype:
+            case ElementKind.InterfacePrototype:
+              // traverse inherited static members on the base prototype if target is a class prototype
+              let classPrototype = <ClassPrototype>classLikeTarget;
+              let basePrototype = classPrototype.basePrototype;
+              if (basePrototype) {
+                findBase = true;
+                classLikeTarget = basePrototype;
+              }
               break;
-            }
-          // traverse inherited instance members on the base class if target is a class instance
-          } else if (
-            target.kind == ElementKind.Class ||
-            target.kind == ElementKind.Interface
-          ) {
-            let classInstance = <Class>target;
-            let baseInstance = classInstance.base;
-            if (baseInstance) {
-              target = baseInstance;
-            } else {
+            case ElementKind.Class:
+            case ElementKind.Interface:
+              // traverse inherited instance members on the base class if target is a class instance
+              let classInstance = <Class>classLikeTarget;
+              let baseInstance = classInstance.base;
+              if (baseInstance) {
+                findBase = true;
+                classLikeTarget = baseInstance;
+              }
               break;
-            }
-          } else {
-            break;
           }
-        } while (true);
+        } while (findBase);
         break;
       }
       default: { // enums or other namespace-like elements
