@@ -2671,6 +2671,10 @@ export class Program extends DiagnosticEmitter {
     /** Parent interface. */
     parent: InterfacePrototype
   ): void {
+    let initializer = declaration.initializer;
+    if (initializer) {
+      this.error(DiagnosticCode.An_interface_property_cannot_have_an_initializer, initializer.range);
+    }
     let typeNode = declaration.type;
     if (!typeNode) typeNode = Node.createOmittedType(declaration.name.range.atEnd);
     this.initializeProperty(
