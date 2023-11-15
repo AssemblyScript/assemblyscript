@@ -1,9 +1,9 @@
 interface I {
-  v:string = ""
+  v: string = "";
 }
 
 class C implements I {
-  v:string = "";
+  v: string = "";
 }
 
 new C();
