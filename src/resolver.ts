@@ -1463,7 +1463,7 @@ export class Resolver extends DiagnosticEmitter {
           findBase = false;
           switch (classLikeTarget.kind) {
             case ElementKind.ClassPrototype:
-            case ElementKind.InterfacePrototype:
+            case ElementKind.InterfacePrototype: {
               // traverse inherited static members on the base prototype if target is a class prototype
               let classPrototype = <ClassPrototype>classLikeTarget;
               let basePrototype = classPrototype.basePrototype;
@@ -1472,8 +1472,9 @@ export class Resolver extends DiagnosticEmitter {
                 classLikeTarget = basePrototype;
               }
               break;
+            }
             case ElementKind.Class:
-            case ElementKind.Interface:
+            case ElementKind.Interface: {
               // traverse inherited instance members on the base class if target is a class instance
               let classInstance = <Class>classLikeTarget;
               let baseInstance = classInstance.base;
@@ -1482,6 +1483,7 @@ export class Resolver extends DiagnosticEmitter {
                 classLikeTarget = baseInstance;
               }
               break;
+            }
           }
         } while (findBase);
         break;
