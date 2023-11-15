@@ -1,0 +1,7 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "AS229: Property 'm' only has a setter and is missing a getter."
+  ]
+}

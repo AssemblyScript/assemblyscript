@@ -1363,7 +1363,15 @@ export class Resolver extends DiagnosticEmitter {
       }
       case ElementKind.Property: { // someInstance.prop
         let propertyInstance = <Property>target;
-        let getterInstance = assert(propertyInstance.getterInstance); // must have a getter
+        let getterInstance = propertyInstance.getterInstance;
+        if (!getterInstance) {
+          let setterInstance = propertyInstance.setterInstance!;
+          this.errorRelated(
+            DiagnosticCode.Property_0_only_has_a_setter_and_is_missing_a_getter,
+            targetNode.range, setterInstance.declaration.range, propertyInstance.name
+          );
+          return null;
+        }
         let type = getterInstance.signature.returnType;
         let classReference = type.getClassOrWrapper(this.program);
         if (!classReference) {
