@@ -3088,6 +3088,13 @@ export abstract class Element {
     return (this.flags & vis) == (other.flags & vis);
   }
 
+  visibilityNoLessThan(other: Element): bool {
+    if (this.is(CommonFlags.Private)) return other.is(CommonFlags.Private);
+    if (this.is(CommonFlags.Protected)) return other.isAny(CommonFlags.Private | CommonFlags.Protected);
+    assert(this.isPublic);
+    return true;
+  }
+
   /** Tests if this element is bound to a class. */
   get isBound(): bool {
     let parent = this.parent;
@@ -4173,6 +4180,17 @@ export class Property extends VariableLikeElement {
   /** Tests if this property represents a field. */
   get isField(): bool {
     return this.prototype.isField;
+  }
+
+  checkVisibility(diag: DiagnosticEmitter): void {
+    let propertyGetter = this.getterInstance;
+    let propertySetter = this.setterInstance;
+    if (propertyGetter && propertySetter && !propertyGetter.visibilityNoLessThan(propertySetter)) {
+      diag.errorRelated(
+        DiagnosticCode.Get_accessor_0_must_be_at_least_as_accessible_as_the_setter,
+        propertyGetter.identifierNode.range, propertySetter.identifierNode.range, propertyGetter.identifierNode.text
+      );
+    }
   }
 }
 

@@ -1,0 +1,8 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS2808: Get accessor 'm2' must be at least as accessible as the setter.",
+    "EOF"
+  ]
+}

@@ -3384,7 +3384,6 @@ export class Resolver extends DiagnosticEmitter {
     // Resolve instance members
     let prototype = instance.prototype;
     let instanceMemberPrototypes = prototype.instanceMembers;
-    let properties = new Array<Property>();
     if (instanceMemberPrototypes) {
       // TODO: for (let member of instanceMemberPrototypes.values()) {
       for (let _values = Map_values(instanceMemberPrototypes), i = 0, k = _values.length; i < k; ++i) {
@@ -3460,26 +3459,6 @@ export class Resolver extends DiagnosticEmitter {
         }
         if (!member.is(CommonFlags.Abstract)) {
           unimplemented.delete(memberName);
-        }
-      }
-    }
-
-    // Check that property getters and setters match
-    for (let i = 0, k = properties.length; i < k; ++i) {
-      let property = properties[i];
-      let propertyGetter = property.getterInstance;
-      if (!propertyGetter) {
-        this.error(
-          DiagnosticCode.Property_0_only_has_a_setter_and_is_missing_a_getter,
-          property.identifierNode.range, property.name
-        );
-      } else {
-        let propertySetter = property.setterInstance;
-        if (propertySetter && !propertyGetter.visibilityEquals(propertySetter)) {
-          this.errorRelated(
-            DiagnosticCode.Getter_and_setter_accessors_do_not_agree_in_visibility,
-            propertyGetter.identifierNode.range, propertySetter.identifierNode.range
-          );
         }
       }
     }
@@ -3707,6 +3686,7 @@ export class Resolver extends DiagnosticEmitter {
         }
       }
     }
+    instance.checkVisibility(this);
     return instance;
   }
 

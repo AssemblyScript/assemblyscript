@@ -151,7 +151,6 @@
   "Operator '{0}' cannot be applied to types '{1}' and '{2}'.": 2365,
   "A 'super' call must be the first statement in the constructor.": 2376,
   "Constructors for derived classes must contain a 'super' call.": 2377,
-  "Getter and setter accessors do not agree in visibility.": 2379,
   "'get' and 'set' accessor must have the same type.": 2380,
   "Overload signatures must all be public, private or protected.": 2385,
   "Constructor implementation is missing.": 2390,
@@ -200,6 +199,7 @@
   "Duplicate property '{0}'.": 2718,
   "Property '{0}' is missing in type '{1}' but required in type '{2}'.": 2741,
   "Type '{0}' has no call signatures.": 2757,
+  "Get accessor '{0}' must be at least as accessible as the setter.": 2808,
   "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.": 4117,
 
   "File '{0}' not found.": 6054,
