@@ -3089,10 +3089,10 @@ export abstract class Element {
   }
 
   visibilityNoLessThan(other: Element): bool {
+    if (this.isPublic) return true; // public is a most frequent case
     if (this.is(CommonFlags.Private)) return other.is(CommonFlags.Private);
     if (this.is(CommonFlags.Protected)) return other.isAny(CommonFlags.Private | CommonFlags.Protected);
-    assert(this.isPublic);
-    return true;
+    return assert(false);
   }
 
   /** Tests if this element is bound to a class. */
