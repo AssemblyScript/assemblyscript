@@ -141,7 +141,7 @@ export function help(config, options) {
 }
 
 /** Sanitizes an option value to be a valid value of the option's type. */
-export function sanitizeValue(value, type) {
+function sanitizeValue(value, type) {
   if (value != null) {
     switch (type) {
       case undefined:

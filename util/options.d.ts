@@ -68,6 +68,3 @@ export function resolvePath(path: string, baseDir: string, useNodeResolution?: b
 
 /** Populates default values on a parsed options result. */
 export function addDefaults(config: Config, options: OptionSet): void;
-
-/** Sanitizes an option value to be a valid value of the option's type. */
-export function sanitizeValue(value: any, type: string): boolean | number | string | null | number[] | string[]; // eslint-disable-line @typescript-eslint/no-explicit-any

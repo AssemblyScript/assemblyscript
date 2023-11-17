@@ -2,18 +2,21 @@ import assert from "assert";
 import * as optionsUtil from "../../util/options.js";
 
 const config = {
-  "enable": {
-    "type": "S",
-    "mutuallyExclusive": "disable"
+  enable: {
+    type: "S",
+    mutuallyExclusive: "disable",
   },
-  "disable": {
-    "type": "S",
-    "mutuallyExclusive": "enable"
+  disable: {
+    type: "S",
+    mutuallyExclusive: "enable",
   },
-  "other": {
-    "type": "S",
-    "default": ["x"]
-  }
+  other: {
+    type: "S",
+    default: ["x"],
+  },
+  bool_input_for_string: {
+    type: "s",
+  },
 };
 
 // Present in both should concat
@@ -33,17 +36,21 @@ assert.deepStrictEqual(merged.enable, ["c"]);
 assert.deepStrictEqual(merged.disable, ["a", "b"]);
 
 // Populating defaults should work after the fact
-optionsUtil.addDefaults(config, merged = {});
+optionsUtil.addDefaults(config, (merged = {}));
 assert.deepStrictEqual(merged.other, ["x"]);
 
-optionsUtil.addDefaults(config, merged = { other: ["y"] });
+optionsUtil.addDefaults(config, (merged = { other: ["y"] }));
 assert.deepStrictEqual(merged.other, ["y"]);
 
+// String test
+assert.deepStrictEqual(merged.bool_input_for_string, undefined);
+merged = optionsUtil.merge(config, {}, { bool_input_for_string: false });
+assert.deepStrictEqual(merged.bool_input_for_string, undefined);
+merged = optionsUtil.merge(config, {}, { bool_input_for_string: true });
+assert.deepStrictEqual(merged.bool_input_for_string, "");
+
 // Complete usage test
-let result = optionsUtil.parse([
-  "--enable", "a",
-  "--disable", "b",
-], config, false);
+let result = optionsUtil.parse(["--enable", "a", "--disable", "b"], config, false);
 
 merged = optionsUtil.merge(config, result.options, { enable: ["b", "c"] });
 merged = optionsUtil.merge(config, merged, { disable: ["a", "d"] });
@@ -52,6 +59,3 @@ optionsUtil.addDefaults(config, merged);
 assert.deepStrictEqual(merged.enable, ["a", "c"]);
 assert.deepStrictEqual(merged.disable, ["b", "d"]);
 assert.deepStrictEqual(merged.other, ["x"]);
-
-let value = optionsUtil.sanitizeValue(false, "s");
-assert.deepStrictEqual(value, null);
