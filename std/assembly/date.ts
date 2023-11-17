@@ -66,29 +66,29 @@ export class Date {
       let len = timeParts.length;
       if (len <= 1) throw new RangeError(E_INVALIDDATE);
 
-      hour = I32.parseInt(timeParts[0]);
-      min  = I32.parseInt(timeParts[1]);
+      hour = i32.parse(timeParts[0]);
+      min  = i32.parse(timeParts[1]);
       if (len >= 3) {
         let secAndMs = timeParts[2];
         let posDot = secAndMs.indexOf(".");
         if (~posDot) {
           // includes milliseconds
-          sec = I32.parseInt(secAndMs.substring(0, posDot));
-          ms  = I32.parseInt(secAndMs.substring(posDot + 1));
+          sec = i32.parse(secAndMs.substring(0, posDot));
+          ms  = i32.parse(secAndMs.substring(posDot + 1));
         } else {
-          sec = I32.parseInt(secAndMs);
+          sec = i32.parse(secAndMs);
         }
       }
     }
     // parse the YYYY-MM-DD component
     let parts = dateString.split("-");
-    let year = I32.parseInt(parts[0]);
+    let year = i32.parse(parts[0]);
     let month = 1, day = 1;
     let len = parts.length;
     if (len >= 2) {
-      month = I32.parseInt(parts[1]);
+      month = i32.parse(parts[1]);
       if (len >= 3) {
-        day = I32.parseInt(parts[2]);
+        day = i32.parse(parts[2]);
       }
     }
     return new Date(epochMillis(year, month, day, hour, min, sec, ms));
