@@ -234,7 +234,6 @@ export function merge(config, currentOptions, parentOptions, parentBaseDir) {
   return mergedOptions;
 }
 
-
 /** Normalizes a path. */
 export function normalizePath(p) {
   const parsed = path.parse(p);
