@@ -3753,10 +3753,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
   global.get $resolve-unary/bar
-  local.tee $6
-  i32.store
+  local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=12
@@ -3789,10 +3787,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
   global.get $resolve-unary/bar
-  local.tee $6
-  i32.store
+  local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
   i32.store offset=12

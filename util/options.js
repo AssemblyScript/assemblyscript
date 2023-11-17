@@ -150,6 +150,7 @@ function sanitizeValue(value, type) {
       case "f": return Number(value) || 0;
       case "s": {
         if (value === true) return "";
+        if (value === false) return null;
         return String(value);
       }
       case "I": {
