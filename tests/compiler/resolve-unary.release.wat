@@ -2626,10 +2626,6 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    global.get $resolve-unary/bar
-   local.tee $1
-   i32.store
-   local.get $0
-   local.get $1
    i32.store offset=12
    local.get $0
    i32.const 3680
@@ -2655,10 +2651,6 @@
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    global.get $resolve-unary/bar
-   local.tee $1
-   i32.store
-   local.get $0
-   local.get $1
    i32.store offset=12
    local.get $0
    i32.const 3712
