@@ -1440,8 +1440,10 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.InterfacePrototype:
       case ElementKind.Class:
       case ElementKind.Interface: {
+        let classLikeTarget = target;
+        let findBase = false; 
         do {
-          let member = target.getMember(propertyName);
+          let member = classLikeTarget.getMember(propertyName);
           if (member) {
             if (member.kind == ElementKind.PropertyPrototype) {
               let propertyInstance = this.resolveProperty(<PropertyPrototype>member, reportMode);
@@ -1458,34 +1460,32 @@ export class Resolver extends DiagnosticEmitter {
             this.currentElementExpression = null;
             return member; // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE, PROPERTY...
           }
-          // traverse inherited static members on the base prototype if target is a class prototype
-          if (
-            target.kind == ElementKind.ClassPrototype ||
-            target.kind == ElementKind.InterfacePrototype
-          ) {
-            let classPrototype = <ClassPrototype>target;
-            let basePrototype = classPrototype.basePrototype;
-            if (basePrototype) {
-              target = basePrototype;
-            } else {
+          findBase = false;
+          switch (classLikeTarget.kind) {
+            case ElementKind.ClassPrototype:
+            case ElementKind.InterfacePrototype: {
+              // traverse inherited static members on the base prototype if target is a class prototype
+              let classPrototype = <ClassPrototype>classLikeTarget;
+              let basePrototype = classPrototype.basePrototype;
+              if (basePrototype) {
+                findBase = true;
+                classLikeTarget = basePrototype;
+              }
               break;
             }
-          // traverse inherited instance members on the base class if target is a class instance
-          } else if (
-            target.kind == ElementKind.Class ||
-            target.kind == ElementKind.Interface
-          ) {
-            let classInstance = <Class>target;
-            let baseInstance = classInstance.base;
-            if (baseInstance) {
-              target = baseInstance;
-            } else {
+            case ElementKind.Class:
+            case ElementKind.Interface: {
+              // traverse inherited instance members on the base class if target is a class instance
+              let classInstance = <Class>classLikeTarget;
+              let baseInstance = classInstance.base;
+              if (baseInstance) {
+                findBase = true;
+                classLikeTarget = baseInstance;
+              }
               break;
             }
-          } else {
-            break;
           }
-        } while (true);
+        } while (findBase);
         break;
       }
       default: { // enums or other namespace-like elements
@@ -3384,7 +3384,6 @@ export class Resolver extends DiagnosticEmitter {
     // Resolve instance members
     let prototype = instance.prototype;
     let instanceMemberPrototypes = prototype.instanceMembers;
-    let properties = new Array<Property>();
     if (instanceMemberPrototypes) {
       // TODO: for (let member of instanceMemberPrototypes.values()) {
       for (let _values = Map_values(instanceMemberPrototypes), i = 0, k = _values.length; i < k; ++i) {
@@ -3460,26 +3459,6 @@ export class Resolver extends DiagnosticEmitter {
         }
         if (!member.is(CommonFlags.Abstract)) {
           unimplemented.delete(memberName);
-        }
-      }
-    }
-
-    // Check that property getters and setters match
-    for (let i = 0, k = properties.length; i < k; ++i) {
-      let property = properties[i];
-      let propertyGetter = property.getterInstance;
-      if (!propertyGetter) {
-        this.error(
-          DiagnosticCode.Property_0_only_has_a_setter_and_is_missing_a_getter,
-          property.identifierNode.range, property.name
-        );
-      } else {
-        let propertySetter = property.setterInstance;
-        if (propertySetter && !propertyGetter.visibilityEquals(propertySetter)) {
-          this.errorRelated(
-            DiagnosticCode.Getter_and_setter_accessors_do_not_agree_in_visibility,
-            propertyGetter.identifierNode.range, propertySetter.identifierNode.range
-          );
         }
       }
     }
@@ -3707,6 +3686,7 @@ export class Resolver extends DiagnosticEmitter {
         }
       }
     }
+    instance.checkVisibility(this);
     return instance;
   }
 

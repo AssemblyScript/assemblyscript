@@ -1,34 +1,34 @@
 (module
- (type $f64_=>_f64 (func (param f64) (result f64)))
- (type $f64_f64_f64_i32_=>_i32 (func (param f64 f64 f64 i32) (result i32)))
- (type $f32_f32_f32_i32_=>_i32 (func (param f32 f32 f32 i32) (result i32)))
- (type $f32_=>_f32 (func (param f32) (result f32)))
- (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $f64_f64_f64_f64_i32_=>_i32 (func (param f64 f64 f64 f64 i32) (result i32)))
- (type $f32_f32_f32_f32_i32_=>_i32 (func (param f32 f32 f32 f32 i32) (result i32)))
- (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
- (type $none_=>_f64 (func (result f64)))
- (type $f64_=>_i32 (func (param f64) (result i32)))
- (type $none_=>_none (func))
- (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
- (type $f64_f64_f64_=>_f64 (func (param f64 f64 f64) (result f64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $f32_=>_i32 (func (param f32) (result i32)))
- (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
- (type $f32_f32_f32_=>_f32 (func (param f32 f32 f32) (result f32)))
- (type $f64_i32_f64_f64_i32_=>_i32 (func (param f64 i32 f64 f64 i32) (result i32)))
- (type $f32_i32_f32_f32_i32_=>_i32 (func (param f32 i32 f32 f32 i32) (result i32)))
- (type $f64_i64_=>_i32 (func (param f64 i64) (result i32)))
- (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
- (type $i64_=>_i64 (func (param i64) (result i64)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i64_=>_none (func (param i64)))
- (type $none_=>_f32 (func (result f32)))
- (type $f64_f64_i32_=>_f64 (func (param f64 f64 i32) (result f64)))
- (type $f64_=>_none (func (param f64)))
- (type $i64_i64_i64_i64_i64_i32_=>_i32 (func (param i64 i64 i64 i64 i64 i32) (result i32)))
- (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $0 (func (param f64) (result f64)))
+ (type $1 (func (param f64 f64 f64 i32) (result i32)))
+ (type $2 (func (param f32 f32 f32 i32) (result i32)))
+ (type $3 (func (param f32) (result f32)))
+ (type $4 (func (param f64 f64) (result f64)))
+ (type $5 (func (param f64 f64 f64 f64 i32) (result i32)))
+ (type $6 (func (param f32 f32 f32 f32 i32) (result i32)))
+ (type $7 (func (param f32 f32) (result f32)))
+ (type $8 (func (result f64)))
+ (type $9 (func (param f64) (result i32)))
+ (type $10 (func))
+ (type $11 (func (param f64 i32) (result f64)))
+ (type $12 (func (param f64 f64 f64) (result f64)))
+ (type $13 (func (param i32 i32 i32 i32)))
+ (type $14 (func (param f32) (result i32)))
+ (type $15 (func (param f32 i32) (result f32)))
+ (type $16 (func (param f32 f32 f32) (result f32)))
+ (type $17 (func (param f64 i32 f64 f64 i32) (result i32)))
+ (type $18 (func (param f32 i32 f32 f32 i32) (result i32)))
+ (type $19 (func (param f64 i64) (result i32)))
+ (type $20 (func (param f64 f64) (result i32)))
+ (type $21 (func (param i64) (result i64)))
+ (type $22 (func (param i32) (result i32)))
+ (type $23 (func (param i64)))
+ (type $24 (func (result f32)))
+ (type $25 (func (param f64 f64 i32) (result f64)))
+ (type $26 (func (param f64)))
+ (type $27 (func (param i64 i64 i64 i64 i64 i32) (result i32)))
+ (type $28 (func (param i64 i64) (result i64)))
+ (type $29 (func (param i32 i32) (result i32)))
  (import "env" "Math.E" (global $~lib/bindings/dom/Math.E f64))
  (import "env" "Math.LN2" (global $~lib/bindings/dom/Math.LN2 f64))
  (import "env" "Math.LN10" (global $~lib/bindings/dom/Math.LN10 f64))
@@ -1561,7 +1561,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0
+   f64.load
    local.set $invc
    i32.const 64
    local.get $i
@@ -1570,7 +1570,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0 offset=8
+   f64.load offset=8
    local.set $logc
    local.get $iz
    f64.reinterpret_i64
@@ -1582,7 +1582,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0
+   f64.load
    local.set $chi
    i32.const 2112
    local.get $i
@@ -1591,7 +1591,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0 offset=8
+   f64.load offset=8
    local.set $clo
    local.get $z
    local.get $chi
@@ -2081,7 +2081,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0
+   f64.load
    local.set $invc
    i32.const 4160
    local.get $i
@@ -2090,7 +2090,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0 offset=8
+   f64.load offset=8
    local.set $logc
    local.get $iz
    f32.reinterpret_i32
@@ -4373,13 +4373,13 @@
   i32.add
   local.set $tblPtr
   local.get $tblPtr
-  i64.load $0
+  i64.load
   local.set $b0
   local.get $tblPtr
-  i64.load $0 offset=8
+  i64.load offset=8
   local.set $b1
   local.get $tblPtr
-  i64.load $0 offset=16
+  i64.load offset=16
   local.set $b2
   local.get $shift
   i64.const 0
@@ -4391,7 +4391,7 @@
    i64.sub
    local.set $rshift
    local.get $tblPtr
-   i64.load $0 offset=24
+   i64.load offset=24
    local.set $b3
    local.get $b1
    local.get $rshift
@@ -5792,17 +5792,17 @@
     i32.add
     local.set $tblPtr
     local.get $tblPtr
-    i64.load $0
+    i64.load
     local.set $b0
     local.get $tblPtr
-    i64.load $0 offset=8
+    i64.load offset=8
     local.set $b1
     local.get $shift
     i64.const 32
     i64.gt_u
     if
      local.get $tblPtr
-     i64.load $0 offset=16
+     i64.load offset=16
      local.set $b2
      local.get $b2
      i64.const 96
@@ -6440,7 +6440,7 @@
    i32.const 3
    i32.shl
    i32.add
-   i64.load $0
+   i64.load
    f64.reinterpret_i64
    local.set $tail
    i32.const 4640
@@ -6448,7 +6448,7 @@
    i32.const 3
    i32.shl
    i32.add
-   i64.load $0 offset=8
+   i64.load offset=8
    local.get $top
    i64.add
    local.set $sbits
@@ -7104,7 +7104,7 @@
    i32.const 3
    i32.shl
    i32.add
-   i64.load $0
+   i64.load
    local.set $t
    local.get $t
    local.get $ki
@@ -7435,7 +7435,7 @@
    i32.const 3
    i32.shl
    i32.add
-   i64.load $0
+   i64.load
    f64.reinterpret_i64
    local.set $tail
    i32.const 4640
@@ -7443,7 +7443,7 @@
    i32.const 3
    i32.shl
    i32.add
-   i64.load $0 offset=8
+   i64.load offset=8
    local.get $top
    i64.add
    local.set $sbits
@@ -7679,7 +7679,7 @@
    i32.const 3
    i32.shl
    i32.add
-   i64.load $0
+   i64.load
    local.set $t
    local.get $t
    local.get $ki
@@ -8913,7 +8913,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0
+   f64.load
    local.set $invc
    i32.const 6944
    local.get $i
@@ -8922,7 +8922,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0 offset=8
+   f64.load offset=8
    local.set $logc
    local.get $iz
    f64.reinterpret_i64
@@ -8937,7 +8937,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0
+   f64.load
    local.set $chi
    i32.const 7968
    local.get $i
@@ -8946,7 +8946,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0 offset=8
+   f64.load offset=8
    local.set $clo
    local.get $z
    local.get $chi
@@ -9168,7 +9168,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0
+   f64.load
    local.set $invc
    i32.const 8992
    local.get $i
@@ -9177,7 +9177,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load $0 offset=8
+   f64.load offset=8
    local.set $logc
    local.get $iz
    f32.reinterpret_i32
@@ -10430,7 +10430,7 @@
     i32.add
     i32.shl
     i32.add
-    f64.load $0
+    f64.load
     local.set $invc
     i32.const 9248
     local.get $i
@@ -10439,7 +10439,7 @@
     i32.add
     i32.shl
     i32.add
-    f64.load $0 offset=16
+    f64.load offset=16
     local.set $logc
     i32.const 9248
     local.get $i
@@ -10448,7 +10448,7 @@
     i32.add
     i32.shl
     i32.add
-    f64.load $0 offset=24
+    f64.load offset=24
     local.set $logctail
     local.get $iz
     i64.const 2147483648
@@ -10758,7 +10758,7 @@
     i32.const 3
     i32.shl
     i32.add
-    i64.load $0
+    i64.load
     f64.reinterpret_i64
     local.set $tail
     i32.const 4640
@@ -10766,7 +10766,7 @@
     i32.const 3
     i32.shl
     i32.add
-    i64.load $0 offset=8
+    i64.load offset=8
     local.get $top
     i64.add
     local.set $sbits
@@ -11413,7 +11413,7 @@
     i32.add
     i32.shl
     i32.add
-    f64.load $0
+    f64.load
     local.set $invc
     i32.const 8992
     local.get $i
@@ -11422,7 +11422,7 @@
     i32.add
     i32.shl
     i32.add
-    f64.load $0 offset=8
+    f64.load offset=8
     local.set $logc
     local.get $uz
     f32.reinterpret_i32
@@ -11572,7 +11572,7 @@
     i32.const 3
     i32.shl
     i32.add
-    i64.load $0
+    i64.load
     local.set $t
     local.get $t
     local.get $ki
@@ -13660,17 +13660,17 @@
     i32.add
     local.set $tblPtr
     local.get $tblPtr
-    i64.load $0
+    i64.load
     local.set $b0
     local.get $tblPtr
-    i64.load $0 offset=8
+    i64.load offset=8
     local.set $b1
     local.get $shift
     i64.const 32
     i64.gt_u
     if
      local.get $tblPtr
-     i64.load $0 offset=16
+     i64.load offset=16
      local.set $b2
      local.get $b2
      i64.const 96
@@ -15243,17 +15243,17 @@
     i32.add
     local.set $tblPtr
     local.get $tblPtr
-    i64.load $0
+    i64.load
     local.set $b0
     local.get $tblPtr
-    i64.load $0 offset=8
+    i64.load offset=8
     local.set $b1
     local.get $shift
     i64.const 32
     i64.gt_u
     if
      local.get $tblPtr
-     i64.load $0 offset=16
+     i64.load offset=16
      local.set $b2
      local.get $b2
      i64.const 96

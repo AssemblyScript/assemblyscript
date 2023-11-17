@@ -25,7 +25,7 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "binaryen": "112.0.0-nightly.20230411",
+    "binaryen": "116.0.0-nightly.20231102",
     "long": "^5.2.1"
   },
   "devDependencies": {
@@ -33,9 +33,9 @@
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
     "diff": "^5.1.0",
-    "esbuild": "^0.16.17",
+    "esbuild": "^0.19.4",
     "eslint": "^8.33.0",
-    "glob": "^7.2.0",
+    "glob": "^10.3.0",
     "typescript": "~4.7.4"
   },
   "type": "module",
@@ -72,7 +72,7 @@
   "scripts": {
     "check": "npm run check:config && npm run check:import && npm run lint",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
-    "check:import": "tsc --noEmit --target ESNEXT --module es6 --experimentalDecorators tests/import/index",
+    "check:import": "tsc --noEmit --target ESNEXT --module nodenext --moduleResolution nodenext --experimentalDecorators tests/import/index",
     "lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
     "build": "node scripts/build",
     "watch": "node scripts/build --watch",

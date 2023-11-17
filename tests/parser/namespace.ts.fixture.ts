@@ -1,3 +1,4 @@
+let outerVar: i32 = 0;
 declare namespace A {
   namespace B {
     export namespace C {
@@ -14,5 +15,6 @@ declare namespace A {
     }
   }
 }
-// ERROR 1039: "Initializers are not allowed in ambient contexts." in namespace.ts(6,32+1)
-// ERROR 1183: "An implementation cannot be declared in ambient contexts." in namespace.ts(8,37+1)
+// ERROR 2695: "Namespace can only have declarations." in namespace.ts(6,7+0)
+// ERROR 1039: "Initializers are not allowed in ambient contexts." in namespace.ts(8,32+1)
+// ERROR 1183: "An implementation cannot be declared in ambient contexts." in namespace.ts(10,37+1)

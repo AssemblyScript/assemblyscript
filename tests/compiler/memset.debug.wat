@@ -1,7 +1,7 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $0 (func))
+ (type $1 (func (param i32 i32 i32) (result i32)))
+ (type $2 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memset/dest (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 60))
@@ -28,14 +28,14 @@
   end
   local.get $dest
   local.get $c
-  i32.store8 $0
+  i32.store8
   local.get $dest
   local.get $n
   i32.add
   i32.const 1
   i32.sub
   local.get $c
-  i32.store8 $0
+  i32.store8
   local.get $n
   i32.const 2
   i32.le_u
@@ -47,26 +47,26 @@
   i32.const 1
   i32.add
   local.get $c
-  i32.store8 $0
+  i32.store8
   local.get $dest
   i32.const 2
   i32.add
   local.get $c
-  i32.store8 $0
+  i32.store8
   local.get $dest
   local.get $n
   i32.add
   i32.const 2
   i32.sub
   local.get $c
-  i32.store8 $0
+  i32.store8
   local.get $dest
   local.get $n
   i32.add
   i32.const 3
   i32.sub
   local.get $c
-  i32.store8 $0
+  i32.store8
   local.get $n
   i32.const 6
   i32.le_u
@@ -78,14 +78,14 @@
   i32.const 3
   i32.add
   local.get $c
-  i32.store8 $0
+  i32.store8
   local.get $dest
   local.get $n
   i32.add
   i32.const 4
   i32.sub
   local.get $c
-  i32.store8 $0
+  i32.store8
   local.get $n
   i32.const 8
   i32.le_u
@@ -121,14 +121,14 @@
   local.set $c32
   local.get $dest
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   local.get $n
   i32.add
   i32.const 4
   i32.sub
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $n
   i32.const 8
   i32.le_u
@@ -140,26 +140,26 @@
   i32.const 4
   i32.add
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   i32.const 8
   i32.add
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   local.get $n
   i32.add
   i32.const 12
   i32.sub
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   local.get $n
   i32.add
   i32.const 8
   i32.sub
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $n
   i32.const 24
   i32.le_u
@@ -171,50 +171,50 @@
   i32.const 12
   i32.add
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   i32.const 16
   i32.add
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   i32.const 20
   i32.add
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   i32.const 24
   i32.add
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   local.get $n
   i32.add
   i32.const 28
   i32.sub
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   local.get $n
   i32.add
   i32.const 24
   i32.sub
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   local.get $n
   i32.add
   i32.const 20
   i32.sub
   local.get $c32
-  i32.store $0
+  i32.store
   local.get $dest
   local.get $n
   i32.add
   i32.const 16
   i32.sub
   local.get $c32
-  i32.store $0
+  i32.store
   i32.const 24
   local.get $dest
   i32.const 4
@@ -244,22 +244,22 @@
    if
     local.get $dest
     local.get $c64
-    i64.store $0
+    i64.store
     local.get $dest
     i32.const 8
     i32.add
     local.get $c64
-    i64.store $0
+    i64.store
     local.get $dest
     i32.const 16
     i32.add
     local.get $c64
-    i64.store $0
+    i64.store
     local.get $dest
     i32.const 24
     i32.add
     local.get $c64
-    i64.store $0
+    i64.store
     local.get $n
     i32.const 32
     i32.sub
@@ -283,7 +283,7 @@
   call $memset/memset
   drop
   global.get $memset/dest
-  i32.load8_u $0
+  i32.load8_u
   i32.const 1
   i32.eq
   i32.eqz
@@ -298,7 +298,7 @@
   global.get $memset/dest
   i32.const 15
   i32.add
-  i32.load8_u $0
+  i32.load8_u
   i32.const 1
   i32.eq
   i32.eqz
@@ -318,7 +318,7 @@
   call $memset/memset
   drop
   global.get $memset/dest
-  i32.load8_u $0
+  i32.load8_u
   i32.const 1
   i32.eq
   i32.eqz
@@ -333,7 +333,7 @@
   global.get $memset/dest
   i32.const 1
   i32.add
-  i32.load8_u $0
+  i32.load8_u
   i32.const 2
   i32.eq
   i32.eqz
@@ -348,7 +348,7 @@
   global.get $memset/dest
   i32.const 14
   i32.add
-  i32.load8_u $0
+  i32.load8_u
   i32.const 2
   i32.eq
   i32.eqz
@@ -363,7 +363,7 @@
   global.get $memset/dest
   i32.const 15
   i32.add
-  i32.load8_u $0
+  i32.load8_u
   i32.const 1
   i32.eq
   i32.eqz

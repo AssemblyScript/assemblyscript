@@ -5703,10 +5703,11 @@ export class Compiler extends DiagnosticEmitter {
     assert(targetType != Type.void);
     let valueExpr = this.compileExpression(valueExpression, targetType);
     let valueType = this.currentType;
+    if (targetType.isNullableReference && this.currentFlow.isNonnull(valueExpr, valueType)) targetType = targetType.nonNullableType;
     return this.makeAssignment(
       target,
       this.convertExpression(valueExpr, valueType, targetType, false, valueExpression),
-      valueType,
+      targetType,
       valueExpression,
       thisExpression,
       elementExpression,
@@ -5799,6 +5800,7 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         assert(setterInstance.signature.parameterTypes.length == 1);
+        assert(setterInstance.signature.returnType == Type.void);
         if (propertyInstance.is(CommonFlags.Instance)) {
           let thisType = assert(setterInstance.signature.thisType);
           let thisExpr = this.compileExpression(
@@ -5807,28 +5809,29 @@ export class Compiler extends DiagnosticEmitter {
             Constraints.ConvImplicit | Constraints.IsThis
           );
           if (!tee) return this.makeCallDirect(setterInstance, [ thisExpr, valueExpr ], valueExpression);
-          let getterInstance = assert((<Property>target).getterInstance);
-          assert(getterInstance.signature.thisType == thisType);
-          let returnType = getterInstance.signature.returnType;
-          let returnTypeRef = returnType.toRef();
-          let tempThis = flow.getTempLocal(thisType);
+          let tempLocal = flow.getTempLocal(valueType);
+          let valueTypeRef = valueType.toRef();
           let ret = module.block(null, [
             this.makeCallDirect(setterInstance, [
-              module.local_tee(tempThis.index, thisExpr, /* isManaged=*/false, thisType.toRef()), // thisType is managed but here it must be alive
-              valueExpr
+              thisExpr,
+              module.local_tee(tempLocal.index, valueExpr, valueType.isManaged, valueTypeRef)
             ], valueExpression),
-            this.makeCallDirect(getterInstance, [
-              module.local_get(tempThis.index, thisType.toRef())
-            ], valueExpression)
-          ], returnTypeRef);
+            module.local_get(tempLocal.index, valueTypeRef),
+          ], valueTypeRef);
+          this.currentType = valueType;
           return ret;
         } else {
           if (!tee) return this.makeCallDirect(setterInstance, [ valueExpr ], valueExpression);
-          let getterInstance = assert((<Property>target).getterInstance);
-          return module.block(null, [
-            this.makeCallDirect(setterInstance, [ valueExpr ], valueExpression),
-            this.makeCallDirect(getterInstance, null, valueExpression)
-          ], getterInstance.signature.returnType.toRef());
+          let tempLocal = flow.getTempLocal(valueType);
+          let valueTypeRef = valueType.toRef();
+          let ret = module.block(null, [
+            this.makeCallDirect(setterInstance, [
+              module.local_tee(tempLocal.index, valueExpr, valueType.isManaged, valueTypeRef),
+            ], valueExpression),
+            module.local_get(tempLocal.index, valueTypeRef),
+          ], valueTypeRef);
+          this.currentType = valueType;
+          return ret;
         }
       }
       case ElementKind.IndexSignature: {

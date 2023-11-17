@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $0 (func))
  (global $unary/i (mut i32) (i32.const 0))
  (global $unary/I (mut i64) (i64.const 0))
  (global $unary/f (mut f32) (f32.const 0))

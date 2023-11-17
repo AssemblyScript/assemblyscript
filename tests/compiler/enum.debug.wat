@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
+ (type $0 (func))
+ (type $1 (func (result i32)))
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
  (global $enum/Implicit.TWO i32 (i32.const 2))

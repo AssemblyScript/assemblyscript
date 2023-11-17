@@ -1,8 +1,8 @@
 (module
- (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_none (func))
+ (type $0 (func (result i32)))
+ (type $1 (func (param i32) (result i32)))
+ (type $2 (func (param i32 i32 i32 i32)))
+ (type $3 (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data $0 (i32.const 1036) ",")
@@ -26,11 +26,13 @@
   i32.const 1
  )
  (func $loop-flow/whileAny (param $0 i32) (result i32)
-  loop $while-continue|0
+  loop $while-continue|0 (result i32)
    local.get $0
    i32.const 1
-   i32.ne
-   if
+   i32.eq
+   if (result i32)
+    i32.const 1
+   else
     local.get $0
     i32.const 2
     i32.eq
@@ -47,14 +49,15 @@
     unreachable
    end
   end
-  i32.const 1
  )
  (func $loop-flow/forAny (param $0 i32) (result i32)
-  loop $for-loop|0
+  loop $for-loop|0 (result i32)
    local.get $0
    i32.const 1
-   i32.ne
-   if
+   i32.eq
+   if (result i32)
+    i32.const 1
+   else
     local.get $0
     i32.const 2
     i32.eq
@@ -69,7 +72,6 @@
     br $for-loop|0
    end
   end
-  i32.const 1
  )
  (func $loop-flow/doAny (param $0 i32) (result i32)
   loop $do-loop|0 (result i32)

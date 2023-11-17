@@ -504,9 +504,9 @@ export const {
 
   _BinaryenPop,
 
-  _BinaryenI31New,
-  _BinaryenI31NewGetValue,
-  _BinaryenI31NewSetValue,
+  _BinaryenRefI31,
+  _BinaryenRefI31GetValue,
+  _BinaryenRefI31SetValue,
 
   _BinaryenI31Get,
   _BinaryenI31GetGetI31,
@@ -837,16 +837,14 @@ export const {
   _TypeBuilderCreate,
   _TypeBuilderGrow,
   _TypeBuilderGetSize,
-  _TypeBuilderSetBasicHeapType,
   _TypeBuilderSetSignatureType,
   _TypeBuilderSetStructType,
   _TypeBuilderSetArrayType,
-  _TypeBuilderIsBasic,
-  _TypeBuilderGetBasic,
   _TypeBuilderGetTempHeapType,
   _TypeBuilderGetTempTupleType,
   _TypeBuilderGetTempRefType,
   _TypeBuilderSetSubType,
+  _TypeBuilderSetOpen,
   _TypeBuilderCreateRecGroup,
   _TypeBuilderBuildAndDispose,
   _BinaryenModuleSetTypeName,
@@ -875,8 +873,6 @@ export const {
   _BinaryenSetOneCallerInlineMaxSize,
   _BinaryenGetAllowInliningFunctionsWithLoops,
   _BinaryenSetAllowInliningFunctionsWithLoops,
-  _BinaryenGetTypeSystem,
-  _BinaryenSetTypeSystem,
 
   // Helpers
 

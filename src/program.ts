@@ -2671,6 +2671,10 @@ export class Program extends DiagnosticEmitter {
     /** Parent interface. */
     parent: InterfacePrototype
   ): void {
+    let initializer = declaration.initializer;
+    if (initializer) {
+      this.error(DiagnosticCode.An_interface_property_cannot_have_an_initializer, initializer.range);
+    }
     let typeNode = declaration.type;
     if (!typeNode) typeNode = Node.createOmittedType(declaration.name.range.atEnd);
     this.initializeProperty(
@@ -3082,6 +3086,13 @@ export abstract class Element {
     if (this.isPublic == other.isPublic) return true;
     const vis = CommonFlags.Private | CommonFlags.Protected;
     return (this.flags & vis) == (other.flags & vis);
+  }
+
+  visibilityNoLessThan(other: Element): bool {
+    if (this.isPublic) return true; // public is a most frequent case
+    if (this.is(CommonFlags.Private)) return other.is(CommonFlags.Private);
+    if (this.is(CommonFlags.Protected)) return other.isAny(CommonFlags.Private | CommonFlags.Protected);
+    return assert(false);
   }
 
   /** Tests if this element is bound to a class. */
@@ -4169,6 +4180,17 @@ export class Property extends VariableLikeElement {
   /** Tests if this property represents a field. */
   get isField(): bool {
     return this.prototype.isField;
+  }
+
+  checkVisibility(diag: DiagnosticEmitter): void {
+    let propertyGetter = this.getterInstance;
+    let propertySetter = this.setterInstance;
+    if (propertyGetter && propertySetter && !propertyGetter.visibilityNoLessThan(propertySetter)) {
+      diag.errorRelated(
+        DiagnosticCode.Get_accessor_0_must_be_at_least_as_accessible_as_the_setter,
+        propertyGetter.identifierNode.range, propertySetter.identifierNode.range, propertyGetter.identifierNode.text
+      );
+    }
   }
 }
 
