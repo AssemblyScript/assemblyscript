@@ -76,7 +76,7 @@ export class Date {
           let offsetParts = timeString.substring(i+1).split(":");
           let offsetHours = i32.parse(offsetParts[0]);
           let offsetMinutes = offsetParts.length >= 2 ? i32.parse(offsetParts[1]) : 0;
-          offsetMs = (offsetHours * 60 + offsetMinutes) * 60000;
+          offsetMs = (offsetHours * 60 + offsetMinutes) * MILLIS_PER_MINUTE;
           if (c == 45) {
             offsetMs = -offsetMs; // negative offset
           }
