@@ -73,10 +73,17 @@ export class Date {
           if (i == timeString.length - 1) {
             throw new RangeError(E_INVALIDDATE);
           }
-          let offsetParts = timeString.substring(i+1).split(":");
-          let offsetHours = i32.parse(offsetParts[0]);
-          let offsetMinutes = offsetParts.length >= 2 ? i32.parse(offsetParts[1]) : 0;
-          offsetMs = (offsetHours * 60 + offsetMinutes) * MILLIS_PER_MINUTE;
+
+          let posColon = timeString.indexOf(":", i + 1);
+          if (~posColon) {
+            let offsetHours = i32.parse(timeString.substring(i + 1, posColon));
+            let offsetMinutes = i32.parse(timeString.substring(posColon + 1));
+            offsetMs = (offsetHours * 60 + offsetMinutes) * MILLIS_PER_MINUTE;
+          } else {
+            let offsetHours = i32.parse(timeString.substring(i + 1));
+            offsetMs = offsetHours * MILLIS_PER_HOUR;
+          }    
+    
           if (c == 45) offsetMs = -offsetMs; // negative offset
           timeString = timeString.substring(0, i);
           break;
