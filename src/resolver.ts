@@ -1365,8 +1365,9 @@ export class Resolver extends DiagnosticEmitter {
         let propertyInstance = <Property>target;
         let getterInstance = propertyInstance.getterInstance;
         if (!getterInstance) {
-          // It should compile as (undefined) for compatibility with ts.
-          // Since AS don't have undefined, diagnose it in compile time would be better although it does cause compatibility issues
+          // In TS, getters without setters return `undefined`. Since AS doesn't have
+          // undefined, we instead diagnose it at compile time, but this isn't
+          // compatible with TS.
           let setterInstance = assert(propertyInstance.setterInstance);
           this.errorRelated(
             DiagnosticCode.Property_0_only_has_a_setter_and_is_missing_a_getter,
