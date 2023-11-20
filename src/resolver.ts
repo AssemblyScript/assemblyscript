@@ -1365,7 +1365,9 @@ export class Resolver extends DiagnosticEmitter {
         let propertyInstance = <Property>target;
         let getterInstance = propertyInstance.getterInstance;
         if (!getterInstance) {
-          let setterInstance = propertyInstance.setterInstance!;
+          // It should compile as (undefined) for compatibility with ts.
+          // Since AS don't have undefined, diagnose it in compile time would be better although it does cause compatibility issues
+          let setterInstance = assert(propertyInstance.setterInstance);
           this.errorRelated(
             DiagnosticCode.Property_0_only_has_a_setter_and_is_missing_a_getter,
             targetNode.range, setterInstance.declaration.range, propertyInstance.name
