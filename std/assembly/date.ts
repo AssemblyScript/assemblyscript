@@ -52,7 +52,8 @@ export class Date {
       hour: i32 = 0,
       min: i32 = 0,
       sec: i32 = 0,
-      ms: i32 = 0;
+      ms: i32 = 0,
+      offsetMs: i32 = 0;
 
     let dateString = dateTimeString;
     let posT = dateTimeString.indexOf("T");
@@ -61,37 +62,67 @@ export class Date {
       let timeString: string;
       dateString = dateTimeString.substring(0, posT);
       timeString = dateTimeString.substring(posT + 1);
-      // parse the HH-MM-SS component
+      
+      // might end with an offset ("Z", "+05:30", "-08:00", etc.)
+      for (let i = timeString.length - 1; i >= 0; i--) {
+        let c = timeString.charCodeAt(i);
+        if (c == 90) { // Z
+          timeString = timeString.substring(0, i);
+          break;
+        } else if (c == 43 || c == 45) { // + or -
+          if (i == timeString.length - 1) {
+            throw new RangeError(E_INVALIDDATE);
+          }
+
+          let posColon = timeString.indexOf(":", i + 1);
+          if (~posColon) {
+            let offsetHours = i32.parse(timeString.substring(i + 1, posColon));
+            let offsetMinutes = i32.parse(timeString.substring(posColon + 1));
+            offsetMs = (offsetHours * 60 + offsetMinutes) * MILLIS_PER_MINUTE;
+          } else {
+            let offsetHours = i32.parse(timeString.substring(i + 1));
+            offsetMs = offsetHours * MILLIS_PER_HOUR;
+          }    
+    
+          if (c == 45) offsetMs = -offsetMs; // negative offset
+          timeString = timeString.substring(0, i);
+          break;
+        }
+      }
+
+      // parse the HH:MM:SS component
       let timeParts = timeString.split(":");
       let len = timeParts.length;
       if (len <= 1) throw new RangeError(E_INVALIDDATE);
 
-      hour = I32.parseInt(timeParts[0]);
-      min  = I32.parseInt(timeParts[1]);
+      hour = i32.parse(timeParts[0]);
+      min  = i32.parse(timeParts[1]);
       if (len >= 3) {
-        let secAndMs = timeParts[2];
-        let posDot = secAndMs.indexOf(".");
+        let secAndFrac = timeParts[2];
+        let posDot = secAndFrac.indexOf(".");
         if (~posDot) {
-          // includes milliseconds
-          sec = I32.parseInt(secAndMs.substring(0, posDot));
-          ms  = I32.parseInt(secAndMs.substring(posDot + 1));
+          // includes fractional seconds (truncate to milliseconds)
+          sec = i32.parse(secAndFrac.substring(0, posDot));
+          ms  = i32.parse(secAndFrac.substr(posDot + 1, 3).padEnd(3, "0"));
         } else {
-          sec = I32.parseInt(secAndMs);
+          sec = i32.parse(secAndFrac);
         }
       }
     }
+
     // parse the YYYY-MM-DD component
     let parts = dateString.split("-");
-    let year = I32.parseInt(parts[0]);
+    let year = i32.parse(parts[0]);
     let month = 1, day = 1;
     let len = parts.length;
     if (len >= 2) {
-      month = I32.parseInt(parts[1]);
+      month = i32.parse(parts[1]);
       if (len >= 3) {
-        day = I32.parseInt(parts[2]);
+        day = i32.parse(parts[2]);
       }
     }
-    return new Date(epochMillis(year, month, day, hour, min, sec, ms));
+
+    return new Date(epochMillis(year, month, day, hour, min, sec, ms) - offsetMs);
   }
 
   constructor(private epochMillis: i64) {

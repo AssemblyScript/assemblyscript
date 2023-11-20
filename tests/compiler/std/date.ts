@@ -295,15 +295,47 @@
   assert(date.getTime() == 11860387200000);
 
   // supports year / month / day / hour / minute / second
-  date = Date.fromString("1976-02-02T12:34:56"); // still use Z suffix
+  date = Date.fromString("1976-02-02T12:34:56");
   assert(date.getTime() == 192112496000);
 
   // supports milliseconds
-  date = Date.fromString("1976-02-02T12:34:56.456"); // still use Z suffix
+  date = Date.fromString("1976-02-02T12:34:56.456");
   assert(date.getTime() == 192112496456);
 
-  // supports 'Z' suffix
+  // supports 'Z' suffix (UTC)
   date = Date.fromString("1976-02-02T12:34:56.456Z");
+  assert(date.getTime() == 192112496456);
+
+  // supports negative offset from UTC
+  date = Date.fromString("1976-02-02T12:34:56.456-08:00");
+  assert(date.getTime() == 192141296456);
+
+  // supports positive offset from UTC
+  date = Date.fromString("1976-02-02T12:34:56.456+05:30");
+  assert(date.getTime() == 192092696456);
+
+  // allows fewer than 3 decimal places
+  date = Date.fromString("1976-02-02T12:34:56.45");
+  assert(date.getTime() == 192112496450);
+
+  // allows fewer than 3 decimal places (with Z)
+  date = Date.fromString("1976-02-02T12:34:56.45Z");
+  assert(date.getTime() == 192112496450);
+
+  // allows fewer than 3 decimal places (with offset)
+  date = Date.fromString("1976-02-02T12:34:56.45+00:00");
+  assert(date.getTime() == 192112496450);
+
+  // truncates more than 3 decimal places
+  date = Date.fromString("1976-02-02T12:34:56.456789");
+  assert(date.getTime() == 192112496456);
+
+  // truncates more than 3 decimal places (with Z)
+  date = Date.fromString("1976-02-02T12:34:56.456789Z");
+  assert(date.getTime() == 192112496456);
+
+  // truncates more than 3 decimal places (with offset)
+  date = Date.fromString("1976-02-02T12:34:56.456789+00:00");
   assert(date.getTime() == 192112496456);
 
   date = Date.fromString("0000");
@@ -321,10 +353,10 @@
   date = Date.fromString("1976-02-02");
   assert(date.getTime() == 192067200000);
 
-  date = Date.fromString("1976-02-02T12:34"); // still use Z suffix
+  date = Date.fromString("1976-02-02T12:34");
   assert(date.getTime() == 192112440000);
 
-  date = Date.fromString("1976-02-02T12:34:56"); // still use Z suffix
+  date = Date.fromString("1976-02-02T12:34:56");
   assert(date.getTime() == 192112496000);
 
   // date = Date.fromString('0Z');
