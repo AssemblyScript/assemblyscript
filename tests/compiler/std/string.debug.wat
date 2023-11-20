@@ -44,23 +44,23 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/string/String.MAX_LENGTH i32 (i32.const 536870910))
- (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $~lib/builtins/i32::MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/util/string/__fixmulShift (mut i64) (i64.const 0))
  (global $~lib/number/I32.MAX_VALUE i32 (i32.const 2147483647))
- (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
+ (global $~lib/builtins/i64::MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~lib/number/I64.MAX_VALUE i64 (i64.const 9223372036854775807))
- (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
- (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
- (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
+ (global $~lib/builtins/f64::EPSILON f64 (f64.const 2.220446049250313e-16))
+ (global $~lib/builtins/f64::MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
+ (global $~lib/builtins/f64::MIN_VALUE f64 (f64.const 5e-324))
  (global $std/string/Ox1p_1073 f64 (f64.const 1e-323))
  (global $std/string/Ox1_0000000000001p_1022 f64 (f64.const 2.225073858507202e-308))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
- (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
- (global $~lib/builtins/i16.MIN_VALUE i32 (i32.const -32768))
- (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
- (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~lib/builtins/u64.MAX_VALUE i64 (i64.const -1))
- (global $~lib/builtins/i64.MIN_VALUE i64 (i64.const -9223372036854775808))
+ (global $~lib/builtins/i8::MIN_VALUE i32 (i32.const -128))
+ (global $~lib/builtins/i16::MIN_VALUE i32 (i32.const -32768))
+ (global $~lib/builtins/i32::MIN_VALUE i32 (i32.const -2147483648))
+ (global $~lib/builtins/u32::MAX_VALUE i32 (i32.const -1))
+ (global $~lib/builtins/u64::MAX_VALUE i64 (i64.const -1))
+ (global $~lib/builtins/i64::MIN_VALUE i64 (i64.const -9223372036854775808))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp (mut i32) (i32.const 0))
@@ -2976,7 +2976,7 @@
   local.get $this
   i32.load offset=4
  )
- (func $~lib/memory/memory.repeat (param $dst i32) (param $src i32) (param $srcLength i32) (param $count i32)
+ (func $~lib/memory/memory::repeat (param $dst i32) (param $src i32) (param $srcLength i32) (param $count i32)
   (local $index i32)
   (local $total i32)
   i32.const 0
@@ -3309,7 +3309,7 @@
   local.get $out
   return
  )
- (func $~lib/math/NativeMath.scalbn (param $x f64) (param $n i32) (result f64)
+ (func $~lib/math/NativeMath::scalbn (param $x f64) (param $n i32) (result f64)
   (local $y f64)
   (local $3 i32)
   (local $4 i32)
@@ -6542,7 +6542,7 @@
    local.get $pad
    local.get $padSize
    local.get $repeatCount
-   call $~lib/memory/memory.repeat
+   call $~lib/memory/memory::repeat
    local.get $out
    local.get $restBase
    i32.add
@@ -6669,7 +6669,7 @@
    local.get $pad
    local.get $padSize
    local.get $repeatCount
-   call $~lib/memory/memory.repeat
+   call $~lib/memory/memory::repeat
    local.get $out
    local.get $thisSize
    i32.add
@@ -6844,7 +6844,7 @@
     end
     unreachable
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $start
   end
   local.get $this
@@ -8627,7 +8627,7 @@
       f64.convert_i64_u
       local.get $shift
       i32.wrap_i64
-      call $~lib/math/NativeMath.scalbn
+      call $~lib/math/NativeMath::scalbn
       br $~lib/util/string/scaledown|inlined.0
      end
      br $~lib/util/string/scientific|inlined.0
@@ -8795,7 +8795,7 @@
       f64.convert_i64_u
       local.get $shift|40
       i32.wrap_i64
-      call $~lib/math/NativeMath.scalbn
+      call $~lib/math/NativeMath::scalbn
       br $~lib/util/string/scaleup|inlined.0
      end
      br $~lib/util/string/scientific|inlined.0
@@ -10166,7 +10166,7 @@
   i32.const 1
   i32.shl
   local.get $count
-  call $~lib/memory/memory.repeat
+  call $~lib/memory/memory::repeat
   local.get $out
   local.set $4
   global.get $~lib/memory/__stack_pointer
@@ -10915,7 +10915,7 @@
     end
     unreachable
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -11059,7 +11059,7 @@
     end
     unreachable
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $length
   end
   local.get $this
@@ -11247,7 +11247,7 @@
     end
     unreachable
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -11619,7 +11619,7 @@
   i32.const 0
   i32.lt_s
   if
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $limit
   end
   local.get $sepLen
@@ -11969,7 +11969,7 @@
     i32.const 0
     local.set $separator
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $limit
   end
   local.get $this
@@ -14533,7 +14533,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/bool.parse|inlined.0 (result i32)
+  block $~lib/builtins/bool::parse|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    i32.const 2128
    local.tee $6
@@ -14545,7 +14545,7 @@
    i32.store
    local.get $55
    call $~lib/util/string/strtob
-   br $~lib/builtins/bool.parse|inlined.0
+   br $~lib/builtins/bool::parse|inlined.0
   end
   i32.const 0
   i32.ne
@@ -14560,7 +14560,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/bool.parse|inlined.1 (result i32)
+  block $~lib/builtins/bool::parse|inlined.1 (result i32)
    global.get $~lib/memory/__stack_pointer
    i32.const 2176
    local.tee $7
@@ -14572,7 +14572,7 @@
    i32.store
    local.get $55
    call $~lib/util/string/strtob
-   br $~lib/builtins/bool.parse|inlined.1
+   br $~lib/builtins/bool::parse|inlined.1
   end
   i32.const 0
   i32.ne
@@ -14587,7 +14587,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/bool.parse|inlined.2 (result i32)
+  block $~lib/builtins/bool::parse|inlined.2 (result i32)
    global.get $~lib/memory/__stack_pointer
    i32.const 2224
    local.tee $8
@@ -14599,7 +14599,7 @@
    i32.store
    local.get $55
    call $~lib/util/string/strtob
-   br $~lib/builtins/bool.parse|inlined.2
+   br $~lib/builtins/bool::parse|inlined.2
   end
   i32.const 0
   i32.ne
@@ -14614,7 +14614,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/bool.parse|inlined.3 (result i32)
+  block $~lib/builtins/bool::parse|inlined.3 (result i32)
    global.get $~lib/memory/__stack_pointer
    i32.const 688
    local.tee $9
@@ -14626,7 +14626,7 @@
    i32.store
    local.get $55
    call $~lib/util/string/strtob
-   br $~lib/builtins/bool.parse|inlined.3
+   br $~lib/builtins/bool::parse|inlined.3
   end
   i32.const 0
   i32.ne
@@ -14641,7 +14641,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/bool.parse|inlined.4 (result i32)
+  block $~lib/builtins/bool::parse|inlined.4 (result i32)
    global.get $~lib/memory/__stack_pointer
    i32.const 2272
    local.tee $10
@@ -14653,7 +14653,7 @@
    i32.store
    local.get $55
    call $~lib/util/string/strtob
-   br $~lib/builtins/bool.parse|inlined.4
+   br $~lib/builtins/bool::parse|inlined.4
   end
   i32.const 0
   i32.ne
@@ -14668,7 +14668,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/bool.parse|inlined.5 (result i32)
+  block $~lib/builtins/bool::parse|inlined.5 (result i32)
    global.get $~lib/memory/__stack_pointer
    i32.const 2304
    local.tee $11
@@ -14680,7 +14680,7 @@
    i32.store
    local.get $55
    call $~lib/util/string/strtob
-   br $~lib/builtins/bool.parse|inlined.5
+   br $~lib/builtins/bool::parse|inlined.5
   end
   i32.const 0
   i32.ne
@@ -14695,7 +14695,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/bool.parse|inlined.6 (result i32)
+  block $~lib/builtins/bool::parse|inlined.6 (result i32)
    global.get $~lib/memory/__stack_pointer
    i32.const 2336
    local.tee $12
@@ -14707,7 +14707,7 @@
    i32.store
    local.get $55
    call $~lib/util/string/strtob
-   br $~lib/builtins/bool.parse|inlined.6
+   br $~lib/builtins/bool::parse|inlined.6
   end
   i32.const 0
   i32.ne
@@ -15083,7 +15083,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMath.signbit|inlined.0 (result i32)
+  block $~lib/math/NativeMath::signbit|inlined.0 (result i32)
    i32.const 2944
    local.set $55
    global.get $~lib/memory/__stack_pointer
@@ -15099,7 +15099,7 @@
    i64.shr_u
    i64.const 0
    i64.ne
-   br $~lib/math/NativeMath.signbit|inlined.0
+   br $~lib/math/NativeMath::signbit|inlined.0
   end
   i32.const 0
   i32.ne
@@ -15505,7 +15505,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/f32.parse|inlined.0 (result f32)
+  block $~lib/builtins/f32::parse|inlined.0 (result f32)
    global.get $~lib/memory/__stack_pointer
    i32.const 3632
    local.tee $22
@@ -15518,7 +15518,7 @@
    local.get $55
    call $~lib/util/string/strtod
    f32.demote_f64
-   br $~lib/builtins/f32.parse|inlined.0
+   br $~lib/builtins/f32::parse|inlined.0
   end
   local.tee $23
   local.get $23
@@ -15532,7 +15532,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/f64.parse|inlined.0 (result f64)
+  block $~lib/builtins/f64::parse|inlined.0 (result f64)
    global.get $~lib/memory/__stack_pointer
    i32.const 3632
    local.tee $24
@@ -15544,7 +15544,7 @@
    i32.store
    local.get $55
    call $~lib/util/string/strtod
-   br $~lib/builtins/f64.parse|inlined.0
+   br $~lib/builtins/f64::parse|inlined.0
   end
   local.tee $25
   local.get $25
@@ -15577,7 +15577,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/i32.parse|inlined.0 (result i32)
+  block $~lib/builtins/i32::parse|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    i32.const 3856
    local.tee $26
@@ -15592,7 +15592,7 @@
    local.get $55
    local.get $27
    call $~lib/util/string/strtol<i32>
-   br $~lib/builtins/i32.parse|inlined.0
+   br $~lib/builtins/i32::parse|inlined.0
   end
   global.get $~lib/number/I32.MAX_VALUE
   i32.eq
@@ -15624,7 +15624,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/builtins/i64.parse|inlined.0 (result i64)
+  block $~lib/builtins/i64::parse|inlined.0 (result i64)
    global.get $~lib/memory/__stack_pointer
    i32.const 3904
    local.tee $28
@@ -15639,7 +15639,7 @@
    local.get $55
    local.get $29
    call $~lib/util/string/strtol<i64>
-   br $~lib/builtins/i64.parse|inlined.0
+   br $~lib/builtins/i64::parse|inlined.0
   end
   global.get $~lib/number/I64.MAX_VALUE
   i64.eq
@@ -17450,7 +17450,7 @@
   i32.store
   local.get $55
   call $~lib/string/parseFloat
-  global.get $~lib/builtins/f64.EPSILON
+  global.get $~lib/builtins/f64::EPSILON
   f64.eq
   i32.eqz
   if
@@ -17468,7 +17468,7 @@
   i32.store
   local.get $55
   call $~lib/string/parseFloat
-  global.get $~lib/builtins/f64.MAX_VALUE
+  global.get $~lib/builtins/f64::MAX_VALUE
   f64.eq
   i32.eqz
   if
@@ -17486,7 +17486,7 @@
   i32.store
   local.get $55
   call $~lib/string/parseFloat
-  global.get $~lib/builtins/f64.MIN_VALUE
+  global.get $~lib/builtins/f64::MIN_VALUE
   f64.eq
   i32.eqz
   if
@@ -17917,7 +17917,7 @@
   i32.store
   local.get $55
   call $~lib/string/parseFloat
-  global.get $~lib/builtins/f64.MAX_VALUE
+  global.get $~lib/builtins/f64::MAX_VALUE
   f64.eq
   i32.eqz
   if
@@ -23993,7 +23993,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8::MIN_VALUE
   i32.const 10
   call $~lib/util/number/itoa32
   local.set $55
@@ -24017,7 +24017,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/i16.MIN_VALUE
+  global.get $~lib/builtins/i16::MIN_VALUE
   i32.const 10
   call $~lib/util/number/itoa32
   local.set $55
@@ -24041,7 +24041,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/i32.MIN_VALUE
+  global.get $~lib/builtins/i32::MIN_VALUE
   i32.const 10
   call $~lib/util/number/itoa32
   local.set $55
@@ -24161,7 +24161,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/u32.MAX_VALUE
+  global.get $~lib/builtins/u32::MAX_VALUE
   i32.const 10
   call $~lib/util/number/utoa32
   local.set $55
@@ -25817,7 +25817,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/u64.MAX_VALUE
+  global.get $~lib/builtins/u64::MAX_VALUE
   i32.const 10
   call $~lib/util/number/utoa64
   local.set $55
@@ -26081,7 +26081,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/i64.MAX_VALUE
+  global.get $~lib/builtins/i64::MAX_VALUE
   i32.const 10
   call $~lib/util/number/itoa64
   local.set $55
@@ -26105,7 +26105,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/i64.MIN_VALUE
+  global.get $~lib/builtins/i64::MIN_VALUE
   i32.const 10
   call $~lib/util/number/itoa64
   local.set $55
@@ -27157,7 +27157,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.EPSILON
+  global.get $~lib/builtins/f64::EPSILON
   call $~lib/util/number/dtoa
   local.set $55
   global.get $~lib/memory/__stack_pointer
@@ -27180,7 +27180,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.EPSILON
+  global.get $~lib/builtins/f64::EPSILON
   f64.neg
   call $~lib/util/number/dtoa
   local.set $55
@@ -27204,7 +27204,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
+  global.get $~lib/builtins/f64::MAX_VALUE
   call $~lib/util/number/dtoa
   local.set $55
   global.get $~lib/memory/__stack_pointer
@@ -27227,7 +27227,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
+  global.get $~lib/builtins/f64::MAX_VALUE
   f64.neg
   call $~lib/util/number/dtoa
   local.set $55
@@ -29090,7 +29090,7 @@
   i32.eq
   if
    local.get $value
-   global.get $~lib/builtins/u32.MAX_VALUE
+   global.get $~lib/builtins/u32::MAX_VALUE
    i64.extend_i32_u
    i64.le_u
    if
@@ -29292,7 +29292,7 @@
   i32.eq
   if
    local.get $value
-   global.get $~lib/builtins/u32.MAX_VALUE
+   global.get $~lib/builtins/u32::MAX_VALUE
    i64.extend_i32_u
    i64.le_u
    if

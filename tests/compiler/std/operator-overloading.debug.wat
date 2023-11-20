@@ -59,7 +59,7 @@
  (global $std/operator-overloading/eq3 (mut i32) (i32.const 0))
  (global $std/operator-overloading/eq4 (mut i32) (i32.const 0))
  (global $std/operator-overloading/eqf (mut i32) (i32.const 0))
- (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $~lib/builtins/i32::MAX_VALUE i32 (i32.const 2147483647))
  (global $std/operator-overloading/gt1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/gt2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/gt (mut i32) (i32.const 0))
@@ -5447,7 +5447,7 @@
   end
   i32.const 0
   i32.const 2
-  global.get $~lib/builtins/i32.MAX_VALUE
+  global.get $~lib/builtins/i32::MAX_VALUE
   call $std/operator-overloading/Tester#constructor
   global.set $std/operator-overloading/gt1
   i32.const 0

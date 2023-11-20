@@ -35,11 +35,11 @@
  (global $std/staticarray/arr3 (mut i32) (i32.const 0))
  (global $std/staticarray/arr4 (mut i32) (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
- (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $~lib/builtins/i32::MAX_VALUE i32 (i32.const 2147483647))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/staticarray/maxVal (mut i32) (i32.const 0))
- (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
+ (global $~lib/builtins/u32::MAX_VALUE i32 (i32.const -1))
  (global $~lib/rt/__rtti_base i32 (i32.const 2864))
  (global $~lib/memory/__data_end i32 (i32.const 2936))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 35704))
@@ -4546,7 +4546,7 @@
     i32.const 0
     local.set $start
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -5874,7 +5874,7 @@
     i32.const 0
     local.set $start
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -6104,7 +6104,7 @@
     end
     unreachable
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this

@@ -2844,7 +2844,7 @@
   call $~lib/util/number/itoa32
   return
  )
- (func $~lib/math/NativeMath.pow (param $x f64) (param $y f64) (result f64)
+ (func $~lib/math/NativeMath::pow (param $x f64) (param $y f64) (result f64)
   (local $x|2 f64)
   (local $y|3 f64)
   (local $sign_bias i32)
@@ -6120,7 +6120,7 @@
   global.set $resolve-binary/f
   global.get $resolve-binary/f
   f64.const 2
-  call $~lib/math/NativeMath.pow
+  call $~lib/math/NativeMath::pow
   global.set $resolve-binary/f
   global.get $resolve-binary/f
   i32.const 0
@@ -6530,7 +6530,7 @@
   end
   f64.const 2
   f64.const 2
-  call $~lib/math/NativeMath.pow
+  call $~lib/math/NativeMath::pow
   i32.const 0
   call $~lib/number/F64#toString
   local.set $0
@@ -6556,7 +6556,7 @@
   end
   f64.const 2
   f64.const 2
-  call $~lib/math/NativeMath.pow
+  call $~lib/math/NativeMath::pow
   i32.const 0
   call $~lib/number/F64#toString
   local.set $0

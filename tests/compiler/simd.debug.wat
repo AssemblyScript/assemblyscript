@@ -39,13 +39,13 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $simd/vec (mut v128) (v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000))
- (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
- (global $~lib/builtins/u16.MAX_VALUE i32 (i32.const 65535))
- (global $~lib/builtins/i16.MAX_VALUE i32 (i32.const 32767))
- (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
- (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
- (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~lib/builtins/u64.MAX_VALUE i64 (i64.const -1))
+ (global $~lib/builtins/u8::MAX_VALUE i32 (i32.const 255))
+ (global $~lib/builtins/u16::MAX_VALUE i32 (i32.const 65535))
+ (global $~lib/builtins/i16::MAX_VALUE i32 (i32.const 32767))
+ (global $~lib/builtins/i8::MAX_VALUE i32 (i32.const 127))
+ (global $~lib/builtins/i32::MAX_VALUE i32 (i32.const 2147483647))
+ (global $~lib/builtins/u32::MAX_VALUE i32 (i32.const -1))
+ (global $~lib/builtins/u64::MAX_VALUE i64 (i64.const -1))
  (global $~lib/rt/__rtti_base i32 (i32.const 560))
  (global $~lib/memory/__data_end i32 (i32.const 588))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33356))
@@ -3557,24 +3557,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/i16.MAX_VALUE
+  global.get $~lib/builtins/i16::MAX_VALUE
   i16x8.splat
-  global.get $~lib/builtins/i16.MAX_VALUE
+  global.get $~lib/builtins/i16::MAX_VALUE
   i16x8.splat
   i8x16.narrow_i16x8_s
-  global.get $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8::MAX_VALUE
   i8x16.splat
   i8x16.eq
   i8x16.all_true
   i32.const 0
   i32.ne
   drop
-  global.get $~lib/builtins/i16.MAX_VALUE
+  global.get $~lib/builtins/i16::MAX_VALUE
   i16x8.splat
-  global.get $~lib/builtins/i16.MAX_VALUE
+  global.get $~lib/builtins/i16::MAX_VALUE
   i16x8.splat
   i8x16.narrow_i16x8_u
-  global.get $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8::MAX_VALUE
   i8x16.splat
   i8x16.eq
   i8x16.all_true
@@ -4192,24 +4192,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/i32.MAX_VALUE
+  global.get $~lib/builtins/i32::MAX_VALUE
   i32x4.splat
-  global.get $~lib/builtins/i32.MAX_VALUE
+  global.get $~lib/builtins/i32::MAX_VALUE
   i32x4.splat
   i16x8.narrow_i32x4_s
-  global.get $~lib/builtins/i16.MAX_VALUE
+  global.get $~lib/builtins/i16::MAX_VALUE
   i16x8.splat
   i8x16.eq
   i8x16.all_true
   i32.const 0
   i32.ne
   drop
-  global.get $~lib/builtins/i32.MAX_VALUE
+  global.get $~lib/builtins/i32::MAX_VALUE
   i32x4.splat
-  global.get $~lib/builtins/i32.MAX_VALUE
+  global.get $~lib/builtins/i32::MAX_VALUE
   i32x4.splat
   i16x8.narrow_i32x4_u
-  global.get $~lib/builtins/u16.MAX_VALUE
+  global.get $~lib/builtins/u16::MAX_VALUE
   i16x8.splat
   i8x16.eq
   i8x16.all_true

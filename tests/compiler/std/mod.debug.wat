@@ -20,7 +20,7 @@
  (export "mod" (func $std/mod/mod))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/math/NativeMath.mod (param $x f64) (param $y f64) (result f64)
+ (func $~lib/math/NativeMath::mod (param $x f64) (param $y f64) (result f64)
   (local $ux i64)
   (local $uy i64)
   (local $ex i64)
@@ -307,7 +307,7 @@
  (func $std/mod/test_fmod (param $left f64) (param $right f64) (param $expected f64) (result i32)
   local.get $left
   local.get $right
-  call $~lib/math/NativeMath.mod
+  call $~lib/math/NativeMath::mod
   local.get $expected
   call $std/mod/check<f64>
   if (result i32)
@@ -321,7 +321,7 @@
   end
   return
  )
- (func $~lib/math/NativeMathf.mod (param $x f32) (param $y f32) (result f32)
+ (func $~lib/math/NativeMathf::mod (param $x f32) (param $y f32) (result f32)
   (local $ux i32)
   (local $uy i32)
   (local $ex i32)
@@ -602,7 +602,7 @@
  (func $std/mod/test_fmodf (param $left f32) (param $right f32) (param $expected f32) (result i32)
   local.get $left
   local.get $right
-  call $~lib/math/NativeMathf.mod
+  call $~lib/math/NativeMathf::mod
   local.get $expected
   call $std/mod/check<f32>
   return

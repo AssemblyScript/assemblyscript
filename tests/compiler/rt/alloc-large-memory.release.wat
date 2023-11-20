@@ -648,7 +648,7 @@
    end
   end
  )
- (func $~lib/memory/heap.alloc (param $0 i32)
+ (func $~lib/memory/heap::alloc (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -943,7 +943,7 @@
    i32.ne
    if
     i32.const 32768
-    call $~lib/memory/heap.alloc
+    call $~lib/memory/heap::alloc
     br $while-continue|0
    end
   end
@@ -953,7 +953,7 @@
    i32.lt_s
    if
     i32.const 65536
-    call $~lib/memory/heap.alloc
+    call $~lib/memory/heap::alloc
     local.get $0
     i32.const 1
     i32.add

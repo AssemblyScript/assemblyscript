@@ -2,10 +2,10 @@
  (type $0 (func))
  (type $1 (func (param i32 i32 i32 i32)))
  (import "declare" "externalConstant" (global $declare/externalConstant i32))
- (import "declare" "my.externalConstant" (global $declare/my.externalConstant i32))
+ (import "declare" "my::externalConstant" (global $declare/my::externalConstant i32))
  (import "declare" "externalFunction" (func $declare/externalFunction))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "declare" "my.externalFunction" (func $declare/my.externalFunction))
+ (import "declare" "my::externalFunction" (func $declare/my::externalFunction))
  (memory $0 1)
  (data $0 (i32.const 1036) ",")
  (data $0.1 (i32.const 1048) "\02\00\00\00\14\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
@@ -24,8 +24,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $declare/my.externalFunction
-  global.get $declare/my.externalConstant
+  call $declare/my::externalFunction
+  global.get $declare/my::externalConstant
   i32.const 2
   i32.ne
   if

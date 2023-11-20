@@ -34,7 +34,7 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/util/casemap/SPECIALS_UPPER i32 (i32.const 464))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
+ (global $~lib/builtins/u32::MAX_VALUE i32 (i32.const -1))
  (global $~lib/rt/__rtti_base i32 (i32.const 20032))
  (global $~lib/memory/__data_end i32 (i32.const 20056))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 52824))
@@ -7652,7 +7652,7 @@
   i32.eq
   if
    local.get $value
-   global.get $~lib/builtins/u32.MAX_VALUE
+   global.get $~lib/builtins/u32::MAX_VALUE
    i64.extend_i32_u
    i64.le_u
    if

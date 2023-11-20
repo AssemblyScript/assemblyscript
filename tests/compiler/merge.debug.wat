@@ -18,9 +18,9 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $merge/namespaceType.test
+ (func $merge/namespaceType::test
  )
- (func $merge/typeNamespace.test
+ (func $merge/typeNamespace::test
  )
  (func $merge/functionType
  )
@@ -28,53 +28,53 @@
  )
  (func $merge/classNamespace.test1
  )
- (func $merge/classNamespace.test2
+ (func $merge/classNamespace::test2
  )
- (func $merge/namespaceClass.test1
+ (func $merge/namespaceClass::test1
  )
  (func $merge/namespaceClass.test2
  )
  (func $merge/functionNamespace
  )
- (func $merge/functionNamespace.test
+ (func $merge/functionNamespace::test
  )
- (func $merge/namespaceFunction.test
+ (func $merge/namespaceFunction::test
  )
  (func $merge/namespaceFunction
  )
- (func $merge/enumNamespace.test
+ (func $merge/enumNamespace::test
  )
- (func $merge/namespaceEnum.test
+ (func $merge/namespaceEnum::test
  )
- (func $merge/namespaceNamespace.test1
+ (func $merge/namespaceNamespace::test1
  )
- (func $merge/namespaceNamespace.test2
+ (func $merge/namespaceNamespace::test2
  )
  (func $start:merge
   global.get $merge/globalType
   drop
   global.get $merge/typeGlobal
   drop
-  call $merge/namespaceType.test
-  call $merge/typeNamespace.test
+  call $merge/namespaceType::test
+  call $merge/typeNamespace::test
   call $merge/functionType
   call $merge/typeFunction
   call $merge/classNamespace.test1
-  call $merge/classNamespace.test2
-  call $merge/namespaceClass.test1
+  call $merge/classNamespace::test2
+  call $merge/namespaceClass::test1
   call $merge/namespaceClass.test2
   call $merge/functionNamespace
-  call $merge/functionNamespace.test
-  call $merge/namespaceFunction.test
+  call $merge/functionNamespace::test
+  call $merge/namespaceFunction::test
   call $merge/namespaceFunction
   global.get $merge/enumNamespace.val
   drop
-  call $merge/enumNamespace.test
-  call $merge/namespaceEnum.test
+  call $merge/enumNamespace::test
+  call $merge/namespaceEnum::test
   global.get $merge/namespaceEnum.val
   drop
-  call $merge/namespaceNamespace.test1
-  call $merge/namespaceNamespace.test2
+  call $merge/namespaceNamespace::test1
+  call $merge/namespaceNamespace::test2
  )
  (func $~start
   call $start:merge

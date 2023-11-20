@@ -2255,7 +2255,7 @@
   local.get $this
   return
  )
- (func $new/ns.Ref#get:ref (param $this i32) (result i32)
+ (func $new/ns::Ref#get:ref (param $this i32) (result i32)
   local.get $this
   return
  )
@@ -2329,7 +2329,7 @@
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
    block $new/GenExt
-    block $new/ns.Ref
+    block $new/ns::Ref
      block $new/Gen<i32>
       block $new/Ref
        block $~lib/arraybuffer/ArrayBufferView
@@ -2340,7 +2340,7 @@
            i32.const 8
            i32.sub
            i32.load
-           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $new/Ref $new/Gen<i32> $new/ns.Ref $new/GenExt $invalid
+           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $new/Ref $new/Gen<i32> $new/ns::Ref $new/GenExt $invalid
           end
           return
          end
@@ -2455,7 +2455,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $new/ns.Ref#constructor (param $this i32) (result i32)
+ (func $new/ns::Ref#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -2589,19 +2589,19 @@
   call $new/Gen<i32>#get:gen
   global.set $new/gen
   i32.const 0
-  call $new/ns.Ref#constructor
+  call $new/ns::Ref#constructor
   global.set $new/ref2
   i32.const 0
-  call $new/ns.Ref#constructor
+  call $new/ns::Ref#constructor
   global.set $new/ref2
   i32.const 0
-  call $new/ns.Ref#constructor
+  call $new/ns::Ref#constructor
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $new/ns.Ref#get:ref
+  call $new/ns::Ref#get:ref
   global.set $new/ref2
   i32.const 0
   call $new/GenExt#constructor

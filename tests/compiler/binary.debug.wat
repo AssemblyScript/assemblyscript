@@ -240,7 +240,7 @@
   local.get $out
   return
  )
- (func $~lib/math/NativeMath.pow (param $x f64) (param $y f64) (result f64)
+ (func $~lib/math/NativeMath::pow (param $x f64) (param $y f64) (result f64)
   (local $x|2 f64)
   (local $y|3 f64)
   (local $sign_bias i32)
@@ -1284,7 +1284,7 @@
   end
   return
  )
- (func $~lib/math/NativeMathf.mod (param $x f32) (param $y f32) (result f32)
+ (func $~lib/math/NativeMathf::mod (param $x f32) (param $y f32) (result f32)
   (local $ux i32)
   (local $uy i32)
   (local $ex i32)
@@ -1533,7 +1533,7 @@
   f32.reinterpret_i32
   return
  )
- (func $~lib/math/NativeMathf.pow (param $x f32) (param $y f32) (result f32)
+ (func $~lib/math/NativeMathf::pow (param $x f32) (param $y f32) (result f32)
   (local $x|2 f32)
   (local $y|3 f32)
   (local $signBias i32)
@@ -2197,7 +2197,7 @@
   end
   return
  )
- (func $~lib/math/NativeMath.mod (param $x f64) (param $y f64) (result f64)
+ (func $~lib/math/NativeMath::mod (param $x f64) (param $y f64) (result f64)
   (local $ux i64)
   (local $uy i64)
   (local $ex i64)
@@ -2684,7 +2684,7 @@
   global.get $binary/I
   f64.convert_i64_s
   f64.const 1
-  call $~lib/math/NativeMath.pow
+  call $~lib/math/NativeMath::pow
   drop
   global.get $binary/I
   i64.const 1
@@ -2757,7 +2757,7 @@
   global.get $binary/I
   f64.convert_i64_s
   f64.const 1
-  call $~lib/math/NativeMath.pow
+  call $~lib/math/NativeMath::pow
   i64.trunc_sat_f64_s
   global.set $binary/I
   global.get $binary/I
@@ -2866,11 +2866,11 @@
   drop
   global.get $binary/f
   f32.const 1
-  call $~lib/math/NativeMathf.mod
+  call $~lib/math/NativeMathf::mod
   drop
   global.get $binary/f
   f32.const 1
-  call $~lib/math/NativeMathf.pow
+  call $~lib/math/NativeMathf::pow
   drop
   global.get $binary/f
   f32.const 1
@@ -2914,11 +2914,11 @@
   global.set $binary/f
   global.get $binary/f
   f32.const 1
-  call $~lib/math/NativeMathf.mod
+  call $~lib/math/NativeMathf::mod
   global.set $binary/f
   global.get $binary/f
   f32.const 1
-  call $~lib/math/NativeMathf.pow
+  call $~lib/math/NativeMathf::pow
   global.set $binary/f
   global.get $binary/f
   f32.const 1
@@ -2934,11 +2934,11 @@
   global.set $binary/f
   global.get $binary/f
   f32.const 1
-  call $~lib/math/NativeMathf.mod
+  call $~lib/math/NativeMathf::mod
   global.set $binary/f
   global.get $binary/f
   f32.const 1
-  call $~lib/math/NativeMathf.pow
+  call $~lib/math/NativeMathf::pow
   global.set $binary/f
   global.get $binary/F
   f64.const 1
@@ -2982,11 +2982,11 @@
   drop
   global.get $binary/F
   f64.const 1
-  call $~lib/math/NativeMath.mod
+  call $~lib/math/NativeMath::mod
   drop
   global.get $binary/F
   f64.const 1
-  call $~lib/math/NativeMath.pow
+  call $~lib/math/NativeMath::pow
   drop
   global.get $binary/F
   f64.const 1
@@ -3030,11 +3030,11 @@
   global.set $binary/F
   global.get $binary/F
   f64.const 1
-  call $~lib/math/NativeMath.mod
+  call $~lib/math/NativeMath::mod
   global.set $binary/F
   global.get $binary/F
   f64.const 1
-  call $~lib/math/NativeMath.pow
+  call $~lib/math/NativeMath::pow
   global.set $binary/F
   global.get $binary/F
   f64.const 1
@@ -3050,11 +3050,11 @@
   global.set $binary/F
   global.get $binary/F
   f64.const 1
-  call $~lib/math/NativeMath.mod
+  call $~lib/math/NativeMath::mod
   global.set $binary/F
   global.get $binary/F
   f64.const 1
-  call $~lib/math/NativeMath.pow
+  call $~lib/math/NativeMath::pow
   global.set $binary/F
  )
  (func $~start

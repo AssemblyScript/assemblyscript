@@ -41,7 +41,7 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $~lib/builtins/i32::MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/rt/__rtti_base i32 (i32.const 7408))
  (global $~lib/memory/__data_end i32 (i32.const 7444))
@@ -3246,7 +3246,7 @@
   i32.shr_u
   return
  )
- (func $~lib/memory/memory.repeat (param $dst i32) (param $src i32) (param $srcLength i32) (param $count i32)
+ (func $~lib/memory/memory::repeat (param $dst i32) (param $src i32) (param $srcLength i32) (param $count i32)
   (local $index i32)
   (local $total i32)
   i32.const 0
@@ -4684,7 +4684,7 @@
    local.get $pad
    local.get $padSize
    local.get $repeatCount
-   call $~lib/memory/memory.repeat
+   call $~lib/memory/memory::repeat
    local.get $out
    local.get $restBase
    i32.add
@@ -6517,7 +6517,7 @@
     end
     unreachable
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -7283,7 +7283,7 @@
   i32.const 0
   i32.lt_s
   if
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $limit
   end
   local.get $sepLen
@@ -7633,7 +7633,7 @@
     i32.const 0
     local.set $separator
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $limit
   end
   local.get $this
@@ -7953,7 +7953,7 @@
    local.get $pad
    local.get $padSize
    local.get $repeatCount
-   call $~lib/memory/memory.repeat
+   call $~lib/memory/memory::repeat
    local.get $out
    local.get $thisSize
    i32.add
@@ -8206,7 +8206,7 @@
         i32.const -1
         i32.xor
         if
-         block $~lib/builtins/i32.parse|inlined.0 (result i32)
+         block $~lib/builtins/i32::parse|inlined.0 (result i32)
           global.get $~lib/memory/__stack_pointer
           local.get $timeString
           local.set $46
@@ -8231,10 +8231,10 @@
           local.get $46
           local.get $radix
           call $~lib/util/string/strtol<i32>
-          br $~lib/builtins/i32.parse|inlined.0
+          br $~lib/builtins/i32::parse|inlined.0
          end
          local.set $offsetHours
-         block $~lib/builtins/i32.parse|inlined.1 (result i32)
+         block $~lib/builtins/i32::parse|inlined.1 (result i32)
           global.get $~lib/memory/__stack_pointer
           local.get $timeString
           local.set $46
@@ -8261,7 +8261,7 @@
           local.get $46
           local.get $radix|16
           call $~lib/util/string/strtol<i32>
-          br $~lib/builtins/i32.parse|inlined.1
+          br $~lib/builtins/i32::parse|inlined.1
          end
          local.set $offsetMinutes
          local.get $offsetHours
@@ -8273,7 +8273,7 @@
          i32.mul
          local.set $offsetMs
         else
-         block $~lib/builtins/i32.parse|inlined.2 (result i32)
+         block $~lib/builtins/i32::parse|inlined.2 (result i32)
           global.get $~lib/memory/__stack_pointer
           local.get $timeString
           local.set $46
@@ -8300,7 +8300,7 @@
           local.get $46
           local.get $radix|19
           call $~lib/util/string/strtol<i32>
-          br $~lib/builtins/i32.parse|inlined.2
+          br $~lib/builtins/i32::parse|inlined.2
          end
          local.set $offsetHours|20
          local.get $offsetHours|20
@@ -8378,7 +8378,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   block $~lib/builtins/i32.parse|inlined.3 (result i32)
+   block $~lib/builtins/i32::parse|inlined.3 (result i32)
     global.get $~lib/memory/__stack_pointer
     local.get $timeParts
     local.set $46
@@ -8400,10 +8400,10 @@
     local.get $46
     local.get $radix|24
     call $~lib/util/string/strtol<i32>
-    br $~lib/builtins/i32.parse|inlined.3
+    br $~lib/builtins/i32::parse|inlined.3
    end
    local.set $hour
-   block $~lib/builtins/i32.parse|inlined.4 (result i32)
+   block $~lib/builtins/i32::parse|inlined.4 (result i32)
     global.get $~lib/memory/__stack_pointer
     local.get $timeParts
     local.set $46
@@ -8425,7 +8425,7 @@
     local.get $46
     local.get $radix|26
     call $~lib/util/string/strtol<i32>
-    br $~lib/builtins/i32.parse|inlined.4
+    br $~lib/builtins/i32::parse|inlined.4
    end
    local.set $min
    local.get $len
@@ -8462,7 +8462,7 @@
     i32.const -1
     i32.xor
     if
-     block $~lib/builtins/i32.parse|inlined.5 (result i32)
+     block $~lib/builtins/i32::parse|inlined.5 (result i32)
       global.get $~lib/memory/__stack_pointer
       local.get $secAndFrac
       local.set $46
@@ -8485,10 +8485,10 @@
       local.get $46
       local.get $radix|30
       call $~lib/util/string/strtol<i32>
-      br $~lib/builtins/i32.parse|inlined.5
+      br $~lib/builtins/i32::parse|inlined.5
      end
      local.set $sec
-     block $~lib/builtins/i32.parse|inlined.6 (result i32)
+     block $~lib/builtins/i32::parse|inlined.6 (result i32)
       global.get $~lib/memory/__stack_pointer
       local.get $secAndFrac
       local.set $46
@@ -8526,11 +8526,11 @@
       local.get $46
       local.get $radix|32
       call $~lib/util/string/strtol<i32>
-      br $~lib/builtins/i32.parse|inlined.6
+      br $~lib/builtins/i32::parse|inlined.6
      end
      local.set $ms
     else
-     block $~lib/builtins/i32.parse|inlined.7 (result i32)
+     block $~lib/builtins/i32::parse|inlined.7 (result i32)
       global.get $~lib/memory/__stack_pointer
       local.get $secAndFrac
       local.tee $value|33
@@ -8545,7 +8545,7 @@
       local.get $46
       local.get $radix|34
       call $~lib/util/string/strtol<i32>
-      br $~lib/builtins/i32.parse|inlined.7
+      br $~lib/builtins/i32::parse|inlined.7
      end
      local.set $sec
     end
@@ -8570,7 +8570,7 @@
   call $~lib/string/String#split@varargs
   local.tee $parts
   i32.store offset=60
-  block $~lib/builtins/i32.parse|inlined.8 (result i32)
+  block $~lib/builtins/i32::parse|inlined.8 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $parts
    local.set $46
@@ -8592,7 +8592,7 @@
    local.get $46
    local.get $radix|37
    call $~lib/util/string/strtol<i32>
-   br $~lib/builtins/i32.parse|inlined.8
+   br $~lib/builtins/i32::parse|inlined.8
   end
   local.set $year
   i32.const 1
@@ -8611,7 +8611,7 @@
   i32.const 2
   i32.ge_s
   if
-   block $~lib/builtins/i32.parse|inlined.9 (result i32)
+   block $~lib/builtins/i32::parse|inlined.9 (result i32)
     global.get $~lib/memory/__stack_pointer
     local.get $parts
     local.set $46
@@ -8633,14 +8633,14 @@
     local.get $46
     local.get $radix|43
     call $~lib/util/string/strtol<i32>
-    br $~lib/builtins/i32.parse|inlined.9
+    br $~lib/builtins/i32::parse|inlined.9
    end
    local.set $month
    local.get $len|41
    i32.const 3
    i32.ge_s
    if
-    block $~lib/builtins/i32.parse|inlined.10 (result i32)
+    block $~lib/builtins/i32::parse|inlined.10 (result i32)
      global.get $~lib/memory/__stack_pointer
      local.get $parts
      local.set $46
@@ -8662,7 +8662,7 @@
      local.get $46
      local.get $radix|45
      call $~lib/util/string/strtol<i32>
-     br $~lib/builtins/i32.parse|inlined.10
+     br $~lib/builtins/i32::parse|inlined.10
     end
     local.set $day
    end

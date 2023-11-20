@@ -14,9 +14,9 @@
  (global $builtins/v (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
- (global $~lib/builtins/f32.NaN f32 (f32.const nan:0x400000))
+ (global $~lib/builtins/f32::NaN f32 (f32.const nan:0x400000))
  (global $builtins/F (mut f64) (f64.const 0))
- (global $~lib/builtins/f64.NaN f64 (f64.const nan:0x8000000000000))
+ (global $~lib/builtins/f64::NaN f64 (f64.const nan:0x8000000000000))
  (global $builtins/constantOffset i32 (i32.const 8))
  (global $builtins/u (mut i32) (i32.const 0))
  (global $builtins/U (mut i64) (i64.const 0))
@@ -27,36 +27,36 @@
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
- (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
- (global $~lib/builtins/i16.MIN_VALUE i32 (i32.const -32768))
- (global $~lib/builtins/i16.MAX_VALUE i32 (i32.const 32767))
- (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
- (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
- (global $~lib/builtins/i64.MIN_VALUE i64 (i64.const -9223372036854775808))
- (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
- (global $~lib/builtins/u8.MIN_VALUE i32 (i32.const 0))
- (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
- (global $~lib/builtins/u16.MIN_VALUE i32 (i32.const 0))
- (global $~lib/builtins/u16.MAX_VALUE i32 (i32.const 65535))
- (global $~lib/builtins/u32.MIN_VALUE i32 (i32.const 0))
- (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~lib/builtins/u64.MIN_VALUE i64 (i64.const 0))
- (global $~lib/builtins/u64.MAX_VALUE i64 (i64.const -1))
- (global $~lib/builtins/bool.MIN_VALUE i32 (i32.const 0))
- (global $~lib/builtins/bool.MAX_VALUE i32 (i32.const 1))
- (global $~lib/builtins/f32.MIN_NORMAL_VALUE f32 (f32.const 1.1754943508222875e-38))
- (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const 1.401298464324817e-45))
- (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
- (global $~lib/builtins/f32.MIN_SAFE_INTEGER f32 (f32.const -16777215))
- (global $~lib/builtins/f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
- (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
- (global $~lib/builtins/f64.MIN_NORMAL_VALUE f64 (f64.const 2.2250738585072014e-308))
- (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
- (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
- (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
- (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
- (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
+ (global $~lib/builtins/i8::MIN_VALUE i32 (i32.const -128))
+ (global $~lib/builtins/i8::MAX_VALUE i32 (i32.const 127))
+ (global $~lib/builtins/i16::MIN_VALUE i32 (i32.const -32768))
+ (global $~lib/builtins/i16::MAX_VALUE i32 (i32.const 32767))
+ (global $~lib/builtins/i32::MIN_VALUE i32 (i32.const -2147483648))
+ (global $~lib/builtins/i32::MAX_VALUE i32 (i32.const 2147483647))
+ (global $~lib/builtins/i64::MIN_VALUE i64 (i64.const -9223372036854775808))
+ (global $~lib/builtins/i64::MAX_VALUE i64 (i64.const 9223372036854775807))
+ (global $~lib/builtins/u8::MIN_VALUE i32 (i32.const 0))
+ (global $~lib/builtins/u8::MAX_VALUE i32 (i32.const 255))
+ (global $~lib/builtins/u16::MIN_VALUE i32 (i32.const 0))
+ (global $~lib/builtins/u16::MAX_VALUE i32 (i32.const 65535))
+ (global $~lib/builtins/u32::MIN_VALUE i32 (i32.const 0))
+ (global $~lib/builtins/u32::MAX_VALUE i32 (i32.const -1))
+ (global $~lib/builtins/u64::MIN_VALUE i64 (i64.const 0))
+ (global $~lib/builtins/u64::MAX_VALUE i64 (i64.const -1))
+ (global $~lib/builtins/bool::MIN_VALUE i32 (i32.const 0))
+ (global $~lib/builtins/bool::MAX_VALUE i32 (i32.const 1))
+ (global $~lib/builtins/f32::MIN_NORMAL_VALUE f32 (f32.const 1.1754943508222875e-38))
+ (global $~lib/builtins/f32::MIN_VALUE f32 (f32.const 1.401298464324817e-45))
+ (global $~lib/builtins/f32::MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
+ (global $~lib/builtins/f32::MIN_SAFE_INTEGER f32 (f32.const -16777215))
+ (global $~lib/builtins/f32::MAX_SAFE_INTEGER f32 (f32.const 16777215))
+ (global $~lib/builtins/f32::EPSILON f32 (f32.const 1.1920928955078125e-07))
+ (global $~lib/builtins/f64::MIN_NORMAL_VALUE f64 (f64.const 2.2250738585072014e-308))
+ (global $~lib/builtins/f64::MIN_VALUE f64 (f64.const 5e-324))
+ (global $~lib/builtins/f64::MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
+ (global $~lib/builtins/f64::MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
+ (global $~lib/builtins/f64::MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
+ (global $~lib/builtins/f64::EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/memory/__data_end i32 (i32.const 1004))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33772))
  (global $~lib/memory/__heap_base i32 (i32.const 33772))
@@ -233,7 +233,7 @@
   i32.const 176
   return
  )
- (func $~lib/atomics/Atomics.isLockFree (param $size i32) (result i32)
+ (func $~lib/atomics/Atomics::isLockFree (param $size i32) (result i32)
   local.get $size
   i32.const 1
   i32.eq
@@ -1599,7 +1599,7 @@
   i32.const 0
   i32.eq
   drop
-  global.get $~lib/builtins/f32.NaN
+  global.get $~lib/builtins/f32::NaN
   drop
   f32.const 1.25
   f32.abs
@@ -1962,7 +1962,7 @@
   i32.const 0
   i32.eq
   drop
-  global.get $~lib/builtins/f64.NaN
+  global.get $~lib/builtins/f64::NaN
   drop
   f64.const 1.25
   f64.abs
@@ -2791,133 +2791,133 @@
   f64.const 0
   f64.eq
   drop
-  global.get $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8::MIN_VALUE
   i32.const 128
   i32.extend8_s
   i32.eq
   drop
-  global.get $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8::MAX_VALUE
   i32.const 127
   i32.eq
   drop
-  global.get $~lib/builtins/i16.MIN_VALUE
+  global.get $~lib/builtins/i16::MIN_VALUE
   i32.const 32768
   i32.extend16_s
   i32.eq
   drop
-  global.get $~lib/builtins/i16.MAX_VALUE
+  global.get $~lib/builtins/i16::MAX_VALUE
   i32.const 32767
   i32.eq
   drop
-  global.get $~lib/builtins/i32.MIN_VALUE
+  global.get $~lib/builtins/i32::MIN_VALUE
   i32.const -2147483648
   i32.eq
   drop
-  global.get $~lib/builtins/i32.MAX_VALUE
+  global.get $~lib/builtins/i32::MAX_VALUE
   i32.const 2147483647
   i32.eq
   drop
-  global.get $~lib/builtins/i64.MIN_VALUE
+  global.get $~lib/builtins/i64::MIN_VALUE
   i64.const -9223372036854775808
   i64.eq
   drop
-  global.get $~lib/builtins/i64.MAX_VALUE
+  global.get $~lib/builtins/i64::MAX_VALUE
   i64.const 9223372036854775807
   i64.eq
   drop
-  global.get $~lib/builtins/u8.MIN_VALUE
+  global.get $~lib/builtins/u8::MIN_VALUE
   i32.const 0
   i32.eq
   drop
-  global.get $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8::MAX_VALUE
   i32.const 255
   i32.eq
   drop
-  global.get $~lib/builtins/u16.MIN_VALUE
+  global.get $~lib/builtins/u16::MIN_VALUE
   i32.const 0
   i32.eq
   drop
-  global.get $~lib/builtins/u16.MAX_VALUE
+  global.get $~lib/builtins/u16::MAX_VALUE
   i32.const 65535
   i32.eq
   drop
-  global.get $~lib/builtins/u32.MIN_VALUE
+  global.get $~lib/builtins/u32::MIN_VALUE
   i32.const 0
   i32.eq
   drop
-  global.get $~lib/builtins/u32.MAX_VALUE
+  global.get $~lib/builtins/u32::MAX_VALUE
   i32.const -1
   i32.eq
   drop
-  global.get $~lib/builtins/u64.MIN_VALUE
+  global.get $~lib/builtins/u64::MIN_VALUE
   i64.const 0
   i64.eq
   drop
-  global.get $~lib/builtins/u64.MAX_VALUE
+  global.get $~lib/builtins/u64::MAX_VALUE
   i64.const -1
   i64.eq
   drop
-  global.get $~lib/builtins/bool.MIN_VALUE
+  global.get $~lib/builtins/bool::MIN_VALUE
   i32.const 0
   i32.eq
   drop
-  global.get $~lib/builtins/bool.MIN_VALUE
+  global.get $~lib/builtins/bool::MIN_VALUE
   i32.const 0
   i32.eq
   drop
-  global.get $~lib/builtins/bool.MAX_VALUE
+  global.get $~lib/builtins/bool::MAX_VALUE
   i32.const 1
   i32.eq
   drop
-  global.get $~lib/builtins/bool.MAX_VALUE
+  global.get $~lib/builtins/bool::MAX_VALUE
   i32.const 1
   i32.eq
   drop
-  global.get $~lib/builtins/f32.MIN_NORMAL_VALUE
+  global.get $~lib/builtins/f32::MIN_NORMAL_VALUE
   f32.const 1.1754943508222875e-38
   f32.eq
   drop
-  global.get $~lib/builtins/f32.MIN_VALUE
+  global.get $~lib/builtins/f32::MIN_VALUE
   f32.const 1.401298464324817e-45
   f32.eq
   drop
-  global.get $~lib/builtins/f32.MAX_VALUE
+  global.get $~lib/builtins/f32::MAX_VALUE
   f32.const 3402823466385288598117041e14
   f32.eq
   drop
-  global.get $~lib/builtins/f32.MIN_SAFE_INTEGER
+  global.get $~lib/builtins/f32::MIN_SAFE_INTEGER
   f32.const -16777215
   f32.eq
   drop
-  global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
+  global.get $~lib/builtins/f32::MAX_SAFE_INTEGER
   f32.const 16777215
   f32.eq
   drop
-  global.get $~lib/builtins/f32.EPSILON
+  global.get $~lib/builtins/f32::EPSILON
   f32.const 1.1920928955078125e-07
   f32.eq
   drop
-  global.get $~lib/builtins/f64.MIN_NORMAL_VALUE
+  global.get $~lib/builtins/f64::MIN_NORMAL_VALUE
   f64.const 2.2250738585072014e-308
   f64.eq
   drop
-  global.get $~lib/builtins/f64.MIN_VALUE
+  global.get $~lib/builtins/f64::MIN_VALUE
   f64.const 5e-324
   f64.eq
   drop
-  global.get $~lib/builtins/f64.MAX_VALUE
+  global.get $~lib/builtins/f64::MAX_VALUE
   f64.const 1797693134862315708145274e284
   f64.eq
   drop
-  global.get $~lib/builtins/f64.MIN_SAFE_INTEGER
+  global.get $~lib/builtins/f64::MIN_SAFE_INTEGER
   f64.const -9007199254740991
   f64.eq
   drop
-  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
+  global.get $~lib/builtins/f64::MAX_SAFE_INTEGER
   f64.const 9007199254740991
   f64.eq
   drop
-  global.get $~lib/builtins/f64.EPSILON
+  global.get $~lib/builtins/f64::EPSILON
   f64.const 2.220446049250313e-16
   f64.eq
   drop
@@ -3169,7 +3169,7 @@
   f64.trunc
   drop
   i32.const 0
-  call $~lib/atomics/Atomics.isLockFree
+  call $~lib/atomics/Atomics::isLockFree
   i32.const 0
   i32.eq
   i32.eqz
@@ -3182,7 +3182,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/atomics/Atomics.isLockFree
+  call $~lib/atomics/Atomics::isLockFree
   i32.const 1
   i32.eq
   i32.eqz
@@ -3195,7 +3195,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/atomics/Atomics.isLockFree
+  call $~lib/atomics/Atomics::isLockFree
   i32.const 1
   i32.eq
   i32.eqz
@@ -3208,7 +3208,7 @@
    unreachable
   end
   i32.const 3
-  call $~lib/atomics/Atomics.isLockFree
+  call $~lib/atomics/Atomics::isLockFree
   i32.const 0
   i32.eq
   i32.eqz
@@ -3221,7 +3221,7 @@
    unreachable
   end
   i32.const 4
-  call $~lib/atomics/Atomics.isLockFree
+  call $~lib/atomics/Atomics::isLockFree
   i32.const 1
   i32.eq
   i32.eqz
@@ -3234,7 +3234,7 @@
    unreachable
   end
   i32.const 5
-  call $~lib/atomics/Atomics.isLockFree
+  call $~lib/atomics/Atomics::isLockFree
   i32.const 0
   i32.eq
   i32.eqz
@@ -3247,7 +3247,7 @@
    unreachable
   end
   i32.const 8
-  call $~lib/atomics/Atomics.isLockFree
+  call $~lib/atomics/Atomics::isLockFree
   i32.const 0
   i32.eq
   i32.eqz

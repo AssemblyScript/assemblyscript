@@ -25,7 +25,7 @@
  (type $23 (func (param i32 f32 i32)))
  (type $24 (func (param i32 i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "env" "Math.random" (func $~lib/bindings/dom/Math.random (result f64)))
+ (import "env" "Math.random" (func $~lib/bindings/dom/Math::random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -4257,7 +4257,7 @@
   i32.lt_u
   i32.sub
  )
- (func $~lib/math/NativeMath.random (result f64)
+ (func $~lib/math/NativeMath::random (result f64)
   (local $0 i64)
   (local $1 i64)
   global.get $~lib/math/random_seeded
@@ -13285,7 +13285,7 @@
     i32.store offset=4
     local.get $2
     local.get $1
-    call $~lib/math/NativeMath.random
+    call $~lib/math/NativeMath::random
     local.get $0
     f64.convert_i32_s
     f64.mul
@@ -25658,7 +25658,7 @@
    i32.const 3
    call $~lib/array/Array<i32>#push
    i64.const -7046029254386353131
-   call $~lib/bindings/dom/Math.random
+   call $~lib/bindings/dom/Math::random
    i64.reinterpret_f64
    local.tee $4
    local.get $4
@@ -28009,7 +28009,7 @@
      global.get $~lib/memory/__stack_pointer
      local.get $8
      i32.store offset=4
-     call $~lib/math/NativeMath.random
+     call $~lib/math/NativeMath::random
      f64.const 32
      f64.mul
      i32.trunc_sat_f64_s
@@ -28046,7 +28046,7 @@
        local.get $10
        i32.const 10032
        i32.store offset=12
-       call $~lib/math/NativeMath.random
+       call $~lib/math/NativeMath::random
        local.set $5
        global.get $~lib/memory/__stack_pointer
        i32.const 10032

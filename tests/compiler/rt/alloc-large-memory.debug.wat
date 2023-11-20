@@ -1493,7 +1493,7 @@
   i32.add
   return
  )
- (func $~lib/memory/heap.alloc (param $size i32) (result i32)
+ (func $~lib/memory/heap::alloc (param $size i32) (result i32)
   local.get $size
   call $~lib/rt/tlsf/__alloc
   return
@@ -1508,7 +1508,7 @@
     i32.const 32
     i32.const 1024
     i32.mul
-    call $~lib/memory/heap.alloc
+    call $~lib/memory/heap::alloc
     drop
     br $while-continue|0
    end
@@ -1523,7 +1523,7 @@
     i32.const 64
     i32.const 1024
     i32.mul
-    call $~lib/memory/heap.alloc
+    call $~lib/memory/heap::alloc
     drop
     local.get $i
     i32.const 1

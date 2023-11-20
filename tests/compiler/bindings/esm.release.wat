@@ -12,10 +12,10 @@
  (type $10 (func (param i64 i64) (result i64)))
  (type $11 (func (result i64)))
  (type $12 (func (param i32 i32 i32 i32)))
- (import "env" "Math.E" (global $~lib/bindings/dom/Math.E f64))
+ (import "env" "Math.E" (global $~lib/bindings/dom/Math::E f64))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
- (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
- (import "env" "Math.log" (func $~lib/bindings/dom/Math.log (param f64) (result f64)))
+ (import "env" "console.log" (func $~lib/bindings/dom/console::log (param i32)))
+ (import "env" "Math.log" (func $~lib/bindings/dom/Math::log (param f64) (result f64)))
  (import "env" "Date.getTimezoneOffset" (func $bindings/esm/Date_getTimezoneOffset (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $bindings/esm/plainGlobal i32 (i32.const 1))
@@ -2112,9 +2112,9 @@
   i32.const 1184
   i32.store
   i32.const 1184
-  call $~lib/bindings/dom/console.log
-  global.get $~lib/bindings/dom/Math.E
-  call $~lib/bindings/dom/Math.log
+  call $~lib/bindings/dom/console::log
+  global.get $~lib/bindings/dom/Math::E
+  call $~lib/bindings/dom/Math::log
   drop
   call $bindings/esm/Date_getTimezoneOffset
   drop

@@ -39,6 +39,7 @@ import {
   PATH_DELIMITER,
   STATIC_DELIMITER,
   INSTANCE_DELIMITER,
+  NAMESPACE_DELIMITER,
   GETTER_PREFIX,
   SETTER_PREFIX,
   INNER_DELIMITER,
@@ -5093,11 +5094,25 @@ export function mangleInternalName(
       parent = parent.parent;
       // fall-through
     }
-    default: {
+    case ElementKind.Enum:
+    case ElementKind.InterfacePrototype:
+    case ElementKind.Interface:
+    case ElementKind.ClassPrototype:
+    case ElementKind.Class: {
       return (
         mangleInternalName(parent.name, parent.parent, parent.is(CommonFlags.Instance), asGlobal) +
         (isInstance ? INSTANCE_DELIMITER : STATIC_DELIMITER) + name
       );
+    }
+    case ElementKind.Namespace: {
+      return (
+        mangleInternalName(parent.name, parent.parent, false, asGlobal) +
+        NAMESPACE_DELIMITER + name
+      );
+    }
+    default: {
+      assert(false);
+      return "";
     }
   }
 }

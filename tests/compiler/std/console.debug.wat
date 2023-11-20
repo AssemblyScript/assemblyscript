@@ -3,15 +3,15 @@
  (type $1 (func))
  (type $2 (func (param i32 i32)))
  (type $3 (func (param i32 i32 i32 i32)))
- (import "env" "console.assert" (func $~lib/bindings/dom/console.assert (param i32 i32)))
- (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
- (import "env" "console.debug" (func $~lib/bindings/dom/console.debug (param i32)))
- (import "env" "console.info" (func $~lib/bindings/dom/console.info (param i32)))
- (import "env" "console.warn" (func $~lib/bindings/dom/console.warn (param i32)))
- (import "env" "console.error" (func $~lib/bindings/dom/console.error (param i32)))
- (import "env" "console.time" (func $~lib/bindings/dom/console.time (param i32)))
- (import "env" "console.timeLog" (func $~lib/bindings/dom/console.timeLog (param i32)))
- (import "env" "console.timeEnd" (func $~lib/bindings/dom/console.timeEnd (param i32)))
+ (import "env" "console.assert" (func $~lib/bindings/dom/console::assert (param i32 i32)))
+ (import "env" "console.log" (func $~lib/bindings/dom/console::log (param i32)))
+ (import "env" "console.debug" (func $~lib/bindings/dom/console::debug (param i32)))
+ (import "env" "console.info" (func $~lib/bindings/dom/console::info (param i32)))
+ (import "env" "console.warn" (func $~lib/bindings/dom/console::warn (param i32)))
+ (import "env" "console.error" (func $~lib/bindings/dom/console::error (param i32)))
+ (import "env" "console.time" (func $~lib/bindings/dom/console::time (param i32)))
+ (import "env" "console.timeLog" (func $~lib/bindings/dom/console::timeLog (param i32)))
+ (import "env" "console.timeEnd" (func $~lib/bindings/dom/console::timeEnd (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 588))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33356))
@@ -51,7 +51,7 @@
    unreachable
   end
  )
- (func $~lib/console/console.assert<bool> (param $condition i32) (param $message i32)
+ (func $~lib/console/console::assert<bool> (param $condition i32) (param $message i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -70,13 +70,13 @@
   local.get $2
   i32.store
   local.get $2
-  call $~lib/bindings/dom/console.assert
+  call $~lib/bindings/dom/console::assert
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.log (param $message i32)
+ (func $~lib/console/console::log (param $message i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -92,13 +92,13 @@
   local.get $1
   i32.store
   local.get $1
-  call $~lib/bindings/dom/console.log
+  call $~lib/bindings/dom/console::log
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.debug (param $message i32)
+ (func $~lib/console/console::debug (param $message i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -114,13 +114,13 @@
   local.get $1
   i32.store
   local.get $1
-  call $~lib/bindings/dom/console.debug
+  call $~lib/bindings/dom/console::debug
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.info (param $message i32)
+ (func $~lib/console/console::info (param $message i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -136,13 +136,13 @@
   local.get $1
   i32.store
   local.get $1
-  call $~lib/bindings/dom/console.info
+  call $~lib/bindings/dom/console::info
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.warn (param $message i32)
+ (func $~lib/console/console::warn (param $message i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -158,13 +158,13 @@
   local.get $1
   i32.store
   local.get $1
-  call $~lib/bindings/dom/console.warn
+  call $~lib/bindings/dom/console::warn
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.error (param $message i32)
+ (func $~lib/console/console::error (param $message i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -180,13 +180,13 @@
   local.get $1
   i32.store
   local.get $1
-  call $~lib/bindings/dom/console.error
+  call $~lib/bindings/dom/console::error
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.time (param $label i32)
+ (func $~lib/console/console::time (param $label i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -202,13 +202,13 @@
   local.get $1
   i32.store
   local.get $1
-  call $~lib/bindings/dom/console.time
+  call $~lib/bindings/dom/console::time
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.timeLog (param $label i32)
+ (func $~lib/console/console::timeLog (param $label i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -224,13 +224,13 @@
   local.get $1
   i32.store
   local.get $1
-  call $~lib/bindings/dom/console.timeLog
+  call $~lib/bindings/dom/console::timeLog
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/console/console.timeEnd (param $label i32)
+ (func $~lib/console/console::timeEnd (param $label i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -246,7 +246,7 @@
   local.get $1
   i32.store
   local.get $1
-  call $~lib/bindings/dom/console.timeEnd
+  call $~lib/bindings/dom/console::timeEnd
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
@@ -269,7 +269,7 @@
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.assert<bool>
+  call $~lib/console/console::assert<bool>
   i32.const 1
   i32.const 64
   local.set $0
@@ -277,119 +277,119 @@
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.assert<bool>
+  call $~lib/console/console::assert<bool>
   i32.const 96
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.log
+  call $~lib/console/console::log
   i32.const 144
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.debug
+  call $~lib/console/console::debug
   i32.const 192
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.info
+  call $~lib/console/console::info
   i32.const 240
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.warn
+  call $~lib/console/console::warn
   i32.const 288
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.error
+  call $~lib/console/console::error
   i32.const 336
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.time
+  call $~lib/console/console::time
   i32.const 336
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.timeLog
+  call $~lib/console/console::timeLog
   i32.const 336
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.timeEnd
+  call $~lib/console/console::timeEnd
   i32.const 384
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.timeLog
+  call $~lib/console/console::timeLog
   i32.const 384
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.timeEnd
+  call $~lib/console/console::timeEnd
   i32.const 432
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.time
+  call $~lib/console/console::time
   i32.const 432
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.time
+  call $~lib/console/console::time
   i32.const 480
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.log
+  call $~lib/console/console::log
   i32.const 512
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.log
+  call $~lib/console/console::log
   i32.const 544
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.log
+  call $~lib/console/console::log
   i32.const 576
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
-  call $~lib/console/console.log
+  call $~lib/console/console::log
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add

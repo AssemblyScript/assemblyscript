@@ -18,12 +18,12 @@
  (type $16 (func (param i32 i32 i32) (result i32)))
  (type $17 (func (param i32 i32 i64)))
  (type $18 (func (param i32 i32) (result f32)))
- (import "env" "Math.E" (global $~lib/bindings/dom/Math.E f64))
+ (import "env" "Math.E" (global $~lib/bindings/dom/Math::E f64))
  (import "env" "globalThis" (global $bindings/esm/immutableGlobal externref))
  (import "env" "globalThis.globalThis" (global $bindings/esm/immutableGlobalNested externref))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
- (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
- (import "env" "Math.log" (func $~lib/bindings/dom/Math.log (param f64) (result f64)))
+ (import "env" "console.log" (func $~lib/bindings/dom/console::log (param i32)))
+ (import "env" "Math.log" (func $~lib/bindings/dom/Math::log (param f64) (result f64)))
  (import "env" "Date.getTimezoneOffset" (func $bindings/esm/Date_getTimezoneOffset (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $bindings/esm/plainGlobal i32 (i32.const 1))
@@ -37,8 +37,8 @@
  (global $bindings/esm/ConstEnum.TWO i32 (i32.const 2))
  (global $bindings/esm/ConstEnum.THREE i32 (i32.const 3))
  (global $bindings/esm/fn i32 (i32.const 96))
- (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~lib/builtins/u64.MAX_VALUE i64 (i64.const -1))
+ (global $~lib/builtins/u32::MAX_VALUE i32 (i32.const -1))
+ (global $~lib/builtins/u64::MAX_VALUE i64 (i64.const -1))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
@@ -140,11 +140,11 @@
   return
  )
  (func $bindings/esm/getMaxUnsigned32 (result i32)
-  global.get $~lib/builtins/u32.MAX_VALUE
+  global.get $~lib/builtins/u32::MAX_VALUE
   return
  )
  (func $bindings/esm/getMaxUnsigned64 (result i64)
-  global.get $~lib/builtins/u64.MAX_VALUE
+  global.get $~lib/builtins/u64::MAX_VALUE
   return
  )
  (func $~lib/rt/common/OBJECT#get:rtSize (param $this i32) (result i32)
@@ -3129,9 +3129,9 @@
   local.get $0
   i32.store
   local.get $0
-  call $~lib/bindings/dom/console.log
-  global.get $~lib/bindings/dom/Math.E
-  call $~lib/bindings/dom/Math.log
+  call $~lib/bindings/dom/console::log
+  global.get $~lib/bindings/dom/Math::E
+  call $~lib/bindings/dom/Math::log
   drop
   global.get $bindings/esm/immutableGlobal
   drop

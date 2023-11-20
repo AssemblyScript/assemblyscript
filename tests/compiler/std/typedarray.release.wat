@@ -2983,7 +2983,7 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $__inlined_func$~lib/math/NativeMathf.mod (result f32)
+  block $__inlined_func$~lib/math/NativeMathf::mod (result f32)
    local.get $0
    i32.reinterpret_f32
    local.tee $1
@@ -3001,7 +3001,7 @@
     local.tee $0
     local.get $0
     f32.div
-    br $__inlined_func$~lib/math/NativeMathf.mod
+    br $__inlined_func$~lib/math/NativeMathf::mod
    end
    local.get $1
    i32.const 1
@@ -3016,7 +3016,7 @@
     i32.ne
     f32.convert_i32_u
     f32.mul
-    br $__inlined_func$~lib/math/NativeMathf.mod
+    br $__inlined_func$~lib/math/NativeMathf::mod
    end
    local.get $1
    i32.const -2147483648
@@ -3058,7 +3058,7 @@
       local.get $1
       i32.const 8388608
       i32.eq
-      br_if $__inlined_func$~lib/math/NativeMathf.mod
+      br_if $__inlined_func$~lib/math/NativeMathf::mod
       drop
       local.get $1
       i32.const 8388608
@@ -3086,7 +3086,7 @@
     local.get $1
     i32.const 8388608
     i32.eq
-    br_if $__inlined_func$~lib/math/NativeMathf.mod
+    br_if $__inlined_func$~lib/math/NativeMathf::mod
     drop
     local.get $1
     i32.const 8388608
@@ -3135,7 +3135,7 @@
   (local $4 i64)
   (local $5 i64)
   (local $6 i64)
-  block $__inlined_func$~lib/math/NativeMath.mod$1 (result f64)
+  block $__inlined_func$~lib/math/NativeMath::mod$1 (result f64)
    local.get $0
    i64.reinterpret_f64
    local.tee $4
@@ -3153,7 +3153,7 @@
     local.tee $0
     local.get $0
     f64.div
-    br $__inlined_func$~lib/math/NativeMath.mod$1
+    br $__inlined_func$~lib/math/NativeMath::mod$1
    end
    local.get $4
    i64.const 1
@@ -3168,7 +3168,7 @@
     i64.ne
     f64.convert_i32_u
     f64.mul
-    br $__inlined_func$~lib/math/NativeMath.mod$1
+    br $__inlined_func$~lib/math/NativeMath::mod$1
    end
    local.get $4
    i64.const 63
@@ -3211,7 +3211,7 @@
       local.get $3
       i64.const 4503599627370496
       i64.eq
-      br_if $__inlined_func$~lib/math/NativeMath.mod$1
+      br_if $__inlined_func$~lib/math/NativeMath::mod$1
       drop
       local.get $3
       i64.const 4503599627370496
@@ -3239,7 +3239,7 @@
     local.get $3
     i64.const 4503599627370496
     i64.eq
-    br_if $__inlined_func$~lib/math/NativeMath.mod$1
+    br_if $__inlined_func$~lib/math/NativeMath::mod$1
     drop
     local.get $3
     i64.const 4503599627370496

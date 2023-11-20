@@ -2800,7 +2800,7 @@
   end
   local.get $2
  )
- (func $~lib/math/NativeMath.scalbn (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath::scalbn (param $0 f64) (param $1 i32) (result f64)
   local.get $1
   i32.const 1023
   i32.gt_s
@@ -7227,7 +7227,7 @@
        local.get $12
        i64.sub
        i32.wrap_i64
-       call $~lib/math/NativeMath.scalbn
+       call $~lib/math/NativeMath::scalbn
       else
        local.get $6
        local.get $6
@@ -7348,7 +7348,7 @@
        f64.convert_i64_u
        global.get $~lib/util/string/__fixmulShift
        i32.wrap_i64
-       call $~lib/math/NativeMath.scalbn
+       call $~lib/math/NativeMath::scalbn
       end
      end
      local.set $8

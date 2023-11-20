@@ -94,10 +94,18 @@ export const PARENT_SUBST = "..";
 export const GETTER_PREFIX = "get:";
 /** Function name prefix used for setters. */
 export const SETTER_PREFIX = "set:";
-/** Delimiter used between class names and instance members. */
+/**
+ * Delimiter used between class names and instance members, as well as
+ * interface names and virtual members.
+ */
 export const INSTANCE_DELIMITER = "#";
-/** Delimiter used between class and namespace names and static members. */
+/**
+ * Delimiter used between class names and static members, as well as enum
+ * names and enum members.
+ */
 export const STATIC_DELIMITER = ".";
+/** Delimiter used between namespace names and namespace members. */
+export const NAMESPACE_DELIMITER = "::";
 /** Delimiter used between a function and its inner elements. */
 export const INNER_DELIMITER = "~";
 /** Substitution used to indicate a library directory. */

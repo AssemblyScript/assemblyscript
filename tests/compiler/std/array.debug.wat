@@ -34,7 +34,7 @@
  (type $32 (func (param i32 i32) (result f64)))
  (type $33 (func (param f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "env" "Math.random" (func $~lib/bindings/dom/Math.random (result f64)))
+ (import "env" "Math.random" (func $~lib/bindings/dom/Math::random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -52,7 +52,7 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $std/array/arr (mut i32) (i32.const 0))
- (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $~lib/builtins/i32::MAX_VALUE i32 (i32.const 2147483647))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/array/i (mut i32) (i32.const 0))
@@ -64,16 +64,16 @@
  (global $std/array/charset i32 (i32.const 9008))
  (global $std/array/inputStabArr (mut i32) (i32.const 0))
  (global $std/array/outputStabArr (mut i32) (i32.const 0))
- (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
+ (global $~lib/builtins/u32::MAX_VALUE i32 (i32.const -1))
+ (global $~lib/builtins/i32::MIN_VALUE i32 (i32.const -2147483648))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp (mut i32) (i32.const 0))
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/builtins/i64.MIN_VALUE i64 (i64.const -9223372036854775808))
- (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
+ (global $~lib/builtins/i64::MIN_VALUE i64 (i64.const -9223372036854775808))
+ (global $~lib/builtins/i64::MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~lib/rt/__rtti_base i32 (i32.const 14976))
  (global $~lib/memory/__data_end i32 (i32.const 15168))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 47936))
@@ -4270,7 +4270,7 @@
   i32.xor
   return
  )
- (func $~lib/math/NativeMath.seedRandom (param $value i64)
+ (func $~lib/math/NativeMath::seedRandom (param $value i64)
   local.get $value
   i64.const 0
   i64.eq
@@ -6348,7 +6348,7 @@
   i32.lt_u
   i32.sub
  )
- (func $~lib/math/NativeMath.random (result f64)
+ (func $~lib/math/NativeMath::random (result f64)
   (local $s1 i64)
   (local $s0 i64)
   (local $r i64)
@@ -6357,7 +6357,7 @@
   if
    call $~lib/builtins/seed
    i64.reinterpret_f64
-   call $~lib/math/NativeMath.seedRandom
+   call $~lib/math/NativeMath::seedRandom
   end
   global.get $~lib/math/random_state0_64
   local.set $s1
@@ -8817,7 +8817,7 @@
   i32.le_u
   drop
   local.get $value
-  global.get $~lib/builtins/u32.MAX_VALUE
+  global.get $~lib/builtins/u32::MAX_VALUE
   i64.extend_i32_u
   i64.le_u
   if
@@ -8951,7 +8951,7 @@
   i32.le_u
   drop
   local.get $value
-  global.get $~lib/builtins/u32.MAX_VALUE
+  global.get $~lib/builtins/u32::MAX_VALUE
   i64.extend_i32_u
   i64.le_u
   if
@@ -10576,7 +10576,7 @@
     i32.const 0
     local.set $start
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -10843,7 +10843,7 @@
     i32.const 0
     local.set $start
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -11078,7 +11078,7 @@
      if
       br $for-continue|0
      end
-     block $~lib/math/NativeMath.signbit|inlined.0 (result i32)
+     block $~lib/math/NativeMath::signbit|inlined.0 (result i32)
       local.get $a
       local.set $8
       global.get $~lib/memory/__stack_pointer
@@ -11095,11 +11095,11 @@
       i64.shr_u
       i64.const 0
       i64.ne
-      br $~lib/math/NativeMath.signbit|inlined.0
+      br $~lib/math/NativeMath::signbit|inlined.0
      end
      i32.const 0
      i32.ne
-     block $~lib/math/NativeMath.signbit|inlined.1 (result i32)
+     block $~lib/math/NativeMath::signbit|inlined.1 (result i32)
       local.get $b
       local.set $8
       global.get $~lib/memory/__stack_pointer
@@ -11116,7 +11116,7 @@
       i64.shr_u
       i64.const 0
       i64.ne
-      br $~lib/math/NativeMath.signbit|inlined.1
+      br $~lib/math/NativeMath::signbit|inlined.1
      end
      i32.const 0
      i32.ne
@@ -11199,7 +11199,7 @@
     i32.const 0
     local.set $start
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -12060,7 +12060,7 @@
     end
     unreachable
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -12496,7 +12496,7 @@
     i32.const 0
     local.set $start
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -13597,7 +13597,7 @@
     end
     unreachable
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $deleteCount
   end
   local.get $this
@@ -17498,7 +17498,7 @@
      if
       br $for-continue|0
      end
-     block $~lib/math/NativeMath.signbit|inlined.2 (result i32)
+     block $~lib/math/NativeMath::signbit|inlined.2 (result i32)
       local.get $a
       local.set $8
       global.get $~lib/memory/__stack_pointer
@@ -17514,11 +17514,11 @@
       i64.shr_u
       i64.const 0
       i64.ne
-      br $~lib/math/NativeMath.signbit|inlined.2
+      br $~lib/math/NativeMath::signbit|inlined.2
      end
      i32.const 0
      i32.ne
-     block $~lib/math/NativeMath.signbit|inlined.3 (result i32)
+     block $~lib/math/NativeMath::signbit|inlined.3 (result i32)
       local.get $b
       local.set $8
       global.get $~lib/memory/__stack_pointer
@@ -17534,7 +17534,7 @@
       i64.shr_u
       i64.const 0
       i64.ne
-      br $~lib/math/NativeMath.signbit|inlined.3
+      br $~lib/math/NativeMath::signbit|inlined.3
      end
      i32.const 0
      i32.ne
@@ -18815,7 +18815,7 @@
     i32.store offset=4
     local.get $3
     local.get $i
-    call $~lib/math/NativeMath.random
+    call $~lib/math/NativeMath::random
     local.get $size
     f64.convert_i32_s
     f64.mul
@@ -19193,7 +19193,7 @@
     i32.const 0
     local.set $start
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -26325,8 +26325,8 @@
     local.get $4
     i32.store offset=12
     local.get $4
-    block $~lib/math/NativeMath.floor|inlined.0 (result f64)
-     call $~lib/math/NativeMath.random
+    block $~lib/math/NativeMath::floor|inlined.0 (result f64)
+     call $~lib/math/NativeMath::random
      global.get $std/array/charset
      local.set $4
      global.get $~lib/memory/__stack_pointer
@@ -26339,7 +26339,7 @@
      local.set $x
      local.get $x
      f64.floor
-     br $~lib/math/NativeMath.floor|inlined.0
+     br $~lib/math/NativeMath::floor|inlined.0
     end
     i32.trunc_sat_f64_s
     call $~lib/string/String#charAt
@@ -26475,7 +26475,7 @@
     i32.store offset=4
     local.get $3
     local.get $i
-    call $~lib/math/NativeMath.random
+    call $~lib/math/NativeMath::random
     f64.const 32
     f64.mul
     i32.trunc_sat_f64_s
@@ -42158,9 +42158,9 @@
   i32.const 3
   call $~lib/array/Array<i32>#push
   drop
-  call $~lib/bindings/dom/Math.random
+  call $~lib/bindings/dom/Math::random
   i64.reinterpret_f64
-  call $~lib/math/NativeMath.seedRandom
+  call $~lib/math/NativeMath::seedRandom
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.const 2
@@ -46958,7 +46958,7 @@
   i32.eq
   if
    local.get $value
-   global.get $~lib/builtins/u32.MAX_VALUE
+   global.get $~lib/builtins/u32::MAX_VALUE
    i64.extend_i32_u
    i64.le_u
    if
@@ -47160,7 +47160,7 @@
   i32.eq
   if
    local.get $value
-   global.get $~lib/builtins/u32.MAX_VALUE
+   global.get $~lib/builtins/u32::MAX_VALUE
    i64.extend_i32_u
    i64.le_u
    if

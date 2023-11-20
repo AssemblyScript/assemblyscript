@@ -1496,7 +1496,7 @@
   i32.add
   return
  )
- (func $~lib/memory/heap.alloc (param $size i32) (result i32)
+ (func $~lib/memory/heap::alloc (param $size i32) (result i32)
   local.get $size
   call $~lib/rt/tlsf/__alloc
   return
@@ -1706,7 +1706,7 @@
   i32.add
   return
  )
- (func $~lib/memory/heap.realloc (param $ptr i32) (param $size i32) (result i32)
+ (func $~lib/memory/heap::realloc (param $ptr i32) (param $size i32) (result i32)
   local.get $ptr
   local.get $size
   call $~lib/rt/tlsf/__realloc
@@ -1729,20 +1729,20 @@
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/memory/heap.free (param $ptr i32)
+ (func $~lib/memory/heap::free (param $ptr i32)
   local.get $ptr
   call $~lib/rt/tlsf/__free
  )
  (func $start:heap
   i32.const 16
-  call $~lib/memory/heap.alloc
+  call $~lib/memory/heap::alloc
   global.set $heap/ptr
   global.get $heap/ptr
   i32.const 32
-  call $~lib/memory/heap.realloc
+  call $~lib/memory/heap::realloc
   global.set $heap/ptr
   global.get $heap/ptr
-  call $~lib/memory/heap.free
+  call $~lib/memory/heap::free
  )
  (func $~start
   call $start:heap

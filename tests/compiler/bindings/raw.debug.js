@@ -10,16 +10,16 @@ export async function instantiate(module, imports = {}) {
         })();
       },
       "console.log"(text) {
-        // ~lib/bindings/dom/console.log(~lib/string/String) => void
+        // ~lib/bindings/dom/console::log(~lib/string/String) => void
         text = __liftString(text >>> 0);
         console.log(text);
       },
       "Math.E": (
-        // ~lib/bindings/dom/Math.E: f64
+        // ~lib/bindings/dom/Math::E: f64
         Math.E
       ),
       "Math.log"(x) {
-        // ~lib/bindings/dom/Math.log(f64) => f64
+        // ~lib/bindings/dom/Math::log(f64) => f64
         return Math.log(x);
       },
       "globalThis.globalThis": (

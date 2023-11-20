@@ -13,7 +13,7 @@
  (type $11 (func (param i32 i64 i32 i32)))
  (type $12 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $resolve-propertyaccess/Namespace.member i32 (i32.const 1))
+ (global $resolve-propertyaccess/Namespace::member i32 (i32.const 1))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -29,11 +29,11 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $resolve-propertyaccess/Namespace.lazyMember i32 (i32.const 11))
- (global $resolve-propertyaccess/MergedNamespace.member i32 (i32.const 2))
- (global $resolve-propertyaccess/MergedNamespace.lazyMember i32 (i32.const 22))
- (global $resolve-propertyaccess/TypedNamespace.member i32 (i32.const 3))
- (global $resolve-propertyaccess/TypedNamespace.lazyMember i32 (i32.const 33))
+ (global $resolve-propertyaccess/Namespace::lazyMember i32 (i32.const 11))
+ (global $resolve-propertyaccess/MergedNamespace::member i32 (i32.const 2))
+ (global $resolve-propertyaccess/MergedNamespace::lazyMember i32 (i32.const 22))
+ (global $resolve-propertyaccess/TypedNamespace::member i32 (i32.const 3))
+ (global $resolve-propertyaccess/TypedNamespace::lazyMember i32 (i32.const 33))
  (global $resolve-propertyaccess/Enum.VALUE i32 (i32.const 4))
  (global $resolve-propertyaccess/Class.staticField (mut i32) (i32.const 5))
  (global $resolve-propertyaccess/Class.lazyStaticField (mut i32) (i32.const 55))
@@ -3072,7 +3072,7 @@
   i32.const 544
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
-  global.get $resolve-propertyaccess/Namespace.member
+  global.get $resolve-propertyaccess/Namespace::member
   i32.const 10
   call $~lib/number/I32#toString
   local.set $1
@@ -3096,7 +3096,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-propertyaccess/Namespace.lazyMember
+  global.get $resolve-propertyaccess/Namespace::lazyMember
   i32.const 10
   call $~lib/number/I32#toString
   local.set $1
@@ -3120,7 +3120,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-propertyaccess/MergedNamespace.member
+  global.get $resolve-propertyaccess/MergedNamespace::member
   i32.const 10
   call $~lib/number/I32#toString
   local.set $1
@@ -3144,7 +3144,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-propertyaccess/MergedNamespace.lazyMember
+  global.get $resolve-propertyaccess/MergedNamespace::lazyMember
   i32.const 10
   call $~lib/number/I32#toString
   local.set $1
@@ -3168,7 +3168,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-propertyaccess/TypedNamespace.member
+  global.get $resolve-propertyaccess/TypedNamespace::member
   i32.const 10
   call $~lib/number/I32#toString
   local.set $1
@@ -3192,7 +3192,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-propertyaccess/TypedNamespace.lazyMember
+  global.get $resolve-propertyaccess/TypedNamespace::lazyMember
   i32.const 10
   call $~lib/number/I32#toString
   local.set $1

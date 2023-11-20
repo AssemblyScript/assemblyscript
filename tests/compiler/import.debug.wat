@@ -30,7 +30,7 @@
   i32.mul
   return
  )
- (func $export/ns.two
+ (func $export/ns::two
  )
  (func $export-default/theDefault
  )
@@ -47,7 +47,7 @@
   call $export/mul
   i32.add
   drop
-  call $export/ns.two
+  call $export/ns::two
   global.get $export/a
   global.get $export/b
   call $export/add
@@ -60,8 +60,8 @@
   call $export/mul
   i32.add
   drop
-  call $export/ns.two
-  call $export/ns.two
+  call $export/ns::two
+  call $export/ns::two
   call $export-default/theDefault
  )
  (func $~start

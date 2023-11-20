@@ -11,12 +11,12 @@
  (global $bool/f1 (mut f32) (f32.const -0))
  (global $bool/f2 (mut f32) (f32.const nan:0x400000))
  (global $bool/f3 (mut f32) (f32.const 0))
- (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
+ (global $~lib/builtins/f32::MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
  (global $bool/f4 (mut f32) (f32.const 0))
  (global $bool/f5 (mut f32) (f32.const 0))
  (global $bool/f6 (mut f32) (f32.const inf))
  (global $bool/f7 (mut f32) (f32.const 0))
- (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const 1.401298464324817e-45))
+ (global $~lib/builtins/f32::MIN_VALUE f32 (f32.const 1.401298464324817e-45))
  (global $bool/f8 (mut f32) (f32.const 0))
  (global $bool/f9 (mut f32) (f32.const 0))
  (global $bool/f10 (mut f32) (f32.const 0))
@@ -28,12 +28,12 @@
  (global $bool/F1 (mut f64) (f64.const -0))
  (global $bool/F2 (mut f64) (f64.const nan:0x8000000000000))
  (global $bool/F3 (mut f64) (f64.const 0))
- (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
+ (global $~lib/builtins/f64::MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
  (global $bool/F4 (mut f64) (f64.const 0))
  (global $bool/F5 (mut f64) (f64.const 0))
  (global $bool/F6 (mut f64) (f64.const inf))
  (global $bool/F7 (mut f64) (f64.const 0))
- (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
+ (global $~lib/builtins/f64::MIN_VALUE f64 (f64.const 5e-324))
  (global $bool/F8 (mut f64) (f64.const 0))
  (global $bool/F9 (mut f64) (f64.const 0))
  (global $bool/F10 (mut f64) (f64.const 0))
@@ -205,7 +205,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_VALUE
+  global.get $~lib/builtins/f32::MAX_VALUE
   global.set $bool/f4
   global.get $bool/f4
   i32.reinterpret_f32
@@ -226,7 +226,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_VALUE
+  global.get $~lib/builtins/f32::MAX_VALUE
   f32.neg
   global.set $bool/f5
   global.get $bool/f5
@@ -289,7 +289,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MIN_VALUE
+  global.get $~lib/builtins/f32::MIN_VALUE
   global.set $bool/f8
   global.get $bool/f8
   i32.reinterpret_f32
@@ -310,7 +310,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MIN_VALUE
+  global.get $~lib/builtins/f32::MIN_VALUE
   f32.neg
   global.set $bool/f9
   global.get $bool/f9
@@ -524,7 +524,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
+  global.get $~lib/builtins/f64::MAX_VALUE
   global.set $bool/F4
   global.get $bool/F4
   i64.reinterpret_f64
@@ -545,7 +545,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
+  global.get $~lib/builtins/f64::MAX_VALUE
   f64.neg
   global.set $bool/F5
   global.get $bool/F5
@@ -608,7 +608,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_VALUE
+  global.get $~lib/builtins/f64::MIN_VALUE
   global.set $bool/F8
   global.get $bool/F8
   i64.reinterpret_f64
@@ -629,7 +629,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_VALUE
+  global.get $~lib/builtins/f64::MIN_VALUE
   f64.neg
   global.set $bool/F9
   global.get $bool/F9

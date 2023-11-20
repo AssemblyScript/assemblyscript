@@ -82,8 +82,8 @@
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $~lib/builtins/u32::MAX_VALUE i32 (i32.const -1))
+ (global $~lib/builtins/i32::MAX_VALUE i32 (i32.const 2147483647))
  (global $std/typedarray/forEachCallCount (mut i32) (i32.const 0))
  (global $std/typedarray/forEachSelf (mut i32) (i32.const 0))
  (global $std/typedarray/forEachValues i32 (i32.const 6128))
@@ -4277,7 +4277,7 @@
   i64.const 2
   i64.eq
  )
- (func $~lib/math/NativeMathf.mod (param $x f32) (param $y f32) (result f32)
+ (func $~lib/math/NativeMathf::mod (param $x f32) (param $y f32) (result f32)
   (local $ux i32)
   (local $uy i32)
   (local $ex i32)
@@ -4529,7 +4529,7 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $value f32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
   f32.const 2
-  call $~lib/math/NativeMathf.mod
+  call $~lib/math/NativeMathf::mod
   f32.const 0
   f32.eq
  )
@@ -4538,7 +4538,7 @@
   f32.const 2
   f32.eq
  )
- (func $~lib/math/NativeMath.mod (param $x f64) (param $y f64) (result f64)
+ (func $~lib/math/NativeMath::mod (param $x f64) (param $y f64) (result f64)
   (local $ux i64)
   (local $uy i64)
   (local $ex i64)
@@ -4796,7 +4796,7 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $value f64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
   f64.const 2
-  call $~lib/math/NativeMath.mod
+  call $~lib/math/NativeMath::mod
   f64.const 0
   f64.eq
  )
@@ -6743,7 +6743,7 @@
   i32.le_u
   drop
   local.get $value
-  global.get $~lib/builtins/u32.MAX_VALUE
+  global.get $~lib/builtins/u32::MAX_VALUE
   i64.extend_i32_u
   i64.le_u
   if
@@ -6841,7 +6841,7 @@
   i32.le_u
   drop
   local.get $value
-  global.get $~lib/builtins/u32.MAX_VALUE
+  global.get $~lib/builtins/u32::MAX_VALUE
   i64.extend_i32_u
   i64.le_u
   if
@@ -17412,7 +17412,7 @@
     i32.const 0
     local.set $start
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -17822,7 +17822,7 @@
     i32.const 0
     local.set $start
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -18009,7 +18009,7 @@
     i32.const 0
     local.set $begin
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -18233,7 +18233,7 @@
     end
     unreachable
    end
-   global.get $~lib/builtins/i32.MAX_VALUE
+   global.get $~lib/builtins/i32::MAX_VALUE
    local.set $end
   end
   local.get $this
@@ -93481,7 +93481,7 @@
   i32.eq
   if
    local.get $value
-   global.get $~lib/builtins/u32.MAX_VALUE
+   global.get $~lib/builtins/u32::MAX_VALUE
    i64.extend_i32_u
    i64.le_u
    if
@@ -93690,7 +93690,7 @@
   i32.eq
   if
    local.get $value
-   global.get $~lib/builtins/u32.MAX_VALUE
+   global.get $~lib/builtins/u32::MAX_VALUE
    i64.extend_i32_u
    i64.le_u
    if
