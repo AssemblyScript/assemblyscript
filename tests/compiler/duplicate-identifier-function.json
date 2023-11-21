@@ -1,0 +1,7 @@
+{
+  "stderr": [
+    "TS2300: Duplicate identifier 'e'", "var e: f32", "var e: i32",
+    "TS2300: Duplicate identifier 'f'", "let f: f32",
+    "EOF"
+  ]
+}
