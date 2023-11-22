@@ -93,7 +93,8 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName
+  mangleInternalName,
+  TypeDefinition
 } from "./program";
 
 import {
@@ -180,7 +181,8 @@ import {
 
   findDecorator,
   isTypeOmitted,
-  Source
+  Source,
+  TypeDeclaration
 } from "./ast";
 
 import {
@@ -1156,7 +1158,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // Resolve type if annotated
       if (typeNode) {
-        let resolvedType = this.resolver.resolveType(typeNode, global.parent); // reports
+        let resolvedType = this.resolver.resolveType(typeNode, null, global.parent); // reports
         if (!resolvedType) {
           global.set(CommonFlags.Errored);
           pendingElements.delete(global);
@@ -2238,13 +2240,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.TypeDeclaration: {
-        // TODO: integrate inner type declaration into flow
-        this.error(
-          DiagnosticCode.Not_implemented_0,
-          statement.range,
-          "Inner type alias"
-        );
-        stmt = module.unreachable();
+        stmt = this.compileTypeDeclaration(<TypeDeclaration>statement);
         break;
       }
       case NodeKind.Module: {
@@ -2303,6 +2299,24 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.inherit(innerFlow);
     this.currentFlow = outerFlow;
     return this.module.flatten(stmts);
+  }
+
+  private compileTypeDeclaration(statement: TypeDeclaration): ExpressionRef {
+    let flow = this.currentFlow;
+    let name = statement.name.text;
+    let existedTypeAlias = flow.lookupScopedTypeAlias(name);
+    if (existedTypeAlias) {
+      this.errorRelated(
+        DiagnosticCode.Duplicate_identifier_0,
+        statement.range,
+        existedTypeAlias.declaration.range,
+        name
+      );
+      return this.module.unreachable();
+    }
+    let element = new TypeDefinition(name, flow.sourceFunction, statement, DecoratorFlags.None);
+    flow.addScopedTypeAlias(name, element);
+    return this.module.nop();
   }
 
   private compileBreakStatement(
@@ -2962,7 +2976,7 @@ export class Compiler extends DiagnosticEmitter {
       let initializerNode = declaration.initializer;
       if (typeNode) {
         type = resolver.resolveType( // reports
-          typeNode,
+          typeNode, flow,
           flow.sourceFunction,
           cloneMap(flow.contextualTypeArguments)
         );
@@ -3729,7 +3743,7 @@ export class Compiler extends DiagnosticEmitter {
       case AssertionKind.As: {
         let flow = this.currentFlow;
         let toType = this.resolver.resolveType( // reports
-          assert(expression.toType),
+          assert(expression.toType), flow,
           flow.sourceFunction,
           cloneMap(flow.contextualTypeArguments)
         );
@@ -6162,6 +6176,7 @@ export class Compiler extends DiagnosticEmitter {
       typeArguments = this.resolver.resolveTypeArguments(
         assert(typeParameterNodes),
         typeArgumentNodes,
+        this.currentFlow,
         this.currentFlow.sourceFunction.parent,
         cloneMap(this.currentFlow.contextualTypeArguments), // don't update
         expression
@@ -7085,7 +7100,7 @@ export class Compiler extends DiagnosticEmitter {
         let parameterNode = parameterNodes[i];
         if (!isTypeOmitted(parameterNode.type)) {
           let resolvedType = this.resolver.resolveType(
-            parameterNode.type,
+            parameterNode.type, flow,
             sourceFunction.parent,
             contextualTypeArguments
           );
@@ -7105,7 +7120,7 @@ export class Compiler extends DiagnosticEmitter {
       let returnType = contextualSignature.returnType;
       if (!isTypeOmitted(signatureNode.returnType)) {
         let resolvedType = this.resolver.resolveType(
-          signatureNode.returnType,
+          signatureNode.returnType, flow,
           sourceFunction.parent,
           contextualTypeArguments
         );
@@ -7135,7 +7150,7 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         let resolvedType = this.resolver.resolveType(
-          thisTypeNode,
+          thisTypeNode, flow,
           sourceFunction.parent,
           contextualTypeArguments
         );
@@ -7522,7 +7537,7 @@ export class Compiler extends DiagnosticEmitter {
     if (isType.kind == NodeKind.NamedType) {
       let namedType = <NamedTypeNode>isType;
       if (!(namedType.isNullable || namedType.hasTypeArguments)) {
-        let element = this.resolver.resolveTypeName(namedType.name, flow.sourceFunction, ReportMode.Swallow);
+        let element = this.resolver.resolveTypeName(namedType.name, flow, flow.sourceFunction, ReportMode.Swallow);
         if (element && element.kind == ElementKind.ClassPrototype) {
           let prototype = <ClassPrototype>element;
           if (prototype.is(CommonFlags.Generic)) {
@@ -7534,7 +7549,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Fall back to `instanceof TYPE`
     let expectedType = this.resolver.resolveType(
-      expression.isType,
+      expression.isType, flow,
       flow.sourceFunction,
       cloneMap(flow.contextualTypeArguments)
     );
@@ -8686,7 +8701,7 @@ export class Compiler extends DiagnosticEmitter {
     let flow = this.currentFlow;
 
     // obtain the class being instantiated
-    let target = this.resolver.resolveTypeName(expression.typeName, flow.sourceFunction);
+    let target = this.resolver.resolveTypeName(expression.typeName, flow, flow.sourceFunction);
     if (!target) return module.unreachable();
     if (target.kind != ElementKind.ClassPrototype) {
       this.error(
@@ -8722,6 +8737,7 @@ export class Compiler extends DiagnosticEmitter {
       classInstance = this.resolver.resolveClassInclTypeArguments(
         classPrototype,
         typeArguments,
+        flow,
         flow.sourceFunction.parent, // relative to caller
         cloneMap(flow.contextualTypeArguments),
         expression

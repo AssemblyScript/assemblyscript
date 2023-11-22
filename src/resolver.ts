@@ -142,6 +142,8 @@ export class Resolver extends DiagnosticEmitter {
   resolveType(
     /** The type to resolve. */
     node: TypeNode,
+    /** The flow */
+    flow: Flow | null,
     /** Contextual element. */
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
@@ -160,21 +162,11 @@ export class Resolver extends DiagnosticEmitter {
     let resolved: Type | null = null;
     switch (node.kind) {
       case NodeKind.NamedType: {
-        resolved = this.resolveNamedType(
-          <NamedTypeNode>node,
-          ctxElement,
-          ctxTypes,
-          reportMode
-        );
+        resolved = this.resolveNamedType(<NamedTypeNode>node, flow, ctxElement, ctxTypes, reportMode);
         break;
       }
       case NodeKind.FunctionType: {
-        resolved = this.resolveFunctionType(
-          <FunctionTypeNode>node,
-          ctxElement,
-          ctxTypes,
-          reportMode
-        );
+        resolved = this.resolveFunctionType(<FunctionTypeNode>node, flow, ctxElement, ctxTypes, reportMode);
         break;
       }
       default: assert(false);
@@ -187,6 +179,8 @@ export class Resolver extends DiagnosticEmitter {
   private resolveNamedType(
     /** The type to resolve. */
     node: NamedTypeNode,
+    /** The flow */
+    flow: Flow | null,
     /** Contextual element. */
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
@@ -225,7 +219,7 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Look up in context
-    let element = this.resolveTypeName(nameNode, ctxElement, reportMode);
+    let element = this.resolveTypeName(nameNode, flow, ctxElement, reportMode);
     if (!element) return null;
 
     // Use shadow type if present (i.e. namespace sharing a type)
@@ -264,6 +258,7 @@ export class Resolver extends DiagnosticEmitter {
         let instance = this.resolveClassInclTypeArguments(
           <ClassPrototype>element,
           typeArgumentNodes,
+          flow,
           ctxElement,
           cloneMap(ctxTypes), // don't inherit
           node,
@@ -318,6 +313,7 @@ export class Resolver extends DiagnosticEmitter {
         typeArguments = this.resolveTypeArguments(
           typeParameterNodes,
           typeArgumentNodes,
+          flow,
           ctxElement,
           ctxTypes = cloneMap(ctxTypes), // update
           node,
@@ -332,6 +328,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       let type = this.resolveType(
         typeDefinition.typeNode,
+        flow,
         element,
         ctxTypes,
         reportMode
@@ -361,6 +358,8 @@ export class Resolver extends DiagnosticEmitter {
   private resolveFunctionType(
     /** The type to resolve. */
     node: FunctionTypeNode,
+    /** The flow */
+    flow: Flow | null,
     /** Contextual element. */
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
@@ -373,6 +372,7 @@ export class Resolver extends DiagnosticEmitter {
     if (explicitThisType) {
       thisType = this.resolveType(
         explicitThisType,
+        flow,
         ctxElement,
         ctxTypes,
         reportMode
@@ -409,6 +409,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       let parameterType = this.resolveType(
         parameterTypeNode,
+        flow,
         ctxElement,
         ctxTypes,
         reportMode
@@ -429,6 +430,7 @@ export class Resolver extends DiagnosticEmitter {
     } else {
       returnType = this.resolveType(
         returnTypeNode,
+        flow,
         ctxElement,
         ctxTypes,
         reportMode
@@ -451,7 +453,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    let typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    let typeArgument = this.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     switch (typeArgument.kind) {
       case TypeKind.I8:
@@ -486,7 +488,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    let typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    let typeArgument = this.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     let classReference = typeArgument.classReference;
     if (!classReference) {
@@ -530,7 +532,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    let typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    let typeArgument = this.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     let classReference = typeArgument.getClassOrWrapper(this.program);
     if (classReference) {
@@ -558,7 +560,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    let typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    let typeArgument = this.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     let signatureReference = typeArgument.getSignature();
     if (signatureReference) return signatureReference.returnType;
@@ -583,7 +585,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    let typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    let typeArgument = this.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     if (!typeArgument.isNullableReference) return typeArgument;
     return typeArgument.nonNullableType;
@@ -593,12 +595,16 @@ export class Resolver extends DiagnosticEmitter {
   resolveTypeName(
     /** The type name to resolve. */
     node: TypeName,
+    /** The flow */
+    flow: Flow | null,
     /** Contextual element. */
     ctxElement: Element,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    let element = ctxElement.lookup(node.identifier.text, true);
+    let element: Element | null = null;
+    if (flow) element = flow.lookupTypeAlias(node.identifier.text);
+    if (!element) element = ctxElement.lookup(node.identifier.text, true);
     if (!element) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -632,6 +638,8 @@ export class Resolver extends DiagnosticEmitter {
     typeParameters: TypeParameterNode[],
     /** Type argument nodes provided. */
     typeArgumentNodes: TypeNode[] | null,
+    /** Flow */
+    flow: Flow | null,
     /** Contextual element. */
     ctxElement: Element,
     /** Contextual types, i.e. `T`. Updated in place with the new set of contextual types. */
@@ -641,9 +649,8 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type[] | null {
-    var
-      minParameterCount = 0,
-      maxParameterCount = 0;
+    let minParameterCount = 0;
+    let maxParameterCount = 0;
     for (let i = 0, k = typeParameters.length; i < k; ++i) {
       if (!typeParameters[i].defaultType) ++minParameterCount;
       ++maxParameterCount;
@@ -672,12 +679,14 @@ export class Resolver extends DiagnosticEmitter {
       let type = i < argumentCount
         ? this.resolveType( // reports
             typeArgumentNodes![i],
+            flow,
             ctxElement,
             oldCtxTypes, // update
             reportMode
           )
         : this.resolveType( // reports
             assert(typeParameters[i].defaultType),
+            flow,
             ctxElement,
             cloneMap(ctxTypes), // don't update
             reportMode
@@ -796,6 +805,7 @@ export class Resolver extends DiagnosticEmitter {
             }
             let resolvedDefaultType = this.resolveType(
               defaultType,
+              null,
               prototype,
               defaultTypeContextualTypeArguments,
               reportMode
@@ -846,7 +856,7 @@ export class Resolver extends DiagnosticEmitter {
       if (typeArgumentNodes && typeArgumentNodes.length > 0) { // foo<T>(bar: Array<T>)
         let classReference = type.classReference;
         if (classReference) {
-          let classPrototype = this.resolveTypeName(namedTypeNode.name, ctxElement);
+          let classPrototype = this.resolveTypeName(namedTypeNode.name, null, ctxElement);
           if (!classPrototype || classPrototype.kind != ElementKind.ClassPrototype) return;
           if (classReference.prototype == <ClassPrototype>classPrototype) {
             let typeArguments = classReference.typeArguments;
@@ -1306,7 +1316,7 @@ export class Resolver extends DiagnosticEmitter {
     if (global.is(CommonFlags.Resolved)) return true;
     let typeNode = global.typeNode;
     let type = typeNode
-      ? this.resolveType(typeNode, global.parent, null, reportMode)
+      ? this.resolveType(typeNode, null, global.parent, null, reportMode)
       : this.resolveExpression(
           assert(global.initializerNode),
           global.file.startFunction.flow,
@@ -1424,7 +1434,7 @@ export class Resolver extends DiagnosticEmitter {
         let shadowType = target.shadowType;
         if (shadowType) {
           if (!shadowType.is(CommonFlags.Resolved)) {
-            let resolvedType = this.resolveType(shadowType.typeNode, shadowType.parent, null, reportMode);
+            let resolvedType = this.resolveType(shadowType.typeNode, null, shadowType.parent, null, reportMode);
             if (resolvedType) shadowType.setType(resolvedType);
           }
           let classReference = shadowType.type.classReference;
@@ -1708,6 +1718,7 @@ export class Resolver extends DiagnosticEmitter {
       case AssertionKind.Prefix: {
         let type = this.resolveType(
           assert(node.toType), // must be set if not NONNULL
+          null,
           ctxFlow.sourceFunction,
           ctxFlow.contextualTypeArguments,
           reportMode
@@ -1764,6 +1775,7 @@ export class Resolver extends DiagnosticEmitter {
       case AssertionKind.Prefix: {
         return this.resolveType(
           assert(node.toType),
+          null,
           ctxFlow.sourceFunction,
           ctxFlow.contextualTypeArguments,
           reportMode
@@ -2659,12 +2671,13 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    let element = this.resolveTypeName(node.typeName, ctxFlow.sourceFunction, reportMode);
+    let element = this.resolveTypeName(node.typeName, ctxFlow, ctxFlow.sourceFunction, reportMode);
     if (!element) return null;
     if (element.kind == ElementKind.ClassPrototype) {
       return this.resolveClassInclTypeArguments(
         <ClassPrototype>element,
         node.typeArguments,
+        ctxFlow,
         ctxFlow.sourceFunction,
         cloneMap(ctxFlow.contextualTypeArguments),
         node,
@@ -2744,7 +2757,7 @@ export class Resolver extends DiagnosticEmitter {
     const declaration = node.declaration;
     const signature = declaration.signature;
     const body = declaration.body;
-    let functionType = this.resolveType(signature, ctxFlow.sourceFunction, ctxFlow.contextualTypeArguments, reportMode);
+    let functionType = this.resolveType(signature, null, ctxFlow.sourceFunction, ctxFlow.contextualTypeArguments, reportMode);
     if (
       functionType &&
       declaration.arrowKind != ArrowKind.None &&
@@ -2843,6 +2856,7 @@ export class Resolver extends DiagnosticEmitter {
     if (explicitThisType) {
       thisType = this.resolveType(
         explicitThisType,
+        null,
         prototype.parent, // relative to function
         ctxTypes,
         reportMode
@@ -2876,6 +2890,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       let parameterType = this.resolveType(
         typeNode,
+        null,
         prototype.parent, // relative to function
         ctxTypes,
         reportMode
@@ -2912,6 +2927,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       let type = this.resolveType(
         typeNode,
+        null,
         prototype.parent, // relative to function
         ctxTypes,
         reportMode
@@ -3026,6 +3042,7 @@ export class Resolver extends DiagnosticEmitter {
       resolvedTypeArguments = this.resolveTypeArguments( // reports
         assert(prototype.typeParameterNodes),
         typeArgumentNodes,
+        null,
         ctxElement,
         ctxTypes, // update
         reportNode,
@@ -3174,6 +3191,7 @@ export class Resolver extends DiagnosticEmitter {
       let base = this.resolveClassInclTypeArguments(
         basePrototype,
         extendsNode.typeArguments,
+        null,
         prototype.parent, // relative to derived class
         cloneMap(ctxTypes), // don't inherit
         extendsNode,
@@ -3214,6 +3232,7 @@ export class Resolver extends DiagnosticEmitter {
         let iface = this.resolveClassInclTypeArguments(
           interfacePrototype,
           implementsNode.typeArguments,
+          null,
           prototype.parent,
           cloneMap(ctxTypes),
           implementsNode,
@@ -3610,6 +3629,8 @@ export class Resolver extends DiagnosticEmitter {
     prototype: ClassPrototype,
     /** Type arguments provided to be resolved. */
     typeArgumentNodes: TypeNode[] | null,
+    /** Flow of {@link typeArgumentNodes} */
+    flow: Flow | null,
     /** Contextual element. */
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
@@ -3626,6 +3647,7 @@ export class Resolver extends DiagnosticEmitter {
       resolvedTypeArguments = this.resolveTypeArguments( // reports
         assert(prototype.typeParameterNodes), // must be present if generic
         typeArgumentNodes,
+        flow,
         ctxElement,
         ctxTypes, // update
         reportNode,

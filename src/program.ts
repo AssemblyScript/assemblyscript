@@ -1308,7 +1308,7 @@ export class Program extends DiagnosticEmitter {
     for (let i = 0, k = queuedExtends.length; i < k; ++i) {
       let thisPrototype = queuedExtends[i];
       let extendsNode = assert(thisPrototype.extendsNode); // must be present if in queuedExtends
-      let baseElement = resolver.resolveTypeName(extendsNode.name, thisPrototype.parent);
+      let baseElement = resolver.resolveTypeName(extendsNode.name, null, thisPrototype.parent);
       if (!baseElement) continue;
       if (thisPrototype.kind == ElementKind.ClassPrototype) {
         if (baseElement.kind == ElementKind.ClassPrototype) {
@@ -1405,7 +1405,7 @@ export class Program extends DiagnosticEmitter {
       let implementsNodes = assert(thisPrototype.implementsNodes); // must be present if in queuedImplements
       for (let j = 0, l = implementsNodes.length; j < l; ++j) {
         let implementsNode = implementsNodes[j];
-        let interfaceElement = resolver.resolveTypeName(implementsNode.name, thisPrototype.parent);
+        let interfaceElement = resolver.resolveTypeName(implementsNode.name, null, thisPrototype.parent);
         if (!interfaceElement) continue;
         if (interfaceElement.kind == ElementKind.InterfacePrototype) {
           let interfacePrototype = <InterfacePrototype>interfaceElement;
@@ -3383,7 +3383,7 @@ export class TypeDefinition extends TypedElement {
   constructor(
     /** Simple name. */
     name: string,
-    /** Parent element, usually a file or namespace. */
+    /** Parent element. */
     parent: Element,
     /** Declaration reference. */
     declaration: TypeDeclaration,
