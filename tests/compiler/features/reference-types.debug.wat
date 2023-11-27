@@ -1,8 +1,8 @@
 (module
- (type $none_=>_none (func))
- (type $none_=>_externref (func (result externref)))
- (type $externref_=>_externref (func (param externref) (result externref)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $0 (func))
+ (type $1 (func (result externref)))
+ (type $2 (func (param externref) (result externref)))
+ (type $3 (func (param i32 i32 i32 i32)))
  (import "reference-types" "somethingReal" (func $features/reference-types/somethingReal (result externref)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
@@ -102,7 +102,6 @@
   end
  )
  (func $features/reference-types/someFunc
-  nop
  )
  (func $start:features/reference-types
   (local $funcLocal funcref)
@@ -129,7 +128,6 @@
   i32.eqz
   i32.eqz
   if
-   nop
   else
    i32.const 0
    i32.eqz
@@ -146,7 +144,6 @@
   ref.is_null
   i32.eqz
   if
-   nop
   else
    i32.const 0
    i32.eqz

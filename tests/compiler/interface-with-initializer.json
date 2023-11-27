@@ -1,0 +1,7 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS1246: An interface property cannot have an initializer."
+  ]
+}

@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_none (func))
+ (type $0 (func (param i32 i32 i32 i32)))
+ (type $1 (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
@@ -84,9 +84,10 @@
   loop $for-loop|0
    local.get $0
    global.get $comma/a
+   local.tee $1
    i32.lt_s
    if
-    global.get $comma/a
+    local.get $1
     i32.const 1
     i32.sub
     global.set $comma/a

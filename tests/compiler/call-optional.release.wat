@@ -1,7 +1,7 @@
 (module
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_none (func))
+ (type $0 (func (param i32 i32 i32) (result i32)))
+ (type $1 (func (param i32 i32 i32 i32)))
+ (type $2 (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (memory $0 1)
@@ -48,8 +48,8 @@
   i32.const 0
   i32.const 0
   i32.const 1120
-  i32.load $0
-  call_indirect $0 (type $i32_i32_i32_=>_i32)
+  i32.load
+  call_indirect (type $0)
   if
    i32.const 0
    i32.const 1056
@@ -64,8 +64,8 @@
   i32.const 4
   i32.const 0
   i32.const 1120
-  i32.load $0
-  call_indirect $0 (type $i32_i32_i32_=>_i32)
+  i32.load
+  call_indirect (type $0)
   i32.const 5
   i32.ne
   if
@@ -82,8 +82,8 @@
   i32.const 4
   i32.const 5
   i32.const 1120
-  i32.load $0
-  call_indirect $0 (type $i32_i32_i32_=>_i32)
+  i32.load
+  call_indirect (type $0)
   i32.const 12
   i32.ne
   if

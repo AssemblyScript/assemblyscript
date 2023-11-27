@@ -1,9 +1,9 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $0 (func (param i32 i32)))
+ (type $1 (func (param i32)))
+ (type $2 (func (param i32 i32) (result i32)))
+ (type $3 (func (result i32)))
+ (type $4 (func (param i32 i32 i32) (result i32)))
  (global $function-inline-regressions/struct i32 (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
@@ -26,28 +26,28 @@
   i32.mul
   local.get $b
   i32.add
-  i32.load $0
+  i32.load
   return
  )
  (func $function-inline-regressions/loadZ (result i32)
   i32.const 16
-  i32.load $0
+  i32.load
   return
  )
  (func $function-inline-regressions/Struct#set:v0 (param $this i32) (param $v0 i32)
   local.get $this
   local.get $v0
-  i32.store $0
+  i32.store
  )
  (func $function-inline-regressions/Struct#set:v1 (param $this i32) (param $v1 i32)
   local.get $this
   local.get $v1
-  i32.store $0 offset=4
+  i32.store offset=4
  )
  (func $function-inline-regressions/Struct#set:v2 (param $this i32) (param $v2 i32)
   local.get $this
   local.get $v2
-  i32.store $0 offset=8
+  i32.store offset=8
  )
  (func $function-inline-regressions/foo (param $v0 i32) (param $v1 i32) (param $v2 i32) (result i32)
   (local $x i32)

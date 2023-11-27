@@ -1,9 +1,9 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
- (type $f32_=>_i32 (func (param f32) (result i32)))
- (type $f64_=>_i32 (func (param f64) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $0 (func (param i32) (result i32)))
+ (type $1 (func))
+ (type $2 (func (param f32) (result i32)))
+ (type $3 (func (param f64) (result i32)))
+ (type $4 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -28,7 +28,7 @@
  (start $~start)
  (func $~lib/rt/common/OBJECT#get:rtSize (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=16
+  i32.load offset=16
  )
  (func $~lib/string/String#get:length (param $this i32) (result i32)
   local.get $this
@@ -241,14 +241,14 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store
   i32.const 1
   drop
   block $~lib/util/hash/hashStr|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $key
    local.tee $key|1
-   i32.store $0
+   i32.store
    local.get $key|1
    i32.const 0
    i32.eq
@@ -260,7 +260,7 @@
    local.set $19
    global.get $~lib/memory/__stack_pointer
    local.get $19
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $19
    call $~lib/string/String#get:length
    i32.const 1
@@ -305,7 +305,7 @@
        local.get $s1
        local.set $h|10
        local.get $pos
-       i32.load $0
+       i32.load
        local.set $key|11
        local.get $h|10
        local.get $key|11
@@ -323,7 +323,7 @@
        local.get $s2
        local.set $h|12
        local.get $pos
-       i32.load $0 offset=4
+       i32.load offset=4
        local.set $key|13
        local.get $h|12
        local.get $key|13
@@ -341,7 +341,7 @@
        local.get $s3
        local.set $h|14
        local.get $pos
-       i32.load $0 offset=8
+       i32.load offset=8
        local.set $key|15
        local.get $h|14
        local.get $key|15
@@ -359,7 +359,7 @@
        local.get $s4
        local.set $h|16
        local.get $pos
-       i32.load $0 offset=12
+       i32.load offset=12
        local.set $key|17
        local.get $h|16
        local.get $key|17
@@ -419,7 +419,7 @@
     if
      local.get $h
      local.get $pos
-     i32.load $0
+     i32.load
      i32.const -1028477379
      i32.mul
      i32.add
@@ -448,7 +448,7 @@
     if
      local.get $h
      local.get $pos
-     i32.load8_u $0
+     i32.load8_u
      i32.const 374761393
      i32.mul
      i32.add
@@ -530,14 +530,14 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
+  i64.store
   i32.const 1
   drop
   block $~lib/util/hash/hashStr|inlined.1 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $key
    local.tee $key|1
-   i32.store $0
+   i32.store
    local.get $key|1
    i32.const 0
    i32.eq
@@ -549,7 +549,7 @@
    local.set $19
    global.get $~lib/memory/__stack_pointer
    local.get $19
-   i32.store $0 offset=4
+   i32.store offset=4
    local.get $19
    call $~lib/string/String#get:length
    i32.const 1
@@ -594,7 +594,7 @@
        local.get $s1
        local.set $h|10
        local.get $pos
-       i32.load $0
+       i32.load
        local.set $key|11
        local.get $h|10
        local.get $key|11
@@ -612,7 +612,7 @@
        local.get $s2
        local.set $h|12
        local.get $pos
-       i32.load $0 offset=4
+       i32.load offset=4
        local.set $key|13
        local.get $h|12
        local.get $key|13
@@ -630,7 +630,7 @@
        local.get $s3
        local.set $h|14
        local.get $pos
-       i32.load $0 offset=8
+       i32.load offset=8
        local.set $key|15
        local.get $h|14
        local.get $key|15
@@ -648,7 +648,7 @@
        local.get $s4
        local.set $h|16
        local.get $pos
-       i32.load $0 offset=12
+       i32.load offset=12
        local.set $key|17
        local.get $h|16
        local.get $key|17
@@ -708,7 +708,7 @@
     if
      local.get $h
      local.get $pos
-     i32.load $0
+     i32.load
      i32.const -1028477379
      i32.mul
      i32.add
@@ -737,7 +737,7 @@
     if
      local.get $h
      local.get $pos
-     i32.load8_u $0
+     i32.load8_u
      i32.const 374761393
      i32.mul
      i32.add
@@ -801,7 +801,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   call $std/hash/check
@@ -810,7 +810,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -819,7 +819,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -828,7 +828,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -837,7 +837,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -846,7 +846,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -855,7 +855,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -864,7 +864,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -873,7 +873,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -882,7 +882,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -891,7 +891,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check

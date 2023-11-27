@@ -1,0 +1,9 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "AS229: Property 'm' only has a setter and is missing a getter.",
+    "TS2808: Get accessor 'm2' must be at least as accessible as the setter.",
+    "EOF"
+  ]
+}

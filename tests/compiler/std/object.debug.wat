@@ -1,13 +1,13 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_none (func))
- (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
- (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
+ (type $0 (func (param i32) (result i32)))
+ (type $1 (func (param i32 i32) (result i32)))
+ (type $2 (func (param i32 i32)))
+ (type $3 (func))
+ (type $4 (func (param f64 f64) (result i32)))
+ (type $5 (func (param i32 i32 i32 i32)))
+ (type $6 (func (param f32 f32) (result i32)))
+ (type $7 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $8 (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -94,7 +94,7 @@
  )
  (func $~lib/rt/common/OBJECT#get:rtSize (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=16
+  i32.load offset=16
  )
  (func $~lib/string/String#get:length (param $this i32) (result i32)
   local.get $this
@@ -146,9 +146,9 @@
    block $do-break|0
     loop $do-loop|0
      local.get $ptr1
-     i64.load $0
+     i64.load
      local.get $ptr2
-     i64.load $0
+     i64.load
      i64.ne
      if
       br $do-break|0
@@ -181,10 +181,10 @@
    local.get $7
    if
     local.get $ptr1
-    i32.load16_u $0
+    i32.load16_u
     local.set $a
     local.get $ptr2
-    i32.load16_u $0
+    i32.load16_u
     local.set $b
     local.get $a
     local.get $b
@@ -275,7 +275,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $pagesWanted i32)
-  memory.size $0
+  memory.size
   local.set $pagesBefore
   local.get $pagesBefore
   i32.const 16
@@ -313,12 +313,12 @@
    select
    local.set $pagesWanted
    local.get $pagesWanted
-   memory.grow $0
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     local.get $pagesNeeded
-    memory.grow $0
+    memory.grow
     i32.const 0
     i32.lt_s
     if
@@ -332,7 +332,7 @@
  (func $~lib/rt/common/BLOCK#set:mmInfo (param $this i32) (param $mmInfo i32)
   local.get $this
   local.get $mmInfo
-  i32.store $0
+  i32.store
  )
  (func $~lib/rt/stub/__alloc (param $size i32) (result i32)
   (local $block i32)
@@ -386,22 +386,22 @@
  (func $~lib/rt/common/OBJECT#set:gcInfo (param $this i32) (param $gcInfo i32)
   local.get $this
   local.get $gcInfo
-  i32.store $0 offset=4
+  i32.store offset=4
  )
  (func $~lib/rt/common/OBJECT#set:gcInfo2 (param $this i32) (param $gcInfo2 i32)
   local.get $this
   local.get $gcInfo2
-  i32.store $0 offset=8
+  i32.store offset=8
  )
  (func $~lib/rt/common/OBJECT#set:rtId (param $this i32) (param $rtId i32)
   local.get $this
   local.get $rtId
-  i32.store $0 offset=12
+  i32.store offset=12
  )
  (func $~lib/rt/common/OBJECT#set:rtSize (param $this i32) (param $rtSize i32)
   local.get $this
   local.get $rtSize
-  i32.store $0 offset=16
+  i32.store offset=16
  )
  (func $~lib/rt/stub/__new (param $size i32) (param $id i32) (result i32)
   (local $ptr i32)
@@ -1190,7 +1190,7 @@
    local.get $0
    i32.const 8
    i32.sub
-   i32.load $0
+   i32.load
    local.set $1
    local.get $1
    i32.const 5
@@ -1207,7 +1207,7 @@
    local.get $0
    i32.const 8
    i32.sub
-   i32.load $0
+   i32.load
    local.set $1
    local.get $1
    i32.const 4

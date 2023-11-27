@@ -1,7 +1,7 @@
 (module
- (type $none_=>_none (func))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $0 (func))
+ (type $1 (func (param i32) (result i32)))
+ (type $2 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $tablebase/staticFunction i32 (i32.const 32))
  (global $~lib/native/ASC_TABLE_BASE i32 (i32.const 32))
@@ -16,11 +16,10 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $tablebase/foo
-  nop
  )
  (func $~lib/function/Function<%28%29=>void>#get:index (param $this i32) (result i32)
   local.get $this
-  i32.load $0
+  i32.load
   return
  )
  (func $~start
@@ -48,7 +47,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 32
   i32.const 32
   i32.eq
@@ -57,7 +56,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0
+  i32.store
   local.get $0
   call $~lib/function/Function<%28%29=>void>#get:index
   i32.const 32

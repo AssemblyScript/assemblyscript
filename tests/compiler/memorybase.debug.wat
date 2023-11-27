@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $0 (func))
  (global $memorybase/staticData i32 (i32.const 1024))
  (global $~lib/native/ASC_MEMORY_BASE i32 (i32.const 1024))
  (global $~lib/memory/__data_end i32 (i32.const 1028))

@@ -1,8 +1,8 @@
 (module
- (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
- (type $none_=>_none (func))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $0 (func (param f64 f64) (result f64)))
+ (type $1 (func (param f32 f32) (result f32)))
+ (type $2 (func))
+ (type $3 (func (param i32 i32) (result i32)))
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
@@ -800,7 +800,7 @@
     i32.add
     i32.shl
     i32.add
-    f64.load $0
+    f64.load
     local.set $invc
     i32.const 8
     local.get $i
@@ -809,7 +809,7 @@
     i32.add
     i32.shl
     i32.add
-    f64.load $0 offset=16
+    f64.load offset=16
     local.set $logc
     i32.const 8
     local.get $i
@@ -818,7 +818,7 @@
     i32.add
     i32.shl
     i32.add
-    f64.load $0 offset=24
+    f64.load offset=24
     local.set $logctail
     local.get $iz
     i64.const 2147483648
@@ -1128,7 +1128,7 @@
     i32.const 3
     i32.shl
     i32.add
-    i64.load $0
+    i64.load
     f64.reinterpret_i64
     local.set $tail
     i32.const 4104
@@ -1136,7 +1136,7 @@
     i32.const 3
     i32.shl
     i32.add
-    i64.load $0 offset=8
+    i64.load offset=8
     local.get $top
     i64.add
     local.set $sbits
@@ -1989,7 +1989,7 @@
     i32.add
     i32.shl
     i32.add
-    f64.load $0
+    f64.load
     local.set $invc
     i32.const 6152
     local.get $i
@@ -1998,7 +1998,7 @@
     i32.add
     i32.shl
     i32.add
-    f64.load $0 offset=8
+    f64.load offset=8
     local.set $logc
     local.get $uz
     f32.reinterpret_i32
@@ -2148,7 +2148,7 @@
     i32.const 3
     i32.shl
     i32.add
-    i64.load $0
+    i64.load
     local.set $t
     local.get $t
     local.get $ki

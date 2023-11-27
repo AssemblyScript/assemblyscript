@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $0 (func (param i32 i32 i32 i32)))
+ (type $1 (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33792))
  (memory $0 0)
@@ -26,13 +26,13 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $3
   local.get $0
-  i32.store $0
+  i32.store
   local.get $3
   local.get $1
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $3
   local.get $2
-  i32.store $0 offset=8
+  i32.store offset=8
   local.get $3
   i32.const 12
   i32.add

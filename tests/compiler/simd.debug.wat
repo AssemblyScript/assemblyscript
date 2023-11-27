@@ -1,28 +1,28 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_v128 (func (param i32 i32 i32) (result v128)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i64_=>_i32 (func (param i32 i32 i64) (result i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $none_=>_v128 (func (result v128)))
- (type $v128_=>_v128 (func (param v128) (result v128)))
- (type $i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
- (type $i32_i32_i32_i32_i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
- (type $i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32) (result v128)))
- (type $i64_=>_v128 (func (param i64) (result v128)))
- (type $i64_i64_=>_v128 (func (param i64 i64) (result v128)))
- (type $f32_f32_f32_=>_v128 (func (param f32 f32 f32) (result v128)))
- (type $f32_f32_f32_f32_=>_v128 (func (param f32 f32 f32 f32) (result v128)))
- (type $f64_=>_v128 (func (param f64) (result v128)))
- (type $f64_f64_=>_v128 (func (param f64 f64) (result v128)))
- (type $i32_i32_=>_v128 (func (param i32 i32) (result v128)))
- (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $0 (func (param i32) (result i32)))
+ (type $1 (func (param i32 i32)))
+ (type $2 (func))
+ (type $3 (func (param i32)))
+ (type $4 (func (param i32 i32 i32)))
+ (type $5 (func (param i32 i32) (result i32)))
+ (type $6 (func (param i32 i32 i32) (result v128)))
+ (type $7 (func (param i32 i32 i32 i32)))
+ (type $8 (func (param i32 i32 i64) (result i32)))
+ (type $9 (func (result i32)))
+ (type $10 (func (param i32 i32 i32) (result i32)))
+ (type $11 (func (result v128)))
+ (type $12 (func (param v128) (result v128)))
+ (type $13 (func (param i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
+ (type $14 (func (param i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
+ (type $15 (func (param i32 i32 i32 i32) (result v128)))
+ (type $16 (func (param i64) (result v128)))
+ (type $17 (func (param i64 i64) (result v128)))
+ (type $18 (func (param f32 f32 f32) (result v128)))
+ (type $19 (func (param f32 f32 f32 f32) (result v128)))
+ (type $20 (func (param f64) (result v128)))
+ (type $21 (func (param f64 f64) (result v128)))
+ (type $22 (func (param i32 i32) (result v128)))
+ (type $23 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -84,12 +84,12 @@
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $this i32) (param $nextWithColor i32)
   local.get $this
   local.get $nextWithColor
-  i32.store $0 offset=4
+  i32.store offset=4
  )
  (func $~lib/rt/itcms/Object#set:prev (param $this i32) (param $prev i32)
   local.get $this
   local.get $prev
-  i32.store $0 offset=8
+  i32.store offset=8
  )
  (func $~lib/rt/itcms/initLazy (param $space i32) (result i32)
   local.get $space
@@ -103,7 +103,7 @@
  )
  (func $~lib/rt/itcms/Object#get:nextWithColor (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=4
+  i32.load offset=4
  )
  (func $~lib/rt/itcms/Object#get:next (param $this i32) (result i32)
   local.get $this
@@ -177,7 +177,7 @@
  )
  (func $~lib/rt/itcms/Object#get:prev (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=8
+  i32.load offset=8
  )
  (func $~lib/rt/itcms/Object#set:next (param $this i32) (param $obj i32)
   local.get $this
@@ -247,11 +247,11 @@
  )
  (func $~lib/rt/itcms/Object#get:rtId (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=12
+  i32.load offset=12
  )
  (func $~lib/shared/typeinfo/Typeinfo#get:flags (param $this i32) (result i32)
   local.get $this
-  i32.load $0
+  i32.load
  )
  (func $~lib/rt/__typeinfo (param $id i32) (result i32)
   (local $ptr i32)
@@ -259,7 +259,7 @@
   local.set $ptr
   local.get $id
   local.get $ptr
-  i32.load $0
+  i32.load
   i32.gt_u
   if
    i32.const 272
@@ -391,7 +391,7 @@
    i32.lt_u
    if
     local.get $ptr
-    i32.load $0
+    i32.load
     local.get $cookie
     call $~lib/rt/itcms/__visit
     local.get $ptr
@@ -404,7 +404,7 @@
  )
  (func $~lib/rt/common/BLOCK#get:mmInfo (param $this i32) (result i32)
   local.get $this
-  i32.load $0
+  i32.load
  )
  (func $~lib/rt/itcms/Object#get:size (param $this i32) (result i32)
   i32.const 4
@@ -420,34 +420,34 @@
  (func $~lib/rt/tlsf/Root#set:flMap (param $this i32) (param $flMap i32)
   local.get $this
   local.get $flMap
-  i32.store $0
+  i32.store
  )
  (func $~lib/rt/common/BLOCK#set:mmInfo (param $this i32) (param $mmInfo i32)
   local.get $this
   local.get $mmInfo
-  i32.store $0
+  i32.store
  )
  (func $~lib/rt/tlsf/Block#set:prev (param $this i32) (param $prev i32)
   local.get $this
   local.get $prev
-  i32.store $0 offset=4
+  i32.store offset=4
  )
  (func $~lib/rt/tlsf/Block#set:next (param $this i32) (param $next i32)
   local.get $this
   local.get $next
-  i32.store $0 offset=8
+  i32.store offset=8
  )
  (func $~lib/rt/tlsf/Block#get:prev (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=4
+  i32.load offset=4
  )
  (func $~lib/rt/tlsf/Block#get:next (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=8
+  i32.load offset=8
  )
  (func $~lib/rt/tlsf/Root#get:flMap (param $this i32) (result i32)
   local.get $this
-  i32.load $0
+  i32.load
  )
  (func $~lib/rt/tlsf/removeBlock (param $root i32) (param $block i32)
   (local $blockInfo i32)
@@ -607,7 +607,7 @@
    i32.const 2
    i32.shl
    i32.add
-   i32.load $0 offset=96
+   i32.load offset=96
    br $~lib/rt/tlsf/GETHEAD|inlined.0
   end
   i32.eq
@@ -630,7 +630,7 @@
    i32.shl
    i32.add
    local.get $head
-   i32.store $0 offset=96
+   i32.store offset=96
    local.get $next
    i32.eqz
    if
@@ -644,7 +644,7 @@
      i32.const 2
      i32.shl
      i32.add
-     i32.load $0 offset=4
+     i32.load offset=4
      br $~lib/rt/tlsf/GETSL|inlined.0
     end
     local.set $slMap
@@ -667,7 +667,7 @@
     i32.shl
     i32.add
     local.get $slMap|23
-    i32.store $0 offset=4
+    i32.store offset=4
     local.get $slMap
     i32.eqz
     if
@@ -810,7 +810,7 @@
     local.get $block|7
     i32.const 4
     i32.sub
-    i32.load $0
+    i32.load
     br $~lib/rt/tlsf/GETFREELEFT|inlined.0
    end
    local.set $left
@@ -896,7 +896,7 @@
   i32.const 4
   i32.sub
   local.get $block
-  i32.store $0
+  i32.store
   local.get $size
   i32.const 256
   i32.lt_u
@@ -976,7 +976,7 @@
    i32.const 2
    i32.shl
    i32.add
-   i32.load $0 offset=96
+   i32.load offset=96
    br $~lib/rt/tlsf/GETHEAD|inlined.1
   end
   local.set $head
@@ -1010,7 +1010,7 @@
   i32.shl
   i32.add
   local.get $head|23
-  i32.store $0 offset=96
+  i32.store offset=96
   local.get $root
   local.get $root
   call $~lib/rt/tlsf/Root#get:flMap
@@ -1033,7 +1033,7 @@
    i32.const 2
    i32.shl
    i32.add
-   i32.load $0 offset=4
+   i32.load offset=4
    br $~lib/rt/tlsf/GETSL|inlined.1
   end
   i32.const 1
@@ -1047,7 +1047,7 @@
   i32.shl
   i32.add
   local.get $slMap
-  i32.store $0 offset=4
+  i32.store offset=4
  )
  (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $endU64 i64) (result i32)
   (local $end i32)
@@ -1099,7 +1099,7 @@
    local.get $root
    local.set $root|4
    local.get $root|4
-   i32.load $0 offset=1568
+   i32.load offset=1568
    br $~lib/rt/tlsf/GETTAIL|inlined.0
   end
   local.set $tail
@@ -1137,7 +1137,6 @@
     call $~lib/rt/common/BLOCK#get:mmInfo
     local.set $tailInfo
    else
-    nop
    end
   else
    i32.const 1
@@ -1212,7 +1211,7 @@
   local.set $tail|11
   local.get $root|10
   local.get $tail|11
-  i32.store $0 offset=1568
+  i32.store offset=1568
   local.get $root
   local.get $left
   call $~lib/rt/tlsf/insertBlock
@@ -1246,7 +1245,7 @@
   i32.xor
   i32.and
   local.set $rootOffset
-  memory.size $0
+  memory.size
   local.set $pagesBefore
   local.get $rootOffset
   i32.const 1572
@@ -1267,7 +1266,7 @@
    local.get $pagesNeeded
    local.get $pagesBefore
    i32.sub
-   memory.grow $0
+   memory.grow
    i32.const 0
    i32.lt_s
   else
@@ -1287,7 +1286,7 @@
   local.set $tail
   local.get $root|4
   local.get $tail
-  i32.store $0 offset=1568
+  i32.store offset=1568
   i32.const 0
   local.set $fl
   loop $for-loop|0
@@ -1307,7 +1306,7 @@
     i32.shl
     i32.add
     local.get $slMap
-    i32.store $0 offset=4
+    i32.store offset=4
     i32.const 0
     local.set $sl
     loop $for-loop|1
@@ -1333,7 +1332,7 @@
       i32.shl
       i32.add
       local.get $head
-      i32.store $0 offset=96
+      i32.store offset=96
       local.get $sl
       i32.const 1
       i32.add
@@ -1356,7 +1355,7 @@
   drop
   local.get $root
   local.get $memStart
-  memory.size $0
+  memory.size
   i64.extend_i32_s
   i64.const 16
   i64.shl
@@ -1841,7 +1840,7 @@
    i32.const 2
    i32.shl
    i32.add
-   i32.load $0 offset=4
+   i32.load offset=4
    br $~lib/rt/tlsf/GETSL|inlined.2
   end
   i32.const 0
@@ -1886,7 +1885,7 @@
      i32.const 2
      i32.shl
      i32.add
-     i32.load $0 offset=4
+     i32.load offset=4
      br $~lib/rt/tlsf/GETSL|inlined.3
     end
     local.set $slMap
@@ -1919,7 +1918,7 @@
      i32.const 2
      i32.shl
      i32.add
-     i32.load $0 offset=96
+     i32.load offset=96
      br $~lib/rt/tlsf/GETHEAD|inlined.2
     end
     local.set $head
@@ -1942,7 +1941,7 @@
     i32.const 2
     i32.shl
     i32.add
-    i32.load $0 offset=96
+    i32.load offset=96
     br $~lib/rt/tlsf/GETHEAD|inlined.3
    end
    local.set $head
@@ -1968,7 +1967,7 @@
    call $~lib/rt/tlsf/roundSize
    local.set $size
   end
-  memory.size $0
+  memory.size
   local.set $pagesBefore
   local.get $size
   i32.const 4
@@ -1981,7 +1980,7 @@
    local.get $root
    local.set $root|3
    local.get $root|3
-   i32.load $0 offset=1568
+   i32.load offset=1568
    br $~lib/rt/tlsf/GETTAIL|inlined.1
   end
   i32.ne
@@ -2008,19 +2007,19 @@
   select
   local.set $pagesWanted
   local.get $pagesWanted
-  memory.grow $0
+  memory.grow
   i32.const 0
   i32.lt_s
   if
    local.get $pagesNeeded
-   memory.grow $0
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     unreachable
    end
   end
-  memory.size $0
+  memory.size
   local.set $pagesAfter
   local.get $root
   local.get $pagesBefore
@@ -2222,12 +2221,12 @@
  (func $~lib/rt/itcms/Object#set:rtId (param $this i32) (param $rtId i32)
   local.get $this
   local.get $rtId
-  i32.store $0 offset=12
+  i32.store offset=12
  )
  (func $~lib/rt/itcms/Object#set:rtSize (param $this i32) (param $rtSize i32)
   local.get $this
   local.get $rtSize
-  i32.store $0 offset=16
+  i32.store offset=16
  )
  (func $~lib/rt/itcms/__new (param $size i32) (param $id i32) (result i32)
   (local $obj i32)
@@ -2278,7 +2277,7 @@
   local.get $ptr
   i32.const 0
   local.get $size
-  memory.fill $0
+  memory.fill
   local.get $ptr
   return
  )
@@ -2293,7 +2292,7 @@
    local.get $buffer
    local.get $data
    local.get $size
-   memory.copy $0 $0
+   memory.copy
   end
   local.get $buffer
   return
@@ -2368,11 +2367,11 @@
  )
  (func $~lib/array/Array<v128>#get:length_ (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=12
+  i32.load offset=12
  )
  (func $~lib/array/Array<v128>#get:dataStart (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=4
+  i32.load offset=4
  )
  (func $simd/test_v128
   (local $ptr i32)
@@ -2477,8 +2476,8 @@
   local.set $ptr
   local.get $ptr
   local.get $ptr
-  v128.load $0 offset=16
-  v128.store $0 offset=32
+  v128.load offset=16
+  v128.store offset=32
   local.get $ptr
   call $~lib/rt/tlsf/__free
   i32.const 16
@@ -2486,9 +2485,9 @@
   local.set $ptr|1
   local.get $ptr|1
   i32.const 42
-  i32.store8 $0
+  i32.store8
   local.get $ptr|1
-  v128.load8_splat $0
+  v128.load8_splat
   v128.const i32x4 0x2a2a2a2a 0x2a2a2a2a 0x2a2a2a2a 0x2a2a2a2a
   i8x16.eq
   i8x16.all_true
@@ -2510,9 +2509,9 @@
   local.set $ptr|2
   local.get $ptr|2
   i32.const 42
-  i32.store16 $0
+  i32.store16
   local.get $ptr|2
-  v128.load16_splat $0
+  v128.load16_splat
   v128.const i32x4 0x002a002a 0x002a002a 0x002a002a 0x002a002a
   i8x16.eq
   i8x16.all_true
@@ -2534,9 +2533,9 @@
   local.set $ptr|3
   local.get $ptr|3
   i32.const 42
-  i32.store $0
+  i32.store
   local.get $ptr|3
-  v128.load32_splat $0
+  v128.load32_splat
   v128.const i32x4 0x0000002a 0x0000002a 0x0000002a 0x0000002a
   i8x16.eq
   i8x16.all_true
@@ -2558,9 +2557,9 @@
   local.set $ptr|4
   local.get $ptr|4
   i64.const 42
-  i64.store $0
+  i64.store
   local.get $ptr|4
-  v128.load64_splat $0
+  v128.load64_splat
   v128.const i32x4 0x0000002a 0x00000000 0x0000002a 0x00000000
   i8x16.eq
   i8x16.all_true
@@ -2582,9 +2581,9 @@
   local.set $ptr|5
   local.get $ptr|5
   i32.const 42
-  i32.store $0
+  i32.store
   local.get $ptr|5
-  v128.load32_zero $0
+  v128.load32_zero
   v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
   i8x16.eq
   i8x16.all_true
@@ -2606,9 +2605,9 @@
   local.set $ptr|6
   local.get $ptr|6
   i64.const 42
-  i64.store $0
+  i64.store
   local.get $ptr|6
-  v128.load64_zero $0
+  v128.load64_zero
   v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
   i8x16.eq
   i8x16.all_true
@@ -2763,12 +2762,12 @@
   local.set $ptr|9
   local.get $ptr|9
   i32.const 42
-  i32.store $0
+  i32.store
   v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
   local.set $v|10
   local.get $ptr|9
   local.get $v|10
-  v128.load32_lane $0 0
+  v128.load32_lane 0
   local.set $v|10
   local.get $v|10
   v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
@@ -2792,12 +2791,12 @@
   local.set $ptr|11
   local.get $ptr|11
   i32.const 42
-  i32.store $0
+  i32.store
   v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
   local.set $v|12
   local.get $ptr|11
   local.get $v|12
-  v128.load32_lane $0 0
+  v128.load32_lane 0
   local.set $v|12
   local.get $v|12
   v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
@@ -2816,7 +2815,7 @@
   end
   local.get $ptr|11
   local.get $v|12
-  v128.load8_lane $0 0
+  v128.load8_lane 0
   local.set $v|12
   local.get $v|12
   v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
@@ -2835,7 +2834,7 @@
   end
   local.get $ptr|11
   local.get $v|12
-  v128.load16_lane $0 0
+  v128.load16_lane 0
   local.set $v|12
   local.get $v|12
   v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
@@ -2854,7 +2853,7 @@
   end
   local.get $ptr|11
   local.get $v|12
-  v128.load32_lane $0 0
+  v128.load32_lane 0
   local.set $v|12
   local.get $v|12
   v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
@@ -2873,7 +2872,7 @@
   end
   local.get $ptr|11
   local.get $v|12
-  v128.load64_lane $0 0
+  v128.load64_lane 0
   local.set $v|12
   local.get $v|12
   v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
@@ -2899,9 +2898,9 @@
   local.set $v|14
   local.get $ptr|13
   local.get $v|14
-  v128.store32_lane $0 0
+  v128.store32_lane 0
   local.get $ptr|13
-  i32.load $0
+  i32.load
   i32.const 42
   i32.eq
   i32.eqz
@@ -2915,9 +2914,9 @@
   end
   local.get $ptr|13
   local.get $v|14
-  v128.store8_lane $0 4
+  v128.store8_lane 4
   local.get $ptr|13
-  i32.load8_s $0
+  i32.load8_s
   i32.const 43
   i32.eq
   i32.eqz
@@ -2931,9 +2930,9 @@
   end
   local.get $ptr|13
   local.get $v|14
-  v128.store16_lane $0 4
+  v128.store16_lane 4
   local.get $ptr|13
-  i32.load16_s $0
+  i32.load16_s
   i32.const 44
   i32.eq
   i32.eqz
@@ -2947,9 +2946,9 @@
   end
   local.get $ptr|13
   local.get $v|14
-  v128.store32_lane $0 1
+  v128.store32_lane 1
   local.get $ptr|13
-  i32.load $0
+  i32.load
   i32.const 43
   i32.eq
   i32.eqz
@@ -2963,9 +2962,9 @@
   end
   local.get $ptr|13
   local.get $v|14
-  v128.store64_lane $0 offset=1 1
+  v128.store64_lane offset=1 1
   local.get $ptr|13
-  i64.load $0 offset=1
+  i64.load offset=1
   i64.const 44
   i64.eq
   i32.eqz
@@ -4289,30 +4288,30 @@
   local.set $ptr
   local.get $ptr
   i32.const 1
-  i32.store8 $0
+  i32.store8
   local.get $ptr
   i32.const 2
-  i32.store8 $0 offset=1
+  i32.store8 offset=1
   local.get $ptr
   i32.const 3
-  i32.store8 $0 offset=2
+  i32.store8 offset=2
   local.get $ptr
   i32.const 4
-  i32.store8 $0 offset=3
+  i32.store8 offset=3
   local.get $ptr
   i32.const 5
-  i32.store8 $0 offset=4
+  i32.store8 offset=4
   local.get $ptr
   i32.const 6
-  i32.store8 $0 offset=5
+  i32.store8 offset=5
   local.get $ptr
   i32.const 7
-  i32.store8 $0 offset=6
+  i32.store8 offset=6
   local.get $ptr
   i32.const -1
-  i32.store8 $0 offset=7
+  i32.store8 offset=7
   local.get $ptr
-  v128.load8x8_s $0 align=1
+  v128.load8x8_s align=1
   v128.const i32x4 0x00020001 0x00040003 0x00060005 0xffff0007
   i8x16.eq
   i8x16.all_true
@@ -4328,7 +4327,7 @@
    unreachable
   end
   local.get $ptr
-  v128.load8x8_u $0 align=1
+  v128.load8x8_u align=1
   v128.const i32x4 0x00020001 0x00040003 0x00060005 0x00ff0007
   i8x16.eq
   i8x16.all_true
@@ -4962,18 +4961,18 @@
   local.set $ptr
   local.get $ptr
   i32.const 1
-  i32.store16 $0
+  i32.store16
   local.get $ptr
   i32.const 2
-  i32.store16 $0 offset=2
+  i32.store16 offset=2
   local.get $ptr
   i32.const 3
-  i32.store16 $0 offset=4
+  i32.store16 offset=4
   local.get $ptr
   i32.const -1
-  i32.store16 $0 offset=6
+  i32.store16 offset=6
   local.get $ptr
-  v128.load16x4_s $0 align=2
+  v128.load16x4_s align=2
   v128.const i32x4 0x00000001 0x00000002 0x00000003 0xffffffff
   i8x16.eq
   i8x16.all_true
@@ -4989,7 +4988,7 @@
    unreachable
   end
   local.get $ptr
-  v128.load16x4_u $0 align=2
+  v128.load16x4_u align=2
   v128.const i32x4 0x00000001 0x00000002 0x00000003 0x0000ffff
   i8x16.eq
   i8x16.all_true
@@ -5304,12 +5303,12 @@
   local.set $ptr
   local.get $ptr
   i32.const 1
-  i32.store $0
+  i32.store
   local.get $ptr
   i32.const -1
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $ptr
-  v128.load32x2_s $0 align=4
+  v128.load32x2_s align=4
   v128.const i32x4 0x00000001 0x00000000 0xffffffff 0xffffffff
   i8x16.eq
   i8x16.all_true
@@ -5325,7 +5324,7 @@
    unreachable
   end
   local.get $ptr
-  v128.load32x2_u $0 align=4
+  v128.load32x2_u align=4
   v128.const i32x4 0x00000001 0x00000000 0xffffffff 0x00000000
   i8x16.eq
   i8x16.all_true
@@ -6811,7 +6810,7 @@
   local.get $1
   call $~lib/object/Object~visit
   local.get $0
-  i32.load $0
+  i32.load
   local.tee $2
   if
    local.get $2
@@ -6820,11 +6819,10 @@
   end
  )
  (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
-  nop
  )
  (func $~lib/array/Array<v128>#get:buffer (param $this i32) (result i32)
   local.get $this
-  i32.load $0
+  i32.load
  )
  (func $~lib/array/Array<v128>~visit (param $0 i32) (param $1 i32)
   local.get $0
@@ -6836,7 +6834,7 @@
  )
  (func $~lib/array/Array<i32>#get:buffer (param $this i32) (result i32)
   local.get $this
-  i32.load $0
+  i32.load
  )
  (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
@@ -6857,7 +6855,7 @@
          local.get $0
          i32.const 8
          i32.sub
-         i32.load $0
+         i32.load
          br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<v128> $~lib/array/Array<i32> $invalid
         end
         return
@@ -6910,13 +6908,13 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $index
   local.get $this
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $3
-  i32.store $0
+  i32.store
   local.get $3
   call $~lib/array/Array<v128>#get:length_
   i32.ge_u
@@ -6932,14 +6930,14 @@
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $3
-  i32.store $0
+  i32.store
   local.get $3
   call $~lib/array/Array<v128>#get:dataStart
   local.get $index
   i32.const 4
   i32.shl
   i32.add
-  v128.load $0
+  v128.load
   local.set $value
   i32.const 0
   drop
@@ -6964,8 +6962,8 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store $0
-  memory.size $0
+  i64.store
+  memory.size
   i32.const 16
   i32.shl
   global.get $~lib/memory/__heap_base
@@ -6989,12 +6987,12 @@
   i32.const 32
   call $~lib/rt/__newArray
   local.tee $2
-  i32.store $0
+  i32.store
   local.get $2
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $3
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $3
   i32.const 0
   call $~lib/array/Array<v128>#__get
@@ -7046,14 +7044,14 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 0
   drop
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0
+  i32.store
   local.get $2
   call $~lib/array/Array<v128>#get:buffer
   local.get $cookie
@@ -7072,14 +7070,14 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 0
   drop
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0
+  i32.store
   local.get $2
   call $~lib/array/Array<i32>#get:buffer
   local.get $cookie
@@ -7101,7 +7099,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.store
   local.get $length
   local.get $alignLog2
   i32.shl
@@ -7112,27 +7110,27 @@
   local.get $data
   call $~lib/rt/__newBuffer
   local.tee $buffer
-  i32.store $0
+  i32.store
   i32.const 16
   local.get $id
   call $~lib/rt/itcms/__new
   local.set $array
   local.get $array
   local.get $buffer
-  i32.store $0
+  i32.store
   local.get $array
   local.get $buffer
   i32.const 0
   call $~lib/rt/itcms/__link
   local.get $array
   local.get $buffer
-  i32.store $0 offset=4
+  i32.store offset=4
   local.get $array
   local.get $bufferSize
-  i32.store $0 offset=8
+  i32.store offset=8
   local.get $array
   local.get $length
-  i32.store $0 offset=12
+  i32.store offset=12
   local.get $array
   local.set $7
   global.get $~lib/memory/__stack_pointer

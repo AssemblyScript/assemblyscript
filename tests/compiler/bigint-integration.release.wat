@@ -1,7 +1,7 @@
 (module
- (type $none_=>_i64 (func (result i64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_none (func))
+ (type $0 (func (result i64)))
+ (type $1 (func (param i32 i32 i32 i32)))
+ (type $2 (func))
  (import "bigint-integration" "externalValue" (global $bigint-integration/externalValue i64))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "bigint-integration" "getExternalValue" (func $bigint-integration/getExternalValue (result i64)))

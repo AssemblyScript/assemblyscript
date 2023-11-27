@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $0 (func))
  (global $~lib/a/index/a i32 (i32.const 1))
  (global $~lib/c/index/c i32 (i32.const 3))
  (global $~lib/b/index/b i32 (i32.const 2))

@@ -1,6 +1,5 @@
 node_modules/
 *debug.log
-dist/
 build/
 raw/
 .history
@@ -10,3 +9,10 @@ raw/
 cli/index.generated.js
 src/diagnosticMessages.generated.ts
 coverage/
+
+dist/*.generated.d.ts
+dist/*.map
+dist/asc.js
+dist/assemblyscript.js
+dist/importmap.json
+dist/web.js

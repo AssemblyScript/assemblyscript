@@ -159,18 +159,21 @@ type TempMap = Map<TypeRef,LocalIndex>;
 
 /** Attempts to match the `__tostack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
 function matchPattern(module: Module, expr: ExpressionRef): ExpressionRef {
-  if (
+  let isFound = false;
+  while (
     _BinaryenExpressionGetId(expr) == ExpressionId.Call &&
     module.readStringCached(_BinaryenCallGetTarget(expr)) == BuiltinNames.tostack
   ) {
     assert(_BinaryenCallGetNumOperands(expr) == 1);
-    return _BinaryenCallGetOperandAt(expr, 0);
+    expr = _BinaryenCallGetOperandAt(expr, 0);
+    isFound = true;
   }
-  return 0;
+  if (!isFound) return 0;
+  return expr;
 }
 
 /** Tests whether a `value` matched by `matchTostack` needs a slot. */
-function needsSlot(module: Module, value: ExpressionRef): bool {
+function needsSlot(value: ExpressionRef): bool {
   switch (_BinaryenExpressionGetId(value)) {
     // no need to stack null pointers
     case ExpressionId.Const: return !isConstZero(value);
@@ -344,7 +347,7 @@ export class ShadowStackPass extends Pass {
       let operand = operands[i];
       let match = matchPattern(module, operand);
       if (!match) continue;
-      if (!needsSlot(module, match)) {
+      if (!needsSlot(match)) {
         operands[i] = match;
         continue;
       }
@@ -434,7 +437,7 @@ export class ShadowStackPass extends Pass {
     let value = _BinaryenLocalSetGetValue(localSet);
     let match = matchPattern(module, value);
     if (!match) return;
-    if (!needsSlot(module, match)) {
+    if (!needsSlot(match)) {
       _BinaryenLocalSetSetValue(localSet, match);
       return;
     }

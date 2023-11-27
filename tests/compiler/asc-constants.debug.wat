@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $0 (func))
  (global $~lib/native/ASC_TARGET i32 (i32.const 1))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/native/ASC_NO_ASSERT i32 (i32.const 0))

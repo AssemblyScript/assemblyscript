@@ -1,5 +1,5 @@
 (module
- (type $i32_=>_none (func (param i32)))
+ (type $0 (func (param i32)))
  (memory $0 0)
  (export "testInherit" (func $continue/testInherit))
  (export "memory" (memory $0))

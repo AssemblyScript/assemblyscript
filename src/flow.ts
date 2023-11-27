@@ -31,7 +31,8 @@ import {
   TypedElement,
   mangleInternalName,
   Property,
-  PropertyPrototype
+  PropertyPrototype,
+  TypeDefinition
 } from "./program";
 
 import {
@@ -250,6 +251,8 @@ export class Flow {
   breakLabel: string | null = null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
+  /** Scoped type alias. */
+  scopedTypeAlias: Map<string,TypeDefinition> | null = null;
   /** Local flags. */
   localFlags: LocalFlags[] = [];
   /** Field flags on `this`. Constructors only. */
@@ -403,6 +406,38 @@ export class Flow {
     let falseFlows = this.falseFlows;
     if (!falseFlows) this.falseFlows = falseFlows = new Map();
     falseFlows.set(condExpr, falseFlow);
+  }
+
+  addScopedTypeAlias(name: string, definition: TypeDefinition): void {
+    let scopedTypeAlias = this.scopedTypeAlias;
+    if (!scopedTypeAlias) this.scopedTypeAlias = scopedTypeAlias = new Map();
+    scopedTypeAlias.set(name, definition);
+  }
+
+  lookupScopedTypeAlias(name: string): TypeDefinition | null {
+    let current: Flow | null = this;
+    do {
+      let scopedTypeAlias = current.scopedTypeAlias;
+      if (scopedTypeAlias && scopedTypeAlias.has(name)) {
+        return assert(scopedTypeAlias.get(name));
+      }
+      current = current.parent;
+    } while (current);
+    return null;
+  }
+
+  lookupTypeAlias(name: string): TypeDefinition | null {
+    let definition: TypeDefinition | null = null;
+    if (definition = this.lookupScopedTypeAlias(name)) return definition;
+
+    let sourceParent = this.sourceFunction.parent;
+    if (sourceParent.kind == ElementKind.Function) {
+      // lookup parent function.
+      let parentFunction = <Function>sourceParent;
+      return parentFunction.flow.lookupTypeAlias(name);
+    }
+    
+    return null;
   }
 
   /** Gets a free temporary local of the specified type. */

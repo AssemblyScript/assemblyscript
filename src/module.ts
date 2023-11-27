@@ -202,13 +202,6 @@ export namespace TypeBuilderErrorReason {
   }
 }
 
-/** Type system constants. */
-export type TypeSystem = binaryen.TypeSystem;
-export namespace TypeSystem {
-  export const Isorecursive: TypeSystem = 0 /* _BinaryenTypeSystemIsorecursive */;
-  export const Nominal: TypeSystem = 1 /* _BinaryenTypeSystemNominal */;
-}
-
 /** Binaryen feature constants. */
 export const enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
@@ -224,11 +217,11 @@ export const enum FeatureFlags {
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
-  RelaxedSIMD = 8192 /* _BinaryenFeatureRelaxedSIMD */,
-  ExtendedConst = 16384 /* _BinaryenFeatureExtendedConst */,
-  Stringref = 32768 /* _BinaryenFeatureStrings */,
-  MultiMemory = 65536 /* _BinaryenFeatureMultiMemories */,
-  All = 126975 /* _BinaryenFeatureAll */
+  RelaxedSIMD = 4096 /* _BinaryenFeatureRelaxedSIMD */,
+  ExtendedConst = 8192 /* _BinaryenFeatureExtendedConst */,
+  Stringref = 16384 /* _BinaryenFeatureStrings */,
+  MultiMemory = 32768 /* _BinaryenFeatureMultiMemory */,
+  All = 131071 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
@@ -282,43 +275,44 @@ export const enum ExpressionId {
   TableSet = 46 /* _BinaryenTableSetId */,
   TableSize = 47 /* _BinaryenTableSizeId */,
   TableGrow = 48 /* _BinaryenTableGrowId */,
-  Try = 49 /* _BinaryenTryId */,
-  Throw = 50 /* _BinaryenThrowId */,
-  Rethrow = 51 /* _BinaryenRethrowId */,
-  TupleMake = 52 /* _BinaryenTupleMakeId */,
-  TupleExtract = 53 /* _BinaryenTupleExtractId */,
-  I31New = 54 /* _BinaryenI31NewId */,
-  I31Get = 55 /* _BinaryenI31GetId */,
-  CallRef = 56 /* _BinaryenCallRefId */,
-  RefTest = 57 /* _BinaryenRefTestId */,
-  RefCast = 58 /* _BinaryenRefCastId */,
-  BrOn = 59 /* _BinaryenBrOnId */,
-  StructNew = 60 /* _BinaryenStructNewId */,
-  StructGet = 61 /* _BinaryenStructGetId */,
-  StructSet = 62 /* _BinaryenStructSetId */,
-  ArrayNew = 63 /* _BinaryenArrayNewId */,
+  Try = 50 /* _BinaryenTryId */,
+  Throw = 51 /* _BinaryenThrowId */,
+  Rethrow = 52 /* _BinaryenRethrowId */,
+  TupleMake = 53 /* _BinaryenTupleMakeId */,
+  TupleExtract = 54 /* _BinaryenTupleExtractId */,
+  RefI31 = 55 /* _BinaryenRefI31Id */,
+  I31Get = 56 /* _BinaryenI31GetId */,
+  CallRef = 57 /* _BinaryenCallRefId */,
+  RefTest = 58 /* _BinaryenRefTestId */,
+  RefCast = 59 /* _BinaryenRefCastId */,
+  BrOn = 60 /* _BinaryenBrOnId */,
+  StructNew = 61 /* _BinaryenStructNewId */,
+  StructGet = 62 /* _BinaryenStructGetId */,
+  StructSet = 63 /* _BinaryenStructSetId */,
+  ArrayNew = 64 /* _BinaryenArrayNewId */,
   ArrayNewSeg = 64 /* TODO_BinaryenArraySegId */,
-  ArrayNewFixed = 65 /* _BinaryenArrayNewFixedId */,
-  ArrayGet = 66 /* _BinaryenArrayGetId */,
-  ArraySet = 67 /* _BinaryenArraySetId */,
-  ArrayLen = 68 /* _BinaryenArrayLenId */,
-  ArrayCopy = 69 /* _BinaryenArrayCopyId */,
-  ArrayFill = 70 /* _BinaryenArrayFillId */,
-  ArrayInit = 71 /* _BinaryenArrayInitId */,
-  RefAs = 72 /* _BinaryenRefAsId */,
-  StringNew = 73 /* _BinaryenStringNewId */,
-  StringConst = 74 /* _BinaryenStringConstId */,
-  StringMeasure = 75 /* _BinaryenStringMeasureId */,
-  StringEncode = 76 /* _BinaryenStringEncodeId */,
-  StringConcat = 77 /* _BinaryenStringConcatId */,
-  StringEq = 78 /* _BinaryenStringEqId */,
-  StringAs = 79 /* _BinaryenStringAsId */,
-  StringWTF8Advance = 80 /* _BinaryenStringWTF8AdvanceId */,
-  StringWTF16Get = 81 /* _BinaryenStringWTF16GetId */,
-  StringIterNext = 82 /* _BinaryenStringIterNextId */,
-  StringIterMove = 83 /* _BinaryenStringIterMoveId */,
-  StringSliceWTF = 84 /* _BinaryenStringSliceWTFId */,
-  StringSliceIter = 85 /* _BinaryenStringSliceIterId */
+  ArrayNewFixed = 67 /* _BinaryenArrayNewFixedId */,
+  ArrayGet = 68 /* _BinaryenArrayGetId */,
+  ArraySet = 69 /* _BinaryenArraySetId */,
+  ArrayLen = 70 /* _BinaryenArrayLenId */,
+  ArrayCopy = 71 /* _BinaryenArrayCopyId */,
+  ArrayFill = 72 /* _BinaryenArrayFillId */,
+  ArrayInitData = 73 /* _BinaryenArrayInitDataId */,
+  ArrayInitElem = 74 /* _BinaryenArrayInitElemId */,
+  RefAs = 75 /* _BinaryenRefAsId */,
+  StringNew = 76 /* _BinaryenStringNewId */,
+  StringConst = 77 /* _BinaryenStringConstId */,
+  StringMeasure = 78 /* _BinaryenStringMeasureId */,
+  StringEncode = 79 /* _BinaryenStringEncodeId */,
+  StringConcat = 80 /* _BinaryenStringConcatId */,
+  StringEq = 81 /* _BinaryenStringEqId */,
+  StringAs = 82 /* _BinaryenStringAsId */,
+  StringWTF8Advance = 83 /* _BinaryenStringWTF8AdvanceId */,
+  StringWTF16Get = 84 /* _BinaryenStringWTF16GetId */,
+  StringIterNext = 85 /* _BinaryenStringIterNextId */,
+  StringIterMove = 86 /* _BinaryenStringIterMoveId */,
+  StringSliceWTF = 87 /* _BinaryenStringSliceWTFId */,
+  StringSliceIter = 88 /* _BinaryenStringSliceIterId */
 }
 
 /** Binaryen external kind constants. */
@@ -1272,7 +1266,7 @@ export const enum StringNewOp {
   /** string.new_wtf8 wtf8 */
   WTF8 = 1 /* _BinaryenStringNewWTF8 */,
   /** string.new_wtf8 replace */
-  Replace = 2 /* _BinaryenStringNewReplace */,
+  LossyUTF8 = 2 /* _BinaryenStringNewLossyUTF8 */,
   /** string.new_wtf16 */
   WTF16 = 3 /* _BinaryenStringNewWTF16 */,
   /** string.new_wtf8_array utf8 */
@@ -1280,7 +1274,7 @@ export const enum StringNewOp {
   /** string.new_wtf8_array wtf8 */
   WTF8Array = 5 /* _BinaryenStringNewWTF8Array */,
   /** string.new_wtf8_array replace */
-  ReplaceArray = 6 /* _BinaryenStringNewReplaceArray */,
+  LossyUTF8Array = 6 /* _BinaryenStringNewLossyUTF8Array */,
   /** string.new_wtf16_array */
   WTF16Array = 7 /* _BinaryenStringNewWTF16Array */,
   /** string.from_code_point */
@@ -1305,16 +1299,20 @@ export const enum StringMeasureOp {
 export const enum StringEncodeOp {
   /** string.encode_wtf8 utf8 */
   UTF8 = 0 /* _BinaryenStringEncodeUTF8 */,
+  /** string.encode_lossy_utf8 utf8 */
+  LossyUTF8 = 1 /* _BinaryenStringEncodeLossyUTF8 */,
   /** string.encode_wtf8 wtf8 */
-  WTF8 = 1 /* _BinaryenStringEncodeWTF8 */,
+  WTF8 = 2 /* _BinaryenStringEncodeWTF8 */,
   /** string.encode_wtf16 */
-  WTF16 = 2 /* _BinaryenStringEncodeWTF16 */,
+  WTF16 = 3 /* _BinaryenStringEncodeWTF16 */,
   /** string.encode_wtf8_array utf8 */
-  UTF8Array = 3 /* _BinaryenStringEncodeUTF8Array */,
+  UTF8Array = 4 /* _BinaryenStringEncodeUTF8Array */,
+  /** string.encode_lossy_utf8_array utf8 */
+  LossyUTF8Array = 5 /* _BinaryenStringEncodeLossyUTF8Array */,
   /** string.encode_wtf8_array wtf8 */
-  WTF8Array = 4 /* _BinaryenStringEncodeWTF8Array */,
+  WTF8Array = 6 /* _BinaryenStringEncodeWTF8Array */,
   /** string.encode_wtf16_array */
-  WTF16Array = 5 /* _BinaryenStringEncodeWTF16Array */
+  WTF16Array = 7 /* _BinaryenStringEncodeWTF16Array */
 }
 
 /** Binaryen StringEq operation constants. */
@@ -1378,7 +1376,6 @@ export class Module {
   ) {
     assert(sizeType == TypeRef.I32 || sizeType == TypeRef.I64);
     this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
-    binaryen._BinaryenSetTypeSystem(TypeSystem.Nominal);
   }
 
   private lit: usize;
@@ -2126,7 +2123,7 @@ export class Module {
   i31_new(
     value: ExpressionRef
   ): ExpressionRef {
-    return binaryen._BinaryenI31New(this.ref, value);
+    return binaryen._BinaryenRefI31(this.ref, value);
   }
 
   i31_get(
@@ -2959,7 +2956,7 @@ export class Module {
       case ExpressionId.Const:
       case ExpressionId.RefNull:
       case ExpressionId.RefFunc:
-      case ExpressionId.I31New: return true;
+      case ExpressionId.RefI31: return true;
       case ExpressionId.Binary: {
         if (this.getFeatures() & FeatureFlags.ExtendedConst) {
           switch (getBinaryOp(expr)) {
@@ -3713,7 +3710,6 @@ export function ensureType(type: Type): TypeRef {
     // @ts-ignore: Wasm only
     assert(sizeof<usize>() == 4); // ABI code below assumes 32-bit pointers
   }
-  assert(binaryen._BinaryenGetTypeSystem() == TypeSystem.Nominal);
   let builder = binaryen._TypeBuilderCreate(0);
   let seen = new Map<Type,HeapTypeRef>();
   prepareType(builder, seen, type); // drop temp return

@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
+ (type $0 (func (param i32 i32) (result i32)))
+ (type $1 (func (param i32)))
  (global $exports/Animal.CAT i32 (i32.const 0))
  (global $exports/Animal.DOG i32 (i32.const 1))
  (global $exports/animals.Animal.CAT i32 (i32.const 0))

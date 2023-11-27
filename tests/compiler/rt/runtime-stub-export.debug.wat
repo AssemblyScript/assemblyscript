@@ -1,10 +1,10 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $0 (func (param i32 i32)))
+ (type $1 (func (param i32)))
+ (type $2 (func (param i32) (result i32)))
+ (type $3 (func))
+ (type $4 (func (param i32 i32 i32 i32)))
+ (type $5 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -30,7 +30,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $pagesWanted i32)
-  memory.size $0
+  memory.size
   local.set $pagesBefore
   local.get $pagesBefore
   i32.const 16
@@ -68,12 +68,12 @@
    select
    local.set $pagesWanted
    local.get $pagesWanted
-   memory.grow $0
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     local.get $pagesNeeded
-    memory.grow $0
+    memory.grow
     i32.const 0
     i32.lt_s
     if
@@ -87,7 +87,7 @@
  (func $~lib/rt/common/BLOCK#set:mmInfo (param $this i32) (param $mmInfo i32)
   local.get $this
   local.get $mmInfo
-  i32.store $0
+  i32.store
  )
  (func $~lib/rt/stub/__alloc (param $size i32) (result i32)
   (local $block i32)
@@ -141,22 +141,22 @@
  (func $~lib/rt/common/OBJECT#set:gcInfo (param $this i32) (param $gcInfo i32)
   local.get $this
   local.get $gcInfo
-  i32.store $0 offset=4
+  i32.store offset=4
  )
  (func $~lib/rt/common/OBJECT#set:gcInfo2 (param $this i32) (param $gcInfo2 i32)
   local.get $this
   local.get $gcInfo2
-  i32.store $0 offset=8
+  i32.store offset=8
  )
  (func $~lib/rt/common/OBJECT#set:rtId (param $this i32) (param $rtId i32)
   local.get $this
   local.get $rtId
-  i32.store $0 offset=12
+  i32.store offset=12
  )
  (func $~lib/rt/common/OBJECT#set:rtSize (param $this i32) (param $rtSize i32)
   local.get $this
   local.get $rtSize
-  i32.store $0 offset=16
+  i32.store offset=16
  )
  (func $~lib/rt/stub/__new (param $size i32) (param $id i32) (result i32)
   (local $ptr i32)
@@ -203,10 +203,8 @@
   return
  )
  (func $~lib/rt/stub/__unpin (param $ptr i32)
-  nop
  )
  (func $~lib/rt/stub/__collect
-  nop
  )
  (func $~start
   global.get $~lib/memory/__heap_base

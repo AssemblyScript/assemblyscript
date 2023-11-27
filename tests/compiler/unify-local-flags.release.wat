@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $0 (func))
  (memory $0 0)
  (export "testFor" (func $unify-local-flags/testFor))
  (export "testWhile" (func $unify-local-flags/testWhile))

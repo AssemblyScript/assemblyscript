@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $0 (func))
  (global $merge/globalType i32 (i32.const 2))
  (global $merge/globalType_test (mut i32) (i32.const 0))
  (global $merge/typeGlobal i32 (i32.const 3))
@@ -19,52 +19,36 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $merge/namespaceType.test
-  nop
  )
  (func $merge/typeNamespace.test
-  nop
  )
  (func $merge/functionType
-  nop
  )
  (func $merge/typeFunction
-  nop
  )
  (func $merge/classNamespace.test1
-  nop
  )
  (func $merge/classNamespace.test2
-  nop
  )
  (func $merge/namespaceClass.test1
-  nop
  )
  (func $merge/namespaceClass.test2
-  nop
  )
  (func $merge/functionNamespace
-  nop
  )
  (func $merge/functionNamespace.test
-  nop
  )
  (func $merge/namespaceFunction.test
-  nop
  )
  (func $merge/namespaceFunction
-  nop
  )
  (func $merge/enumNamespace.test
-  nop
  )
  (func $merge/namespaceEnum.test
-  nop
  )
  (func $merge/namespaceNamespace.test1
-  nop
  )
  (func $merge/namespaceNamespace.test2
-  nop
  )
  (func $start:merge
   global.get $merge/globalType

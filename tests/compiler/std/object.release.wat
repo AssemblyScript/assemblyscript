@@ -1,7 +1,7 @@
 (module
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $none_=>_none (func))
+ (type $0 (func (param i32 i32 i32 i32)))
+ (type $1 (func (param i32 i32) (result i32)))
+ (type $2 (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data $0 (i32.const 1036) ",")
@@ -44,14 +44,14 @@
   local.get $0
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  i32.load offset=16
   i32.const 1
   i32.shr_u
   local.tee $3
   local.get $1
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  i32.load offset=16
   i32.const 1
   i32.shr_u
   i32.ne
@@ -60,25 +60,29 @@
    return
   end
   local.get $0
-  local.tee $2
-  i32.const 7
-  i32.and
-  local.get $1
-  i32.const 7
-  i32.and
-  i32.or
-  i32.eqz
+  local.set $2
   local.get $3
   local.tee $0
   i32.const 4
   i32.ge_u
-  i32.and
+  if (result i32)
+   local.get $2
+   i32.const 7
+   i32.and
+   local.get $1
+   i32.const 7
+   i32.and
+   i32.or
+  else
+   i32.const 1
+  end
+  i32.eqz
   if
    loop $do-loop|0
     local.get $2
-    i64.load $0
+    i64.load
     local.get $1
-    i64.load $0
+    i64.load
     i64.eq
     if
      local.get $2
@@ -99,7 +103,7 @@
     end
    end
   end
-  block $__inlined_func$~lib/util/string/compareImpl
+  block $__inlined_func$~lib/util/string/compareImpl$1
    loop $while-continue|1
     local.get $0
     local.tee $3
@@ -109,17 +113,17 @@
     local.get $3
     if
      local.get $2
-     i32.load16_u $0
+     i32.load16_u
      local.tee $5
      local.get $1
-     i32.load16_u $0
+     i32.load16_u
      local.tee $4
      i32.sub
      local.set $3
      local.get $4
      local.get $5
      i32.ne
-     br_if $__inlined_func$~lib/util/string/compareImpl
+     br_if $__inlined_func$~lib/util/string/compareImpl$1
      local.get $2
      i32.const 2
      i32.add
@@ -210,7 +214,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  memory.size $0
+  memory.size
   local.tee $1
   i32.const 16
   i32.shl
@@ -235,12 +239,12 @@
    local.get $1
    i32.lt_s
    select
-   memory.grow $0
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     local.get $0
-    memory.grow $0
+    memory.grow
     i32.const 0
     i32.lt_s
     if
@@ -250,20 +254,20 @@
   end
   i32.const 1340
   i32.const 28
-  i32.store $0
+  i32.store
   i32.const 1344
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 1348
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 1352
   i32.const 4
-  i32.store $0
+  i32.store
   i32.const 1356
   i32.const 0
-  i32.store $0
-  memory.size $0
+  i32.store
+  memory.size
   local.tee $1
   i32.const 16
   i32.shl
@@ -288,12 +292,12 @@
    local.get $1
    i32.lt_s
    select
-   memory.grow $0
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     local.get $0
-    memory.grow $0
+    memory.grow
     i32.const 0
     i32.lt_s
     if
@@ -303,21 +307,21 @@
   end
   i32.const 1372
   i32.const 28
-  i32.store $0
+  i32.store
   i32.const 1376
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 1380
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 1384
   i32.const 5
-  i32.store $0
+  i32.store
   i32.const 1388
   i32.const 0
-  i32.store $0
+  i32.store
   i32.const 1384
-  i32.load $0
+  i32.load
   i32.const 5
   i32.ne
   if
@@ -329,7 +333,7 @@
    unreachable
   end
   i32.const 1352
-  i32.load $0
+  i32.load
   i32.const 4
   i32.ne
   if
@@ -341,7 +345,7 @@
    unreachable
   end
   i32.const 1384
-  i32.load $0
+  i32.load
   i32.const 5
   i32.ne
   if

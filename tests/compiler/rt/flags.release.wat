@@ -1,7 +1,7 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $0 (func))
+ (type $1 (func (param i32 i32 i32 i32)))
+ (type $2 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data $0 (i32.const 1036) "<")
@@ -16,7 +16,7 @@
  (func $~lib/rt/__typeinfo (param $0 i32) (result i32)
   local.get $0
   i32.const 1200
-  i32.load $0
+  i32.load
   i32.gt_u
   if
    i32.const 1056
@@ -31,7 +31,7 @@
   i32.shl
   i32.const 1204
   i32.add
-  i32.load $0
+  i32.load
  )
  (func $start:rt/flags
   block $folding-inner0

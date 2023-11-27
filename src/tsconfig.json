@@ -3,7 +3,6 @@
   "compilerOptions": {
     "target": "esnext",
     "outDir": "../build",
-    "types" : ["node"],
     "allowJs": false,
     "sourceMap": true,
     "skipLibCheck": true,

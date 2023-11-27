@@ -41,7 +41,6 @@ export type ExpressionRunnerRef = Ref;
 export type BinaryenModuleAllocateAndWriteResultRef = Ref;
 export type TypeBuilderRef = Ref;
 export type TypeBuilderErrorReason = u32;
-export type TypeSystem = u32;
 
 export declare function _BinaryenTypeCreate(types: ArrayRef<TypeRef>, numTypes: u32): TypeRef;
 export declare function _BinaryenTypeArity(type: TypeRef): u32;
@@ -546,9 +545,9 @@ export declare function _BinaryenTupleExtractSetIndex(expr: ExpressionRef, index
 
 export declare function _BinaryenPop(module: ModuleRef, type: TypeRef): ExpressionRef;
 
-export declare function _BinaryenI31New(module: ModuleRef, value: ExpressionRef): ExpressionRef;
-export declare function _BinaryenI31NewGetValue(expr: ExpressionRef): ExpressionRef;
-export declare function _BinaryenI31NewSetValue(expr: ExpressionRef, valueExpr: ExpressionRef): void;
+export declare function _BinaryenRefI31(module: ModuleRef, value: ExpressionRef): ExpressionRef;
+export declare function _BinaryenRefI31GetValue(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenRefI31SetValue(expr: ExpressionRef, valueExpr: ExpressionRef): void;
 
 export declare function _BinaryenI31Get(module: ModuleRef, i31Expr: ExpressionRef, signed: bool): ExpressionRef;
 export declare function _BinaryenI31GetGetI31(expr: ExpressionRef): ExpressionRef;
@@ -661,7 +660,7 @@ export declare function _BinaryenArrayCopyGetLength(expr: ExpressionRef): Expres
 export declare function _BinaryenArrayCopySetLength(expr: ExpressionRef, lengthExpr: ExpressionRef): void;
 
 // TODO: BinaryenArrayFill
-// TODO: BinaryenArrayInit
+// TODO: BinaryenArrayNewFixed
 
 export declare function _BinaryenStringNew(module: ModuleRef, op: Op, ptr: ExpressionRef, length: ExpressionRef, start: ExpressionRef, end: ExpressionRef, isTry: bool): ExpressionRef;
 export declare function _BinaryenStringNewGetOp(expr: ExpressionRef): Op;
@@ -884,16 +883,14 @@ export declare function _ExpressionRunnerRunAndDispose(runner: ExpressionRunnerR
 export declare function _TypeBuilderCreate(size: Index): TypeBuilderRef;
 export declare function _TypeBuilderGrow(builder: TypeBuilderRef, count: Index): void;
 export declare function _TypeBuilderGetSize(builder: TypeBuilderRef): Index;
-export declare function _TypeBuilderSetBasicHeapType(builder: TypeBuilderRef, index: Index, basicHeapType: HeapTypeRef): void;
 export declare function _TypeBuilderSetSignatureType(builder: TypeBuilderRef, index: Index, paramTypes: TypeRef, resultTypes: TypeRef): void;
 export declare function _TypeBuilderSetStructType(builder: TypeBuilderRef, index: Index, fieldTypes: ArrayRef<TypeRef>, fieldPackedTypes: ArrayRef<PackedType>, fieldMutables: ArrayRef<bool>, numFields: i32): void;
 export declare function _TypeBuilderSetArrayType(builder: TypeBuilderRef, index: Index, elementType: TypeRef, elementPackedTyype: PackedType, elementMutable: bool): void;
-export declare function _TypeBuilderIsBasic(builder: TypeBuilderRef, index: Index): bool;
-export declare function _TypeBuilderGetBasic(builder: TypeBuilderRef, index: Index): HeapTypeRef;
 export declare function _TypeBuilderGetTempHeapType(builder: TypeBuilderRef, index: Index): HeapTypeRef;
 export declare function _TypeBuilderGetTempTupleType(builder: TypeBuilderRef, types: ArrayRef<TypeRef>, numTypes: Index): TypeRef;
 export declare function _TypeBuilderGetTempRefType(builder: TypeBuilderRef, heapType: HeapTypeRef, nullable: bool): TypeRef;
 export declare function _TypeBuilderSetSubType(builder: TypeBuilderRef, index: Index, superType: HeapTypeRef): void;
+export declare function _TypeBuilderSetOpen(builder: TypeBuilderRef, index: Index): void;
 export declare function _TypeBuilderCreateRecGroup(builder: TypeBuilderRef, index: Index, length: Index): void;
 export declare function _TypeBuilderBuildAndDispose(builder: TypeBuilderRef, heapTypes: ArrayRef<HeapTypeRef>, errorIndex: Pointer<Index>, errorReason: Pointer<TypeBuilderErrorReason>): bool;
 export declare function _BinaryenModuleSetTypeName(module: ModuleRef, heapType: HeapTypeRef, name: StringRef): void;
@@ -922,8 +919,6 @@ export declare function _BinaryenGetOneCallerInlineMaxSize(): Index;
 export declare function _BinaryenSetOneCallerInlineMaxSize(size: Index): void;
 export declare function _BinaryenGetAllowInliningFunctionsWithLoops(): bool;
 export declare function _BinaryenSetAllowInliningFunctionsWithLoops(enabled: bool): void;
-export declare function _BinaryenGetTypeSystem(): TypeSystem;
-export declare function _BinaryenSetTypeSystem(typeSystem: TypeSystem): void;
 
 // Helpers
 

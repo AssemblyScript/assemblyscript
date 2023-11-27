@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $0 (func))
  (memory $0 0)
  (export "foo" (func $inlining-recursive/foo))
  (export "bar" (func $inlining-recursive/baz))

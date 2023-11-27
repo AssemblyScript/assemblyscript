@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $0 (func))
  (global $features/gc/globalFunc funcref (ref.null nofunc))
  (global $features/gc/globalExtern externref (ref.null noextern))
  (global $features/gc/globalAny anyref (ref.null none))
@@ -19,7 +19,6 @@
  (export "globalArray" (global $features/gc/globalArray))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $~start (type $none_=>_none)
-  nop
+ (func $~start (type $0)
  )
 )
