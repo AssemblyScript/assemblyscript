@@ -103,14 +103,13 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $2
   i64.const 0
   i64.store
   local.get $0
   local.get $1
   i32.eq
   if
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
@@ -125,8 +124,6 @@
    i32.or
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $4
-   local.tee $2
    local.get $0
    i32.store
    local.get $0
@@ -136,7 +133,7 @@
    i32.const 1
    i32.shr_u
    local.set $3
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store
    local.get $3
@@ -148,12 +145,12 @@
    i32.shr_u
    i32.ne
    br_if $folding-inner0
-   local.get $4
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
    local.get $0
    local.set $2
-   local.get $4
+   global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store offset=4
    local.get $3
@@ -248,7 +245,6 @@
   i32.const 0
  )
  (func $start:builtins
-  (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -265,10 +261,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i64.const 0
   i64.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store offset=8
   i32.const 1
@@ -656,13 +651,12 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1168
   i32.store offset=8
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1056
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1056
   i32.store offset=4
   i32.const 1056
@@ -678,19 +672,18 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1168
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1168
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1168
   i32.store offset=8
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1200
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1200
   i32.store offset=4
   i32.const 1200
@@ -786,10 +779,9 @@
   f64.const 52
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1376
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1376
   i32.store offset=4
   i32.const 1376
@@ -805,10 +797,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1376
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1376
   i32.store offset=4
   i32.const 1376
@@ -824,10 +815,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1424
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1424
   i32.store offset=4
   i32.const 1424
@@ -843,10 +833,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1456
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1456
   i32.store offset=4
   i32.const 1456
@@ -862,10 +851,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1488
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1488
   i32.store offset=4
   i32.const 1488
@@ -881,10 +869,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1520
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1520
   i32.store offset=4
   i32.const 1520
@@ -900,10 +887,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1552
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1552
   i32.store offset=4
   i32.const 1552
@@ -919,10 +905,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1584
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1584
   i32.store offset=4
   i32.const 1584
@@ -938,10 +923,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1616
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1616
   i32.store offset=4
   i32.const 1616
@@ -957,10 +941,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1648
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1648
   i32.store offset=4
   i32.const 1648
@@ -976,10 +959,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1680
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1680
   i32.store offset=4
   i32.const 1680
@@ -995,10 +977,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1712
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1712
   i32.store offset=4
   i32.const 1712
@@ -1014,10 +995,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1744
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1744
   i32.store offset=4
   i32.const 1744
@@ -1033,10 +1013,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1776
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1776
   i32.store offset=4
   i32.const 1776
@@ -1052,10 +1031,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1808
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1808
   i32.store offset=4
   i32.const 1808
@@ -1071,10 +1049,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1840
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1840
   i32.store offset=4
   i32.const 1840
@@ -1090,10 +1067,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1872
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1872
   i32.store offset=4
   i32.const 1872
@@ -1109,10 +1085,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1904
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1904
   i32.store offset=4
   i32.const 1904
@@ -1128,10 +1103,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1456
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1456
   i32.store offset=4
   i32.const 1456
@@ -1147,10 +1121,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i32.const 1376
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1376
   i32.store offset=4
   i32.const 1376

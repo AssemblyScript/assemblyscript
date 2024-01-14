@@ -2311,11 +2311,11 @@
   local.get $fn
   return
  )
- (func $infer-generic/inferEncapsulatedFunction<f32,f64> (param $fn i32) (result i32)
+ (func $"infer-generic/inferEncapsulatedFunction<f32,f64>" (param $fn i32) (result i32)
   local.get $fn
   return
  )
- (func $infer-generic/inferEncapsulatedFunctionMixed<f32,f64> (param $fn i32) (result i32)
+ (func $"infer-generic/inferEncapsulatedFunctionMixed<f32,f64>" (param $fn i32) (result i32)
   local.get $fn
   return
  )
@@ -2797,7 +2797,7 @@
   local.get $1
   i32.store
   local.get $1
-  call $infer-generic/inferEncapsulatedFunction<f32,f64>
+  call $"infer-generic/inferEncapsulatedFunction<f32,f64>"
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2822,7 +2822,7 @@
   local.get $1
   i32.store
   local.get $1
-  call $infer-generic/inferEncapsulatedFunctionMixed<f32,f64>
+  call $"infer-generic/inferEncapsulatedFunctionMixed<f32,f64>"
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4

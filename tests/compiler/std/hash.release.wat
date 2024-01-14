@@ -127,15 +127,14 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $1
   i64.const 0
   i64.store
-  local.get $1
+  global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
   if
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    local.tee $1
    i32.store offset=4

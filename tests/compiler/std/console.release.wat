@@ -46,7 +46,6 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $~start
-  (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -57,10 +56,9 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i32.const 0
    i32.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 1056
    i32.store
    i32.const 0
@@ -89,10 +87,9 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i32.const 0
    i32.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 1168
    i32.store
    i32.const 1168
@@ -113,10 +110,9 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i32.const 0
    i32.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 1216
    i32.store
    i32.const 1216
@@ -137,10 +133,9 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i32.const 0
    i32.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 1264
    i32.store
    i32.const 1264
@@ -161,10 +156,9 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i32.const 0
    i32.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 1312
    i32.store
    i32.const 1312
@@ -242,7 +236,6 @@
   unreachable
  )
  (func $~lib/console/console.assert<bool> (param $0 i32) (param $1 i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -259,10 +252,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $2
   i32.const 0
   i32.store
-  local.get $2
+  global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store
   local.get $0
@@ -276,7 +268,6 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/console/console.log (param $0 i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -293,10 +284,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $1
   i32.const 0
   i32.store
-  local.get $1
+  global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
@@ -307,7 +297,6 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/console/console.time (param $0 i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -324,10 +313,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $1
   i32.const 0
   i32.store
-  local.get $1
+  global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
@@ -338,7 +326,6 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/console/console.timeLog (param $0 i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -355,10 +342,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $1
   i32.const 0
   i32.store
-  local.get $1
+  global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0
@@ -369,7 +355,6 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/console/console.timeEnd (param $0 i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -386,10 +371,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $1
   i32.const 0
   i32.store
-  local.get $1
+  global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   local.get $0

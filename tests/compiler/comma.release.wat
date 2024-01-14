@@ -84,10 +84,9 @@
   loop $for-loop|0
    local.get $0
    global.get $comma/a
-   local.tee $1
    i32.lt_s
    if
-    local.get $1
+    global.get $comma/a
     i32.const 1
     i32.sub
     global.set $comma/a

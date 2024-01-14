@@ -7,7 +7,6 @@
  (export "memory" (memory $0))
  (export "test" (func $export:resolve-localortype/test))
  (func $export:resolve-localortype/test (param $0 i32) (result i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -18,10 +17,9 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
    local.get $0
    i32.store
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -30,13 +28,12 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
    i32.const 0
    i32.store
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer

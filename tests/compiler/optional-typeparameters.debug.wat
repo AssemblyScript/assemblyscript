@@ -47,11 +47,11 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $optional-typeparameters/testConcrete<i32,i32> (param $a i32) (result i32)
+ (func $"optional-typeparameters/testConcrete<i32,i32>" (param $a i32) (result i32)
   local.get $a
   return
  )
- (func $optional-typeparameters/testDerived<i32,i32> (param $a i32) (result i32)
+ (func $"optional-typeparameters/testDerived<i32,i32>" (param $a i32) (result i32)
   local.get $a
   return
  )
@@ -2255,13 +2255,13 @@
   local.get $ptr
   return
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (param $this i32) (param $a i32) (param $b i32) (result i32)
+ (func $"optional-typeparameters/TestConcrete<i32,i32>#test<i32>" (param $this i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.add
   return
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (param $this i32) (param $a f64) (param $b f64) (result f64)
+ (func $"optional-typeparameters/TestDerived<f64,f64>#test<f64>" (param $this i32) (param $a f64) (param $b f64) (result f64)
   local.get $a
   local.get $b
   f64.add
@@ -2351,8 +2351,8 @@
    block $optional-typeparameters/TestMethodDerived2<f64>
     block $~lib/array/Array<~lib/string/String>
      block $optional-typeparameters/TestMethodDerived<~lib/string/String>
-      block $optional-typeparameters/TestDerived<f64,f64>
-       block $optional-typeparameters/TestConcrete<i32,i32>
+      block $"optional-typeparameters/TestDerived<f64,f64>"
+       block $"optional-typeparameters/TestConcrete<i32,i32>"
         block $~lib/arraybuffer/ArrayBufferView
          block $~lib/string/String
           block $~lib/arraybuffer/ArrayBuffer
@@ -2361,7 +2361,7 @@
             i32.const 8
             i32.sub
             i32.load
-            br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $optional-typeparameters/TestConcrete<i32,i32> $optional-typeparameters/TestDerived<f64,f64> $optional-typeparameters/TestMethodDerived<~lib/string/String> $~lib/array/Array<~lib/string/String> $optional-typeparameters/TestMethodDerived2<f64> $invalid
+            br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $"optional-typeparameters/TestConcrete<i32,i32>" $"optional-typeparameters/TestDerived<f64,f64>" $optional-typeparameters/TestMethodDerived<~lib/string/String> $~lib/array/Array<~lib/string/String> $optional-typeparameters/TestMethodDerived2<f64> $invalid
            end
            return
           end
@@ -2405,7 +2405,7 @@
    unreachable
   end
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (param $this i32) (result i32)
+ (func $"optional-typeparameters/TestConcrete<i32,i32>#constructor" (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -2443,7 +2443,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#constructor (param $this i32) (result i32)
+ (func $"optional-typeparameters/TestDerived<f64,f64>#constructor" (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -2590,10 +2590,10 @@
   i64.const 0
   i64.store
   i32.const 1
-  call $optional-typeparameters/testConcrete<i32,i32>
+  call $"optional-typeparameters/testConcrete<i32,i32>"
   drop
   i32.const 2
-  call $optional-typeparameters/testDerived<i32,i32>
+  call $"optional-typeparameters/testDerived<i32,i32>"
   drop
   memory.size
   i32.const 16
@@ -2613,7 +2613,7 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   i32.const 0
-  call $optional-typeparameters/TestConcrete<i32,i32>#constructor
+  call $"optional-typeparameters/TestConcrete<i32,i32>#constructor"
   global.set $optional-typeparameters/tConcrete
   global.get $optional-typeparameters/tConcrete
   local.set $0
@@ -2623,10 +2623,10 @@
   local.get $0
   i32.const 1
   i32.const 2
-  call $optional-typeparameters/TestConcrete<i32,i32>#test<i32>
+  call $"optional-typeparameters/TestConcrete<i32,i32>#test<i32>"
   drop
   i32.const 0
-  call $optional-typeparameters/TestDerived<f64,f64>#constructor
+  call $"optional-typeparameters/TestDerived<f64,f64>#constructor"
   global.set $optional-typeparameters/tDerived
   global.get $optional-typeparameters/tDerived
   local.set $0
@@ -2636,7 +2636,7 @@
   local.get $0
   f64.const 1
   f64.const 2
-  call $optional-typeparameters/TestDerived<f64,f64>#test<f64>
+  call $"optional-typeparameters/TestDerived<f64,f64>#test<f64>"
   drop
   i32.const 0
   call $optional-typeparameters/TestMethodDerived<~lib/string/String>#constructor

@@ -607,7 +607,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<v128,i8>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<v128,i8>>" (param $flags i32)
   i32.const 42
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -622,7 +622,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i64,i16>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<i64,i16>>" (param $flags i32)
   i32.const 43
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -637,7 +637,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i32,i32>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<i32,i32>>" (param $flags i32)
   i32.const 44
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -652,7 +652,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i16,i64>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<i16,i64>>" (param $flags i32)
   i32.const 45
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -667,7 +667,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i8,v128>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<i8,v128>>" (param $flags i32)
   i32.const 46
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -682,7 +682,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<rt/flags/Ref,i8>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<rt/flags/Ref,i8>>" (param $flags i32)
   i32.const 47
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -697,7 +697,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<rt/flags/Ref|null,i8>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<rt/flags/Ref|null,i8>>" (param $flags i32)
   i32.const 48
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -712,7 +712,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i8,rt/flags/Ref>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<i8,rt/flags/Ref>>" (param $flags i32)
   i32.const 49
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -727,7 +727,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<i8,rt/flags/Ref|null>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<i8,rt/flags/Ref|null>>" (param $flags i32)
   i32.const 50
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -742,7 +742,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<rt/flags/Ref|null,rt/flags/Ref|null>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<rt/flags/Ref|null,rt/flags/Ref|null>>" (param $flags i32)
   i32.const 51
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -757,7 +757,7 @@
    unreachable
   end
  )
- (func $rt/flags/test<~lib/map/Map<f32,i32>> (param $flags i32)
+ (func $"rt/flags/test<~lib/map/Map<f32,i32>>" (param $flags i32)
   i32.const 52
   call $~lib/rt/__typeinfo
   local.get $flags
@@ -988,7 +988,7 @@
   i32.or
   i32.const 2048
   i32.or
-  call $rt/flags/test<~lib/map/Map<v128,i8>>
+  call $"rt/flags/test<~lib/map/Map<v128,i8>>"
   i32.const 16
   i32.const 262144
   i32.or
@@ -998,7 +998,7 @@
   i32.or
   i32.const 2048
   i32.or
-  call $rt/flags/test<~lib/map/Map<i64,i16>>
+  call $"rt/flags/test<~lib/map/Map<i64,i16>>"
   i32.const 16
   i32.const 131072
   i32.or
@@ -1008,7 +1008,7 @@
   i32.or
   i32.const 2048
   i32.or
-  call $rt/flags/test<~lib/map/Map<i32,i32>>
+  call $"rt/flags/test<~lib/map/Map<i32,i32>>"
   i32.const 16
   i32.const 65536
   i32.or
@@ -1018,7 +1018,7 @@
   i32.or
   i32.const 2048
   i32.or
-  call $rt/flags/test<~lib/map/Map<i16,i64>>
+  call $"rt/flags/test<~lib/map/Map<i16,i64>>"
   i32.const 16
   i32.const 32768
   i32.or
@@ -1026,7 +1026,7 @@
   i32.or
   i32.const 1024
   i32.or
-  call $rt/flags/test<~lib/map/Map<i8,v128>>
+  call $"rt/flags/test<~lib/map/Map<i8,v128>>"
   i32.const 16
   global.get $rt/flags/KEY_ALIGN_REF
   i32.or
@@ -1036,7 +1036,7 @@
   i32.or
   i32.const 2048
   i32.or
-  call $rt/flags/test<~lib/map/Map<rt/flags/Ref,i8>>
+  call $"rt/flags/test<~lib/map/Map<rt/flags/Ref,i8>>"
   i32.const 16
   global.get $rt/flags/KEY_ALIGN_REF
   i32.or
@@ -1048,7 +1048,7 @@
   i32.or
   i32.const 2048
   i32.or
-  call $rt/flags/test<~lib/map/Map<rt/flags/Ref|null,i8>>
+  call $"rt/flags/test<~lib/map/Map<rt/flags/Ref|null,i8>>"
   i32.const 16
   i32.const 32768
   i32.or
@@ -1058,7 +1058,7 @@
   i32.or
   global.get $rt/flags/VALUE_ALIGN_REF
   i32.or
-  call $rt/flags/test<~lib/map/Map<i8,rt/flags/Ref>>
+  call $"rt/flags/test<~lib/map/Map<i8,rt/flags/Ref>>"
   i32.const 16
   i32.const 32768
   i32.or
@@ -1070,7 +1070,7 @@
   i32.or
   global.get $rt/flags/VALUE_ALIGN_REF
   i32.or
-  call $rt/flags/test<~lib/map/Map<i8,rt/flags/Ref|null>>
+  call $"rt/flags/test<~lib/map/Map<i8,rt/flags/Ref|null>>"
   i32.const 16
   i32.const 4194304
   i32.or
@@ -1084,7 +1084,7 @@
   i32.or
   global.get $rt/flags/VALUE_ALIGN_REF
   i32.or
-  call $rt/flags/test<~lib/map/Map<rt/flags/Ref|null,rt/flags/Ref|null>>
+  call $"rt/flags/test<~lib/map/Map<rt/flags/Ref|null,rt/flags/Ref|null>>"
   i32.const 16
   i32.const 131072
   i32.or
@@ -1096,7 +1096,7 @@
   i32.or
   i32.const 2048
   i32.or
-  call $rt/flags/test<~lib/map/Map<f32,i32>>
+  call $"rt/flags/test<~lib/map/Map<f32,i32>>"
  )
  (func $~start
   call $start:rt/flags
