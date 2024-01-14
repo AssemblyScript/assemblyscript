@@ -7843,24 +7843,18 @@
      i32.ge_u
      br_if $~lib/util/math/exp_inline|inlined.0
      drop
+     f64.const -0
+     f64.const 0
+     local.get $4
+     select
+     f64.const -inf
+     f64.const inf
+     local.get $4
+     select
      local.get $2
      i64.const 0
      i64.lt_s
-     if (result f64)
-      f64.const -1.2882297539194267e-231
-      f64.const 1.2882297539194267e-231
-      local.get $4
-      select
-      f64.const 1.2882297539194267e-231
-      f64.mul
-     else
-      f64.const -3105036184601417870297958e207
-      f64.const 3105036184601417870297958e207
-      local.get $4
-      select
-      f64.const 3105036184601417870297958e207
-      f64.mul
-     end
+     select
      local.get $3
      i32.const 1033
      i32.ge_u
@@ -8412,23 +8406,19 @@
    i64.const 32959
    i64.ge_u
    if
-    f32.const -1584563250285286751870879e5
-    f32.const 1584563250285286751870879e5
+    f32.const -inf
+    f32.const inf
     local.get $4
     select
-    f32.const 1584563250285286751870879e5
-    f32.mul
     local.get $3
     f64.const 127.99999995700433
     f64.gt
     br_if $~lib/util/math/powf_lut|inlined.0
     drop
-    f32.const -2.524354896707238e-29
-    f32.const 2.524354896707238e-29
+    f32.const -0
+    f32.const 0
     local.get $4
     select
-    f32.const 2.524354896707238e-29
-    f32.mul
     local.get $3
     f64.const -150
     f64.le

@@ -23,7 +23,6 @@
   local.get $0
  )
  (func $~start
-  (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -40,16 +39,15 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i64.const 0
   i64.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store offset=8
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1056
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1056
   i32.store offset=4
   i32.const 1056
@@ -96,14 +94,13 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $2
   i64.const 0
   i64.store
   local.get $0
   local.get $1
   i32.eq
   if
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
@@ -118,8 +115,6 @@
    i32.or
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $4
-   local.tee $2
    local.get $0
    i32.store
    local.get $0
@@ -129,7 +124,7 @@
    i32.const 1
    i32.shr_u
    local.set $3
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store
    local.get $3
@@ -141,12 +136,12 @@
    i32.shr_u
    i32.ne
    br_if $folding-inner0
-   local.get $4
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
    local.get $0
    local.set $2
-   local.get $4
+   global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store offset=4
    local.get $3
@@ -241,7 +236,6 @@
   i32.const 0
  )
  (func $typealias/outer_function~inner_function
-  (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -258,13 +252,12 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $0
   i64.const 0
   i64.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1136
   i32.store
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 1136
   i32.store offset=4
   i32.const 1136

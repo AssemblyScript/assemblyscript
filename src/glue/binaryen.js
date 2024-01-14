@@ -35,6 +35,7 @@ export const {
   _BinaryenHeapTypeI31,
   _BinaryenHeapTypeStruct,
   _BinaryenHeapTypeArray,
+  // _BinaryenHeapTypeExn,
   _BinaryenHeapTypeString,
   _BinaryenHeapTypeStringviewWTF8,
   _BinaryenHeapTypeStringviewWTF16,

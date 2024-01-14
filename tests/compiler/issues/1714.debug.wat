@@ -20,28 +20,28 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $issues/1714/a_i64_i32<i64,i32> (result i32)
+ (func $"issues/1714/a_i64_i32<i64,i32>" (result i32)
   i32.const 8
   i32.const 4
   i32.eq
   return
  )
- (func $issues/1714/foo<i32,i64> (result i32)
-  call $issues/1714/a_i64_i32<i64,i32>
+ (func $"issues/1714/foo<i32,i64>" (result i32)
+  call $"issues/1714/a_i64_i32<i64,i32>"
   i32.const 1
   i32.eq
   return
  )
- (func $issues/1714/bar<i32,f64> (result i32)
+ (func $"issues/1714/bar<i32,f64>" (result i32)
   i32.const 0
   drop
   i32.const 80
   return
  )
- (func $issues/1714/bar<f64,i32> (result i32)
+ (func $"issues/1714/bar<f64,i32>" (result i32)
   i32.const 1
   drop
-  call $issues/1714/bar<i32,f64>
+  call $"issues/1714/bar<i32,f64>"
   return
  )
  (func $~lib/rt/common/OBJECT#get:rtSize (param $this i32) (result i32)
@@ -283,7 +283,7 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  call $issues/1714/foo<i32,i64>
+  call $"issues/1714/foo<i32,i64>"
   i32.const 0
   i32.eq
   i32.eqz
@@ -295,7 +295,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $issues/1714/bar<f64,i32>
+  call $"issues/1714/bar<f64,i32>"
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0

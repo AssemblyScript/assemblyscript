@@ -1,6 +1,6 @@
 (module
  (type $0 (func))
- (memory $0 (shared 1 10))
+ (memory $0 1 10 shared)
  (export "memory" (memory $0))
  (start $~start)
  (func $features/threads/testAtomic

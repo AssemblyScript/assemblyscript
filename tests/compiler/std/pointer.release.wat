@@ -95,10 +95,9 @@
   i32.add
   global.set $std/pointer/one
   global.get $std/pointer/one
-  local.tee $0
   global.set $std/pointer/nextOne
-  local.get $0
   global.get $std/pointer/nextOne
+  global.get $std/pointer/one
   i32.ne
   if
    i32.const 0

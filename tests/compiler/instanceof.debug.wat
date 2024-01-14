@@ -2291,47 +2291,47 @@
   i32.const 0
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/W,~lib/object/Object> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/W,~lib/object/Object>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/X,~lib/object/Object> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/X,~lib/object/Object>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Y,~lib/object/Object> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Y,~lib/object/Object>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Z,~lib/object/Object> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Z,~lib/object/Object>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/IA,~lib/object/Object> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/IA,~lib/object/Object>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/IB,~lib/object/Object> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/IB,~lib/object/Object>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/IC,~lib/object/Object> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/IC,~lib/object/Object>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/ID,~lib/object/Object> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/ID,~lib/object/Object>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/W> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/W>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2376,7 +2376,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2421,7 +2421,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2466,7 +2466,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2511,7 +2511,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IA> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IA>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2556,7 +2556,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IB> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IB>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2601,7 +2601,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IC> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IC>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2646,7 +2646,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/ID> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/ID>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2691,53 +2691,53 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertStaticTrue<instanceof/W,instanceof/W> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/W,instanceof/W>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/W,instanceof/X> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/W,instanceof/X>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/W,instanceof/Y> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/W,instanceof/Y>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/W,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/W,instanceof/Z>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/X,instanceof/W> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/X,instanceof/W>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/Y,instanceof/W> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/Y,instanceof/W>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/Z,instanceof/W> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/Z,instanceof/W>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/X,instanceof/X> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/X,instanceof/X>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertDynamicFalse<instanceof/X,instanceof/Y> (param $value i32)
+ (func $"instanceof/assertDynamicFalse<instanceof/X,instanceof/Y>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2781,7 +2781,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicFalse<instanceof/X,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertDynamicFalse<instanceof/X,instanceof/Z>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2825,7 +2825,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/X,instanceof/Y> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/X,instanceof/Y>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2870,7 +2870,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/X,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/X,instanceof/Z>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2915,17 +2915,17 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertStaticTrue<instanceof/Y,instanceof/X> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Y,instanceof/X>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Y,instanceof/Y> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Y,instanceof/Y>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertDynamicFalse<instanceof/Y,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertDynamicFalse<instanceof/Y,instanceof/Z>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -2969,7 +2969,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/Y,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/Y,instanceof/Z>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3014,22 +3014,22 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertStaticTrue<instanceof/Z,instanceof/X> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Z,instanceof/X>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Z,instanceof/Y> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Z,instanceof/Y>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Z,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Z,instanceof/Z>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertDynamicFalse<instanceof/IA,instanceof/IC> (param $value i32)
+ (func $"instanceof/assertDynamicFalse<instanceof/IA,instanceof/IC>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3073,7 +3073,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicFalse<instanceof/IB,instanceof/IC> (param $value i32)
+ (func $"instanceof/assertDynamicFalse<instanceof/IB,instanceof/IC>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3117,7 +3117,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicFalse<instanceof/IA,instanceof/ID> (param $value i32)
+ (func $"instanceof/assertDynamicFalse<instanceof/IA,instanceof/ID>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3161,7 +3161,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicFalse<instanceof/IB,instanceof/ID> (param $value i32)
+ (func $"instanceof/assertDynamicFalse<instanceof/IB,instanceof/ID>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3205,64 +3205,19 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertStaticFalse<instanceof/IA,instanceof/IE> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/IA,instanceof/IE>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/IB,instanceof/IE> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/IB,instanceof/IE>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertDynamicTrue<instanceof/IA,instanceof/IC> (param $value i32)
-  (local $1 i32)
-  (local $check i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $value
-  local.tee $1
-  i32.store
-  local.get $1
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $1
-   call $~instanceof|instanceof/IC
-  end
-  i32.eqz
-  if
-   i32.const 0
-   local.set $check
-   i32.const 0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 432
-    i32.const 12
-    i32.const 5
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  i32.const 1
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $instanceof/assertDynamicTrue<instanceof/IB,instanceof/IC> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/IC>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3307,246 +3262,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/IA,instanceof/ID> (param $value i32)
-  (local $1 i32)
-  (local $check i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $value
-  local.tee $1
-  i32.store
-  local.get $1
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $1
-   call $~instanceof|instanceof/ID
-  end
-  i32.eqz
-  if
-   i32.const 0
-   local.set $check
-   i32.const 0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 432
-    i32.const 12
-    i32.const 5
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  i32.const 1
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $instanceof/assertDynamicTrue<instanceof/IB,instanceof/ID> (param $value i32)
-  (local $1 i32)
-  (local $check i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $value
-  local.tee $1
-  i32.store
-  local.get $1
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $1
-   call $~instanceof|instanceof/ID
-  end
-  i32.eqz
-  if
-   i32.const 0
-   local.set $check
-   i32.const 0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 432
-    i32.const 12
-    i32.const 5
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  i32.const 1
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $instanceof/assertStaticTrue<instanceof/X,instanceof/IA> (param $value i32)
-  i32.const 1
-  drop
-  return
- )
- (func $instanceof/assertStaticTrue<instanceof/X,instanceof/IB> (param $value i32)
-  i32.const 1
-  drop
-  return
- )
- (func $instanceof/assertDynamicFalse<instanceof/X,instanceof/ID> (param $value i32)
-  (local $1 i32)
-  (local $check i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $value
-  local.tee $1
-  i32.store
-  local.get $1
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $1
-   call $~instanceof|instanceof/ID
-  end
-  if
-   i32.const 0
-   local.set $check
-   i32.const 0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 432
-    i32.const 19
-    i32.const 5
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  i32.const 1
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $instanceof/assertDynamicFalse<instanceof/X,instanceof/IC> (param $value i32)
-  (local $1 i32)
-  (local $check i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $value
-  local.tee $1
-  i32.store
-  local.get $1
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $1
-   call $~instanceof|instanceof/IC
-  end
-  if
-   i32.const 0
-   local.set $check
-   i32.const 0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 432
-    i32.const 19
-    i32.const 5
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  i32.const 1
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $instanceof/assertStaticFalse<instanceof/X,instanceof/IE> (param $value i32)
-  i32.const 0
-  i32.eqz
-  drop
-  return
- )
- (func $instanceof/assertDynamicTrue<instanceof/X,instanceof/ID> (param $value i32)
-  (local $1 i32)
-  (local $check i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $value
-  local.tee $1
-  i32.store
-  local.get $1
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $1
-   call $~instanceof|instanceof/ID
-  end
-  i32.eqz
-  if
-   i32.const 0
-   local.set $check
-   i32.const 0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 432
-    i32.const 12
-    i32.const 5
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  i32.const 1
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $instanceof/assertDynamicTrue<instanceof/X,instanceof/IC> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/IC>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3591,83 +3307,367 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertStaticTrue<instanceof/Y,instanceof/IA> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/ID>" (param $value i32)
+  (local $1 i32)
+  (local $check i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $value
+  local.tee $1
+  i32.store
+  local.get $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $1
+   call $~instanceof|instanceof/ID
+  end
+  i32.eqz
+  if
+   i32.const 0
+   local.set $check
+   i32.const 0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 12
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+  end
+  i32.const 1
+  drop
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/ID>" (param $value i32)
+  (local $1 i32)
+  (local $check i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $value
+  local.tee $1
+  i32.store
+  local.get $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $1
+   call $~instanceof|instanceof/ID
+  end
+  i32.eqz
+  if
+   i32.const 0
+   local.set $check
+   i32.const 0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 12
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+  end
+  i32.const 1
+  drop
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $"instanceof/assertStaticTrue<instanceof/X,instanceof/IA>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Y,instanceof/IB> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/X,instanceof/IB>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Y,instanceof/ID> (param $value i32)
+ (func $"instanceof/assertDynamicFalse<instanceof/X,instanceof/ID>" (param $value i32)
+  (local $1 i32)
+  (local $check i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $value
+  local.tee $1
+  i32.store
+  local.get $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $1
+   call $~instanceof|instanceof/ID
+  end
+  if
+   i32.const 0
+   local.set $check
+   i32.const 0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 19
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+  end
   i32.const 1
   drop
-  return
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertStaticTrue<instanceof/Y,instanceof/IC> (param $value i32)
+ (func $"instanceof/assertDynamicFalse<instanceof/X,instanceof/IC>" (param $value i32)
+  (local $1 i32)
+  (local $check i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $value
+  local.tee $1
+  i32.store
+  local.get $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $1
+   call $~instanceof|instanceof/IC
+  end
+  if
+   i32.const 0
+   local.set $check
+   i32.const 0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 19
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+  end
   i32.const 1
   drop
-  return
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertStaticFalse<instanceof/Y,instanceof/IE> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/X,instanceof/IE>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Z,instanceof/IA> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/X,instanceof/ID>" (param $value i32)
+  (local $1 i32)
+  (local $check i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $value
+  local.tee $1
+  i32.store
+  local.get $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $1
+   call $~instanceof|instanceof/ID
+  end
+  i32.eqz
+  if
+   i32.const 0
+   local.set $check
+   i32.const 0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 12
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+  end
+  i32.const 1
+  drop
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $"instanceof/assertDynamicTrue<instanceof/X,instanceof/IC>" (param $value i32)
+  (local $1 i32)
+  (local $check i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $value
+  local.tee $1
+  i32.store
+  local.get $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $1
+   call $~instanceof|instanceof/IC
+  end
+  i32.eqz
+  if
+   i32.const 0
+   local.set $check
+   i32.const 0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 12
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+  end
+  i32.const 1
+  drop
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $"instanceof/assertStaticTrue<instanceof/Y,instanceof/IA>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Z,instanceof/IB> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Y,instanceof/IB>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Z,instanceof/ID> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Y,instanceof/ID>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticTrue<instanceof/Z,instanceof/IC> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Y,instanceof/IC>" (param $value i32)
   i32.const 1
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/Z,instanceof/IE> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/Y,instanceof/IE>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/IA,instanceof/W> (param $value i32)
+ (func $"instanceof/assertStaticTrue<instanceof/Z,instanceof/IA>" (param $value i32)
+  i32.const 1
+  drop
+  return
+ )
+ (func $"instanceof/assertStaticTrue<instanceof/Z,instanceof/IB>" (param $value i32)
+  i32.const 1
+  drop
+  return
+ )
+ (func $"instanceof/assertStaticTrue<instanceof/Z,instanceof/ID>" (param $value i32)
+  i32.const 1
+  drop
+  return
+ )
+ (func $"instanceof/assertStaticTrue<instanceof/Z,instanceof/IC>" (param $value i32)
+  i32.const 1
+  drop
+  return
+ )
+ (func $"instanceof/assertStaticFalse<instanceof/Z,instanceof/IE>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/IB,instanceof/W> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/IA,instanceof/W>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/IC,instanceof/W> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/IB,instanceof/W>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertStaticFalse<instanceof/ID,instanceof/W> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/IC,instanceof/W>" (param $value i32)
   i32.const 0
   i32.eqz
   drop
   return
  )
- (func $instanceof/assertDynamicTrue<instanceof/IA,instanceof/X> (param $value i32)
+ (func $"instanceof/assertStaticFalse<instanceof/ID,instanceof/W>" (param $value i32)
+  i32.const 0
+  i32.eqz
+  drop
+  return
+ )
+ (func $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/X>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3712,7 +3712,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/IB,instanceof/X> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/X>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3757,7 +3757,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/IA,instanceof/Y> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/Y>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3802,7 +3802,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/IB,instanceof/Y> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/Y>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3847,7 +3847,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/IC,instanceof/Y> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/IC,instanceof/Y>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3892,7 +3892,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/ID,instanceof/Y> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/ID,instanceof/Y>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3937,7 +3937,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/IA,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/Z>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -3982,7 +3982,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/IB,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/Z>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -4027,7 +4027,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/IC,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/IC,instanceof/Z>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -4072,7 +4072,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $instanceof/assertDynamicTrue<instanceof/ID,instanceof/Z> (param $value i32)
+ (func $"instanceof/assertDynamicTrue<instanceof/ID,instanceof/Z>" (param $value i32)
   (local $1 i32)
   (local $check i32)
   global.get $~lib/memory/__stack_pointer
@@ -6086,924 +6086,924 @@
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/W,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/W,~lib/object/Object>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/X,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/X,~lib/object/Object>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/Y,~lib/object/Object>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Z,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/Z,~lib/object/Object>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/IA,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/IA,~lib/object/Object>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/IB,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/IB,~lib/object/Object>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/IA,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/IA,~lib/object/Object>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/IB,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/IB,~lib/object/Object>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/IC,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/IC,~lib/object/Object>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/ID,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/ID,~lib/object/Object>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/IA,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/IA,~lib/object/Object>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/IB,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/IB,~lib/object/Object>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/IC,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/IC,~lib/object/Object>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/ID,~lib/object/Object>
+  call $"instanceof/assertStaticTrue<instanceof/ID,~lib/object/Object>"
   global.get $instanceof/w
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/W>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/W>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/X>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Y>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/Z>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IA>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IA>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IB>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IB>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IA>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IA>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IB>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IB>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IC>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IC>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/ID>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/ID>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IA>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IA>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IB>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IB>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IC>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/IC>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/ID>
+  call $"instanceof/assertDynamicTrue<~lib/object/Object,instanceof/ID>"
   global.get $instanceof/w
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/W,instanceof/W>
+  call $"instanceof/assertStaticTrue<instanceof/W,instanceof/W>"
   global.get $instanceof/w
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/W,instanceof/X>
+  call $"instanceof/assertStaticFalse<instanceof/W,instanceof/X>"
   global.get $instanceof/w
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/W,instanceof/Y>
+  call $"instanceof/assertStaticFalse<instanceof/W,instanceof/Y>"
   global.get $instanceof/w
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/W,instanceof/Z>
+  call $"instanceof/assertStaticFalse<instanceof/W,instanceof/Z>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/X,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/X,instanceof/W>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/Y,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/Y,instanceof/W>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/Z,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/Z,instanceof/W>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/X,instanceof/X>
+  call $"instanceof/assertStaticTrue<instanceof/X,instanceof/X>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Y>
+  call $"instanceof/assertDynamicFalse<instanceof/X,instanceof/Y>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Z>
+  call $"instanceof/assertDynamicFalse<instanceof/X,instanceof/Z>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/X,instanceof/X>
+  call $"instanceof/assertStaticTrue<instanceof/X,instanceof/X>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/X,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<instanceof/X,instanceof/Y>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicFalse<instanceof/X,instanceof/Z>
+  call $"instanceof/assertDynamicFalse<instanceof/X,instanceof/Z>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/X,instanceof/X>
+  call $"instanceof/assertStaticTrue<instanceof/X,instanceof/X>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/X,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<instanceof/X,instanceof/Y>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/X,instanceof/Z>
+  call $"instanceof/assertDynamicTrue<instanceof/X,instanceof/Z>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/X>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/X>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/Y>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/Y>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicFalse<instanceof/Y,instanceof/Z>
+  call $"instanceof/assertDynamicFalse<instanceof/Y,instanceof/Z>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/X>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/X>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/Y>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/Y>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/Y,instanceof/Z>
+  call $"instanceof/assertDynamicTrue<instanceof/Y,instanceof/Z>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Z,instanceof/X>
+  call $"instanceof/assertStaticTrue<instanceof/Z,instanceof/X>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Z,instanceof/Y>
+  call $"instanceof/assertStaticTrue<instanceof/Z,instanceof/Y>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Z,instanceof/Z>
+  call $"instanceof/assertStaticTrue<instanceof/Z,instanceof/Z>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicFalse<instanceof/IA,instanceof/IC>
+  call $"instanceof/assertDynamicFalse<instanceof/IA,instanceof/IC>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicFalse<instanceof/IB,instanceof/IC>
+  call $"instanceof/assertDynamicFalse<instanceof/IB,instanceof/IC>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicFalse<instanceof/IA,instanceof/ID>
+  call $"instanceof/assertDynamicFalse<instanceof/IA,instanceof/ID>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicFalse<instanceof/IB,instanceof/ID>
+  call $"instanceof/assertDynamicFalse<instanceof/IB,instanceof/ID>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IA,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/IA,instanceof/IE>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IB,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/IB,instanceof/IE>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IA,instanceof/IC>
+  call $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/IC>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IB,instanceof/IC>
+  call $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/IC>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IA,instanceof/ID>
+  call $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/ID>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IB,instanceof/ID>
+  call $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/ID>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IA,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/IA,instanceof/IE>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IB,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/IB,instanceof/IE>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IA,instanceof/IC>
+  call $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/IC>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IB,instanceof/IC>
+  call $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/IC>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IA,instanceof/ID>
+  call $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/ID>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IB,instanceof/ID>
+  call $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/ID>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IA,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/IA,instanceof/IE>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IB,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/IB,instanceof/IE>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/X,instanceof/IA>
+  call $"instanceof/assertStaticTrue<instanceof/X,instanceof/IA>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/X,instanceof/IB>
+  call $"instanceof/assertStaticTrue<instanceof/X,instanceof/IB>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicFalse<instanceof/X,instanceof/ID>
+  call $"instanceof/assertDynamicFalse<instanceof/X,instanceof/ID>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicFalse<instanceof/X,instanceof/IC>
+  call $"instanceof/assertDynamicFalse<instanceof/X,instanceof/IC>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/X,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/X,instanceof/IE>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/X,instanceof/IA>
+  call $"instanceof/assertStaticTrue<instanceof/X,instanceof/IA>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/X,instanceof/IB>
+  call $"instanceof/assertStaticTrue<instanceof/X,instanceof/IB>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/X,instanceof/ID>
+  call $"instanceof/assertDynamicTrue<instanceof/X,instanceof/ID>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/X,instanceof/IC>
+  call $"instanceof/assertDynamicTrue<instanceof/X,instanceof/IC>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/X,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/X,instanceof/IE>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/X,instanceof/IA>
+  call $"instanceof/assertStaticTrue<instanceof/X,instanceof/IA>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/X,instanceof/IB>
+  call $"instanceof/assertStaticTrue<instanceof/X,instanceof/IB>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/X,instanceof/ID>
+  call $"instanceof/assertDynamicTrue<instanceof/X,instanceof/ID>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/X,instanceof/IC>
+  call $"instanceof/assertDynamicTrue<instanceof/X,instanceof/IC>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/X,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/X,instanceof/IE>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/IA>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/IA>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/IB>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/IB>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/ID>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/ID>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/IC>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/IC>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/Y,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/Y,instanceof/IE>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/IA>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/IA>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/IB>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/IB>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/ID>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/ID>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Y,instanceof/IC>
+  call $"instanceof/assertStaticTrue<instanceof/Y,instanceof/IC>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/Y,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/Y,instanceof/IE>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Z,instanceof/IA>
+  call $"instanceof/assertStaticTrue<instanceof/Z,instanceof/IA>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Z,instanceof/IB>
+  call $"instanceof/assertStaticTrue<instanceof/Z,instanceof/IB>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Z,instanceof/ID>
+  call $"instanceof/assertStaticTrue<instanceof/Z,instanceof/ID>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticTrue<instanceof/Z,instanceof/IC>
+  call $"instanceof/assertStaticTrue<instanceof/Z,instanceof/IC>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/Z,instanceof/IE>
+  call $"instanceof/assertStaticFalse<instanceof/Z,instanceof/IE>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IA,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/IA,instanceof/W>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IB,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/IB,instanceof/W>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IA,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/IA,instanceof/W>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IB,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/IB,instanceof/W>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IC,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/IC,instanceof/W>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/ID,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/ID,instanceof/W>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IA,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/IA,instanceof/W>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IB,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/IB,instanceof/W>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/IC,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/IC,instanceof/W>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertStaticFalse<instanceof/ID,instanceof/W>
+  call $"instanceof/assertStaticFalse<instanceof/ID,instanceof/W>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IA,instanceof/X>
+  call $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/X>"
   global.get $instanceof/x
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IB,instanceof/X>
+  call $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/X>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IA,instanceof/X>
+  call $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/X>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IB,instanceof/X>
+  call $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/X>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IA,instanceof/X>
+  call $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/X>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IB,instanceof/X>
+  call $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/X>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IA,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/Y>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IB,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/Y>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IC,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<instanceof/IC,instanceof/Y>"
   global.get $instanceof/y
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/ID,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<instanceof/ID,instanceof/Y>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IA,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/Y>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IB,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/Y>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IC,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<instanceof/IC,instanceof/Y>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/ID,instanceof/Y>
+  call $"instanceof/assertDynamicTrue<instanceof/ID,instanceof/Y>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IA,instanceof/Z>
+  call $"instanceof/assertDynamicTrue<instanceof/IA,instanceof/Z>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IB,instanceof/Z>
+  call $"instanceof/assertDynamicTrue<instanceof/IB,instanceof/Z>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/IC,instanceof/Z>
+  call $"instanceof/assertDynamicTrue<instanceof/IC,instanceof/Z>"
   global.get $instanceof/z
   local.set $21
   global.get $~lib/memory/__stack_pointer
   local.get $21
   i32.store
   local.get $21
-  call $instanceof/assertDynamicTrue<instanceof/ID,instanceof/Z>
+  call $"instanceof/assertDynamicTrue<instanceof/ID,instanceof/Z>"
   global.get $~lib/memory/__stack_pointer
   i32.const 88
   i32.add

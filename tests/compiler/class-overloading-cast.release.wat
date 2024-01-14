@@ -1107,11 +1107,10 @@
     return
    end
    global.get $~lib/rt/itcms/toSpace
-   local.tee $0
-   local.get $0
+   global.get $~lib/rt/itcms/toSpace
    i32.store offset=4
-   local.get $0
-   local.get $0
+   global.get $~lib/rt/itcms/toSpace
+   global.get $~lib/rt/itcms/toSpace
    i32.store offset=8
    i32.const 0
    global.set $~lib/rt/itcms/state
@@ -1213,8 +1212,7 @@
      br_if $do-loop|0
     end
     global.get $~lib/rt/itcms/total
-    local.tee $1
-    local.get $1
+    global.get $~lib/rt/itcms/total
     global.get $~lib/rt/itcms/threshold
     i32.sub
     i32.const 1024
@@ -1412,15 +1410,15 @@
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid
    block $class-overloading-cast/A<f32>
-    block $class-overloading-cast/B<f32,f64>
+    block $"class-overloading-cast/B<f32,f64>"
      block $class-overloading-cast/D
       block $class-overloading-cast/A<~lib/string/String>
        block $class-overloading-cast/C
         block $class-overloading-cast/A<f64>
-         block $class-overloading-cast/B<f64,~lib/string/String>
-          block $class-overloading-cast/B<i32,~lib/string/String>
+         block $"class-overloading-cast/B<f64,~lib/string/String>"
+          block $"class-overloading-cast/B<i32,~lib/string/String>"
            block $class-overloading-cast/A<i32>
-            block $class-overloading-cast/B<i32,f64>
+            block $"class-overloading-cast/B<i32,f64>"
              block $~lib/arraybuffer/ArrayBufferView
               block $~lib/string/String
                block $~lib/arraybuffer/ArrayBuffer
@@ -1429,7 +1427,7 @@
                  i32.const 8
                  i32.sub
                  i32.load
-                 br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $class-overloading-cast/B<i32,f64> $class-overloading-cast/A<i32> $class-overloading-cast/B<i32,~lib/string/String> $class-overloading-cast/B<f64,~lib/string/String> $class-overloading-cast/A<f64> $class-overloading-cast/C $class-overloading-cast/A<~lib/string/String> $class-overloading-cast/D $class-overloading-cast/B<f32,f64> $class-overloading-cast/A<f32> $invalid
+                 br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $"class-overloading-cast/B<i32,f64>" $class-overloading-cast/A<i32> $"class-overloading-cast/B<i32,~lib/string/String>" $"class-overloading-cast/B<f64,~lib/string/String>" $class-overloading-cast/A<f64> $class-overloading-cast/C $class-overloading-cast/A<~lib/string/String> $class-overloading-cast/D $"class-overloading-cast/B<f32,f64>" $class-overloading-cast/A<f32> $invalid
                 end
                 return
                end
@@ -1478,7 +1476,6 @@
   call $start:class-overloading-cast
  )
  (func $class-overloading-cast/A<i32>#constructor (param $0 i32) (result i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -1495,23 +1492,21 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $1
   i64.const 0
   i64.store
   local.get $0
   i32.eqz
   if
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    i32.const 5
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $1
   local.get $0
   i32.store offset=4
-  local.get $1
+  global.get $~lib/memory/__stack_pointer
   local.get $0
   call $~lib/object/Object#constructor
   local.tee $0
@@ -1543,14 +1538,13 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $2
   i64.const 0
   i64.store
   local.get $0
   local.get $1
   i32.eq
   if
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
@@ -1565,8 +1559,6 @@
    i32.or
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $4
-   local.tee $2
    local.get $0
    i32.store
    local.get $0
@@ -1576,7 +1568,7 @@
    i32.const 1
    i32.shr_u
    local.set $3
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store
    local.get $3
@@ -1588,12 +1580,12 @@
    i32.shr_u
    i32.ne
    br_if $folding-inner0
-   local.get $4
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
    local.get $0
    local.set $2
-   local.get $4
+   global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store offset=4
    local.get $3
@@ -1691,7 +1683,6 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -1702,10 +1693,9 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i64.const 0
    i64.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store offset=8
    memory.size
@@ -1740,7 +1730,7 @@
    i32.store
    i32.const 1344
    global.set $~lib/rt/itcms/fromSpace
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -1749,19 +1739,17 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i64.const 0
    i64.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 4
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
    local.get $0
    i32.store offset=4
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    call $class-overloading-cast/A<i32>#constructor
    local.tee $0
@@ -1781,19 +1769,17 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i64.const 0
    i64.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 6
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
    local.get $0
    i32.store offset=4
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    call $class-overloading-cast/A<i32>#constructor
    local.tee $0
@@ -1813,19 +1799,19 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i64.const 0
    i64.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 7
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
+   local.set $1
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -1834,23 +1820,21 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
    i64.const 0
    i64.store
    local.get $0
    i32.eqz
    if
-    local.get $2
+    global.get $~lib/memory/__stack_pointer
     i32.const 8
     call $~lib/rt/itcms/__new
     local.tee $0
     i32.store
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
    local.get $0
    i32.store offset=4
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    call $~lib/object/Object#constructor
    local.tee $0
@@ -1916,13 +1900,12 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    global.get $class-overloading-cast/v2
    i32.store offset=8
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 1488
    i32.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 1488
    i32.store offset=4
    i32.const 1488
@@ -1937,14 +1920,14 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    block $__inlined_func$class-overloading-cast/A<f64>#foo@override$137 (result i32)
     global.get $~lib/memory/__stack_pointer
-    local.tee $0
     global.get $class-overloading-cast/v3
-    local.tee $1
+    local.tee $0
     i32.store offset=8
     i32.const 1488
-    local.get $1
+    local.get $0
     i32.const 8
     i32.sub
     i32.load
@@ -1954,14 +1937,12 @@
     drop
     i32.const 1456
    end
-   local.set $1
-   local.get $0
-   local.get $1
+   local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 1488
    i32.store offset=4
-   local.get $1
+   local.get $0
    i32.const 1488
    call $~lib/string/String.__eq
    i32.eqz
@@ -1982,19 +1963,19 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i64.const 0
    i64.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 9
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
+   local.set $1
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -2003,23 +1984,21 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
    i64.const 0
    i64.store
    local.get $0
    i32.eqz
    if
-    local.get $2
+    global.get $~lib/memory/__stack_pointer
     i32.const 10
     call $~lib/rt/itcms/__new
     local.tee $0
     i32.store
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
    local.get $0
    i32.store offset=4
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    call $~lib/object/Object#constructor
    local.tee $0
@@ -2068,22 +2047,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    global.get $class-overloading-cast/c
-   local.tee $1
+   local.tee $0
    i32.store offset=8
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 1600
    i32.store offset=12
-   local.get $1
+   local.get $0
    i32.const 8
    i32.sub
    i32.load
    drop
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 1456
    i32.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 1456
    i32.store offset=4
    i32.const 1456
@@ -2107,19 +2085,19 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i64.const 0
    i64.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 11
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
+   local.set $1
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -2128,23 +2106,23 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
    i64.const 0
    i64.store
    local.get $0
    i32.eqz
    if
-    local.get $2
+    global.get $~lib/memory/__stack_pointer
     i32.const 12
     call $~lib/rt/itcms/__new
     local.tee $0
     i32.store
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
-   local.get $2
+   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -2153,23 +2131,21 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $3
    i64.const 0
    i64.store
    local.get $0
    i32.eqz
    if
-    local.get $3
+    global.get $~lib/memory/__stack_pointer
     i32.const 13
     call $~lib/rt/itcms/__new
     local.tee $0
     i32.store
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $3
    local.get $0
    i32.store offset=4
-   local.get $3
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    call $~lib/object/Object#constructor
    local.tee $0
@@ -2227,7 +2203,6 @@
   unreachable
  )
  (func $~lib/object/Object#constructor (param $0 i32) (result i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2244,13 +2219,12 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $1
   i32.const 0
   i32.store
   local.get $0
   i32.eqz
   if
-   local.get $1
+   global.get $~lib/memory/__stack_pointer
    i32.const 0
    call $~lib/rt/itcms/__new
    local.tee $0
