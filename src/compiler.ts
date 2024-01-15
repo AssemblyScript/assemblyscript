@@ -3647,8 +3647,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // int to float
     } else if (fromType.isIntegerValue && toType.isFloatValue) {
-
-      if (fromType.isShortIntegerValue) expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
+      // Clear extra bits.
+      expr = this.ensureSmallIntegerWrap(expr, fromType);
       let op: UnaryOp;
       // int to f32
       if (toType.kind == TypeKind.F32) {
