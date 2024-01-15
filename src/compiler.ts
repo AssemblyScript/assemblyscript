@@ -3647,43 +3647,29 @@ export class Compiler extends DiagnosticEmitter {
 
     // int to float
     } else if (fromType.isIntegerValue && toType.isFloatValue) {
-
+      // Clear extra bits.
+      expr = this.ensureSmallIntegerWrap(expr, fromType);
+      let op: UnaryOp;
       // int to f32
       if (toType.kind == TypeKind.F32) {
         if (fromType.isLongIntegerValue) {
-          expr = module.unary(
-            fromType.isSignedIntegerValue
-              ? UnaryOp.ConvertI64ToF32
-              : UnaryOp.ConvertU64ToF32,
-            expr
-          );
+          if (fromType.isSignedIntegerValue) op = UnaryOp.ConvertI64ToF32;
+          else op = UnaryOp.ConvertU64ToF32;
         } else {
-          expr = module.unary(
-            fromType.isSignedIntegerValue
-              ? UnaryOp.ConvertI32ToF32
-              : UnaryOp.ConvertU32ToF32,
-            expr
-          );
+          if (fromType.isSignedIntegerValue) op = UnaryOp.ConvertI32ToF32;
+          else op = UnaryOp.ConvertU32ToF32;
         }
-
       // int to f64
       } else {
         if (fromType.isLongIntegerValue) {
-          expr = module.unary(
-            fromType.isSignedIntegerValue
-              ? UnaryOp.ConvertI64ToF64
-              : UnaryOp.ConvertU64ToF64,
-            expr
-          );
+          if (fromType.isSignedIntegerValue) op = UnaryOp.ConvertI64ToF64;
+          else op = UnaryOp.ConvertU64ToF64;
         } else {
-          expr = module.unary(
-            fromType.isSignedIntegerValue
-              ? UnaryOp.ConvertI32ToF64
-              : UnaryOp.ConvertU32ToF64,
-            expr
-          );
+          if (fromType.isSignedIntegerValue) op = UnaryOp.ConvertI32ToF64;
+          else op = UnaryOp.ConvertU32ToF64;
         }
       }
+      expr = module.unary(op, expr);
 
     // v128 to bool
     } else if (fromType == Type.v128 && toType.isBooleanValue) {
