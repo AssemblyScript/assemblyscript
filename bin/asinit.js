@@ -55,10 +55,19 @@ const asinitOptions = {
     ],
     "type": "b",
     "alias": "y"
-  }
+  },
+  "noColors": {
+    "description": "Disables terminal colors.",
+    "type": "b",
+    "default": false
+  },
 };
 
 const cliOptions = optionsUtil.parse(process.argv.slice(2), asinitOptions);
+
+if (cliOptions.options.noColors) {
+  stdoutColors.enabled = false;
+}
 
 if (cliOptions.options.help || cliOptions.arguments.length === 0) printHelp();
 
