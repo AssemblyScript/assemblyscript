@@ -6618,6 +6618,7 @@ export class Compiler extends DiagnosticEmitter {
     );
     let overrideInstances = this.resolver.resolveOverrides(instance);
     if (overrideInstances) {
+      let mostRecentInheritanceMapping = new Map<Class, Class>();
       for (let i = 0, k = overrideInstances.length; i < k; ++i) {
         let overrideInstance = overrideInstances[i];
         if (!overrideInstance.is(CommonFlags.Compiled)) continue; // errored
@@ -6680,7 +6681,18 @@ export class Compiler extends DiagnosticEmitter {
             if (instanceMembers && instanceMembers.has(instance.declaration.name.text)) {
               continue; // skip those not inheriting
             }
-            builder.addCase(extender.id, stmts);
+            if (mostRecentInheritanceMapping.has(extender)) {
+              let currentRecentParent = assert(mostRecentInheritanceMapping.get(extender));
+              if (currentRecentParent.extends(classInstance)) {
+                // already find recent parent, keep old stmt
+              } else {
+                mostRecentInheritanceMapping.set(extender, classInstance);
+                builder.replaceCase(extender.id, stmts);
+              }
+            } else {
+              mostRecentInheritanceMapping.set(extender, classInstance);
+              builder.addCase(extender.id, stmts);
+            }
           }
         }
       }

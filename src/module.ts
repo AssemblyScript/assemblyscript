@@ -3418,16 +3418,27 @@ export class SwitchBuilder {
     this.condition = condition;
   }
 
+  /** Replace case to the specified branch. */
+  replaceCase(value: i32, code: ExpressionRef[]): void {
+    let valueIndex = this.values.indexOf(value);
+    assert(valueIndex >= 0);
+    this.indexes[valueIndex] = this.addCode(code);
+  }
+
   /** Links a case to the specified branch. */
   addCase(value: i32, code: ExpressionRef[]): void {
+    this.values.push(value);
+    this.indexes.push(this.addCode(code));
+  }
+
+  private addCode(code: ExpressionRef[]): i32 {
     let cases = this.cases;
     let index = cases.indexOf(code);
     if (index < 0) {
       index = cases.length;
       cases.push(code);
     }
-    this.values.push(value);
-    this.indexes.push(index);
+    return index;
   }
 
   /** Links the default branch. */
