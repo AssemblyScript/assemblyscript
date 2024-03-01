@@ -1633,7 +1633,6 @@
  )
  (func $class-override/fn (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -1654,21 +1653,13 @@
     block $default
      block $case1
       block $case0
-       block $tablify|0
-        local.get $1
-        i32.const 8
-        i32.sub
-        i32.load
-        local.tee $2
-        i32.const 5
-        i32.sub
-        br_table $case0 $case1 $case0 $tablify|0
-       end
-       local.get $2
+       local.get $1
+       i32.const 8
+       i32.sub
+       i32.load
        i32.const 5
-       i32.eq
-       br_if $case1
-       br $default
+       i32.sub
+       br_table $case1 $case1 $case0 $default
       end
       local.get $1
       local.get $0

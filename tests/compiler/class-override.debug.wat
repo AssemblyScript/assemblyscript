@@ -2302,13 +2302,9 @@
      local.get $2
      i32.const 5
      i32.eq
-     br_if $case0
-     local.get $2
-     i32.const 6
-     i32.eq
      br_if $case1
      local.get $2
-     i32.const 5
+     i32.const 6
      i32.eq
      br_if $case1
      br $default
