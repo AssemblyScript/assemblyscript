@@ -6681,17 +6681,12 @@ export class Compiler extends DiagnosticEmitter {
             if (instanceMembers && instanceMembers.has(instance.declaration.name.text)) {
               continue; // skip those not inheriting
             }
-            if (mostRecentInheritanceMapping.has(extender)) {
-              let currentRecentParent = assert(mostRecentInheritanceMapping.get(extender));
-              if (currentRecentParent.extends(classInstance)) {
-                // already find recent parent, keep old stmt
-              } else {
-                mostRecentInheritanceMapping.set(extender, classInstance);
-                builder.replaceCase(extender.id, stmts);
-              }
-            } else {
+            if (
+              !mostRecentInheritanceMapping.has(extender) ||
+              !assert(mostRecentInheritanceMapping.get(extender)).extends(classInstance)
+            ) {
               mostRecentInheritanceMapping.set(extender, classInstance);
-              builder.addCase(extender.id, stmts);
+              builder.addOrReplaceCase(extender.id, stmts);
             }
           }
         }

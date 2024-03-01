@@ -3418,11 +3418,11 @@ export class SwitchBuilder {
     this.condition = condition;
   }
 
-  /** Replace case to the specified branch. */
-  replaceCase(value: i32, code: ExpressionRef[]): void {
+  /** Links a case to the specified branch, replace old case if it is linked. */
+  addOrReplaceCase(value: i32, code: ExpressionRef[]): void {
     let valueIndex = this.values.indexOf(value);
-    assert(valueIndex >= 0);
-    this.indexes[valueIndex] = this.addCode(code);
+    if (valueIndex >= 0) this.indexes[valueIndex] = this.addCode(code);
+    else this.addCase(value, code);
   }
 
   /** Links a case to the specified branch. */
