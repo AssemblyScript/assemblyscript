@@ -3421,8 +3421,13 @@ export class SwitchBuilder {
   /** Links a case to the specified branch, replace old case if it is linked. */
   addOrReplaceCase(value: i32, code: ExpressionRef[]): void {
     let valueIndex = this.values.indexOf(value);
-    if (valueIndex >= 0) this.indexes[valueIndex] = this.addCode(code);
-    else this.addCase(value, code);
+    const codeIndex =  this.addCode(code);
+    if (valueIndex >= 0) {
+      this.indexes[valueIndex] = codeIndex;
+    } else {
+      this.values.push(value);
+      this.indexes.push(codeIndex);
+    }
   }
 
   /** Links a case to the specified branch. */
