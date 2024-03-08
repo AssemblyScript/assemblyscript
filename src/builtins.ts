@@ -43,7 +43,8 @@ import {
   NodeKind,
   LiteralExpression,
   ArrayLiteralExpression,
-  IdentifierExpression
+  IdentifierExpression,
+  FunctionExpression
 } from "./ast";
 
 import {
@@ -193,6 +194,8 @@ export namespace BuiltinNames {
   export const unchecked = "~lib/builtins/unchecked";
   export const instantiate = "~lib/builtins/instantiate";
   export const idof = "~lib/builtins/idof";
+
+  export const experimental_first_class_function = "~lib/builtins/experimental_first_class_function";
 
   export const i8 = "~lib/builtins/i8";
   export const i16 = "~lib/builtins/i16";
@@ -3608,6 +3611,26 @@ function builtin_unchecked(ctx: BuiltinFunctionContext): ExpressionRef {
   return expr;
 }
 builtinFunctions.set(BuiltinNames.unchecked, builtin_unchecked);
+
+// experimental_first_class_function(FunctionExpression: *) -> *
+function builtin_experimental_first_class_function(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operand = ctx.operands[0];
+  if (operand.kind != NodeKind.Function) {
+    let prototype = ctx.prototype;
+    prototype.program.error(DiagnosticCode._0_expected, operand.range, "FunctionExpression");
+    return module.unreachable();
+  }
+  let functionExpression = <FunctionExpression>operand;
+  let expr = compiler.compileFirstClassFunction(functionExpression);
+  return expr;
+}
+builtinFunctions.set(BuiltinNames.experimental_first_class_function, builtin_experimental_first_class_function);
 
 // call_indirect<T?>(index: u32, ...args: *[]) -> T
 function builtin_call_indirect(ctx: BuiltinFunctionContext): ExpressionRef {
@@ -10668,11 +10691,11 @@ export function compileVisitGlobals(compiler: Compiler): void {
     let global = <Global>element;
     let globalType = global.type;
     let classReference = globalType.getClass();
-    if (
-      classReference &&
-      !classReference.hasDecorator(DecoratorFlags.Unmanaged) &&
-      global.is(CommonFlags.Compiled)
-    ) {
+    let signatureReference = globalType.getSignature();
+    let isGcObject =
+      (classReference != null && !classReference.hasDecorator(DecoratorFlags.Unmanaged)) ||
+      (signatureReference != null && signatureReference.hasEnv);
+    if (isGcObject && global.is(CommonFlags.Compiled)) {
       if (global.is(CommonFlags.Inlined)) {
         let value = global.constantIntegerValue;
         if (i64_low(value) || i64_high(value)) {
