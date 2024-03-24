@@ -1894,6 +1894,16 @@ export class Compiler extends DiagnosticEmitter {
     return segment;
   }
 
+  /** Adds a dummy memory segment. */
+  addZeroedMemorySegment(size: i32, alignment: i32 = 16): MemorySegment {
+    assert(isPowerOf2(alignment));
+    let memoryOffset = i64_align(this.memoryOffset, alignment);
+    let segment = new MemorySegment(null, memoryOffset);
+    this.memorySegments.push(segment);
+    this.memoryOffset = i64_add(memoryOffset, i64_new(size));
+    return segment;
+  }
+
   /** Adds a static memory segment representing a runtime object. */
   addRuntimeMemorySegment(buffer: Uint8Array): MemorySegment {
     let memoryOffset = this.program.computeBlockStart64(this.memoryOffset);
@@ -2043,7 +2053,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!arrayInstance) {
       arrayInstance = assert(this.resolver.resolveClass(this.program.arrayPrototype, [ elementType ]));
     }
-    let bufferLength = readI32(bufferSegment.buffer, program.OBJECTInstance.offsetof("rtSize"));
+    let bufferLength = readI32(bufferSegment.buffer!, program.OBJECTInstance.offsetof("rtSize"));
     let arrayLength = i32(bufferLength / elementType.byteSize);
     let bufferAddress = i64_add(bufferSegment.offset, i64_new(program.totalOverhead));
     let buf = arrayInstance.createBuffer();
@@ -8060,7 +8070,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       let arrayInstance = assert(this.resolver.resolveClass(this.program.staticArrayPrototype, [ stringType ]));
       let segment = this.addStaticBuffer(stringType, values, arrayInstance.id);
-      this.program.OBJECTInstance.writeField("gcInfo", 3, segment.buffer, 0); // use transparent gcinfo
+      this.program.OBJECTInstance.writeField("gcInfo", 3, segment.buffer!, 0); // use transparent gcinfo
       let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
       let joinInstance = assert(arrayInstance.getMethod("join"));
       let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.IndexedSet, true));
@@ -8151,7 +8161,7 @@ export class Compiler extends DiagnosticEmitter {
       );
       arrayInstance.writeField("raw",
         i64_add(rawHeaderSegment.offset, i64_new(this.program.totalOverhead)),
-        arraySegment.buffer
+        arraySegment.buffer!
       );
     } else {
       arraySegment = this.addStaticArrayHeader(stringType,
