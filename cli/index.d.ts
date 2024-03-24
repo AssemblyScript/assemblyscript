@@ -240,7 +240,8 @@ export function createMemoryStream(fn?: (chunk: Uint8Array | string) => void): M
 /** Compatible TypeScript compiler options for syntax highlighting etc. */
 export const tscOptions: Record<string,unknown>;
 
-import { Program, Parser, Module } from "../src";
+import binaryen from "../lib/binaryen";
+import { Program, Parser } from "../src";
 
 /** Compiler transform base class. */
 export abstract class Transform {
@@ -258,7 +259,7 @@ export abstract class Transform {
   readonly stderr: OutputStream;
 
   /** Logs a message to console. */
-  readonly log: typeof console.log;
+  readonly log: typeof console.error;
 
   /** Reads a file from disk. */
   readFile(filename: string, baseDir: string): (string | null) | Promise<string | null>;
@@ -276,5 +277,5 @@ export abstract class Transform {
   afterInitialize?(program: Program): void | Promise<void>;
 
   /** Called when compilation is complete, before the module is being validated. */
-  afterCompile?(module: Module): void | Promise<void>;
+  afterCompile?(module: binaryen.Module): void | Promise<void>;
 }
