@@ -450,6 +450,7 @@ export async function main(argv, options) {
       if (typeof transform === "function") {
         Object.assign(transform.prototype, {
           program,
+          binaryen,
           baseDir,
           stdout,
           stderr,
