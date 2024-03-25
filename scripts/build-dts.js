@@ -373,9 +373,13 @@ export function generateCli() {
     prefix,
     stdout,
     resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
-      return currentModuleId == "cli/index" && importedModuleId == "../src"
-        ? prefix + "/src/index"
-        : null;
+      if (currentModuleId == "cli/index" && importedModuleId == "../src")
+        return prefix + "/src/index";
+
+      if (importedModuleId == "binaryen")
+        return "binaryen";
+
+      return null;
     },
   });
 
