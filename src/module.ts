@@ -1366,7 +1366,7 @@ export const enum ExpressionRunnerFlags {
 export class MemorySegment {
   constructor(
     /** Segment data. */
-    public buffer: Uint8Array,
+    public buffer: Uint8Array | null,
     /** Segment offset. */
     public offset: i64
   ) {}
@@ -2409,22 +2409,31 @@ export class Module {
     let cStr1 = this.allocStringCached(exportName);
     let cStr2 = this.allocStringCached(name);
     let k = segments.length;
-    let segs = new Array<usize>(k);
+    let empty = 0;
+
+    let segs = new Array<usize>();
     let psvs = new Uint8Array(k);
-    let offs = new Array<ExpressionRef>(k);
-    let sizs = new Array<Index>(k);
-    for (let i = 0; i < k; ++i) {
+    let offs = new Array<ExpressionRef>();
+    let sizs = new Array<Index>();
+    for (let i = 0; i < k; i++) {
       let segment = unchecked(segments[i]);
       let buffer = segment.buffer;
+      if (!buffer) {
+        empty++;
+        continue;
+      }
+
       let offset = segment.offset;
-      unchecked(segs[i] = allocU8Array(buffer));
-      unchecked(psvs[i] = 0); // no passive segments currently
-      unchecked(offs[i] = target == Target.Wasm64
+      segs.push(allocU8Array(buffer));
+      psvs[i - empty] = 0; // no passive segments currently
+      offs.push(target == Target.Wasm64
         ? this.i64(i64_low(offset), i64_high(offset))
         : this.i32(i64_low(offset))
       );
-      unchecked(sizs[i] = buffer.length);
+      sizs.push(buffer.length);
     }
+
+    k -= empty;
     let cArr1 = allocPtrArray(segs);
     let cArr2 = allocU8Array(psvs);
     let cArr3 = allocPtrArray(offs);
