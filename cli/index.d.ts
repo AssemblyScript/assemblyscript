@@ -240,13 +240,17 @@ export function createMemoryStream(fn?: (chunk: Uint8Array | string) => void): M
 /** Compatible TypeScript compiler options for syntax highlighting etc. */
 export const tscOptions: Record<string,unknown>;
 
-import { Program, Parser, Module } from "../src";
+import binaryen from "../lib/binaryen";
+import { Program, Parser } from "../src";
 
 /** Compiler transform base class. */
 export abstract class Transform {
 
   /** Program reference. */
   readonly program: Program;
+
+  /** Binaryen reference. */
+  readonly binaryen: typeof binaryen;
 
   /** Base directory. */
   readonly baseDir: string;
@@ -276,5 +280,5 @@ export abstract class Transform {
   afterInitialize?(program: Program): void | Promise<void>;
 
   /** Called when compilation is complete, before the module is being validated. */
-  afterCompile?(module: Module): void | Promise<void>;
+  afterCompile?(module: binaryen.Module): void | Promise<void>;
 }
