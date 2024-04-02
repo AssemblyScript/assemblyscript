@@ -2600,6 +2600,7 @@ export class Compiler extends DiagnosticEmitter {
     if (possiblyLoops) {
       let incrementor = statement.incrementor;
       if (incrementor) {
+        this.currentFlow = flow;
         bodyStmts.push(
           this.compileExpression(incrementor, Type.void, Constraints.ConvImplicit | Constraints.WillDrop)
         );
