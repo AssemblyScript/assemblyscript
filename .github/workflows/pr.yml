@@ -22,12 +22,12 @@ jobs:
         if: success()
         with:
           message: |
-            "✅ PR title meet the requirements"
+            ✅ PR title meet the requirements.
           comment_tag: PR title check result
 
       - uses: thollander/actions-comment-pull-request@v2
         if: failure()
         with:
           message: |
-            "🚨 PR title does not meet the requirements. It must start with one of the following prefixes: 'feat:', 'fix:', 'chore:', 'break:'."
+            🚨 PR title does not meet the requirements. It must start with one of the following prefixes: 'feat:', 'fix:', 'chore:', 'break:'.
           comment_tag: PR title check result
