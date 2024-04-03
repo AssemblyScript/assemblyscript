@@ -3449,6 +3449,9 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.module.unreachable();
       }
     }
+    // debug location is added here so the caller doesn't have to. means: compilation of an expression
+    // must go through this function, with the respective per-kind functions not being used directly.
+    if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
     // ensure conversion and wrapping in case the respective function doesn't on its own
     let currentType = this.currentType;
     let wrap = (constraints & Constraints.MustWrap) != 0;
@@ -3462,9 +3465,6 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     if (wrap) expr = this.ensureSmallIntegerWrap(expr, currentType);
-    // debug location is added here so the caller doesn't have to. means: compilation of an expression
-    // must go through this function, with the respective per-kind functions not being used directly.
-    if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
     return expr;
   }
 
