@@ -1,0 +1,33 @@
+name: PR
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  check-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR Title Prefix
+        id: title-check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const titlePrefixes = ["feat", "fix", "break", "chore"];
+            const title = context.payload.pull_request.title.toLowerCase();
+            const titleHasValidPrefix = titlePrefixes.some((prefix) => title.startsWith(`${prefix}:`));
+            if (!titleHasValidPrefix) { process.exit(-1); }
+
+      - uses: thollander/actions-comment-pull-request@v2
+        if: success()
+        with:
+          message: |
+            ✅ PR title meet the requirements.
+          comment_tag: PR title check result
+
+      - uses: thollander/actions-comment-pull-request@v2
+        if: failure()
+        with:
+          message: |
+            🚨 PR title does not meet the requirements. It must start with one of the following prefixes: 'feat:', 'fix:', 'chore:', 'break:'.
+          comment_tag: PR title check result
