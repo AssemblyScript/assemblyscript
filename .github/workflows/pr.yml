@@ -3,6 +3,8 @@ name: PR
 on:
   pull_request:
     types: [opened, edited, synchronize]
+permissions:
+  pull-requests: write
 
 jobs:
   check-title:
