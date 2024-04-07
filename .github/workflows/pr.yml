@@ -26,6 +26,7 @@ jobs:
           message: |
             ✅ PR title meet the requirements.
           comment_tag: PR title check result
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: thollander/actions-comment-pull-request@v2
         if: failure()
@@ -33,3 +34,4 @@ jobs:
           message: |
             🚨 PR title does not meet the requirements. It must start with one of the following prefixes: 'feat:', 'fix:', 'chore:', 'break:'.
           comment_tag: PR title check result
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
