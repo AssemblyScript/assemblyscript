@@ -3449,22 +3449,28 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.module.unreachable();
       }
     }
-    // debug location is added here so the caller doesn't have to. means: compilation of an expression
-    // must go through this function, with the respective per-kind functions not being used directly.
-    if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
     // ensure conversion and wrapping in case the respective function doesn't on its own
     let currentType = this.currentType;
     let wrap = (constraints & Constraints.MustWrap) != 0;
     if (currentType != contextualType.nonNullableType) { // allow assigning non-nullable to nullable
       if (constraints & Constraints.ConvExplicit) {
+        // emit debug location for inner expression before conversion
+        if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
         expr = this.convertExpression(expr, currentType, contextualType, true, expression);
         this.currentType = currentType = contextualType;
       } else if (constraints & Constraints.ConvImplicit) {
+        if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
         expr = this.convertExpression(expr, currentType, contextualType, false, expression);
         this.currentType = currentType = contextualType;
       }
     }
-    if (wrap) expr = this.ensureSmallIntegerWrap(expr, currentType);
+    if (wrap) {
+      if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
+      expr = this.ensureSmallIntegerWrap(expr, currentType);
+    }
+    // debug location is added here so the caller doesn't have to. means: compilation of an expression
+    // must go through this function, with the respective per-kind functions not being used directly.
+    if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
     return expr;
   }
 
