@@ -10,6 +10,7 @@
  (data $0 (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\002\008\002\005\00.\00t\00s\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
+ (export "init" (func $issues/2825/init))
  (export "memory" (memory $0))
  (start $~start)
  (func $issues/2825/increment (param $x i32) (result i32)
@@ -45,6 +46,19 @@
     local.get $i
     call $issues/2825/increment
     local.set $i
+    br $for-loop|0
+   end
+  end
+ )
+ (func $issues/2825/init
+  (local $not_unassigned i32)
+  loop $for-loop|0
+   i32.const 1
+   if
+    i32.const 0
+    local.set $not_unassigned
+    local.get $not_unassigned
+    drop
     br $for-loop|0
    end
   end
