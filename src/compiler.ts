@@ -2595,6 +2595,14 @@ export class Compiler extends DiagnosticEmitter {
       bodyStmts.length = 1;
     }
 
+    if (condKind == ConditionKind.True) {
+      // Body executes at least once
+      flow.inherit(bodyFlow);
+    } else {
+      // Otherwise executes conditionally
+      flow.mergeBranch(bodyFlow);
+    }
+
     // Compile the incrementor if it possibly executes
     let possiblyLoops = possiblyContinues || possiblyFallsThrough;
     if (possiblyLoops) {
@@ -2618,14 +2626,6 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // Body executes at least once
-    if (condKind == ConditionKind.True) {
-      flow.inherit(bodyFlow);
-
-    // Otherwise executes conditionally
-    } else {
-      flow.mergeBranch(bodyFlow);
-    }
 
     // Finalize
     outerFlow.inherit(flow);
