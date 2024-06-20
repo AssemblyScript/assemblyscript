@@ -553,8 +553,8 @@ export const {
   fn,
 } = await (async url => instantiate(
   await (async () => {
-    try { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)); }
-    catch { return globalThis.WebAssembly.compile(await (await import("node:fs/promises")).readFile(url)); }
+    if (typeof self === "object" && self.constructor) { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)); }
+    else { return globalThis.WebAssembly.compile(await (await import("node:fs/promises")).readFile(url)); }
   })(), {
   }
 ))(new URL("esm.release.wasm", import.meta.url));

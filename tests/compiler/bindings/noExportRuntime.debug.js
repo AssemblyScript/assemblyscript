@@ -162,8 +162,8 @@ export const {
   takesFunction,
 } = await (async url => instantiate(
   await (async () => {
-    try { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)); }
-    catch { return globalThis.WebAssembly.compile(await (await import("node:fs/promises")).readFile(url)); }
+    if (typeof self === "object" && self.constructor) { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)); }
+    else { return globalThis.WebAssembly.compile(await (await import("node:fs/promises")).readFile(url)); }
   })(), {
   }
 ))(new URL("noExportRuntime.debug.wasm", import.meta.url));
