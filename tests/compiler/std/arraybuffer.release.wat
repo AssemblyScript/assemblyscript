@@ -642,16 +642,11 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $2
   local.get $1
   i64.extend_i32_u
-  i64.lt_u
+  local.get $2
+  i64.gt_u
   if
-   i32.const 0
-   i32.const 1504
-   i32.const 385
-   i32.const 14
-   call $~lib/builtins/abort
    unreachable
   end
   local.get $1

@@ -1425,19 +1425,11 @@
   local.set $end
   i32.const 0
   drop
-  i32.const 1
-  drop
   local.get $start
   i64.extend_i32_u
   local.get $endU64
-  i64.le_u
-  i32.eqz
+  i64.gt_u
   if
-   i32.const 0
-   i32.const 512
-   i32.const 385
-   i32.const 14
-   call $~lib/builtins/abort
    unreachable
   end
   local.get $start

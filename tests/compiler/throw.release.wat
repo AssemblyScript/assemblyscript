@@ -916,11 +916,6 @@
        i64.const 36100
        i64.lt_u
        if
-        i32.const 0
-        i32.const 1632
-        i32.const 385
-        i32.const 14
-        call $~lib/builtins/abort
         unreachable
        end
        i32.const 36108
