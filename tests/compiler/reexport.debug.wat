@@ -1069,6 +1069,8 @@
   local.get $endU64
   i32.wrap_i64
   local.set $end
+  i32.const 0
+  drop
   i32.const 1
   drop
   local.get $start
@@ -1079,7 +1081,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 382
+   i32.const 385
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1125,7 +1127,7 @@
    if
     i32.const 0
     i32.const 416
-    i32.const 389
+    i32.const 392
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -1157,7 +1159,7 @@
    if
     i32.const 0
     i32.const 416
-    i32.const 402
+    i32.const 405
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -1358,8 +1360,6 @@
   i32.const 1572
   i32.add
   local.set $memStart
-  i32.const 0
-  drop
   local.get $root
   local.get $memStart
   memory.size
@@ -1401,7 +1401,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 562
+   i32.const 555
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1730,7 +1730,7 @@
   if
    i32.const 80
    i32.const 416
-   i32.const 461
+   i32.const 460
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1964,8 +1964,6 @@
   (local $6 i32)
   (local $pagesWanted i32)
   (local $pagesAfter i32)
-  i32.const 0
-  drop
   local.get $size
   i32.const 256
   i32.ge_u
@@ -2175,7 +2173,7 @@
    if
     i32.const 0
     i32.const 416
-    i32.const 499
+    i32.const 492
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -2195,7 +2193,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 501
+   i32.const 494
    i32.const 14
    call $~lib/builtins/abort
    unreachable

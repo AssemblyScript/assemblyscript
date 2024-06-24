@@ -260,7 +260,7 @@
   },
   "lowMemoryLimit": {
     "category": "Features",
-    "description": "Enforces very low (<64k) memory constraints.",
+    "description": "Enforces memory constraints, memory usage will not exceed the given value.",
     "default": 0,
     "type": "i"
   },

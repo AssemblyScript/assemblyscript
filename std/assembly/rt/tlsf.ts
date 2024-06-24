@@ -379,6 +379,9 @@ function prepareBlock(root: Root, block: Block, size: usize): void {
 /** Adds more memory to the pool. */
 function addMemory(root: Root, start: usize, endU64: u64): bool {
   let end = <usize>endU64;
+  if (ASC_LOW_MEMORY_LIMIT) {
+    end = <u64>ASC_LOW_MEMORY_LIMIT;
+  }
   if (DEBUG) assert(<u64>start <= endU64); // must be valid
   start = ((start + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
   end &= ~AL_MASK;
@@ -427,10 +430,6 @@ function addMemory(root: Root, start: usize, endU64: u64): bool {
 
 /** Grows memory to fit at least another block of the specified size. */
 function growMemory(root: Root, size: usize): void {
-  if (ASC_LOW_MEMORY_LIMIT) {
-    unreachable();
-    return;
-  }
   // Here, both rounding performed in searchBlock ...
   if (size >= SB_SIZE) {
     size = roundSize(size);
@@ -479,13 +478,7 @@ function initialize(): void {
     }
   }
   let memStart = rootOffset + ROOT_SIZE;
-  if (ASC_LOW_MEMORY_LIMIT) {
-    const memEnd = <u64>ASC_LOW_MEMORY_LIMIT & ~AL_MASK;
-    if (memStart <= memEnd) addMemory(root, memStart, memEnd);
-    else unreachable(); // low memory limit already exceeded
-  } else {
-    addMemory(root, memStart, <u64>memory.size() << 16);
-  }
+  addMemory(root, memStart, <u64>memory.size() << 16);
   ROOT = root;
 }
 
