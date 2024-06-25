@@ -260,7 +260,7 @@
   },
   "lowMemoryLimit": {
     "category": "Features",
-    "description": "Enforces memory constraints, memory usage will not exceed the given value.",
+    "description": "Enforces memory constraints; memory usage will not exceed the given address.",
     "default": 0,
     "type": "i"
   },
