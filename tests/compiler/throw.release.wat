@@ -916,6 +916,11 @@
        i64.const 36100
        i64.lt_u
        if
+        i32.const 0
+        i32.const 1632
+        i32.const 386
+        i32.const 14
+        call $~lib/builtins/abort
         unreachable
        end
        i32.const 36108
@@ -932,7 +937,7 @@
         if
          i32.const 0
          i32.const 1632
-         i32.const 392
+         i32.const 393
          i32.const 16
          call $~lib/builtins/abort
          unreachable
@@ -1020,7 +1025,7 @@
       if
        i32.const 0
        i32.const 1632
-       i32.const 555
+       i32.const 556
        i32.const 3
        call $~lib/builtins/abort
        unreachable

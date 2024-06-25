@@ -381,8 +381,9 @@ function addMemory(root: Root, start: usize, endU64: u64): bool {
   let end = <usize>endU64;
   if (ASC_LOW_MEMORY_LIMIT) {
     end = <u64>ASC_LOW_MEMORY_LIMIT;
+    if (start > ASC_LOW_MEMORY_LIMIT) unreachable();
   }
-  if (<u64>start > endU64) unreachable();
+  if (DEBUG) assert(<u64>start <= endU64); // must be valid
   start = ((start + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
   end &= ~AL_MASK;
 

@@ -1101,11 +1101,19 @@
   local.set $end
   i32.const 0
   drop
+  i32.const 1
+  drop
   local.get $start
   i64.extend_i32_u
   local.get $endU64
-  i64.gt_u
+  i64.le_u
+  i32.eqz
   if
+   i32.const 0
+   i32.const 496
+   i32.const 386
+   i32.const 14
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $start
@@ -1149,7 +1157,7 @@
    if
     i32.const 0
     i32.const 496
-    i32.const 392
+    i32.const 393
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -1181,7 +1189,7 @@
    if
     i32.const 0
     i32.const 496
-    i32.const 405
+    i32.const 406
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -1423,7 +1431,7 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 555
+   i32.const 556
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1752,7 +1760,7 @@
   if
    i32.const 160
    i32.const 496
-   i32.const 460
+   i32.const 461
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -2195,7 +2203,7 @@
    if
     i32.const 0
     i32.const 496
-    i32.const 492
+    i32.const 493
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -2215,7 +2223,7 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 494
+   i32.const 495
    i32.const 14
    call $~lib/builtins/abort
    unreachable
