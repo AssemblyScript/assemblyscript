@@ -158,6 +158,7 @@ export namespace CommonNames {
   export const valueof = "valueof";
   export const returnof = "returnof";
   export const nonnull = "nonnull";
+  export const experimental_first_class_function = "experimental_first_class_function";
   // aliases
   export const null_ = "null";
   export const true_ = "true";
@@ -225,6 +226,7 @@ export namespace CommonNames {
   export const Set = "Set";
   export const Map = "Map";
   export const Function = "Function";
+  export const FirstClassFunction = "FirstClassFunctionBase";
   export const ArrayBufferView = "ArrayBufferView";
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";
