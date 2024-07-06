@@ -275,7 +275,7 @@ export class Options {
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
   pedantic: bool = false;
-  /** Indicates a very low (<64k) memory limit. */
+  /** Indicates a memory limit. */
   lowMemoryLimit: u32 = 0;
   /** If true, exports the runtime helpers. */
   exportRuntime: bool = false;
