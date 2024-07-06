@@ -412,6 +412,4 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     if (n) message += Array.prototype.slice.call(arguments, 2, 2 + n);
     console.error("trace: " + message);
   };
-} else {
-  console.warn("compiler mismatch: std/portable included twice");
 }
