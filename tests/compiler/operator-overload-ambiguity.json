@@ -1,0 +1,14 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "AS240: Ambiguous operator overload '==' (conflicting overloads 'operator-overload-ambiguity/A#__eq' and 'operator-overload-ambiguity/B#__eq').",
+    "compare_nonnull_a == compare_nonnull_b;",
+    "AS240: Ambiguous operator overload '==' (conflicting overloads 'operator-overload-ambiguity/B#__eq' and 'operator-overload-ambiguity/A#__eq').",
+    "compare_nonnull_b == compare_nonnull_a;",
+    "AS240: Ambiguous operator overload '==' (conflicting overloads 'operator-overload-ambiguity/C.__eq' and 'operator-overload-ambiguity/D#__eq').",
+    "compare_nonnull_c == compare_nonnull_d;",
+    "AS240: Ambiguous operator overload '==' (conflicting overloads 'operator-overload-ambiguity/A#__eq' and 'operator-overload-ambiguity/B#__eq').",
+    "compare_extend_1 == compare_extend_2;",
+    "EOF"
+  ]
+}
