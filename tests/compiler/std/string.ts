@@ -27,7 +27,7 @@ assert(String.fromCharCode(65600) == "@");
 assert(String.fromCharCode(54) == "6");
 assert(String.fromCharCode(0x10000 + 54) == "6");
 assert(String.fromCharCode(0xD800, 0xDF00) == "𐌀");
-assert(String.fromCharCodes([0, 54]) == "\06");
+assert(String.fromCharCodes([0, 54]) == "\x006");
 assert(String.fromCharCodes([65, 66, 67]) == "ABC");
 assert(String.fromCharCodes([0xD834, 0xDF06, 0x61, 0xD834, 0xDF07]) == "\uD834\uDF06a\uD834\uDF07");
 

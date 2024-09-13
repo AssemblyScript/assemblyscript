@@ -1623,6 +1623,7 @@ function builtin_max(ctx: BuiltinFunctionContext): ExpressionRef {
     } else {
       arg1 = compiler.compileExpression(operands[1], type, Constraints.ConvImplicit | Constraints.MustWrap);
     }
+    // @ts-expect-error
     let op: BinaryOp = -1;
     switch (type.kind) {
       case TypeKind.I8:
@@ -1691,6 +1692,7 @@ function builtin_min(ctx: BuiltinFunctionContext): ExpressionRef {
     } else {
       arg1 = compiler.compileExpression(operands[1], type, Constraints.ConvImplicit | Constraints.MustWrap);
     }
+    // @ts-expect-error
     let op: BinaryOp = -1;
     switch (type.kind) {
       case TypeKind.I8:
