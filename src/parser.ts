@@ -631,7 +631,7 @@ export class Parser extends DiagnosticEmitter {
     }
     // ... | type
     while (tn.skip(Token.Bar)) {
-      let nextType = this.parseType(tn, false, true);
+      let nextType = this.parseType(tn, true, false);
       if (!nextType) return null;
       let typeIsNull = type.kind == NodeKind.NamedType && (<NamedTypeNode>type).isNull;
       let nextTypeIsNull = nextType.kind == NodeKind.NamedType && (<NamedTypeNode>nextType).isNull;
