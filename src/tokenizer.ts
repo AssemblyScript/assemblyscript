@@ -463,9 +463,11 @@ export class Tokenizer extends DiagnosticEmitter {
   end: i32 = 0;
 
   pos: i32 = 0;
+  // @ts-expect-error
   token: Token = -1;
   tokenPos: i32 = 0;
 
+  // @ts-expect-error
   nextToken: Token = -1;
   nextTokenPos: i32 = 0;
   nextTokenOnNewLine: OnNewLine = OnNewLine.Unknown;
@@ -1055,6 +1057,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   clearNextToken(): void {
+    // @ts-expect-error
     this.nextToken = -1;
     this.nextTokenPos = 0;
     this.nextTokenOnNewLine = OnNewLine.Unknown;

@@ -118,7 +118,7 @@ testUTF8Decode();
 function testUTF8DecodeNullTerminated(): void {
   var buf = String.UTF8.encode(str, true);
   assert(String.UTF8.decode(buf, true) == str);
-  var str2 = "123\0456";
+  var str2 = "123\x00456";
   assert(String.UTF8.byteLength(str2, true) == 4);
   var buf2 = String.UTF8.encode(str2, true);
   assert(buf2.byteLength == 4);
