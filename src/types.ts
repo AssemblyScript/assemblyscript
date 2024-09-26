@@ -10,7 +10,9 @@ import {
 import {
   Class,
   Program,
-  DecoratorFlags
+  DecoratorFlags,
+  OperatorKind,
+  Function
 } from "./program";
 
 import {
@@ -316,6 +318,14 @@ export class Type {
           return assert(wrapperClasses.get(this));
         }
       }
+    }
+    return null;
+  }
+
+  lookupOverload(kind: OperatorKind, program: Program): Function | null {
+    let classReference = this.getClassOrWrapper(program);
+    if (classReference) {
+      return classReference.lookupOverload(kind);
     }
     return null;
   }
