@@ -1708,20 +1708,40 @@ export class Parser extends DiagnosticEmitter {
     }
 
     let extendsType: NamedTypeNode | null = null;
+    let implementsTypes: NamedTypeNode[] | null = null;
     if (tn.skip(Token.Extends)) {
-      let type = this.parseType(tn);
-      if (!type) return null;
-      if (type.kind != NodeKind.NamedType) {
-        this.error(
-          DiagnosticCode.Identifier_expected,
-          type.range
-        );
-        return null;
+      if (isInterface) {
+        do {
+          let type = this.parseType(tn);
+          if (!type) return null;
+          if (type.kind != NodeKind.NamedType) {
+            this.error(
+              DiagnosticCode.Identifier_expected,
+              type.range
+            );
+            return null;
+          }
+          // Note: Even though the keyword is "extends", the base interfaces are stored in
+          //       the implementsTypes field, as that's already an array that can be used.
+          //       When an InterfacePrototype is created, the base InterfacePrototypes are
+          //       stored in the interfacePrototypes field for the same reason.
+          if (!implementsTypes) implementsTypes = [<NamedTypeNode>type];
+          else implementsTypes.push(<NamedTypeNode>type);
+        } while (tn.skip(Token.Comma));
+      } else {
+        let type = this.parseType(tn);
+        if (!type) return null;
+        if (type.kind != NodeKind.NamedType) {
+          this.error(
+            DiagnosticCode.Identifier_expected,
+            type.range
+          );
+          return null;
+        }
+        extendsType = <NamedTypeNode>type;
       }
-      extendsType = <NamedTypeNode>type;
     }
 
-    let implementsTypes: NamedTypeNode[] | null = null;
     if (tn.skip(Token.Implements)) {
       if (isInterface) {
         this.error(
@@ -1757,14 +1777,14 @@ export class Parser extends DiagnosticEmitter {
     let members = new Array<DeclarationStatement>();
     let declaration: ClassDeclaration;
     if (isInterface) {
-      assert(!implementsTypes);
+      assert(!extendsType);
       declaration = Node.createInterfaceDeclaration(
         identifier,
         decorators,
         flags,
         typeParameters,
-        extendsType,
         null,
+        implementsTypes,
         members,
         tn.range(startPos, tn.pos)
       );
