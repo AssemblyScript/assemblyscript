@@ -488,7 +488,9 @@ export async function main(argv, options) {
     if (libPath.includes("/")) return; // in sub-directory: imported on demand
     let begin = stats.begin();
     stats.parseCount++;
-    assemblyscript.parse(program, libraryFiles[libPath], libraryPrefix + libPath + extension, false);
+    const path = libraryPrefix + libPath;
+    const pathWithExtension = extension_re.test(path) ? path : path + extension;
+    assemblyscript.parse(program, libraryFiles[libPath], pathWithExtension, false);
     stats.parseTime += stats.end(begin);
   });
   let customLibDirs = [];
