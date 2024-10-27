@@ -653,6 +653,9 @@ export class Type {
         }
       }
     }
+    if (this == Type.auto) {
+      return "auto";
+    }
     return this.kindToString();
   }
 
