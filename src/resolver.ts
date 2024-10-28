@@ -3767,6 +3767,9 @@ export class Resolver extends DiagnosticEmitter {
             return Type.bool;
         }
         break;
+      case NodeKind.True:
+      case NodeKind.False:
+        return Type.bool;
     }
     this.error(DiagnosticCode.Cannot_infer_type, expr.range);
     return null;
