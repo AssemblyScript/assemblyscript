@@ -2379,11 +2379,6 @@ export class Parser extends DiagnosticEmitter {
       if (tn.skip(Token.Colon)) {
         type = this.parseType(tn);
         if (!type) return null;
-      } else {
-        this.error(
-          DiagnosticCode.Type_expected,
-          tn.range()
-        ); // recoverable
       }
       let initializer: Expression | null = null;
       if (tn.skip(Token.Equals)) {
