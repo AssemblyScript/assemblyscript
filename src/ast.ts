@@ -51,6 +51,7 @@ export const enum NodeKind {
   // types
   NamedType,
   FunctionType,
+  InferredType,
   TypeName,
   TypeParameter,
   Parameter,
@@ -166,6 +167,10 @@ export abstract class Node {
     range: Range
   ): NamedTypeNode {
     return new NamedTypeNode(Node.createSimpleTypeName("", range), null, false, range);
+  }
+
+  static createInferredType(expr: Expression): InferredTypeNode {
+    return new InferredTypeNode(expr, expr.range);
   }
 
   static createTypeParameter(
@@ -926,6 +931,17 @@ export class FunctionTypeNode extends TypeNode {
     range: Range
   ) {
     super(NodeKind.FunctionType, isNullable, range);
+  }
+}
+
+export class InferredTypeNode extends TypeNode {
+  constructor(
+    /** Function parameters. */
+    public expr: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.InferredType, false, range);
   }
 }
 
