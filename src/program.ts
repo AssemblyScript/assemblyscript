@@ -4000,7 +4000,10 @@ export class PropertyPrototype extends DeclaredElement {
     let nativeRange = Source.native.range;
     let typeNode = fieldDeclaration.type;
     let initializer = fieldDeclaration.initializer;
-    if (!typeNode) typeNode = initializer ? Node.createInferredType(initializer) : Node.createOmittedType(fieldDeclaration.name.range.atEnd)
+    if (!typeNode) {
+      const defaultTypeNode = initializer ? Node.createInferredType(initializer) : Node.createOmittedType(fieldDeclaration.name.range.atEnd);
+      typeNode = defaultTypeNode;
+    }
     let getterDeclaration = new MethodDeclaration( // get name(): type
       fieldDeclaration.name,
       fieldDeclaration.decorators,
