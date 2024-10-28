@@ -3999,7 +3999,8 @@ export class PropertyPrototype extends DeclaredElement {
     // override stub at the interface needs to handle both interchangeably.
     let nativeRange = Source.native.range;
     let typeNode = fieldDeclaration.type;
-    if (!typeNode) typeNode = Node.createOmittedType(fieldDeclaration.name.range.atEnd);
+    let initializer = fieldDeclaration.initializer;
+    if (!typeNode) typeNode = initializer ? Node.createInferredType(initializer) : Node.createOmittedType(fieldDeclaration.name.range.atEnd)
     let getterDeclaration = new MethodDeclaration( // get name(): type
       fieldDeclaration.name,
       fieldDeclaration.decorators,

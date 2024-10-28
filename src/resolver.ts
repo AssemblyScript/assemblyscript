@@ -76,7 +76,8 @@ import {
   NewExpression,
   ArrayLiteralExpression,
   ArrowKind,
-  ExpressionStatement
+  ExpressionStatement,
+  InferredTypeNode
 } from "./ast";
 
 import {
@@ -167,6 +168,10 @@ export class Resolver extends DiagnosticEmitter {
       }
       case NodeKind.FunctionType: {
         resolved = this.resolveFunctionType(<FunctionTypeNode>node, flow, ctxElement, ctxTypes, reportMode);
+        break;
+      }
+      case NodeKind.InferredType: {
+        resolved = this.inferExpressionType((<InferredTypeNode>node).expr);
         break;
       }
       default: assert(false);
@@ -3741,5 +3746,29 @@ export class Resolver extends DiagnosticEmitter {
       return null;
     }
     return typeArgumentNodes[0];
+  }
+
+  private inferExpressionType(expr: Expression): Type | null {
+    switch(expr.kind) {
+      case NodeKind.Literal:
+        switch((<LiteralExpression>expr).literalKind) {
+          case LiteralKind.Integer:
+            return this.determineIntegerLiteralType(<IntegerLiteralExpression>expr, false, Type.auto);
+          case LiteralKind.Float:
+            return Type.f64;
+        }
+        break;
+      case NodeKind.Binary:
+        switch((<BinaryExpression>expr).operator) {
+          case Token.Equals_Equals:
+          case Token.Equals_Equals_Equals:
+          case Token.Exclamation_Equals:
+          case Token.Exclamation_Equals_Equals:
+            return Type.bool;
+        }
+        break;
+    }
+    this.error(DiagnosticCode.Cannot_infer_type, expr.range);
+    return null;
   }
 }
