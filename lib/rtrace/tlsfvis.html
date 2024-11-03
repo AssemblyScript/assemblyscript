@@ -169,8 +169,8 @@ button:hover { background: #bbb; }
 </style>
 
 <h1>TLSF visualizer</h1>
-<p>
-  <strong>Notes:</strong>
+<div>
+  <p><strong>Notes:</strong></p>
   <ul>
     <li>It is expected that there is exactly one block on initialization. This is the remaining space (&lt; 64K) within the last page after static data.</li>
     <li>It is expected that if two adjacent blocks of size K are freed, the merged block doesn't go into the first level list for K*2 because its size is actually larger than that (K + OVERHEAD + K).</li>
@@ -178,7 +178,7 @@ button:hover { background: #bbb; }
     <li>It is expected that after other operations have already been performed, being able to allocate 1GB can't be guaranteed anymore, even if there should be enough space left in absolute terms, if prior subdivision prevents it.</li>
     <li>It is expected that the second level 0 in first level 0 isn't ever used due to alignment guarantees. Smallest block is 32 bytes (16 bytes overhead + 16 bytes payload if used, respectively linking information if free) in this implementation.</li>
   </ul>
-</p>
+</div>
 <p><strong>Implementation constants:</strong> <span id="albits">?</span> bits alignment, <span id="flbits">?</span> bits first level, <span id="slbits">?</span> bits second level, <span id="overhead">?</span> B overhead</p>
 
 <h2>First level bitmap</h2>
@@ -228,7 +228,6 @@ button:hover { background: #bbb; }
   <button onclick="allocate(268435456-OVERHEAD); update()">256 MB - δ <span class="sub">fl=MSB-2 sl=MSB</span></button>
   <button onclick="allocate(536870912-OVERHEAD); update()">512 MB - δ <span class="sub">fl=MSB-1 sl=MSB</span></button>
   <button onclick="allocate(1073741824-OVERHEAD); update()">1 GB - δ <span class="sub">fl=MSB sl=MSB</span></button>
-</p>
 </p>
 
 <h2>Segments</h2>
