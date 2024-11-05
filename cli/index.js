@@ -598,7 +598,7 @@ export async function main(argv, options) {
     return { sourceText, sourcePath };
   }
 
-  // Gets all pending imported files from the the backlog
+  // Gets all pending imported files from the backlog
   function getBacklog(paths = []) {
     do {
       let internalPath = assemblyscript.nextFile(program);
