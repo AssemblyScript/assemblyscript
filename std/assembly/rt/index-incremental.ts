@@ -1,2 +1,2 @@
-import "rt/tlsf";
-import "rt/itcms";
+import "./tlsf";
+import "./itcms";
