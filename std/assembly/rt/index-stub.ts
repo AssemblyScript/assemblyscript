@@ -1,1 +1,1 @@
-import "rt/stub";
+import "./stub";
