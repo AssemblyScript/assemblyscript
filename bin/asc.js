@@ -1,15 +1,11 @@
 #!/usr/bin/env node
+import process from "node:process";
 
 const [ nodePath, thisPath, ...args ] = process.argv;
 const nodeArgs = process.execArgv;
 
 const hasSourceMaps = nodeArgs.includes("--enable-source-maps");
 const posCustomArgs = args.indexOf("--");
-const isDeno = typeof Deno !== "undefined";
-
-if (isDeno) {
-  process.on = function() { /* suppress 'not implemented' message */ };
-}
 
 if ((!hasSourceMaps || ~posCustomArgs) && !isDeno) {
   if (!hasSourceMaps) {
