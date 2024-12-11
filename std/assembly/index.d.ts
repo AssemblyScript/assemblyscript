@@ -791,7 +791,7 @@ declare function v128(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i:
 declare namespace v128 {
   /** Creates a vector with identical lanes. */
   export function splat<T>(x: T): v128;
-  /** Extracts one lane as a scalar. idx argument needs to be compile time constant. */
+  /** Extracts one lane as a scalar. */
   export function extract_lane<T>(x: v128, idx: u8): T;
   /** Replaces one lane. */
   export function replace_lane<T>(x: v128, idx: u8, value: T): v128;
@@ -1051,9 +1051,9 @@ declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i
 declare namespace i8x16 {
   /** Creates a vector with sixteen identical 8-bit integer lanes. */
   export function splat(x: i8): v128;
-  /** Extracts one 8-bit integer lane as a signed scalar. idx argument needs to be compile time constant. */
+  /** Extracts one 8-bit integer lane as a signed scalar. */
   export function extract_lane_s(x: v128, idx: u8): i8;
-  /** Extracts one 8-bit integer lane as an unsigned scalar. idx argument needs to be compile time constant. */
+  /** Extracts one 8-bit integer lane as an unsigned scalar. */
   export function extract_lane_u(x: v128, idx: u8): u8;
   /** Replaces one 8-bit integer lane. */
   export function replace_lane(x: v128, idx: u8, value: i8): v128;
@@ -1146,9 +1146,9 @@ declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h
 declare namespace i16x8 {
   /** Creates a vector with eight identical 16-bit integer lanes. */
   export function splat(x: i16): v128;
-  /** Extracts one 16-bit integer lane as a signed scalar. idx argument needs to be compile time constant. */
+  /** Extracts one 16-bit integer lane as a signed scalar. */
   export function extract_lane_s(x: v128, idx: u8): i16;
-  /** Extracts one 16-bit integer lane as an unsigned scalar. idx argument needs to be compile time constant. */
+  /** Extracts one 16-bit integer lane as an unsigned scalar. */
   export function extract_lane_u(x: v128, idx: u8): u16;
   /** Replaces one 16-bit integer lane. */
   export function replace_lane(x: v128, idx: u8, value: i16): v128;
@@ -1267,7 +1267,7 @@ declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
 declare namespace i32x4 {
   /** Creates a vector with four identical 32-bit integer lanes. */
   export function splat(x: i32): v128;
-  /** Extracts one 32-bit integer lane as a scalar. idx argument needs to be compile time constant. */
+  /** Extracts one 32-bit integer lane as a scalar. */
   export function extract_lane(x: v128, idx: u8): i32;
   /** Replaces one 32-bit integer lane. */
   export function replace_lane(x: v128, idx: u8, value: i32): v128;
@@ -1416,7 +1416,7 @@ declare function i64x2(a: i64, b: i64): v128;
 declare namespace i64x2 {
   /** Creates a vector with two identical 64-bit integer lanes. */
   export function splat(x: i64): v128;
-  /** Extracts one 64-bit integer lane as a scalar. `idx` argument need to be compile time constant */
+  /** Extracts one 64-bit integer lane as a scalar. */
   export function extract_lane(x: v128, idx: u8): i64;
   /** Replaces one 64-bit integer lane. */
   export function replace_lane(x: v128, idx: u8, value: i64): v128;
@@ -1485,7 +1485,7 @@ declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
 declare namespace f32x4 {
   /** Creates a vector with four identical 32-bit float lanes. */
   export function splat(x: f32): v128;
-  /** Extracts one 32-bit float lane as a scalar. idx argument needs to be compile time constant. */
+  /** Extracts one 32-bit float lane as a scalar. */
   export function extract_lane(x: v128, idx: u8): f32;
   /** Replaces one 32-bit float lane. */
   export function replace_lane(x: v128, idx: u8, value: f32): v128;
@@ -1575,7 +1575,7 @@ declare function f64x2(a: f64, b: f64): v128;
 declare namespace f64x2 {
   /** Creates a vector with two identical 64-bit float lanes. */
   export function splat(x: f64): v128;
-  /** Extracts one 64-bit float lane as a scalar. idx argument needs to be compile time constant. */
+  /** Extracts one 64-bit float lane as a scalar. */
   export function extract_lane(x: v128, idx: u8): f64;
   /** Replaces one 64-bit float lane. */
   export function replace_lane(x: v128, idx: u8, value: f64): v128;
