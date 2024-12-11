@@ -1,90 +1,89 @@
 The following authors have all licensed their contributions to AssemblyScript
 under the licensing terms detailed in LICENSE:
 
-- Daniel Wirtz <dcode@dcode.io>
-- Max Graey <maxgraey@gmail.com>
-- Igor Sbitnev <PinkaminaDianePie@gmail.com>
-- Norton Wang <me@nortonwang.com>
-- Alan Pierce <alangpierce@gmail.com>
-- Palmer <pengliao@live.cn>
-- Linus Unnebäck <linus@folkdatorn.se>
-- Joshua Tenner <tenner.joshua@gmail.com>
-- Nidin Vinayakan <01@01alchemist.com>
-- Aaron Turner <aaron@aaronthedev.com>
-- Willem Wyndham <willem@cs.umd.edu>
-- Bowen Wang <bowen@nearprotocol.com>
-- Emil Laine <laine.emil@gmail.com>
-- Stephen Paul Weber <stephen.weber@shopify.com>
-- Jay Phelps <hello@jayphelps.com>
-- jhwgh1968 <jhwgh1968@protonmail.com>
-- Jeffrey Charles <jeffreycharles@gmail.com>
-- Vladimir Tikhonov <reg@tikhonov.by>
-- Duncan Uszkay <duncan.uszkay@shopify.com>
-- Surma <surma@surma.dev>
-- Julien Letellier <letellier.julien@gmail.com>
-- Guido Zuidhof <me@guido.io>
-- ncave <777696+ncave@users.noreply.github.com>
-- Andrew Davis <pulpdrew@gmail.com>
-- Maël Nison <nison.mael@gmail.com>
-- Valeria Viana Gusmao <valeria.viana.gusmao@gmail.com>
-- Gabor Greif <ggreif@gmail.com>
-- Martin Fredriksson <martin.fredriksson@vikinganalytics.se>
-- forcepusher <bionitsoup@gmail.com>
-- Piotr Oleś <piotrek.oles@gmail.com>
-- Saúl Cabrera <saulecabrera@gmail.com>
-- Chance Snow <git@chancesnow.me>
-- Peter Salomonsen <petersalomonsen@runbox.com>
-- ookangzheng <git-ed@runbox.no>
-- yjhmelody <yjh465402634@gmail.com>
-- bnbarak <bn.barak@gmail.com>
-- Colin Eberhardt <colin.eberhardt@gmail.com>
-- Ryan Pivovar <ryanpivovar@gmail.com>
-- Roman F. <70765447+romdotdog@users.noreply.github.com>
-- Joe Pea <trusktr@gmail.com>
-- Felipe Gasper <FGasper@users.noreply.github.com>
-- Congcong Cai <congcongcai0907@163.com>
-- mooooooi <emwings@outlook.com>
-- Yasushi Ando <andyjpn@gmail.com>
-- Syed Jafri <syed@metalpay.co>
-- Peter Hayman <peteyhayman@gmail.com>
-- ApsarasX <apsarax@outlook.com>
-- Adrien Zinger <zinger.ad@gmail.com>
-- Ruixiang Chen <xiang19890319@gmail.com>
-- Daniel Salvadori <danaugrs@gmail.com>
-- Jairus Tanaka <jairus.v.tanaka@outlook.com>
-- CountBleck <Mr.YouKnowWhoIAm@protonmail.com>
-- Abdul Rauf <abdulraufmujahid@gmail.com>
-- Bach Le <bach@bullno1.com>
-- Xinquan Xu <xinquan0203@163.com>
-- Matt Johnson-Pint <mattjohnsonpint@gmail.com>
-- Fabián Heredia Montiel <fabianhjr@users.noreply.github.com>
-- Jonas Minnberg <sasq64@gmail.com>
-- Kam Chehresa <kaz.che@gmail.com>
+* Daniel Wirtz <dcode@dcode.io>
+* Max Graey <maxgraey@gmail.com>
+* Igor Sbitnev <PinkaminaDianePie@gmail.com>
+* Norton Wang <me@nortonwang.com>
+* Alan Pierce <alangpierce@gmail.com>
+* Palmer <pengliao@live.cn>
+* Linus Unnebäck <linus@folkdatorn.se>
+* Joshua Tenner <tenner.joshua@gmail.com>
+* Nidin Vinayakan <01@01alchemist.com>
+* Aaron Turner <aaron@aaronthedev.com>
+* Willem Wyndham <willem@cs.umd.edu>
+* Bowen Wang <bowen@nearprotocol.com>
+* Emil Laine <laine.emil@gmail.com>
+* Stephen Paul Weber <stephen.weber@shopify.com>
+* Jay Phelps <hello@jayphelps.com>
+* jhwgh1968 <jhwgh1968@protonmail.com>
+* Jeffrey Charles <jeffreycharles@gmail.com>
+* Vladimir Tikhonov <reg@tikhonov.by>
+* Duncan Uszkay <duncan.uszkay@shopify.com>
+* Surma <surma@surma.dev>
+* Julien Letellier <letellier.julien@gmail.com>
+* Guido Zuidhof <me@guido.io>
+* ncave <777696+ncave@users.noreply.github.com>
+* Andrew Davis <pulpdrew@gmail.com>
+* Maël Nison <nison.mael@gmail.com>
+* Valeria Viana Gusmao <valeria.viana.gusmao@gmail.com>
+* Gabor Greif <ggreif@gmail.com>
+* Martin Fredriksson <martin.fredriksson@vikinganalytics.se>
+* forcepusher <bionitsoup@gmail.com>
+* Piotr Oleś <piotrek.oles@gmail.com>
+* Saúl Cabrera <saulecabrera@gmail.com>
+* Chance Snow <git@chancesnow.me>
+* Peter Salomonsen <petersalomonsen@runbox.com>
+* ookangzheng <git-ed@runbox.no>
+* yjhmelody <yjh465402634@gmail.com>
+* bnbarak <bn.barak@gmail.com>
+* Colin Eberhardt <colin.eberhardt@gmail.com>
+* Ryan Pivovar <ryanpivovar@gmail.com>
+* Roman F. <70765447+romdotdog@users.noreply.github.com>
+* Joe Pea <trusktr@gmail.com>
+* Felipe Gasper <FGasper@users.noreply.github.com>
+* Congcong Cai <congcongcai0907@163.com>
+* mooooooi <emwings@outlook.com>
+* Yasushi Ando <andyjpn@gmail.com>
+* Syed Jafri <syed@metalpay.co>
+* Peter Hayman <peteyhayman@gmail.com>
+* ApsarasX <apsarax@outlook.com>
+* Adrien Zinger <zinger.ad@gmail.com>
+* Ruixiang Chen <xiang19890319@gmail.com>
+* Daniel Salvadori <danaugrs@gmail.com>
+* Jairus Tanaka <jairus.v.tanaka@outlook.com>
+* CountBleck <Mr.YouKnowWhoIAm@protonmail.com>
+* Abdul Rauf <abdulraufmujahid@gmail.com>
+* Bach Le <bach@bullno1.com>
+* Xinquan Xu <xinquan0203@163.com>
+* Matt Johnson-Pint <mattjohnsonpint@gmail.com>
+* Fabián Heredia Montiel <fabianhjr@users.noreply.github.com>
+* Jonas Minnberg <sasq64@gmail.com>
 
 Portions of this software are derived from third-party works licensed under
 the following terms:
 
-- TypeScript: https://github.com/Microsoft/TypeScript
+* TypeScript: https://github.com/Microsoft/TypeScript
 
   Copyright (c) Microsoft Corporation
   Apache License, Version 2.0 (https://opensource.org/licenses/Apache-2.0)
 
-- Binaryen: https://github.com/WebAssembly/binaryen
+* Binaryen: https://github.com/WebAssembly/binaryen
 
   Copyright (c) WebAssembly Community Group participants
   Apache License, Version 2.0 (https://opensource.org/licenses/Apache-2.0)
 
-- musl libc: http://www.musl-libc.org
+* musl libc: http://www.musl-libc.org
 
   Copyright (c) Rich Felker, et al.
   The MIT License (https://opensource.org/licenses/MIT)
 
-- V8: https://developers.google.com/v8/
+* V8: https://developers.google.com/v8/
 
   Copyright (c) the V8 project authors
   The 3-Clause BSD License (https://opensource.org/licenses/BSD-3-Clause)
 
-- Arm Optimized Routines: https://github.com/ARM-software/optimized-routines
+* Arm Optimized Routines: https://github.com/ARM-software/optimized-routines
 
   Copyright (c) Arm Limited
   The MIT License (https://opensource.org/licenses/MIT)
