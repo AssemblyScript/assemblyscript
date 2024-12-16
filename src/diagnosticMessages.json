@@ -94,6 +94,8 @@
   "Type expected.": 1110,
   "A 'default' clause cannot appear more than once in a 'switch' statement.": 1113,
   "Duplicate label '{0}'.": 1114,
+  "A 'continue' statement can only jump to a label of an enclosing iteration statement.": 1115,
+  "A 'break' statement can only jump to a label of an enclosing statement": 1116,
   "An export assignment cannot have modifiers.": 1120,
   "Octal literals are not allowed in strict mode.": 1121,
   "Digit expected.": 1124,
