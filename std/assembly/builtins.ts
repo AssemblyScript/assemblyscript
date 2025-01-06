@@ -202,6 +202,12 @@ export declare function assert<T>(isTrueish: T, message?: string): T;
 @unsafe @builtin
 export declare function unchecked<T>(expr: T): T;
 
+export namespace inline {
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function always<T>(expr: T): T;
+}
+
 // @ts-ignore: decorator
 @unsafe @builtin
 export declare function call_indirect<T>(index: u32, ...args: auto[]): T;

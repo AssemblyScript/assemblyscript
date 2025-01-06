@@ -6255,7 +6255,8 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Inline if explicitly requested
-    if (instance.hasDecorator(DecoratorFlags.Inline) && (!instance.is(CommonFlags.Overridden) || reportNode.isAccessOnSuper)) {
+    let inlineRequested = instance.hasDecorator(DecoratorFlags.Inline) || this.currentFlow.is(FlowFlags.InlineContext);
+    if (inlineRequested && (!instance.is(CommonFlags.Overridden) || reportNode.isAccessOnSuper)) {
       assert(!instance.is(CommonFlags.Stub)); // doesn't make sense
       let inlineStack = this.inlineStack;
       if (inlineStack.includes(instance)) {

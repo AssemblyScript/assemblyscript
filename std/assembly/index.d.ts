@@ -2693,6 +2693,10 @@ declare function final(constructor: Constructor): void;
 
 /** Annotates a method, function or constant global as always inlined. */
 declare function inline(...args: any[]): any;
+declare namespace inline {
+  /** Explicitly requests inlined function calls on the provided expression wherever possible. */
+  declare function always<T>(value: T): T;
+}
 
 /** Annotates a method, function or constant global as unsafe. */
 declare function unsafe(...args: any[]): any;
