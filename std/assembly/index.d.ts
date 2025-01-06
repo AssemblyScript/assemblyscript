@@ -222,6 +222,8 @@ declare function idof<T>(): u32;
 declare function changetype<T>(value: any): T;
 /** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
 declare function unchecked<T>(value: T): T;
+/** Explicitly requests inlined function calls on the provided expression wherever possible. */
+declare function inlined<T>(value: T): T;
 /** Emits a `call_indirect` instruction, calling the specified function in the function table by index with the specified arguments. Does result in a runtime error if the arguments do not match the called function. */
 declare function call_indirect<T>(index: u32, ...args: unknown[]): T;
 /** Instantiates a new instance of `T` using the specified constructor arguments. */
