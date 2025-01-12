@@ -731,7 +731,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // infer generic call if type arguments have been omitted
     if (prototype.is(CommonFlags.Generic)) {
-      let resolvedTypeArguments = this.inferGenericTypesArguments(
+      let resolvedTypeArguments = this.inferGenericTypeArguments(
         node,
         prototype,
         prototype.typeParameterNodes,
@@ -751,7 +751,7 @@ export class Resolver extends DiagnosticEmitter {
     return this.resolveFunction(prototype, null, new Map(), reportMode);
   }
 
-  inferGenericTypesArguments(
+  private inferGenericTypeArguments(
     node: CallExpression | NewExpression,
     prototype: FunctionPrototype,
     typeParameterNodes: TypeParameterNode[] | null,
@@ -3679,15 +3679,28 @@ export class Resolver extends DiagnosticEmitter {
 
     // Resolve type arguments if generic
     if (prototype.is(CommonFlags.Generic)) {
-      resolvedTypeArguments = this.resolveTypeArguments( // reports
-        assert(prototype.typeParameterNodes), // must be present if generic
-        typeArgumentNodes,
-        flow,
-        ctxElement,
-        ctxTypes, // update
-        reportNode,
-        reportMode
-      );
+
+      // if no type arguments are provided, try to infer them from the constructor call
+      if (!typeArgumentNodes && prototype.constructorPrototype && flow) {
+        resolvedTypeArguments = this.inferGenericTypeArguments(
+          reportNode as NewExpression,
+          prototype.constructorPrototype,
+          prototype.typeParameterNodes,
+          flow,
+        );
+      } else {
+        // resolve them from the provided type argument nodes
+        resolvedTypeArguments = this.resolveTypeArguments( // reports
+          assert(prototype.typeParameterNodes), // must be present if generic
+          typeArgumentNodes,
+          flow,
+          ctxElement,
+          ctxTypes, // update
+          reportNode,
+          reportMode
+        );
+      }
+
       if (!resolvedTypeArguments) return null;
 
     // Otherwise make sure that no type arguments have been specified
