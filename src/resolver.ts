@@ -752,7 +752,7 @@ export class Resolver extends DiagnosticEmitter {
   }
 
   private inferGenericTypeArguments(
-    node: CallExpression | NewExpression,
+    node: Expression,
     prototype: FunctionPrototype,
     typeParameterNodes: TypeParameterNode[] | null,
     ctxFlow: Flow,
@@ -776,7 +776,20 @@ export class Resolver extends DiagnosticEmitter {
 
     let parameterNodes = prototype.functionTypeNode.parameters;
     let numParameters = parameterNodes.length;
-    let argumentNodes = node.args;
+
+    let argumentNodes: Expression[];
+    switch (node.kind) {
+      case NodeKind.Call:
+        argumentNodes = (<CallExpression>node).args;
+        break;
+      case NodeKind.New: 
+        argumentNodes = (<NewExpression>node).args;
+        break;
+      default:
+        assert(false);
+        return null;
+    }
+
     let numArguments = argumentNodes.length;
 
     // infer types with generic components while updating contextual types
@@ -3681,10 +3694,10 @@ export class Resolver extends DiagnosticEmitter {
     if (prototype.is(CommonFlags.Generic)) {
 
       // if no type arguments are provided, try to infer them from the constructor call
-      if (!typeArgumentNodes && prototype.constructorPrototype && flow) {
+      if (!typeArgumentNodes && prototype.constructorPrototype && flow && ctxTypes.size == 0) {
         resolvedTypeArguments = this.inferGenericTypeArguments(
           reportNode as NewExpression,
-          prototype.constructorPrototype,
+          prototype.constructorPrototype!,
           prototype.typeParameterNodes,
           flow,
         );
