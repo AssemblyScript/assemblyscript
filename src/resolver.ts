@@ -731,100 +731,14 @@ export class Resolver extends DiagnosticEmitter {
 
     // infer generic call if type arguments have been omitted
     if (prototype.is(CommonFlags.Generic)) {
-      let contextualTypeArguments = cloneMap(ctxFlow.contextualTypeArguments);
-
-      // fill up contextual types with auto for each generic component
-      let typeParameterNodes = assert(prototype.typeParameterNodes);
-      let numTypeParameters = typeParameterNodes.length;
-      let typeParameterNames = new Set<string>();
-      for (let i = 0; i < numTypeParameters; ++i) {
-        let name = typeParameterNodes[i].name.text;
-        contextualTypeArguments.set(name, Type.auto);
-        typeParameterNames.add(name);
-      }
-
-      let parameterNodes = prototype.functionTypeNode.parameters;
-      let numParameters = parameterNodes.length;
-      let argumentNodes = node.args;
-      let numArguments = argumentNodes.length;
-
-      // infer types with generic components while updating contextual types
-      for (let i = 0; i < numParameters; ++i) {
-        let argumentExpression = i < numArguments
-          ? argumentNodes[i]
-          : parameterNodes[i].initializer;
-        if (!argumentExpression) {
-          // optional but not have initializer should be handled in the other place
-          if (parameterNodes[i].parameterKind == ParameterKind.Optional) {
-            continue;
-          }
-          // missing initializer -> too few arguments
-          if (reportMode == ReportMode.Report) {
-            this.error(
-              DiagnosticCode.Expected_0_arguments_but_got_1,
-              node.range, numParameters.toString(), numArguments.toString()
-            );
-          }
-          return null;
-        }
-        let typeNode = parameterNodes[i].type;
-        if (typeNode.hasGenericComponent(typeParameterNodes)) {
-          let type = this.resolveExpression(argumentExpression, ctxFlow, Type.auto, ReportMode.Swallow);
-          if (type) {
-            this.propagateInferredGenericTypes(
-              typeNode,
-              type,
-              prototype,
-              contextualTypeArguments,
-              typeParameterNames
-            );
-          }
-        }
-      }
-
-      // apply concrete types to the generic function signature
-      let resolvedTypeArguments = new Array<Type>(numTypeParameters);
-      for (let i = 0; i < numTypeParameters; ++i) {
-        let typeParameterNode = typeParameterNodes[i];
-        let name = typeParameterNode.name.text;
-        if (contextualTypeArguments.has(name)) {
-          let inferredType = assert(contextualTypeArguments.get(name));
-          if (inferredType != Type.auto) {
-            resolvedTypeArguments[i] = inferredType;
-            continue;
-          }
-          let defaultType = typeParameterNode.defaultType;
-          if (defaultType) {
-            // Default parameters are resolved in context of the called function, not the calling function
-            let parent = prototype.parent;
-            let defaultTypeContextualTypeArguments: Map<string, Type> | null = null;
-            if (parent.kind == ElementKind.Class) {
-              defaultTypeContextualTypeArguments = (<Class>parent).contextualTypeArguments;
-            } else if (parent.kind == ElementKind.Function) {
-              defaultTypeContextualTypeArguments = (<Function>parent).contextualTypeArguments;
-            }
-            let resolvedDefaultType = this.resolveType(
-              defaultType,
-              null,
-              prototype,
-              defaultTypeContextualTypeArguments,
-              reportMode
-            );
-            if (!resolvedDefaultType) return null;
-            resolvedTypeArguments[i] = resolvedDefaultType;
-            continue;
-          }
-        }
-        // unused template, e.g. `function test<T>(): void {...}` called as `test()`
-        // invalid because the type is effectively unknown inside the function body
-        if (reportMode == ReportMode.Report) {
-          this.error(
-            DiagnosticCode.Type_argument_expected,
-            node.expression.range.atEnd
-          );
-        }
-        return null;
-      }
+      let resolvedTypeArguments = this.inferGenericTypesArguments(
+        node,
+        prototype,
+        prototype.typeParameterNodes,
+        ctxFlow,
+        reportMode,
+      );
+      
       return this.resolveFunction(
         prototype,
         resolvedTypeArguments,
@@ -835,6 +749,127 @@ export class Resolver extends DiagnosticEmitter {
 
     // otherwise resolve the non-generic call as usual
     return this.resolveFunction(prototype, null, new Map(), reportMode);
+  }
+
+  inferGenericTypesArguments(
+    node: CallExpression | NewExpression,
+    prototype: FunctionPrototype,
+    typeParameterNodes: TypeParameterNode[] | null,
+    ctxFlow: Flow,
+    reportMode: ReportMode = ReportMode.Report,
+  ): Type[] | null {
+
+    if (!typeParameterNodes) {
+      return null;
+    }
+
+    let contextualTypeArguments = cloneMap(ctxFlow.contextualTypeArguments);
+
+    // fill up contextual types with auto for each generic component
+    let numTypeParameters = typeParameterNodes.length;
+    let typeParameterNames = new Set<string>();
+    for (let i = 0; i < numTypeParameters; ++i) {
+      let name = typeParameterNodes[i].name.text;
+      contextualTypeArguments.set(name, Type.auto);
+      typeParameterNames.add(name);
+    }
+
+    let parameterNodes = prototype.functionTypeNode.parameters;
+    let numParameters = parameterNodes.length;
+    let argumentNodes = node.args;
+    let numArguments = argumentNodes.length;
+
+    // infer types with generic components while updating contextual types
+    for (let i = 0; i < numParameters; ++i) {
+      let argumentExpression = i < numArguments
+        ? argumentNodes[i]
+        : parameterNodes[i].initializer;
+      if (!argumentExpression) {
+        // optional but not have initializer should be handled in the other place
+        if (parameterNodes[i].parameterKind == ParameterKind.Optional) {
+          continue;
+        }
+        // missing initializer -> too few arguments
+        if (reportMode == ReportMode.Report) {
+          this.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            node.range, numParameters.toString(), numArguments.toString()
+          );
+        }
+        return null;
+      }
+      let typeNode = parameterNodes[i].type;
+      if (typeNode.hasGenericComponent(typeParameterNodes)) {
+        let type = this.resolveExpression(argumentExpression, ctxFlow, Type.auto, ReportMode.Swallow);
+        if (type) {
+          this.propagateInferredGenericTypes(
+            typeNode,
+            type,
+            prototype,
+            contextualTypeArguments,
+            typeParameterNames
+          );
+        }
+      }
+    }
+
+    // apply concrete types to the generic function signature
+    let resolvedTypeArguments = new Array<Type>(numTypeParameters);
+    for (let i = 0; i < numTypeParameters; ++i) {
+      let typeParameterNode = typeParameterNodes[i];
+      let name = typeParameterNode.name.text;
+      if (contextualTypeArguments.has(name)) {
+        let inferredType = assert(contextualTypeArguments.get(name));
+        if (inferredType != Type.auto) {
+          resolvedTypeArguments[i] = inferredType;
+          continue;
+        }
+        let defaultType = typeParameterNode.defaultType;
+        if (defaultType) {
+          // Default parameters are resolved in context of the called function, not the calling function
+          let parent = prototype.parent;
+          let defaultTypeContextualTypeArguments: Map<string, Type> | null = null;
+          if (parent.kind == ElementKind.Class) {
+            defaultTypeContextualTypeArguments = (<Class>parent).contextualTypeArguments;
+          } else if (parent.kind == ElementKind.Function) {
+            defaultTypeContextualTypeArguments = (<Function>parent).contextualTypeArguments;
+          }
+          let resolvedDefaultType = this.resolveType(
+            defaultType,
+            null,
+            prototype,
+            defaultTypeContextualTypeArguments,
+            reportMode
+          );
+          if (!resolvedDefaultType) return null;
+          resolvedTypeArguments[i] = resolvedDefaultType;
+          continue;
+        }
+      }
+      // unused template, e.g. `function test<T>(): void {...}` called as `test()`
+      // invalid because the type is effectively unknown inside the function body
+      if (reportMode == ReportMode.Report) {
+        let range: Range;
+        switch (node.kind) {
+          case NodeKind.Call:
+            range = (<CallExpression>node).expression.range;
+            break;
+          case NodeKind.New:
+            range = (<NewExpression>node).typeName.range;
+            break;
+          default:
+            assert(false);
+            return null;
+        }
+        this.error(
+          DiagnosticCode.Type_argument_expected,
+          range.atEnd
+        );
+      }
+      return null;
+    }
+
+    return resolvedTypeArguments;
   }
 
   /** Updates contextual types with a possibly encapsulated inferred type. */
