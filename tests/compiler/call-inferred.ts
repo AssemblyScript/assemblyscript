@@ -1,16 +1,16 @@
-// function foo<T>(a: T): T {
-//   return a;
-// }
+function foo<T>(a: T): T {
+  return a;
+}
 
-// assert(foo(42) == 42);
-// assert(foo(42.0) == 42);
-// assert(foo(<f32>42.0) == 42);
+assert(foo(42) == 42);
+assert(foo(42.0) == 42);
+assert(foo(<f32>42.0) == 42);
 
-// function bar<T>(a: T = <f32>42.0): T {
-//   return a;
-// }
+function bar<T>(a: T = <f32>42.0): T {
+  return a;
+}
 
-// assert(bar() == 42);
+assert(bar() == 42);
 
 class Foo<T> {
   constructor(public value: T) {}
@@ -19,16 +19,16 @@ class Foo<T> {
   }
 }
 
-// assert(new Foo(42).value == 42);
-// assert(Foo.create(42).value == 42);
+assert(new Foo(42).value == 42);
+assert(Foo.create(42).value == 42);
 
-// class Bar {
-//   doSomething<T>(a: T): T {
-//     return a;
-//   }
-// }
+class Bar {
+  doSomething<T>(a: T): T {
+    return a;
+  }
+}
 
-// assert(new Bar().doSomething(42) == 42);
+assert(new Bar().doSomething(42) == 42);
 
 class Baz<T> extends Foo<T> {}
 assert(new Baz(42).value == 42);
