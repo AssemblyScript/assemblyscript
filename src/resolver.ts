@@ -3693,11 +3693,17 @@ export class Resolver extends DiagnosticEmitter {
     // Resolve type arguments if generic
     if (prototype.is(CommonFlags.Generic)) {
 
+      // find the constructor prototype, which may be on a base class
+      let constructorPrototype: FunctionPrototype | null = null;
+      for (let p: ClassPrototype | null = prototype; p && !constructorPrototype; p = p.basePrototype) {
+        constructorPrototype = p.constructorPrototype;
+      }
+
       // if no type arguments are provided, try to infer them from the constructor call
-      if (!typeArgumentNodes && prototype.constructorPrototype && flow && ctxTypes.size == 0) {
+      if (!typeArgumentNodes && constructorPrototype && flow && ctxTypes.size == 0) {
         resolvedTypeArguments = this.inferGenericTypeArguments(
           reportNode as NewExpression,
-          prototype.constructorPrototype!,
+          constructorPrototype,
           prototype.typeParameterNodes,
           flow,
         );

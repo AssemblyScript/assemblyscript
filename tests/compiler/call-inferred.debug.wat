@@ -4,14 +4,11 @@
  (type $2 (func (param i32)))
  (type $3 (func))
  (type $4 (func (param i32 i32) (result i32)))
- (type $5 (func (param f32) (result f32)))
- (type $6 (func (param i32 i32 i32)))
- (type $7 (func (param i32 i32 i32 i32)))
- (type $8 (func (param f64) (result f64)))
- (type $9 (func (param i32 i32 i64) (result i32)))
- (type $10 (func (result i32)))
+ (type $5 (func (param i32 i32 i32)))
+ (type $6 (func (param i32 i32 i32 i32)))
+ (type $7 (func (param i32 i32 i64) (result i32)))
+ (type $8 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -31,51 +28,20 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33276))
  (global $~lib/memory/__heap_base i32 (i32.const 33276))
  (memory $0 1)
- (data $0 (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00c\00a\00l\00l\00-\00i\00n\00f\00e\00r\00r\00e\00d\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $1 (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data $2 (i32.const 140) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $3 (i32.const 208) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $4 (i32.const 240) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $5 (i32.const 268) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
- (data $6 (i32.const 332) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data $7 (i32.const 384) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $8 (i32.const 412) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $0 (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data $1 (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $2 (i32.const 144) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $3 (i32.const 176) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $4 (i32.const 204) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
+ (data $5 (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data $6 (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $7 (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $8 (i32.const 412) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00c\00a\00l\00l\00-\00i\00n\00f\00e\00r\00r\00e\00d\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data $9 (i32.const 480) "\06\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $call-inferred/foo<i32> (param $a i32) (result i32)
-  local.get $a
-  return
- )
- (func $call-inferred/foo<f64> (param $a f64) (result f64)
-  local.get $a
-  return
- )
- (func $call-inferred/foo<f32> (param $a f32) (result f32)
-  local.get $a
-  return
- )
- (func $call-inferred/bar<f32> (param $a f32) (result f32)
-  local.get $a
-  return
- )
- (func $call-inferred/bar<f32>@varargs (param $a f32) (result f32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   f32.const 42
-   local.set $a
-  end
-  local.get $a
-  call $call-inferred/bar<f32>
- )
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $this i32) (param $nextWithColor i32)
   local.get $this
   local.get $nextWithColor
@@ -140,7 +106,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 160
+     i32.const 96
      i32.const 160
      i32.const 16
      call $~lib/builtins/abort
@@ -210,7 +176,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 160
+    i32.const 96
     i32.const 128
     i32.const 18
     call $~lib/builtins/abort
@@ -227,7 +193,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 96
    i32.const 132
    i32.const 16
    call $~lib/builtins/abort
@@ -257,8 +223,8 @@
   i32.load
   i32.gt_u
   if
+   i32.const 224
    i32.const 288
-   i32.const 352
    i32.const 21
    i32.const 28
    call $~lib/builtins/abort
@@ -326,7 +292,7 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 160
+    i32.const 96
     i32.const 148
     i32.const 30
     call $~lib/builtins/abort
@@ -478,7 +444,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 268
    i32.const 14
    call $~lib/builtins/abort
@@ -498,7 +464,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 270
    i32.const 14
    call $~lib/builtins/abort
@@ -561,7 +527,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 284
    i32.const 14
    call $~lib/builtins/abort
@@ -714,7 +680,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 201
    i32.const 14
    call $~lib/builtins/abort
@@ -731,7 +697,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 203
    i32.const 14
    call $~lib/builtins/abort
@@ -820,7 +786,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 432
+    i32.const 368
     i32.const 221
     i32.const 16
     call $~lib/builtins/abort
@@ -863,7 +829,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 233
    i32.const 14
    call $~lib/builtins/abort
@@ -881,7 +847,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 234
    i32.const 14
    call $~lib/builtins/abort
@@ -949,7 +915,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 251
    i32.const 14
    call $~lib/builtins/abort
@@ -1066,7 +1032,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 382
    i32.const 14
    call $~lib/builtins/abort
@@ -1112,7 +1078,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 432
+    i32.const 368
     i32.const 389
     i32.const 16
     call $~lib/builtins/abort
@@ -1144,7 +1110,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 432
+    i32.const 368
     i32.const 402
     i32.const 5
     call $~lib/builtins/abort
@@ -1388,7 +1354,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 562
    i32.const 3
    call $~lib/builtins/abort
@@ -1608,7 +1574,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 160
+     i32.const 96
      i32.const 229
      i32.const 20
      call $~lib/builtins/abort
@@ -1716,8 +1682,8 @@
   i32.const 1073741820
   i32.gt_u
   if
-   i32.const 96
-   i32.const 432
+   i32.const 32
+   i32.const 368
    i32.const 461
    i32.const 29
    call $~lib/builtins/abort
@@ -1819,7 +1785,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 334
    i32.const 14
    call $~lib/builtins/abort
@@ -1890,7 +1856,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 432
+     i32.const 368
      i32.const 347
      i32.const 18
      call $~lib/builtins/abort
@@ -2047,7 +2013,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 361
    i32.const 14
    call $~lib/builtins/abort
@@ -2162,7 +2128,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 432
+    i32.const 368
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -2182,7 +2148,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 432
+   i32.const 368
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -2230,8 +2196,8 @@
   i32.const 1073741804
   i32.ge_u
   if
+   i32.const 32
    i32.const 96
-   i32.const 160
    i32.const 261
    i32.const 31
    call $~lib/builtins/abort
@@ -2285,22 +2251,12 @@
   local.get $this
   i32.load
  )
- (func $call-inferred/Foo.create<i32> (param $value i32) (result i32)
-  i32.const 0
-  local.get $value
-  call $call-inferred/Foo<i32>#constructor
-  return
- )
- (func $call-inferred/Bar#doSomething<i32> (param $this i32) (param $a i32) (result i32)
-  local.get $a
-  return
- )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
-  i32.const 288
+  i32.const 224
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 96
+  i32.const 32
   local.get $0
   call $~lib/rt/itcms/__visit
  )
@@ -2322,8 +2278,8 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $call-inferred/Bar
-    block $call-inferred/Foo<i32>
+   block $call-inferred/Foo<i32>
+    block $call-inferred/Baz<i32>
      block $~lib/arraybuffer/ArrayBufferView
       block $~lib/string/String
        block $~lib/arraybuffer/ArrayBuffer
@@ -2332,7 +2288,7 @@
          i32.const 8
          i32.sub
          i32.load
-         br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $call-inferred/Foo<i32> $call-inferred/Bar $invalid
+         br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $call-inferred/Baz<i32> $call-inferred/Foo<i32> $invalid
         end
         return
        end
@@ -2382,7 +2338,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
-   i32.const 4
+   i32.const 5
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store
@@ -2403,8 +2359,8 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
- (func $call-inferred/Bar#constructor (param $this i32) (result i32)
-  (local $1 i32)
+ (func $call-inferred/Baz<i32>#constructor (param $this i32) (param $value i32) (result i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -2417,29 +2373,30 @@
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 5
+   i32.const 4
+   i32.const 4
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store
   end
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  local.set $1
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $2
   i32.store offset=4
-  local.get $1
-  call $~lib/object/Object#constructor
+  local.get $2
+  local.get $value
+  call $call-inferred/Foo<i32>#constructor
   local.tee $this
   i32.store
   local.get $this
-  local.set $1
+  local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $2
  )
  (func $start:call-inferred
   (local $0 i32)
@@ -2451,60 +2408,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 42
-  call $call-inferred/foo<i32>
-  i32.const 42
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 5
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 42
-  call $call-inferred/foo<f64>
-  f64.const 42
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 6
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 42
-  call $call-inferred/foo<f32>
-  f32.const 42
-  f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 7
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  global.set $~argumentsLength
-  f32.const 0
-  call $call-inferred/bar<f32>@varargs
-  f32.const 42
-  f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 13
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   memory.size
   i32.const 16
   i32.shl
@@ -2513,18 +2416,18 @@
   i32.const 1
   i32.shr_u
   global.set $~lib/rt/itcms/threshold
-  i32.const 208
+  i32.const 144
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
-  i32.const 240
+  i32.const 176
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/toSpace
-  i32.const 384
+  i32.const 320
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   i32.const 0
   i32.const 42
-  call $call-inferred/Foo<i32>#constructor
+  call $call-inferred/Baz<i32>#constructor
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -2536,47 +2439,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
-   i32.const 22
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 42
-  call $call-inferred/Foo.create<i32>
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $call-inferred/Foo<i32>#get:value
-  i32.const 42
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 23
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $call-inferred/Bar#constructor
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  i32.const 42
-  call $call-inferred/Bar#doSomething<i32>
-  i32.const 42
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 31
+   i32.const 432
+   i32.const 34
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2585,33 +2449,5 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/object/Object#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 0
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
  )
 )
