@@ -3324,7 +3324,7 @@ function builtin_memory_data(ctx: BuiltinFunctionContext): ExpressionRef {
         return module.unreachable();
       }
     }
-    offset = compiler.addAlignedMemorySegment(new Uint8Array(size), align).offset;
+    offset = compiler.addZeroedMemorySegment(size, align).offset;
   }
   // FIXME: what if recompiles happen? recompiles are bad.
   compiler.currentType = usizeType;
