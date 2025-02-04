@@ -1,7 +1,4 @@
 {
-  "asc_flags": [],
-  "stderr": [
-    "AS100: Not implemented: Rest parameters",
-    "func(1, 2, 3, 4);"
+  "asc_flags": [
   ]
 }
