@@ -738,7 +738,9 @@ export class Resolver extends DiagnosticEmitter {
         ctxFlow,
         reportMode,
       );
-      
+      if (!resolvedTypeArguments) {
+        return null;
+      }     
       return this.resolveFunction(
         prototype,
         resolvedTypeArguments,
@@ -778,16 +780,24 @@ export class Resolver extends DiagnosticEmitter {
     let numParameters = parameterNodes.length;
 
     let argumentNodes: Expression[];
+    let argumentsRange: Range;
     switch (node.kind) {
-      case NodeKind.Call:
-        argumentNodes = (<CallExpression>node).args;
+      case NodeKind.Call: {
+        const expr = node as CallExpression;
+        argumentNodes = expr.args;
+        argumentsRange = expr.argumentsRange;
         break;
-      case NodeKind.New: 
-        argumentNodes = (<NewExpression>node).args;
+      }
+      case NodeKind.New: {
+        const expr = node as NewExpression;
+        argumentNodes = expr.args;
+        argumentsRange = expr.argumentsRange;
         break;
-      default:
+      }
+      default: {
         assert(false);
         return null;
+      }
     }
 
     let numArguments = argumentNodes.length;
@@ -802,12 +812,20 @@ export class Resolver extends DiagnosticEmitter {
         if (parameterNodes[i].parameterKind == ParameterKind.Optional) {
           continue;
         }
-        // missing initializer -> too few arguments
         if (reportMode == ReportMode.Report) {
-          this.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            node.range, numParameters.toString(), numArguments.toString()
-          );
+          if (parameterNodes[i].parameterKind == ParameterKind.Rest) {
+            // rest params are optional, but one element is needed for type inference
+            this.error(
+              DiagnosticCode.Type_argument_expected,
+              argumentsRange.atEnd
+            );
+          } else {
+            // missing initializer -> too few arguments
+            this.error(
+              DiagnosticCode.Expected_0_arguments_but_got_1,
+              node.range, numParameters.toString(), numArguments.toString()
+            );
+          }
         }
         return null;
       }
