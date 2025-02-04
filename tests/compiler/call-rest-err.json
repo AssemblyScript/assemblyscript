@@ -1,0 +1,12 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS2322: Type '~lib/string/String' is not assignable to type 'i32'.",
+    "sum('a', 'b')",
+    "TS2322: Type '~lib/string/String' is not assignable to type 'i32'.",
+    "sum('a', 'b')",
+    "TS2322: Type '~lib/string/String' is not assignable to type 'i32'.",
+    "count(1, 'a')"
+  ]
+}
