@@ -52,3 +52,7 @@ assert(count<i32>(1, 2, 3) == 3);
 
 // inferred generic test
 assert(count('a','b','c') == 3);
+
+// error cases
+count<i32>("a", "b"); // expect a type mismatch error on each argument
+count(1, "a"); // expect a type mismatch error on the second argument

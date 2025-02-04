@@ -1,4 +1,7 @@
 {
   "asc_flags": [
+  ],
+  "stderr": [
+    "TS2322: Type '~lib/string/String' is not assignable to type 'i32'."
   ]
 }
