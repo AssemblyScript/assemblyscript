@@ -812,6 +812,9 @@ export class Resolver extends DiagnosticEmitter {
         return null;
       }
       let typeNode = parameterNodes[i].type;
+      if (parameterNodes[i].parameterKind == ParameterKind.Rest) {
+        typeNode = (<NamedTypeNode> typeNode).typeArguments![0];
+      }
       if (typeNode.hasGenericComponent(typeParameterNodes)) {
         let type = this.resolveExpression(argumentExpression, ctxFlow, Type.auto, ReportMode.Swallow);
         if (type) {
@@ -2921,10 +2924,13 @@ export class Resolver extends DiagnosticEmitter {
     let numSignatureParameters = signatureParameters.length;
     let parameterTypes = new Array<Type>(numSignatureParameters);
     let requiredParameters = 0;
+    let hasRest = false;
     for (let i = 0; i < numSignatureParameters; ++i) {
       let parameterDeclaration = signatureParameters[i];
       if (parameterDeclaration.parameterKind == ParameterKind.Default) {
         requiredParameters = i + 1;
+      } else if (parameterDeclaration.parameterKind == ParameterKind.Rest) {
+        hasRest = true;
       }
       let typeNode = parameterDeclaration.type;
       if (isTypeOmitted(typeNode)) {
@@ -2984,7 +2990,7 @@ export class Resolver extends DiagnosticEmitter {
       returnType = type;
     }
 
-    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters);
+    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest);
 
     let nameInclTypeParameters = prototype.name;
     if (instanceKey.length) nameInclTypeParameters += `<${instanceKey}>`;

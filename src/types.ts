@@ -1075,7 +1075,7 @@ export class Signature {
     }
 
     // check rest parameter
-    if (this.hasRest != target.hasRest) return false; // TODO
+    if (this.hasRest != target.hasRest) return false;
 
     // check return type (covariant)
     let thisReturnType = this.returnType;
@@ -1087,7 +1087,7 @@ export class Signature {
     let thisParameterTypes = this.parameterTypes;
     let targetParameterTypes = target.parameterTypes;
     let numParameters = thisParameterTypes.length;
-    if (numParameters != targetParameterTypes.length) return false; // TODO
+    if (numParameters != targetParameterTypes.length) return false;
 
     for (let i = 0; i < numParameters; ++i) {
       let thisParameterType = unchecked(thisParameterTypes[i]);
