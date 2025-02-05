@@ -2864,12 +2864,16 @@ export class Resolver extends DiagnosticEmitter {
     // Instance method prototypes are pre-bound to their concrete class as their parent
     if (prototype.is(CommonFlags.Instance)) {
 
+      // The actual class instance may be a subclass of the bound class in the case of
+      // a function or property that uses the polymorphic `this` type
       if (this.currentThisExpression && ctxFlow) {
         let element = this.lookupExpression(this.currentThisExpression, ctxFlow);
         if (element?.kind == ElementKind.Class) {
           classInstance = <Class>element;
         }
       }
+
+      // Otherwise, the bound class is the actual class instance
       if (!classInstance) {
         classInstance = assert(prototype.getBoundClassOrInterface());
       }
@@ -3013,6 +3017,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // check against overridden base member
     if (prototype.is(CommonFlags.Instance)) {
+      // always take the prototype's bound class here - which may differ from the previous classInstance
       let classInstance = assert(prototype.getBoundClassOrInterface());
       let methodOrPropertyName = instance.declaration.name.text;
       let baseClass = classInstance.base;
