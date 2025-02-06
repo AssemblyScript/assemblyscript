@@ -35,7 +35,7 @@
     "diff": "^7.0.0",
     "esbuild": "^0.24.2",
     "eslint": "^8.57.1",
-    "glob": "^11.0.1",
+    "glob": "^10.4.5",
     "typescript": "^5.7.3"
   },
   "type": "module",
