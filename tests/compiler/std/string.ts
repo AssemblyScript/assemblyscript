@@ -742,19 +742,17 @@ assert(dtoa(+f64.EPSILON) == "2.220446049250313e-16");
 assert(dtoa(-f64.EPSILON) == "-2.220446049250313e-16");
 assert(dtoa(+f64.MAX_VALUE) == "1.7976931348623157e+308");
 assert(dtoa(-f64.MAX_VALUE) == "-1.7976931348623157e+308");
+assert(dtoa(+f32.EPSILON) == "1.1920929e-7");
+assert(dtoa(-f32.EPSILON) == "-1.1920929e-7");
+assert(dtoa(+f32.MAX_VALUE) == "3.4028235e+38");
+assert(dtoa(-f32.MAX_VALUE) == "-3.4028235e+38");
 assert(dtoa(4.185580496821357e+298) == "4.185580496821357e+298");
 assert(dtoa(2.2250738585072014e-308) == "2.2250738585072014e-308");
-// assert(dtoa(2.98023223876953125e-8) == "2.9802322387695312e-8"); // FIXME
-// assert(dtoa(-2.109808898695963e+16) == "-21098088986959630.0"); // FIXME
 assert(dtoa(4.940656E-318) == "4.940656e-318");
 assert(dtoa(9.0608011534336e+15) == "9060801153433600.0");
 assert(dtoa(4.708356024711512e+18) == "4708356024711512000.0");
 assert(dtoa(9.409340012568248e+18) == "9409340012568248000.0");
 assert(dtoa(5e-324) == "5e-324");
-// Known imprecise issue for Grisu alghoritm. Need workaround
-// Expeced: 1.2345e+21
-// Actual:  1.2344999999999999e+21
-// assert(dtoa(1.2345e+21) == "1.2345e+21");
 
 assert(dtoa(1.0) == "1.0");
 assert(dtoa(0.1) == "0.1");
@@ -778,14 +776,11 @@ assert(dtoa(1e-323) == "1e-323");
 assert(dtoa(-1e-323) == "-1e-323");
 assert(dtoa(1e-324) == "0.0");
 
-assert(dtoa(4294967272) == "4294967272.0");
 assert(dtoa(1.23121456734562345678e-8) == "1.2312145673456234e-8");
-// assert(dtoa(-0.0000010471975511965976) == "-0.0000010471975511965976"); // FIXME
 assert(dtoa(555555555.55555555) == "555555555.5555556");
 assert(dtoa(0.9999999999999999) == "0.9999999999999999");
 assert(dtoa(0.99999999999999995) == "1.0");
 assert(dtoa(1234e-2) == "12.34");
-// assert(dtoa(0.1 + 0.2)   == "0.30000000000000004"); // FIXME
 assert(dtoa(1.0 / 3.0) == "0.3333333333333333");
 assert(dtoa(1.234e+20) == "123400000000000000000.0");
 assert(dtoa(1.234e+21) == "1.234e+21");
@@ -796,6 +791,34 @@ assert(dtoa(1.1e+128) == "1.1e+128");
 assert(dtoa(1.1e-64) == "1.1e-64");
 assert(dtoa(0.000035689) == "0.000035689");
 
+// The following demonstrates behavior that may seem surprising, but is consistent with the
+// IEEE 754 standard and behaves the same way in other languages that have 32-bit floating point numbers.
+assert(dtoa(<u64>4294967272) == "4294967272.0"); // u64 -> f64, no loss of precision
+assert(dtoa(<u32>4294967272) == "4294967300.0"); // u32 -> f32, loss of precision is expected
+assert(dtoa(4294967272) == "4294967300.0"); // default integer literal is 32-bit, so loss of precision is expected
+
+// FIXME: The following are imprecise rounding issues for Grisu algorithm. Need workaround.
+
+// Expected: 1.2345e+21
+// Actual:   1.2344999999999999e+21
+// assert(dtoa(1.2345e+21) == "1.2345e+21");
+
+// Expected: 2.98023223876953125e-8
+// Actual:   2.9802322387695315e-8
+// assert(dtoa(2.98023223876953125e-8) == "2.9802322387695312e-8");
+
+// Expected: -2.109808898695963e+16
+// Actual:   -21098088986959633.0
+// assert(dtoa(-2.109808898695963e+16) == "-21098088986959630.0");
+
+// Expected: -0.0000010471975511965976
+// Actual:   -0.0000010471975511965977
+// assert(dtoa(-0.0000010471975511965976) == "-0.0000010471975511965976");
+
+// Expected: 0.30000000000000004
+// Actual:   0.30000000000000007
+// assert(dtoa(0.1 + 0.2)   == "0.30000000000000004");
+
 
 // concat
 
@@ -803,9 +826,6 @@ assert("Hello ".concat("World") == "Hello World");
 assert("".concat("bar") == "bar");
 assert("bar".concat("") == "bar");
 assert("".concat("") == "");
-
-// assert(dtoa(f32.MAX_VALUE) == "3.4028234663852886e+38"); // FIXME
-// assert(dtoa(f32.EPSILON) == "1.1920928955078125e-7"); // FIXME
 
 export function getString(): string {
   return str;
