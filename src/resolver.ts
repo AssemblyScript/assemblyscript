@@ -3023,10 +3023,8 @@ export class Resolver extends DiagnosticEmitter {
 
     // check against overridden base member
     if (prototype.is(CommonFlags.Instance)) {
-      // always take the prototype's bound class here - which may differ from the previous classInstance
-      let classInstance = assert(prototype.getBoundClassOrInterface());
       let methodOrPropertyName = instance.declaration.name.text;
-      let baseClass = classInstance.base;
+      let baseClass = (assert(prototype.getBoundClassOrInterface())).base;
       if (baseClass) {
         let baseMember = baseClass.getMember(methodOrPropertyName);
         if (baseMember) {
