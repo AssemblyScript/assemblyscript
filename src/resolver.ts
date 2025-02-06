@@ -2856,7 +2856,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report,
     /** Contextual flow. */
-    ctxFlow?: Flow,
+    ctxFlow: Flow | null = null
   ): Function | null {
     let classInstance: Class | null = null; // if an instance method
     let instanceKey = typeArguments ? typesToString(typeArguments) : "";
@@ -2864,12 +2864,18 @@ export class Resolver extends DiagnosticEmitter {
     // Instance method prototypes are pre-bound to their concrete class as their parent
     if (prototype.is(CommonFlags.Instance)) {
 
-      // The actual class instance may be a subclass of the bound class in the case of
-      // a function or property that uses the polymorphic `this` type
+      // The actual class instance may be a subclass of the bound class
       if (this.currentThisExpression && ctxFlow) {
-        let element = this.lookupExpression(this.currentThisExpression, ctxFlow);
-        if (element?.kind == ElementKind.Class) {
-          classInstance = <Class>element;
+        // In the case of a function or property that uses the polymorphic `this` type,
+        // this is important, so the return is typed as the actual class instance.
+        // Note: It should work without this outer type check, and does when testing, but fails the "bootstrap" build.
+        // TODO: Figure out why and remove the extra check.
+        let type = prototype.functionTypeNode.returnType;
+        if (type.kind == NodeKind.NamedType && (<NamedTypeNode>type).name.identifier.text == CommonNames.this_) {
+          let element = this.lookupExpression(this.currentThisExpression!, ctxFlow);
+          if (element && element.kind == ElementKind.Class && element.is(CommonFlags.Resolved)) {
+            classInstance = <Class>element;
+          }
         }
       }
 
@@ -3512,7 +3518,7 @@ export class Resolver extends DiagnosticEmitter {
                   );
                   break;
                 }
-                if (boundPrototype.typeNode?.kind == NodeKind.NamedType && (<NamedTypeNode>boundPrototype.typeNode).name.identifier.text == CommonNames.this_) {
+                if (assert(boundPrototype.typeNode).kind == NodeKind.NamedType && (<NamedTypeNode>boundPrototype.typeNode).name.identifier.text == CommonNames.this_) {
                   this.error(
                     DiagnosticCode.Not_implemented_0,
                     assert(boundPrototype.typeNode).range,
@@ -3779,7 +3785,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report,
     /** Contextual flow. */
-    ctxFlow?: Flow,
+    ctxFlow: Flow | null = null
   ): Property | null {
     let instance = prototype.instance;
     if (instance) return instance;
