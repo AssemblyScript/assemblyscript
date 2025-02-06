@@ -20,23 +20,23 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "engines": {
-    "node": ">=16",
-    "npm": ">=7"
+    "node": ">=18",
+    "npm": ">=10"
   },
   "engineStrict": true,
   "dependencies": {
     "binaryen": "116.0.0-nightly.20240114",
-    "long": "^5.2.1"
+    "long": "^5.2.4"
   },
   "devDependencies": {
-    "@types/node": "^18.13.0",
-    "@typescript-eslint/eslint-plugin": "^5.51.0",
-    "@typescript-eslint/parser": "^5.51.0",
-    "diff": "^5.1.0",
-    "esbuild": "^0.19.4",
-    "eslint": "^8.33.0",
-    "glob": "^10.3.0",
-    "typescript": "^5.5.4"
+    "@types/node": "^18.19.75",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "diff": "^7.0.0",
+    "esbuild": "^0.24.2",
+    "eslint": "^8.57.1",
+    "glob": "^10.4.5",
+    "typescript": "^5.7.3"
   },
   "type": "module",
   "exports": {
@@ -50,8 +50,8 @@
     },
     "./transform": {
       "import": "./dist/transform.js",
-      "require": "./dist/transform.cjs",
-      "types": "./dist/transform.d.ts"
+      "types": "./dist/transform.d.ts",
+      "require": "./dist/transform.cjs"
     },
     "./binaryen": {
       "import": "./lib/binaryen.js",

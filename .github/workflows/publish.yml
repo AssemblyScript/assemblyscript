@@ -11,18 +11,15 @@ jobs:
     if: github.repository == 'AssemblyScript/assemblyscript'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         ref: main
         fetch-depth: 0
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
         node-version: current
     - name: Install dependencies
-      run: | # npm>=7 is currently broken: https://github.com/npm/cli/issues/1973
-        npm -g install npm@6
-        npm -v
-        npm ci
+      run: npm ci
     - name: Build packages
       run: |
         VERSION=$(npx aspublish --version)
