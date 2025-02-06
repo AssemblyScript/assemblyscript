@@ -2962,41 +2962,25 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  block $__inlined_func$~lib/util/number/dtoa$79
+  i32.const 3776
+  local.set $1
+  block $~lib/util/number/dtoa_impl|inlined.0
    local.get $0
    f64.const 0
    f64.eq
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 4
-    i32.add
-    global.set $~lib/memory/__stack_pointer
-    i32.const 3776
-    local.set $1
-    br $__inlined_func$~lib/util/number/dtoa$79
-   end
+   br_if $~lib/util/number/dtoa_impl|inlined.0
    local.get $0
    local.get $0
    f64.sub
    f64.const 0
    f64.ne
    if
+    i32.const 3808
+    local.set $1
     local.get $0
     local.get $0
     f64.ne
-    if
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     i32.const 3808
-     local.set $1
-     br $__inlined_func$~lib/util/number/dtoa$79
-    end
-    global.get $~lib/memory/__stack_pointer
-    i32.const 4
-    i32.add
-    global.set $~lib/memory/__stack_pointer
+    br_if $~lib/util/number/dtoa_impl|inlined.0
     i32.const 3840
     i32.const 3888
     local.get $0
@@ -3004,7 +2988,7 @@
     f64.lt
     select
     local.set $1
-    br $__inlined_func$~lib/util/number/dtoa$79
+    br $~lib/util/number/dtoa_impl|inlined.0
    end
    local.get $0
    call $~lib/util/number/dtoa_core
@@ -3021,11 +3005,11 @@
    i32.const 3920
    local.get $2
    memory.copy
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
   end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
   local.get $1
  )
  (func $start:templateliteral
