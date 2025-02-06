@@ -2873,7 +2873,7 @@ export class Resolver extends DiagnosticEmitter {
         let type = prototype.functionTypeNode.returnType;
         if (type.kind == NodeKind.NamedType && (<NamedTypeNode>type).name.identifier.text == CommonNames.this_) {
           let element = this.lookupExpression(this.currentThisExpression!, ctxFlow);
-          if (element && element.kind == ElementKind.Class && element.is(CommonFlags.Resolved)) {
+          if (element && element.kind == ElementKind.Class) {
             classInstance = <Class>element;
           }
         }
