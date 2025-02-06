@@ -19,10 +19,7 @@ jobs:
       with:
         node-version: current
     - name: Install dependencies
-      run: | # npm>=7 is currently broken: https://github.com/npm/cli/issues/1973
-        npm -g install npm@6
-        npm -v
-        npm ci
+      run: npm ci
     - name: Build packages
       run: |
         VERSION=$(npx aspublish --version)
