@@ -1,4 +1,4 @@
-import { itoa32, utoa32, itoa64, utoa64, dtoa } from "./util/number";
+import { itoa32, utoa32, itoa64, utoa64, dtoa32, dtoa64 } from "./util/number";
 import { strtol, strtod } from "./util/string";
 
 // @ts-ignore: decorator
@@ -315,7 +315,7 @@ export abstract class F32 {
   }
 
   toString(this: f32, radix: i32 = 0): String {
-    return dtoa(this);
+    return dtoa32(this);
   }
 }
 
@@ -381,7 +381,7 @@ export abstract class F64 {
   }
 
   toString(this: f64, radix: i32 = 0): String {
-    return dtoa(this);
+    return dtoa64(this);
   }
 }
 
