@@ -565,13 +565,13 @@ function grisu2(value: f64, buffer: usize, sign: i32, isSinglePrecision: bool): 
 
   // frexp routine
   if (isSinglePrecision) {
-    let uv  = reinterpret<u32>(<f32>value);
+    let uv = reinterpret<u32>(<f32>value);
     exp = (uv & 0x7F800000) >>> 23;
     let sid = uv & 0x007FFFFF;
     frc = (u64(exp != 0) << 23) + sid;
     exp = select<i32>(exp, 1, exp) - (0x7F + 23);
   } else {
-    let uv  = reinterpret<u64>(value);
+    let uv = reinterpret<u64>(value);
     exp = i32((uv & 0x7FF0000000000000) >>> 52);
     let sid = uv & 0x000FFFFFFFFFFFFF;
     frc = (u64(exp != 0) << 52) + sid;
