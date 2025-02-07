@@ -182,7 +182,8 @@ import {
   findDecorator,
   isTypeOmitted,
   Source,
-  TypeDeclaration
+  TypeDeclaration,
+  ParameterKind
 } from "./ast";
 
 import {
@@ -6171,16 +6172,7 @@ export class Compiler extends DiagnosticEmitter {
       return false;
     }
 
-    // not yet implemented (TODO: maybe some sort of an unmanaged/lightweight array?)
     let hasRest = signature.hasRest;
-    if (hasRest) {
-      this.error(
-        DiagnosticCode.Not_implemented_0,
-        reportNode.range, "Rest parameters"
-      );
-      return false;
-    }
-
     let minimum = signature.requiredParameters;
     let maximum = signature.parameterTypes.length;
 
@@ -6225,6 +6217,37 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
+  private adjustArgumentsForRestParams(
+    argumentExpressions: Expression[],
+    signature: Signature,
+    reportNode: Node
+  ) : Expression[] {
+
+    // if no rest args, return the original args
+    if (!signature.hasRest) {
+      return argumentExpressions;
+    }
+
+    // if there are fewer args than params, then the rest args were not provided
+    // so return the original args
+    const numArguments = argumentExpressions.length;
+    const numParams = signature.parameterTypes.length;
+    if (numArguments < numParams) {
+      return argumentExpressions;
+    }
+      
+    // make an array literal expression from the rest args
+    let elements = argumentExpressions.slice(numParams - 1);
+    let range = new Range(elements[0].range.start, elements[elements.length - 1].range.end);
+    range.source = reportNode.range.source;
+    let arrExpr = new ArrayLiteralExpression(elements, range);
+    
+    // return the original args, but replace the rest args with the array
+    const exprs = argumentExpressions.slice(0, numParams - 1);
+    exprs.push(arrExpr);
+    return exprs;
+  }
+
   /** Compiles a direct call to a concrete function. */
   compileCallDirect(
     instance: Function,
@@ -6245,6 +6268,9 @@ export class Compiler extends DiagnosticEmitter {
       return this.module.unreachable();
     }
     if (instance.hasDecorator(DecoratorFlags.Unsafe)) this.checkUnsafe(reportNode);
+
+    argumentExpressions = this.adjustArgumentsForRestParams(argumentExpressions, signature, reportNode);
+    numArguments = argumentExpressions.length;
 
     // handle call on `this` in constructors
     let sourceFunction = this.currentFlow.sourceFunction;
@@ -6477,7 +6503,11 @@ export class Compiler extends DiagnosticEmitter {
       let declaration = originalParameterDeclarations[minArguments + i];
       let initializer = declaration.initializer;
       let initExpr: ExpressionRef;
-      if (initializer) {
+      if (declaration.parameterKind === ParameterKind.Rest) {
+        const arrExpr = new ArrayLiteralExpression([], declaration.range.atEnd);       
+        initExpr = this.compileArrayLiteral(arrExpr, type, Constraints.ConvExplicit);
+        initExpr = module.local_set(operandIndex, initExpr, type.isManaged);        
+      } else if (initializer) {
         initExpr = this.compileExpression(
           initializer,
           type,
@@ -6862,6 +6892,9 @@ export class Compiler extends DiagnosticEmitter {
     )) {
       return this.module.unreachable();
     }
+
+    argumentExpressions = this.adjustArgumentsForRestParams(argumentExpressions, signature, reportNode);
+    numArguments = argumentExpressions.length;
 
     let numArgumentsInclThis = thisArg ? numArguments + 1 : numArguments;
     let operands = new Array<ExpressionRef>(numArgumentsInclThis);
