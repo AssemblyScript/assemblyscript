@@ -7719,6 +7719,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 0
+  drop
+  i32.const 1
+  drop
   i32.const 8
   i32.const 4
   i32.eq

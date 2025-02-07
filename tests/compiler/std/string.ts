@@ -776,6 +776,7 @@ assert(dtoa(1e-323) == "1e-323");
 assert(dtoa(-1e-323) == "-1e-323");
 assert(dtoa(1e-324) == "0.0");
 
+assert(dtoa(4294967272) == "4294967272.0");
 assert(dtoa(1.23121456734562345678e-8) == "1.2312145673456234e-8");
 assert(dtoa(555555555.55555555) == "555555555.5555556");
 assert(dtoa(0.9999999999999999) == "0.9999999999999999");
@@ -790,12 +791,6 @@ assert(dtoa(2.71828e+2) == "271.828");
 assert(dtoa(1.1e+128) == "1.1e+128");
 assert(dtoa(1.1e-64) == "1.1e-64");
 assert(dtoa(0.000035689) == "0.000035689");
-
-// The following demonstrates behavior that may seem surprising, but is consistent with the
-// IEEE 754 standard and behaves the same way in other languages that have 32-bit floating point numbers.
-assert(dtoa(<u64>4294967272) == "4294967272.0"); // u64 -> f64, no loss of precision
-assert(dtoa(<u32>4294967272) == "4294967300.0"); // u32 -> f32, loss of precision is expected
-assert(dtoa(4294967272) == "4294967300.0"); // default integer literal is 32-bit, so loss of precision is expected
 
 // FIXME: The following are imprecise rounding issues for Grisu algorithm. Need workaround.
 
