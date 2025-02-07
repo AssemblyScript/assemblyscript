@@ -6,18 +6,18 @@
  (type $4 (func))
  (type $5 (func (param i32 i32 i32) (result i32)))
  (type $6 (func (param i32 i32 i32)))
- (type $7 (func (param f32) (result i32)))
- (type $8 (func (param f64) (result i32)))
- (type $9 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
- (type $10 (func (param i32 f64 i32) (result i32)))
- (type $11 (func (param i32 i32 i32 i32)))
- (type $12 (func (param i32 i32 i64) (result i32)))
- (type $13 (func (result i32)))
- (type $14 (func (param f32 i32) (result i32)))
- (type $15 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $16 (func (param f64 i32) (result i32)))
- (type $17 (func (param i32 f32) (result i32)))
- (type $18 (func (param i32 f64) (result i32)))
+ (type $7 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
+ (type $8 (func (param i32 f64 i32) (result i32)))
+ (type $9 (func (param i32 i32 i32 i32)))
+ (type $10 (func (param i32 i32 i64) (result i32)))
+ (type $11 (func (result i32)))
+ (type $12 (func (param f32 i32) (result i32)))
+ (type $13 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $14 (func (param f64 i32) (result i32)))
+ (type $15 (func (param i32 f32) (result i32)))
+ (type $16 (func (param i32 f64) (result i32)))
+ (type $17 (func (param f32) (result i32)))
+ (type $18 (func (param f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
@@ -3845,7 +3845,7 @@
  )
  (func $~lib/number/F32#toString (param $this f32) (param $radix i32) (result i32)
   local.get $this
-  call $~lib/util/number/dtoa32
+  call $~lib/util/number/dtoa<f32>
   return
  )
  (func $~lib/rt/common/OBJECT#get:rtSize (param $this i32) (result i32)
@@ -3967,7 +3967,7 @@
  )
  (func $~lib/number/F64#toString (param $this f64) (param $radix i32) (result i32)
   local.get $this
-  call $~lib/util/number/dtoa64
+  call $~lib/util/number/dtoa<f64>
   return
  )
  (func $~lib/array/Array<f32>#get:dataStart (param $this i32) (result i32)
@@ -5175,7 +5175,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/util/number/dtoa32 (param $value f32) (result i32)
+ (func $~lib/util/number/dtoa<f32> (param $value f32) (result i32)
   (local $value|1 f64)
   (local $isSingle i32)
   (local $size i32)
@@ -5189,6 +5189,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
   block $~lib/util/number/dtoa_impl|inlined.0 (result i32)
    local.get $value
    f64.promote_f32
@@ -5252,7 +5256,7 @@
   local.get $5
   return
  )
- (func $~lib/util/number/dtoa64 (param $value f64) (result i32)
+ (func $~lib/util/number/dtoa<f64> (param $value f64) (result i32)
   (local $value|1 f64)
   (local $isSingle i32)
   (local $size i32)
@@ -5266,6 +5270,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
   block $~lib/util/number/dtoa_impl|inlined.1 (result i32)
    local.get $value
    local.set $value|1
@@ -5319,167 +5327,6 @@
    memory.copy
    local.get $result
    br $~lib/util/number/dtoa_impl|inlined.1
-  end
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $5
-  return
- )
- (func $~lib/util/number/dtoa<f32> (param $value f32) (result i32)
-  (local $value|1 f64)
-  (local $isSingle i32)
-  (local $size i32)
-  (local $result i32)
-  (local $5 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 4
-  i32.const 4
-  i32.eq
-  drop
-  block $~lib/util/number/dtoa_impl|inlined.2 (result i32)
-   local.get $value
-   f64.promote_f32
-   local.set $value|1
-   i32.const 1
-   local.set $isSingle
-   local.get $value|1
-   f64.const 0
-   f64.eq
-   if
-    i32.const 32
-    br $~lib/util/number/dtoa_impl|inlined.2
-   end
-   local.get $value|1
-   local.get $value|1
-   f64.sub
-   f64.const 0
-   f64.eq
-   i32.eqz
-   if
-    local.get $value|1
-    local.get $value|1
-    f64.ne
-    if
-     i32.const 64
-     br $~lib/util/number/dtoa_impl|inlined.2
-    end
-    i32.const 96
-    i32.const 144
-    local.get $value|1
-    f64.const 0
-    f64.lt
-    select
-    br $~lib/util/number/dtoa_impl|inlined.2
-   end
-   i32.const 176
-   local.get $value|1
-   local.get $isSingle
-   call $~lib/util/number/dtoa_core
-   i32.const 1
-   i32.shl
-   local.set $size
-   global.get $~lib/memory/__stack_pointer
-   local.get $size
-   i32.const 2
-   call $~lib/rt/itcms/__new
-   local.tee $result
-   i32.store
-   local.get $result
-   i32.const 176
-   local.get $size
-   memory.copy
-   local.get $result
-   br $~lib/util/number/dtoa_impl|inlined.2
-  end
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $5
-  return
- )
- (func $~lib/util/number/dtoa<f64> (param $value f64) (result i32)
-  (local $value|1 f64)
-  (local $isSingle i32)
-  (local $size i32)
-  (local $result i32)
-  (local $5 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 8
-  i32.const 4
-  i32.eq
-  drop
-  block $~lib/util/number/dtoa_impl|inlined.3 (result i32)
-   local.get $value
-   local.set $value|1
-   i32.const 0
-   local.set $isSingle
-   local.get $value|1
-   f64.const 0
-   f64.eq
-   if
-    i32.const 32
-    br $~lib/util/number/dtoa_impl|inlined.3
-   end
-   local.get $value|1
-   local.get $value|1
-   f64.sub
-   f64.const 0
-   f64.eq
-   i32.eqz
-   if
-    local.get $value|1
-    local.get $value|1
-    f64.ne
-    if
-     i32.const 64
-     br $~lib/util/number/dtoa_impl|inlined.3
-    end
-    i32.const 96
-    i32.const 144
-    local.get $value|1
-    f64.const 0
-    f64.lt
-    select
-    br $~lib/util/number/dtoa_impl|inlined.3
-   end
-   i32.const 176
-   local.get $value|1
-   local.get $isSingle
-   call $~lib/util/number/dtoa_core
-   i32.const 1
-   i32.shl
-   local.set $size
-   global.get $~lib/memory/__stack_pointer
-   local.get $size
-   i32.const 2
-   call $~lib/rt/itcms/__new
-   local.tee $result
-   i32.store
-   local.get $result
-   i32.const 176
-   local.get $size
-   memory.copy
-   local.get $result
-   br $~lib/util/number/dtoa_impl|inlined.3
   end
   local.set $5
   global.get $~lib/memory/__stack_pointer

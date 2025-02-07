@@ -3948,7 +3948,7 @@
  )
  (func $~lib/number/F32#toString (param $this f32) (param $radix i32) (result i32)
   local.get $this
-  call $~lib/util/number/dtoa32
+  call $~lib/util/number/dtoa<f32>
   return
  )
  (func $~lib/rt/common/OBJECT#get:rtSize (param $this i32) (result i32)
@@ -5311,7 +5311,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/util/number/dtoa32 (param $value f32) (result i32)
+ (func $~lib/util/number/dtoa<f32> (param $value f32) (result i32)
   (local $value|1 f64)
   (local $isSingle i32)
   (local $size i32)
@@ -5325,6 +5325,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
   block $~lib/util/number/dtoa_impl|inlined.0 (result i32)
    local.get $value
    f64.promote_f32

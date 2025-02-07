@@ -5260,7 +5260,7 @@
  )
  (func $~lib/number/F64#toString (param $this f64) (param $radix i32) (result i32)
   local.get $this
-  call $~lib/util/number/dtoa64
+  call $~lib/util/number/dtoa<f64>
   return
  )
  (func $~lib/math/ipow32 (param $x i32) (param $e i32) (result i32)
@@ -7705,7 +7705,7 @@
   local.get $14
   return
  )
- (func $~lib/util/number/dtoa64 (param $value f64) (result i32)
+ (func $~lib/util/number/dtoa<f64> (param $value f64) (result i32)
   (local $value|1 f64)
   (local $isSingle i32)
   (local $size i32)
@@ -7719,6 +7719,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
   block $~lib/util/number/dtoa_impl|inlined.0 (result i32)
    local.get $value
    local.set $value|1

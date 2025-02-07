@@ -750,14 +750,6 @@ export function dtoa<T extends number>(value: T): String {
   }
 }
 
-export function dtoa32(value: f32): String {
-  return dtoa_impl(value, true);
-}
-
-export function dtoa64(value: f64): String {
-  return dtoa_impl(value, false);
-}
-
 // @ts-ignore: decorator
 @inline
 function dtoa_impl(value: f64, isSingle: bool): String {
