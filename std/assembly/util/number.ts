@@ -742,19 +742,8 @@ function dtoa_core(buffer: usize, value: f64, isSingle: bool): i32 {
 @lazy @inline const dtoa_buf = memory.data(MAX_DOUBLE_LENGTH << 1);
 
 export function dtoa<T extends number>(value: T): String {
-  if (isInteger<T>()) {
-    return dtoa_impl(<f64>value, false);
-  }
-
-  if (isFloat<T>()) {
-    if (sizeof<T>() == 4) {
-      return dtoa_impl(<f32>value, true);
-    } else {
-      return dtoa_impl(<f64>value, false);
-    }
-  }
-  
-  ERROR("dtoa: unsupported type");
+  const isSingle = isFloat<T>() && sizeof<T>() == 4;
+  return dtoa_impl(value, isSingle);
 }
 
 // @ts-ignore: decorator
@@ -850,19 +839,8 @@ export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
 }
 
 export function dtoa_buffered<T extends number>(buffer: usize, value: T): u32 {
-  if (isInteger<T>()) {
-    return dtoa_buffered_impl(buffer, <f64>value, false);
-  }
-
-  if (isFloat<T>()) {
-    if (sizeof<T>() == 4) {
-      return dtoa_buffered_impl(buffer, <f32>value, true);
-    } else {
-      return dtoa_buffered_impl(buffer, <f64>value, false);
-    }
-  }
-  
-  ERROR("dtoa_buffered: unsupported type");
+  const isSingle = isFloat<T>() && sizeof<T>() == 4;
+  return dtoa_buffered_impl(buffer, value, isSingle);
 }
 
 // @ts-ignore: decorator

@@ -8199,14 +8199,6 @@
   (local $value|3 f64)
   (local $isSingle i32)
   (local $sign i32)
-  i32.const 0
-  drop
-  i32.const 1
-  drop
-  i32.const 8
-  i32.const 4
-  i32.eq
-  drop
   block $~lib/util/number/dtoa_buffered_impl|inlined.0 (result i32)
    local.get $buffer
    local.set $buffer|2
@@ -46901,14 +46893,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 0
-  drop
-  i32.const 1
-  drop
-  i32.const 8
-  i32.const 4
-  i32.eq
-  drop
   block $~lib/util/number/dtoa_impl|inlined.0 (result i32)
    local.get $value
    local.set $value|1
