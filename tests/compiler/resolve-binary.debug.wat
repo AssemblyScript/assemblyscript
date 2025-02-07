@@ -4727,12 +4727,12 @@
   end
   unreachable
  )
- (func $~lib/util/number/dtoa_core (param $buffer i32) (param $value f64) (param $isSinglePrecision i32) (result i32)
+ (func $~lib/util/number/dtoa_core (param $buffer i32) (param $value f64) (param $isSingle i32) (result i32)
   (local $sign i32)
   (local $value|4 f64)
   (local $buffer|5 i32)
   (local $sign|6 i32)
-  (local $isSinglePrecision|7 i32)
+  (local $isSingle|7 i32)
   (local $frc i64)
   (local $exp i32)
   (local $uv i32)
@@ -4741,7 +4741,7 @@
   (local $sid|13 i64)
   (local $f i64)
   (local $e i32)
-  (local $isSinglePrecision|16 i32)
+  (local $isSingle|16 i32)
   (local $frc|17 i64)
   (local $exp|18 i32)
   (local $off i32)
@@ -4811,9 +4811,9 @@
    local.set $buffer|5
    local.get $sign
    local.set $sign|6
-   local.get $isSinglePrecision
-   local.set $isSinglePrecision|7
-   local.get $isSinglePrecision|7
+   local.get $isSingle
+   local.set $isSingle|7
+   local.get $isSingle|7
    if
     local.get $value|4
     f32.demote_f64
@@ -4840,9 +4840,11 @@
     i64.add
     local.set $frc
     local.get $exp
-    i32.const 1
-    local.get $exp
-    select
+    if (result i32)
+     local.get $exp
+    else
+     i32.const 1
+    end
     i32.const 127
     i32.const 23
     i32.add
@@ -4873,9 +4875,11 @@
     i64.add
     local.set $frc
     local.get $exp
-    i32.const 1
-    local.get $exp
-    select
+    if (result i32)
+     local.get $exp
+    else
+     i32.const 1
+    end
     i32.const 1023
     i32.const 52
     i32.add
@@ -4886,8 +4890,8 @@
    local.set $f
    local.get $exp
    local.set $e
-   local.get $isSinglePrecision|7
-   local.set $isSinglePrecision|16
+   local.get $isSingle|7
+   local.set $isSingle|16
    local.get $f
    i64.const 1
    i64.shl
@@ -4913,7 +4917,7 @@
    local.set $exp|18
    i32.const 1
    local.get $f
-   local.get $isSinglePrecision|16
+   local.get $isSingle|16
    if (result i64)
     i64.const 8388608
    else
@@ -7703,7 +7707,7 @@
  )
  (func $~lib/util/number/dtoa64 (param $value f64) (result i32)
   (local $value|1 f64)
-  (local $isSinglePrecision i32)
+  (local $isSingle i32)
   (local $size i32)
   (local $result i32)
   (local $5 i32)
@@ -7719,7 +7723,7 @@
    local.get $value
    local.set $value|1
    i32.const 0
-   local.set $isSinglePrecision
+   local.set $isSingle
    local.get $value|1
    f64.const 0
    f64.eq
@@ -7751,7 +7755,7 @@
    end
    i32.const 8704
    local.get $value|1
-   local.get $isSinglePrecision
+   local.get $isSingle
    call $~lib/util/number/dtoa_core
    i32.const 1
    i32.shl
