@@ -511,14 +511,14 @@ function umul64e(e1: i32, e2: i32): i32 {
 
 // @ts-ignore: decorator
 @inline
-function normalizedBoundaries(f: u64, e: i32, isSinglePrecision: bool): void {
+function normalizedBoundaries(f: u64, e: i32, isSingle: bool): void {
   let frc = (f << 1) + 1;
   let exp = e - 1;
   let off = <i32>clz<u64>(frc);
   frc <<= off;
   exp  -= off;
 
-  let m = 1 + i32(f == (isSinglePrecision ? 0x00800000 : 0x0010000000000000));
+  let m = 1 + i32(f == (isSingle ? 0x00800000 : 0x0010000000000000));
 
   _frc_plus  = frc;
   _frc_minus = ((f << m) - 1) << e - m - exp;
@@ -559,26 +559,26 @@ function getCachedPower(minExp: i32): void {
 
 // @ts-ignore: decorator
 @inline
-function grisu2(value: f64, buffer: usize, sign: i32, isSinglePrecision: bool): i32 {
+function grisu2(value: f64, buffer: usize, sign: i32, isSingle: bool): i32 {
   let frc: u64;
   let exp: i32;
 
   // frexp routine
-  if (isSinglePrecision) {
+  if (isSingle) {
     let uv = reinterpret<u32>(<f32>value);
     exp = (uv & 0x7F800000) >>> 23;
     let sid = uv & 0x007FFFFF;
     frc = (u64(exp != 0) << 23) + sid;
-    exp = select<i32>(exp, 1, exp) - (0x7F + 23);
+    exp = (exp || 1) - (0x7F + 23);
   } else {
     let uv = reinterpret<u64>(value);
     exp = i32((uv & 0x7FF0000000000000) >>> 52);
     let sid = uv & 0x000FFFFFFFFFFFFF;
     frc = (u64(exp != 0) << 52) + sid;
-    exp = select<i32>(exp, 1, exp) - (0x3FF + 52);
+    exp = (exp || 1) - (0x3FF + 52);
   }
 
-  normalizedBoundaries(frc, exp, isSinglePrecision);
+  normalizedBoundaries(frc, exp, isSingle);
   getCachedPower(_exp);
 
   // normalize
@@ -726,14 +726,14 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
   }
 }
 
-function dtoa_core(buffer: usize, value: f64, isSinglePrecision: bool): i32 {
+function dtoa_core(buffer: usize, value: f64, isSingle: bool): i32 {
   let sign = i32(value < 0);
   if (sign) {
     value = -value;
     store<u16>(buffer, CharCode.MINUS);
   }
-  // assert(value > 0 && value <= (isSinglePrecision ? f32.MAX_VALUE : f64.MAX_VALUE));
-  let len = grisu2(value, buffer, sign, isSinglePrecision);
+  // assert(value > 0 && value <= (isSingle ? f32.MAX_VALUE : f64.MAX_VALUE));
+  let len = grisu2(value, buffer, sign, isSingle);
   len = prettify(buffer + (sign << 1), len - sign, _K);
   return len + sign;
 }
@@ -760,13 +760,13 @@ export function dtoa64(value: f64): String {
 
 // @ts-ignore: decorator
 @inline
-function dtoa_impl(value: f64, isSinglePrecision: bool): String {
+function dtoa_impl(value: f64, isSingle: bool): String {
   if (value == 0) return "0.0";
   if (!isFinite(value)) {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  let size = dtoa_core(dtoa_buf, value, isSinglePrecision) << 1;
+  let size = dtoa_core(dtoa_buf, value, isSingle) << 1;
   let result = changetype<String>(__new(size, idof<String>()));
   memory.copy(changetype<usize>(result), dtoa_buf, size);
   return result;
@@ -861,7 +861,7 @@ export function dtoa_buffered<T extends number>(buffer: usize, value: T): u32 {
 
 // @ts-ignore: decorator
 @inline
-function dtoa_buffered_impl(buffer: usize, value: f64, isSinglePrecision: bool): u32 {
+function dtoa_buffered_impl(buffer: usize, value: f64, isSingle: bool): u32 {
   if (value == 0) {
     store<u16>(buffer, CharCode._0);
     store<u16>(buffer, CharCode.DOT, 2);
@@ -885,5 +885,5 @@ function dtoa_buffered_impl(buffer: usize, value: f64, isSinglePrecision: bool):
       return 8 + u32(sign);
     }
   }
-  return dtoa_core(buffer, value, isSinglePrecision);
+  return dtoa_core(buffer, value, isSingle);
 }
