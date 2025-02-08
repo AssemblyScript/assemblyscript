@@ -2517,10 +2517,10 @@
   (local $1 i64)
   (local $2 i32)
   (local $3 i64)
-  (local $4 i32)
+  (local $4 i64)
   (local $5 i64)
   (local $6 i64)
-  (local $7 i64)
+  (local $7 i32)
   (local $8 i32)
   (local $9 i32)
   (local $10 i64)
@@ -2541,30 +2541,31 @@
   else
    local.get $0
   end
-  i64.reinterpret_f64
-  local.tee $1
-  i64.const 9218868437227405312
-  i64.and
-  i64.const 52
-  i64.shr_u
-  i32.wrap_i64
-  local.tee $4
-  i32.const 1
-  local.get $4
-  select
-  i32.const 1075
-  i32.sub
+  f32.demote_f64
+  i32.reinterpret_f32
+  local.tee $7
+  i32.const 2139095040
+  i32.and
+  i32.const 23
+  i32.shr_u
   local.tee $8
   i32.const 1
+  local.get $8
+  select
+  i32.const 150
   i32.sub
-  local.get $1
-  i64.const 4503599627370495
-  i64.and
-  local.get $4
+  local.tee $9
+  i32.const 1
+  i32.sub
+  local.get $7
+  i32.const 8388607
+  i32.and
+  i64.extend_i32_u
+  local.get $8
   i32.const 0
   i32.ne
   i64.extend_i32_u
-  i64.const 52
+  i64.const 23
   i64.shl
   i64.add
   local.tee $1
@@ -2575,34 +2576,34 @@
   local.tee $3
   i64.clz
   i32.wrap_i64
-  local.tee $9
+  local.tee $7
   i32.sub
-  local.set $4
+  local.set $8
   local.get $3
-  local.get $9
+  local.get $7
   i64.extend_i32_s
   i64.shl
   global.set $~lib/util/number/_frc_plus
   local.get $1
   local.get $1
-  i64.const 4503599627370496
+  i64.const 8388608
   i64.eq
   i32.const 1
   i32.add
-  local.tee $9
+  local.tee $7
   i64.extend_i32_s
   i64.shl
   i64.const 1
   i64.sub
-  local.get $8
   local.get $9
+  local.get $7
   i32.sub
-  local.get $4
+  local.get $8
   i32.sub
   i64.extend_i32_s
   i64.shl
   global.set $~lib/util/number/_frc_minus
-  local.get $4
+  local.get $8
   global.set $~lib/util/number/_exp
   i32.const 348
   i32.const -61
@@ -2615,8 +2616,8 @@
   f64.add
   local.tee $0
   i32.trunc_sat_f64_s
-  local.tee $4
-  local.get $4
+  local.tee $7
+  local.get $7
   f64.convert_i32_s
   local.get $0
   f64.ne
@@ -2625,7 +2626,7 @@
   i32.shr_s
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $7
   i32.const 3
   i32.shl
   local.tee $8
@@ -2636,7 +2637,7 @@
   i32.add
   i64.load
   global.set $~lib/util/number/_frc_pow
-  local.get $4
+  local.get $7
   i32.const 1
   i32.shl
   i32.const 2528
@@ -2650,7 +2651,7 @@
   local.tee $1
   i64.const 4294967295
   i64.and
-  local.set $5
+  local.set $4
   global.get $~lib/util/number/_frc_pow
   local.tee $10
   i64.const 4294967295
@@ -2661,13 +2662,13 @@
   i64.shr_u
   local.tee $1
   i64.mul
-  local.get $5
+  local.get $4
   local.get $11
   i64.mul
   i64.const 32
   i64.shr_u
   i64.add
-  local.set $6
+  local.set $5
   global.get $~lib/util/number/_frc_plus
   local.tee $3
   i64.const 4294967295
@@ -2685,7 +2686,7 @@
   i64.const 32
   i64.shr_u
   i64.add
-  local.set $7
+  local.set $6
   global.get $~lib/util/number/_frc_minus
   local.tee $13
   i64.const 4294967295
@@ -2715,14 +2716,14 @@
   i64.shr_u
   local.tee $1
   i64.mul
-  local.get $6
+  local.get $5
   i64.const 32
   i64.shr_u
   i64.add
   local.get $1
-  local.get $5
+  local.get $4
   i64.mul
-  local.get $6
+  local.get $5
   i64.const 4294967295
   i64.and
   i64.add
@@ -2734,14 +2735,14 @@
   local.get $1
   local.get $3
   i64.mul
-  local.get $7
+  local.get $6
   i64.const 32
   i64.shr_u
   i64.add
   local.get $1
   local.get $12
   i64.mul
-  local.get $7
+  local.get $6
   i64.const 4294967295
   i64.and
   i64.add
@@ -2812,43 +2813,27 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  block $__inlined_func$~lib/util/number/dtoa$77
+  i32.const 1632
+  local.set $2
+  block $~lib/util/number/dtoa_impl|inlined.0
    local.get $0
    f64.promote_f32
    local.tee $1
    f64.const 0
    f64.eq
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 4
-    i32.add
-    global.set $~lib/memory/__stack_pointer
-    i32.const 1632
-    local.set $2
-    br $__inlined_func$~lib/util/number/dtoa$77
-   end
+   br_if $~lib/util/number/dtoa_impl|inlined.0
    local.get $1
    local.get $1
    f64.sub
    f64.const 0
    f64.ne
    if
+    i32.const 1664
+    local.set $2
     local.get $1
     local.get $1
     f64.ne
-    if
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     i32.const 1664
-     local.set $2
-     br $__inlined_func$~lib/util/number/dtoa$77
-    end
-    global.get $~lib/memory/__stack_pointer
-    i32.const 4
-    i32.add
-    global.set $~lib/memory/__stack_pointer
+    br_if $~lib/util/number/dtoa_impl|inlined.0
     i32.const 1696
     i32.const 1744
     local.get $1
@@ -2856,7 +2841,7 @@
     f64.lt
     select
     local.set $2
-    br $__inlined_func$~lib/util/number/dtoa$77
+    br $~lib/util/number/dtoa_impl|inlined.0
    end
    local.get $1
    call $~lib/util/number/dtoa_core
@@ -2873,11 +2858,11 @@
    i32.const 1776
    local.get $3
    memory.copy
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
   end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
   local.get $2
  )
  (func $~lib/number/U8#toString (param $0 i32) (result i32)

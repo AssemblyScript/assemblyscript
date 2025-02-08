@@ -474,7 +474,7 @@ export function itoa64(value: i64, radix: i32): String {
 @lazy let _frc_minus: u64 = 0;
 
 // @ts-ignore: decorator
-@lazy let _frc_plus:  u64 = 0;
+@lazy let _frc_plus: u64 = 0;
 
 // @ts-ignore: decorator
 @lazy let _frc_pow: u64 = 0;
@@ -511,14 +511,14 @@ function umul64e(e1: i32, e2: i32): i32 {
 
 // @ts-ignore: decorator
 @inline
-function normalizedBoundaries(f: u64, e: i32): void {
+function normalizedBoundaries(f: u64, e: i32, isSingle: bool): void {
   let frc = (f << 1) + 1;
   let exp = e - 1;
   let off = <i32>clz<u64>(frc);
   frc <<= off;
   exp  -= off;
 
-  let m = 1 + i32(f == 0x0010000000000000);
+  let m = 1 + i32(f == (isSingle ? 0x00800000 : 0x0010000000000000));
 
   _frc_plus  = frc;
   _frc_minus = ((f << m) - 1) << e - m - exp;
@@ -559,16 +559,26 @@ function getCachedPower(minExp: i32): void {
 
 // @ts-ignore: decorator
 @inline
-function grisu2(value: f64, buffer: usize, sign: i32): i32 {
+function grisu2(value: f64, buffer: usize, sign: i32, isSingle: bool): i32 {
+  let frc: u64;
+  let exp: i32;
 
   // frexp routine
-  let uv  = reinterpret<u64>(value);
-  let exp = i32((uv & 0x7FF0000000000000) >>> 52);
-  let sid = uv & 0x000FFFFFFFFFFFFF;
-  let frc = (u64(exp != 0) << 52) + sid;
-  exp = select<i32>(exp, 1, exp) - (0x3FF + 52);
+  if (isSingle) {
+    let uv = reinterpret<u32>(<f32>value);
+    exp = (uv & 0x7F800000) >>> 23;
+    let sid = uv & 0x007FFFFF;
+    frc = (u64(exp != 0) << 23) + sid;
+    exp = (exp || 1) - (0x7F + 23);
+  } else {
+    let uv = reinterpret<u64>(value);
+    exp = i32((uv & 0x7FF0000000000000) >>> 52);
+    let sid = uv & 0x000FFFFFFFFFFFFF;
+    frc = (u64(exp != 0) << 52) + sid;
+    exp = (exp || 1) - (0x3FF + 52);
+  }
 
-  normalizedBoundaries(frc, exp);
+  normalizedBoundaries(frc, exp, isSingle);
   getCachedPower(_exp);
 
   // normalize
@@ -716,14 +726,14 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
   }
 }
 
-function dtoa_core(buffer: usize, value: f64): i32 {
+function dtoa_core(buffer: usize, value: f64, isSingle: bool): i32 {
   let sign = i32(value < 0);
   if (sign) {
     value = -value;
     store<u16>(buffer, CharCode.MINUS);
   }
-  // assert(value > 0 && value <= 1.7976931348623157e308);
-  let len = grisu2(value, buffer, sign);
+  // assert(value > 0 && value <= (isSingle ? f32.MAX_VALUE : f64.MAX_VALUE));
+  let len = grisu2(value, buffer, sign, isSingle);
   len = prettify(buffer + (sign << 1), len - sign, _K);
   return len + sign;
 }
@@ -731,13 +741,20 @@ function dtoa_core(buffer: usize, value: f64): i32 {
 // @ts-ignore: decorator
 @lazy @inline const dtoa_buf = memory.data(MAX_DOUBLE_LENGTH << 1);
 
-export function dtoa(value: f64): String {
+export function dtoa<T extends number>(value: T): String {
+  const isSingle = isFloat<T>() && sizeof<T>() == 4;
+  return dtoa_impl(value, isSingle);
+}
+
+// @ts-ignore: decorator
+@inline
+function dtoa_impl(value: f64, isSingle: bool): String {
   if (value == 0) return "0.0";
   if (!isFinite(value)) {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  let size = dtoa_core(dtoa_buf, value) << 1;
+  let size = dtoa_core(dtoa_buf, value, isSingle) << 1;
   let result = changetype<String>(__new(size, idof<String>()));
   memory.copy(changetype<usize>(result), dtoa_buf, size);
   return result;
@@ -821,7 +838,14 @@ export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
   return sign + decimals;
 }
 
-export function dtoa_buffered(buffer: usize, value: f64): u32 {
+export function dtoa_buffered<T extends number>(buffer: usize, value: T): u32 {
+  const isSingle = isFloat<T>() && sizeof<T>() == 4;
+  return dtoa_buffered_impl(buffer, value, isSingle);
+}
+
+// @ts-ignore: decorator
+@inline
+function dtoa_buffered_impl(buffer: usize, value: f64, isSingle: bool): u32 {
   if (value == 0) {
     store<u16>(buffer, CharCode._0);
     store<u16>(buffer, CharCode.DOT, 2);
@@ -845,5 +869,5 @@ export function dtoa_buffered(buffer: usize, value: f64): u32 {
       return 8 + u32(sign);
     }
   }
-  return dtoa_core(buffer, value);
+  return dtoa_core(buffer, value, isSingle);
 }
