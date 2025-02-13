@@ -146,6 +146,8 @@ export const enum FlowFlags {
   UncheckedContext = 1 << 15,
   /** This is a flow compiling a constructor parameter. */
   CtorParamContext = 1 << 16,
+  /** This is a flow where all function calls are inlined if possible. */
+  InlineContext = 1 << 17,
 
   // masks
 

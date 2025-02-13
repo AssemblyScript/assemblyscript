@@ -191,6 +191,7 @@ export namespace BuiltinNames {
   export const assert = "~lib/builtins/assert";
   export const call_indirect = "~lib/builtins/call_indirect";
   export const unchecked = "~lib/builtins/unchecked";
+  export const inlined = "~lib/builtins/inlined";
   export const instantiate = "~lib/builtins/instantiate";
   export const idof = "~lib/builtins/idof";
 
@@ -3610,6 +3611,24 @@ function builtin_unchecked(ctx: BuiltinFunctionContext): ExpressionRef {
   return expr;
 }
 builtinFunctions.set(BuiltinNames.unchecked, builtin_unchecked);
+
+// inlined(expr: *) -> *
+function builtin_inlined(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let flow = compiler.currentFlow;
+  let alreadyInline = flow.is(FlowFlags.InlineContext);
+  if (!alreadyInline) flow.set(FlowFlags.InlineContext);
+  // eliminate unnecessary tees by preferring contextualType(=void)
+  let expr = compiler.compileExpression(ctx.operands[0], ctx.contextualType);
+  if (!alreadyInline) flow.unset(FlowFlags.InlineContext);
+  return expr;
+}
+builtinFunctions.set(BuiltinNames.inlined, builtin_inlined);
 
 // call_indirect<T?>(index: u32, ...args: *[]) -> T
 function builtin_call_indirect(ctx: BuiltinFunctionContext): ExpressionRef {
