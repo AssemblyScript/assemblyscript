@@ -6,8 +6,10 @@
  (type $4 (func (param i32 i32) (result i32)))
  (type $5 (func (result i32)))
  (type $6 (func (param i32 i32 i32)))
- (type $7 (func (param i32 i32 i32 i32)))
- (type $8 (func (param i32 i32 i64) (result i32)))
+ (type $7 (func (param i32 i32 i32) (result f64)))
+ (type $8 (func (param i32 i32 i32 i32)))
+ (type $9 (func (param i32 i32 i64) (result i32)))
+ (type $10 (func (param f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~argumentsLength (mut i32) (i32.const 0))
@@ -44,6 +46,8 @@
  (table $0 2 2 funcref)
  (elem $0 (i32.const 1) $inlining/func_fe~anonymous|0)
  (export "test" (func $inlining/test))
+ (export "foo" (func $inlining/foo))
+ (export "bar" (func $inlining/bar))
  (export "memory" (memory $0))
  (start $~start)
  (func $inlining/test (result i32)
@@ -2572,6 +2576,192 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   call $inlining/test_ctor
+ )
+ (func $~lib/math/NativeMath.cbrt (param $x f64) (result f64)
+  (local $u i64)
+  (local $hx i32)
+  (local $t f64)
+  (local $r f64)
+  (local $s f64)
+  local.get $x
+  i64.reinterpret_f64
+  local.set $u
+  local.get $u
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const 2147483647
+  i32.and
+  local.set $hx
+  local.get $hx
+  i32.const 2146435072
+  i32.ge_u
+  if
+   local.get $x
+   local.get $x
+   f64.add
+   return
+  end
+  local.get $hx
+  i32.const 1048576
+  i32.lt_u
+  if
+   local.get $x
+   f64.const 18014398509481984
+   f64.mul
+   i64.reinterpret_f64
+   local.set $u
+   local.get $u
+   i64.const 32
+   i64.shr_u
+   i32.wrap_i64
+   i32.const 2147483647
+   i32.and
+   local.set $hx
+   local.get $hx
+   i32.const 0
+   i32.eq
+   if
+    local.get $x
+    return
+   end
+   local.get $hx
+   i32.const 3
+   i32.div_u
+   i32.const 696219795
+   i32.add
+   local.set $hx
+  else
+   local.get $hx
+   i32.const 3
+   i32.div_u
+   i32.const 715094163
+   i32.add
+   local.set $hx
+  end
+  local.get $u
+  i64.const 1
+  i64.const 63
+  i64.shl
+  i64.and
+  local.set $u
+  local.get $u
+  local.get $hx
+  i64.extend_i32_u
+  i64.const 32
+  i64.shl
+  i64.or
+  local.set $u
+  local.get $u
+  f64.reinterpret_i64
+  local.set $t
+  local.get $t
+  local.get $t
+  f64.mul
+  local.get $t
+  local.get $x
+  f64.div
+  f64.mul
+  local.set $r
+  local.get $t
+  f64.const 1.87595182427177
+  local.get $r
+  f64.const -1.8849797954337717
+  local.get $r
+  f64.const 1.6214297201053545
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  local.get $r
+  local.get $r
+  f64.mul
+  local.get $r
+  f64.mul
+  f64.const -0.758397934778766
+  local.get $r
+  f64.const 0.14599619288661245
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  f64.mul
+  local.set $t
+  local.get $t
+  i64.reinterpret_f64
+  i64.const 2147483648
+  i64.add
+  i64.const -1073741824
+  i64.and
+  f64.reinterpret_i64
+  local.set $t
+  local.get $t
+  local.get $t
+  f64.mul
+  local.set $s
+  local.get $x
+  local.get $s
+  f64.div
+  local.set $r
+  local.get $r
+  local.get $t
+  f64.sub
+  f64.const 2
+  local.get $t
+  f64.mul
+  local.get $r
+  f64.add
+  f64.div
+  local.set $r
+  local.get $t
+  local.get $t
+  local.get $r
+  f64.mul
+  f64.add
+  local.set $t
+  local.get $t
+  return
+ )
+ (func $inlining/foo (param $a i32) (param $b i32) (param $c i32) (result f64)
+  local.get $a
+  f64.convert_i32_s
+  local.get $b
+  f64.convert_i32_s
+  call $~lib/math/NativeMath.cbrt
+  f64.mul
+  local.get $c
+  f64.convert_i32_s
+  f64.add
+  return
+ )
+ (func $inlining/bar (param $a i32) (param $b i32) (param $c i32) (result f64)
+  (local $a|3 i32)
+  (local $b|4 i32)
+  (local $c|5 i32)
+  block $inlining/foo|inlined.0 (result f64)
+   local.get $a
+   local.set $a|3
+   local.get $b
+   local.set $b|4
+   local.get $c
+   local.set $c|5
+   local.get $a|3
+   f64.convert_i32_s
+   local.get $b|4
+   f64.convert_i32_s
+   call $~lib/math/NativeMath.cbrt
+   f64.mul
+   local.get $c|5
+   f64.convert_i32_s
+   f64.add
+   br $inlining/foo|inlined.0
+  end
+  local.get $b
+  local.get $a
+  local.get $c
+  call $inlining/foo
+  f64.div
+  return
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)

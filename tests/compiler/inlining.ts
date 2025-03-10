@@ -100,3 +100,11 @@ function test_ctor(): void {
 }
 
 test_ctor();
+
+export function foo(a: i32, b: i32, c: i32): f64 {
+  return a * Math.cbrt(b) + c;
+}
+
+export function bar(a: i32, b: i32, c: i32): f64 {
+  return inline.always(foo(a, b, c)) / foo(b, a, c);
+}
