@@ -7693,23 +7693,26 @@ export class Compiler extends DiagnosticEmitter {
         ), false // managedness is irrelevant here, isn't interrupted
       )
     );
-    let allInstances: Set<Class> | null;
+    let allInstances: Class[] | null;
     if (instance.isInterface) {
-      allInstances = instance.implementers;
+      let implementers = instance.implementers;
+      // Ensure interfaces are filtered out, since their class IDs will never be
+      // seen in actual objects.
+      allInstances = implementers
+        ? Set_values(implementers).filter(implementer => implementer.kind == ElementKind.Class)
+        : null;
     } else {
-      allInstances = new Set();
-      allInstances.add(instance);
       let extenders = instance.extenders;
       if (extenders) {
-        for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
-          let extender = _values[i];
-          allInstances.add(extender);
-        }
+        allInstances = Set_values(extenders);
+        allInstances.push(instance);
+      } else {
+        allInstances = [instance];
       }
     }
     if (allInstances) {
-      for (let _values = Set_values(allInstances), i = 0, k = _values.length; i < k; ++i) {
-        let instance = _values[i];
+      for (let i = 0, k = allInstances.length; i < k; ++i) {
+        let instance = unchecked(allInstances[i]);
         stmts.push(
           module.br("is_instance",
             module.binary(BinaryOp.EqI32,
