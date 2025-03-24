@@ -267,6 +267,7 @@ export namespace CommonNames {
   // memory & table
   export const DefaultMemory = "0";
   export const DefaultTable = "0";
+  export const VisitorTable = "~/lib/rt/visitor";
 }
 
 // shared

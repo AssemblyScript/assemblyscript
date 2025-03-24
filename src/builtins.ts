@@ -99,6 +99,7 @@ import {
 
 import {
   CommonFlags,
+  CommonNames,
   Feature,
   featureToString,
   TypeinfoFlags
@@ -10841,16 +10842,12 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   }
 }
 
-/** Compiles the `__visit_members` function. */
-export function compileVisitMembers(compiler: Compiler): void {
+function compileVisitMembersWithSwitchCase(compiler: Compiler): ExpressionRef {
   let program = compiler.program;
   let module = compiler.module;
   let usizeType = program.options.usizeType;
   let sizeTypeRef = usizeType.toRef();
   let managedClasses = program.managedClasses;
-  let visitInstance = assert(program.visitInstance);
-  compiler.compileFunction(visitInstance, true); // is lazy, make sure it is compiled
-
   // Prepare a mapping of class names to visitor calls. Each name corresponds to
   // the respective sequential (0..N) class id.
   let names = new Array<string>();
@@ -10907,16 +10904,66 @@ export function compileVisitMembers(compiler: Compiler): void {
     current,
     cases[names.length - 1]
   ], TypeRef.None);
+  return current;
+}
 
+function compileVisitMembersWithCallIndirect(compiler: Compiler): ExpressionRef {
+  let program = compiler.program;
+  let module = compiler.module;
+  let sizeTypeRef = program.options.usizeType.toRef();
+  let managedClasses = program.managedClasses;
+  let objectInstance = program.objectInstance;
+  let tableFunc = new Array<string>();
+  let managedClassKeys = Map_keys(managedClasses), l = managedClassKeys.length;
+  for (let i = 0; i < l; ++i) {
+    let instanceId = managedClassKeys[i];
+    let instance = assert(managedClasses.get(instanceId));
+    if (instance.isPointerfree) {
+      // optimize for non pointer object
+      ensureVisitMembersOf(compiler, objectInstance);
+      tableFunc[i] = `${objectInstance.internalName}~visit`;
+    } else {
+      ensureVisitMembersOf(compiler, instance);
+      tableFunc[i] = `${instance.internalName}~visit`;
+    }
+  }
+  module.addFunctionTable(CommonNames.VisitorTable, l, l, tableFunc, module.i32(0));
+  return module.call_indirect(CommonNames.VisitorTable,
+    // load<u32>(changetype<usize>(this) - 8)
+    module.load(4, false,
+      sizeTypeRef == TypeRef.I64
+        ? module.binary(BinaryOp.SubI64,
+          module.local_get(0, sizeTypeRef),
+          module.i64(8)
+        )
+        : module.binary(BinaryOp.SubI32,
+          module.local_get(0, sizeTypeRef),
+          module.i32(8) // rtId is at -8
+        ),
+      TypeRef.I32, 0
+    ), [
+      module.local_get(0, sizeTypeRef), // this
+      module.local_get(1, TypeRef.I32)  // cookie
+    ], createType([sizeTypeRef, TypeRef.I32]), TypeRef.None, false);
+}
+/** Compiles the `__visit_members` function. */
+export function compileVisitMembers(compiler: Compiler): void {
+  let program = compiler.program;
+  let module = compiler.module;
+  let usizeType = program.options.usizeType;
+  let sizeTypeRef = usizeType.toRef();
+  let visitInstance = assert(program.visitInstance);
+  compiler.compileFunction(visitInstance, true); // is lazy, make sure it is compiled
+  const current = compiler.options.hasFeature(Feature.ReferenceTypes)
+    ? compileVisitMembersWithCallIndirect(compiler)
+    : compileVisitMembersWithSwitchCase(compiler);
   // Add the function, executing an unreachable if breaking to 'invalid'
-  module.addFunction(BuiltinNames.visit_members,
-    createType([ sizeTypeRef, TypeRef.I32 ]), // this, cookie
+  module.addFunction(
+    BuiltinNames.visit_members,
+    createType([sizeTypeRef, TypeRef.I32]), // this, cookie
     TypeRef.None, // => void
     null,
-    module.flatten([
-      current,
-      module.unreachable()
-    ])
+    module.flatten([current, module.unreachable()])
   );
 }
 

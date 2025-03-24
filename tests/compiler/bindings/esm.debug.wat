@@ -84,8 +84,10 @@
  (data $20 (i32.const 1052) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d\00\00\00")
  (data $21 (i32.const 1116) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00")
  (data $22 (i32.const 1184) "\10\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\00\00\00\00\81\08\00\00\01\19\00\00\01\02\00\00$\t\00\00\a4\00\00\00$\n\00\00\02\t\00\00\02A\00\00\00\00\00\00A\00\00\00 \00\00\00")
+ (table $~/lib/rt/visitor 16 16 funcref)
  (table $0 2 2 funcref)
- (elem $0 (i32.const 1) $start:bindings/esm~anonymous|0)
+ (elem $~/lib/rt/visitor (table $~/lib/rt/visitor) (i32.const 0) func $~lib/object/Object~visit $~lib/object/Object~visit $~lib/object/Object~visit $~lib/arraybuffer/ArrayBufferView~visit $~lib/function/Function<%28%29=>void>~visit $~lib/typedarray/Int16Array~visit $~lib/typedarray/Float32Array~visit $~lib/typedarray/Uint64Array~visit $~lib/object/Object~visit $~lib/object/Object~visit $~lib/object/Object~visit $~lib/array/Array<i32>~visit $~lib/array/Array<~lib/string/String>~visit $bindings/esm/PlainObject~visit $~lib/typedarray/Uint8Array~visit $~lib/object/Object~visit)
+ (elem $0 (table $0) (i32.const 1) func $start:bindings/esm~anonymous|0)
  (export "plainGlobal" (global $bindings/esm/plainGlobal))
  (export "plainMutableGlobal" (global $bindings/esm/plainMutableGlobal))
  (export "stringGlobal" (global $bindings/esm/stringGlobal))
@@ -2867,6 +2869,8 @@
   local.get $0
   call $~lib/rt/itcms/__visit
  )
+ (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
+ )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -2880,8 +2884,6 @@
    local.get $1
    call $~lib/rt/itcms/__visit
   end
- )
- (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
  )
  (func $~lib/function/Function<%28%29=>void>#get:_env (param $this i32) (result i32)
   local.get $this
@@ -2970,88 +2972,13 @@
   call $~lib/arraybuffer/ArrayBufferView~visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  block $invalid
-   block $bindings/esm/NonPlainObject
-    block $~lib/typedarray/Uint8Array
-     block $bindings/esm/PlainObject
-      block $~lib/array/Array<~lib/string/String>
-       block $~lib/array/Array<i32>
-        block $~lib/staticarray/StaticArray<i64>
-         block $~lib/staticarray/StaticArray<u16>
-          block $~lib/staticarray/StaticArray<i32>
-           block $~lib/typedarray/Uint64Array
-            block $~lib/typedarray/Float32Array
-             block $~lib/typedarray/Int16Array
-              block $~lib/function/Function<%28%29=>void>
-               block $~lib/arraybuffer/ArrayBufferView
-                block $~lib/string/String
-                 block $~lib/arraybuffer/ArrayBuffer
-                  block $~lib/object/Object
-                   local.get $0
-                   i32.const 8
-                   i32.sub
-                   i32.load
-                   br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28%29=>void> $~lib/typedarray/Int16Array $~lib/typedarray/Float32Array $~lib/typedarray/Uint64Array $~lib/staticarray/StaticArray<i32> $~lib/staticarray/StaticArray<u16> $~lib/staticarray/StaticArray<i64> $~lib/array/Array<i32> $~lib/array/Array<~lib/string/String> $bindings/esm/PlainObject $~lib/typedarray/Uint8Array $bindings/esm/NonPlainObject $invalid
-                  end
-                  return
-                 end
-                 return
-                end
-                return
-               end
-               local.get $0
-               local.get $1
-               call $~lib/arraybuffer/ArrayBufferView~visit
-               return
-              end
-              local.get $0
-              local.get $1
-              call $~lib/function/Function<%28%29=>void>~visit
-              return
-             end
-             local.get $0
-             local.get $1
-             call $~lib/typedarray/Int16Array~visit
-             return
-            end
-            local.get $0
-            local.get $1
-            call $~lib/typedarray/Float32Array~visit
-            return
-           end
-           local.get $0
-           local.get $1
-           call $~lib/typedarray/Uint64Array~visit
-           return
-          end
-          return
-         end
-         return
-        end
-        return
-       end
-       local.get $0
-       local.get $1
-       call $~lib/array/Array<i32>~visit
-       return
-      end
-      local.get $0
-      local.get $1
-      call $~lib/array/Array<~lib/string/String>~visit
-      return
-     end
-     local.get $0
-     local.get $1
-     call $bindings/esm/PlainObject~visit
-     return
-    end
-    local.get $0
-    local.get $1
-    call $~lib/typedarray/Uint8Array~visit
-    return
-   end
-   return
-  end
+  local.get $0
+  local.get $1
+  local.get $0
+  i32.const 8
+  i32.sub
+  i32.load
+  call_indirect $~/lib/rt/visitor (type $0)
   unreachable
  )
  (func $~setArgumentsLength (param $0 i32)
