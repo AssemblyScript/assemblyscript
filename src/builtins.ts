@@ -10904,7 +10904,7 @@ function compileVisitMembersWithSwitchCase(compiler: Compiler): ExpressionRef {
     current,
     cases[names.length - 1]
   ], TypeRef.None);
-  return current;
+  return module.flatten([current, module.unreachable()]);
 }
 
 function compileVisitMembersWithCallIndirect(compiler: Compiler): ExpressionRef {
@@ -10963,7 +10963,7 @@ export function compileVisitMembers(compiler: Compiler): void {
     createType([sizeTypeRef, TypeRef.I32]), // this, cookie
     TypeRef.None, // => void
     null,
-    module.flatten([current, module.unreachable()])
+    current,
   );
 }
 

@@ -2982,7 +2982,6 @@
   i32.sub
   i32.load
   call_indirect $~/lib/rt/visitor (type $0)
-  unreachable
  )
  (func $~setArgumentsLength (param $0 i32)
   local.get $0
