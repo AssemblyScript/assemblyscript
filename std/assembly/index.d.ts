@@ -2695,7 +2695,7 @@ declare function final(constructor: Constructor): void;
 declare function inline(...args: any[]): any;
 declare namespace inline {
   /** Explicitly requests inlined function calls on the provided expression wherever possible. */
-  declare function always<T>(value: T): T;
+  export function always<T>(value: T): T;
 }
 
 /** Annotates a method, function or constant global as unsafe. */
