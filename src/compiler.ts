@@ -8189,7 +8189,6 @@ export class Compiler extends DiagnosticEmitter {
     let arrayInstance = <Class>element;
     let arrayType = arrayInstance.type;
     let elementType = arrayInstance.getTypeArgumentsTo(program.arrayPrototype)![0];
-    let arrayBufferInstance = assert(program.arrayBufferInstance);
 
     // block those here so compiling expressions doesn't conflict
     let tempThis = flow.getTempLocal(this.options.usizeType);
