@@ -2269,7 +2269,7 @@
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 112
+  i32.const 96
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
@@ -2279,7 +2279,7 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.const 112
+   i32.const 96
    memory.fill
    memory.size
    i32.const 16
@@ -2433,10 +2433,6 @@
    call $~lib/rt/__newArray
    local.tee $3
    i32.store offset=32
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.load offset=4
-   i32.store offset=36
    local.get $3
    i32.const 0
    local.get $0
@@ -2447,7 +2443,7 @@
    call $~lib/array/Array<infer-array/Ref|null>#__set
    local.get $2
    local.get $3
-   i32.store offset=40
+   i32.store offset=36
    global.get $~lib/memory/__stack_pointer
    local.get $3
    i32.store offset=4
@@ -2457,11 +2453,11 @@
    global.get $~lib/memory/__stack_pointer
    call $infer-array/Ref#constructor
    local.tee $0
-   i32.store offset=44
+   i32.store offset=40
    global.get $~lib/memory/__stack_pointer
    call $infer-array/Ref#constructor
    local.tee $1
-   i32.store offset=48
+   i32.store offset=44
    global.get $~lib/memory/__stack_pointer
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -2471,11 +2467,7 @@
    i32.const 0
    call $~lib/rt/__newArray
    local.tee $3
-   i32.store offset=52
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.load offset=4
-   i32.store offset=56
+   i32.store offset=48
    local.get $3
    i32.const 0
    local.get $0
@@ -2486,7 +2478,7 @@
    call $~lib/array/Array<infer-array/Ref|null>#__set
    local.get $2
    local.get $3
-   i32.store offset=60
+   i32.store offset=52
    global.get $~lib/memory/__stack_pointer
    local.get $3
    i32.store offset=4
@@ -2496,7 +2488,7 @@
    global.get $~lib/memory/__stack_pointer
    call $infer-array/Ref#constructor
    local.tee $0
-   i32.store offset=64
+   i32.store offset=56
    global.get $~lib/memory/__stack_pointer
    local.set $1
    global.get $~lib/memory/__stack_pointer
@@ -2506,11 +2498,7 @@
    i32.const 0
    call $~lib/rt/__newArray
    local.tee $2
-   i32.store offset=68
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.load offset=4
-   i32.store offset=72
+   i32.store offset=60
    local.get $2
    i32.const 0
    local.get $0
@@ -2521,7 +2509,7 @@
    call $~lib/array/Array<infer-array/Ref|null>#__set
    local.get $1
    local.get $2
-   i32.store offset=76
+   i32.store offset=64
    global.get $~lib/memory/__stack_pointer
    local.get $2
    i32.store offset=4
@@ -2535,7 +2523,7 @@
    i32.const 1824
    call $~lib/rt/__newArray
    local.tee $0
-   i32.store offset=80
+   i32.store offset=68
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -2549,7 +2537,7 @@
    i32.const 1856
    call $~lib/rt/__newArray
    local.tee $0
-   i32.store offset=84
+   i32.store offset=72
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -2571,7 +2559,7 @@
    i32.const 1888
    call $~lib/rt/__newArray
    local.tee $0
-   i32.store offset=88
+   i32.store offset=76
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -2593,7 +2581,7 @@
    i32.const 1920
    call $~lib/rt/__newArray
    local.tee $0
-   i32.store offset=92
+   i32.store offset=80
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -2611,7 +2599,7 @@
    i32.const 1952
    call $~lib/rt/__newArray
    local.tee $0
-   i32.store offset=96
+   i32.store offset=84
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -2631,11 +2619,7 @@
    i32.const 0
    call $~lib/rt/__newArray
    local.tee $1
-   i32.store offset=100
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.load offset=4
-   i32.store offset=104
+   i32.store offset=88
    local.get $1
    i32.const 0
    i32.const 1
@@ -2654,7 +2638,7 @@
    call $~lib/array/Array<infer-array/Ref|null>#__set
    local.get $0
    local.get $1
-   i32.store offset=108
+   i32.store offset=92
    global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store offset=4
@@ -2707,7 +2691,7 @@
    i32.add
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 112
+   i32.const 96
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

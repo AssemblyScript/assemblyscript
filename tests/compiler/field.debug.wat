@@ -2539,7 +2539,6 @@
  (func $field/NoStaticConflict#constructor (param $this i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -2563,38 +2562,38 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  local.set $3
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
   i32.store offset=4
-  local.get $3
+  local.get $2
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store
   local.get $this
-  local.set $3
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
   i32.store offset=4
-  local.get $3
+  local.get $2
   i32.const 0
   i32.const 2
   i32.const 5
   i32.const 432
   call $~lib/rt/__newArray
-  local.set $3
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
   i32.store offset=8
-  local.get $3
+  local.get $2
   call $field/NoStaticConflict#set:a
   local.get $this
-  local.set $3
+  local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
  )
  (func $field/testNoStaticConflict
   (local $inst i32)

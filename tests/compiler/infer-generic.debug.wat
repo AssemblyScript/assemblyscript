@@ -2626,7 +2626,6 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -2651,17 +2650,17 @@
    unreachable
   end
   global.get $infer-generic/arr
-  local.set $3
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
   i32.store
-  local.get $3
+  local.get $2
   i32.const 176
-  local.set $3
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
   i32.store offset=4
-  local.get $3
+  local.get $2
   i32.const 0
   call $~lib/array/Array<f32>#reduce<bool>
   drop
@@ -2698,22 +2697,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $infer-generic/Ref#constructor
-  local.tee $2
+  local.tee $1
   i32.store offset=8
-  local.get $2
-  local.set $3
+  local.get $1
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
   i32.store offset=4
-  local.get $3
+  local.get $2
   i32.const 2
   call $infer-generic/Ref#set:x
-  local.get $2
-  local.set $3
+  local.get $1
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
   i32.store
-  local.get $3
+  local.get $2
   call $infer-generic/inferDefault<infer-generic/Ref>
   drop
   i32.const 1

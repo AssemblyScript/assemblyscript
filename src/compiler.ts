@@ -8193,7 +8193,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // block those here so compiling expressions doesn't conflict
     let tempThis = flow.getTempLocal(this.options.usizeType);
-    let tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
 
     // compile value expressions and find out whether all are constant
     let expressions = expression.elementExpressions;
@@ -8269,16 +8268,6 @@ export class Compiler extends DiagnosticEmitter {
     let dataStartProperty = (<PropertyPrototype>dataStartMember).instance;
     if (!dataStartProperty) return module.unreachable();
     assert(dataStartProperty.isField && dataStartProperty.memoryOffset >= 0);
-    stmts.push(
-      module.local_set(tempDataStart.index,
-        module.load(arrayType.byteSize, false,
-          module.local_get(tempThis.index, arrayTypeRef),
-          arrayTypeRef,
-          dataStartProperty.memoryOffset
-        ),
-        true // ArrayBuffer
-      )
-    );
     for (let i = 0; i < length; ++i) {
       // this[i] = value
       stmts.push(

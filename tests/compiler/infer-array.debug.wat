@@ -3455,12 +3455,12 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
+  (local $10 f32)
   (local $11 i32)
   (local $12 i32)
   (local $13 i32)
   (local $14 i32)
-  (local $15 f32)
+  (local $15 i32)
   (local $16 i32)
   (local $17 i32)
   (local $18 i32)
@@ -3482,30 +3482,14 @@
   (local $34 i32)
   (local $35 i32)
   (local $36 i32)
-  (local $37 i32)
-  (local $38 i32)
-  (local $39 i32)
-  (local $40 i32)
-  (local $41 i32)
-  (local $42 i32)
-  (local $43 i32)
-  (local $44 i32)
-  (local $45 i32)
-  (local $46 i32)
-  (local $47 i32)
-  (local $48 i32)
-  (local $49 i32)
-  (local $50 i32)
-  (local $51 i32)
-  (local $52 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 112
+  i32.const 96
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.const 112
+  i32.const 96
   memory.fill
   memory.size
   i32.const 16
@@ -3530,14 +3514,14 @@
   i32.const 4
   i32.const 32
   call $~lib/rt/__newArray
-  local.tee $2
+  local.tee $1
   i32.store
-  local.get $2
-  local.set $52
+  local.get $1
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<i32>#__get
   drop
@@ -3551,12 +3535,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
-  local.set $52
+  local.get $1
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<i32>#__get
   drop
@@ -3576,14 +3560,14 @@
   i32.const 5
   i32.const 560
   call $~lib/rt/__newArray
-  local.tee $5
+  local.tee $3
   i32.store offset=8
-  local.get $5
-  local.set $52
+  local.get $3
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<f64>#__get
   drop
@@ -3603,14 +3587,14 @@
   i32.const 6
   i32.const 608
   call $~lib/rt/__newArray
-  local.tee $8
+  local.tee $5
   i32.store offset=12
-  local.get $8
-  local.set $52
+  local.get $5
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<u32>#__get
   drop
@@ -3624,12 +3608,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $8
-  local.set $52
+  local.get $5
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<u32>#__get
   drop
@@ -3644,12 +3628,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $8
-  local.set $52
+  local.get $5
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 1
   call $~lib/array/Array<u32>#__get
   i32.const -1
@@ -3669,14 +3653,14 @@
   i32.const 5
   i32.const 640
   call $~lib/rt/__newArray
-  local.tee $11
+  local.tee $7
   i32.store offset=16
-  local.get $11
-  local.set $52
+  local.get $7
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<f64>#__get
   drop
@@ -3696,14 +3680,14 @@
   i32.const 7
   i32.const 688
   call $~lib/rt/__newArray
-  local.tee $14
+  local.tee $9
   i32.store offset=20
-  local.get $14
-  local.set $52
+  local.get $9
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<f32>#__get
   drop
@@ -3717,24 +3701,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $14
-  local.set $52
+  local.get $9
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 1
   call $~lib/array/Array<f32>#__get
-  local.set $15
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $infer-array/Ref#constructor
-  local.tee $16
+  local.tee $11
   i32.store offset=24
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $infer-array/Ref#constructor
-  local.tee $17
+  local.tee $12
   i32.store offset=28
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -3743,30 +3727,25 @@
   i32.const 9
   i32.const 0
   call $~lib/rt/__newArray
-  local.tee $18
+  local.tee $13
   i32.store offset=32
-  global.get $~lib/memory/__stack_pointer
-  local.get $18
-  i32.load offset=4
-  local.tee $19
-  i32.store offset=36
-  local.get $18
+  local.get $13
   i32.const 0
-  local.get $16
+  local.get $11
   call $~lib/array/Array<infer-array/Ref|null>#__set
-  local.get $18
+  local.get $13
   i32.const 1
-  local.get $17
+  local.get $12
   call $~lib/array/Array<infer-array/Ref|null>#__set
-  local.get $18
-  local.tee $20
-  i32.store offset=40
-  local.get $20
-  local.set $52
+  local.get $13
+  local.tee $14
+  i32.store offset=36
+  local.get $14
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<infer-array/Ref|null>#__get
   drop
@@ -3783,13 +3762,13 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $infer-array/Ref#constructor
-  local.tee $21
-  i32.store offset=44
+  local.tee $15
+  i32.store offset=40
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $infer-array/Ref#constructor
-  local.tee $22
-  i32.store offset=48
+  local.tee $16
+  i32.store offset=44
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 2
@@ -3797,30 +3776,25 @@
   i32.const 9
   i32.const 0
   call $~lib/rt/__newArray
-  local.tee $23
-  i32.store offset=52
-  global.get $~lib/memory/__stack_pointer
-  local.get $23
-  i32.load offset=4
-  local.tee $24
-  i32.store offset=56
-  local.get $23
+  local.tee $17
+  i32.store offset=48
+  local.get $17
   i32.const 0
-  local.get $21
+  local.get $15
   call $~lib/array/Array<infer-array/Ref|null>#__set
-  local.get $23
+  local.get $17
   i32.const 1
-  local.get $22
+  local.get $16
   call $~lib/array/Array<infer-array/Ref|null>#__set
-  local.get $23
-  local.tee $25
-  i32.store offset=60
-  local.get $25
-  local.set $52
+  local.get $17
+  local.tee $18
+  i32.store offset=52
+  local.get $18
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 1
   call $~lib/array/Array<infer-array/Ref|null>#__get
   drop
@@ -3837,8 +3811,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $infer-array/Ref#constructor
-  local.tee $26
-  i32.store offset=64
+  local.tee $19
+  i32.store offset=56
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 2
@@ -3846,30 +3820,25 @@
   i32.const 9
   i32.const 0
   call $~lib/rt/__newArray
-  local.tee $27
-  i32.store offset=68
-  global.get $~lib/memory/__stack_pointer
-  local.get $27
-  i32.load offset=4
-  local.tee $28
-  i32.store offset=72
-  local.get $27
+  local.tee $20
+  i32.store offset=60
+  local.get $20
   i32.const 0
-  local.get $26
+  local.get $19
   call $~lib/array/Array<infer-array/Ref|null>#__set
-  local.get $27
+  local.get $20
   i32.const 1
   i32.const 0
   call $~lib/array/Array<infer-array/Ref|null>#__set
-  local.get $27
-  local.tee $29
-  i32.store offset=76
-  local.get $29
-  local.set $52
+  local.get $20
+  local.tee $21
+  i32.store offset=64
+  local.get $21
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<infer-array/Ref|null>#__get
   drop
@@ -3889,14 +3858,14 @@
   i32.const 10
   i32.const 800
   call $~lib/rt/__newArray
-  local.tee $32
-  i32.store offset=80
-  local.get $32
-  local.set $52
+  local.tee $23
+  i32.store offset=68
+  local.get $23
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<~lib/string/String|null>#__get
   drop
@@ -3916,14 +3885,14 @@
   i32.const 11
   i32.const 832
   call $~lib/rt/__newArray
-  local.tee $35
-  i32.store offset=84
-  local.get $35
-  local.set $52
+  local.tee $25
+  i32.store offset=72
+  local.get $25
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<usize>#__get
   drop
@@ -3937,12 +3906,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $35
-  local.set $52
+  local.get $25
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<usize>#__get
   drop
@@ -3963,14 +3932,14 @@
   i32.const 11
   i32.const 864
   call $~lib/rt/__newArray
-  local.tee $38
-  i32.store offset=88
-  local.get $38
-  local.set $52
+  local.tee $27
+  i32.store offset=76
+  local.get $27
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<usize>#__get
   drop
@@ -3984,12 +3953,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $38
-  local.set $52
+  local.get $27
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<usize>#__get
   drop
@@ -4010,14 +3979,14 @@
   i32.const 4
   i32.const 896
   call $~lib/rt/__newArray
-  local.tee $41
-  i32.store offset=92
-  local.get $41
-  local.set $52
+  local.tee $29
+  i32.store offset=80
+  local.get $29
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<i32>#__get
   drop
@@ -4031,12 +4000,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $41
-  local.set $52
+  local.get $29
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<i32>#__get
   drop
@@ -4057,14 +4026,14 @@
   i32.const 4
   i32.const 928
   call $~lib/rt/__newArray
-  local.tee $44
-  i32.store offset=96
-  local.get $44
-  local.set $52
+  local.tee $31
+  i32.store offset=84
+  local.get $31
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<i32>#__get
   drop
@@ -4078,12 +4047,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $44
-  local.set $52
+  local.get $31
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<i32>#__get
   drop
@@ -4105,14 +4074,9 @@
   i32.const 12
   i32.const 0
   call $~lib/rt/__newArray
-  local.tee $45
-  i32.store offset=100
-  global.get $~lib/memory/__stack_pointer
-  local.get $45
-  i32.load offset=4
-  local.tee $46
-  i32.store offset=104
-  local.get $45
+  local.tee $32
+  i32.store offset=88
+  local.get $32
   i32.const 0
   i32.const 1
   i32.const 2
@@ -4120,7 +4084,7 @@
   i32.const 960
   call $~lib/rt/__newArray
   call $~lib/array/Array<~lib/array/Array<i32>>#__set
-  local.get $45
+  local.get $32
   i32.const 1
   i32.const 1
   i32.const 2
@@ -4128,15 +4092,15 @@
   i32.const 992
   call $~lib/rt/__newArray
   call $~lib/array/Array<~lib/array/Array<i32>>#__set
-  local.get $45
-  local.tee $51
-  i32.store offset=108
-  local.get $51
-  local.set $52
+  local.get $32
+  local.tee $35
+  i32.store offset=92
+  local.get $35
+  local.set $36
   global.get $~lib/memory/__stack_pointer
-  local.get $52
+  local.get $36
   i32.store offset=4
-  local.get $52
+  local.get $36
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
   drop
@@ -4154,7 +4118,7 @@
   i32.eqz
   drop
   global.get $~lib/memory/__stack_pointer
-  i32.const 112
+  i32.const 96
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

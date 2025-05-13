@@ -3147,9 +3147,8 @@
  )
  (func $resolve-access/arrayAccess (result i32)
   (local $0 i32)
-  (local $1 i32)
   (local $arr i32)
-  (local $3 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -3167,21 +3166,21 @@
   local.tee $arr
   i32.store
   local.get $arr
-  local.set $3
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
   i32.store offset=4
-  local.get $3
+  local.get $2
   i32.const 0
   call $~lib/array/Array<u64>#__get
   i32.const 10
   call $~lib/number/U64#toString
-  local.set $3
+  local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
   return
  )
  (func $resolve-access/Container#constructor (param $this i32) (result i32)
