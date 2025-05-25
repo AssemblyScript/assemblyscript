@@ -1,6 +1,6 @@
 export async function instantiate(module, imports = {}) {
   const adaptedImports = {
-    env: Object.assign(Object.create(globalThis), imports.env || {}, {
+    env: Object.setPrototypeOf({
       trace(message, n, a0, a1, a2, a3, a4) {
         // ~lib/builtins/trace(~lib/string/String, i32?, f64?, f64?, f64?, f64?, f64?) => void
         message = __liftString(message >>> 0);
@@ -44,7 +44,7 @@ export async function instantiate(module, imports = {}) {
           throw Error(`${message} in ${fileName}:${lineNumber}:${columnNumber}`);
         })();
       },
-    }),
+    }, Object.assign(Object.create(globalThis), imports.env || {})),
   };
   const { exports } = await WebAssembly.instantiate(module, adaptedImports);
   const memory = exports.memory || imports.env.memory;

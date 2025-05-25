@@ -554,18 +554,10 @@ export class JSBuilder extends ExportsWalker {
         continue;
       }
       let resetPos = sb.length;
-      sb.push(": Object.assign(Object.create(");
-      if (moduleName == "env") {
-        sb.push("globalThis");
-      } else {
-        sb.push("__module");
-        sb.push(moduleId.toString());
-      }
-      sb.push("), ");
-      if (moduleName == "env") {
-        sb.push("imports.env || {}, ");
-      }
-      sb.push("{\n");
+
+      // Use Object.setPrototypeOf to avoid issues with read-only properties
+      // on module objects created by bundlers (issue #2659)
+      sb.push(": Object.setPrototypeOf({\n");
       ++this.indentLevel;
       let numInstrumented = 0;
       for (let _keys2 = Map_keys(module), j = 0, l = _keys2.length; j < l; ++j) {
@@ -598,7 +590,15 @@ export class JSBuilder extends ExportsWalker {
         sb.push(",\n");
       } else {
         indent(sb, this.indentLevel);
-        sb.push("}),\n");
+        sb.push("}, ");
+        if (moduleName == "env") {
+          // TODO: If necessary, use "Object.setPrototypeOf(Object.assign({}, imports.env || {}), globalThis)"
+          sb.push("Object.assign(Object.create(globalThis), imports.env || {})");
+        } else {
+          sb.push("__module");
+          sb.push(moduleId.toString());
+        }
+        sb.push("),\n");
       }
     }
     --this.indentLevel;
