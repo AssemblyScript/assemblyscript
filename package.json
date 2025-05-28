@@ -25,6 +25,7 @@
   },
   "engineStrict": true,
   "dependencies": {
+    "as-float": "^1.0.0",
     "binaryen": "116.0.0-nightly.20240114",
     "long": "^5.2.4"
   },
