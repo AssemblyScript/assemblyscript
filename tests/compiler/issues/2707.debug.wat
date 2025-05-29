@@ -2440,7 +2440,6 @@
  (func $start:issues/2707
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2471,11 +2470,11 @@
   i32.const 4
   i32.const 64
   call $~lib/rt/__newArray
-  local.set $2
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $1
   i32.store
-  local.get $2
+  local.get $1
   i32.const 1
   global.set $~argumentsLength
   global.get $issues/2707/func

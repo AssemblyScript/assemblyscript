@@ -2361,8 +2361,6 @@
  (func $start:bindings/noExportRuntime
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
   memory.size
   i32.const 16
   i32.shl

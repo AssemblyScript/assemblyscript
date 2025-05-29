@@ -3322,10 +3322,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -3335,11 +3331,11 @@
   i32.const 0
   i32.store
   global.get $std/static-array/i
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   call $~lib/array/Array<i32>#get:length
   i32.const 2
   i32.eq
@@ -3353,11 +3349,11 @@
    unreachable
   end
   global.get $std/static-array/i
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   call $~lib/array/Array<i32>#__get
   i32.const 1
@@ -3372,11 +3368,11 @@
    unreachable
   end
   global.get $std/static-array/i
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 1
   call $~lib/array/Array<i32>#__get
   i32.const 2
@@ -3408,20 +3404,20 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   global.get $std/static-array/i
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   i32.const 2
   call $~lib/array/Array<i32>#__set
   global.get $std/static-array/i
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   call $~lib/array/Array<i32>#__get
   i32.const 2
@@ -3436,11 +3432,11 @@
    unreachable
   end
   global.get $std/static-array/I
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   call $~lib/array/Array<i64>#get:length
   i32.const 2
   i32.eq
@@ -3454,11 +3450,11 @@
    unreachable
   end
   global.get $std/static-array/I
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   call $~lib/array/Array<i64>#__get
   i64.const 3
@@ -3473,11 +3469,11 @@
    unreachable
   end
   global.get $std/static-array/I
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 1
   call $~lib/array/Array<i64>#__get
   i64.const 4
@@ -3492,20 +3488,20 @@
    unreachable
   end
   global.get $std/static-array/I
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   i64.const 4
   call $~lib/array/Array<i64>#__set
   global.get $std/static-array/I
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   call $~lib/array/Array<i64>#__get
   i64.const 4
@@ -3520,11 +3516,11 @@
    unreachable
   end
   global.get $std/static-array/f
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   call $~lib/array/Array<f32>#get:length
   i32.const 2
   i32.eq
@@ -3538,11 +3534,11 @@
    unreachable
   end
   global.get $std/static-array/f
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   call $~lib/array/Array<f32>#__get
   f32.const 1.5
@@ -3557,11 +3553,11 @@
    unreachable
   end
   global.get $std/static-array/f
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 1
   call $~lib/array/Array<f32>#__get
   f32.const 2.5
@@ -3576,20 +3572,20 @@
    unreachable
   end
   global.get $std/static-array/f
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   f32.const 2.5
   call $~lib/array/Array<f32>#__set
   global.get $std/static-array/f
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   call $~lib/array/Array<f32>#__get
   f32.const 2.5
@@ -3604,11 +3600,11 @@
    unreachable
   end
   global.get $std/static-array/F
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   call $~lib/array/Array<f64>#get:length
   i32.const 2
   i32.eq
@@ -3622,11 +3618,11 @@
    unreachable
   end
   global.get $std/static-array/F
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   call $~lib/array/Array<f64>#__get
   f64.const 1.25
@@ -3641,11 +3637,11 @@
    unreachable
   end
   global.get $std/static-array/F
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 1
   call $~lib/array/Array<f64>#__get
   f64.const 2.25
@@ -3660,20 +3656,20 @@
    unreachable
   end
   global.get $std/static-array/F
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   f64.const 2.25
   call $~lib/array/Array<f64>#__set
   global.get $std/static-array/F
-  local.set $8
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $4
   i32.store
-  local.get $8
+  local.get $4
   i32.const 0
   call $~lib/array/Array<f64>#__get
   f64.const 2.25
