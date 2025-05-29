@@ -3653,6 +3653,9 @@ function builtin_call_indirect(ctx: BuiltinFunctionContext): ExpressionRef {
   let paramTypeRefs = new Array<TypeRef>(numOperands);
   for (let i = 0; i < numOperands; ++i) {
     operandExprs[i] = compiler.compileExpression(operands[1 + i], Type.auto);
+    if (compiler.currentType.isManaged) {
+      operandExprs[i] = module.tostack(operandExprs[i]);
+    }
     paramTypeRefs[i] = compiler.currentType.toRef();
   }
   compiler.currentType = returnType;
