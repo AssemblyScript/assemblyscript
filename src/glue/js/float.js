@@ -3,6 +3,8 @@
  * @license Apache-2.0
  */
 
+import { f64_pow } from "as-float";
+
 /* eslint-disable no-undef */
 
 const F64 = new Float64Array(1);
@@ -29,3 +31,5 @@ globalThis.i64_as_f64 = function i64_as_f64(value) {
   I32[1] = i64_high(value);
   return F64[0];
 };
+
+globalThis.f64_pow = f64_pow;
