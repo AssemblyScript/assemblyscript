@@ -296,88 +296,90 @@
     i32.const 16
     i32.sub
     local.set $end
-    loop $while-continue|0
-     local.get $pos
-     local.get $end
-     i32.le_u
-     if
-      block $~lib/util/hash/mix|inlined.0 (result i32)
-       local.get $s1
-       local.set $h|10
-       local.get $pos
-       i32.load
-       local.set $key|11
-       local.get $h|10
-       local.get $key|11
-       i32.const -2048144777
-       i32.mul
-       i32.add
-       i32.const 13
-       i32.rotl
-       i32.const -1640531535
-       i32.mul
-       br $~lib/util/hash/mix|inlined.0
-      end
-      local.set $s1
-      block $~lib/util/hash/mix|inlined.1 (result i32)
-       local.get $s2
-       local.set $h|12
-       local.get $pos
-       i32.load offset=4
-       local.set $key|13
-       local.get $h|12
-       local.get $key|13
-       i32.const -2048144777
-       i32.mul
-       i32.add
-       i32.const 13
-       i32.rotl
-       i32.const -1640531535
-       i32.mul
-       br $~lib/util/hash/mix|inlined.1
-      end
-      local.set $s2
-      block $~lib/util/hash/mix|inlined.2 (result i32)
-       local.get $s3
-       local.set $h|14
-       local.get $pos
-       i32.load offset=8
-       local.set $key|15
-       local.get $h|14
-       local.get $key|15
-       i32.const -2048144777
-       i32.mul
-       i32.add
-       i32.const 13
-       i32.rotl
-       i32.const -1640531535
-       i32.mul
-       br $~lib/util/hash/mix|inlined.2
-      end
-      local.set $s3
-      block $~lib/util/hash/mix|inlined.3 (result i32)
-       local.get $s4
-       local.set $h|16
-       local.get $pos
-       i32.load offset=12
-       local.set $key|17
-       local.get $h|16
-       local.get $key|17
-       i32.const -2048144777
-       i32.mul
-       i32.add
-       i32.const 13
-       i32.rotl
-       i32.const -1640531535
-       i32.mul
-       br $~lib/util/hash/mix|inlined.3
-      end
-      local.set $s4
+    block $while-break|0
+     loop $while-continue|0
       local.get $pos
-      i32.const 16
-      i32.add
-      local.set $pos
-      br $while-continue|0
+      local.get $end
+      i32.le_u
+      if
+       block $~lib/util/hash/mix|inlined.0 (result i32)
+        local.get $s1
+        local.set $h|10
+        local.get $pos
+        i32.load
+        local.set $key|11
+        local.get $h|10
+        local.get $key|11
+        i32.const -2048144777
+        i32.mul
+        i32.add
+        i32.const 13
+        i32.rotl
+        i32.const -1640531535
+        i32.mul
+        br $~lib/util/hash/mix|inlined.0
+       end
+       local.set $s1
+       block $~lib/util/hash/mix|inlined.1 (result i32)
+        local.get $s2
+        local.set $h|12
+        local.get $pos
+        i32.load offset=4
+        local.set $key|13
+        local.get $h|12
+        local.get $key|13
+        i32.const -2048144777
+        i32.mul
+        i32.add
+        i32.const 13
+        i32.rotl
+        i32.const -1640531535
+        i32.mul
+        br $~lib/util/hash/mix|inlined.1
+       end
+       local.set $s2
+       block $~lib/util/hash/mix|inlined.2 (result i32)
+        local.get $s3
+        local.set $h|14
+        local.get $pos
+        i32.load offset=8
+        local.set $key|15
+        local.get $h|14
+        local.get $key|15
+        i32.const -2048144777
+        i32.mul
+        i32.add
+        i32.const 13
+        i32.rotl
+        i32.const -1640531535
+        i32.mul
+        br $~lib/util/hash/mix|inlined.2
+       end
+       local.set $s3
+       block $~lib/util/hash/mix|inlined.3 (result i32)
+        local.get $s4
+        local.set $h|16
+        local.get $pos
+        i32.load offset=12
+        local.set $key|17
+        local.get $h|16
+        local.get $key|17
+        i32.const -2048144777
+        i32.mul
+        i32.add
+        i32.const 13
+        i32.rotl
+        i32.const -1640531535
+        i32.mul
+        br $~lib/util/hash/mix|inlined.3
+       end
+       local.set $s4
+       local.get $pos
+       i32.const 16
+       i32.add
+       local.set $pos
+       br $while-continue|0
+      end
      end
     end
     local.get $h
@@ -412,58 +414,62 @@
    i32.const 4
    i32.sub
    local.set $end|18
-   loop $while-continue|1
-    local.get $pos
-    local.get $end|18
-    i32.le_u
-    if
-     local.get $h
+   block $while-break|1
+    loop $while-continue|1
      local.get $pos
-     i32.load
-     i32.const -1028477379
-     i32.mul
-     i32.add
-     local.set $h
-     local.get $h
-     i32.const 17
-     i32.rotl
-     i32.const 668265263
-     i32.mul
-     local.set $h
-     local.get $pos
-     i32.const 4
-     i32.add
-     local.set $pos
-     br $while-continue|1
+     local.get $end|18
+     i32.le_u
+     if
+      local.get $h
+      local.get $pos
+      i32.load
+      i32.const -1028477379
+      i32.mul
+      i32.add
+      local.set $h
+      local.get $h
+      i32.const 17
+      i32.rotl
+      i32.const 668265263
+      i32.mul
+      local.set $h
+      local.get $pos
+      i32.const 4
+      i32.add
+      local.set $pos
+      br $while-continue|1
+     end
     end
    end
    local.get $key|1
    local.get $len
    i32.add
    local.set $end|18
-   loop $while-continue|2
-    local.get $pos
-    local.get $end|18
-    i32.lt_u
-    if
-     local.get $h
+   block $while-break|2
+    loop $while-continue|2
      local.get $pos
-     i32.load8_u
-     i32.const 374761393
-     i32.mul
-     i32.add
-     local.set $h
-     local.get $h
-     i32.const 11
-     i32.rotl
-     i32.const -1640531535
-     i32.mul
-     local.set $h
-     local.get $pos
-     i32.const 1
-     i32.add
-     local.set $pos
-     br $while-continue|2
+     local.get $end|18
+     i32.lt_u
+     if
+      local.get $h
+      local.get $pos
+      i32.load8_u
+      i32.const 374761393
+      i32.mul
+      i32.add
+      local.set $h
+      local.get $h
+      i32.const 11
+      i32.rotl
+      i32.const -1640531535
+      i32.mul
+      local.set $h
+      local.get $pos
+      i32.const 1
+      i32.add
+      local.set $pos
+      br $while-continue|2
+     end
     end
    end
    local.get $h
@@ -585,88 +591,90 @@
     i32.const 16
     i32.sub
     local.set $end
-    loop $while-continue|0
-     local.get $pos
-     local.get $end
-     i32.le_u
-     if
-      block $~lib/util/hash/mix|inlined.4 (result i32)
-       local.get $s1
-       local.set $h|10
-       local.get $pos
-       i32.load
-       local.set $key|11
-       local.get $h|10
-       local.get $key|11
-       i32.const -2048144777
-       i32.mul
-       i32.add
-       i32.const 13
-       i32.rotl
-       i32.const -1640531535
-       i32.mul
-       br $~lib/util/hash/mix|inlined.4
-      end
-      local.set $s1
-      block $~lib/util/hash/mix|inlined.5 (result i32)
-       local.get $s2
-       local.set $h|12
-       local.get $pos
-       i32.load offset=4
-       local.set $key|13
-       local.get $h|12
-       local.get $key|13
-       i32.const -2048144777
-       i32.mul
-       i32.add
-       i32.const 13
-       i32.rotl
-       i32.const -1640531535
-       i32.mul
-       br $~lib/util/hash/mix|inlined.5
-      end
-      local.set $s2
-      block $~lib/util/hash/mix|inlined.6 (result i32)
-       local.get $s3
-       local.set $h|14
-       local.get $pos
-       i32.load offset=8
-       local.set $key|15
-       local.get $h|14
-       local.get $key|15
-       i32.const -2048144777
-       i32.mul
-       i32.add
-       i32.const 13
-       i32.rotl
-       i32.const -1640531535
-       i32.mul
-       br $~lib/util/hash/mix|inlined.6
-      end
-      local.set $s3
-      block $~lib/util/hash/mix|inlined.7 (result i32)
-       local.get $s4
-       local.set $h|16
-       local.get $pos
-       i32.load offset=12
-       local.set $key|17
-       local.get $h|16
-       local.get $key|17
-       i32.const -2048144777
-       i32.mul
-       i32.add
-       i32.const 13
-       i32.rotl
-       i32.const -1640531535
-       i32.mul
-       br $~lib/util/hash/mix|inlined.7
-      end
-      local.set $s4
+    block $while-break|0
+     loop $while-continue|0
       local.get $pos
-      i32.const 16
-      i32.add
-      local.set $pos
-      br $while-continue|0
+      local.get $end
+      i32.le_u
+      if
+       block $~lib/util/hash/mix|inlined.4 (result i32)
+        local.get $s1
+        local.set $h|10
+        local.get $pos
+        i32.load
+        local.set $key|11
+        local.get $h|10
+        local.get $key|11
+        i32.const -2048144777
+        i32.mul
+        i32.add
+        i32.const 13
+        i32.rotl
+        i32.const -1640531535
+        i32.mul
+        br $~lib/util/hash/mix|inlined.4
+       end
+       local.set $s1
+       block $~lib/util/hash/mix|inlined.5 (result i32)
+        local.get $s2
+        local.set $h|12
+        local.get $pos
+        i32.load offset=4
+        local.set $key|13
+        local.get $h|12
+        local.get $key|13
+        i32.const -2048144777
+        i32.mul
+        i32.add
+        i32.const 13
+        i32.rotl
+        i32.const -1640531535
+        i32.mul
+        br $~lib/util/hash/mix|inlined.5
+       end
+       local.set $s2
+       block $~lib/util/hash/mix|inlined.6 (result i32)
+        local.get $s3
+        local.set $h|14
+        local.get $pos
+        i32.load offset=8
+        local.set $key|15
+        local.get $h|14
+        local.get $key|15
+        i32.const -2048144777
+        i32.mul
+        i32.add
+        i32.const 13
+        i32.rotl
+        i32.const -1640531535
+        i32.mul
+        br $~lib/util/hash/mix|inlined.6
+       end
+       local.set $s3
+       block $~lib/util/hash/mix|inlined.7 (result i32)
+        local.get $s4
+        local.set $h|16
+        local.get $pos
+        i32.load offset=12
+        local.set $key|17
+        local.get $h|16
+        local.get $key|17
+        i32.const -2048144777
+        i32.mul
+        i32.add
+        i32.const 13
+        i32.rotl
+        i32.const -1640531535
+        i32.mul
+        br $~lib/util/hash/mix|inlined.7
+       end
+       local.set $s4
+       local.get $pos
+       i32.const 16
+       i32.add
+       local.set $pos
+       br $while-continue|0
+      end
      end
     end
     local.get $h
@@ -701,58 +709,62 @@
    i32.const 4
    i32.sub
    local.set $end|18
-   loop $while-continue|1
-    local.get $pos
-    local.get $end|18
-    i32.le_u
-    if
-     local.get $h
+   block $while-break|1
+    loop $while-continue|1
      local.get $pos
-     i32.load
-     i32.const -1028477379
-     i32.mul
-     i32.add
-     local.set $h
-     local.get $h
-     i32.const 17
-     i32.rotl
-     i32.const 668265263
-     i32.mul
-     local.set $h
-     local.get $pos
-     i32.const 4
-     i32.add
-     local.set $pos
-     br $while-continue|1
+     local.get $end|18
+     i32.le_u
+     if
+      local.get $h
+      local.get $pos
+      i32.load
+      i32.const -1028477379
+      i32.mul
+      i32.add
+      local.set $h
+      local.get $h
+      i32.const 17
+      i32.rotl
+      i32.const 668265263
+      i32.mul
+      local.set $h
+      local.get $pos
+      i32.const 4
+      i32.add
+      local.set $pos
+      br $while-continue|1
+     end
     end
    end
    local.get $key|1
    local.get $len
    i32.add
    local.set $end|18
-   loop $while-continue|2
-    local.get $pos
-    local.get $end|18
-    i32.lt_u
-    if
-     local.get $h
+   block $while-break|2
+    loop $while-continue|2
      local.get $pos
-     i32.load8_u
-     i32.const 374761393
-     i32.mul
-     i32.add
-     local.set $h
-     local.get $h
-     i32.const 11
-     i32.rotl
-     i32.const -1640531535
-     i32.mul
-     local.set $h
-     local.get $pos
-     i32.const 1
-     i32.add
-     local.set $pos
-     br $while-continue|2
+     local.get $end|18
+     i32.lt_u
+     if
+      local.get $h
+      local.get $pos
+      i32.load8_u
+      i32.const 374761393
+      i32.mul
+      i32.add
+      local.set $h
+      local.get $h
+      i32.const 11
+      i32.rotl
+      i32.const -1640531535
+      i32.mul
+      local.set $h
+      local.get $pos
+      i32.const 1
+      i32.add
+      local.set $pos
+      br $while-continue|2
+     end
     end
    end
    local.get $h

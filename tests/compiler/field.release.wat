@@ -1810,20 +1810,23 @@
      block $invalid
       block $~lib/array/Array<i32>
        block $~lib/array/Array<~lib/string/String>
-        block $~lib/string/String
-         block $~lib/arraybuffer/ArrayBuffer
-          block $~lib/object/Object
-           local.get $0
-           i32.const 8
-           i32.sub
-           i32.load
-           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner2 $folding-inner2 $~lib/array/Array<~lib/string/String> $~lib/array/Array<i32> $invalid
+        block
+         block $~lib/string/String
+          block $~lib/arraybuffer/ArrayBuffer
+           block $~lib/object/Object
+            local.get $0
+            i32.const 8
+            i32.sub
+            i32.load
+            br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner2 $folding-inner2 $~lib/array/Array<~lib/string/String> $~lib/array/Array<i32> $invalid
+           end
+           return
           end
           return
          end
          return
         end
-        return
+        unreachable
        end
        global.get $~lib/memory/__stack_pointer
        i32.const 4

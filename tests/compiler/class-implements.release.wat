@@ -2306,18 +2306,18 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-implements/I#foo@override$167
-    block $default2
+    block $default12
      block $case3
       block $case2
        block $case1
-        block $case03
+        block $case013
          local.get $0
          i32.const 8
          i32.sub
          i32.load
          i32.const 4
          i32.sub
-         br_table $case1 $default2 $case2 $default2 $case3 $default2 $case3 $case03 $default2
+         br_table $case1 $default12 $case2 $default12 $case3 $default12 $case3 $case013 $default12
         end
         i32.const 4
         local.set $0
@@ -2381,18 +2381,18 @@
    local.get $0
    i32.store
    block $__inlined_func$class-implements/J#foo@override$169
-    block $default3
-     block $case34
-      block $case25
-       block $case16
-        block $case07
+    block $default14
+     block $case315
+      block $case216
+       block $case117
+        block $case018
          local.get $0
          i32.const 8
          i32.sub
          i32.load
          i32.const 8
          i32.sub
-         br_table $case25 $default3 $case25 $case16 $case34 $case07 $default3
+         br_table $case216 $default14 $case216 $case117 $case315 $case018 $default14
         end
         unreachable
        end

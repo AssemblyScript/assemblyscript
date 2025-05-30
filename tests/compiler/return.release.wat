@@ -15,8 +15,10 @@
  (export "testVoidReturnFunction" (func $export:return/testVoidReturnFunction))
  (start $~start)
  (func $start:return~anonymous|0
+  nop
  )
  (func $return/testVoidReturn (param $0 i32)
+  nop
  )
  (func $~start
   global.get $~lib/memory/__stack_pointer

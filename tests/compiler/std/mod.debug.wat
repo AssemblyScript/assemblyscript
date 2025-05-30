@@ -176,38 +176,40 @@
    i64.or
    local.set $uy
   end
-  loop $while-continue|0
-   local.get $ex
-   local.get $ey
-   i64.gt_s
-   if
-    local.get $ux
-    local.get $uy
-    i64.ge_u
+  block $while-break|0
+   loop $while-continue|0
+    local.get $ex
+    local.get $ey
+    i64.gt_s
     if
      local.get $ux
      local.get $uy
-     i64.eq
+     i64.ge_u
      if
-      f64.const 0
-      local.get $x
-      f64.mul
-      return
+      local.get $ux
+      local.get $uy
+      i64.eq
+      if
+       f64.const 0
+       local.get $x
+       f64.mul
+       return
+      end
+      local.get $ux
+      local.get $uy
+      i64.sub
+      local.set $ux
      end
      local.get $ux
-     local.get $uy
-     i64.sub
+     i64.const 1
+     i64.shl
      local.set $ux
+     local.get $ex
+     i64.const 1
+     i64.sub
+     local.set $ex
+     br $while-continue|0
     end
-    local.get $ux
-    i64.const 1
-    i64.shl
-    local.set $ux
-    local.get $ex
-    i64.const 1
-    i64.sub
-    local.set $ex
-    br $while-continue|0
    end
   end
   local.get $ux
@@ -473,38 +475,40 @@
    i32.or
    local.set $uy
   end
-  loop $while-continue|0
-   local.get $ex
-   local.get $ey
-   i32.gt_s
-   if
-    local.get $ux
-    local.get $uy
-    i32.ge_u
+  block $while-break|0
+   loop $while-continue|0
+    local.get $ex
+    local.get $ey
+    i32.gt_s
     if
      local.get $ux
      local.get $uy
-     i32.eq
+     i32.ge_u
      if
-      f32.const 0
-      local.get $x
-      f32.mul
-      return
+      local.get $ux
+      local.get $uy
+      i32.eq
+      if
+       f32.const 0
+       local.get $x
+       f32.mul
+       return
+      end
+      local.get $ux
+      local.get $uy
+      i32.sub
+      local.set $ux
      end
      local.get $ux
-     local.get $uy
-     i32.sub
+     i32.const 1
+     i32.shl
      local.set $ux
+     local.get $ex
+     i32.const 1
+     i32.sub
+     local.set $ex
+     br $while-continue|0
     end
-    local.get $ux
-    i32.const 1
-    i32.shl
-    local.set $ux
-    local.get $ex
-    i32.const 1
-    i32.sub
-    local.set $ex
-    br $while-continue|0
    end
   end
   local.get $ux

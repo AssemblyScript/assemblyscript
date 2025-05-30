@@ -1471,12 +1471,12 @@
   end
   i32.const 10
   local.set $0
-  loop $for-loop|03
+  loop $for-loop|04
    local.get $0
    i32.const 1
    i32.sub
    local.tee $0
-   br_if $for-loop|03
+   br_if $for-loop|04
   end
   local.get $0
   if
@@ -1489,14 +1489,14 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|04
+  loop $for-loop|06
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $for-loop|04
+   br_if $for-loop|06
   end
   local.get $0
   i32.const 10
@@ -1511,7 +1511,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|05
+  loop $for-loop|07
    local.get $0
    i32.const 10
    i32.lt_s
@@ -1520,7 +1520,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|05
+    br $for-loop|07
    end
   end
   local.get $0
@@ -1536,7 +1536,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|06
+  loop $for-loop|09
    local.get $0
    i32.const 10
    i32.lt_s
@@ -1573,7 +1573,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|06
+    br $for-loop|09
    end
   end
   local.get $0
@@ -1659,7 +1659,7 @@
    call $for/Ref#constructor
    local.tee $0
    i32.store
-   loop $for-loop|07
+   loop $for-loop|05
     local.get $0
     if
      local.get $1
@@ -1677,7 +1677,7 @@
       local.tee $0
       i32.store
      end
-     br $for-loop|07
+     br $for-loop|05
     end
    end
    local.get $1
@@ -1727,7 +1727,7 @@
    loop $for-loop|08
     call $for/Ref#constructor
     if
-     block $for-break03
+     block $for-break06
       local.get $1
       i32.const 1
       i32.add
@@ -1737,7 +1737,7 @@
       if
        i32.const 0
        local.set $0
-       br $for-break03
+       br $for-break06
       end
       global.get $~lib/memory/__stack_pointer
       call $for/Ref#constructor

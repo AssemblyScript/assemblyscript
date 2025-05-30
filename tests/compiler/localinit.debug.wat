@@ -124,22 +124,24 @@
  (func $localinit/initInWhileOr (param $cond i32)
   (local $a i32)
   (local $b i32)
-  loop $while-continue|0
-   local.get $cond
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 1
-    local.tee $a
-   end
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 1
-    local.tee $b
-   end
-   if
-    return
+  block $while-break|0
+   loop $while-continue|0
+    local.get $cond
+    if (result i32)
+     i32.const 1
+    else
+     i32.const 1
+     local.tee $a
+    end
+    if (result i32)
+     i32.const 1
+    else
+     i32.const 1
+     local.tee $b
+    end
+    if
+     return
+    end
    end
   end
   local.get $a

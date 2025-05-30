@@ -1,9 +1,9 @@
 (module
  (type $0 (func (param i32 i32 i32) (result i32)))
- (type $1 (func (param i32 i32) (result i32)))
- (type $2 (func))
- (type $3 (func (param i32)))
- (type $4 (func (param i32 i32)))
+ (type $1 (func))
+ (type $2 (func (param i32)))
+ (type $3 (func (param i32 i32)))
+ (type $4 (func (param i32 i32) (result i32)))
  (type $5 (func (param i32) (result i32)))
  (type $6 (func (param i32 i32 i32 i32)))
  (type $7 (func (param i32 i32 i64)))
@@ -1874,8 +1874,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $0
  )
- (func $call-rest/fn (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $call-rest/fn (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1896,33 +1895,35 @@
   i32.const 0
   i32.store
   local.get $0
-  i32.const 1
+  local.get $1
   i32.add
+  local.set $1
+  i32.const 0
   local.set $0
   global.get $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $2
   i32.store
-  local.get $1
+  local.get $2
   call $~lib/array/Array<i32>#get:length
   local.set $3
   loop $for-loop|0
-   local.get $2
+   local.get $0
    local.get $3
    i32.lt_s
    if
     global.get $~lib/memory/__stack_pointer
-    local.get $1
+    local.get $2
     i32.store
-    local.get $1
     local.get $2
-    call $~lib/array/Array<i32>#__get
     local.get $0
+    call $~lib/array/Array<i32>#__get
+    local.get $1
     i32.add
-    local.set $0
-    local.get $2
+    local.set $1
+    local.get $0
     i32.const 1
     i32.add
-    local.set $2
+    local.set $0
     br $for-loop|0
    end
   end
@@ -1930,7 +1931,7 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
  )
  (func $call-rest/fn@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
@@ -1976,6 +1977,7 @@
   global.get $~lib/memory/__stack_pointer
   local.get $2
   i32.store offset=4
+  local.get $0
   local.get $1
   local.get $2
   call $call-rest/fn
@@ -2585,6 +2587,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
+   i32.const 1
    i32.const 2
    local.get $0
    call $call-rest/fn
@@ -2606,6 +2609,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
+   i32.const 1
    i32.const 2
    local.get $0
    call $call-rest/fn
