@@ -8,5 +8,3 @@ class ManagedBaz {}
 class ManagedFoo extends UnmanagedBase { // AS207
   constructor(public baz: ManagedBaz) { super(); }
 }
-
-ERROR("EOF");
