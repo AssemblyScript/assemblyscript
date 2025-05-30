@@ -203,8 +203,10 @@
   return
  )
  (func $~lib/rt/stub/__unpin (param $ptr i32)
+  nop
  )
  (func $~lib/rt/stub/__collect
+  nop
  )
  (func $~start
   global.get $~lib/memory/__heap_base

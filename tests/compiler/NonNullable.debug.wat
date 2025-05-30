@@ -105,38 +105,40 @@
     end
    end
   end
-  loop $while-continue|1
-   local.get $len
-   local.tee $7
-   i32.const 1
-   i32.sub
-   local.set $len
-   local.get $7
-   if
-    local.get $ptr1
-    i32.load16_u
-    local.set $a
-    local.get $ptr2
-    i32.load16_u
-    local.set $b
-    local.get $a
-    local.get $b
-    i32.ne
+  block $while-break|1
+   loop $while-continue|1
+    local.get $len
+    local.tee $7
+    i32.const 1
+    i32.sub
+    local.set $len
+    local.get $7
     if
+     local.get $ptr1
+     i32.load16_u
+     local.set $a
+     local.get $ptr2
+     i32.load16_u
+     local.set $b
      local.get $a
      local.get $b
-     i32.sub
-     return
+     i32.ne
+     if
+      local.get $a
+      local.get $b
+      i32.sub
+      return
+     end
+     local.get $ptr1
+     i32.const 2
+     i32.add
+     local.set $ptr1
+     local.get $ptr2
+     i32.const 2
+     i32.add
+     local.set $ptr2
+     br $while-continue|1
     end
-    local.get $ptr1
-    i32.const 2
-    i32.add
-    local.set $ptr1
-    local.get $ptr2
-    i32.const 2
-    i32.add
-    local.set $ptr2
-    br $while-continue|1
    end
   end
   i32.const 0

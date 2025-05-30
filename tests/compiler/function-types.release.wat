@@ -28,10 +28,14 @@
   i32.add
  )
  (func $function-types/makeAdder<i64>~anonymous|0 (param $0 i64) (param $1 i64) (result i64)
-  i64.const 30
+  local.get $0
+  local.get $1
+  i64.add
  )
  (func $function-types/makeAdder<f64>~anonymous|0 (param $0 f64) (param $1 f64) (result f64)
-  f64.const 4
+  local.get $0
+  local.get $1
+  f64.add
  )
  (func $~start
   (local $0 i32)

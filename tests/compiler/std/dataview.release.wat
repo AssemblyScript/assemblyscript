@@ -1605,20 +1605,23 @@
  (func $~lib/rt/__visit_members (param $0 i32)
   block $folding-inner0
    block $invalid
-    block $~lib/string/String
-     block $~lib/arraybuffer/ArrayBuffer
-      block $~lib/object/Object
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $folding-inner0 $folding-inner0 $invalid
+    block
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       block $~lib/object/Object
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $folding-inner0 $folding-inner0 $invalid
+       end
+       return
       end
       return
      end
      return
     end
-    return
+    unreachable
    end
    unreachable
   end
@@ -3058,2248 +3061,2251 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1772
-   i32.lt_s
-   br_if $folding-inner1
-   global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store
-   global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store offset=8
-   memory.size
-   i32.const 16
-   i32.shl
-   i32.const 34540
-   i32.sub
-   i32.const 1
-   i32.shr_u
-   global.set $~lib/rt/itcms/threshold
-   i32.const 1284
-   i32.const 1280
-   i32.store
-   i32.const 1288
-   i32.const 1280
-   i32.store
-   i32.const 1280
-   global.set $~lib/rt/itcms/pinSpace
-   i32.const 1316
-   i32.const 1312
-   i32.store
-   i32.const 1320
-   i32.const 1312
-   i32.store
-   i32.const 1312
-   global.set $~lib/rt/itcms/toSpace
-   i32.const 1460
-   i32.const 1456
-   i32.store
-   i32.const 1464
-   i32.const 1456
-   i32.store
-   i32.const 1456
-   global.set $~lib/rt/itcms/fromSpace
-   global.get $~lib/memory/__stack_pointer
-   block $__inlined_func$~lib/typedarray/Uint8Array#constructor$3 (result i32)
+   block $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1772
+    i32.lt_s
+    br_if $folding-inner1
+    global.get $~lib/memory/__stack_pointer
+    i64.const 0
+    i64.store
+    global.get $~lib/memory/__stack_pointer
+    i64.const 0
+    i64.store offset=8
+    memory.size
+    i32.const 16
+    i32.shl
+    i32.const 34540
+    i32.sub
+    i32.const 1
+    i32.shr_u
+    global.set $~lib/rt/itcms/threshold
+    i32.const 1284
+    i32.const 1280
+    i32.store
+    i32.const 1288
+    i32.const 1280
+    i32.store
+    i32.const 1280
+    global.set $~lib/rt/itcms/pinSpace
+    i32.const 1316
+    i32.const 1312
+    i32.store
+    i32.const 1320
+    i32.const 1312
+    i32.store
+    i32.const 1312
+    global.set $~lib/rt/itcms/toSpace
+    i32.const 1460
+    i32.const 1456
+    i32.store
+    i32.const 1464
+    i32.const 1456
+    i32.store
+    i32.const 1456
+    global.set $~lib/rt/itcms/fromSpace
+    global.get $~lib/memory/__stack_pointer
+    block $__inlined_func$~lib/typedarray/Uint8Array#constructor$3 (result i32)
+     global.get $~lib/memory/__stack_pointer
+     i32.const 8
+     i32.sub
+     global.set $~lib/memory/__stack_pointer
+     block $folding-inner00
+      global.get $~lib/memory/__stack_pointer
+      i32.const 1772
+      i32.lt_s
+      br_if $folding-inner00
+      global.get $~lib/memory/__stack_pointer
+      i64.const 0
+      i64.store
+      global.get $~lib/memory/__stack_pointer
+      i32.const 12
+      i32.const 4
+      call $~lib/rt/itcms/__new
+      local.tee $0
+      i32.store
+      global.get $~lib/memory/__stack_pointer
+      local.set $1
+      global.get $~lib/memory/__stack_pointer
+      local.get $0
+      i32.store offset=4
+      global.get $~lib/memory/__stack_pointer
+      i32.const 16
+      i32.sub
+      global.set $~lib/memory/__stack_pointer
+      global.get $~lib/memory/__stack_pointer
+      i32.const 1772
+      i32.lt_s
+      br_if $folding-inner00
+      global.get $~lib/memory/__stack_pointer
+      i64.const 0
+      i64.store
+      global.get $~lib/memory/__stack_pointer
+      i64.const 0
+      i64.store offset=8
+      local.get $0
+      i32.eqz
+      if
+       global.get $~lib/memory/__stack_pointer
+       i32.const 12
+       i32.const 3
+       call $~lib/rt/itcms/__new
+       local.tee $0
+       i32.store
+      end
+      global.get $~lib/memory/__stack_pointer
+      local.get $0
+      i32.store offset=4
+      local.get $0
+      i32.const 0
+      call $~lib/arraybuffer/ArrayBufferView#set:buffer
+      global.get $~lib/memory/__stack_pointer
+      local.get $0
+      i32.store offset=4
+      local.get $0
+      i32.const 0
+      i32.store offset=4
+      global.get $~lib/memory/__stack_pointer
+      local.get $0
+      i32.store offset=4
+      local.get $0
+      i32.const 0
+      i32.store offset=8
+      global.get $~lib/memory/__stack_pointer
+      i32.const 8
+      i32.const 1
+      call $~lib/rt/itcms/__new
+      local.tee $2
+      i32.store offset=8
+      global.get $~lib/memory/__stack_pointer
+      local.get $0
+      i32.store offset=4
+      global.get $~lib/memory/__stack_pointer
+      local.get $2
+      i32.store offset=12
+      local.get $0
+      local.get $2
+      call $~lib/arraybuffer/ArrayBufferView#set:buffer
+      global.get $~lib/memory/__stack_pointer
+      local.get $0
+      i32.store offset=4
+      local.get $0
+      local.get $2
+      i32.store offset=4
+      global.get $~lib/memory/__stack_pointer
+      local.get $0
+      i32.store offset=4
+      local.get $0
+      i32.const 8
+      i32.store offset=8
+      global.get $~lib/memory/__stack_pointer
+      i32.const 16
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $1
+      local.get $0
+      i32.store
+      global.get $~lib/memory/__stack_pointer
+      i32.const 8
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $0
+      br $__inlined_func$~lib/typedarray/Uint8Array#constructor$3
+     end
+     br $folding-inner1
+    end
+    local.tee $1
+    i32.store
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    i32.const 0
+    i32.const 246
+    call $~lib/typedarray/Uint8Array#__set
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    i32.const 1
+    i32.const 224
+    call $~lib/typedarray/Uint8Array#__set
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    i32.const 2
+    i32.const 88
+    call $~lib/typedarray/Uint8Array#__set
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    i32.const 3
+    i32.const 159
+    call $~lib/typedarray/Uint8Array#__set
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    i32.const 4
+    i32.const 130
+    call $~lib/typedarray/Uint8Array#__set
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    i32.const 5
+    i32.const 101
+    call $~lib/typedarray/Uint8Array#__set
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    i32.const 6
+    i32.const 67
+    call $~lib/typedarray/Uint8Array#__set
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    i32.const 7
+    i32.const 95
+    call $~lib/typedarray/Uint8Array#__set
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=8
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.load
+    local.tee $2
+    i32.store offset=4
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=8
+    global.get $~lib/memory/__stack_pointer
+    local.set $0
+    local.get $1
+    call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+    local.set $3
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=8
+    local.get $0
+    local.get $2
+    local.get $3
+    local.get $1
+    i32.load offset=8
+    call $~lib/dataview/DataView#constructor
+    local.tee $0
+    i32.store offset=12
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 1
+    call $~lib/dataview/DataView#getFloat32
+    f32.const -4.592586247781397e-20
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 15
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    i32.const 1
+    call $~lib/dataview/DataView#getFloat32
+    f32.const -2.3413961970849473e-37
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 16
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    i32.const 1
+    call $~lib/dataview/DataView#getFloat32
+    f32.const 77105877018631129268224
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 17
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    i32.const 1
+    call $~lib/dataview/DataView#getFloat32
+    f32.const 229.51023864746094
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 18
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.const 1
+    call $~lib/dataview/DataView#getFloat32
+    f32.const 14079802746555334656
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 19
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#getFloat32
+    f32.const -2275140518817895515269171e9
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 21
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    i32.const 0
+    call $~lib/dataview/DataView#getFloat32
+    f32.const -62437351080004157440
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 22
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    i32.const 0
+    call $~lib/dataview/DataView#getFloat32
+    f32.const 1403059112509440
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 23
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    i32.const 0
+    call $~lib/dataview/DataView#getFloat32
+    f32.const -5.522466503261712e-20
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 24
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.const 0
+    call $~lib/dataview/DataView#getFloat32
+    f32.const -1.6843597451835358e-37
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 25
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    call $~lib/dataview/DataView#getFloat64
+    f64.const 7936550095674706383278551e126
+    f64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 27
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    call $~lib/dataview/DataView#getFloat64
+    f64.const -411777475818852546741639e241
+    f64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 28
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    call $~lib/dataview/DataView#getInt8
+    i32.const -10
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 30
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    call $~lib/dataview/DataView#getInt8
+    i32.const -32
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 31
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    call $~lib/dataview/DataView#getInt8
+    i32.const 88
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 32
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    call $~lib/dataview/DataView#getInt8
+    i32.const -97
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 33
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    call $~lib/dataview/DataView#getInt8
+    i32.const -126
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 34
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 5
+    call $~lib/dataview/DataView#getInt8
+    i32.const 101
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 35
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 6
+    call $~lib/dataview/DataView#getInt8
+    i32.const 67
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 36
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 7
+    call $~lib/dataview/DataView#getInt8
+    i32.const 95
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 37
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 1
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 57590
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 39
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    i32.const 1
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 22752
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 40
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    i32.const 1
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 40792
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 41
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    i32.const 1
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 33439
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 42
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.const 1
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 25986
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 43
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 5
+    i32.const 1
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 17253
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 44
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 6
+    i32.const 1
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 24387
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 45
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 63200
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 47
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    i32.const 0
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 57432
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 48
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    i32.const 0
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 22687
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 49
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    i32.const 0
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 40834
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 50
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.const 0
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 33381
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 51
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 5
+    i32.const 0
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 25923
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 52
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 6
+    i32.const 0
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 17247
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 53
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 1
+    call $~lib/dataview/DataView#getInt32
+    i32.const -1621565194
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 55
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    i32.const 1
+    call $~lib/dataview/DataView#getInt32
+    i32.const -2103486240
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 56
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    i32.const 1
+    call $~lib/dataview/DataView#getInt32
+    i32.const 1703059288
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 57
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    i32.const 1
+    call $~lib/dataview/DataView#getInt32
+    i32.const 1130726047
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 58
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.const 1
+    call $~lib/dataview/DataView#getInt32
+    i32.const 1598252418
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 59
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#getInt32
+    i32.const -153069409
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 61
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    i32.const 0
+    call $~lib/dataview/DataView#getInt32
+    i32.const -531062910
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 62
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    i32.const 0
+    call $~lib/dataview/DataView#getInt32
+    i32.const 1486848613
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 63
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    i32.const 0
+    call $~lib/dataview/DataView#getInt32
+    i32.const -1618844349
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 64
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.const 0
+    call $~lib/dataview/DataView#getInt32
+    i32.const -2107292833
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 65
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    call $~lib/dataview/DataView#getInt64
+    i64.const 6864441868736323830
+    i64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 67
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    call $~lib/dataview/DataView#getInt64
+    i64.const -657428103485373601
+    i64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 68
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    call $~lib/dataview/DataView#getUint8
+    i32.const 246
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 70
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    call $~lib/dataview/DataView#getUint8
+    i32.const 224
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 71
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    call $~lib/dataview/DataView#getUint8
+    i32.const 88
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 72
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    call $~lib/dataview/DataView#getUint8
+    i32.const 159
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 73
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    call $~lib/dataview/DataView#getUint8
+    i32.const 130
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 74
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 5
+    call $~lib/dataview/DataView#getUint8
+    i32.const 101
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 75
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 6
+    call $~lib/dataview/DataView#getUint8
+    i32.const 67
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 76
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 7
+    call $~lib/dataview/DataView#getUint8
+    i32.const 95
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 77
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 1
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 57590
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 79
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    i32.const 1
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 22752
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 80
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    i32.const 1
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 40792
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 81
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    i32.const 1
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 33439
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 82
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.const 1
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 25986
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 83
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 5
+    i32.const 1
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 17253
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 84
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 6
+    i32.const 1
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 24387
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 85
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 63200
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 87
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    i32.const 0
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 57432
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 88
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    i32.const 0
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 22687
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 89
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    i32.const 0
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 40834
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 90
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.const 0
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 33381
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 91
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 5
+    i32.const 0
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 25923
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 92
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 6
+    i32.const 0
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 17247
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 93
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 1
+    call $~lib/dataview/DataView#getUint32
+    i32.const -1621565194
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 95
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    i32.const 1
+    call $~lib/dataview/DataView#getUint32
+    i32.const -2103486240
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 96
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    i32.const 1
+    call $~lib/dataview/DataView#getUint32
+    i32.const 1703059288
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 97
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    i32.const 1
+    call $~lib/dataview/DataView#getUint32
+    i32.const 1130726047
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 98
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.const 1
+    call $~lib/dataview/DataView#getUint32
+    i32.const 1598252418
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 99
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#getUint32
+    i32.const -153069409
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 101
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    i32.const 0
+    call $~lib/dataview/DataView#getUint32
+    i32.const -531062910
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 102
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 2
+    i32.const 0
+    call $~lib/dataview/DataView#getUint32
+    i32.const 1486848613
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 103
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 3
+    i32.const 0
+    call $~lib/dataview/DataView#getUint32
+    i32.const -1618844349
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 104
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 4
+    i32.const 0
+    call $~lib/dataview/DataView#getUint32
+    i32.const -2107292833
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 105
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    call $~lib/dataview/DataView#getUint64
+    i64.const 6864441868736323830
+    i64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 107
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    call $~lib/dataview/DataView#getUint64
+    i64.const -657428103485373601
+    i64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 108
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    f32.const 1.5976661625240943e-18
+    i32.const 1
+    call $~lib/dataview/DataView#setFloat32
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 1
+    call $~lib/dataview/DataView#getFloat32
+    f32.const 1.5976661625240943e-18
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 111
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    f32.const 1976281973381696323584
+    i32.const 0
+    call $~lib/dataview/DataView#setFloat32
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#getFloat32
+    f32.const 1976281973381696323584
+    f32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 114
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    f64.const -1094252199637739024055454e124
+    i32.const 1
+    call $~lib/dataview/DataView#setFloat64
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    call $~lib/dataview/DataView#getFloat64
+    f64.const -1094252199637739024055454e124
+    f64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 117
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    f64.const 6.022586634778589e-103
+    i32.const 0
+    call $~lib/dataview/DataView#setFloat64
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    call $~lib/dataview/DataView#getFloat64
+    f64.const 6.022586634778589e-103
+    f64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 120
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.sub
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1772
+    i32.lt_s
+    br_if $folding-inner1
+    global.get $~lib/memory/__stack_pointer
+    i32.const 0
+    i32.store
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store
+    local.get $0
+    i32.load offset=8
+    i32.eqz
+    if
+     i32.const 1360
+     i32.const 1632
+     i32.const 109
+     i32.const 50
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store
+    local.get $0
+    i32.load offset=4
+    i32.const 108
+    i32.store8
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    call $~lib/dataview/DataView#getInt8
+    i32.const 108
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 123
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const -13360
+    i32.const 1
+    call $~lib/dataview/DataView#setInt16
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 1
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 52176
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 126
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 14689
+    i32.const 0
+    call $~lib/dataview/DataView#setInt16
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#getInt16
+    i32.const 65535
+    i32.and
+    i32.const 14689
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 129
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1204680201
+    i32.const 1
+    call $~lib/dataview/DataView#setInt32
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 1
+    call $~lib/dataview/DataView#getInt32
+    i32.const 1204680201
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 132
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 660673230
+    i32.const 0
+    call $~lib/dataview/DataView#setInt32
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#getInt32
+    i32.const 660673230
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 135
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i64.const -3290739641816099749
+    i32.const 1
+    call $~lib/dataview/DataView#setInt64
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    call $~lib/dataview/DataView#getInt64
+    i64.const -3290739641816099749
+    i64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 138
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i64.const 8178932412950708047
+    i32.const 0
+    call $~lib/dataview/DataView#setInt64
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    call $~lib/dataview/DataView#getInt64
+    i64.const 8178932412950708047
+    i64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 141
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.sub
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1772
+    i32.lt_s
+    br_if $folding-inner1
+    global.get $~lib/memory/__stack_pointer
+    i32.const 0
+    i32.store
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store
+    local.get $0
+    i32.load offset=8
+    i32.eqz
+    if
+     i32.const 1360
+     i32.const 1632
+     i32.const 128
+     i32.const 50
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store
+    local.get $0
+    i32.load offset=4
+    i32.const 238
+    i32.store8
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    call $~lib/dataview/DataView#getUint8
+    i32.const 238
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 144
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 58856
+    i32.const 1
+    call $~lib/dataview/DataView#setUint16
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 1
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 58856
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 147
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 60400
+    i32.const 0
+    call $~lib/dataview/DataView#setUint16
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#getUint16
+    i32.const 65535
+    i32.and
+    i32.const 60400
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 150
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const -846805744
+    i32.const 1
+    call $~lib/dataview/DataView#setUint32
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 1
+    call $~lib/dataview/DataView#getUint32
+    i32.const -846805744
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 153
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const -1510791631
+    i32.const 0
+    call $~lib/dataview/DataView#setUint32
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#getUint32
+    i32.const -1510791631
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 156
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i64.const 2334704782995986958
+    i32.const 1
+    call $~lib/dataview/DataView#setUint64
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 1
+    call $~lib/dataview/DataView#getUint64
+    i64.const 2334704782995986958
+    i64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 159
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i64.const -7123186897289856329
+    i32.const 0
+    call $~lib/dataview/DataView#setUint64
+    global.get $~lib/memory/__stack_pointer
+    local.get $0
+    i32.store offset=4
+    local.get $0
+    i32.const 0
+    call $~lib/dataview/DataView#getUint64
+    i64.const -7123186897289856329
+    i64.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 162
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.set $0
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=8
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.load
+    local.tee $1
+    i32.store offset=4
     global.get $~lib/memory/__stack_pointer
     i32.const 8
     i32.sub
     global.set $~lib/memory/__stack_pointer
-    block $folding-inner00
-     global.get $~lib/memory/__stack_pointer
-     i32.const 1772
-     i32.lt_s
-     br_if $folding-inner00
-     global.get $~lib/memory/__stack_pointer
-     i64.const 0
-     i64.store
-     global.get $~lib/memory/__stack_pointer
-     i32.const 12
-     i32.const 4
-     call $~lib/rt/itcms/__new
-     local.tee $0
-     i32.store
-     global.get $~lib/memory/__stack_pointer
-     local.set $1
-     global.get $~lib/memory/__stack_pointer
-     local.get $0
-     i32.store offset=4
-     global.get $~lib/memory/__stack_pointer
-     i32.const 16
-     i32.sub
-     global.set $~lib/memory/__stack_pointer
-     global.get $~lib/memory/__stack_pointer
-     i32.const 1772
-     i32.lt_s
-     br_if $folding-inner00
-     global.get $~lib/memory/__stack_pointer
-     i64.const 0
-     i64.store
-     global.get $~lib/memory/__stack_pointer
-     i64.const 0
-     i64.store offset=8
-     local.get $0
-     i32.eqz
-     if
-      global.get $~lib/memory/__stack_pointer
-      i32.const 12
-      i32.const 3
-      call $~lib/rt/itcms/__new
-      local.tee $0
-      i32.store
-     end
-     global.get $~lib/memory/__stack_pointer
-     local.get $0
-     i32.store offset=4
-     local.get $0
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1772
+    i32.lt_s
+    br_if $folding-inner1
+    global.get $~lib/memory/__stack_pointer
+    i64.const 0
+    i64.store
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store
+    local.get $1
+    i32.const 20
+    i32.sub
+    i32.load offset=16
+    local.set $2
+    global.get $~lib/memory/__stack_pointer
+    i32.const 0
+    i32.store
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    i32.const 0
+    local.get $2
+    call $~lib/dataview/DataView#constructor
+    local.set $1
+    global.get $~lib/memory/__stack_pointer
+    i32.const 8
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $0
+    local.get $1
+    i32.store offset=12
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+    if
      i32.const 0
-     call $~lib/arraybuffer/ArrayBufferView#set:buffer
-     global.get $~lib/memory/__stack_pointer
-     local.get $0
-     i32.store offset=4
-     local.get $0
-     i32.const 0
-     i32.store offset=4
-     global.get $~lib/memory/__stack_pointer
-     local.get $0
-     i32.store offset=4
-     local.get $0
-     i32.const 0
-     i32.store offset=8
-     global.get $~lib/memory/__stack_pointer
-     i32.const 8
-     i32.const 1
-     call $~lib/rt/itcms/__new
-     local.tee $2
-     i32.store offset=8
-     global.get $~lib/memory/__stack_pointer
-     local.get $0
-     i32.store offset=4
-     global.get $~lib/memory/__stack_pointer
-     local.get $2
-     i32.store offset=12
-     local.get $0
-     local.get $2
-     call $~lib/arraybuffer/ArrayBufferView#set:buffer
-     global.get $~lib/memory/__stack_pointer
-     local.get $0
-     i32.store offset=4
-     local.get $0
-     local.get $2
-     i32.store offset=4
-     global.get $~lib/memory/__stack_pointer
-     local.get $0
-     i32.store offset=4
-     local.get $0
-     i32.const 8
-     i32.store offset=8
-     global.get $~lib/memory/__stack_pointer
-     i32.const 16
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $1
-     local.get $0
-     i32.store
-     global.get $~lib/memory/__stack_pointer
-     i32.const 8
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $0
-     br $__inlined_func$~lib/typedarray/Uint8Array#constructor$3
+     i32.const 1696
+     i32.const 165
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
     end
-    br $folding-inner1
-   end
-   local.tee $1
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 0
-   i32.const 246
-   call $~lib/typedarray/Uint8Array#__set
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 1
-   i32.const 224
-   call $~lib/typedarray/Uint8Array#__set
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 2
-   i32.const 88
-   call $~lib/typedarray/Uint8Array#__set
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 3
-   i32.const 159
-   call $~lib/typedarray/Uint8Array#__set
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 4
-   i32.const 130
-   call $~lib/typedarray/Uint8Array#__set
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 5
-   i32.const 101
-   call $~lib/typedarray/Uint8Array#__set
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 6
-   i32.const 67
-   call $~lib/typedarray/Uint8Array#__set
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 7
-   i32.const 95
-   call $~lib/typedarray/Uint8Array#__set
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=8
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.load
-   local.tee $2
-   i32.store offset=4
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=8
-   global.get $~lib/memory/__stack_pointer
-   local.set $0
-   local.get $1
-   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=8
-   local.get $0
-   local.get $2
-   local.get $3
-   local.get $1
-   i32.load offset=8
-   call $~lib/dataview/DataView#constructor
-   local.tee $0
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 1
-   call $~lib/dataview/DataView#getFloat32
-   f32.const -4.592586247781397e-20
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 15
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   i32.const 1
-   call $~lib/dataview/DataView#getFloat32
-   f32.const -2.3413961970849473e-37
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 16
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   i32.const 1
-   call $~lib/dataview/DataView#getFloat32
-   f32.const 77105877018631129268224
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 17
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   i32.const 1
-   call $~lib/dataview/DataView#getFloat32
-   f32.const 229.51023864746094
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 18
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   i32.const 1
-   call $~lib/dataview/DataView#getFloat32
-   f32.const 14079802746555334656
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 19
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#getFloat32
-   f32.const -2275140518817895515269171e9
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 21
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   i32.const 0
-   call $~lib/dataview/DataView#getFloat32
-   f32.const -62437351080004157440
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 22
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   i32.const 0
-   call $~lib/dataview/DataView#getFloat32
-   f32.const 1403059112509440
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 23
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   i32.const 0
-   call $~lib/dataview/DataView#getFloat32
-   f32.const -5.522466503261712e-20
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 24
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   i32.const 0
-   call $~lib/dataview/DataView#getFloat32
-   f32.const -1.6843597451835358e-37
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 25
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   call $~lib/dataview/DataView#getFloat64
-   f64.const 7936550095674706383278551e126
-   f64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 27
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   call $~lib/dataview/DataView#getFloat64
-   f64.const -411777475818852546741639e241
-   f64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 28
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   call $~lib/dataview/DataView#getInt8
-   i32.const -10
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 30
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   call $~lib/dataview/DataView#getInt8
-   i32.const -32
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 31
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   call $~lib/dataview/DataView#getInt8
-   i32.const 88
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 32
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   call $~lib/dataview/DataView#getInt8
-   i32.const -97
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 33
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   call $~lib/dataview/DataView#getInt8
-   i32.const -126
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 34
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 5
-   call $~lib/dataview/DataView#getInt8
-   i32.const 101
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 35
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 6
-   call $~lib/dataview/DataView#getInt8
-   i32.const 67
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 36
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 7
-   call $~lib/dataview/DataView#getInt8
-   i32.const 95
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 37
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 1
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 57590
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 39
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   i32.const 1
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 22752
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 40
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   i32.const 1
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 40792
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 41
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   i32.const 1
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 33439
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 42
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   i32.const 1
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 25986
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 43
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 5
-   i32.const 1
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 17253
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 44
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 6
-   i32.const 1
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 24387
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 45
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 63200
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 47
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   i32.const 0
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 57432
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 48
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   i32.const 0
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 22687
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 49
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   i32.const 0
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 40834
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 50
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   i32.const 0
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 33381
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 51
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 5
-   i32.const 0
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 25923
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 52
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 6
-   i32.const 0
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 17247
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 53
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 1
-   call $~lib/dataview/DataView#getInt32
-   i32.const -1621565194
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 55
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   i32.const 1
-   call $~lib/dataview/DataView#getInt32
-   i32.const -2103486240
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 56
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   i32.const 1
-   call $~lib/dataview/DataView#getInt32
-   i32.const 1703059288
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 57
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   i32.const 1
-   call $~lib/dataview/DataView#getInt32
-   i32.const 1130726047
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 58
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   i32.const 1
-   call $~lib/dataview/DataView#getInt32
-   i32.const 1598252418
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 59
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#getInt32
-   i32.const -153069409
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 61
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   i32.const 0
-   call $~lib/dataview/DataView#getInt32
-   i32.const -531062910
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 62
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   i32.const 0
-   call $~lib/dataview/DataView#getInt32
-   i32.const 1486848613
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 63
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   i32.const 0
-   call $~lib/dataview/DataView#getInt32
-   i32.const -1618844349
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 64
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   i32.const 0
-   call $~lib/dataview/DataView#getInt32
-   i32.const -2107292833
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 65
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   call $~lib/dataview/DataView#getInt64
-   i64.const 6864441868736323830
-   i64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 67
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   call $~lib/dataview/DataView#getInt64
-   i64.const -657428103485373601
-   i64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 68
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   call $~lib/dataview/DataView#getUint8
-   i32.const 246
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 70
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   call $~lib/dataview/DataView#getUint8
-   i32.const 224
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 71
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   call $~lib/dataview/DataView#getUint8
-   i32.const 88
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 72
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   call $~lib/dataview/DataView#getUint8
-   i32.const 159
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 73
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   call $~lib/dataview/DataView#getUint8
-   i32.const 130
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 74
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 5
-   call $~lib/dataview/DataView#getUint8
-   i32.const 101
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 75
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 6
-   call $~lib/dataview/DataView#getUint8
-   i32.const 67
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 76
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 7
-   call $~lib/dataview/DataView#getUint8
-   i32.const 95
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 77
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 1
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 57590
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 79
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   i32.const 1
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 22752
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 80
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   i32.const 1
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 40792
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 81
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   i32.const 1
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 33439
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 82
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   i32.const 1
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 25986
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 83
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 5
-   i32.const 1
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 17253
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 84
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 6
-   i32.const 1
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 24387
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 85
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 63200
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 87
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   i32.const 0
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 57432
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 88
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   i32.const 0
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 22687
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 89
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   i32.const 0
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 40834
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 90
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   i32.const 0
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 33381
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 91
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 5
-   i32.const 0
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 25923
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 92
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 6
-   i32.const 0
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 17247
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 93
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 1
-   call $~lib/dataview/DataView#getUint32
-   i32.const -1621565194
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 95
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   i32.const 1
-   call $~lib/dataview/DataView#getUint32
-   i32.const -2103486240
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 96
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   i32.const 1
-   call $~lib/dataview/DataView#getUint32
-   i32.const 1703059288
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 97
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   i32.const 1
-   call $~lib/dataview/DataView#getUint32
-   i32.const 1130726047
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 98
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   i32.const 1
-   call $~lib/dataview/DataView#getUint32
-   i32.const 1598252418
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 99
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#getUint32
-   i32.const -153069409
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 101
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   i32.const 0
-   call $~lib/dataview/DataView#getUint32
-   i32.const -531062910
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 102
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 2
-   i32.const 0
-   call $~lib/dataview/DataView#getUint32
-   i32.const 1486848613
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 103
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 3
-   i32.const 0
-   call $~lib/dataview/DataView#getUint32
-   i32.const -1618844349
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 104
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 4
-   i32.const 0
-   call $~lib/dataview/DataView#getUint32
-   i32.const -2107292833
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 105
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   call $~lib/dataview/DataView#getUint64
-   i64.const 6864441868736323830
-   i64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 107
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   call $~lib/dataview/DataView#getUint64
-   i64.const -657428103485373601
-   i64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 108
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   f32.const 1.5976661625240943e-18
-   i32.const 1
-   call $~lib/dataview/DataView#setFloat32
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 1
-   call $~lib/dataview/DataView#getFloat32
-   f32.const 1.5976661625240943e-18
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 111
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   f32.const 1976281973381696323584
-   i32.const 0
-   call $~lib/dataview/DataView#setFloat32
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#getFloat32
-   f32.const 1976281973381696323584
-   f32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 114
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   f64.const -1094252199637739024055454e124
-   i32.const 1
-   call $~lib/dataview/DataView#setFloat64
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   call $~lib/dataview/DataView#getFloat64
-   f64.const -1094252199637739024055454e124
-   f64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 117
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   f64.const 6.022586634778589e-103
-   i32.const 0
-   call $~lib/dataview/DataView#setFloat64
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   call $~lib/dataview/DataView#getFloat64
-   f64.const 6.022586634778589e-103
-   f64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 120
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1772
-   i32.lt_s
-   br_if $folding-inner1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store
-   local.get $0
-   i32.load offset=8
-   i32.eqz
-   if
-    i32.const 1360
-    i32.const 1632
-    i32.const 109
-    i32.const 50
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store
-   local.get $0
-   i32.load offset=4
-   i32.const 108
-   i32.store8
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   call $~lib/dataview/DataView#getInt8
-   i32.const 108
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 123
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const -13360
-   i32.const 1
-   call $~lib/dataview/DataView#setInt16
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 1
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 52176
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 126
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 14689
-   i32.const 0
-   call $~lib/dataview/DataView#setInt16
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#getInt16
-   i32.const 65535
-   i32.and
-   i32.const 14689
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 129
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1204680201
-   i32.const 1
-   call $~lib/dataview/DataView#setInt32
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 1
-   call $~lib/dataview/DataView#getInt32
-   i32.const 1204680201
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 132
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 660673230
-   i32.const 0
-   call $~lib/dataview/DataView#setInt32
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#getInt32
-   i32.const 660673230
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 135
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i64.const -3290739641816099749
-   i32.const 1
-   call $~lib/dataview/DataView#setInt64
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   call $~lib/dataview/DataView#getInt64
-   i64.const -3290739641816099749
-   i64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 138
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i64.const 8178932412950708047
-   i32.const 0
-   call $~lib/dataview/DataView#setInt64
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   call $~lib/dataview/DataView#getInt64
-   i64.const 8178932412950708047
-   i64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 141
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1772
-   i32.lt_s
-   br_if $folding-inner1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store
-   local.get $0
-   i32.load offset=8
-   i32.eqz
-   if
-    i32.const 1360
-    i32.const 1632
-    i32.const 128
-    i32.const 50
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store
-   local.get $0
-   i32.load offset=4
-   i32.const 238
-   i32.store8
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   call $~lib/dataview/DataView#getUint8
-   i32.const 238
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 144
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 58856
-   i32.const 1
-   call $~lib/dataview/DataView#setUint16
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 1
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 58856
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 147
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 60400
-   i32.const 0
-   call $~lib/dataview/DataView#setUint16
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#getUint16
-   i32.const 65535
-   i32.and
-   i32.const 60400
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 150
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const -846805744
-   i32.const 1
-   call $~lib/dataview/DataView#setUint32
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 1
-   call $~lib/dataview/DataView#getUint32
-   i32.const -846805744
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 153
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const -1510791631
-   i32.const 0
-   call $~lib/dataview/DataView#setUint32
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#getUint32
-   i32.const -1510791631
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 156
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i64.const 2334704782995986958
-   i32.const 1
-   call $~lib/dataview/DataView#setUint64
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 1
-   call $~lib/dataview/DataView#getUint64
-   i64.const 2334704782995986958
-   i64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 159
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i64.const -7123186897289856329
-   i32.const 0
-   call $~lib/dataview/DataView#setUint64
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   call $~lib/dataview/DataView#getUint64
-   i64.const -7123186897289856329
-   i64.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 162
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=8
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.load
-   local.tee $1
-   i32.store offset=4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1772
-   i32.lt_s
-   br_if $folding-inner1
-   global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store
-   local.get $1
-   i32.const 20
-   i32.sub
-   i32.load offset=16
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 0
-   local.get $2
-   call $~lib/dataview/DataView#constructor
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $0
-   local.get $1
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 165
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.load offset=8
-   i32.const 8
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1696
-    i32.const 166
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 34540
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/rt/itcms/state
-   i32.const 0
-   i32.gt_s
-   if
-    loop $while-continue|0
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store offset=4
+    local.get $1
+    i32.load offset=8
+    i32.const 8
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1696
+     i32.const 166
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    i32.const 34540
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/rt/itcms/state
+    i32.const 0
+    i32.gt_s
+    if
+     loop $while-continue|0
+      global.get $~lib/rt/itcms/state
+      if
+       call $~lib/rt/itcms/step
+       drop
+       br $while-continue|0
+      end
+     end
+    end
+    call $~lib/rt/itcms/step
+    drop
+    loop $while-continue|1
      global.get $~lib/rt/itcms/state
      if
       call $~lib/rt/itcms/step
       drop
-      br $while-continue|0
+      br $while-continue|1
      end
     end
+    global.get $~lib/rt/itcms/total
+    i64.extend_i32_u
+    i64.const 200
+    i64.mul
+    i64.const 100
+    i64.div_u
+    i32.wrap_i64
+    i32.const 1024
+    i32.add
+    global.set $~lib/rt/itcms/threshold
+    global.get $~lib/memory/__stack_pointer
+    i32.const 16
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    return
    end
-   call $~lib/rt/itcms/step
-   drop
-   loop $while-continue|1
-    global.get $~lib/rt/itcms/state
-    if
-     call $~lib/rt/itcms/step
-     drop
-     br $while-continue|1
-    end
-   end
-   global.get $~lib/rt/itcms/total
-   i64.extend_i32_u
-   i64.const 200
-   i64.mul
-   i64.const 100
-   i64.div_u
-   i32.wrap_i64
-   i32.const 1024
-   i32.add
-   global.set $~lib/rt/itcms/threshold
-   global.get $~lib/memory/__stack_pointer
-   i32.const 16
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   return
+   unreachable
   end
   i32.const 34560
   i32.const 34608

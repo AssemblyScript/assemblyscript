@@ -1222,11 +1222,11 @@
     i32.const 0
     i32.gt_s
     if
-     loop $while-continue|01
+     loop $while-continue|05
       global.get $~lib/rt/itcms/state
       if
        call $~lib/rt/itcms/step
-       br $while-continue|01
+       br $while-continue|05
       end
      end
     end
