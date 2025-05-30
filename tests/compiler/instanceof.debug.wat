@@ -4232,11 +4232,11 @@
    i32.load
    local.set $1
    local.get $1
-   i32.const 13
+   i32.const 14
    i32.eq
    br_if $is_instance
    local.get $1
-   i32.const 14
+   i32.const 13
    i32.eq
    br_if $is_instance
    i32.const 0
@@ -4287,15 +4287,15 @@
    i32.load
    local.set $1
    local.get $1
-   i32.const 16
-   i32.eq
-   br_if $is_instance
-   local.get $1
    i32.const 19
    i32.eq
    br_if $is_instance
    local.get $1
    i32.const 22
+   i32.eq
+   br_if $is_instance
+   local.get $1
+   i32.const 16
    i32.eq
    br_if $is_instance
    i32.const 0
@@ -4312,11 +4312,11 @@
    i32.load
    local.set $1
    local.get $1
-   i32.const 19
+   i32.const 22
    i32.eq
    br_if $is_instance
    local.get $1
-   i32.const 22
+   i32.const 19
    i32.eq
    br_if $is_instance
    i32.const 0
