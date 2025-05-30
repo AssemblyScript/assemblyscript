@@ -24,31 +24,33 @@
   (local $c i32)
   i32.const 1
   local.set $a
-  local.get $a
-  local.tee $1
-  i32.const 1
-  i32.add
-  local.set $a
-  local.get $1
-  local.set $a|3
-  global.get $inlining-blocklocals/b
-  local.tee $2
-  i32.const 1
-  i32.add
-  global.set $inlining-blocklocals/b
-  local.get $2
-  local.set $b
-  local.get $a
-  i32.const 1
-  i32.add
-  local.tee $a
-  local.set $c
-  local.get $a|3
-  global.set $inlining-blocklocals/theCall_a
-  local.get $b
-  global.set $inlining-blocklocals/theCall_b
-  local.get $c
-  global.set $inlining-blocklocals/theCall_c
+  block $inlining-blocklocals/theCall|inlined.0
+   local.get $a
+   local.tee $1
+   i32.const 1
+   i32.add
+   local.set $a
+   local.get $1
+   local.set $a|3
+   global.get $inlining-blocklocals/b
+   local.tee $2
+   i32.const 1
+   i32.add
+   global.set $inlining-blocklocals/b
+   local.get $2
+   local.set $b
+   local.get $a
+   i32.const 1
+   i32.add
+   local.tee $a
+   local.set $c
+   local.get $a|3
+   global.set $inlining-blocklocals/theCall_a
+   local.get $b
+   global.set $inlining-blocklocals/theCall_b
+   local.get $c
+   global.set $inlining-blocklocals/theCall_c
+  end
   global.get $inlining-blocklocals/theCall_a
   i32.const 1
   i32.eq

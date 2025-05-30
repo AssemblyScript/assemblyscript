@@ -1407,6 +1407,7 @@
   i32.sub
  )
  (func $export-default/theDefault
+  nop
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid

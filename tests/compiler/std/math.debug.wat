@@ -9491,38 +9491,40 @@
    i64.or
    local.set $uy
   end
-  loop $while-continue|0
-   local.get $ex
-   local.get $ey
-   i64.gt_s
-   if
-    local.get $ux
-    local.get $uy
-    i64.ge_u
+  block $while-break|0
+   loop $while-continue|0
+    local.get $ex
+    local.get $ey
+    i64.gt_s
     if
      local.get $ux
      local.get $uy
-     i64.eq
+     i64.ge_u
      if
-      f64.const 0
-      local.get $x
-      f64.mul
-      return
+      local.get $ux
+      local.get $uy
+      i64.eq
+      if
+       f64.const 0
+       local.get $x
+       f64.mul
+       return
+      end
+      local.get $ux
+      local.get $uy
+      i64.sub
+      local.set $ux
      end
      local.get $ux
-     local.get $uy
-     i64.sub
+     i64.const 1
+     i64.shl
      local.set $ux
+     local.get $ex
+     i64.const 1
+     i64.sub
+     local.set $ex
+     br $while-continue|0
     end
-    local.get $ux
-    i64.const 1
-    i64.shl
-    local.set $ux
-    local.get $ex
-    i64.const 1
-    i64.sub
-    local.set $ex
-    br $while-continue|0
    end
   end
   local.get $ux
@@ -9763,38 +9765,40 @@
    i32.or
    local.set $uy
   end
-  loop $while-continue|0
-   local.get $ex
-   local.get $ey
-   i32.gt_s
-   if
-    local.get $ux
-    local.get $uy
-    i32.ge_u
+  block $while-break|0
+   loop $while-continue|0
+    local.get $ex
+    local.get $ey
+    i32.gt_s
     if
      local.get $ux
      local.get $uy
-     i32.eq
+     i32.ge_u
      if
-      f32.const 0
-      local.get $x
-      f32.mul
-      return
+      local.get $ux
+      local.get $uy
+      i32.eq
+      if
+       f32.const 0
+       local.get $x
+       f32.mul
+       return
+      end
+      local.get $ux
+      local.get $uy
+      i32.sub
+      local.set $ux
      end
      local.get $ux
-     local.get $uy
-     i32.sub
+     i32.const 1
+     i32.shl
      local.set $ux
+     local.get $ex
+     i32.const 1
+     i32.sub
+     local.set $ex
+     br $while-continue|0
     end
-    local.get $ux
-    i32.const 1
-    i32.shl
-    local.set $ux
-    local.get $ex
-    i32.const 1
-    i32.sub
-    local.set $ex
-    br $while-continue|0
    end
   end
   local.get $ux
@@ -12107,37 +12111,39 @@
      local.get $x
      return
     end
-    loop $while-continue|1
-     local.get $ex
-     local.get $ey
-     i64.gt_s
-     if
-      local.get $uxi
-      local.get $uy
-      i64.ge_u
+    block $while-break|1
+     loop $while-continue|1
+      local.get $ex
+      local.get $ey
+      i64.gt_s
       if
        local.get $uxi
        local.get $uy
-       i64.sub
+       i64.ge_u
+       if
+        local.get $uxi
+        local.get $uy
+        i64.sub
+        local.set $uxi
+        local.get $q
+        i32.const 1
+        i32.add
+        local.set $q
+       end
+       local.get $uxi
+       i64.const 1
+       i64.shl
        local.set $uxi
        local.get $q
        i32.const 1
-       i32.add
+       i32.shl
        local.set $q
+       local.get $ex
+       i64.const 1
+       i64.sub
+       local.set $ex
+       br $while-continue|1
       end
-      local.get $uxi
-      i64.const 1
-      i64.shl
-      local.set $uxi
-      local.get $q
-      i32.const 1
-      i32.shl
-      local.set $q
-      local.get $ex
-      i64.const 1
-      i64.sub
-      local.set $ex
-      br $while-continue|1
      end
     end
     local.get $uxi
@@ -12420,37 +12426,39 @@
      local.get $x
      return
     end
-    loop $while-continue|1
-     local.get $ex
-     local.get $ey
-     i32.gt_s
-     if
-      local.get $uxi
-      local.get $uy
-      i32.ge_u
+    block $while-break|1
+     loop $while-continue|1
+      local.get $ex
+      local.get $ey
+      i32.gt_s
       if
        local.get $uxi
        local.get $uy
-       i32.sub
+       i32.ge_u
+       if
+        local.get $uxi
+        local.get $uy
+        i32.sub
+        local.set $uxi
+        local.get $q
+        i32.const 1
+        i32.add
+        local.set $q
+       end
+       local.get $uxi
+       i32.const 1
+       i32.shl
        local.set $uxi
        local.get $q
        i32.const 1
-       i32.add
+       i32.shl
        local.set $q
+       local.get $ex
+       i32.const 1
+       i32.sub
+       local.set $ex
+       br $while-continue|1
       end
-      local.get $uxi
-      i32.const 1
-      i32.shl
-      local.set $uxi
-      local.get $q
-      i32.const 1
-      i32.shl
-      local.set $q
-      local.get $ex
-      i32.const 1
-      i32.sub
-      local.set $ex
-      br $while-continue|1
      end
     end
     local.get $uxi
@@ -16717,31 +16725,33 @@
     end
    end
   end
-  loop $while-continue|1
-   local.get $e
-   i64.const 0
-   i64.ne
-   if
+  block $while-break|1
+   loop $while-continue|1
     local.get $e
-    i64.const 1
-    i64.and
     i64.const 0
     i64.ne
     if
-     local.get $out
+     local.get $e
+     i64.const 1
+     i64.and
+     i64.const 0
+     i64.ne
+     if
+      local.get $out
+      local.get $x
+      i64.mul
+      local.set $out
+     end
+     local.get $e
+     i64.const 1
+     i64.shr_u
+     local.set $e
+     local.get $x
      local.get $x
      i64.mul
-     local.set $out
+     local.set $x
+     br $while-continue|1
     end
-    local.get $e
-    i64.const 1
-    i64.shr_u
-    local.set $e
-    local.get $x
-    local.get $x
-    i64.mul
-    local.set $x
-    br $while-continue|1
    end
   end
   local.get $out
@@ -16939,27 +16949,29 @@
     end
    end
   end
-  loop $while-continue|1
-   local.get $e
-   if
+  block $while-break|1
+   loop $while-continue|1
     local.get $e
-    i32.const 1
-    i32.and
     if
-     local.get $out
+     local.get $e
+     i32.const 1
+     i32.and
+     if
+      local.get $out
+      local.get $x
+      i32.mul
+      local.set $out
+     end
+     local.get $e
+     i32.const 1
+     i32.shr_u
+     local.set $e
+     local.get $x
      local.get $x
      i32.mul
-     local.set $out
+     local.set $x
+     br $while-continue|1
     end
-    local.get $e
-    i32.const 1
-    i32.shr_u
-    local.set $e
-    local.get $x
-    local.get $x
-    i32.mul
-    local.set $x
-    br $while-continue|1
    end
   end
   local.get $out
@@ -47950,11 +47962,13 @@
     br $for-loop|0
    end
   end
-  call $~lib/bindings/dom/Math.random
-  i64.reinterpret_f64
-  local.set $value
-  local.get $value
-  call $~lib/math/NativeMath.seedRandom
+  block $~lib/math/NativeMathf.seedRandom|inlined.0
+   call $~lib/bindings/dom/Math.random
+   i64.reinterpret_f64
+   local.set $value
+   local.get $value
+   call $~lib/math/NativeMath.seedRandom
+  end
   i32.const 0
   local.set $i|8
   loop $for-loop|1

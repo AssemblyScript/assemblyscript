@@ -126,36 +126,40 @@
  )
  (func $switch/doSwitchFallThroughCase (param $n i32) (result i32)
   (local $1 i32)
-  block $case1|0
-   block $case0|0
-    local.get $n
-    local.set $1
-    local.get $1
-    i32.const 1
-    i32.eq
-    br_if $case1|0
-    br $case0|0
+  block $break|0
+   block $case1|0
+    block $case0|0
+     local.get $n
+     local.set $1
+     local.get $1
+     i32.const 1
+     i32.eq
+     br_if $case1|0
+     br $case0|0
+    end
+    i32.const 2
+    return
    end
-   i32.const 2
-   return
   end
   i32.const 1
   return
  )
  (func $switch/doSwitchFallThroughDefault (param $n i32) (result i32)
   (local $1 i32)
-  block $case1|0
-   block $case0|0
-    local.get $n
-    local.set $1
-    local.get $1
+  block $break|0
+   block $case1|0
+    block $case0|0
+     local.get $n
+     local.set $1
+     local.get $1
+     i32.const 1
+     i32.eq
+     br_if $case0|0
+     br $case1|0
+    end
     i32.const 1
-    i32.eq
-    br_if $case0|0
-    br $case1|0
+    return
    end
-   i32.const 1
-   return
   end
   i32.const 2
   return

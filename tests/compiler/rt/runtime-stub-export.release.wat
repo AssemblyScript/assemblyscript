@@ -135,8 +135,10 @@
   local.get $0
  )
  (func $~lib/rt/stub/__unpin (param $0 i32)
+  nop
  )
  (func $~lib/rt/stub/__collect
+  nop
  )
  (func $~start
   i32.const 1196

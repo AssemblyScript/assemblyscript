@@ -12,6 +12,7 @@
  (export "table" (table $0))
  (start $~start)
  (func $start:exportimport-table~anonymous|0
+  nop
  )
  (func $start:exportimport-table
   global.get $exportimport-table/f

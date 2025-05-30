@@ -31,8 +31,10 @@
   return
  )
  (func $export/ns.two
+  nop
  )
  (func $export-default/theDefault
+  nop
  )
  (func $start:import
   global.get $export/a

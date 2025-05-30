@@ -218,25 +218,27 @@
   end
   i32.eq
   if
-   local.get $root
-   local.set $root|14
-   local.get $fl
-   local.set $fl|15
-   local.get $sl
-   local.set $sl|16
-   local.get $next
-   local.set $head
-   local.get $root|14
-   local.get $fl|15
-   i32.const 4
-   i32.shl
-   local.get $sl|16
-   i32.add
-   i32.const 2
-   i32.shl
-   i32.add
-   local.get $head
-   i32.store offset=96
+   block $~lib/rt/tlsf/SETHEAD|inlined.1
+    local.get $root
+    local.set $root|14
+    local.get $fl
+    local.set $fl|15
+    local.get $sl
+    local.set $sl|16
+    local.get $next
+    local.set $head
+    local.get $root|14
+    local.get $fl|15
+    i32.const 4
+    i32.shl
+    local.get $sl|16
+    i32.add
+    i32.const 2
+    i32.shl
+    i32.add
+    local.get $head
+    i32.store offset=96
+   end
    local.get $next
    i32.eqz
    if
@@ -254,26 +256,28 @@
      br $~lib/rt/tlsf/GETSL|inlined.0
     end
     local.set $slMap
-    local.get $root
-    local.set $root|21
-    local.get $fl
-    local.set $fl|22
-    local.get $slMap
-    i32.const 1
-    local.get $sl
-    i32.shl
-    i32.const -1
-    i32.xor
-    i32.and
-    local.tee $slMap
-    local.set $slMap|23
-    local.get $root|21
-    local.get $fl|22
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $slMap|23
-    i32.store offset=4
+    block $~lib/rt/tlsf/SETSL|inlined.1
+     local.get $root
+     local.set $root|21
+     local.get $fl
+     local.set $fl|22
+     local.get $slMap
+     i32.const 1
+     local.get $sl
+     i32.shl
+     i32.const -1
+     i32.xor
+     i32.and
+     local.tee $slMap
+     local.set $slMap|23
+     local.get $root|21
+     local.get $fl|22
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $slMap|23
+     i32.store offset=4
+    end
     local.get $slMap
     i32.eqz
     if
@@ -598,25 +602,27 @@
    local.get $block
    call $~lib/rt/tlsf/Block#set:prev
   end
-  local.get $root
-  local.set $root|20
-  local.get $fl
-  local.set $fl|21
-  local.get $sl
-  local.set $sl|22
-  local.get $block
-  local.set $head|23
-  local.get $root|20
-  local.get $fl|21
-  i32.const 4
-  i32.shl
-  local.get $sl|22
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $head|23
-  i32.store offset=96
+  block $~lib/rt/tlsf/SETHEAD|inlined.2
+   local.get $root
+   local.set $root|20
+   local.get $fl
+   local.set $fl|21
+   local.get $sl
+   local.set $sl|22
+   local.get $block
+   local.set $head|23
+   local.get $root|20
+   local.get $fl|21
+   i32.const 4
+   i32.shl
+   local.get $sl|22
+   i32.add
+   i32.const 2
+   i32.shl
+   i32.add
+   local.get $head|23
+   i32.store offset=96
+  end
   local.get $root
   local.get $root
   call $~lib/rt/tlsf/Root#get:flMap
@@ -625,35 +631,37 @@
   i32.shl
   i32.or
   call $~lib/rt/tlsf/Root#set:flMap
-  local.get $root
-  local.set $root|26
-  local.get $fl
-  local.set $fl|27
-  block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
+  block $~lib/rt/tlsf/SETSL|inlined.2
    local.get $root
-   local.set $root|24
+   local.set $root|26
    local.get $fl
-   local.set $fl|25
-   local.get $root|24
-   local.get $fl|25
+   local.set $fl|27
+   block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
+    local.get $root
+    local.set $root|24
+    local.get $fl
+    local.set $fl|25
+    local.get $root|24
+    local.get $fl|25
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.load offset=4
+    br $~lib/rt/tlsf/GETSL|inlined.1
+   end
+   i32.const 1
+   local.get $sl
+   i32.shl
+   i32.or
+   local.set $slMap
+   local.get $root|26
+   local.get $fl|27
    i32.const 2
    i32.shl
    i32.add
-   i32.load offset=4
-   br $~lib/rt/tlsf/GETSL|inlined.1
+   local.get $slMap
+   i32.store offset=4
   end
-  i32.const 1
-  local.get $sl
-  i32.shl
-  i32.or
-  local.set $slMap
-  local.get $root|26
-  local.get $fl|27
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $slMap
-  i32.store offset=4
  )
  (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $endU64 i64) (result i32)
   (local $end i32)
@@ -743,6 +751,7 @@
     call $~lib/rt/common/BLOCK#get:mmInfo
     local.set $tailInfo
    else
+    nop
    end
   else
    i32.const 1
@@ -811,13 +820,15 @@
   i32.const 2
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
-  local.get $root
-  local.set $root|10
-  local.get $tail
-  local.set $tail|11
-  local.get $root|10
-  local.get $tail|11
-  i32.store offset=1568
+  block $~lib/rt/tlsf/SETTAIL|inlined.1
+   local.get $root
+   local.set $root|10
+   local.get $tail
+   local.set $tail|11
+   local.get $root|10
+   local.get $tail|11
+   i32.store offset=1568
+  end
   local.get $root
   local.get $left
   call $~lib/rt/tlsf/insertBlock
@@ -886,13 +897,15 @@
   local.get $root
   i32.const 0
   call $~lib/rt/tlsf/Root#set:flMap
-  local.get $root
-  local.set $root|4
-  i32.const 0
-  local.set $tail
-  local.get $root|4
-  local.get $tail
-  i32.store offset=1568
+  block $~lib/rt/tlsf/SETTAIL|inlined.0
+   local.get $root
+   local.set $root|4
+   i32.const 0
+   local.set $tail
+   local.get $root|4
+   local.get $tail
+   i32.store offset=1568
+  end
   i32.const 0
   local.set $fl
   loop $for-loop|0
@@ -900,19 +913,21 @@
    i32.const 23
    i32.lt_u
    if
-    local.get $root
-    local.set $root|7
-    local.get $fl
-    local.set $fl|8
-    i32.const 0
-    local.set $slMap
-    local.get $root|7
-    local.get $fl|8
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $slMap
-    i32.store offset=4
+    block $~lib/rt/tlsf/SETSL|inlined.0
+     local.get $root
+     local.set $root|7
+     local.get $fl
+     local.set $fl|8
+     i32.const 0
+     local.set $slMap
+     local.get $root|7
+     local.get $fl|8
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $slMap
+     i32.store offset=4
+    end
     i32.const 0
     local.set $sl
     loop $for-loop|1
@@ -920,25 +935,27 @@
      i32.const 16
      i32.lt_u
      if
-      local.get $root
-      local.set $root|11
-      local.get $fl
-      local.set $fl|12
-      local.get $sl
-      local.set $sl|13
-      i32.const 0
-      local.set $head
-      local.get $root|11
-      local.get $fl|12
-      i32.const 4
-      i32.shl
-      local.get $sl|13
-      i32.add
-      i32.const 2
-      i32.shl
-      i32.add
-      local.get $head
-      i32.store offset=96
+      block $~lib/rt/tlsf/SETHEAD|inlined.0
+       local.get $root
+       local.set $root|11
+       local.get $fl
+       local.set $fl|12
+       local.get $sl
+       local.set $sl|13
+       i32.const 0
+       local.set $head
+       local.get $root|11
+       local.get $fl|12
+       i32.const 4
+       i32.shl
+       local.get $sl|13
+       i32.add
+       i32.const 2
+       i32.shl
+       i32.add
+       local.get $head
+       i32.store offset=96
+      end
       local.get $sl
       i32.const 1
       i32.add
@@ -1500,17 +1517,19 @@
  )
  (func $start:rt/alloc-large-memory
   (local $i i32)
-  loop $while-continue|0
-   memory.size
-   i32.const 128
-   i32.ne
-   if
-    i32.const 32
-    i32.const 1024
-    i32.mul
-    call $~lib/memory/heap.alloc
-    drop
-    br $while-continue|0
+  block $while-break|0
+   loop $while-continue|0
+    memory.size
+    i32.const 128
+    i32.ne
+    if
+     i32.const 32
+     i32.const 1024
+     i32.mul
+     call $~lib/memory/heap.alloc
+     drop
+     br $while-continue|0
+    end
    end
   end
   i32.const 0

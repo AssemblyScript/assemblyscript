@@ -49,7 +49,7 @@
   i32.const 3
  )
  (func $inlining/func_fe~anonymous|0 (param $0 i32) (result i32)
-  i32.const 2
+  local.get $0
  )
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
@@ -1561,7 +1561,16 @@
    i32.const 1104
    i32.load
    call_indirect (type $2)
-   drop
+   i32.const 2
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1056
+    i32.const 69
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
    global.get $~lib/memory/__stack_pointer
    i32.const 123
    i32.store

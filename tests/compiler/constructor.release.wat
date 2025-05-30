@@ -181,7 +181,7 @@
     local.get $0
     global.set $~lib/rt/itcms/iter
    end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink$152
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$153
     local.get $1
     i32.load offset=4
     i32.const -4
@@ -205,7 +205,7 @@
       call $~lib/builtins/abort
       unreachable
      end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink$152
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$153
     end
     local.get $1
     i32.load offset=8
@@ -1660,11 +1660,11 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  block $folding-inner1
+  block $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
@@ -1707,7 +1707,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
@@ -1730,7 +1730,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -1759,7 +1759,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -1788,7 +1788,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -1823,7 +1823,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -1854,7 +1854,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -1891,7 +1891,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -1928,7 +1928,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
@@ -1948,7 +1948,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
@@ -2005,7 +2005,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1556
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store

@@ -29,6 +29,7 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $features/reference-types/someFunc
+  nop
  )
  (func $features/reference-types/internal (param $0 externref) (result externref)
   local.get $0

@@ -123,35 +123,37 @@
   local.get $pn
   call $~lib/rt/itcms/Object#get:next
   local.set $iter
-  loop $while-continue|0
-   local.get $iter
-   local.get $pn
-   i32.ne
-   if
-    i32.const 1
-    drop
+  block $while-break|0
+   loop $while-continue|0
     local.get $iter
-    call $~lib/rt/itcms/Object#get:color
-    i32.const 3
-    i32.eq
-    i32.eqz
+    local.get $pn
+    i32.ne
     if
-     i32.const 0
-     i32.const 96
-     i32.const 160
-     i32.const 16
-     call $~lib/builtins/abort
-     unreachable
+     i32.const 1
+     drop
+     local.get $iter
+     call $~lib/rt/itcms/Object#get:color
+     i32.const 3
+     i32.eq
+     i32.eqz
+     if
+      i32.const 0
+      i32.const 96
+      i32.const 160
+      i32.const 16
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $iter
+     i32.const 20
+     i32.add
+     local.get $cookie
+     call $~lib/rt/__visit_members
+     local.get $iter
+     call $~lib/rt/itcms/Object#get:next
+     local.set $iter
+     br $while-continue|0
     end
-    local.get $iter
-    i32.const 20
-    i32.add
-    local.get $cookie
-    call $~lib/rt/__visit_members
-    local.get $iter
-    call $~lib/rt/itcms/Object#get:next
-    local.set $iter
-    br $while-continue|0
    end
   end
  )
@@ -377,20 +379,22 @@
   (local $ptr i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
-  loop $while-continue|0
-   local.get $ptr
-   global.get $~lib/memory/__heap_base
-   i32.lt_u
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $ptr
-    i32.load
-    local.get $cookie
-    call $~lib/rt/itcms/__visit
-    local.get $ptr
-    i32.const 4
-    i32.add
-    local.set $ptr
-    br $while-continue|0
+    global.get $~lib/memory/__heap_base
+    i32.lt_u
+    if
+     local.get $ptr
+     i32.load
+     local.get $cookie
+     call $~lib/rt/itcms/__visit
+     local.get $ptr
+     i32.const 4
+     i32.add
+     local.set $ptr
+     br $while-continue|0
+    end
    end
   end
  )
@@ -604,25 +608,27 @@
   end
   i32.eq
   if
-   local.get $root
-   local.set $root|14
-   local.get $fl
-   local.set $fl|15
-   local.get $sl
-   local.set $sl|16
-   local.get $next
-   local.set $head
-   local.get $root|14
-   local.get $fl|15
-   i32.const 4
-   i32.shl
-   local.get $sl|16
-   i32.add
-   i32.const 2
-   i32.shl
-   i32.add
-   local.get $head
-   i32.store offset=96
+   block $~lib/rt/tlsf/SETHEAD|inlined.1
+    local.get $root
+    local.set $root|14
+    local.get $fl
+    local.set $fl|15
+    local.get $sl
+    local.set $sl|16
+    local.get $next
+    local.set $head
+    local.get $root|14
+    local.get $fl|15
+    i32.const 4
+    i32.shl
+    local.get $sl|16
+    i32.add
+    i32.const 2
+    i32.shl
+    i32.add
+    local.get $head
+    i32.store offset=96
+   end
    local.get $next
    i32.eqz
    if
@@ -640,26 +646,28 @@
      br $~lib/rt/tlsf/GETSL|inlined.0
     end
     local.set $slMap
-    local.get $root
-    local.set $root|21
-    local.get $fl
-    local.set $fl|22
-    local.get $slMap
-    i32.const 1
-    local.get $sl
-    i32.shl
-    i32.const -1
-    i32.xor
-    i32.and
-    local.tee $slMap
-    local.set $slMap|23
-    local.get $root|21
-    local.get $fl|22
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $slMap|23
-    i32.store offset=4
+    block $~lib/rt/tlsf/SETSL|inlined.1
+     local.get $root
+     local.set $root|21
+     local.get $fl
+     local.set $fl|22
+     local.get $slMap
+     i32.const 1
+     local.get $sl
+     i32.shl
+     i32.const -1
+     i32.xor
+     i32.and
+     local.tee $slMap
+     local.set $slMap|23
+     local.get $root|21
+     local.get $fl|22
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $slMap|23
+     i32.store offset=4
+    end
     local.get $slMap
     i32.eqz
     if
@@ -984,25 +992,27 @@
    local.get $block
    call $~lib/rt/tlsf/Block#set:prev
   end
-  local.get $root
-  local.set $root|20
-  local.get $fl
-  local.set $fl|21
-  local.get $sl
-  local.set $sl|22
-  local.get $block
-  local.set $head|23
-  local.get $root|20
-  local.get $fl|21
-  i32.const 4
-  i32.shl
-  local.get $sl|22
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $head|23
-  i32.store offset=96
+  block $~lib/rt/tlsf/SETHEAD|inlined.2
+   local.get $root
+   local.set $root|20
+   local.get $fl
+   local.set $fl|21
+   local.get $sl
+   local.set $sl|22
+   local.get $block
+   local.set $head|23
+   local.get $root|20
+   local.get $fl|21
+   i32.const 4
+   i32.shl
+   local.get $sl|22
+   i32.add
+   i32.const 2
+   i32.shl
+   i32.add
+   local.get $head|23
+   i32.store offset=96
+  end
   local.get $root
   local.get $root
   call $~lib/rt/tlsf/Root#get:flMap
@@ -1011,35 +1021,37 @@
   i32.shl
   i32.or
   call $~lib/rt/tlsf/Root#set:flMap
-  local.get $root
-  local.set $root|26
-  local.get $fl
-  local.set $fl|27
-  block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
+  block $~lib/rt/tlsf/SETSL|inlined.2
    local.get $root
-   local.set $root|24
+   local.set $root|26
    local.get $fl
-   local.set $fl|25
-   local.get $root|24
-   local.get $fl|25
+   local.set $fl|27
+   block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
+    local.get $root
+    local.set $root|24
+    local.get $fl
+    local.set $fl|25
+    local.get $root|24
+    local.get $fl|25
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.load offset=4
+    br $~lib/rt/tlsf/GETSL|inlined.1
+   end
+   i32.const 1
+   local.get $sl
+   i32.shl
+   i32.or
+   local.set $slMap
+   local.get $root|26
+   local.get $fl|27
    i32.const 2
    i32.shl
    i32.add
-   i32.load offset=4
-   br $~lib/rt/tlsf/GETSL|inlined.1
+   local.get $slMap
+   i32.store offset=4
   end
-  i32.const 1
-  local.get $sl
-  i32.shl
-  i32.or
-  local.set $slMap
-  local.get $root|26
-  local.get $fl|27
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $slMap
-  i32.store offset=4
  )
  (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $endU64 i64) (result i32)
   (local $end i32)
@@ -1129,6 +1141,7 @@
     call $~lib/rt/common/BLOCK#get:mmInfo
     local.set $tailInfo
    else
+    nop
    end
   else
    i32.const 1
@@ -1197,13 +1210,15 @@
   i32.const 2
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
-  local.get $root
-  local.set $root|10
-  local.get $tail
-  local.set $tail|11
-  local.get $root|10
-  local.get $tail|11
-  i32.store offset=1568
+  block $~lib/rt/tlsf/SETTAIL|inlined.1
+   local.get $root
+   local.set $root|10
+   local.get $tail
+   local.set $tail|11
+   local.get $root|10
+   local.get $tail|11
+   i32.store offset=1568
+  end
   local.get $root
   local.get $left
   call $~lib/rt/tlsf/insertBlock
@@ -1272,13 +1287,15 @@
   local.get $root
   i32.const 0
   call $~lib/rt/tlsf/Root#set:flMap
-  local.get $root
-  local.set $root|4
-  i32.const 0
-  local.set $tail
-  local.get $root|4
-  local.get $tail
-  i32.store offset=1568
+  block $~lib/rt/tlsf/SETTAIL|inlined.0
+   local.get $root
+   local.set $root|4
+   i32.const 0
+   local.set $tail
+   local.get $root|4
+   local.get $tail
+   i32.store offset=1568
+  end
   i32.const 0
   local.set $fl
   loop $for-loop|0
@@ -1286,19 +1303,21 @@
    i32.const 23
    i32.lt_u
    if
-    local.get $root
-    local.set $root|7
-    local.get $fl
-    local.set $fl|8
-    i32.const 0
-    local.set $slMap
-    local.get $root|7
-    local.get $fl|8
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $slMap
-    i32.store offset=4
+    block $~lib/rt/tlsf/SETSL|inlined.0
+     local.get $root
+     local.set $root|7
+     local.get $fl
+     local.set $fl|8
+     i32.const 0
+     local.set $slMap
+     local.get $root|7
+     local.get $fl|8
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $slMap
+     i32.store offset=4
+    end
     i32.const 0
     local.set $sl
     loop $for-loop|1
@@ -1306,25 +1325,27 @@
      i32.const 16
      i32.lt_u
      if
-      local.get $root
-      local.set $root|11
-      local.get $fl
-      local.set $fl|12
-      local.get $sl
-      local.set $sl|13
-      i32.const 0
-      local.set $head
-      local.get $root|11
-      local.get $fl|12
-      i32.const 4
-      i32.shl
-      local.get $sl|13
-      i32.add
-      i32.const 2
-      i32.shl
-      i32.add
-      local.get $head
-      i32.store offset=96
+      block $~lib/rt/tlsf/SETHEAD|inlined.0
+       local.get $root
+       local.set $root|11
+       local.get $fl
+       local.set $fl|12
+       local.get $sl
+       local.set $sl|13
+       i32.const 0
+       local.set $head
+       local.get $root|11
+       local.get $fl|12
+       i32.const 4
+       i32.shl
+       local.get $sl|13
+       i32.add
+       i32.const 2
+       i32.shl
+       i32.add
+       local.get $head
+       i32.store offset=96
+      end
       local.get $sl
       i32.const 1
       i32.add
@@ -1493,37 +1514,39 @@
     global.get $~lib/rt/itcms/iter
     call $~lib/rt/itcms/Object#get:next
     local.set $obj
-    loop $while-continue|1
-     local.get $obj
-     global.get $~lib/rt/itcms/toSpace
-     i32.ne
-     if
+    block $while-break|1
+     loop $while-continue|1
       local.get $obj
-      global.set $~lib/rt/itcms/iter
-      local.get $obj
-      call $~lib/rt/itcms/Object#get:color
-      local.get $black
+      global.get $~lib/rt/itcms/toSpace
       i32.ne
       if
        local.get $obj
-       local.get $black
-       call $~lib/rt/itcms/Object#set:color
-       i32.const 0
-       global.set $~lib/rt/itcms/visitCount
+       global.set $~lib/rt/itcms/iter
        local.get $obj
-       i32.const 20
-       i32.add
-       i32.const 0
-       call $~lib/rt/__visit_members
-       global.get $~lib/rt/itcms/visitCount
-       i32.const 1
-       i32.mul
-       return
+       call $~lib/rt/itcms/Object#get:color
+       local.get $black
+       i32.ne
+       if
+        local.get $obj
+        local.get $black
+        call $~lib/rt/itcms/Object#set:color
+        i32.const 0
+        global.set $~lib/rt/itcms/visitCount
+        local.get $obj
+        i32.const 20
+        i32.add
+        i32.const 0
+        call $~lib/rt/__visit_members
+        global.get $~lib/rt/itcms/visitCount
+        i32.const 1
+        i32.mul
+        return
+       end
+       local.get $obj
+       call $~lib/rt/itcms/Object#get:next
+       local.set $obj
+       br $while-continue|1
       end
-      local.get $obj
-      call $~lib/rt/itcms/Object#get:next
-      local.set $obj
-      br $while-continue|1
      end
     end
     i32.const 0
@@ -1542,29 +1565,31 @@
      global.get $~lib/rt/itcms/iter
      call $~lib/rt/itcms/Object#get:next
      local.set $obj
-     loop $while-continue|2
-      local.get $obj
-      global.get $~lib/rt/itcms/toSpace
-      i32.ne
-      if
+     block $while-break|2
+      loop $while-continue|2
        local.get $obj
-       call $~lib/rt/itcms/Object#get:color
-       local.get $black
+       global.get $~lib/rt/itcms/toSpace
        i32.ne
        if
         local.get $obj
+        call $~lib/rt/itcms/Object#get:color
         local.get $black
-        call $~lib/rt/itcms/Object#set:color
+        i32.ne
+        if
+         local.get $obj
+         local.get $black
+         call $~lib/rt/itcms/Object#set:color
+         local.get $obj
+         i32.const 20
+         i32.add
+         i32.const 0
+         call $~lib/rt/__visit_members
+        end
         local.get $obj
-        i32.const 20
-        i32.add
-        i32.const 0
-        call $~lib/rt/__visit_members
+        call $~lib/rt/itcms/Object#get:next
+        local.set $obj
+        br $while-continue|2
        end
-       local.get $obj
-       call $~lib/rt/itcms/Object#get:next
-       local.set $obj
-       br $while-continue|2
       end
      end
      global.get $~lib/rt/itcms/fromSpace
@@ -5169,14 +5194,16 @@
   end
   call $~lib/rt/itcms/step
   drop
-  loop $while-continue|1
-   global.get $~lib/rt/itcms/state
-   i32.const 0
-   i32.ne
-   if
-    call $~lib/rt/itcms/step
-    drop
-    br $while-continue|1
+  block $while-break|1
+   loop $while-continue|1
+    global.get $~lib/rt/itcms/state
+    i32.const 0
+    i32.ne
+    if
+     call $~lib/rt/itcms/step
+     drop
+     br $while-continue|1
+    end
    end
   end
   global.get $~lib/rt/itcms/total
@@ -5255,6 +5282,7 @@
   end
  )
  (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
+  nop
  )
  (func $"~lib/map/Map<i8,i32>~visit" (param $0 i32) (param $1 i32)
   local.get $0
@@ -5878,43 +5906,45 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<i8,i32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<i8,i32>#get:key"
-     i32.extend8_s
-     local.get $key
-     i32.extend8_s
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<i8,i32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<i8,i32>#get:key"
+      i32.extend8_s
+      local.get $key
+      i32.extend8_s
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -6035,65 +6065,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<i8,i32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<i8,i32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<i8,i32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<i8,i32>#get:value"
-     call $"~lib/map/MapEntry<i8,i32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<i8>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<i8,i32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<i8,i32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<i8,i32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i8,i32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<i8,i32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i8,i32>#get:value"
+      call $"~lib/map/MapEntry<i8,i32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<i8>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<i8,i32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<i8,i32>|inlined.3" (result i32)
+       i32.const 12
+       br $"~lib/map/ENTRY_SIZE<i8,i32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<i8,i32>|inlined.4" (result i32)
       i32.const 12
-      br $"~lib/map/ENTRY_SIZE<i8,i32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<i8,i32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<i8,i32>|inlined.4" (result i32)
-     i32.const 12
-     br $"~lib/map/ENTRY_SIZE<i8,i32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -7587,43 +7619,45 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<i8,i8>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<i8,i8>#get:key"
-     i32.extend8_s
-     local.get $key
-     i32.extend8_s
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<i8,i8>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<i8,i8>#get:key"
+      i32.extend8_s
+      local.get $key
+      i32.extend8_s
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -7714,65 +7748,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<i8,i8>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<i8,i8>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<i8,i8>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<i8,i8>#get:value"
-     call $"~lib/map/MapEntry<i8,i8>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<i8>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<i8,i8>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<i8,i8>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<i8,i8>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i8,i8>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<i8,i8>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i8,i8>#get:value"
+      call $"~lib/map/MapEntry<i8,i8>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<i8>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<i8,i8>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<i8,i8>|inlined.3" (result i32)
+       i32.const 8
+       br $"~lib/map/ENTRY_SIZE<i8,i8>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<i8,i8>|inlined.4" (result i32)
       i32.const 8
-      br $"~lib/map/ENTRY_SIZE<i8,i8>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<i8,i8>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<i8,i8>|inlined.4" (result i32)
-     i32.const 8
-     br $"~lib/map/ENTRY_SIZE<i8,i8>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -8071,41 +8107,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<i32,i32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<i32,i32>#get:key"
-     local.get $key
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<i32,i32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<i32,i32>#get:key"
+      local.get $key
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -8196,65 +8234,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<i32,i32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<i32,i32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<i32,i32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<i32,i32>#get:value"
-     call $"~lib/map/MapEntry<i32,i32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<i32>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<i32,i32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<i32,i32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<i32,i32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i32,i32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<i32,i32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i32,i32>#get:value"
+      call $"~lib/map/MapEntry<i32,i32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<i32>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<i32,i32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<i32,i32>|inlined.3" (result i32)
+       i32.const 12
+       br $"~lib/map/ENTRY_SIZE<i32,i32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<i32,i32>|inlined.4" (result i32)
       i32.const 12
-      br $"~lib/map/ENTRY_SIZE<i32,i32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<i32,i32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<i32,i32>|inlined.4" (result i32)
-     i32.const 12
-     br $"~lib/map/ENTRY_SIZE<i32,i32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -9565,45 +9605,47 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<u8,i32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<u8,i32>#get:key"
-     i32.const 255
-     i32.and
-     local.get $key
-     i32.const 255
-     i32.and
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<u8,i32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<u8,i32>#get:key"
+      i32.const 255
+      i32.and
+      local.get $key
+      i32.const 255
+      i32.and
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -9724,65 +9766,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<u8,i32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<u8,i32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<u8,i32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<u8,i32>#get:value"
-     call $"~lib/map/MapEntry<u8,i32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<u8>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<u8,i32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<u8,i32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<u8,i32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u8,i32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<u8,i32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u8,i32>#get:value"
+      call $"~lib/map/MapEntry<u8,i32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<u8>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<u8,i32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<u8,i32>|inlined.3" (result i32)
+       i32.const 12
+       br $"~lib/map/ENTRY_SIZE<u8,i32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<u8,i32>|inlined.4" (result i32)
       i32.const 12
-      br $"~lib/map/ENTRY_SIZE<u8,i32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<u8,i32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<u8,i32>|inlined.4" (result i32)
-     i32.const 12
-     br $"~lib/map/ENTRY_SIZE<u8,i32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -10768,45 +10812,47 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<u8,u8>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<u8,u8>#get:key"
-     i32.const 255
-     i32.and
-     local.get $key
-     i32.const 255
-     i32.and
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<u8,u8>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<u8,u8>#get:key"
+      i32.const 255
+      i32.and
+      local.get $key
+      i32.const 255
+      i32.and
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -10897,65 +10943,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<u8,u8>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<u8,u8>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<u8,u8>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<u8,u8>#get:value"
-     call $"~lib/map/MapEntry<u8,u8>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<u8>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<u8,u8>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<u8,u8>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<u8,u8>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u8,u8>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<u8,u8>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u8,u8>#get:value"
+      call $"~lib/map/MapEntry<u8,u8>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<u8>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<u8,u8>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<u8,u8>|inlined.3" (result i32)
+       i32.const 8
+       br $"~lib/map/ENTRY_SIZE<u8,u8>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<u8,u8>|inlined.4" (result i32)
       i32.const 8
-      br $"~lib/map/ENTRY_SIZE<u8,u8>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<u8,u8>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<u8,u8>|inlined.4" (result i32)
-     i32.const 8
-     br $"~lib/map/ENTRY_SIZE<u8,u8>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -12241,43 +12289,45 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<i16,i32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<i16,i32>#get:key"
-     i32.extend16_s
-     local.get $key
-     i32.extend16_s
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<i16,i32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<i16,i32>#get:key"
+      i32.extend16_s
+      local.get $key
+      i32.extend16_s
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -12398,65 +12448,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<i16,i32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<i16,i32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<i16,i32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<i16,i32>#get:value"
-     call $"~lib/map/MapEntry<i16,i32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<i16>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<i16,i32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<i16,i32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<i16,i32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i16,i32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<i16,i32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i16,i32>#get:value"
+      call $"~lib/map/MapEntry<i16,i32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<i16>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<i16,i32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<i16,i32>|inlined.3" (result i32)
+       i32.const 12
+       br $"~lib/map/ENTRY_SIZE<i16,i32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<i16,i32>|inlined.4" (result i32)
       i32.const 12
-      br $"~lib/map/ENTRY_SIZE<i16,i32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<i16,i32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<i16,i32>|inlined.4" (result i32)
-     i32.const 12
-     br $"~lib/map/ENTRY_SIZE<i16,i32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -13442,43 +13494,45 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<i16,i16>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<i16,i16>#get:key"
-     i32.extend16_s
-     local.get $key
-     i32.extend16_s
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<i16,i16>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<i16,i16>#get:key"
+      i32.extend16_s
+      local.get $key
+      i32.extend16_s
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -13569,65 +13623,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<i16,i16>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<i16,i16>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<i16,i16>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<i16,i16>#get:value"
-     call $"~lib/map/MapEntry<i16,i16>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<i16>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<i16,i16>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<i16,i16>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<i16,i16>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i16,i16>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<i16,i16>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i16,i16>#get:value"
+      call $"~lib/map/MapEntry<i16,i16>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<i16>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<i16,i16>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<i16,i16>|inlined.3" (result i32)
+       i32.const 8
+       br $"~lib/map/ENTRY_SIZE<i16,i16>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<i16,i16>|inlined.4" (result i32)
       i32.const 8
-      br $"~lib/map/ENTRY_SIZE<i16,i16>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<i16,i16>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<i16,i16>|inlined.4" (result i32)
-     i32.const 8
-     br $"~lib/map/ENTRY_SIZE<i16,i16>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -14913,45 +14969,47 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<u16,i32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<u16,i32>#get:key"
-     i32.const 65535
-     i32.and
-     local.get $key
-     i32.const 65535
-     i32.and
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<u16,i32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<u16,i32>#get:key"
+      i32.const 65535
+      i32.and
+      local.get $key
+      i32.const 65535
+      i32.and
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -15072,65 +15130,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<u16,i32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<u16,i32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<u16,i32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<u16,i32>#get:value"
-     call $"~lib/map/MapEntry<u16,i32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<u16>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<u16,i32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<u16,i32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<u16,i32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u16,i32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<u16,i32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u16,i32>#get:value"
+      call $"~lib/map/MapEntry<u16,i32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<u16>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<u16,i32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<u16,i32>|inlined.3" (result i32)
+       i32.const 12
+       br $"~lib/map/ENTRY_SIZE<u16,i32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<u16,i32>|inlined.4" (result i32)
       i32.const 12
-      br $"~lib/map/ENTRY_SIZE<u16,i32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<u16,i32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<u16,i32>|inlined.4" (result i32)
-     i32.const 12
-     br $"~lib/map/ENTRY_SIZE<u16,i32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -16116,45 +16176,47 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<u16,u16>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<u16,u16>#get:key"
-     i32.const 65535
-     i32.and
-     local.get $key
-     i32.const 65535
-     i32.and
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<u16,u16>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<u16,u16>#get:key"
+      i32.const 65535
+      i32.and
+      local.get $key
+      i32.const 65535
+      i32.and
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -16245,65 +16307,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<u16,u16>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<u16,u16>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<u16,u16>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<u16,u16>#get:value"
-     call $"~lib/map/MapEntry<u16,u16>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<u16>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<u16,u16>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<u16,u16>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<u16,u16>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u16,u16>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<u16,u16>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u16,u16>#get:value"
+      call $"~lib/map/MapEntry<u16,u16>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<u16>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<u16,u16>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<u16,u16>|inlined.3" (result i32)
+       i32.const 8
+       br $"~lib/map/ENTRY_SIZE<u16,u16>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<u16,u16>|inlined.4" (result i32)
       i32.const 8
-      br $"~lib/map/ENTRY_SIZE<u16,u16>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<u16,u16>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<u16,u16>|inlined.4" (result i32)
-     i32.const 8
-     br $"~lib/map/ENTRY_SIZE<u16,u16>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -18752,41 +18816,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<u32,i32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<u32,i32>#get:key"
-     local.get $key
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<u32,i32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<u32,i32>#get:key"
+      local.get $key
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -18907,65 +18973,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<u32,i32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<u32,i32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<u32,i32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<u32,i32>#get:value"
-     call $"~lib/map/MapEntry<u32,i32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<u32>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<u32,i32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<u32,i32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<u32,i32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u32,i32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<u32,i32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u32,i32>#get:value"
+      call $"~lib/map/MapEntry<u32,i32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<u32>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<u32,i32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<u32,i32>|inlined.3" (result i32)
+       i32.const 12
+       br $"~lib/map/ENTRY_SIZE<u32,i32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<u32,i32>|inlined.4" (result i32)
       i32.const 12
-      br $"~lib/map/ENTRY_SIZE<u32,i32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<u32,i32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<u32,i32>|inlined.4" (result i32)
-     i32.const 12
-     br $"~lib/map/ENTRY_SIZE<u32,i32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -19951,41 +20019,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<u32,u32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<u32,u32>#get:key"
-     local.get $key
-     i32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<u32,u32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<u32,u32>#get:key"
+      local.get $key
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -20076,65 +20146,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<u32,u32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<u32,u32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<u32,u32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<u32,u32>#get:value"
-     call $"~lib/map/MapEntry<u32,u32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<u32>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<u32,u32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<u32,u32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<u32,u32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u32,u32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<u32,u32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u32,u32>#get:value"
+      call $"~lib/map/MapEntry<u32,u32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<u32>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<u32,u32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<u32,u32>|inlined.3" (result i32)
+       i32.const 12
+       br $"~lib/map/ENTRY_SIZE<u32,u32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<u32,u32>|inlined.4" (result i32)
       i32.const 12
-      br $"~lib/map/ENTRY_SIZE<u32,u32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<u32,u32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<u32,u32>|inlined.4" (result i32)
-     i32.const 12
-     br $"~lib/map/ENTRY_SIZE<u32,u32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -21420,41 +21492,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<i64,i32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<i64,i32>#get:key"
-     local.get $key
-     i64.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<i64,i32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<i64,i32>#get:key"
+      local.get $key
+      i64.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -21575,65 +21649,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<i64,i32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<i64,i32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<i64,i32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<i64,i32>#get:value"
-     call $"~lib/map/MapEntry<i64,i32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<i64>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<i64,i32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<i64,i32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<i64,i32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i64,i32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<i64,i32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i64,i32>#get:value"
+      call $"~lib/map/MapEntry<i64,i32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<i64>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<i64,i32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<i64,i32>|inlined.3" (result i32)
+       i32.const 16
+       br $"~lib/map/ENTRY_SIZE<i64,i32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<i64,i32>|inlined.4" (result i32)
       i32.const 16
-      br $"~lib/map/ENTRY_SIZE<i64,i32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<i64,i32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<i64,i32>|inlined.4" (result i32)
-     i32.const 16
-     br $"~lib/map/ENTRY_SIZE<i64,i32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -22620,41 +22696,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<i64,i64>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<i64,i64>#get:key"
-     local.get $key
-     i64.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<i64,i64>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<i64,i64>#get:key"
+      local.get $key
+      i64.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -22745,65 +22823,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<i64,i64>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<i64,i64>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<i64,i64>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<i64,i64>#get:value"
-     call $"~lib/map/MapEntry<i64,i64>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<i64>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<i64,i64>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<i64,i64>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<i64,i64>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i64,i64>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<i64,i64>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<i64,i64>#get:value"
+      call $"~lib/map/MapEntry<i64,i64>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<i64>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<i64,i64>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<i64,i64>|inlined.3" (result i32)
+       i32.const 24
+       br $"~lib/map/ENTRY_SIZE<i64,i64>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<i64,i64>|inlined.4" (result i32)
       i32.const 24
-      br $"~lib/map/ENTRY_SIZE<i64,i64>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<i64,i64>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<i64,i64>|inlined.4" (result i32)
-     i32.const 24
-     br $"~lib/map/ENTRY_SIZE<i64,i64>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -24097,41 +24177,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<u64,i32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<u64,i32>#get:key"
-     local.get $key
-     i64.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<u64,i32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<u64,i32>#get:key"
+      local.get $key
+      i64.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -24252,65 +24334,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<u64,i32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<u64,i32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<u64,i32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<u64,i32>#get:value"
-     call $"~lib/map/MapEntry<u64,i32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<u64>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<u64,i32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<u64,i32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<u64,i32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u64,i32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<u64,i32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u64,i32>#get:value"
+      call $"~lib/map/MapEntry<u64,i32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<u64>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<u64,i32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<u64,i32>|inlined.3" (result i32)
+       i32.const 16
+       br $"~lib/map/ENTRY_SIZE<u64,i32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<u64,i32>|inlined.4" (result i32)
       i32.const 16
-      br $"~lib/map/ENTRY_SIZE<u64,i32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<u64,i32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<u64,i32>|inlined.4" (result i32)
-     i32.const 16
-     br $"~lib/map/ENTRY_SIZE<u64,i32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -25297,41 +25381,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<u64,u64>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<u64,u64>#get:key"
-     local.get $key
-     i64.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<u64,u64>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<u64,u64>#get:key"
+      local.get $key
+      i64.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -25422,65 +25508,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<u64,u64>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<u64,u64>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<u64,u64>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<u64,u64>#get:value"
-     call $"~lib/map/MapEntry<u64,u64>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<u64>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<u64,u64>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<u64,u64>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<u64,u64>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u64,u64>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<u64,u64>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<u64,u64>#get:value"
+      call $"~lib/map/MapEntry<u64,u64>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<u64>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<u64,u64>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<u64,u64>|inlined.3" (result i32)
+       i32.const 24
+       br $"~lib/map/ENTRY_SIZE<u64,u64>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<u64,u64>|inlined.4" (result i32)
       i32.const 24
-      br $"~lib/map/ENTRY_SIZE<u64,u64>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<u64,u64>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<u64,u64>|inlined.4" (result i32)
-     i32.const 24
-     br $"~lib/map/ENTRY_SIZE<u64,u64>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -26774,41 +26862,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<f32,i32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<f32,i32>#get:key"
-     local.get $key
-     f32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<f32,i32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<f32,i32>#get:key"
+      local.get $key
+      f32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -26929,65 +27019,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<f32,i32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<f32,i32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<f32,i32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<f32,i32>#get:value"
-     call $"~lib/map/MapEntry<f32,i32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<f32>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<f32,i32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<f32,i32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<f32,i32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<f32,i32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<f32,i32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<f32,i32>#get:value"
+      call $"~lib/map/MapEntry<f32,i32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<f32>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<f32,i32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<f32,i32>|inlined.3" (result i32)
+       i32.const 12
+       br $"~lib/map/ENTRY_SIZE<f32,i32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<f32,i32>|inlined.4" (result i32)
       i32.const 12
-      br $"~lib/map/ENTRY_SIZE<f32,i32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<f32,i32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<f32,i32>|inlined.4" (result i32)
-     i32.const 12
-     br $"~lib/map/ENTRY_SIZE<f32,i32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -27974,41 +28066,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<f32,f32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<f32,f32>#get:key"
-     local.get $key
-     f32.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<f32,f32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<f32,f32>#get:key"
+      local.get $key
+      f32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -28099,65 +28193,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<f32,f32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<f32,f32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<f32,f32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<f32,f32>#get:value"
-     call $"~lib/map/MapEntry<f32,f32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<f32>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<f32,f32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<f32,f32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<f32,f32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<f32,f32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<f32,f32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<f32,f32>#get:value"
+      call $"~lib/map/MapEntry<f32,f32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<f32>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<f32,f32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<f32,f32>|inlined.3" (result i32)
+       i32.const 12
+       br $"~lib/map/ENTRY_SIZE<f32,f32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<f32,f32>|inlined.4" (result i32)
       i32.const 12
-      br $"~lib/map/ENTRY_SIZE<f32,f32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<f32,f32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<f32,f32>|inlined.4" (result i32)
-     i32.const 12
-     br $"~lib/map/ENTRY_SIZE<f32,f32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -29451,41 +29547,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<f64,i32>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<f64,i32>#get:key"
-     local.get $key
-     f64.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<f64,i32>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<f64,i32>#get:key"
+      local.get $key
+      f64.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -29606,65 +29704,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<f64,i32>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<f64,i32>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<f64,i32>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<f64,i32>#get:value"
-     call $"~lib/map/MapEntry<f64,i32>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<f64>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<f64,i32>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<f64,i32>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<f64,i32>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<f64,i32>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<f64,i32>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<f64,i32>#get:value"
+      call $"~lib/map/MapEntry<f64,i32>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<f64>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<f64,i32>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<f64,i32>|inlined.3" (result i32)
+       i32.const 16
+       br $"~lib/map/ENTRY_SIZE<f64,i32>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<f64,i32>|inlined.4" (result i32)
       i32.const 16
-      br $"~lib/map/ENTRY_SIZE<f64,i32>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<f64,i32>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<f64,i32>|inlined.4" (result i32)
-     i32.const 16
-     br $"~lib/map/ENTRY_SIZE<f64,i32>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this
@@ -30651,41 +30751,43 @@
   i32.add
   i32.load
   local.set $entry
-  loop $while-continue|0
-   local.get $entry
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $entry
-    call $"~lib/map/MapEntry<f64,f64>#get:taggedNext"
-    local.set $taggedNext
-    local.get $taggedNext
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $entry
-     call $"~lib/map/MapEntry<f64,f64>#get:key"
-     local.get $key
-     f64.eq
-    else
-     i32.const 0
-    end
     if
      local.get $entry
-     local.set $5
-     global.get $~lib/memory/__stack_pointer
-     i32.const 4
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $5
-     return
+     call $"~lib/map/MapEntry<f64,f64>#get:taggedNext"
+     local.set $taggedNext
+     local.get $taggedNext
+     i32.const 1
+     i32.and
+     i32.eqz
+     if (result i32)
+      local.get $entry
+      call $"~lib/map/MapEntry<f64,f64>#get:key"
+      local.get $key
+      f64.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $entry
+      local.set $5
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      local.get $5
+      return
+     end
+     local.get $taggedNext
+     i32.const 1
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $entry
+     br $while-continue|0
     end
-    local.get $taggedNext
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $entry
-    br $while-continue|0
    end
   end
   i32.const 0
@@ -30776,65 +30878,67 @@
   local.set $oldEnd
   local.get $newEntries
   local.set $newPtr
-  loop $while-continue|0
-   local.get $oldPtr
-   local.get $oldEnd
-   i32.ne
-   if
+  block $while-break|0
+   loop $while-continue|0
     local.get $oldPtr
-    local.set $oldEntry
-    local.get $oldEntry
-    call $"~lib/map/MapEntry<f64,f64>#get:taggedNext"
-    i32.const 1
-    i32.and
-    i32.eqz
+    local.get $oldEnd
+    i32.ne
     if
-     local.get $newPtr
-     local.set $newEntry
+     local.get $oldPtr
+     local.set $oldEntry
      local.get $oldEntry
-     call $"~lib/map/MapEntry<f64,f64>#get:key"
-     local.set $oldEntryKey
-     local.get $newEntry
-     local.get $oldEntryKey
-     call $"~lib/map/MapEntry<f64,f64>#set:key"
-     local.get $newEntry
-     local.get $oldEntry
-     call $"~lib/map/MapEntry<f64,f64>#get:value"
-     call $"~lib/map/MapEntry<f64,f64>#set:value"
-     local.get $oldEntryKey
-     call $~lib/util/hash/HASH<f64>
-     local.get $newBucketsMask
+     call $"~lib/map/MapEntry<f64,f64>#get:taggedNext"
+     i32.const 1
      i32.and
-     local.set $newBucketIndex
-     local.get $newBuckets
-     local.get $newBucketIndex
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $newBucketPtrBase
-     local.get $newEntry
-     local.get $newBucketPtrBase
-     i32.load
-     call $"~lib/map/MapEntry<f64,f64>#set:taggedNext"
-     local.get $newBucketPtrBase
-     local.get $newPtr
-     i32.store
-     local.get $newPtr
-     block $"~lib/map/ENTRY_SIZE<f64,f64>|inlined.3" (result i32)
+     i32.eqz
+     if
+      local.get $newPtr
+      local.set $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<f64,f64>#get:key"
+      local.set $oldEntryKey
+      local.get $newEntry
+      local.get $oldEntryKey
+      call $"~lib/map/MapEntry<f64,f64>#set:key"
+      local.get $newEntry
+      local.get $oldEntry
+      call $"~lib/map/MapEntry<f64,f64>#get:value"
+      call $"~lib/map/MapEntry<f64,f64>#set:value"
+      local.get $oldEntryKey
+      call $~lib/util/hash/HASH<f64>
+      local.get $newBucketsMask
+      i32.and
+      local.set $newBucketIndex
+      local.get $newBuckets
+      local.get $newBucketIndex
+      i32.const 4
+      i32.mul
+      i32.add
+      local.set $newBucketPtrBase
+      local.get $newEntry
+      local.get $newBucketPtrBase
+      i32.load
+      call $"~lib/map/MapEntry<f64,f64>#set:taggedNext"
+      local.get $newBucketPtrBase
+      local.get $newPtr
+      i32.store
+      local.get $newPtr
+      block $"~lib/map/ENTRY_SIZE<f64,f64>|inlined.3" (result i32)
+       i32.const 24
+       br $"~lib/map/ENTRY_SIZE<f64,f64>|inlined.3"
+      end
+      i32.add
+      local.set $newPtr
+     end
+     local.get $oldPtr
+     block $"~lib/map/ENTRY_SIZE<f64,f64>|inlined.4" (result i32)
       i32.const 24
-      br $"~lib/map/ENTRY_SIZE<f64,f64>|inlined.3"
+      br $"~lib/map/ENTRY_SIZE<f64,f64>|inlined.4"
      end
      i32.add
-     local.set $newPtr
+     local.set $oldPtr
+     br $while-continue|0
     end
-    local.get $oldPtr
-    block $"~lib/map/ENTRY_SIZE<f64,f64>|inlined.4" (result i32)
-     i32.const 24
-     br $"~lib/map/ENTRY_SIZE<f64,f64>|inlined.4"
-    end
-    i32.add
-    local.set $oldPtr
-    br $while-continue|0
    end
   end
   local.get $this

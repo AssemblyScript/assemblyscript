@@ -208,32 +208,22 @@ import {
   _BinaryenArrayCopyGetSrcRef,
   _BinaryenArrayCopyGetSrcIndex,
   _BinaryenArrayCopyGetLength,
-  _BinaryenStringNewGetPtr,
-  _BinaryenStringNewGetLength,
+  _BinaryenStringNewGetRef,
   _BinaryenStringNewGetStart,
   _BinaryenStringNewGetEnd,
   _BinaryenStringMeasureGetRef,
-  _BinaryenStringEncodeGetPtr,
-  _BinaryenStringEncodeGetRef,
+  _BinaryenStringEncodeGetArray,
+  _BinaryenStringEncodeGetStr,
   _BinaryenStringEncodeGetStart,
   _BinaryenStringConcatGetLeft,
   _BinaryenStringConcatGetRight,
   _BinaryenStringEqGetLeft,
   _BinaryenStringEqGetRight,
-  _BinaryenStringAsGetRef,
-  _BinaryenStringWTF8AdvanceGetRef,
-  _BinaryenStringWTF8AdvanceGetPos,
-  _BinaryenStringWTF8AdvanceGetBytes,
   _BinaryenStringWTF16GetGetRef,
   _BinaryenStringWTF16GetGetPos,
-  _BinaryenStringIterNextGetRef,
-  _BinaryenStringIterMoveGetRef,
-  _BinaryenStringIterMoveGetNum,
   _BinaryenStringSliceWTFGetRef,
   _BinaryenStringSliceWTFGetStart,
   _BinaryenStringSliceWTFGetEnd,
-  _BinaryenStringSliceIterGetRef,
-  _BinaryenStringSliceIterGetNum,
   _BinaryenCallRefSetOperandAt,
   _BinaryenCallRefSetTarget,
   _BinaryenRefTestSetRef,
@@ -257,32 +247,22 @@ import {
   _BinaryenArrayCopySetSrcIndex,
   _BinaryenArrayCopySetLength,
   _BinaryenRefAsSetValue,
-  _BinaryenStringNewSetPtr,
-  _BinaryenStringNewSetLength,
+  _BinaryenStringNewSetRef,
   _BinaryenStringNewSetStart,
   _BinaryenStringNewSetEnd,
   _BinaryenStringMeasureSetRef,
-  _BinaryenStringEncodeSetRef,
-  _BinaryenStringEncodeSetPtr,
+  _BinaryenStringEncodeSetStr,
+  _BinaryenStringEncodeSetArray,
   _BinaryenStringEncodeSetStart,
   _BinaryenStringConcatSetLeft,
   _BinaryenStringConcatSetRight,
   _BinaryenStringEqSetLeft,
   _BinaryenStringEqSetRight,
-  _BinaryenStringAsSetRef,
-  _BinaryenStringWTF8AdvanceSetRef,
-  _BinaryenStringWTF8AdvanceSetPos,
-  _BinaryenStringWTF8AdvanceSetBytes,
   _BinaryenStringWTF16GetSetRef,
   _BinaryenStringWTF16GetSetPos,
-  _BinaryenStringIterNextSetRef,
-  _BinaryenStringIterMoveSetRef,
-  _BinaryenStringIterMoveSetNum,
   _BinaryenStringSliceWTFSetRef,
   _BinaryenStringSliceWTFSetStart,
   _BinaryenStringSliceWTFSetEnd,
-  _BinaryenStringSliceIterSetRef,
-  _BinaryenStringSliceIterSetNum,
   _BinaryenArrayNewFixedSetValueAt
 } from "../glue/binaryen";
 
@@ -1183,9 +1163,7 @@ export abstract class Visitor {
       }
       case ExpressionId.StringNew: {
         this.stack.push(expr);
-        this.visit(_BinaryenStringNewGetPtr(expr));
-        let length = _BinaryenStringNewGetLength(expr); // LM only
-        if (length) this.visit(length);
+        this.visit(_BinaryenStringNewGetRef(expr));
         let start = _BinaryenStringNewGetStart(expr); // GC only
         if (start) this.visit(start);
         let end = _BinaryenStringNewGetEnd(expr); // GC only
@@ -1209,8 +1187,8 @@ export abstract class Visitor {
       }
       case ExpressionId.StringEncode: {
         this.stack.push(expr);
-        this.visit(_BinaryenStringEncodeGetRef(expr));
-        this.visit(_BinaryenStringEncodeGetPtr(expr));
+        this.visit(_BinaryenStringEncodeGetStr(expr));
+        this.visit(_BinaryenStringEncodeGetArray(expr));
         let start = _BinaryenStringEncodeGetStart(expr); // GC only
         if (start) this.visit(start);
         assert(this.stack.pop() == expr);
@@ -1233,43 +1211,12 @@ export abstract class Visitor {
         this.visitStringEq(expr);
         break;
       }
-      case ExpressionId.StringAs: {
-        this.stack.push(expr);
-        this.visit(_BinaryenStringAsGetRef(expr));
-        assert(this.stack.pop() == expr);
-        this.visitStringAs(expr);
-        break;
-      }
-      case ExpressionId.StringWTF8Advance: {
-        this.stack.push(expr);
-        this.visit(_BinaryenStringWTF8AdvanceGetRef(expr));
-        this.visit(_BinaryenStringWTF8AdvanceGetPos(expr));
-        this.visit(_BinaryenStringWTF8AdvanceGetBytes(expr));
-        assert(this.stack.pop() == expr);
-        this.visitStringWTF8Advance(expr);
-        break;
-      }
       case ExpressionId.StringWTF16Get: {
         this.stack.push(expr);
         this.visit(_BinaryenStringWTF16GetGetRef(expr));
         this.visit(_BinaryenStringWTF16GetGetPos(expr));
         assert(this.stack.pop() == expr);
         this.visitStringWTF16Get(expr);
-        break;
-      }
-      case ExpressionId.StringIterNext: {
-        this.stack.push(expr);
-        this.visit(_BinaryenStringIterNextGetRef(expr));
-        assert(this.stack.pop() == expr);
-        this.visitStringIterNext(expr);
-        break;
-      }
-      case ExpressionId.StringIterMove: {
-        this.stack.push(expr);
-        this.visit(_BinaryenStringIterMoveGetRef(expr));
-        this.visit(_BinaryenStringIterMoveGetNum(expr));
-        assert(this.stack.pop() == expr);
-        this.visitStringIterMove(expr);
         break;
       }
       case ExpressionId.StringSliceWTF: {
@@ -1279,14 +1226,6 @@ export abstract class Visitor {
         this.visit(_BinaryenStringSliceWTFGetEnd(expr));
         assert(this.stack.pop() == expr);
         this.visitStringSliceWTF(expr);
-        break;
-      }
-      case ExpressionId.StringSliceIter: {
-        this.stack.push(expr);
-        this.visit(_BinaryenStringSliceIterGetRef(expr));
-        this.visit(_BinaryenStringSliceIterGetNum(expr));
-        assert(this.stack.pop() == expr);
-        this.visitStringSliceIter(expr);
         break;
       }
       default: throw new Error("unexpected expression kind");
@@ -2072,15 +2011,10 @@ export function replaceChild(
       break;
     }
     case ExpressionId.StringNew: {
-      let ptr = _BinaryenStringNewGetPtr(parent);
+      let ptr = _BinaryenStringNewGetRef(parent);
       if (ptr == search) {
-        _BinaryenStringNewSetPtr(parent, replacement);
+        _BinaryenStringNewSetRef(parent, replacement);
         return ptr;
-      }
-      let length = _BinaryenStringNewGetLength(parent);
-      if (length == search) {
-        _BinaryenStringNewSetLength(parent, replacement);
-        return length;
       }
       let start = _BinaryenStringNewGetStart(parent);
       if (start == search) {
@@ -2106,14 +2040,14 @@ export function replaceChild(
       break;
     }
     case ExpressionId.StringEncode: {
-      let ref = _BinaryenStringEncodeGetRef(parent);
+      let ref = _BinaryenStringEncodeGetStr(parent);
       if (ref == search) {
-        _BinaryenStringEncodeSetRef(parent, replacement);
+        _BinaryenStringEncodeSetStr(parent, replacement);
         return ref;
       }
-      let ptr = _BinaryenStringEncodeGetPtr(parent);
+      let ptr = _BinaryenStringEncodeGetArray(parent);
       if (ptr == search) {
-        _BinaryenStringEncodeSetPtr(parent, replacement);
+        _BinaryenStringEncodeSetArray(parent, replacement);
         return ptr;
       }
       let start = _BinaryenStringEncodeGetStart(parent);
@@ -2149,32 +2083,6 @@ export function replaceChild(
       }
       break;
     }
-    case ExpressionId.StringAs: {
-      let ref = _BinaryenStringAsGetRef(parent);
-      if (ref == search) {
-        _BinaryenStringAsSetRef(parent, replacement);
-        return ref;
-      }
-      break;
-    }
-    case ExpressionId.StringWTF8Advance: {
-      let ref = _BinaryenStringWTF8AdvanceGetRef(parent);
-      if (ref == search) {
-        _BinaryenStringWTF8AdvanceSetRef(parent, replacement);
-        return ref;
-      }
-      let pos = _BinaryenStringWTF8AdvanceGetPos(parent);
-      if (pos == search) {
-        _BinaryenStringWTF8AdvanceSetPos(parent, replacement);
-        return pos;
-      }
-      let bytes = _BinaryenStringWTF8AdvanceGetBytes(parent);
-      if (bytes == search) {
-        _BinaryenStringWTF8AdvanceSetBytes(parent, replacement);
-        return bytes;
-      }
-      break;
-    }
     case ExpressionId.StringWTF16Get: {
       let ref = _BinaryenStringWTF16GetGetRef(parent);
       if (ref == search) {
@@ -2185,27 +2093,6 @@ export function replaceChild(
       if (pos == search) {
         _BinaryenStringWTF16GetSetPos(parent, replacement);
         return pos;
-      }
-      break;
-    }
-    case ExpressionId.StringIterNext: {
-      let ref = _BinaryenStringIterNextGetRef(parent);
-      if (ref == search) {
-        _BinaryenStringIterNextSetRef(parent, replacement);
-        return ref;
-      }
-      break;
-    }
-    case ExpressionId.StringIterMove: {
-      let ref = _BinaryenStringIterMoveGetRef(parent);
-      if (ref == search) {
-        _BinaryenStringIterMoveSetRef(parent, replacement);
-        return ref;
-      }
-      let num = _BinaryenStringIterMoveGetNum(parent);
-      if (num == search) {
-        _BinaryenStringIterMoveSetNum(parent, replacement);
-        return num;
       }
       break;
     }
@@ -2224,19 +2111,6 @@ export function replaceChild(
       if (end == search) {
         _BinaryenStringSliceWTFSetEnd(parent, replacement);
         return end;
-      }
-      break;
-    }
-    case ExpressionId.StringSliceIter: {
-      let ref = _BinaryenStringSliceIterGetRef(parent);
-      if (ref == search) {
-        _BinaryenStringSliceIterSetRef(parent, replacement);
-        return ref;
-      }
-      let num = _BinaryenStringSliceIterGetNum(parent);
-      if (num == search) {
-        _BinaryenStringSliceIterSetNum(parent, replacement);
-        return num;
       }
       break;
     }

@@ -16,6 +16,7 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $tablebase/foo
+  nop
  )
  (func $~lib/function/Function<%28%29=>void>#get:index (param $this i32) (result i32)
   local.get $this

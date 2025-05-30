@@ -237,38 +237,40 @@
   i64.shl
   i64.or
   local.set $c64
-  loop $while-continue|0
-   local.get $n
-   i32.const 32
-   i32.ge_u
-   if
-    local.get $dest
-    local.get $c64
-    i64.store
-    local.get $dest
-    i32.const 8
-    i32.add
-    local.get $c64
-    i64.store
-    local.get $dest
-    i32.const 16
-    i32.add
-    local.get $c64
-    i64.store
-    local.get $dest
-    i32.const 24
-    i32.add
-    local.get $c64
-    i64.store
+  block $while-break|0
+   loop $while-continue|0
     local.get $n
     i32.const 32
-    i32.sub
-    local.set $n
-    local.get $dest
-    i32.const 32
-    i32.add
-    local.set $dest
-    br $while-continue|0
+    i32.ge_u
+    if
+     local.get $dest
+     local.get $c64
+     i64.store
+     local.get $dest
+     i32.const 8
+     i32.add
+     local.get $c64
+     i64.store
+     local.get $dest
+     i32.const 16
+     i32.add
+     local.get $c64
+     i64.store
+     local.get $dest
+     i32.const 24
+     i32.add
+     local.get $c64
+     i64.store
+     local.get $n
+     i32.const 32
+     i32.sub
+     local.set $n
+     local.get $dest
+     i32.const 32
+     i32.add
+     local.set $dest
+     br $while-continue|0
+    end
    end
   end
   local.get $ret

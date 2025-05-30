@@ -39,20 +39,22 @@
   local.set $x
   i32.const 0
   local.set $i
-  loop $while-continue|2
-   local.get $i
-   i32.const 255
-   i32.and
-   i32.const 255
-   i32.lt_u
-   if
+  block $while-break|2
+   loop $while-continue|2
     local.get $i
-    local.set $x
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $while-continue|2
+    i32.const 255
+    i32.and
+    i32.const 255
+    i32.lt_u
+    if
+     local.get $i
+     local.set $x
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $while-continue|2
+    end
    end
   end
  )
