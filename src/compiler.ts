@@ -2816,19 +2816,48 @@ export class Compiler extends DiagnosticEmitter {
     let numCases = cases.length;
 
     // Compile the condition (always executes)
-    let condExpr = this.compileExpression(statement.condition, Type.u32,
-      Constraints.ConvImplicit
-    );
+    let condExpr = this.compileExpression(statement.condition, Type.auto);
+
+    // Get the type set from compiling the condition expression
+    let currentType = this.currentType;
+    
+    // Determine the binary operation to use for comparison
+    let binaryOp: BinaryOp;
+    switch (currentType.toRef()) {
+      case TypeRef.I32: {
+        binaryOp = BinaryOp.EqI32;
+        break;
+      }
+      case TypeRef.I64: {
+        binaryOp = BinaryOp.EqI64;
+        break;
+      }
+      case TypeRef.F32: {
+        binaryOp = BinaryOp.EqF32;
+        break;
+      }
+      case TypeRef.F64: {
+        binaryOp = BinaryOp.EqF64;
+        break;
+      }
+      default: {
+        this.error(
+          DiagnosticCode.Not_implemented_0,
+          statement.range, `Switch condition of type ${currentType}`
+        );
+        return module.unreachable();
+      }
+    }
 
     // Shortcut if there are no cases
     if (!numCases) return module.drop(condExpr);
     
     // Assign the condition to a temporary local as we compare it multiple times
     let outerFlow = this.currentFlow;
-    let tempLocal = outerFlow.getTempLocal(Type.u32);
+    let tempLocal = outerFlow.getTempLocal(currentType);
     let tempLocalIndex = tempLocal.index;
     let breaks = new Array<ExpressionRef>(1 + numCases);
-    breaks[0] = module.local_set(tempLocalIndex, condExpr, false); // u32
+    breaks[0] = module.local_set(tempLocalIndex, condExpr, currentType.isManaged);
     
     // Make one br_if per labeled case and leave it to Binaryen to optimize the
     // sequence of br_ifs to a br_table according to optimization levels
@@ -2842,9 +2871,9 @@ export class Compiler extends DiagnosticEmitter {
         continue;
       }
       breaks[breakIndex++] = module.br(`case${i}|${label}`,
-        module.binary(BinaryOp.EqI32,
-          module.local_get(tempLocalIndex, TypeRef.I32),
-          this.compileExpression(assert(case_.label), Type.u32,
+        module.binary(binaryOp,
+          module.local_get(tempLocalIndex, currentType.toRef()),
+          this.compileExpression(assert(case_.label), currentType,
             Constraints.ConvImplicit
           )
         )
