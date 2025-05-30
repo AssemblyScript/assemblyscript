@@ -116,10 +116,10 @@ function doSwitchNullableString(s: string | null): i32 {
   }
 }
 assert(doSwitchNullableString(null) == 0);
-assert(doSwitchString("one") == 1);
-assert(doSwitchString("two") == 2);
-assert(doSwitchString("three") == 3);
-assert(doSwitchString("four") == 4);
+assert(doSwitchNullableString("one") == 1);
+assert(doSwitchNullableString("two") == 2);
+assert(doSwitchNullableString("three") == 3);
+assert(doSwitchNullableString("four") == 4);
 
 function doSwitchBoolean(b: bool): i32 {
   switch (b) {

@@ -3316,7 +3316,7 @@
   local.get $0
   i32.store
   local.get $0
-  call $switch/doSwitchString
+  call $switch/doSwitchNullableString
   i32.const 1
   i32.eq
   i32.eqz
@@ -3334,7 +3334,7 @@
   local.get $0
   i32.store
   local.get $0
-  call $switch/doSwitchString
+  call $switch/doSwitchNullableString
   i32.const 2
   i32.eq
   i32.eqz
@@ -3352,7 +3352,7 @@
   local.get $0
   i32.store
   local.get $0
-  call $switch/doSwitchString
+  call $switch/doSwitchNullableString
   i32.const 3
   i32.eq
   i32.eqz
@@ -3370,7 +3370,7 @@
   local.get $0
   i32.store
   local.get $0
-  call $switch/doSwitchString
+  call $switch/doSwitchNullableString
   i32.const 4
   i32.eq
   i32.eqz
