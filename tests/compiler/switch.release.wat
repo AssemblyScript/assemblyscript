@@ -1,6 +1,6 @@
 (module
- (type $0 (func))
- (type $1 (func (param i32) (result i32)))
+ (type $0 (func (param i32) (result i32)))
+ (type $1 (func))
  (type $2 (func (param i32)))
  (type $3 (func (param i32 i32)))
  (type $4 (func (result i32)))
@@ -125,7 +125,7 @@
     local.get $0
     global.set $~lib/rt/itcms/iter
    end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink$170
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$169
     local.get $1
     i32.load offset=4
     i32.const -4
@@ -149,7 +149,7 @@
       call $~lib/builtins/abort
       unreachable
      end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink$170
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$169
     end
     local.get $1
     i32.load offset=8
@@ -1515,248 +1515,238 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1640
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1104
-   i32.store
-   i32.const 1104
-   call $switch/doSwitchString
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1640
+  i32.lt_s
+  if
+   i32.const 34432
+   i32.const 34480
    i32.const 1
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 104
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1136
-   i32.store
-   i32.const 1136
-   call $switch/doSwitchString
-   i32.const 2
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 105
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1168
-   i32.store
-   i32.const 1168
-   call $switch/doSwitchString
-   i32.const 3
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 106
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1200
-   i32.store
-   i32.const 1200
-   call $switch/doSwitchString
-   i32.const 4
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 107
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1640
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1104
-   i32.store
-   i32.const 1104
-   call $switch/doSwitchString
    i32.const 1
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 119
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1136
-   i32.store
-   i32.const 1136
-   call $switch/doSwitchString
-   i32.const 2
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 120
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1168
-   i32.store
-   i32.const 1168
-   call $switch/doSwitchString
-   i32.const 3
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 121
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1200
-   i32.store
-   i32.const 1200
-   call $switch/doSwitchString
-   i32.const 4
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 122
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   memory.size
-   i32.const 16
-   i32.shl
-   i32.const 34408
-   i32.sub
-   i32.const 1
-   i32.shr_u
-   global.set $~lib/rt/itcms/threshold
-   i32.const 1348
-   i32.const 1344
-   i32.store
-   i32.const 1352
-   i32.const 1344
-   i32.store
-   i32.const 1344
-   global.set $~lib/rt/itcms/pinSpace
-   i32.const 1380
-   i32.const 1376
-   i32.store
-   i32.const 1384
-   i32.const 1376
-   i32.store
-   i32.const 1376
-   global.set $~lib/rt/itcms/toSpace
-   i32.const 1524
-   i32.const 1520
-   i32.store
-   i32.const 1528
-   i32.const 1520
-   i32.store
-   i32.const 1520
-   global.set $~lib/rt/itcms/fromSpace
-   i32.const 0
-   call $switch/FooClass#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store
-   local.get $0
-   call $switch/doSwitchClassMember
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 234
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 1
-   call $switch/FooClass#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store
-   local.get $0
-   call $switch/doSwitchClassMember
-   i32.const 1
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 235
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 2
-   call $switch/FooClass#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store
-   local.get $0
-   call $switch/doSwitchClassMember
-   i32.const 2
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1056
-    i32.const 236
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   return
+   call $~lib/builtins/abort
+   unreachable
   end
-  i32.const 34432
-  i32.const 34480
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1104
+  i32.store
+  i32.const 1104
+  call $switch/doSwitchString
   i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 104
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1136
+  i32.store
+  i32.const 1136
+  call $switch/doSwitchString
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 105
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1168
+  i32.store
+  i32.const 1168
+  call $switch/doSwitchString
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 106
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1200
+  i32.store
+  i32.const 1200
+  call $switch/doSwitchString
+  i32.const 4
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 107
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $switch/doSwitchNullableString
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 118
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1104
+  i32.store
+  i32.const 1104
+  call $switch/doSwitchNullableString
   i32.const 1
-  call $~lib/builtins/abort
-  unreachable
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 119
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1136
+  i32.store
+  i32.const 1136
+  call $switch/doSwitchNullableString
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 120
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1168
+  i32.store
+  i32.const 1168
+  call $switch/doSwitchNullableString
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 121
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1200
+  i32.store
+  i32.const 1200
+  call $switch/doSwitchNullableString
+  i32.const 4
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 122
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  memory.size
+  i32.const 16
+  i32.shl
+  i32.const 34408
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
+  i32.const 1348
+  i32.const 1344
+  i32.store
+  i32.const 1352
+  i32.const 1344
+  i32.store
+  i32.const 1344
+  global.set $~lib/rt/itcms/pinSpace
+  i32.const 1380
+  i32.const 1376
+  i32.store
+  i32.const 1384
+  i32.const 1376
+  i32.store
+  i32.const 1376
+  global.set $~lib/rt/itcms/toSpace
+  i32.const 1524
+  i32.const 1520
+  i32.store
+  i32.const 1528
+  i32.const 1520
+  i32.store
+  i32.const 1520
+  global.set $~lib/rt/itcms/fromSpace
+  i32.const 0
+  call $switch/FooClass#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $switch/doSwitchClassMember
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 234
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  call $switch/FooClass#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $switch/doSwitchClassMember
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 235
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $switch/FooClass#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $switch/doSwitchClassMember
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 236
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $switch/doSwitchString (param $0 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
@@ -1796,6 +1786,82 @@
       i32.eq
       br_if $case2|0
       br $case3|0
+     end
+     global.get $~lib/memory/__stack_pointer
+     i32.const 4
+     i32.add
+     global.set $~lib/memory/__stack_pointer
+     i32.const 1
+     return
+    end
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    i32.const 2
+    return
+   end
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   i32.const 3
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  i32.const 4
+ )
+ (func $switch/doSwitchNullableString (param $0 i32) (result i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1640
+  i32.lt_s
+  if
+   i32.const 34432
+   i32.const 34480
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  block $case4|0
+   block $case3|0
+    block $case2|0
+     block $case1|0
+      local.get $0
+      if
+       local.get $0
+       i32.const 1104
+       i32.eq
+       br_if $case1|0
+       local.get $0
+       i32.const 1136
+       i32.eq
+       br_if $case2|0
+       local.get $0
+       i32.const 1168
+       i32.eq
+       br_if $case3|0
+       br $case4|0
+      end
+      global.get $~lib/memory/__stack_pointer
+      i32.const 4
+      i32.add
+      global.set $~lib/memory/__stack_pointer
+      i32.const 0
+      return
      end
      global.get $~lib/memory/__stack_pointer
      i32.const 4
