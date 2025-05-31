@@ -2817,48 +2817,18 @@ export class Compiler extends DiagnosticEmitter {
 
     // Compile the condition (always executes)
     let condExpr = this.compileExpression(statement.condition, Type.auto);
-
-    // Get the type set from compiling the condition expression
-    let currentType = this.currentType;
+    let condType = this.currentType;
     
-    // Determine the binary operation to use for comparison
-    let binaryOp: BinaryOp;
-    switch (currentType.toRef()) {
-      case TypeRef.I32: {
-        binaryOp = BinaryOp.EqI32;
-        break;
-      }
-      case TypeRef.I64: {
-        binaryOp = BinaryOp.EqI64;
-        break;
-      }
-      case TypeRef.F32: {
-        binaryOp = BinaryOp.EqF32;
-        break;
-      }
-      case TypeRef.F64: {
-        binaryOp = BinaryOp.EqF64;
-        break;
-      }
-      default: {
-        this.error(
-          DiagnosticCode.Not_implemented_0,
-          statement.range, `Switch condition of type ${currentType}`
-        );
-        return module.unreachable();
-      }
-    }
-
     // Shortcut if there are no cases
     if (!numCases) return module.drop(condExpr);
     
     // Assign the condition to a temporary local as we compare it multiple times
     let outerFlow = this.currentFlow;
-    let tempLocal = outerFlow.getTempLocal(currentType);
+    let tempLocal = outerFlow.getTempLocal(condType);
     let tempLocalIndex = tempLocal.index;
     let breaks = new Array<ExpressionRef>(1 + numCases);
-    breaks[0] = module.local_set(tempLocalIndex, condExpr, currentType.isManaged);
-    
+    breaks[0] = module.local_set(tempLocalIndex, condExpr, condType.isManaged);
+        
     // Make one br_if per labeled case and leave it to Binaryen to optimize the
     // sequence of br_ifs to a br_table according to optimization levels
     let breakIndex = 1;
@@ -2870,14 +2840,24 @@ export class Compiler extends DiagnosticEmitter {
         defaultIndex = i;
         continue;
       }
-      breaks[breakIndex++] = module.br(`case${i}|${label}`,
-        module.binary(binaryOp,
-          module.local_get(tempLocalIndex, currentType.toRef()),
-          this.compileExpression(assert(case_.label), currentType,
-            Constraints.ConvImplicit
-          )
-        )
+      
+      // Compile the equality expression for this case
+      const left = statement.condition;
+      const leftExpr = module.local_get(tempLocalIndex, condType.toRef());
+      const leftType = condType;
+      const right = case_.label!;
+      const rightExpr = this.compileExpression(assert(case_.label), condType, Constraints.ConvImplicit);
+      const rightType = this.currentType;
+      const equalityExpr = this.compileCommutativeCompareBinaryExpressionFromParts(
+        Token.Equals_Equals,
+        left, leftExpr, leftType,
+        right, rightExpr, rightType,
+        condType,
+        statement
       );
+      
+      // Add it to the list of breaks
+      breaks[breakIndex++] = module.br(`case${i}|${label}`, equalityExpr);
     }
 
     // If there is a default case, break to it, otherwise break out of the switch
@@ -3829,24 +3809,44 @@ export class Compiler extends DiagnosticEmitter {
     expression: BinaryExpression,
     contextualType: Type,
   ): ExpressionRef {
+    
+    const left = expression.left;
+    const leftExpr = this.compileExpression(left, contextualType);
+    const leftType = this.currentType;
+
+    const right = expression.right;
+    const rightExpr = this.compileExpression(right, leftType);
+    const rightType = this.currentType;
+
+    return this.compileCommutativeCompareBinaryExpressionFromParts(
+      expression.operator,
+      left, leftExpr, leftType,
+      right, rightExpr, rightType,
+      contextualType,
+      expression
+    );
+  }
+
+  /** 
+   * compile `==` `===` `!=` `!==` BinaryExpression, from previously compiled left and right expressions.
+   * 
+   * This is split from `compileCommutativeCompareBinaryExpression` so that the logic can be reused
+   * for switch cases in `compileSwitchStatement`, where the left expression only should be compiled once.
+   */
+  private compileCommutativeCompareBinaryExpressionFromParts(
+    operator: Token,
+    left: Expression,
+    leftExpr: ExpressionRef,
+    leftType: Type,
+    right: Expression,
+    rightExpr: ExpressionRef,
+    rightType: Type,
+    contextualType: Type,
+    reportNode: Node
+  ): ExpressionRef {
+
     let module = this.module;
-    let left = expression.left;
-    let right = expression.right;
-
-    let leftExpr: ExpressionRef;
-    let leftType: Type;
-    let rightExpr: ExpressionRef;
-    let rightType: Type;
-    let commonType: Type | null;
-
-    let operator = expression.operator;
     let operatorString = operatorTokenToString(operator);
-
-    leftExpr = this.compileExpression(left, contextualType);
-    leftType = this.currentType;
-
-    rightExpr = this.compileExpression(right, leftType);
-    rightType = this.currentType;
     
     // check operator overload
     const operatorKind = OperatorKind.fromBinaryToken(operator);
@@ -3854,7 +3854,8 @@ export class Compiler extends DiagnosticEmitter {
     const rightOverload = rightType.lookupOverload(operatorKind, this.program);
     if (leftOverload && rightOverload && leftOverload != rightOverload) {
       this.error(
-        DiagnosticCode.Ambiguous_operator_overload_0_conflicting_overloads_1_and_2, expression.range, 
+        DiagnosticCode.Ambiguous_operator_overload_0_conflicting_overloads_1_and_2,
+        reportNode.range, 
         operatorString,
         leftOverload.internalName,
         rightOverload.internalName
@@ -3867,7 +3868,7 @@ export class Compiler extends DiagnosticEmitter {
         leftOverload,
         left, leftExpr, leftType,
         right, rightExpr, rightType,
-        expression
+        reportNode
       );
     }
     if (rightOverload) {
@@ -3875,15 +3876,15 @@ export class Compiler extends DiagnosticEmitter {
         rightOverload,
         right, rightExpr, rightType,
         left, leftExpr, leftType,
-        expression
+        reportNode
       );
     }
     const signednessIsRelevant = false;
-    commonType = Type.commonType(leftType, rightType, contextualType, signednessIsRelevant);
+    const commonType = Type.commonType(leftType, rightType, contextualType, signednessIsRelevant);
     if (!commonType) {
       this.error(
         DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-        expression.range,
+        reportNode.range,
         operatorString,
         leftType.toString(),
         rightType.toString()
@@ -3896,13 +3897,13 @@ export class Compiler extends DiagnosticEmitter {
       if (isConstExpressionNaN(module, rightExpr) || isConstExpressionNaN(module, leftExpr)) {
         this.warning(
           DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
-          expression.range
+          reportNode.range
         );
       }
       if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
         this.warning(
           DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
-          expression.range
+          reportNode.range
         );
       }
     }
@@ -3916,10 +3917,10 @@ export class Compiler extends DiagnosticEmitter {
     switch (operator) {
       case Token.Equals_Equals_Equals:
       case Token.Equals_Equals:
-        return this.makeEq(leftExpr, rightExpr, commonType, expression);
+        return this.makeEq(leftExpr, rightExpr, commonType, reportNode);
       case Token.Exclamation_Equals_Equals:
       case Token.Exclamation_Equals:
-        return this.makeNe(leftExpr, rightExpr, commonType, expression);
+        return this.makeNe(leftExpr, rightExpr, commonType, reportNode);
       default:
         assert(false);
         return module.unreachable();

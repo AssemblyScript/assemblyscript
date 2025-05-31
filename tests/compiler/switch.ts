@@ -101,10 +101,18 @@ function doSwitchString(s: string): i32 {
     default: return 4;
   }
 }
+
+// these will pass regardless of whether the comparison is done by value or reference
 assert(doSwitchString("one") == 1);
 assert(doSwitchString("two") == 2);
 assert(doSwitchString("three") == 3);
 assert(doSwitchString("four") == 4);
+
+// these would fail if the comparison was done by reference
+assert(doSwitchString("o" + "n" + "e") == 1);
+assert(doSwitchString("t" + "w" + "o") == 2);
+assert(doSwitchString("t" + "h" + "r" + "e" + "e") == 3);
+assert(doSwitchString("f" + "o" + "u" + "r") == 4);
 
 function doSwitchNullableString(s: string | null): i32 {
   switch (s) {
@@ -115,11 +123,19 @@ function doSwitchNullableString(s: string | null): i32 {
     default: return 4;
   }
 }
+
+// these will pass regardless of whether the comparison is done by value or reference
 assert(doSwitchNullableString(null) == 0);
 assert(doSwitchNullableString("one") == 1);
 assert(doSwitchNullableString("two") == 2);
 assert(doSwitchNullableString("three") == 3);
 assert(doSwitchNullableString("four") == 4);
+
+// these would fail if the comparison was done by reference
+assert(doSwitchNullableString("o" + "n" + "e") == 1);
+assert(doSwitchNullableString("t" + "w" + "o") == 2);
+assert(doSwitchNullableString("t" + "h" + "r" + "e" + "e") == 3);
+assert(doSwitchNullableString("f" + "o" + "u" + "r") == 4);
 
 function doSwitchBoolean(b: bool): i32 {
   switch (b) {
@@ -216,6 +232,7 @@ assert(doSwitchUInt64(1) == 1);
 assert(doSwitchUInt64(2) == 2);
 
 
+// class members should switch like any other expression
 class FooClass {
   value: i32;
 
@@ -228,33 +245,52 @@ function doSwitchClassMember(foo: FooClass): i32 {
   switch (foo.value) {
     case 1: return 1;
     case 2: return 2;
-    default: return 0;
+    default: return 3;
   }
 }
-assert(doSwitchClassMember(new FooClass(0)) == 0);
 assert(doSwitchClassMember(new FooClass(1)) == 1);
 assert(doSwitchClassMember(new FooClass(2)) == 2);
+assert(doSwitchClassMember(new FooClass(3)) == 3);
 
 
-// TODO: This should either work, or be a compile error.
-// Currently it compiles but gives a runtime error, such as:
-//
-// abort: null in (252:1)
-// ---
-// RuntimeError: unreachable
-//     at start:switch (wasm://wasm/14e6b94a:wasm-function[75]:0x1ae9)
-//     at ~start (wasm://wasm/14e6b94a:wasm-function[71]:0x1300)
-// ---
-// function doSwitchClassInstance(foo: FooClass): i32 {
-//   const one = new FooClass(1);
-//   const two = new FooClass(2);
-//   switch (foo) {
-//     case one: return 1;
-//     case two: return 2;
-//     default: return 0;
-//   }
-// }
-// assert(doSwitchClassInstance(new FooClass(0)) == 0);
-// assert(doSwitchClassInstance(new FooClass(1)) == 1);
-// assert(doSwitchClassInstance(new FooClass(2)) == 2);
-// assert(doSwitchClassInstance(new FooClass(3)) == 0);
+// class instances switch using reference equality by default
+const foo1 = new FooClass(1);
+const foo2 = new FooClass(2);
+function doSwitchClassInstance(foo: FooClass): i32 {
+  switch (foo) {
+    case foo1: return 1;
+    case foo2: return 2;
+    default: return 3;
+  }
+}
+assert(doSwitchClassInstance(foo1) == 1);
+assert(doSwitchClassInstance(foo2) == 2);
+assert(doSwitchClassInstance(new FooClass(1)) == 3);
+
+// class instances can switch using value equality with an operator overload
+class BarClass {
+  value: i32;
+
+  constructor(value: i32) {
+    this.value = value;
+  }
+
+  @operator("==") private static __eq(left: BarClass | null, right: BarClass | null): bool {
+    if (changetype<usize>(left) == changetype<usize>(right)) return true;
+    if (!left || !right) return false;
+    return left.value == right.value;
+  }
+}
+
+function doSwitchClassInstanceWithOverload(foo: BarClass | null): i32 {
+  switch (foo) {
+    case null: return 0;
+    case new BarClass(1): return 1;
+    case new BarClass(2): return 2;
+    default: return 3;
+  }
+}
+assert(doSwitchClassInstanceWithOverload(null) == 0);
+assert(doSwitchClassInstanceWithOverload(new BarClass(1)) == 1);
+assert(doSwitchClassInstanceWithOverload(new BarClass(2)) == 2);
+assert(doSwitchClassInstanceWithOverload(new BarClass(3)) == 3);
