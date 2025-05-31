@@ -2828,7 +2828,7 @@ export class Compiler extends DiagnosticEmitter {
     let tempLocalIndex = tempLocal.index;
     let breaks = new Array<ExpressionRef>(1 + numCases);
     breaks[0] = module.local_set(tempLocalIndex, condExpr, condType.isManaged);
-        
+    
     // Make one br_if per labeled case and leave it to Binaryen to optimize the
     // sequence of br_ifs to a br_table according to optimization levels
     let breakIndex = 1;
