@@ -10145,6 +10145,7 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes a string conversion of the given expression. */
   makeToString(expr: ExpressionRef, type: Type, reportNode: Node): ExpressionRef {
+    let module = this.module;
     let stringType = this.program.stringInstance.type;
     if (type == stringType) {
       return expr;
@@ -10161,15 +10162,30 @@ export class Compiler extends DiagnosticEmitter {
           reportNode
         )) {
           this.currentType = stringType;
-          return this.module.unreachable();
+          return module.unreachable();
         }
         if (!type.isStrictlyAssignableTo(assert(toStringSignature.thisType))) {
-          this.errorRelated(
-            DiagnosticCode.The_this_types_of_each_signature_are_incompatible,
-            reportNode.range, toStringInstance.identifierAndSignatureRange
+          if (!type.is(TypeFlags.Nullable)) {
+            this.errorRelated(
+              DiagnosticCode.The_this_types_of_each_signature_are_incompatible,
+              reportNode.range, toStringInstance.identifierAndSignatureRange
+            );
+            this.currentType = stringType;
+            return module.unreachable();
+          }
+
+          // Attempt to retry on the non-nullable form of the type, wrapped in a ternary:
+          // `expr ? expr.toString() : "null"`
+          const tempLocal = this.currentFlow.getTempLocal(type);
+          return module.if(
+            module.local_tee(tempLocal.index, expr, type.isManaged),
+            this.makeToString(
+              module.local_get(tempLocal.index, type.toRef()),
+              type.nonNullableType,
+              reportNode
+            ),
+            this.ensureStaticString("null")
           );
-          this.currentType = stringType;
-          return this.module.unreachable();
         }
         let toStringReturnType = toStringSignature.returnType;
         if (!toStringReturnType.isStrictlyAssignableTo(stringType)) {
@@ -10178,7 +10194,7 @@ export class Compiler extends DiagnosticEmitter {
             reportNode.range, toStringInstance.identifierAndSignatureRange, toStringReturnType.toString(), stringType.toString()
           );
           this.currentType = stringType;
-          return this.module.unreachable();
+          return module.unreachable();
         }
         return this.makeCallDirect(toStringInstance, [ expr ], reportNode);
       }
@@ -10188,7 +10204,7 @@ export class Compiler extends DiagnosticEmitter {
       reportNode.range, type.toString(), stringType.toString()
     );
     this.currentType = stringType;
-    return this.module.unreachable();
+    return module.unreachable();
   }
 
   /** Makes an allocation suitable to hold the data of an instance of the given class. */
