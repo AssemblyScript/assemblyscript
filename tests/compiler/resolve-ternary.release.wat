@@ -2418,24 +2418,16 @@
   end
  )
  (func $start:resolve-ternary~anonymous|0 (param $0 i32) (result i32)
-  local.get $0
-  i32.const 1
-  i32.add
+  i32.const 2
  )
  (func $start:resolve-ternary~anonymous|1 (param $0 i32) (result i32)
-  local.get $0
-  i32.const 2
-  i32.add
+  i32.const 3
  )
  (func $resolve-ternary/g1 (param $0 i32) (result i32)
-  local.get $0
-  i32.const 3
-  i32.add
+  i32.const 4
  )
  (func $resolve-ternary/g2 (param $0 i32) (result i32)
-  local.get $0
-  i32.const 4
-  i32.add
+  i32.const 5
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid

@@ -2471,6 +2471,14 @@ export class Module {
     binaryen._BinaryenSetDebugInfo(on);
   }
 
+  getClosedWorld(): bool {
+    return binaryen._BinaryenGetClosedWorld();
+  }
+
+  setClosedWorld(on: bool): void {
+    binaryen._BinaryenSetClosedWorld(on);
+  }
+
   getLowMemoryUnused(): bool {
     return binaryen._BinaryenGetLowMemoryUnused();
   }
