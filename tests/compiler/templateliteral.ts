@@ -54,6 +54,13 @@ function test_ref(): void {
 }
 test_ref();
 
+function test_null(): void {
+  var c: Ref | null = new Ref(3);
+  var d: Ref | null = null;
+  assert(`c: ${c}; d: ${d}` == "c: ref#3; d: null");
+}
+test_null();
+
 function tag(parts: TemplateStringsArray, a: i32): string {
   var raw = parts.raw;
   assert(parts.length == 2);
