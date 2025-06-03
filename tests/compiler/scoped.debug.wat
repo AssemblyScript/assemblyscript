@@ -32,7 +32,6 @@
    i32.const 1
    i32.lt_s
    if
-    nop
     local.get $anotherStartFunctionLocal
     i32.const 1
     i32.add

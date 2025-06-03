@@ -100,37 +100,35 @@
   (local $84 i32)
   local.get $dest
   local.set $ret
-  block $while-break|0
-   loop $while-continue|0
+  loop $while-continue|0
+   local.get $n
+   if (result i32)
+    local.get $src
+    i32.const 4
+    i32.rem_u
+   else
+    i32.const 0
+   end
+   if
+    local.get $dest
+    local.tee $6
+    i32.const 1
+    i32.add
+    local.set $dest
+    local.get $6
+    local.get $src
+    local.tee $7
+    i32.const 1
+    i32.add
+    local.set $src
+    local.get $7
+    i32.load8_u
+    i32.store8
     local.get $n
-    if (result i32)
-     local.get $src
-     i32.const 4
-     i32.rem_u
-    else
-     i32.const 0
-    end
-    if
-     local.get $dest
-     local.tee $6
-     i32.const 1
-     i32.add
-     local.set $dest
-     local.get $6
-     local.get $src
-     local.tee $7
-     i32.const 1
-     i32.add
-     local.set $src
-     local.get $7
-     i32.load8_u
-     i32.store8
-     local.get $n
-     i32.const 1
-     i32.sub
-     local.set $n
-     br $while-continue|0
-    end
+    i32.const 1
+    i32.sub
+    local.set $n
+    br $while-continue|0
    end
   end
   local.get $dest
@@ -139,54 +137,52 @@
   i32.const 0
   i32.eq
   if
-   block $while-break|1
-    loop $while-continue|1
+   loop $while-continue|1
+    local.get $n
+    i32.const 16
+    i32.ge_u
+    if
+     local.get $dest
+     local.get $src
+     i32.load
+     i32.store
+     local.get $dest
+     i32.const 4
+     i32.add
+     local.get $src
+     i32.const 4
+     i32.add
+     i32.load
+     i32.store
+     local.get $dest
+     i32.const 8
+     i32.add
+     local.get $src
+     i32.const 8
+     i32.add
+     i32.load
+     i32.store
+     local.get $dest
+     i32.const 12
+     i32.add
+     local.get $src
+     i32.const 12
+     i32.add
+     i32.load
+     i32.store
+     local.get $src
+     i32.const 16
+     i32.add
+     local.set $src
+     local.get $dest
+     i32.const 16
+     i32.add
+     local.set $dest
      local.get $n
      i32.const 16
-     i32.ge_u
-     if
-      local.get $dest
-      local.get $src
-      i32.load
-      i32.store
-      local.get $dest
-      i32.const 4
-      i32.add
-      local.get $src
-      i32.const 4
-      i32.add
-      i32.load
-      i32.store
-      local.get $dest
-      i32.const 8
-      i32.add
-      local.get $src
-      i32.const 8
-      i32.add
-      i32.load
-      i32.store
-      local.get $dest
-      i32.const 12
-      i32.add
-      local.get $src
-      i32.const 12
-      i32.add
-      i32.load
-      i32.store
-      local.get $src
-      i32.const 16
-      i32.add
-      local.set $src
-      local.get $dest
-      i32.const 16
-      i32.add
-      local.set $dest
-      local.get $n
-      i32.const 16
-      i32.sub
-      local.set $n
-      br $while-continue|1
-     end
+     i32.sub
+     local.set $n
+     br $while-continue|1
     end
    end
    local.get $n
@@ -345,88 +341,86 @@
       i32.const 3
       i32.sub
       local.set $n
-      block $while-break|3
-       loop $while-continue|3
+      loop $while-continue|3
+       local.get $n
+       i32.const 17
+       i32.ge_u
+       if
+        local.get $src
+        i32.const 1
+        i32.add
+        i32.load
+        local.set $x
+        local.get $dest
+        local.get $w
+        i32.const 24
+        i32.shr_u
+        local.get $x
+        i32.const 8
+        i32.shl
+        i32.or
+        i32.store
+        local.get $src
+        i32.const 5
+        i32.add
+        i32.load
+        local.set $w
+        local.get $dest
+        i32.const 4
+        i32.add
+        local.get $x
+        i32.const 24
+        i32.shr_u
+        local.get $w
+        i32.const 8
+        i32.shl
+        i32.or
+        i32.store
+        local.get $src
+        i32.const 9
+        i32.add
+        i32.load
+        local.set $x
+        local.get $dest
+        i32.const 8
+        i32.add
+        local.get $w
+        i32.const 24
+        i32.shr_u
+        local.get $x
+        i32.const 8
+        i32.shl
+        i32.or
+        i32.store
+        local.get $src
+        i32.const 13
+        i32.add
+        i32.load
+        local.set $w
+        local.get $dest
+        i32.const 12
+        i32.add
+        local.get $x
+        i32.const 24
+        i32.shr_u
+        local.get $w
+        i32.const 8
+        i32.shl
+        i32.or
+        i32.store
+        local.get $src
+        i32.const 16
+        i32.add
+        local.set $src
+        local.get $dest
+        i32.const 16
+        i32.add
+        local.set $dest
         local.get $n
-        i32.const 17
-        i32.ge_u
-        if
-         local.get $src
-         i32.const 1
-         i32.add
-         i32.load
-         local.set $x
-         local.get $dest
-         local.get $w
-         i32.const 24
-         i32.shr_u
-         local.get $x
-         i32.const 8
-         i32.shl
-         i32.or
-         i32.store
-         local.get $src
-         i32.const 5
-         i32.add
-         i32.load
-         local.set $w
-         local.get $dest
-         i32.const 4
-         i32.add
-         local.get $x
-         i32.const 24
-         i32.shr_u
-         local.get $w
-         i32.const 8
-         i32.shl
-         i32.or
-         i32.store
-         local.get $src
-         i32.const 9
-         i32.add
-         i32.load
-         local.set $x
-         local.get $dest
-         i32.const 8
-         i32.add
-         local.get $w
-         i32.const 24
-         i32.shr_u
-         local.get $x
-         i32.const 8
-         i32.shl
-         i32.or
-         i32.store
-         local.get $src
-         i32.const 13
-         i32.add
-         i32.load
-         local.set $w
-         local.get $dest
-         i32.const 12
-         i32.add
-         local.get $x
-         i32.const 24
-         i32.shr_u
-         local.get $w
-         i32.const 8
-         i32.shl
-         i32.or
-         i32.store
-         local.get $src
-         i32.const 16
-         i32.add
-         local.set $src
-         local.get $dest
-         i32.const 16
-         i32.add
-         local.set $dest
-         local.get $n
-         i32.const 16
-         i32.sub
-         local.set $n
-         br $while-continue|3
-        end
+        i32.const 16
+        i32.sub
+        local.set $n
+        br $while-continue|3
        end
       end
       br $break|2
@@ -466,88 +460,86 @@
      i32.const 2
      i32.sub
      local.set $n
-     block $while-break|4
-      loop $while-continue|4
+     loop $while-continue|4
+      local.get $n
+      i32.const 18
+      i32.ge_u
+      if
+       local.get $src
+       i32.const 2
+       i32.add
+       i32.load
+       local.set $x
+       local.get $dest
+       local.get $w
+       i32.const 16
+       i32.shr_u
+       local.get $x
+       i32.const 16
+       i32.shl
+       i32.or
+       i32.store
+       local.get $src
+       i32.const 6
+       i32.add
+       i32.load
+       local.set $w
+       local.get $dest
+       i32.const 4
+       i32.add
+       local.get $x
+       i32.const 16
+       i32.shr_u
+       local.get $w
+       i32.const 16
+       i32.shl
+       i32.or
+       i32.store
+       local.get $src
+       i32.const 10
+       i32.add
+       i32.load
+       local.set $x
+       local.get $dest
+       i32.const 8
+       i32.add
+       local.get $w
+       i32.const 16
+       i32.shr_u
+       local.get $x
+       i32.const 16
+       i32.shl
+       i32.or
+       i32.store
+       local.get $src
+       i32.const 14
+       i32.add
+       i32.load
+       local.set $w
+       local.get $dest
+       i32.const 12
+       i32.add
+       local.get $x
+       i32.const 16
+       i32.shr_u
+       local.get $w
+       i32.const 16
+       i32.shl
+       i32.or
+       i32.store
+       local.get $src
+       i32.const 16
+       i32.add
+       local.set $src
+       local.get $dest
+       i32.const 16
+       i32.add
+       local.set $dest
        local.get $n
-       i32.const 18
-       i32.ge_u
-       if
-        local.get $src
-        i32.const 2
-        i32.add
-        i32.load
-        local.set $x
-        local.get $dest
-        local.get $w
-        i32.const 16
-        i32.shr_u
-        local.get $x
-        i32.const 16
-        i32.shl
-        i32.or
-        i32.store
-        local.get $src
-        i32.const 6
-        i32.add
-        i32.load
-        local.set $w
-        local.get $dest
-        i32.const 4
-        i32.add
-        local.get $x
-        i32.const 16
-        i32.shr_u
-        local.get $w
-        i32.const 16
-        i32.shl
-        i32.or
-        i32.store
-        local.get $src
-        i32.const 10
-        i32.add
-        i32.load
-        local.set $x
-        local.get $dest
-        i32.const 8
-        i32.add
-        local.get $w
-        i32.const 16
-        i32.shr_u
-        local.get $x
-        i32.const 16
-        i32.shl
-        i32.or
-        i32.store
-        local.get $src
-        i32.const 14
-        i32.add
-        i32.load
-        local.set $w
-        local.get $dest
-        i32.const 12
-        i32.add
-        local.get $x
-        i32.const 16
-        i32.shr_u
-        local.get $w
-        i32.const 16
-        i32.shl
-        i32.or
-        i32.store
-        local.get $src
-        i32.const 16
-        i32.add
-        local.set $src
-        local.get $dest
-        i32.const 16
-        i32.add
-        local.set $dest
-        local.get $n
-        i32.const 16
-        i32.sub
-        local.set $n
-        br $while-continue|4
-       end
+       i32.const 16
+       i32.sub
+       local.set $n
+       br $while-continue|4
       end
      end
      br $break|2
@@ -573,88 +565,86 @@
     i32.const 1
     i32.sub
     local.set $n
-    block $while-break|5
-     loop $while-continue|5
+    loop $while-continue|5
+     local.get $n
+     i32.const 19
+     i32.ge_u
+     if
+      local.get $src
+      i32.const 3
+      i32.add
+      i32.load
+      local.set $x
+      local.get $dest
+      local.get $w
+      i32.const 8
+      i32.shr_u
+      local.get $x
+      i32.const 24
+      i32.shl
+      i32.or
+      i32.store
+      local.get $src
+      i32.const 7
+      i32.add
+      i32.load
+      local.set $w
+      local.get $dest
+      i32.const 4
+      i32.add
+      local.get $x
+      i32.const 8
+      i32.shr_u
+      local.get $w
+      i32.const 24
+      i32.shl
+      i32.or
+      i32.store
+      local.get $src
+      i32.const 11
+      i32.add
+      i32.load
+      local.set $x
+      local.get $dest
+      i32.const 8
+      i32.add
+      local.get $w
+      i32.const 8
+      i32.shr_u
+      local.get $x
+      i32.const 24
+      i32.shl
+      i32.or
+      i32.store
+      local.get $src
+      i32.const 15
+      i32.add
+      i32.load
+      local.set $w
+      local.get $dest
+      i32.const 12
+      i32.add
+      local.get $x
+      i32.const 8
+      i32.shr_u
+      local.get $w
+      i32.const 24
+      i32.shl
+      i32.or
+      i32.store
+      local.get $src
+      i32.const 16
+      i32.add
+      local.set $src
+      local.get $dest
+      i32.const 16
+      i32.add
+      local.set $dest
       local.get $n
-      i32.const 19
-      i32.ge_u
-      if
-       local.get $src
-       i32.const 3
-       i32.add
-       i32.load
-       local.set $x
-       local.get $dest
-       local.get $w
-       i32.const 8
-       i32.shr_u
-       local.get $x
-       i32.const 24
-       i32.shl
-       i32.or
-       i32.store
-       local.get $src
-       i32.const 7
-       i32.add
-       i32.load
-       local.set $w
-       local.get $dest
-       i32.const 4
-       i32.add
-       local.get $x
-       i32.const 8
-       i32.shr_u
-       local.get $w
-       i32.const 24
-       i32.shl
-       i32.or
-       i32.store
-       local.get $src
-       i32.const 11
-       i32.add
-       i32.load
-       local.set $x
-       local.get $dest
-       i32.const 8
-       i32.add
-       local.get $w
-       i32.const 8
-       i32.shr_u
-       local.get $x
-       i32.const 24
-       i32.shl
-       i32.or
-       i32.store
-       local.get $src
-       i32.const 15
-       i32.add
-       i32.load
-       local.set $w
-       local.get $dest
-       i32.const 12
-       i32.add
-       local.get $x
-       i32.const 8
-       i32.shr_u
-       local.get $w
-       i32.const 24
-       i32.shl
-       i32.or
-       i32.store
-       local.get $src
-       i32.const 16
-       i32.add
-       local.set $src
-       local.get $dest
-       i32.const 16
-       i32.add
-       local.set $dest
-       local.get $n
-       i32.const 16
-       i32.sub
-       local.set $n
-       br $while-continue|5
-      end
+      i32.const 16
+      i32.sub
+      local.set $n
+      br $while-continue|5
      end
     end
     br $break|2

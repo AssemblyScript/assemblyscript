@@ -945,9 +945,10 @@ export async function main(argv, options) {
       try {
         // use superset text format when extension is `.wast`.
         // Otherwise use official stack IR format (wat).
+        binaryen.setOptimizeStackIR(true);
         out = opts.textFile?.endsWith(".wast")
           ? binaryenModule.emitText()
-          : binaryenModule.emitStackIR(true);
+          : binaryenModule.emitStackIR();
       } catch (e) {
         crash("emitText", e);
       }

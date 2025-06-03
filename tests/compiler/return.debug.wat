@@ -17,7 +17,6 @@
  (export "testVoidReturnFunction" (func $export:return/testVoidReturnFunction))
  (start $~start)
  (func $return/nop
-  nop
  )
  (func $start:return~anonymous|0
   call $return/nop

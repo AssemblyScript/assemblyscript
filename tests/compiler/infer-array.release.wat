@@ -1071,7 +1071,6 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1104,7 +1103,6 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1890,12 +1888,10 @@
   i32.shl
   i32.add
   i32.load
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/array/Array<f32>#__get (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -1969,7 +1965,6 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.set $1
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -1998,7 +1993,6 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $1
    local.get $0
    i32.store
    global.get $~lib/memory/__stack_pointer
@@ -2424,7 +2418,6 @@
    local.tee $1
    i32.store offset=28
    global.get $~lib/memory/__stack_pointer
-   local.set $2
    global.get $~lib/memory/__stack_pointer
    i32.const 2
    i32.const 2
@@ -2441,7 +2434,6 @@
    i32.const 1
    local.get $1
    call $~lib/array/Array<infer-array/Ref|null>#__set
-   local.get $2
    local.get $3
    i32.store offset=36
    global.get $~lib/memory/__stack_pointer
@@ -2459,7 +2451,6 @@
    local.tee $1
    i32.store offset=44
    global.get $~lib/memory/__stack_pointer
-   local.set $2
    global.get $~lib/memory/__stack_pointer
    i32.const 2
    i32.const 2
@@ -2476,7 +2467,6 @@
    i32.const 1
    local.get $1
    call $~lib/array/Array<infer-array/Ref|null>#__set
-   local.get $2
    local.get $3
    i32.store offset=52
    global.get $~lib/memory/__stack_pointer
@@ -2490,7 +2480,6 @@
    local.tee $0
    i32.store offset=56
    global.get $~lib/memory/__stack_pointer
-   local.set $1
    global.get $~lib/memory/__stack_pointer
    i32.const 2
    i32.const 2
@@ -2507,7 +2496,6 @@
    i32.const 1
    i32.const 0
    call $~lib/array/Array<infer-array/Ref|null>#__set
-   local.get $1
    local.get $2
    i32.store offset=64
    global.get $~lib/memory/__stack_pointer
@@ -2611,7 +2599,6 @@
    local.get $0
    call $~lib/array/Array<i32>#__get
    global.get $~lib/memory/__stack_pointer
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 2
    i32.const 2
@@ -2636,7 +2623,6 @@
    i32.const 2016
    call $~lib/rt/__newArray
    call $~lib/array/Array<infer-array/Ref|null>#__set
-   local.get $0
    local.get $1
    i32.store offset=92
    global.get $~lib/memory/__stack_pointer
@@ -2725,7 +2711,6 @@
   i32.const 0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  local.set $4
   local.get $0
   local.get $1
   i32.shl
@@ -2740,7 +2725,6 @@
    local.get $5
    memory.copy
   end
-  local.get $4
   local.get $1
   i32.store
   i32.const 16

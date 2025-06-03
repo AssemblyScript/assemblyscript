@@ -98,37 +98,35 @@
   local.get $pn
   call $~lib/rt/itcms/Object#get:next
   local.set $iter
-  block $while-break|0
-   loop $while-continue|0
+  loop $while-continue|0
+   local.get $iter
+   local.get $pn
+   i32.ne
+   if
+    i32.const 1
+    drop
     local.get $iter
-    local.get $pn
-    i32.ne
+    call $~lib/rt/itcms/Object#get:color
+    i32.const 3
+    i32.eq
+    i32.eqz
     if
-     i32.const 1
-     drop
-     local.get $iter
-     call $~lib/rt/itcms/Object#get:color
-     i32.const 3
-     i32.eq
-     i32.eqz
-     if
-      i32.const 0
-      i32.const 96
-      i32.const 160
-      i32.const 16
-      call $~lib/builtins/abort
-      unreachable
-     end
-     local.get $iter
-     i32.const 20
-     i32.add
-     local.get $cookie
-     call $~lib/rt/__visit_members
-     local.get $iter
-     call $~lib/rt/itcms/Object#get:next
-     local.set $iter
-     br $while-continue|0
+     i32.const 0
+     i32.const 96
+     i32.const 160
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
     end
+    local.get $iter
+    i32.const 20
+    i32.add
+    local.get $cookie
+    call $~lib/rt/__visit_members
+    local.get $iter
+    call $~lib/rt/itcms/Object#get:next
+    local.set $iter
+    br $while-continue|0
    end
   end
  )
@@ -354,22 +352,20 @@
   (local $ptr i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
-  block $while-break|0
-   loop $while-continue|0
+  loop $while-continue|0
+   local.get $ptr
+   global.get $~lib/memory/__heap_base
+   i32.lt_u
+   if
     local.get $ptr
-    global.get $~lib/memory/__heap_base
-    i32.lt_u
-    if
-     local.get $ptr
-     i32.load
-     local.get $cookie
-     call $~lib/rt/itcms/__visit
-     local.get $ptr
-     i32.const 4
-     i32.add
-     local.set $ptr
-     br $while-continue|0
-    end
+    i32.load
+    local.get $cookie
+    call $~lib/rt/itcms/__visit
+    local.get $ptr
+    i32.const 4
+    i32.add
+    local.set $ptr
+    br $while-continue|0
    end
   end
  )
@@ -583,27 +579,25 @@
   end
   i32.eq
   if
-   block $~lib/rt/tlsf/SETHEAD|inlined.1
-    local.get $root
-    local.set $root|14
-    local.get $fl
-    local.set $fl|15
-    local.get $sl
-    local.set $sl|16
-    local.get $next
-    local.set $head
-    local.get $root|14
-    local.get $fl|15
-    i32.const 4
-    i32.shl
-    local.get $sl|16
-    i32.add
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $head
-    i32.store offset=96
-   end
+   local.get $root
+   local.set $root|14
+   local.get $fl
+   local.set $fl|15
+   local.get $sl
+   local.set $sl|16
+   local.get $next
+   local.set $head
+   local.get $root|14
+   local.get $fl|15
+   i32.const 4
+   i32.shl
+   local.get $sl|16
+   i32.add
+   i32.const 2
+   i32.shl
+   i32.add
+   local.get $head
+   i32.store offset=96
    local.get $next
    i32.eqz
    if
@@ -621,28 +615,26 @@
      br $~lib/rt/tlsf/GETSL|inlined.0
     end
     local.set $slMap
-    block $~lib/rt/tlsf/SETSL|inlined.1
-     local.get $root
-     local.set $root|21
-     local.get $fl
-     local.set $fl|22
-     local.get $slMap
-     i32.const 1
-     local.get $sl
-     i32.shl
-     i32.const -1
-     i32.xor
-     i32.and
-     local.tee $slMap
-     local.set $slMap|23
-     local.get $root|21
-     local.get $fl|22
-     i32.const 2
-     i32.shl
-     i32.add
-     local.get $slMap|23
-     i32.store offset=4
-    end
+    local.get $root
+    local.set $root|21
+    local.get $fl
+    local.set $fl|22
+    local.get $slMap
+    i32.const 1
+    local.get $sl
+    i32.shl
+    i32.const -1
+    i32.xor
+    i32.and
+    local.tee $slMap
+    local.set $slMap|23
+    local.get $root|21
+    local.get $fl|22
+    i32.const 2
+    i32.shl
+    i32.add
+    local.get $slMap|23
+    i32.store offset=4
     local.get $slMap
     i32.eqz
     if
@@ -967,27 +959,25 @@
    local.get $block
    call $~lib/rt/tlsf/Block#set:prev
   end
-  block $~lib/rt/tlsf/SETHEAD|inlined.2
-   local.get $root
-   local.set $root|20
-   local.get $fl
-   local.set $fl|21
-   local.get $sl
-   local.set $sl|22
-   local.get $block
-   local.set $head|23
-   local.get $root|20
-   local.get $fl|21
-   i32.const 4
-   i32.shl
-   local.get $sl|22
-   i32.add
-   i32.const 2
-   i32.shl
-   i32.add
-   local.get $head|23
-   i32.store offset=96
-  end
+  local.get $root
+  local.set $root|20
+  local.get $fl
+  local.set $fl|21
+  local.get $sl
+  local.set $sl|22
+  local.get $block
+  local.set $head|23
+  local.get $root|20
+  local.get $fl|21
+  i32.const 4
+  i32.shl
+  local.get $sl|22
+  i32.add
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $head|23
+  i32.store offset=96
   local.get $root
   local.get $root
   call $~lib/rt/tlsf/Root#get:flMap
@@ -996,37 +986,35 @@
   i32.shl
   i32.or
   call $~lib/rt/tlsf/Root#set:flMap
-  block $~lib/rt/tlsf/SETSL|inlined.2
+  local.get $root
+  local.set $root|26
+  local.get $fl
+  local.set $fl|27
+  block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
    local.get $root
-   local.set $root|26
+   local.set $root|24
    local.get $fl
-   local.set $fl|27
-   block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
-    local.get $root
-    local.set $root|24
-    local.get $fl
-    local.set $fl|25
-    local.get $root|24
-    local.get $fl|25
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load offset=4
-    br $~lib/rt/tlsf/GETSL|inlined.1
-   end
-   i32.const 1
-   local.get $sl
-   i32.shl
-   i32.or
-   local.set $slMap
-   local.get $root|26
-   local.get $fl|27
+   local.set $fl|25
+   local.get $root|24
+   local.get $fl|25
    i32.const 2
    i32.shl
    i32.add
-   local.get $slMap
-   i32.store offset=4
+   i32.load offset=4
+   br $~lib/rt/tlsf/GETSL|inlined.1
   end
+  i32.const 1
+  local.get $sl
+  i32.shl
+  i32.or
+  local.set $slMap
+  local.get $root|26
+  local.get $fl|27
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $slMap
+  i32.store offset=4
  )
  (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $endU64 i64) (result i32)
   (local $end i32)
@@ -1116,7 +1104,6 @@
     call $~lib/rt/common/BLOCK#get:mmInfo
     local.set $tailInfo
    else
-    nop
    end
   else
    i32.const 1
@@ -1185,15 +1172,13 @@
   i32.const 2
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
-  block $~lib/rt/tlsf/SETTAIL|inlined.1
-   local.get $root
-   local.set $root|10
-   local.get $tail
-   local.set $tail|11
-   local.get $root|10
-   local.get $tail|11
-   i32.store offset=1568
-  end
+  local.get $root
+  local.set $root|10
+  local.get $tail
+  local.set $tail|11
+  local.get $root|10
+  local.get $tail|11
+  i32.store offset=1568
   local.get $root
   local.get $left
   call $~lib/rt/tlsf/insertBlock
@@ -1262,15 +1247,13 @@
   local.get $root
   i32.const 0
   call $~lib/rt/tlsf/Root#set:flMap
-  block $~lib/rt/tlsf/SETTAIL|inlined.0
-   local.get $root
-   local.set $root|4
-   i32.const 0
-   local.set $tail
-   local.get $root|4
-   local.get $tail
-   i32.store offset=1568
-  end
+  local.get $root
+  local.set $root|4
+  i32.const 0
+  local.set $tail
+  local.get $root|4
+  local.get $tail
+  i32.store offset=1568
   i32.const 0
   local.set $fl
   loop $for-loop|0
@@ -1278,21 +1261,19 @@
    i32.const 23
    i32.lt_u
    if
-    block $~lib/rt/tlsf/SETSL|inlined.0
-     local.get $root
-     local.set $root|7
-     local.get $fl
-     local.set $fl|8
-     i32.const 0
-     local.set $slMap
-     local.get $root|7
-     local.get $fl|8
-     i32.const 2
-     i32.shl
-     i32.add
-     local.get $slMap
-     i32.store offset=4
-    end
+    local.get $root
+    local.set $root|7
+    local.get $fl
+    local.set $fl|8
+    i32.const 0
+    local.set $slMap
+    local.get $root|7
+    local.get $fl|8
+    i32.const 2
+    i32.shl
+    i32.add
+    local.get $slMap
+    i32.store offset=4
     i32.const 0
     local.set $sl
     loop $for-loop|1
@@ -1300,27 +1281,25 @@
      i32.const 16
      i32.lt_u
      if
-      block $~lib/rt/tlsf/SETHEAD|inlined.0
-       local.get $root
-       local.set $root|11
-       local.get $fl
-       local.set $fl|12
-       local.get $sl
-       local.set $sl|13
-       i32.const 0
-       local.set $head
-       local.get $root|11
-       local.get $fl|12
-       i32.const 4
-       i32.shl
-       local.get $sl|13
-       i32.add
-       i32.const 2
-       i32.shl
-       i32.add
-       local.get $head
-       i32.store offset=96
-      end
+      local.get $root
+      local.set $root|11
+      local.get $fl
+      local.set $fl|12
+      local.get $sl
+      local.set $sl|13
+      i32.const 0
+      local.set $head
+      local.get $root|11
+      local.get $fl|12
+      i32.const 4
+      i32.shl
+      local.get $sl|13
+      i32.add
+      i32.const 2
+      i32.shl
+      i32.add
+      local.get $head
+      i32.store offset=96
       local.get $sl
       i32.const 1
       i32.add
@@ -1489,39 +1468,37 @@
     global.get $~lib/rt/itcms/iter
     call $~lib/rt/itcms/Object#get:next
     local.set $obj
-    block $while-break|1
-     loop $while-continue|1
+    loop $while-continue|1
+     local.get $obj
+     global.get $~lib/rt/itcms/toSpace
+     i32.ne
+     if
       local.get $obj
-      global.get $~lib/rt/itcms/toSpace
+      global.set $~lib/rt/itcms/iter
+      local.get $obj
+      call $~lib/rt/itcms/Object#get:color
+      local.get $black
       i32.ne
       if
        local.get $obj
-       global.set $~lib/rt/itcms/iter
-       local.get $obj
-       call $~lib/rt/itcms/Object#get:color
        local.get $black
-       i32.ne
-       if
-        local.get $obj
-        local.get $black
-        call $~lib/rt/itcms/Object#set:color
-        i32.const 0
-        global.set $~lib/rt/itcms/visitCount
-        local.get $obj
-        i32.const 20
-        i32.add
-        i32.const 0
-        call $~lib/rt/__visit_members
-        global.get $~lib/rt/itcms/visitCount
-        i32.const 1
-        i32.mul
-        return
-       end
+       call $~lib/rt/itcms/Object#set:color
+       i32.const 0
+       global.set $~lib/rt/itcms/visitCount
        local.get $obj
-       call $~lib/rt/itcms/Object#get:next
-       local.set $obj
-       br $while-continue|1
+       i32.const 20
+       i32.add
+       i32.const 0
+       call $~lib/rt/__visit_members
+       global.get $~lib/rt/itcms/visitCount
+       i32.const 1
+       i32.mul
+       return
       end
+      local.get $obj
+      call $~lib/rt/itcms/Object#get:next
+      local.set $obj
+      br $while-continue|1
      end
     end
     i32.const 0
@@ -1540,31 +1517,29 @@
      global.get $~lib/rt/itcms/iter
      call $~lib/rt/itcms/Object#get:next
      local.set $obj
-     block $while-break|2
-      loop $while-continue|2
+     loop $while-continue|2
+      local.get $obj
+      global.get $~lib/rt/itcms/toSpace
+      i32.ne
+      if
        local.get $obj
-       global.get $~lib/rt/itcms/toSpace
+       call $~lib/rt/itcms/Object#get:color
+       local.get $black
        i32.ne
        if
         local.get $obj
-        call $~lib/rt/itcms/Object#get:color
         local.get $black
-        i32.ne
-        if
-         local.get $obj
-         local.get $black
-         call $~lib/rt/itcms/Object#set:color
-         local.get $obj
-         i32.const 20
-         i32.add
-         i32.const 0
-         call $~lib/rt/__visit_members
-        end
+        call $~lib/rt/itcms/Object#set:color
         local.get $obj
-        call $~lib/rt/itcms/Object#get:next
-        local.set $obj
-        br $while-continue|2
+        i32.const 20
+        i32.add
+        i32.const 0
+        call $~lib/rt/__visit_members
        end
+       local.get $obj
+       call $~lib/rt/itcms/Object#get:next
+       local.set $obj
+       br $while-continue|2
       end
      end
      global.get $~lib/rt/itcms/fromSpace
@@ -2353,40 +2328,38 @@
     end
    end
   end
-  block $while-break|1
-   loop $while-continue|1
-    local.get $len
-    local.tee $7
-    i32.const 1
-    i32.sub
-    local.set $len
-    local.get $7
+  loop $while-continue|1
+   local.get $len
+   local.tee $7
+   i32.const 1
+   i32.sub
+   local.set $len
+   local.get $7
+   if
+    local.get $ptr1
+    i32.load16_u
+    local.set $a
+    local.get $ptr2
+    i32.load16_u
+    local.set $b
+    local.get $a
+    local.get $b
+    i32.ne
     if
-     local.get $ptr1
-     i32.load16_u
-     local.set $a
-     local.get $ptr2
-     i32.load16_u
-     local.set $b
      local.get $a
      local.get $b
-     i32.ne
-     if
-      local.get $a
-      local.get $b
-      i32.sub
-      return
-     end
-     local.get $ptr1
-     i32.const 2
-     i32.add
-     local.set $ptr1
-     local.get $ptr2
-     i32.const 2
-     i32.add
-     local.set $ptr2
-     br $while-continue|1
+     i32.sub
+     return
     end
+    local.get $ptr1
+    i32.const 2
+    i32.add
+    local.set $ptr1
+    local.get $ptr2
+    i32.const 2
+    i32.add
+    local.set $ptr2
+    br $while-continue|1
    end
   end
   i32.const 0
@@ -2416,7 +2389,6 @@
   end
  )
  (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
-  nop
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid

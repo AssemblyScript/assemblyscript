@@ -4,6 +4,5 @@
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $~start
-  nop
  )
 )

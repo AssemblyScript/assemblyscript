@@ -53,7 +53,6 @@
    unreachable
   end
   global.get $~lib/rt/stub/offset
-  local.set $3
   global.get $~lib/rt/stub/offset
   i32.const 4
   i32.add
@@ -109,7 +108,6 @@
   end
   local.get $5
   global.set $~lib/rt/stub/offset
-  local.get $3
   local.get $4
   i32.store
   local.get $2
@@ -135,10 +133,8 @@
   local.get $0
  )
  (func $~lib/rt/stub/__unpin (param $0 i32)
-  nop
  )
  (func $~lib/rt/stub/__collect
-  nop
  )
  (func $~start
   i32.const 1196

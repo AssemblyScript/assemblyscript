@@ -2503,6 +2503,22 @@ export class Module {
     binaryen._BinaryenSetFastMath(on);
   }
 
+  getGenerateStackIR(): bool {
+    return binaryen._BinaryenGetGenerateStackIR();
+  }
+
+  setGenerateStackIR(on: bool): void {
+    binaryen._BinaryenSetGenerateStackIR(on);
+  }
+
+  getOptimizeStackIR(): bool {
+    return binaryen._BinaryenGetOptimizeStackIR();
+  }
+
+  setOptimizeStackIR(on: bool): void {
+    binaryen._BinaryenSetOptimizeStackIR(on);
+  }
+
   getPassArgument(key: string): string | null {
     let cStr = this.allocStringCached(key);
     let ptr = binaryen._BinaryenGetPassArgument(cStr);
@@ -2593,6 +2609,11 @@ export class Module {
     this.setZeroFilledMemory(zeroFilledMemory);
     this.setFastMath(true);
     this.clearPassArguments();
+
+    // OptimizationOptions#parse in src/tools/optimization-options.h
+    const stackIR = optimizeLevel >= 2 || shrinkLevel >= 1;
+    this.setGenerateStackIR(stackIR);
+    this.setOptimizeStackIR(stackIR);
 
     // Tweak inlining limits based on optimization levels
     if (optimizeLevel >= 2 && shrinkLevel == 0) {

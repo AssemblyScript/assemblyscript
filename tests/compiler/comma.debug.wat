@@ -152,7 +152,6 @@
    global.get $comma/a
    i32.lt_s
    if
-    nop
     global.get $comma/a
     i32.const 1
     i32.sub

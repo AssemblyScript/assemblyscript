@@ -413,36 +413,34 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $std/pointer/Pointer<std/pointer/Entry>#set:value|inlined.0
-   global.get $std/pointer/one
-   local.set $this|26
-   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6 (result i32)
-    global.get $std/pointer/two
-    local.set $this|25
-    i32.const 1
-    drop
-    local.get $this|25
-    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6
-   end
-   local.set $value
+  global.get $std/pointer/one
+  local.set $this|26
+  block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6 (result i32)
+   global.get $std/pointer/two
+   local.set $this|25
    i32.const 1
    drop
+   local.get $this|25
+   br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6
+  end
+  local.set $value
+  i32.const 1
+  drop
+  i32.const 0
+  drop
+  local.get $value
+  i32.const 0
+  i32.eq
+  if
+   local.get $this|26
    i32.const 0
-   drop
+   i32.const 8
+   memory.fill
+  else
+   local.get $this|26
    local.get $value
-   i32.const 0
-   i32.eq
-   if
-    local.get $this|26
-    i32.const 0
-    i32.const 8
-    memory.fill
-   else
-    local.get $this|26
-    local.get $value
-    i32.const 8
-    memory.copy
-   end
+   i32.const 8
+   memory.copy
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.8 (result i32)
    global.get $std/pointer/one
@@ -515,36 +513,32 @@
    br $std/pointer/Pointer<f32>#constructor|inlined.0
   end
   global.set $std/pointer/buf
-  block $std/pointer/Pointer<f32>#set|inlined.0
-   global.get $std/pointer/buf
-   local.set $this|34
-   i32.const 0
-   local.set $index
-   f32.const 1.100000023841858
-   local.set $value|36
-   local.get $this|34
-   local.get $index
-   i32.const 4
-   i32.mul
-   i32.add
-   local.get $value|36
-   f32.store
-  end
-  block $std/pointer/Pointer<f32>#set|inlined.1
-   global.get $std/pointer/buf
-   local.set $this|37
-   i32.const 1
-   local.set $index|38
-   f32.const 1.2000000476837158
-   local.set $value|39
-   local.get $this|37
-   local.get $index|38
-   i32.const 4
-   i32.mul
-   i32.add
-   local.get $value|39
-   f32.store
-  end
+  global.get $std/pointer/buf
+  local.set $this|34
+  i32.const 0
+  local.set $index
+  f32.const 1.100000023841858
+  local.set $value|36
+  local.get $this|34
+  local.get $index
+  i32.const 4
+  i32.mul
+  i32.add
+  local.get $value|36
+  f32.store
+  global.get $std/pointer/buf
+  local.set $this|37
+  i32.const 1
+  local.set $index|38
+  f32.const 1.2000000476837158
+  local.set $value|39
+  local.get $this|37
+  local.get $index|38
+  i32.const 4
+  i32.mul
+  i32.add
+  local.get $value|39
+  f32.store
   block $std/pointer/Pointer<f32>#get|inlined.0 (result f32)
    global.get $std/pointer/buf
    local.set $this|40
@@ -667,21 +661,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $std/pointer/Pointer<f32>#set|inlined.2
-   global.get $std/pointer/buf
-   local.set $this|48
-   i32.const 2
-   local.set $index|49
-   f32.const 1.2999999523162842
-   local.set $value|50
-   local.get $this|48
-   local.get $index|49
-   i32.const 4
-   i32.mul
-   i32.add
-   local.get $value|50
-   f32.store
-  end
+  global.get $std/pointer/buf
+  local.set $this|48
+  i32.const 2
+  local.set $index|49
+  f32.const 1.2999999523162842
+  local.set $value|50
+  local.get $this|48
+  local.get $index|49
+  i32.const 4
+  i32.mul
+  i32.add
+  local.get $value|50
+  f32.store
   block $std/pointer/Pointer<f32>#get|inlined.4 (result f32)
    global.get $std/pointer/buf
    local.set $this|51
@@ -743,17 +735,15 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $std/pointer/Pointer<f32>#set:value|inlined.0
-   global.get $std/pointer/buf
-   local.set $this|55
-   f32.const 1.399999976158142
-   local.set $value|56
-   i32.const 0
-   drop
-   local.get $this|55
-   local.get $value|56
-   f32.store
-  end
+  global.get $std/pointer/buf
+  local.set $this|55
+  f32.const 1.399999976158142
+  local.set $value|56
+  i32.const 0
+  drop
+  local.get $this|55
+  local.get $value|56
+  f32.store
   block $std/pointer/Pointer<f32>#get:value|inlined.0 (result f32)
    global.get $std/pointer/buf
    local.set $this|57

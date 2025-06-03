@@ -143,21 +143,19 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  block $while-break|0
-   loop $while-continue|0
-    local.get $a
-    if
-     i32.const 0
-     drop
-     global.get $~lib/memory/__stack_pointer
-     local.get $b
-     local.tee $a
-     i32.store
-     i32.const 1
-     i32.eqz
-     drop
-     br $while-continue|0
-    end
+  loop $while-continue|0
+   local.get $a
+   if
+    i32.const 0
+    drop
+    global.get $~lib/memory/__stack_pointer
+    local.get $b
+    local.tee $a
+    i32.store
+    i32.const 1
+    i32.eqz
+    drop
+    br $while-continue|0
    end
   end
   global.get $~lib/memory/__stack_pointer
@@ -174,23 +172,21 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  block $while-break|0
-   loop $while-continue|0
-    local.get $a
+  loop $while-continue|0
+   local.get $a
+   if
+    i32.const 0
+    drop
+    local.get $b
     if
+     global.get $~lib/memory/__stack_pointer
+     local.get $b
+     local.tee $a
+     i32.store
      i32.const 0
      drop
-     local.get $b
-     if
-      global.get $~lib/memory/__stack_pointer
-      local.get $b
-      local.tee $a
-      i32.store
-      i32.const 0
-      drop
-     end
-     br $while-continue|0
     end
+    br $while-continue|0
    end
   end
   global.get $~lib/memory/__stack_pointer

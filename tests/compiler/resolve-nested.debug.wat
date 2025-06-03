@@ -26,7 +26,6 @@
  (export "memory" (memory $0))
  (export "outer" (func $export:resolve-nested/outer))
  (func $resolve-nested/outer (param $a i32) (param $b i32) (param $c i32)
-  nop
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer

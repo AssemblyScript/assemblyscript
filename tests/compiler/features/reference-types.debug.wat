@@ -102,7 +102,6 @@
   end
  )
  (func $features/reference-types/someFunc
-  nop
  )
  (func $start:features/reference-types
   (local $funcLocal funcref)
@@ -129,7 +128,6 @@
   i32.eqz
   i32.eqz
   if
-   nop
   else
    i32.const 0
    i32.eqz
@@ -146,7 +144,6 @@
   ref.is_null
   i32.eqz
   if
-   nop
   else
    i32.const 0
    i32.eqz

@@ -1066,7 +1066,6 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1099,7 +1098,6 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1332,12 +1330,10 @@
   i32.store
   local.get $0
   i32.load offset=12
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/array/Array<i32>#__get (param $0 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
@@ -1383,12 +1379,10 @@
   i32.shl
   i32.add
   i32.load
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1921,12 +1915,10 @@
   i32.shl
   i32.add
   i64.load
-  local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
  )
  (func $~lib/array/Array<f32>#__get (param $0 i32) (result f32)
   (local $1 f32)
@@ -1973,12 +1965,10 @@
   i32.shl
   i32.add
   f32.load
-  local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
  )
  (func $~lib/array/Array<f64>#__get (param $0 i32) (result f64)
   (local $1 f64)
@@ -2025,12 +2015,10 @@
   i32.shl
   i32.add
   f64.load
-  local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
  )
  (func $start:std/static-array
   global.get $~lib/memory/__stack_pointer

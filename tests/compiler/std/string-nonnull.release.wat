@@ -104,12 +104,10 @@
    i32.const 1
    i32.shr_u
    i32.eqz
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
    i32.eqz
    if
     global.get $~lib/memory/__stack_pointer
@@ -185,11 +183,9 @@
   i32.store offset=4
   call $~lib/string/String.__eq
   i32.eqz
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
 )

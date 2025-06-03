@@ -174,7 +174,6 @@
    i32.store
    local.get $0
    i32.load
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -183,7 +182,6 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
    return
   end
   i32.const 34256
@@ -453,7 +451,6 @@
     i32.eqz
     br_if $folding-inner1
     global.get $~lib/memory/__stack_pointer
-    local.set $1
     global.get $~lib/memory/__stack_pointer
     local.get $0
     i32.store offset=4
@@ -468,7 +465,6 @@
     global.get $~lib/memory/__stack_pointer
     local.get $0
     i32.store
-    local.get $1
     local.get $0
     i32.load
     local.tee $0
@@ -535,7 +531,6 @@
     i32.eqz
     br_if $folding-inner1
     global.get $~lib/memory/__stack_pointer
-    local.set $1
     global.get $~lib/memory/__stack_pointer
     local.get $0
     i32.store offset=4
@@ -550,7 +545,6 @@
     global.get $~lib/memory/__stack_pointer
     local.get $0
     i32.store
-    local.get $1
     local.get $0
     i32.load
     local.tee $0
@@ -623,7 +617,6 @@
    local.get $0
    i32.load
    call_indirect (type $1)
-   drop
    unreachable
   end
   i32.const 34256
@@ -662,7 +655,6 @@
    local.get $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.set $1
    local.get $0
    i32.eqz
    if
@@ -673,13 +665,11 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $1
    local.get $0
    i32.store offset=4
    local.get $0
    i32.load
    call_indirect (type $1)
-   drop
    unreachable
   end
   i32.const 34256
@@ -723,7 +713,6 @@
     local.get $0
     i32.load
     call_indirect (type $1)
-    drop
     unreachable
    end
    i32.const 34256
@@ -785,7 +774,6 @@
    local.get $0
    i32.load
    call_indirect (type $1)
-   drop
    unreachable
   end
   i32.const 34256
@@ -837,7 +825,6 @@
     local.get $0
     i32.load
     call_indirect (type $1)
-    drop
     unreachable
    end
    i32.const 34256

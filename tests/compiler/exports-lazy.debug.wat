@@ -23,10 +23,8 @@
   call $exports-lazy/lazyFuncUsed
  )
  (func $exports-lazy/lazyFuncUsed
-  nop
  )
  (func $exports-lazy/lazyFuncUnused
-  nop
  )
  (func $~start
   call $start:exports-lazy

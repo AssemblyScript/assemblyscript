@@ -41,91 +41,85 @@
    i32.rem_u
    i32.eq
    if
-    block $while-break|0
-     loop $while-continue|0
-      local.get $dest
-      i32.const 8
-      i32.rem_u
-      if
-       local.get $n
-       i32.eqz
-       if
-        local.get $ret
-        return
-       end
-       local.get $n
-       i32.const 1
-       i32.sub
-       local.set $n
-       local.get $dest
-       local.tee $4
-       i32.const 1
-       i32.add
-       local.set $dest
-       local.get $4
-       local.get $src
-       local.tee $5
-       i32.const 1
-       i32.add
-       local.set $src
-       local.get $5
-       i32.load8_u
-       i32.store8
-       br $while-continue|0
-      end
-     end
-    end
-    block $while-break|1
-     loop $while-continue|1
-      local.get $n
-      i32.const 8
-      i32.ge_u
-      if
-       local.get $dest
-       local.get $src
-       i64.load
-       i64.store
-       local.get $n
-       i32.const 8
-       i32.sub
-       local.set $n
-       local.get $dest
-       i32.const 8
-       i32.add
-       local.set $dest
-       local.get $src
-       i32.const 8
-       i32.add
-       local.set $src
-       br $while-continue|1
-      end
-     end
-    end
-   end
-   block $while-break|2
-    loop $while-continue|2
-     local.get $n
+    loop $while-continue|0
+     local.get $dest
+     i32.const 8
+     i32.rem_u
      if
-      local.get $dest
-      local.tee $6
-      i32.const 1
-      i32.add
-      local.set $dest
-      local.get $6
-      local.get $src
-      local.tee $7
-      i32.const 1
-      i32.add
-      local.set $src
-      local.get $7
-      i32.load8_u
-      i32.store8
+      local.get $n
+      i32.eqz
+      if
+       local.get $ret
+       return
+      end
       local.get $n
       i32.const 1
       i32.sub
       local.set $n
-      br $while-continue|2
+      local.get $dest
+      local.tee $4
+      i32.const 1
+      i32.add
+      local.set $dest
+      local.get $4
+      local.get $src
+      local.tee $5
+      i32.const 1
+      i32.add
+      local.set $src
+      local.get $5
+      i32.load8_u
+      i32.store8
+      br $while-continue|0
      end
+    end
+    loop $while-continue|1
+     local.get $n
+     i32.const 8
+     i32.ge_u
+     if
+      local.get $dest
+      local.get $src
+      i64.load
+      i64.store
+      local.get $n
+      i32.const 8
+      i32.sub
+      local.set $n
+      local.get $dest
+      i32.const 8
+      i32.add
+      local.set $dest
+      local.get $src
+      i32.const 8
+      i32.add
+      local.set $src
+      br $while-continue|1
+     end
+    end
+   end
+   loop $while-continue|2
+    local.get $n
+    if
+     local.get $dest
+     local.tee $6
+     i32.const 1
+     i32.add
+     local.set $dest
+     local.get $6
+     local.get $src
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $src
+     local.get $7
+     i32.load8_u
+     i32.store8
+     local.get $n
+     i32.const 1
+     i32.sub
+     local.set $n
+     br $while-continue|2
     end
    end
   else
@@ -137,62 +131,19 @@
    i32.rem_u
    i32.eq
    if
-    block $while-break|3
-     loop $while-continue|3
-      local.get $dest
-      local.get $n
-      i32.add
-      i32.const 8
-      i32.rem_u
-      if
-       local.get $n
-       i32.eqz
-       if
-        local.get $ret
-        return
-       end
-       local.get $dest
-       local.get $n
-       i32.const 1
-       i32.sub
-       local.tee $n
-       i32.add
-       local.get $src
-       local.get $n
-       i32.add
-       i32.load8_u
-       i32.store8
-       br $while-continue|3
-      end
-     end
-    end
-    block $while-break|4
-     loop $while-continue|4
-      local.get $n
-      i32.const 8
-      i32.ge_u
-      if
-       local.get $n
-       i32.const 8
-       i32.sub
-       local.set $n
-       local.get $dest
-       local.get $n
-       i32.add
-       local.get $src
-       local.get $n
-       i32.add
-       i64.load
-       i64.store
-       br $while-continue|4
-      end
-     end
-    end
-   end
-   block $while-break|5
-    loop $while-continue|5
+    loop $while-continue|3
+     local.get $dest
      local.get $n
+     i32.add
+     i32.const 8
+     i32.rem_u
      if
+      local.get $n
+      i32.eqz
+      if
+       local.get $ret
+       return
+      end
       local.get $dest
       local.get $n
       i32.const 1
@@ -204,8 +155,45 @@
       i32.add
       i32.load8_u
       i32.store8
-      br $while-continue|5
+      br $while-continue|3
      end
+    end
+    loop $while-continue|4
+     local.get $n
+     i32.const 8
+     i32.ge_u
+     if
+      local.get $n
+      i32.const 8
+      i32.sub
+      local.set $n
+      local.get $dest
+      local.get $n
+      i32.add
+      local.get $src
+      local.get $n
+      i32.add
+      i64.load
+      i64.store
+      br $while-continue|4
+     end
+    end
+   end
+   loop $while-continue|5
+    local.get $n
+    if
+     local.get $dest
+     local.get $n
+     i32.const 1
+     i32.sub
+     local.tee $n
+     i32.add
+     local.get $src
+     local.get $n
+     i32.add
+     i32.load8_u
+     i32.store8
+     br $while-continue|5
     end
    end
   end

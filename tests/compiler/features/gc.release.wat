@@ -20,6 +20,5 @@
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $~start (type $0)
-  nop
  )
 )
