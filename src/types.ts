@@ -702,15 +702,6 @@ export class Type {
       case TypeKind.String: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.StringviewWTF8: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewWTF8, this.is(TypeFlags.Nullable));
-      }
-      case TypeKind.StringviewWTF16: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewWTF16, this.is(TypeFlags.Nullable));
-      }
-      case TypeKind.StringviewIter: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewIter, this.is(TypeFlags.Nullable));
-      }
       case TypeKind.Void: return TypeRef.None;
     }
     // TODO: not used yet

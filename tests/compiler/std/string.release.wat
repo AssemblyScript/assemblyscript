@@ -2078,7 +2078,6 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -2111,7 +2110,6 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -4453,12 +4451,10 @@
    local.get $2
    call $~lib/util/string/compareImpl
    i32.eqz
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
    return
   end
   global.get $~lib/memory/__stack_pointer
@@ -4624,12 +4620,10 @@
   else
    i32.const 0
   end
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
   i32.eqz
  )
  (func $~lib/array/Array<i32>#get:length (param $0 i32) (result i32)
@@ -4656,12 +4650,10 @@
   i32.store
   local.get $0
   i32.load offset=12
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/string/String.fromCharCodes (param $0 i32) (result i32)
   (local $1 i32)
@@ -5154,12 +5146,10 @@
    i32.load offset=16
    i32.const 1
    i32.shr_u
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
    return
   end
   global.get $~lib/memory/__stack_pointer
@@ -5278,12 +5268,10 @@
   local.get $1
   local.get $2
   call $~lib/string/String#lastIndexOf
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/string/String#localeCompare (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -6161,12 +6149,10 @@
   i64.load
   i64.const 28429475166421108
   i64.eq
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/util/string/strtol<f64> (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
@@ -6541,12 +6527,10 @@
   local.get $0
   local.get $1
   call $~lib/util/string/strtol<f64>
-  local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $2
  )
  (func $~lib/util/string/strtod (param $0 i32) (result f64)
   (local $1 i32)
@@ -7410,12 +7394,10 @@
   i32.store
   local.get $0
   call $~lib/util/string/strtod
-  local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
  )
  (func $~lib/util/string/strtol<i32> (result i32)
   (local $0 i32)
@@ -8129,12 +8111,10 @@
   local.get $0
   local.get $1
   call $~lib/string/String#concat
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/string/String.__ne (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
@@ -8165,12 +8145,10 @@
   local.get $1
   call $~lib/string/String.__eq
   i32.eqz
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/string/String.__gt (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -8388,12 +8366,10 @@
   local.get $1
   call $~lib/string/String.__lt
   i32.eqz
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/string/String.__lte (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
@@ -8424,12 +8400,10 @@
   local.get $1
   call $~lib/string/String.__gt
   i32.eqz
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/string/String#repeat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9234,12 +9208,10 @@
   local.get $1
   local.get $2
   call $~lib/string/String#slice
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/string/String#substr (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -9373,12 +9345,10 @@
   local.get $1
   local.get $2
   call $~lib/string/String#substr
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/string/String#substring (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -9538,12 +9508,10 @@
   local.get $1
   local.get $2
   call $~lib/string/String#substring
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -10107,12 +10075,10 @@
   local.get $1
   local.get $2
   call $~lib/string/String#split
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
@@ -11095,12 +11061,10 @@
    call $~lib/string/String#indexOf
    i32.const -1
    i32.ne
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
    i32.eqz
    if
     i32.const 0
@@ -11834,12 +11798,10 @@
    local.get $0
    i32.const 1712
    call $~lib/string/String#lastIndexOf@varargs
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    global.get $std/string/str
    local.tee $4
    i32.store
-   local.get $0
    local.get $4
    i32.const 20
    i32.sub
@@ -13348,12 +13310,10 @@
    i32.const 4880
    i32.store
    call $~lib/util/string/strtol<i32>
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
    i32.const 2147483647
    i32.ne
    if
@@ -13399,12 +13359,10 @@
    i32.const 4928
    i32.store
    call $~lib/util/string/strtol<i64>
-   local.set $3
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $3
    i64.const 9223372036854775807
    i64.ne
    if
@@ -16605,7 +16563,6 @@
    local.tee $4
    i32.store offset=84
    global.get $~lib/memory/__stack_pointer
-   local.set $5
    i32.const 55296
    call $~lib/string/String.fromCodePoint
    local.set $6
@@ -16618,7 +16575,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
-   local.get $5
    local.get $6
    local.get $0
    call $~lib/string/String.__concat
@@ -24638,7 +24594,6 @@
   i32.const 0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  local.set $5
   local.get $0
   i32.const 2
   i32.shl
@@ -24653,7 +24608,6 @@
    local.get $4
    memory.copy
   end
-  local.get $5
   local.get $3
   i32.store
   i32.const 16

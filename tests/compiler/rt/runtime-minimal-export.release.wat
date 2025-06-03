@@ -1288,7 +1288,6 @@
     i32.load offset=4
     i32.const -4
     i32.and
-    local.set $1
     local.get $0
     i32.const 1476
     i32.lt_u
@@ -1322,7 +1321,6 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $6
       local.get $0
       i32.const 4
       i32.sub
@@ -1355,12 +1353,10 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $6
       local.get $4
       call $~lib/rt/tlsf/insertBlock
      end
     end
-    local.get $1
     local.set $0
     br $while-continue|2
    end

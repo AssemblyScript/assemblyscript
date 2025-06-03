@@ -1135,7 +1135,6 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1168,7 +1167,6 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -2081,12 +2079,10 @@
    i32.shr_u
    i32.xor
   end
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2275,11 +2271,9 @@
   i32.store
   local.get $0
   i32.load
-  local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  local.get $2
   local.get $1
   local.get $0
   i32.load offset=4
@@ -2384,11 +2378,9 @@
     i32.store
     local.get $0
     i32.load offset=16
-    local.set $2
     global.get $~lib/memory/__stack_pointer
     local.get $0
     i32.store
-    local.get $2
     local.get $0
     i32.load offset=12
     i32.eq
@@ -2401,11 +2393,9 @@
      i32.store offset=4
      local.get $0
      i32.load offset=20
-     local.set $2
      global.get $~lib/memory/__stack_pointer
      local.get $0
      i32.store offset=4
-     local.get $2
      local.get $0
      i32.load offset=12
      i32.const 3
@@ -2706,11 +2696,9 @@
   i32.store
   local.get $0
   i32.load
-  local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  local.get $3
   local.get $2
   local.get $0
   i32.load offset=4
@@ -2836,11 +2824,9 @@
     i32.store
     local.get $0
     i32.load offset=16
-    local.set $2
     global.get $~lib/memory/__stack_pointer
     local.get $0
     i32.store
-    local.get $2
     local.get $0
     i32.load offset=12
     i32.eq
@@ -2853,11 +2839,9 @@
      i32.store offset=4
      local.get $0
      i32.load offset=20
-     local.set $2
      global.get $~lib/memory/__stack_pointer
      local.get $0
      i32.store offset=4
-     local.get $2
      local.get $0
      i32.load offset=12
      i32.const 3
@@ -3208,12 +3192,10 @@
     call $"~lib/map/Map<~lib/string/String,usize>#find"
     i32.const 0
     i32.ne
-    local.set $0
     global.get $~lib/memory/__stack_pointer
     i32.const 12
     i32.add
     global.set $~lib/memory/__stack_pointer
-    local.get $0
     if
      global.get $~lib/memory/__stack_pointer
      global.get $~lib/symbol/stringToId
@@ -3368,12 +3350,10 @@
   call $"~lib/map/Map<usize,~lib/string/String>#find"
   i32.const 0
   i32.ne
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $"~lib/map/Map<usize,~lib/string/String>#get" (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
@@ -3440,12 +3420,10 @@
   end
   local.get $0
   i32.load offset=4
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/symbol/_Symbol.keyFor (param $0 i32) (result i32)
   (local $1 i32)
@@ -3485,12 +3463,10 @@
   else
    i32.const 0
   end
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $~lib/string/String.__concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3761,12 +3737,10 @@
   local.get $0
   i32.const 2464
   call $~lib/string/String.__concat
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $start:std/symbol
   (local $0 i32)

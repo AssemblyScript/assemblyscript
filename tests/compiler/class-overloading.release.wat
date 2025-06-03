@@ -1087,7 +1087,6 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1120,7 +1119,6 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1561,7 +1559,6 @@
     i32.store
    end
    global.get $~lib/memory/__stack_pointer
-   local.set $1
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -1597,7 +1594,6 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $1
    local.get $0
    i32.store
    global.get $~lib/memory/__stack_pointer
@@ -2044,17 +2040,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#get:c@override$154
-    block $default0
-     block $case21
-      block $case12
-       block $case03
+    block $default4
+     block $case25
+      block $case16
+       block $case07
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case03 $case12 $case03 $case03 $case21 $default0
+        br_table $case07 $case16 $case07 $case07 $case25 $default4
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2097,17 +2093,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#b@override$155
-    block $default1
-     block $case22
-      block $case13
-       block $case04
+    block $default8
+     block $case29
+      block $case110
+       block $case011
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case04 $case13 $case04 $case04 $case22 $default1
+        br_table $case011 $case110 $case011 $case011 $case29 $default8
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2310,17 +2306,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#b@override$157
-    block $default2
-     block $case23
-      block $case14
-       block $case05
+    block $default16
+     block $case217
+      block $case118
+       block $case019
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case05 $case14 $case05 $case05 $case23 $default2
+        br_table $case019 $case118 $case019 $case019 $case217 $default16
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2363,17 +2359,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#get:c@override$158
-    block $default3
-     block $case24
-      block $case15
-       block $case06
+    block $default24
+     block $case225
+      block $case126
+       block $case027
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case06 $case15 $case06 $case06 $case24 $default3
+        br_table $case027 $case126 $case027 $case027 $case225 $default24
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2414,17 +2410,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#b@override$159
-    block $default4
-     block $case25
-      block $case16
-       block $case07
+    block $default32
+     block $case233
+      block $case134
+       block $case035
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case07 $case16 $case07 $case07 $case25 $default4
+        br_table $case035 $case134 $case035 $case035 $case233 $default32
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2497,17 +2493,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#b@override$160
-    block $default5
-     block $case26
-      block $case17
-       block $case08
+    block $default40
+     block $case241
+      block $case142
+       block $case043
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case08 $case17 $case08 $case08 $case26 $default5
+        br_table $case043 $case142 $case043 $case043 $case241 $default40
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2550,17 +2546,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#get:c@override$161
-    block $default6
-     block $case27
-      block $case18
-       block $case09
+    block $default48
+     block $case249
+      block $case150
+       block $case051
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case09 $case18 $case09 $case09 $case27 $default6
+        br_table $case051 $case150 $case051 $case051 $case249 $default48
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2601,17 +2597,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#b@override$162
-    block $default7
-     block $case28
-      block $case19
-       block $case010
+    block $default56
+     block $case257
+      block $case158
+       block $case059
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case010 $case19 $case010 $case010 $case28 $default7
+        br_table $case059 $case158 $case059 $case059 $case257 $default56
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2711,17 +2707,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#b@override$164
-    block $default8
-     block $case29
-      block $case110
-       block $case011
+    block $default64
+     block $case265
+      block $case166
+       block $case067
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case011 $case110 $case011 $case011 $case29 $default8
+        br_table $case067 $case166 $case067 $case067 $case265 $default64
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2764,17 +2760,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#get:c@override$165
-    block $default9
-     block $case210
-      block $case111
-       block $case012
+    block $default72
+     block $case273
+      block $case174
+       block $case075
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case012 $case111 $case012 $case012 $case210 $default9
+        br_table $case075 $case174 $case075 $case075 $case273 $default72
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2817,17 +2813,17 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/A#b@override$166
-    block $default10
-     block $case211
-      block $case112
-       block $case013
+    block $default80
+     block $case281
+      block $case182
+       block $case083
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 5
         i32.sub
-        br_table $case013 $case112 $case013 $case013 $case211 $default10
+        br_table $case083 $case182 $case083 $case083 $case281 $default80
        end
        i32.const 1520
        global.set $class-overloading/which
@@ -2900,8 +2896,8 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/IA#foo@override$168
-    block $default11
-     block $case113
+    block $default88
+     block $case189
       local.get $0
       i32.const 8
       i32.sub
@@ -2913,8 +2909,8 @@
        local.get $0
        i32.const 13
        i32.eq
-       br_if $case113
-       br $default11
+       br_if $case189
+       br $default88
       end
       i32.const 1680
       global.set $class-overloading/which
@@ -2982,8 +2978,8 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/IA#foo@override$170
-    block $default12
-     block $case114
+    block $default91
+     block $case192
       local.get $0
       i32.const 8
       i32.sub
@@ -2995,8 +2991,8 @@
        local.get $0
        i32.const 13
        i32.eq
-       br_if $case114
-       br $default12
+       br_if $case192
+       br $default91
       end
       i32.const 1680
       global.set $class-overloading/which
@@ -3044,7 +3040,6 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.set $1
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -3080,7 +3075,6 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $1
    local.get $0
    i32.store
    global.get $~lib/memory/__stack_pointer
@@ -3129,7 +3123,6 @@
      local.tee $0
      i32.store
      global.get $~lib/memory/__stack_pointer
-     local.set $1
      global.get $~lib/memory/__stack_pointer
      local.get $0
      i32.store offset=4
@@ -3165,7 +3158,6 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     local.get $1
      local.get $0
      i32.store
      global.get $~lib/memory/__stack_pointer

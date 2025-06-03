@@ -330,12 +330,10 @@
   i32.const 0
   call $~lib/string/String.__eq
   i32.eqz
-  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
  (func $NonNullable/assertNonNull<~lib/string/String>
   global.get $~lib/memory/__stack_pointer

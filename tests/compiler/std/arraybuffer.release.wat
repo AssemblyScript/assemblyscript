@@ -1042,7 +1042,6 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1075,7 +1074,6 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1907,7 +1905,6 @@
    i32.const 1456
    global.set $~lib/rt/itcms/fromSpace
    global.get $~lib/memory/__stack_pointer
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
@@ -1929,7 +1926,6 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
    local.get $1
    i32.store
    global.get $~lib/memory/__stack_pointer
@@ -2185,7 +2181,6 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.sub
@@ -2216,7 +2211,6 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
    local.get $1
    i32.store offset=12
    global.get $~lib/memory/__stack_pointer
@@ -2231,7 +2225,6 @@
    i32.const 0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.set $0
    i32.const 8
    i32.const 1
    call $~lib/rt/itcms/__new
@@ -2239,7 +2232,6 @@
    i32.const 1632
    i64.load align=1
    i64.store align=1
-   local.get $0
    local.get $2
    i32.store
    i32.const 16

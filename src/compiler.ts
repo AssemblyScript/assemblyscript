@@ -536,6 +536,12 @@ export class Compiler extends DiagnosticEmitter {
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize();
 
+
+    // Binaryen treats all function references as being leaked to the outside world when
+    // the module isn't marked as closed-world (see WebAssembly/binaryen#7135). Therefore,
+    // we should mark the module as closed-world when we're definitely sure it is.
+    module.setClosedWorld(true);
+
     // obtain the main start function
     let startFunctionInstance = this.currentFlow.targetFunction;
     assert(startFunctionInstance.internalName == BuiltinNames.start);
@@ -857,6 +863,7 @@ export class Compiler extends DiagnosticEmitter {
         ImportNames.DefaultNamespace,
         ImportNames.Table
       );
+      module.setClosedWorld(false);
       if (options.pedantic && options.willOptimize) {
         this.pedantic(
           DiagnosticCode.Importing_the_table_disables_some_indirect_call_optimizations,
@@ -866,6 +873,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (options.exportTable) {
       module.addTableExport(CommonNames.DefaultTable, ExportNames.Table);
+      module.setClosedWorld(false);
       if (options.pedantic && options.willOptimize) {
         this.pedantic(
           DiagnosticCode.Exporting_the_table_disables_some_indirect_call_optimizations,
@@ -977,6 +985,7 @@ export class Compiler extends DiagnosticEmitter {
                   }
                 }
               }
+              if (functionInstance.signature.returnType.kind == TypeKind.Func) this.module.setClosedWorld(false);
             }
             return;
           }
@@ -1007,6 +1016,7 @@ export class Compiler extends DiagnosticEmitter {
                 this.desiresExportRuntime = true;
               }
             }
+            if (global.type.kind == TypeKind.Func) this.module.setClosedWorld(false);
           }
           if (global.type == Type.v128) {
             this.warning(
@@ -4975,8 +4985,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.select(
           module.i32(1),
           module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
-          leftExpr,
-          TypeRef.I32
+          leftExpr
         );
       }
       case TypeKind.I8:

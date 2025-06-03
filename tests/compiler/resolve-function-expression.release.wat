@@ -1068,7 +1068,6 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1101,7 +1100,6 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1289,7 +1287,6 @@
     br $__inlined_func$~lib/util/number/itoa32$73
    end
    global.get $~lib/memory/__stack_pointer
-   local.set $5
    i32.const 0
    local.get $0
    i32.sub
@@ -1661,7 +1658,6 @@
    i32.const 0
    local.get $6
    memory.fill
-   local.get $5
    local.get $2
    i32.store
    local.get $2

@@ -1027,7 +1027,6 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1060,7 +1059,6 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1552,7 +1550,7 @@
   end
   i32.const 0
   local.set $0
-  loop $do-loop|07
+  loop $do-loop|09
    local.get $0
    i32.const 1
    i32.add
@@ -1562,7 +1560,7 @@
    i32.const 0
    local.get $0
    select
-   br_if $do-loop|07
+   br_if $do-loop|09
   end
   local.get $0
   i32.const 10
@@ -1579,7 +1577,7 @@
   local.set $0
   i32.const 0
   local.set $1
-  loop $do-loop|08
+  loop $do-loop|011
    local.get $0
    i32.const 1
    i32.add
@@ -1587,7 +1585,7 @@
    i32.const 10
    i32.ne
    if
-    loop $do-loop|110
+    loop $do-loop|113
      local.get $1
      i32.const 1
      i32.add
@@ -1597,10 +1595,10 @@
      i32.const 0
      local.get $1
      select
-     br_if $do-loop|110
+     br_if $do-loop|113
     end
     local.get $0
-    br_if $do-loop|08
+    br_if $do-loop|011
    end
   end
   local.get $0
@@ -1674,7 +1672,7 @@
    global.get $~lib/memory/__stack_pointer
    call $do/Ref#constructor
    i32.store
-   loop $do-loop|09
+   loop $do-loop|05
     local.get $1
     i32.const 1
     i32.add
@@ -1691,7 +1689,7 @@
      i32.store
     end
     local.get $0
-    br_if $do-loop|09
+    br_if $do-loop|05
    end
    local.get $1
    i32.const 10
@@ -1734,8 +1732,8 @@
    call $do/Ref#constructor
    local.tee $1
    i32.store
-   loop $do-loop|010
-    block $do-break|03
+   loop $do-loop|08
+    block $do-break|06
      local.get $0
      i32.const 1
      i32.add
@@ -1745,10 +1743,10 @@
      if
       i32.const 0
       local.set $1
-      br $do-break|03
+      br $do-break|06
      end
      call $do/Ref#constructor
-     br_if $do-loop|010
+     br_if $do-loop|08
     end
    end
    local.get $0
@@ -1873,7 +1871,6 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.set $1
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -1901,7 +1898,6 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $1
    local.get $0
    i32.store
    global.get $~lib/memory/__stack_pointer

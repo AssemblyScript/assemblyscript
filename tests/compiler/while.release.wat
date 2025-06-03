@@ -1027,7 +1027,6 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1060,7 +1059,6 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1496,7 +1494,7 @@
   local.set $0
   i32.const 0
   local.set $2
-  loop $while-continue|02
+  loop $while-continue|03
    local.get $0
    local.tee $1
    i32.const 1
@@ -1511,7 +1509,7 @@
    else
     i32.const 0
    end
-   br_if $while-continue|02
+   br_if $while-continue|03
   end
   local.get $0
   i32.const -1
@@ -1537,14 +1535,14 @@
   end
   i32.const 0
   local.set $0
-  loop $while-continue|03
+  loop $while-continue|05
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $while-continue|03
+   br_if $while-continue|05
   end
   local.get $0
   i32.const 10
@@ -1559,14 +1557,14 @@
   end
   i32.const 0
   local.set $0
-  loop $while-continue|04
+  loop $while-continue|07
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $while-continue|04
+   br_if $while-continue|07
   end
   local.get $0
   i32.const 10
@@ -1581,14 +1579,14 @@
   end
   i32.const 10
   local.set $0
-  loop $while-continue|07
+  loop $while-continue|013
    local.get $0
    if
     local.get $0
     i32.const 1
     i32.sub
     local.set $0
-    br $while-continue|07
+    br $while-continue|013
    end
   end
   local.get $0
@@ -1604,24 +1602,24 @@
   local.set $0
   i32.const 10
   local.set $1
-  loop $while-continue|08
+  loop $while-continue|015
    local.get $0
    if
-    loop $while-continue|110
+    loop $while-continue|117
      local.get $1
      if
       local.get $1
       i32.const 1
       i32.sub
       local.set $1
-      br $while-continue|110
+      br $while-continue|117
      end
     end
     local.get $0
     i32.const 1
     i32.sub
     local.set $0
-    br $while-continue|08
+    br $while-continue|015
    end
   end
   local.get $0
@@ -1692,7 +1690,7 @@
    call $while/Ref#constructor
    local.tee $0
    i32.store
-   loop $while-continue|11
+   loop $while-continue|15
     local.get $0
     if
      local.get $1
@@ -1710,7 +1708,7 @@
       local.tee $0
       i32.store
      end
-     br $while-continue|11
+     br $while-continue|15
     end
    end
    local.get $1
@@ -1754,10 +1752,10 @@
    call $while/Ref#constructor
    local.tee $1
    i32.store
-   loop $while-continue|09
+   loop $while-continue|08
     call $while/Ref#constructor
     if
-     block $while-break|08
+     block $while-break|07
       local.get $0
       i32.const 1
       i32.add
@@ -1767,9 +1765,9 @@
       if
        i32.const 0
        local.set $1
-       br $while-break|08
+       br $while-break|07
       end
-      br $while-continue|09
+      br $while-continue|08
      end
     end
    end
@@ -1799,25 +1797,25 @@
    global.set $~lib/memory/__stack_pointer
    i32.const 0
    local.set $0
-   loop $while-continue|0911
+   loop $while-continue|019
     local.get $0
     i32.const 1
     i32.add
     local.tee $0
     i32.const 0
     i32.le_s
-    br_if $while-continue|0911
+    br_if $while-continue|019
    end
    i32.const 0
    local.set $0
-   loop $while-continue|010
+   loop $while-continue|021
     local.get $0
     i32.const 1
     i32.add
     local.tee $0
     i32.const 0
     i32.le_s
-    br_if $while-continue|010
+    br_if $while-continue|021
    end
    i32.const 0
    local.set $0
@@ -1845,23 +1843,23 @@
    i32.const 0
    i32.gt_s
    if
-    loop $while-continue|011
+    loop $while-continue|023
      global.get $~lib/rt/itcms/state
      if
       call $~lib/rt/itcms/step
       drop
-      br $while-continue|011
+      br $while-continue|023
      end
     end
    end
    call $~lib/rt/itcms/step
    drop
-   loop $while-continue|113
+   loop $while-continue|125
     global.get $~lib/rt/itcms/state
     if
      call $~lib/rt/itcms/step
      drop
-     br $while-continue|113
+     br $while-continue|125
     end
    end
    global.get $~lib/rt/itcms/total
@@ -1939,7 +1937,6 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.set $1
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -1967,7 +1964,6 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $1
    local.get $0
    i32.store
    global.get $~lib/memory/__stack_pointer

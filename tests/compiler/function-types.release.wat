@@ -168,12 +168,10 @@
    i32.const 1056
    i32.load
    call_indirect (type $0)
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
    i32.const 3
    i32.ne
    if

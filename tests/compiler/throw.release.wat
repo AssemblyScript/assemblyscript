@@ -911,7 +911,6 @@
        i64.shl
        local.tee $2
        i32.wrap_i64
-       local.set $4
        local.get $2
        i64.const 36100
        i64.lt_u
@@ -957,7 +956,6 @@
         i32.const 0
        end
        local.set $0
-       local.get $4
        i32.const -16
        i32.and
        local.get $1
@@ -1003,7 +1001,6 @@
        global.set $~lib/rt/tlsf/ROOT
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.set $0
       local.get $3
       i32.const 4
       i32.sub
@@ -1036,7 +1033,6 @@
       i32.const 1
       i32.or
       i32.store
-      local.get $0
       local.get $1
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1222,11 +1218,11 @@
     i32.const 0
     i32.gt_s
     if
-     loop $while-continue|01
+     loop $while-continue|05
       global.get $~lib/rt/itcms/state
       if
        call $~lib/rt/itcms/step
-       br $while-continue|01
+       br $while-continue|05
       end
      end
     end
