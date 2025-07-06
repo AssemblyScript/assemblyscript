@@ -380,14 +380,13 @@ async function runTest(basename) {
     if (config.skipInstantiate) {
       instantiateDebug.end(SKIPPED);
     } else {
-
-      if (!await testInstantiate(debugBuffer, glue, stderr)) {
+      if (!await testInstantiate(debugBuffer, glue, stderr, !!config.expectedFailed)) {
         instantiateDebug.end(FAILURE);
         return prepareResult(FAILURE, "instantiate error (debug)");
       }
       instantiateDebug.end(SUCCESS);
       const instantiateRelease = section("instantiate release");
-      if (!await testInstantiate(releaseBuffer, glue, stderr)) {
+      if (!await testInstantiate(releaseBuffer, glue, stderr, !!config.expectedFailed)) {
         instantiateRelease.end(FAILURE);
         return prepareResult(FAILURE, "instantiate error (release)");
       }
@@ -423,7 +422,7 @@ async function runTest(basename) {
 
     const rtracedBuffer = stdout.toBuffer();
     const instantiateRtrace = section("instantiate rtrace");
-    if (!await testInstantiate(rtracedBuffer, glue, stderr)) {
+    if (!await testInstantiate(rtracedBuffer, glue, stderr, !!config.expectedFailed)) {
       instantiateRtrace.end(FAILURE);
       return prepareResult(FAILURE, "rtrace error");
     }
@@ -434,7 +433,7 @@ async function runTest(basename) {
 }
 
 // Tests if instantiation of a module succeeds
-async function testInstantiate(binaryBuffer, glue, stderr) {
+async function testInstantiate(binaryBuffer, glue, stderr, expectedFailed) {
   let failed = false;
   try {
     const memory = new WebAssembly.Memory({ initial: 10 });
@@ -539,23 +538,21 @@ async function testInstantiate(binaryBuffer, glue, stderr) {
       failed = true;
       console.log(`  memory leak detected: ${leakCount} leaking`);
     }
-    if (!failed) {
-      if (rtrace.active) {
-        console.log("  " +
-          rtrace.allocCount + " allocs, " +
-          rtrace.freeCount + " frees, " +
-          rtrace.resizeCount + " resizes, " +
-          rtrace.moveCount + " moves"
-        );
-      }
-      return true;
+    if (rtrace.active) {
+      console.log("  " +
+        rtrace.allocCount + " allocs, " +
+        rtrace.freeCount + " frees, " +
+        rtrace.resizeCount + " resizes, " +
+        rtrace.moveCount + " moves"
+      );
     }
   } catch (err) {
+    failed = true;
     stderr.write("---\n");
     stderr.write(err.stack);
     stderr.write("\n---\n");
   }
-  return false;
+  return failed == expectedFailed;
 }
 
 // Evaluates the overall test result

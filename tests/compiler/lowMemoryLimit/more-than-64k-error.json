@@ -1,0 +1,6 @@
+{
+  "asc_flags": [
+    "--lowMemoryLimit", "655360"
+  ],
+  "expectedFailed": true
+}
