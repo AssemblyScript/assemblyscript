@@ -196,6 +196,11 @@ import { E_ALLOCATION_TOO_LARGE } from "../util/error";
   );
 }
 
+// @ts-ignore: decorator
+@inline function sizeRoundToPage(size: usize): i32 {
+  return <i32>((size + 0xffff) >>> 16);
+}
+
 /** Inserts a previously used block back into the free list. */
 function insertBlock(root: Root, block: Block): void {
   if (DEBUG) assert(block); // cannot be null
@@ -427,10 +432,6 @@ function addMemory(root: Root, start: usize, endU64: u64): bool {
 
 /** Grows memory to fit at least another block of the specified size. */
 function growMemory(root: Root, size: usize): void {
-  if (ASC_LOW_MEMORY_LIMIT) {
-    unreachable();
-    return;
-  }
   // Here, both rounding performed in searchBlock ...
   if (size >= SB_SIZE) {
     size = roundSize(size);
@@ -439,13 +440,23 @@ function growMemory(root: Root, size: usize): void {
   // to merge with the tail block, that's one time, otherwise it's two times.
   let pagesBefore = memory.size();
   size += BLOCK_OVERHEAD << usize((<usize>pagesBefore << 16) - BLOCK_OVERHEAD != changetype<usize>(GETTAIL(root)));
-  let pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
+  if (ASC_LOW_MEMORY_LIMIT) {
+    if ((<usize>pagesBefore << 16) + size > <usize>ASC_LOW_MEMORY_LIMIT) unreachable();
+  }
+  let pagesNeeded = sizeRoundToPage(size);
   let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+  if (ASC_LOW_MEMORY_LIMIT) {
+    pagesWanted = min(pagesWanted, sizeRoundToPage(ASC_LOW_MEMORY_LIMIT) - pagesBefore);
+  }
   if (memory.grow(pagesWanted) < 0) {
     if (memory.grow(pagesNeeded) < 0) unreachable();
   }
   let pagesAfter = memory.size();
-  addMemory(root, <usize>pagesBefore << 16, <u64>pagesAfter << 16);
+  if (ASC_LOW_MEMORY_LIMIT) {
+    addMemory(root, <usize>pagesBefore << 16, min(<u64>pagesAfter << 16, <u64>ASC_LOW_MEMORY_LIMIT & ~AL_MASK));
+  } else {
+    addMemory(root, <usize>pagesBefore << 16, <u64>pagesAfter << 16);
+  }
 }
 
 /** Computes the size (excl. header) of a block. */
@@ -467,7 +478,7 @@ function initialize(): void {
   if (isDefined(ASC_RTRACE)) oninit(__heap_base);
   let rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
   let pagesBefore = memory.size();
-  let pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
+  let pagesNeeded = sizeRoundToPage(rootOffset + ROOT_SIZE);
   if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
   let root = changetype<Root>(rootOffset);
   root.flMap = 0;
@@ -480,9 +491,9 @@ function initialize(): void {
   }
   let memStart = rootOffset + ROOT_SIZE;
   if (ASC_LOW_MEMORY_LIMIT) {
-    const memEnd = <u64>ASC_LOW_MEMORY_LIMIT & ~AL_MASK;
-    if (memStart <= memEnd) addMemory(root, memStart, memEnd);
-    else unreachable(); // low memory limit already exceeded
+    const limitedEnd: u64 = min(<u64>memory.size() << 16, <u64>ASC_LOW_MEMORY_LIMIT & ~AL_MASK);
+    if (<u64>memStart > limitedEnd) unreachable(); // low memory limit already exceeded
+    addMemory(root, memStart, limitedEnd);
   } else {
     addMemory(root, memStart, <u64>memory.size() << 16);
   }
