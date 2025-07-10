@@ -647,8 +647,8 @@ export class Compiler extends DiagnosticEmitter {
     // finalize runtime features
     module.removeGlobal(BuiltinNames.rtti_base);
     if (this.runtimeFeatures & RuntimeFeatures.Rtti) compileRTTI(this);
-    if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
     if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
+    if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
 
     let memoryOffset = i64_align(this.memoryOffset, options.usizeType.byteSize);
 

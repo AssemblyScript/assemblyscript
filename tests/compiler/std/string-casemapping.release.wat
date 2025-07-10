@@ -485,16 +485,6 @@
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
   (local $1 i32)
-  i32.const 1280
-  call $~lib/rt/itcms/__visit
-  i32.const 1088
-  call $~lib/rt/itcms/__visit
-  i32.const 19632
-  call $~lib/rt/itcms/__visit
-  i32.const 20688
-  call $~lib/rt/itcms/__visit
-  i32.const 1488
-  call $~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1
   i32.load offset=4

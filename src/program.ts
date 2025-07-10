@@ -4910,6 +4910,10 @@ export class Class extends TypedElement {
     }
     return false;
   }
+
+  get visitorFunctionName(): string {
+    return `${this.internalName}~visit`;
+  }
 }
 
 /** A yet unresolved interface. */

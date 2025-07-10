@@ -1070,24 +1070,6 @@
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
   (local $1 i32)
-  global.get $std/string/str
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  i32.const 1264
-  call $~lib/rt/itcms/__visit
-  i32.const 14064
-  call $~lib/rt/itcms/__visit
-  i32.const 15712
-  call $~lib/rt/itcms/__visit
-  i32.const 1376
-  call $~lib/rt/itcms/__visit
-  i32.const 16640
-  call $~lib/rt/itcms/__visit
-  i32.const 17696
-  call $~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1
   i32.load offset=4

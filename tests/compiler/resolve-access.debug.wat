@@ -2965,21 +2965,6 @@
   call $~lib/util/number/utoa32
   return
  )
- (func $~lib/rt/__visit_globals (param $0 i32)
-  (local $1 i32)
-  i32.const 256
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 64
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 1136
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 2192
-  local.get $0
-  call $~lib/rt/itcms/__visit
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -3055,6 +3040,9 @@
    return
   end
   unreachable
+ )
+ (func $~lib/rt/__visit_globals (param $0 i32)
+  (local $1 i32)
  )
  (func $~start
   memory.size

@@ -2323,22 +2323,6 @@
   local.get $this
   i32.load
  )
- (func $~lib/rt/__visit_globals (param $0 i32)
-  (local $1 i32)
-  global.get $infer-generic/arr
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  i32.const 400
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 208
-  local.get $0
-  call $~lib/rt/itcms/__visit
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -2468,6 +2452,16 @@
    return
   end
   unreachable
+ )
+ (func $~lib/rt/__visit_globals (param $0 i32)
+  (local $1 i32)
+  global.get $infer-generic/arr
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
  )
  (func $~start
   call $start:infer-generic

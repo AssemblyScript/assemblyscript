@@ -71,14 +71,6 @@
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
   (local $1 i32)
-  i32.const 1056
-  call $~lib/rt/itcms/__visit
-  global.get $bindings/noExportRuntime/isBuffer
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
   global.get $bindings/noExportRuntime/isTypedArray
   local.tee $0
   if
@@ -88,12 +80,6 @@
   i32.const 1632
   call $~lib/rt/itcms/__visit
   i32.const 1712
-  call $~lib/rt/itcms/__visit
-  i32.const 1392
-  call $~lib/rt/itcms/__visit
-  i32.const 1088
-  call $~lib/rt/itcms/__visit
-  i32.const 1200
   call $~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1

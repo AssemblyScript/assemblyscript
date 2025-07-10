@@ -62,10 +62,6 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
-  i32.const 1296
-  call $~lib/rt/itcms/__visit
-  i32.const 1104
-  call $~lib/rt/itcms/__visit
   global.get $reexport/car
   local.tee $0
   if

@@ -64,10 +64,6 @@
   (local $1 i32)
   i32.const 1152
   call $~lib/rt/itcms/__visit
-  i32.const 1424
-  call $~lib/rt/itcms/__visit
-  i32.const 1232
-  call $~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1
   i32.load offset=4

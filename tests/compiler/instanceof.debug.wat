@@ -4450,6 +4450,103 @@
   end
   i32.const 1
  )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
+ )
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
+  block $invalid
+   block $instanceof/IE
+    block $instanceof/Z
+     block $instanceof/IC
+      block $instanceof/ID
+       block $instanceof/Y
+        block $instanceof/IA
+         block $instanceof/IB
+          block $instanceof/X
+           block $instanceof/W
+            block $instanceof/BlackCat
+             block $instanceof/Cat
+              block $instanceof/Animal
+               block $instanceof/SomethingElse<i32>
+                block $instanceof/Parent<f32>
+                 block $instanceof/Child<f32>
+                  block $instanceof/Parent<i32>
+                   block $instanceof/Child<i32>
+                    block $instanceof/C
+                     block $instanceof/B
+                      block $instanceof/A
+                       block $~lib/arraybuffer/ArrayBufferView
+                        block $~lib/string/String
+                         block $~lib/arraybuffer/ArrayBuffer
+                          block $~lib/object/Object
+                           local.get $0
+                           i32.const 8
+                           i32.sub
+                           i32.load
+                           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $instanceof/A $instanceof/B $instanceof/C $instanceof/Child<i32> $instanceof/Parent<i32> $instanceof/Child<f32> $instanceof/Parent<f32> $instanceof/SomethingElse<i32> $instanceof/Animal $instanceof/Cat $instanceof/BlackCat $instanceof/W $instanceof/X $instanceof/IB $instanceof/IA $instanceof/Y $instanceof/ID $instanceof/IC $instanceof/Z $instanceof/IE $invalid
+                          end
+                          return
+                         end
+                         return
+                        end
+                        return
+                       end
+                       local.get $0
+                       local.get $1
+                       call $~lib/arraybuffer/ArrayBufferView~visit
+                       return
+                      end
+                      return
+                     end
+                     return
+                    end
+                    return
+                   end
+                   return
+                  end
+                  return
+                 end
+                 return
+                end
+                return
+               end
+               return
+              end
+              return
+             end
+             return
+            end
+            return
+           end
+           return
+          end
+          return
+         end
+         return
+        end
+        return
+       end
+       return
+      end
+      return
+     end
+     return
+    end
+    return
+   end
+   return
+  end
+  unreachable
+ )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
   global.get $instanceof/a
@@ -4578,109 +4675,6 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
-  i32.const 224
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 32
-  local.get $0
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
- )
- (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  block $invalid
-   block $instanceof/IE
-    block $instanceof/Z
-     block $instanceof/IC
-      block $instanceof/ID
-       block $instanceof/Y
-        block $instanceof/IA
-         block $instanceof/IB
-          block $instanceof/X
-           block $instanceof/W
-            block $instanceof/BlackCat
-             block $instanceof/Cat
-              block $instanceof/Animal
-               block $instanceof/SomethingElse<i32>
-                block $instanceof/Parent<f32>
-                 block $instanceof/Child<f32>
-                  block $instanceof/Parent<i32>
-                   block $instanceof/Child<i32>
-                    block $instanceof/C
-                     block $instanceof/B
-                      block $instanceof/A
-                       block $~lib/arraybuffer/ArrayBufferView
-                        block $~lib/string/String
-                         block $~lib/arraybuffer/ArrayBuffer
-                          block $~lib/object/Object
-                           local.get $0
-                           i32.const 8
-                           i32.sub
-                           i32.load
-                           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $instanceof/A $instanceof/B $instanceof/C $instanceof/Child<i32> $instanceof/Parent<i32> $instanceof/Child<f32> $instanceof/Parent<f32> $instanceof/SomethingElse<i32> $instanceof/Animal $instanceof/Cat $instanceof/BlackCat $instanceof/W $instanceof/X $instanceof/IB $instanceof/IA $instanceof/Y $instanceof/ID $instanceof/IC $instanceof/Z $instanceof/IE $invalid
-                          end
-                          return
-                         end
-                         return
-                        end
-                        return
-                       end
-                       local.get $0
-                       local.get $1
-                       call $~lib/arraybuffer/ArrayBufferView~visit
-                       return
-                      end
-                      return
-                     end
-                     return
-                    end
-                    return
-                   end
-                   return
-                  end
-                  return
-                 end
-                 return
-                end
-                return
-               end
-               return
-              end
-              return
-             end
-             return
-            end
-            return
-           end
-           return
-          end
-          return
-         end
-         return
-        end
-        return
-       end
-       return
-      end
-      return
-     end
-     return
-    end
-    return
-   end
-   return
-  end
-  unreachable
  )
  (func $~start
   call $start:instanceof

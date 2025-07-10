@@ -2735,63 +2735,6 @@
   local.get $taggedNext
   i32.store offset=8
  )
- (func $~lib/rt/__visit_globals (param $0 i32)
-  (local $1 i32)
-  global.get $~lib/symbol/stringToId
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $~lib/symbol/idToString
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/symbol/key1
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/symbol/key2
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/symbol/key3
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/symbol/key4
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  i32.const 304
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 512
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 624
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 112
-  local.get $0
-  call $~lib/rt/itcms/__visit
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -2856,6 +2799,23 @@
    return
   end
   unreachable
+ )
+ (func $~lib/rt/__visit_globals (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/symbol/stringToId
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $~lib/symbol/idToString
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
  )
  (func $~start
   global.get $~started

@@ -51,10 +51,6 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
-  i32.const 1248
-  call $~lib/rt/itcms/__visit
-  i32.const 1056
-  call $~lib/rt/itcms/__visit
   global.get $issues/2622/_a/t1
   local.tee $0
   if

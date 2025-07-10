@@ -85,7 +85,8 @@ import {
   DecoratorFlags,
   Class,
   PropertyPrototype,
-  VariableLikeElement
+  VariableLikeElement,
+  Function,
 } from "./program";
 
 import {
@@ -10673,6 +10674,17 @@ builtinFunctions.set(BuiltinNames.i32x4_relaxed_dot_i8x16_i7x16_add_s, builtin_i
 
 // === Internal helpers =======================================================================
 
+function getVisitInstanceName(visitInstance: Function, classReference: Class): string | null {
+  if (classReference.hasDecorator(DecoratorFlags.Final)) {
+    if (classReference.visitRef != 0) {
+      return classReference.visitorFunctionName;
+    } else  if (classReference.isPointerfree) {
+      return null; // no visitor for pointerfree classes
+    }
+  }
+  return visitInstance.internalName;
+}
+
 /** Compiles the `visit_globals` function. */
 export function compileVisitGlobals(compiler: Compiler): void {
   let module = compiler.module;
@@ -10695,11 +10707,13 @@ export function compileVisitGlobals(compiler: Compiler): void {
       !classReference.hasDecorator(DecoratorFlags.Unmanaged) &&
       global.is(CommonFlags.Compiled)
     ) {
+      let visitFunctionName = getVisitInstanceName(visitInstance, classReference);
+      if (visitFunctionName == null) continue;
       if (global.is(CommonFlags.Inlined)) {
         let value = global.constantIntegerValue;
         if (i64_low(value) || i64_high(value)) {
           exprs.push(
-            module.call(visitInstance.internalName, [
+            module.call(visitFunctionName, [
               compiler.options.isWasm64
                 ? module.i64(i64_low(value), i64_high(value))
                 : module.i32(i64_low(value)),
@@ -10714,7 +10728,7 @@ export function compileVisitGlobals(compiler: Compiler): void {
               module.global_get(global.internalName, sizeTypeRef),
               false // internal
             ),
-            module.call(visitInstance.internalName, [
+            module.call(visitFunctionName, [
               module.local_get(1, sizeTypeRef), // tempRef != null
               module.local_get(0, TypeRef.I32) // cookie
             ], TypeRef.None)
@@ -10750,7 +10764,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   let base = instance.base;
   if (base) {
     body.push(
-      module.call(`${base.internalName}~visit`, [
+      module.call(base.visitorFunctionName, [
         module.local_get(0, sizeTypeRef), // this
         module.local_get(1, TypeRef.I32)  // cookie
       ], TypeRef.None)
@@ -10860,7 +10874,7 @@ export function compileVisitMembers(compiler: Compiler): void {
       cases[i] = module.return();
     } else {
       cases[i] = module.block(null, [
-        module.call(`${instance.internalName}~visit`, [
+        module.call(instance.visitorFunctionName, [
           module.local_get(0, sizeTypeRef), // this
           module.local_get(1, TypeRef.I32)  // cookie
         ], TypeRef.None),

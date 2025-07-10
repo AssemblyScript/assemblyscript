@@ -5512,41 +5512,6 @@
   global.get $std/string/str
   return
  )
- (func $~lib/rt/__visit_globals (param $0 i32)
-  (local $1 i32)
-  global.get $std/string/str
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/string/nullStr
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  i32.const 240
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 13040
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 14688
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 352
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 15616
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 16672
-  local.get $0
-  call $~lib/rt/itcms/__visit
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -5619,6 +5584,9 @@
    return
   end
   unreachable
+ )
+ (func $~lib/rt/__visit_globals (param $0 i32)
+  (local $1 i32)
  )
  (func $~start
   call $start:std/string

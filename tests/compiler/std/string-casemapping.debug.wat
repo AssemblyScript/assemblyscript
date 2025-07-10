@@ -3408,28 +3408,6 @@
   call $~lib/util/number/itoa64
   return
  )
- (func $~lib/rt/__visit_globals (param $0 i32)
-  (local $1 i32)
-  i32.const 256
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 64
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 18608
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 19664
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/util/casemap/SPECIALS_UPPER
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -3469,6 +3447,9 @@
    return
   end
   unreachable
+ )
+ (func $~lib/rt/__visit_globals (param $0 i32)
+  (local $1 i32)
  )
  (func $~start
   call $start:std/string-casemapping

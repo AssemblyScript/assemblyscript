@@ -1,6 +1,6 @@
 (module
- (type $0 (func (param i32)))
- (type $1 (func))
+ (type $0 (func))
+ (type $1 (func (param i32)))
  (type $2 (func (param i32 i32)))
  (type $3 (func (param i32 i32) (result i32)))
  (type $4 (func (param i32 i32 i32 i32)))
@@ -1176,12 +1176,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 1056
-  call $~lib/rt/tcms/__visit
-  i32.const 1280
-  call $~lib/rt/tcms/__visit
-  i32.const 1376
-  call $~lib/rt/tcms/__visit
   global.get $~lib/rt/tcms/pinSpace
   local.tee $1
   i32.load offset=4
@@ -1374,53 +1368,9 @@
   local.get $3
   global.set $~lib/rt/tcms/white
  )
- (func $~lib/rt/tcms/__visit (param $0 i32)
+ (func $~lib/rt/__visit_members (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  local.get $0
-  i32.eqz
-  if
-   return
-  end
-  global.get $~lib/rt/tcms/white
-  local.get $0
-  i32.const 20
-  i32.sub
-  local.tee $1
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   local.get $1
-   call $~lib/rt/tcms/Object#unlink
-   global.get $~lib/rt/tcms/toSpace
-   local.tee $0
-   i32.load offset=8
-   local.set $2
-   local.get $1
-   local.get $0
-   global.get $~lib/rt/tcms/white
-   i32.eqz
-   i32.or
-   i32.store offset=4
-   local.get $1
-   local.get $2
-   i32.store offset=8
-   local.get $2
-   local.get $1
-   local.get $2
-   i32.load offset=4
-   i32.const 3
-   i32.and
-   i32.or
-   i32.store offset=4
-   local.get $0
-   local.get $1
-   i32.store offset=8
-  end
- )
- (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid
    block $~lib/arraybuffer/ArrayBufferView
     block $~lib/string/String
@@ -1440,7 +1390,46 @@
    end
    local.get $0
    i32.load
-   call $~lib/rt/tcms/__visit
+   local.tee $0
+   if
+    global.get $~lib/rt/tcms/white
+    local.get $0
+    i32.const 20
+    i32.sub
+    local.tee $1
+    i32.load offset=4
+    i32.const 3
+    i32.and
+    i32.eq
+    if
+     local.get $1
+     call $~lib/rt/tcms/Object#unlink
+     global.get $~lib/rt/tcms/toSpace
+     local.tee $0
+     i32.load offset=8
+     local.set $2
+     local.get $1
+     local.get $0
+     global.get $~lib/rt/tcms/white
+     i32.eqz
+     i32.or
+     i32.store offset=4
+     local.get $1
+     local.get $2
+     i32.store offset=8
+     local.get $2
+     local.get $1
+     local.get $2
+     i32.load offset=4
+     i32.const 3
+     i32.and
+     i32.or
+     i32.store offset=4
+     local.get $0
+     local.get $1
+     i32.store offset=8
+    end
+   end
    return
   end
   unreachable

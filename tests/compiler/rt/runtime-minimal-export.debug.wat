@@ -2015,18 +2015,6 @@
    call $~lib/rt/tcms/Object#linkTo
   end
  )
- (func $~lib/rt/__visit_globals (param $0 i32)
-  (local $1 i32)
-  i32.const 32
-  local.get $0
-  call $~lib/rt/tcms/__visit
-  i32.const 256
-  local.get $0
-  call $~lib/rt/tcms/__visit
-  i32.const 352
-  local.get $0
-  call $~lib/rt/tcms/__visit
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -2063,6 +2051,9 @@
    return
   end
   unreachable
+ )
+ (func $~lib/rt/__visit_globals (param $0 i32)
+  (local $1 i32)
  )
  (func $~start
   i32.const 208

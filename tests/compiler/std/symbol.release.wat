@@ -113,38 +113,6 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
-  global.get $std/symbol/key1
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/symbol/key2
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/symbol/key3
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/symbol/key4
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  i32.const 1328
-  call $~lib/rt/itcms/__visit
-  i32.const 1536
-  call $~lib/rt/itcms/__visit
-  i32.const 1648
-  call $~lib/rt/itcms/__visit
-  i32.const 1136
-  call $~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1
   i32.load offset=4

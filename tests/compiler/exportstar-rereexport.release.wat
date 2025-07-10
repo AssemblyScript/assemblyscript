@@ -50,10 +50,6 @@
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
   (local $1 i32)
-  i32.const 1296
-  call $~lib/rt/itcms/__visit
-  i32.const 1104
-  call $~lib/rt/itcms/__visit
   global.get $rereexport/car
   local.tee $0
   if
