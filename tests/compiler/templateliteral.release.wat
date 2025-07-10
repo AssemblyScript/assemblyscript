@@ -3807,11 +3807,7 @@
       end
       local.get $0
       i32.load
-      local.tee $0
-      if
-       local.get $0
-       call $~lib/rt/itcms/__visit
-      end
+      call $~lib/rt/itcms/__visit
       return
      end
      local.get $0
@@ -3846,18 +3842,10 @@
    end
    local.get $0
    i32.load
-   local.tee $1
-   if
-    local.get $1
-    call $~lib/rt/itcms/__visit
-   end
+   call $~lib/rt/itcms/__visit
    local.get $0
    i32.load offset=4
-   local.tee $0
-   if
-    local.get $0
-    call $~lib/rt/itcms/__visit
-   end
+   call $~lib/rt/itcms/__visit
    return
   end
   unreachable

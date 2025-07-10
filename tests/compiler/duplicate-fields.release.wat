@@ -116,7 +116,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$136
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$139
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -140,7 +140,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$136
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$139
    end
    local.get $0
    i32.load offset=8
@@ -1596,7 +1596,6 @@
   end
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  (local $1 i32)
   block $folding-inner0
    block $invalid
     block $duplicate-fields/A3
@@ -1628,11 +1627,7 @@
       end
       local.get $0
       i32.load
-      local.tee $1
-      if
-       local.get $1
-       call $~lib/rt/itcms/__visit
-      end
+      call $~lib/rt/itcms/__visit
       br $folding-inner0
      end
      return
@@ -1643,11 +1638,7 @@
   end
   local.get $0
   i32.load
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
+  call $~lib/rt/itcms/__visit
  )
  (func $~start
   (local $0 i32)

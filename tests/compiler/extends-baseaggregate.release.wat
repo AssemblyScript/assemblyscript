@@ -120,7 +120,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$137
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$142
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -144,7 +144,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$137
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$142
    end
    local.get $0
    i32.load offset=8
@@ -1672,52 +1672,50 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner1
-   block $folding-inner0
-    block $invalid
-     block $~lib/array/Array<extends-baseaggregate/A2>
-      block $~lib/array/Array<extends-baseaggregate/B1>
-       block $~lib/string/String
-        block $~lib/arraybuffer/ArrayBuffer
-         block $~lib/object/Object
-          local.get $0
-          i32.const 8
-          i32.sub
-          i32.load
-          br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $~lib/array/Array<extends-baseaggregate/B1> $~lib/array/Array<extends-baseaggregate/A2> $invalid
+  block $folding-inner0
+   block $invalid
+    block $~lib/array/Array<extends-baseaggregate/A2>
+     block $~lib/array/Array<extends-baseaggregate/B1>
+      block $extends-baseaggregate/A2
+       block $extends-baseaggregate/A1
+        block $~lib/string/String
+         block $~lib/arraybuffer/ArrayBuffer
+          block $~lib/object/Object
+           local.get $0
+           i32.const 8
+           i32.sub
+           i32.load
+           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $folding-inner0 $extends-baseaggregate/A1 $folding-inner0 $extends-baseaggregate/A2 $~lib/array/Array<extends-baseaggregate/B1> $~lib/array/Array<extends-baseaggregate/A2> $invalid
+          end
+          return
          end
          return
         end
         return
        end
+       local.get $0
+       i32.load offset=16
+       call $~lib/rt/itcms/__visit
        return
       end
       local.get $0
-      call $~lib/array/Array<extends-baseaggregate/B1>~visit
+      i32.load offset=16
+      call $~lib/rt/itcms/__visit
       return
      end
      local.get $0
      call $~lib/array/Array<extends-baseaggregate/B1>~visit
      return
     end
-    unreachable
-   end
-   local.get $0
-   i32.load
-   local.tee $0
-   if
     local.get $0
-    call $~lib/rt/itcms/__visit
+    call $~lib/array/Array<extends-baseaggregate/B1>~visit
+    return
    end
-   return
+   unreachable
   end
   local.get $0
-  i32.load offset=16
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
+  i32.load
+  call $~lib/rt/itcms/__visit
  )
  (func $~start
   (local $0 i32)
@@ -1939,7 +1937,7 @@
     global.get $~lib/memory/__stack_pointer
     i32.const 1168
     i32.store
-    block $__inlined_func$~lib/rt/itcms/__renew$136
+    block $__inlined_func$~lib/rt/itcms/__renew$141
      i32.const 1073741820
      local.get $0
      i32.const 1
@@ -1982,7 +1980,7 @@
       i32.store offset=16
       local.get $0
       local.set $1
-      br $__inlined_func$~lib/rt/itcms/__renew$136
+      br $__inlined_func$~lib/rt/itcms/__renew$141
      end
      local.get $3
      local.get $2

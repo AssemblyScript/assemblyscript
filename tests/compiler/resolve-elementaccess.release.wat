@@ -176,7 +176,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$150
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$153
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -200,7 +200,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$150
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$153
    end
    local.get $0
    i32.load offset=8
@@ -2950,11 +2950,7 @@
   end
   local.get $0
   i32.load
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
+  call $~lib/rt/itcms/__visit
  )
  (func $~start
   call $start:resolve-elementaccess

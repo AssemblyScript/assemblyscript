@@ -2705,12 +2705,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
  )
@@ -2721,12 +2717,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Nullable_Init~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2735,12 +2727,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Nullable~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2749,12 +2737,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Ref_Init_Ctor~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2763,12 +2747,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Ref_Ctor_Init~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2777,12 +2757,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Ref_Ctor_Param~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2791,12 +2767,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Nullable_Ctor~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2805,12 +2777,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Nullable_Init_Ctor~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2819,12 +2787,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Nullable_Ctor_Init~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2833,12 +2797,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Inherit~visit (param $0 i32) (param $1 i32)
   local.get $0
@@ -2852,12 +2812,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Inherit_Ctor~visit (param $0 i32) (param $1 i32)
   local.get $0
@@ -2871,12 +2827,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load offset=4
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/SomeOtherObject~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2885,12 +2837,8 @@
   call $field-initialization/SomeObject~visit
   local.get $0
   i32.load offset=8
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Flow_Balanced~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2899,12 +2847,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Ref_Init_InlineCtor~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2913,12 +2857,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $field-initialization/Ref_InlineCtor_Init~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2927,12 +2867,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid

@@ -113,7 +113,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$172
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$185
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -137,7 +137,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$172
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$185
    end
    local.get $0
    i32.load offset=8
@@ -1644,11 +1644,7 @@
   end
   local.get $0
   i32.load
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
+  call $~lib/rt/itcms/__visit
  )
  (func $~start
   call $start:std/arraybuffer
@@ -2303,7 +2299,7 @@
    i32.load
    local.tee $0
    i32.store offset=16
-   block $__inlined_func$~lib/dataview/DataView#constructor@varargs$1 (result i32)
+   block $__inlined_func$~lib/dataview/DataView#constructor@varargs (result i32)
     global.get $~lib/memory/__stack_pointer
     i32.const 8
     i32.sub
@@ -2425,7 +2421,7 @@
      i32.add
      global.set $~lib/memory/__stack_pointer
      local.get $2
-     br $__inlined_func$~lib/dataview/DataView#constructor@varargs$1
+     br $__inlined_func$~lib/dataview/DataView#constructor@varargs
     end
     br $folding-inner1
    end
