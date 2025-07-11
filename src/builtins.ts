@@ -10674,11 +10674,12 @@ builtinFunctions.set(BuiltinNames.i32x4_relaxed_dot_i8x16_i7x16_add_s, builtin_i
 
 // === Internal helpers =======================================================================
 
+// When no visit is needed, null is returned, otherwise the name of the visit function is returned.
 function getVisitInstanceName(visitInstance: Function, classReference: Class): string | null {
   if (classReference.hasDecorator(DecoratorFlags.Final)) {
     if (classReference.visitRef != 0) {
       return classReference.visitorFunctionName;
-    } else  if (classReference.isPointerfree) {
+    } else if (classReference.isPointerfree) {
       return null; // no visitor for pointerfree classes
     }
   }

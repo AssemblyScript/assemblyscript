@@ -647,6 +647,8 @@ export class Compiler extends DiagnosticEmitter {
     // finalize runtime features
     module.removeGlobal(BuiltinNames.rtti_base);
     if (this.runtimeFeatures & RuntimeFeatures.Rtti) compileRTTI(this);
+    // visit globals can rely on the result of visit members to visit globals of
+    // certain type directly thought the visit of the class.
     if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
     if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
 
