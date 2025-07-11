@@ -120,7 +120,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$223
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$241
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -144,7 +144,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$223
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$241
    end
    local.get $0
    i32.load offset=8
@@ -1599,27 +1599,23 @@
   end
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  (local $1 i32)
-  block $folding-inner1
-   block $folding-inner0
-    block $invalid
-     block $field-initialization/SomeOtherObject
-      block $field-initialization/SomeObject
-       block $field-initialization/Value_Ctor_Init
-        block $field-initialization/Value_Init_Ctor
-         block $field-initialization/Value_Ctor
-          block $field-initialization/Value
-           block $field-initialization/Value_Init
-            block $~lib/string/String
-             block $~lib/arraybuffer/ArrayBuffer
-              block $~lib/object/Object
-               local.get $0
-               i32.const 8
-               i32.sub
-               i32.load
-               br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $field-initialization/Value_Init $field-initialization/Value $folding-inner0 $folding-inner0 $folding-inner0 $field-initialization/Value_Ctor $field-initialization/Value_Init_Ctor $field-initialization/Value_Ctor_Init $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $field-initialization/SomeObject $field-initialization/SomeOtherObject $folding-inner0 $folding-inner0 $folding-inner0 $invalid
-              end
-              return
+  block $folding-inner0
+   block $invalid
+    block $field-initialization/SomeOtherObject
+     block $field-initialization/SomeObject
+      block $field-initialization/Value_Ctor_Init
+       block $field-initialization/Value_Init_Ctor
+        block $field-initialization/Value_Ctor
+         block $field-initialization/Value
+          block $field-initialization/Value_Init
+           block $~lib/string/String
+            block $~lib/arraybuffer/ArrayBuffer
+             block $~lib/object/Object
+              local.get $0
+              i32.const 8
+              i32.sub
+              i32.load
+              br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $field-initialization/Value_Init $field-initialization/Value $folding-inner0 $folding-inner0 $folding-inner0 $field-initialization/Value_Ctor $field-initialization/Value_Init_Ctor $field-initialization/Value_Ctor_Init $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $field-initialization/SomeObject $field-initialization/SomeOtherObject $folding-inner0 $folding-inner0 $folding-inner0 $invalid
              end
              return
             end
@@ -1635,49 +1631,26 @@
        end
        return
       end
-      local.get $0
-      i32.load offset=4
-      local.tee $0
-      if
-       local.get $0
-       call $~lib/rt/itcms/__visit
-      end
       return
      end
      local.get $0
      i32.load offset=4
-     local.tee $1
-     if
-      local.get $1
-      call $~lib/rt/itcms/__visit
-     end
-     local.get $0
-     i32.load offset=8
-     local.tee $0
-     if
-      local.get $0
-      call $~lib/rt/itcms/__visit
-     end
+     call $~lib/rt/itcms/__visit
      return
     end
-    unreachable
-   end
-   local.get $0
-   i32.load
-   local.tee $0
-   if
     local.get $0
+    i32.load offset=4
     call $~lib/rt/itcms/__visit
+    local.get $0
+    i32.load offset=8
+    call $~lib/rt/itcms/__visit
+    return
    end
-   return
+   unreachable
   end
   local.get $0
   i32.load
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
+  call $~lib/rt/itcms/__visit
  )
  (func $~start
   call $start:field-initialization

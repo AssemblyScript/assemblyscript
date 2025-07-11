@@ -2839,12 +2839,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
  )
@@ -2855,12 +2851,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load offset=4
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $object-literal/MixedOmitted~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2869,12 +2861,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load offset=4
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $object-literal/OmittedFoo~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2883,68 +2871,36 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
   local.get $0
   i32.load offset=4
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
   local.get $0
   i32.load offset=8
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
   local.get $0
   i32.load offset=12
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
   local.get $0
   i32.load offset=16
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
   local.get $0
   i32.load offset=20
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
   local.get $0
   i32.load offset=24
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
   local.get $0
   i32.load offset=28
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid

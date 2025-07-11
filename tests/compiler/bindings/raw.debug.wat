@@ -2877,12 +2877,8 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
  )
@@ -2944,28 +2940,16 @@
   call $~lib/object/Object~visit
   local.get $0
   i32.load offset=56
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
   local.get $0
   i32.load offset=60
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
   local.get $0
   i32.load offset=64
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
+  local.get $1
+  call $~lib/rt/itcms/__visit
  )
  (func $~lib/typedarray/Uint8Array~visit (param $0 i32) (param $1 i32)
   local.get $0

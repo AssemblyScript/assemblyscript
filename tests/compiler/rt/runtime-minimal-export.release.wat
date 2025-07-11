@@ -1440,11 +1440,7 @@
    end
    local.get $0
    i32.load
-   local.tee $0
-   if
-    local.get $0
-    call $~lib/rt/tcms/__visit
-   end
+   call $~lib/rt/tcms/__visit
    return
   end
   unreachable

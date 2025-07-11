@@ -10808,20 +10808,14 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
         assert(fieldOffset >= 0);
         needsTempValue = true;
         body.push(
-          // if ($2 = value) __visit($2, $1)
-          module.if(
-            module.local_tee(2,
-              module.load(sizeTypeSize, false,
-                module.local_get(0, sizeTypeRef),
-                sizeTypeRef, fieldOffset
-              ),
-              false // internal
-            ),
-            module.call(visitInstance.internalName, [
-              module.local_get(2, sizeTypeRef), // value
-              module.local_get(1, TypeRef.I32)  // cookie
-            ], TypeRef.None)
-          )
+          // __visit(load<usize>($this, fieldOffset), $cookie)
+          module.call(visitInstance.internalName, [
+            module.load(sizeTypeSize, false,
+              module.local_get(0, sizeTypeRef),
+              sizeTypeRef, fieldOffset
+            ), // value
+            module.local_get(1, TypeRef.I32)  // cookie
+          ], TypeRef.None)
         );
       }
     }

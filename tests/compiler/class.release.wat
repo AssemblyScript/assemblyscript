@@ -109,7 +109,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$137
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$139
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -133,7 +133,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$137
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$139
    end
    local.get $0
    i32.load offset=8
@@ -1748,66 +1748,69 @@
   unreachable
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner0
-   block $invalid
-    block $~lib/array/Array<i32>
+  block $invalid
+   block $~lib/array/Array<i32>
+    block $class/GenericInitializer<i32>
      block $class/Animal<f64>
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        block $~lib/object/Object
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $class/Animal<f64> $folding-inner0 $~lib/array/Array<i32> $invalid
+      block $~lib/arraybuffer/ArrayBufferView
+       block $~lib/string/String
+        block $~lib/arraybuffer/ArrayBuffer
+         block $~lib/object/Object
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $class/Animal<f64> $class/GenericInitializer<i32> $~lib/array/Array<i32> $invalid
+         end
+         return
         end
         return
        end
        return
       end
+      local.get $0
+      i32.load
+      call $~lib/rt/itcms/__visit
       return
      end
      return
     end
-    global.get $~lib/memory/__stack_pointer
-    i32.const 4
-    i32.sub
-    global.set $~lib/memory/__stack_pointer
-    global.get $~lib/memory/__stack_pointer
-    i32.const 1568
-    i32.lt_s
-    if
-     i32.const 34368
-     i32.const 34416
-     i32.const 1
-     i32.const 1
-     call $~lib/builtins/abort
-     unreachable
-    end
-    global.get $~lib/memory/__stack_pointer
-    i32.const 0
-    i32.store
-    global.get $~lib/memory/__stack_pointer
-    local.get $0
-    i32.store
     local.get $0
     i32.load
     call $~lib/rt/itcms/__visit
-    global.get $~lib/memory/__stack_pointer
-    i32.const 4
-    i32.add
-    global.set $~lib/memory/__stack_pointer
     return
    end
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.tee $0
-  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1568
+   i32.lt_s
+   if
+    i32.const 34368
+    i32.const 34416
+    i32.const 1
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
    local.get $0
+   i32.store
+   local.get $0
+   i32.load
    call $~lib/rt/itcms/__visit
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   return
   end
+  unreachable
  )
  (func $~start
   memory.size

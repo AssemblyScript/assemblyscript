@@ -1930,11 +1930,7 @@
        end
        local.get $0
        i32.load
-       local.tee $0
-       if
-        local.get $0
-        call $~lib/rt/itcms/__visit
-       end
+       call $~lib/rt/itcms/__visit
        return
       end
       global.get $~lib/memory/__stack_pointer

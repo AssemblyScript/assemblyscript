@@ -71,7 +71,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$203
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$205
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -95,7 +95,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$203
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$205
    end
    local.get $0
    i32.load offset=8
@@ -1604,105 +1604,71 @@
   local.get $1
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  (local $1 i32)
-  block $folding-inner0
-   block $invalid
-    block $object-literal/OmittedFoo
+  block $invalid
+   block $object-literal/OmittedFoo
+    block $object-literal/MixedOmitted
      block $object-literal/OmittedTypes
-      block $~lib/arraybuffer/ArrayBufferView
-       block $~lib/string/String
-        block $~lib/arraybuffer/ArrayBuffer
-         block $~lib/object/Object
-          local.get $0
-          i32.const 8
-          i32.sub
-          i32.load
-          br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $folding-inner0 $object-literal/OmittedTypes $folding-inner0 $object-literal/OmittedFoo $invalid
+      block $object-literal/Managed
+       block $~lib/arraybuffer/ArrayBufferView
+        block $~lib/string/String
+         block $~lib/arraybuffer/ArrayBuffer
+          block $~lib/object/Object
+           local.get $0
+           i32.const 8
+           i32.sub
+           i32.load
+           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $object-literal/Managed $object-literal/OmittedTypes $object-literal/MixedOmitted $object-literal/OmittedFoo $invalid
+          end
+          return
          end
          return
         end
         return
        end
+       local.get $0
+       i32.load
+       call $~lib/rt/itcms/__visit
        return
       end
       local.get $0
-      i32.load
-      local.tee $0
-      if
-       local.get $0
-       call $~lib/rt/itcms/__visit
-      end
+      i32.load offset=4
+      call $~lib/rt/itcms/__visit
       return
      end
      return
     end
     local.get $0
-    i32.load
-    local.tee $1
-    if
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $0
     i32.load offset=4
-    local.tee $1
-    if
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $0
-    i32.load offset=8
-    local.tee $1
-    if
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $0
-    i32.load offset=12
-    local.tee $1
-    if
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $0
-    i32.load offset=16
-    local.tee $1
-    if
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $0
-    i32.load offset=20
-    local.tee $1
-    if
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $0
-    i32.load offset=24
-    local.tee $1
-    if
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $0
-    i32.load offset=28
-    local.tee $0
-    if
-     local.get $0
-     call $~lib/rt/itcms/__visit
-    end
+    call $~lib/rt/itcms/__visit
     return
    end
-   unreachable
-  end
-  local.get $0
-  i32.load offset=4
-  local.tee $0
-  if
    local.get $0
+   i32.load
    call $~lib/rt/itcms/__visit
+   local.get $0
+   i32.load offset=4
+   call $~lib/rt/itcms/__visit
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/itcms/__visit
+   local.get $0
+   i32.load offset=12
+   call $~lib/rt/itcms/__visit
+   local.get $0
+   i32.load offset=16
+   call $~lib/rt/itcms/__visit
+   local.get $0
+   i32.load offset=20
+   call $~lib/rt/itcms/__visit
+   local.get $0
+   i32.load offset=24
+   call $~lib/rt/itcms/__visit
+   local.get $0
+   i32.load offset=28
+   call $~lib/rt/itcms/__visit
+   return
   end
+  unreachable
  )
  (func $~start
   call $start:object-literal
@@ -2537,7 +2503,7 @@
    i32.const 1
    i32.shl
    local.set $3
-   block $__inlined_func$~lib/string/String#substring$208
+   block $__inlined_func$~lib/string/String#substring$210
     local.get $2
     i32.const 0
     local.get $2
@@ -2558,7 +2524,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 1568
      local.set $0
-     br $__inlined_func$~lib/string/String#substring$208
+     br $__inlined_func$~lib/string/String#substring$210
     end
     local.get $3
     i32.eqz
@@ -2575,7 +2541,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 1056
      local.set $0
-     br $__inlined_func$~lib/string/String#substring$208
+     br $__inlined_func$~lib/string/String#substring$210
     end
     global.get $~lib/memory/__stack_pointer
     local.get $2
