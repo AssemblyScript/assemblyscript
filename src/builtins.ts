@@ -10808,7 +10808,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
         assert(fieldOffset >= 0);
         needsTempValue = true;
         body.push(
-          // __visit(load<uszie>($0), $1)
+          // __visit(load<usize>($this, fieldOffset), $cookie)
           module.call(visitInstance.internalName, [
             module.load(sizeTypeSize, false,
               module.local_get(0, sizeTypeRef),
