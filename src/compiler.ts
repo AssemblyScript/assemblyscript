@@ -276,7 +276,7 @@ export class Options {
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
   pedantic: bool = false;
-  /** Indicates a very low (<64k) memory limit. */
+  /** Indicates a memory limit. */
   lowMemoryLimit: u32 = 0;
   /** If true, exports the runtime helpers. */
   exportRuntime: bool = false;
@@ -821,7 +821,7 @@ export class Compiler extends DiagnosticEmitter {
     // check that we didn't exceed lowMemoryLimit already
     let lowMemoryLimit32 = options.lowMemoryLimit;
     if (lowMemoryLimit32) {
-      let lowMemoryLimit = i64_new(lowMemoryLimit32 & ~15);
+      let lowMemoryLimit = i64_new(lowMemoryLimit32);
       if (i64_gt(memoryOffset, lowMemoryLimit)) {
         this.error(
           DiagnosticCode.Low_memory_limit_exceeded_by_static_data_0_1,
