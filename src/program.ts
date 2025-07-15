@@ -4367,6 +4367,8 @@ export class Class extends TypedElement {
   nextMemoryOffset: u32 = 0;
   /** Constructor instance. */
   constructorInstance: Function | null = null;
+  /** Constructor instance for inheritance. */
+  rawConstructorInstance: Function | null = null;
   /** Operator overloads. */
   operatorOverloads: Map<OperatorKind,Function> | null = null;
   /** Index signature, if present. */

@@ -1,6 +1,6 @@
 (module
- (type $0 (func (param i32 i32)))
- (type $1 (func (param i32) (result i32)))
+ (type $0 (func (param i32) (result i32)))
+ (type $1 (func (param i32 i32)))
  (type $2 (func (param i32)))
  (type $3 (func))
  (type $4 (func (param i32 i32) (result i32)))
@@ -126,6 +126,9 @@
   local.get $this
   local.get $three
   i32.store8 offset=6
+ )
+ (func $~lib/object/Object#raw_constructor (param $this i32) (result i32)
+  local.get $this
  )
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $this i32) (param $nextWithColor i32)
   local.get $this
@@ -2793,6 +2796,52 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
+ (func $class/GenericInitializer<i32>#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store offset=8
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  i32.const 0
+  i32.const 0
+  call $~lib/array/Array<i32>#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=8
+  local.get $1
+  call $class/GenericInitializer<i32>#set:foo
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
  (func $class/GenericInitializer<i32>#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2823,7 +2872,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
   local.get $this
