@@ -8830,7 +8830,7 @@ export class Compiler extends DiagnosticEmitter {
       classInstance.constructorInstance = instance;
       let members = classInstance.members;
       if (!members) classInstance.members = members = new Map();
-      members.set("constructor", instance.prototype);
+      members.set(CommonNames.constructor, instance.prototype);
 
       let previousFlow = this.currentFlow;
       let flow = instance.flow;
