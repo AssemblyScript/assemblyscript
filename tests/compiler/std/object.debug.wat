@@ -454,6 +454,9 @@
   end
   local.get $this
  )
+ (func $~lib/object/Object#raw_constructor (param $this i32) (result i32)
+  local.get $this
+ )
  (func $~lib/object/Object#constructor (param $this i32) (result i32)
   local.get $this
   i32.eqz

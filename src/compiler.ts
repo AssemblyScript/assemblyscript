@@ -8764,6 +8764,139 @@ export class Compiler extends DiagnosticEmitter {
     return this.compileInstantiate(ctor, expression.args, constraints, expression);
   }
 
+  private createConstructorInstance(
+    /** true mean this constructor is externally visible, need to handle memory allocation */
+    isExternallyVisible: bool,
+    /** Class wanting a constructor. */
+    classInstance: Class,
+    /** Report node. */
+    reportNode: Node
+  ): Function {
+    const name = isExternallyVisible ? CommonNames.constructor : CommonNames.raw_constructor;
+    let instance: Function | null = null;
+    // clone base constructor if a derived class. note that we cannot just
+    // call the base ctor since the derived class may have additional fields.
+    let baseClass = classInstance.base;
+    let contextualTypeArguments = cloneMap(classInstance.contextualTypeArguments);
+    if (baseClass) {
+      let baseCtor = this.ensureConstructor(baseClass, reportNode);
+      this.checkFieldInitialization(baseClass, reportNode);
+      instance = new Function(
+        name,
+        new FunctionPrototype(
+          name,
+          classInstance,
+          // declaration is important, i.e. to access optional parameter initializers
+          (<FunctionDeclaration>baseCtor.declaration).clone()
+        ),
+        null,
+        Signature.create(
+          this.program,
+          baseCtor.signature.parameterTypes,
+          classInstance.type,
+          classInstance.type,
+          baseCtor.signature.requiredParameters,
+          baseCtor.signature.hasRest
+        ),
+        contextualTypeArguments
+      );
+    // otherwise make a default constructor
+    } else {
+      instance = new Function(
+        name,
+        new FunctionPrototype(
+          name,
+          classInstance, // bound
+          this.program.makeNativeFunctionDeclaration(name,
+            CommonFlags.Instance | CommonFlags.Constructor
+          )
+        ),
+        null,
+        Signature.create(this.program, [], classInstance.type, classInstance.type),
+        contextualTypeArguments
+      );
+    }
+
+    instance.prototype.setResolvedInstance("", instance);
+    if (isExternallyVisible) {
+      if (classInstance.is(CommonFlags.ModuleExport)) {
+        instance.set(CommonFlags.ModuleExport);
+      }
+      let members = classInstance.members;
+      if (!members) classInstance.members = members = new Map();
+      members.set(CommonNames.constructor, instance.prototype);
+    }
+    return instance;
+  }
+
+  private compileConstructorInstance(
+    isExternallyVisible: bool,
+    instance: Function,
+    classInstance: Class,
+    reportNode: Node
+  ): void {
+    instance.set(CommonFlags.Compiled);
+    let baseClass = classInstance.base;
+    let previousFlow = this.currentFlow;
+    let flow = instance.flow;
+    this.currentFlow = flow;
+
+    // generate body
+    let signature = instance.signature;
+    let module = this.module;
+    let sizeTypeRef = this.options.sizeTypeRef;
+    let stmts = new Array<ExpressionRef>();
+
+    // {
+    //   this = <COND_ALLOC>?
+    //   IF_DERIVED: this = super(this, ...args)
+    //   this.a = X
+    //   this.b = Y
+    //   return this
+    // }
+    if (isExternallyVisible) {
+      stmts.push(this.makeConditionalAllocation(classInstance, 0));
+    }
+    if (baseClass) {
+      let parameterTypes = signature.parameterTypes;
+      let numParameters = parameterTypes.length;
+      let forwardCallOperands = new Array<ExpressionRef>(1 + numParameters);
+      forwardCallOperands[0] = module.local_get(0, sizeTypeRef);
+      for (let i = 1; i <= numParameters; ++i) {
+        forwardCallOperands[i] = module.local_get(i, parameterTypes[i - 1].toRef());
+      }
+      let baseCallConstructorInstance = baseClass.rawConstructorInstance;
+      if (baseCallConstructorInstance == null) baseCallConstructorInstance = assert(baseClass.constructorInstance);
+      stmts.push(
+        module.local_set(
+          0,
+          this.makeCallDirect(baseCallConstructorInstance, forwardCallOperands, reportNode, false),
+          baseClass.type.isManaged
+        )
+      );
+    }
+    this.makeFieldInitializationInConstructor(classInstance, stmts);
+    stmts.push(module.local_get(0, sizeTypeRef));
+    this.currentFlow = previousFlow;
+
+    // make the function
+    let locals = instance.localsByIndex;
+    let varTypes = new Array<TypeRef>(); // of temp. vars added while compiling initializers
+    let numOperands = 1 + signature.parameterTypes.length;
+    let numLocals = locals.length;
+    if (numLocals > numOperands) {
+      for (let i = numOperands; i < numLocals; ++i) varTypes.push(locals[i].type.toRef());
+    }
+    let funcRef = module.addFunction(
+      instance.internalName,
+      signature.paramRefs,
+      signature.resultRefs,
+      varTypes,
+      module.flatten(stmts, sizeTypeRef)
+    );
+    instance.finalize(module, funcRef);
+  }
+
   /** Gets the compiled constructor of the specified class or generates one if none is present. */
   ensureConstructor(
     /** Class wanting a constructor. */
@@ -8778,119 +8911,14 @@ export class Compiler extends DiagnosticEmitter {
       // do not attempt to compile if inlined anyway
       if (!instance.hasDecorator(DecoratorFlags.Inline)) this.compileFunction(instance);
     } else {
-      // clone base constructor if a derived class. note that we cannot just
-      // call the base ctor since the derived class may have additional fields.
-      let baseClass = classInstance.base;
-      let contextualTypeArguments = cloneMap(classInstance.contextualTypeArguments);
-      if (baseClass) {
-        let baseCtor = this.ensureConstructor(baseClass, reportNode);
-        this.checkFieldInitialization(baseClass, reportNode);
-        instance = new Function(
-          CommonNames.constructor,
-          new FunctionPrototype(
-            CommonNames.constructor,
-            classInstance,
-            // declaration is important, i.e. to access optional parameter initializers
-            (<FunctionDeclaration>baseCtor.declaration).clone()
-          ),
-          null,
-          Signature.create(
-            this.program,
-            baseCtor.signature.parameterTypes,
-            classInstance.type,
-            classInstance.type,
-            baseCtor.signature.requiredParameters,
-            baseCtor.signature.hasRest
-          ),
-          contextualTypeArguments
-        );
-
-      // otherwise make a default constructor
-      } else {
-        instance = new Function(
-          CommonNames.constructor,
-          new FunctionPrototype(
-            CommonNames.constructor,
-            classInstance, // bound
-            this.program.makeNativeFunctionDeclaration(CommonNames.constructor,
-              CommonFlags.Instance | CommonFlags.Constructor
-            )
-          ),
-          null,
-          Signature.create(this.program, [], classInstance.type, classInstance.type),
-          contextualTypeArguments
-        );
+      instance = classInstance.constructorInstance = this.createConstructorInstance(true, classInstance, reportNode);
+      // TODO: maybe we can remove this function when the classInstance is finalized?
+      if (!classInstance.hasDecorator(DecoratorFlags.Final)) {
+        let rawInstance = classInstance.rawConstructorInstance = this.createConstructorInstance(false, classInstance, reportNode);
+        this.compileConstructorInstance(false, rawInstance, classInstance, reportNode);
       }
-
-      instance.set(CommonFlags.Compiled);
-      instance.prototype.setResolvedInstance("", instance);
-      if (classInstance.is(CommonFlags.ModuleExport)) {
-        instance.set(CommonFlags.ModuleExport);
-      }
-      classInstance.constructorInstance = instance;
-      let members = classInstance.members;
-      if (!members) classInstance.members = members = new Map();
-      members.set(CommonNames.constructor, instance.prototype);
-
-      let previousFlow = this.currentFlow;
-      let flow = instance.flow;
-      this.currentFlow = flow;
-
-      // generate body
-      let signature = instance.signature;
-      let module = this.module;
-      let sizeTypeRef = this.options.sizeTypeRef;
-      let stmts = new Array<ExpressionRef>();
-
-      // {
-      //   this = <COND_ALLOC>
-      //   IF_DERIVED: this = super(this, ...args)
-      //   this.a = X
-      //   this.b = Y
-      //   return this
-      // }
-      stmts.push(
-        this.makeConditionalAllocation(classInstance, 0)
-      );
-      if (baseClass) {
-        let parameterTypes = signature.parameterTypes;
-        let numParameters = parameterTypes.length;
-        let operands = new Array<ExpressionRef>(1 + numParameters);
-        operands[0] = module.local_get(0, sizeTypeRef);
-        for (let i = 1; i <= numParameters; ++i) {
-          operands[i] = module.local_get(i, parameterTypes[i - 1].toRef());
-        }
-        stmts.push(
-          module.local_set(0,
-            this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode, false),
-            baseClass.type.isManaged
-          )
-        );
-      }
-      this.makeFieldInitializationInConstructor(classInstance, stmts);
-      stmts.push(
-        module.local_get(0, sizeTypeRef)
-      );
-      this.currentFlow = previousFlow;
-
-      // make the function
-      let locals = instance.localsByIndex;
-      let varTypes = new Array<TypeRef>(); // of temp. vars added while compiling initializers
-      let numOperands = 1 + signature.parameterTypes.length;
-      let numLocals = locals.length;
-      if (numLocals > numOperands) {
-        for (let i = numOperands; i < numLocals; ++i) varTypes.push(locals[i].type.toRef());
-      }
-      let funcRef = module.addFunction(
-        instance.internalName,
-        signature.paramRefs,
-        signature.resultRefs,
-        varTypes,
-        module.flatten(stmts, sizeTypeRef)
-      );
-      instance.finalize(module, funcRef);
+      this.compileConstructorInstance(true, instance, classInstance, reportNode);
     }
-
     return instance;
   }
 

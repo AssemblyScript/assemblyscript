@@ -6,7 +6,6 @@
  (type $4 (func (param i32 i32) (result i32)))
  (type $5 (func (param i32 i32 i32 i32)))
  (type $6 (func (param i32 i32 i64)))
- (type $7 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -181,7 +180,7 @@
     local.get $0
     global.set $~lib/rt/itcms/iter
    end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink$153
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$156
     local.get $1
     i32.load offset=4
     i32.const -4
@@ -205,7 +204,7 @@
       call $~lib/builtins/abort
       unreachable
      end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink$153
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$156
     end
     local.get $1
     i32.load offset=8
@@ -1832,8 +1831,6 @@
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   call $~lib/object/Object#constructor
-   local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -1863,8 +1860,6 @@
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   call $~lib/object/Object#constructor
-   local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -1900,8 +1895,6 @@
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   call $~lib/object/Object#constructor
-   local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -2188,8 +2181,6 @@
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  call $~lib/object/Object#constructor
-  local.tee $0
   i32.store
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -2209,41 +2200,6 @@
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
   i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
- (func $~lib/object/Object#constructor (param $0 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1556
-  i32.lt_s
-  if
-   i32.const 34352
-   i32.const 34400
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 0
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $0

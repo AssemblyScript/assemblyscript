@@ -59,6 +59,9 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
+ (func $~lib/object/Object#raw_constructor (param $this i32) (result i32)
+  local.get $this
+ )
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $this i32) (param $nextWithColor i32)
   local.get $this
   local.get $nextWithColor
@@ -2905,6 +2908,34 @@
    unreachable
   end
  )
+ (func $class-overloading/A#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
  (func $class-overloading/A#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2932,9 +2963,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading/B#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $class-overloading/A#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -2970,7 +3029,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $class-overloading/A#constructor
+  call $class-overloading/A#raw_constructor
   local.tee $this
   i32.store
   local.get $this
@@ -3077,6 +3136,34 @@
   local.get $3
   return
  )
+ (func $class-overloading/C#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $class-overloading/B#raw_constructor
+  local.tee $this
+  i32.store offset=4
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
  (func $class-overloading/C#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3104,7 +3191,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $class-overloading/B#constructor
+  call $class-overloading/B#raw_constructor
   local.tee $this
   i32.store
   local.get $this
@@ -3162,6 +3249,34 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $class-overloading/D#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $class-overloading/B#raw_constructor
+  local.tee $this
+  i32.store offset=4
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
  (func $class-overloading/D#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3189,9 +3304,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $class-overloading/B#constructor
+  call $class-overloading/B#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading/E#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $class-overloading/D#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3227,9 +3370,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $class-overloading/D#constructor
+  call $class-overloading/D#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading/F#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $class-overloading/E#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3265,9 +3436,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $class-overloading/E#constructor
+  call $class-overloading/E#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading/CA#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3303,9 +3502,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading/CC#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3341,9 +3568,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading/A2#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3379,9 +3634,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading/B2#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $class-overloading/A2#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3417,7 +3700,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $class-overloading/A2#constructor
+  call $class-overloading/A2#raw_constructor
   local.tee $this
   i32.store
   local.get $this
@@ -4196,6 +4479,34 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $class-overloading/A1#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
  (func $class-overloading/A1#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -4223,9 +4534,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading/B1#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $class-overloading/A1#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4261,7 +4600,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $class-overloading/A1#constructor
+  call $class-overloading/A1#raw_constructor
   local.tee $this
   i32.store
   local.get $this

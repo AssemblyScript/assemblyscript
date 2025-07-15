@@ -177,7 +177,7 @@
     local.get $0
     global.set $~lib/rt/itcms/iter
    end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink$171
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$176
     local.get $1
     i32.load offset=4
     i32.const -4
@@ -201,7 +201,7 @@
       call $~lib/builtins/abort
       unreachable
      end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink$171
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$176
     end
     local.get $1
     i32.load offset=8
@@ -1531,80 +1531,69 @@
   global.set $~started
   call $start:class-overloading
  )
- (func $class-overloading/B#constructor (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $class-overloading/A#raw_constructor (param $0 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1868
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store
-   local.get $0
-   i32.eqz
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 5
-    call $~lib/rt/itcms/__new
-    local.tee $0
-    i32.store
-   end
-   global.get $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1868
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store
-   local.get $0
-   i32.eqz
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 4
-    call $~lib/rt/itcms/__new
-    local.tee $0
-    i32.store
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   call $~lib/object/Object#constructor
-   local.tee $0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $0
-   return
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1868
+  i32.lt_s
+  if
+   i32.const 34656
+   i32.const 34704
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
   end
-  i32.const 34656
-  i32.const 34704
-  i32.const 1
-  i32.const 1
-  call $~lib/builtins/abort
-  unreachable
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
+ )
+ (func $class-overloading/B#raw_constructor (param $0 i32) (result i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1868
+  i32.lt_s
+  if
+   i32.const 34656
+   i32.const 34704
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  call $class-overloading/A#raw_constructor
+  local.tee $0
+  i32.store offset=4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -1719,7 +1708,7 @@
      end
     end
    end
-   block $__inlined_func$~lib/util/string/compareImpl$95
+   block $__inlined_func$~lib/util/string/compareImpl$97
     loop $while-continue|1
      local.get $0
      local.tee $3
@@ -1739,7 +1728,7 @@
       local.get $4
       local.get $5
       i32.ne
-      br_if $__inlined_func$~lib/util/string/compareImpl$95
+      br_if $__inlined_func$~lib/util/string/compareImpl$97
       local.get $2
       i32.const 2
       i32.add
@@ -1767,6 +1756,39 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   i32.const 0
+ )
+ (func $class-overloading/C#raw_constructor (param $0 i32) (result i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1868
+  i32.lt_s
+  if
+   i32.const 34656
+   i32.const 34704
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  call $class-overloading/B#raw_constructor
+  local.tee $0
+  i32.store offset=4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $class-overloading/C#a<i32> (param $0 i32)
   global.get $~lib/memory/__stack_pointer
@@ -1817,90 +1839,6 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $class-overloading/D#constructor (param $0 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1868
-  i32.lt_s
-  if
-   i32.const 34656
-   i32.const 34704
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 7
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  call $class-overloading/B#constructor
-  local.tee $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
- (func $class-overloading/E#constructor (param $0 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1868
-  i32.lt_s
-  if
-   i32.const 34656
-   i32.const 34704
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  call $class-overloading/D#constructor
-  local.tee $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
  (func $start:class-overloading
   (local $0 i32)
   (local $1 i32)
@@ -1908,11 +1846,11 @@
   i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  block $folding-inner1
+  block $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 1868
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -1948,8 +1886,35 @@
    i32.store
    i32.const 1376
    global.set $~lib/rt/itcms/fromSpace
-   i32.const 0
-   call $class-overloading/B#constructor
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1868
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   i64.const 0
+   i64.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   call $class-overloading/A#raw_constructor
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $class-overloading/a
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading/a
@@ -1982,7 +1947,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@override$153
+   block $__inlined_func$class-overloading/A#b@override$156
     block $default
      block $case2
       block $case1
@@ -1997,15 +1962,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@override$153
+       br $__inlined_func$class-overloading/A#b@override$156
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@override$153
+      br $__inlined_func$class-overloading/A#b@override$156
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@override$153
+     br $__inlined_func$class-overloading/A#b@override$156
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2035,7 +2000,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#get:c@override$154
+   block $__inlined_func$class-overloading/A#get:c@override$157
     block $default4
      block $case25
       block $case16
@@ -2050,15 +2015,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#get:c@override$154
+       br $__inlined_func$class-overloading/A#get:c@override$157
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#get:c@override$154
+      br $__inlined_func$class-overloading/A#get:c@override$157
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#get:c@override$154
+     br $__inlined_func$class-overloading/A#get:c@override$157
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2088,7 +2053,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@override$155
+   block $__inlined_func$class-overloading/A#b@override$158
     block $default8
      block $case29
       block $case110
@@ -2103,15 +2068,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@override$155
+       br $__inlined_func$class-overloading/A#b@override$158
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@override$155
+      br $__inlined_func$class-overloading/A#b@override$158
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@override$155
+     br $__inlined_func$class-overloading/A#b@override$158
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2142,7 +2107,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1868
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -2156,7 +2121,7 @@
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   call $class-overloading/B#constructor
+   call $class-overloading/B#raw_constructor
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
@@ -2265,8 +2230,35 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 0
-   call $class-overloading/D#constructor
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1868
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   i64.const 0
+   i64.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 7
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   call $class-overloading/B#raw_constructor
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $class-overloading/a
    i32.const 1056
    global.set $class-overloading/which
@@ -2301,7 +2293,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@override$157
+   block $__inlined_func$class-overloading/A#b@override$161
     block $default16
      block $case217
       block $case118
@@ -2316,15 +2308,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@override$157
+       br $__inlined_func$class-overloading/A#b@override$161
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@override$157
+      br $__inlined_func$class-overloading/A#b@override$161
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@override$157
+     br $__inlined_func$class-overloading/A#b@override$161
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2354,7 +2346,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#get:c@override$158
+   block $__inlined_func$class-overloading/A#get:c@override$162
     block $default24
      block $case225
       block $case126
@@ -2369,15 +2361,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#get:c@override$158
+       br $__inlined_func$class-overloading/A#get:c@override$162
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#get:c@override$158
+      br $__inlined_func$class-overloading/A#get:c@override$162
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#get:c@override$158
+     br $__inlined_func$class-overloading/A#get:c@override$162
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2405,7 +2397,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@override$159
+   block $__inlined_func$class-overloading/A#b@override$163
     block $default32
      block $case233
       block $case134
@@ -2420,15 +2412,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@override$159
+       br $__inlined_func$class-overloading/A#b@override$163
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@override$159
+      br $__inlined_func$class-overloading/A#b@override$163
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@override$159
+     br $__inlined_func$class-overloading/A#b@override$163
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2452,8 +2444,35 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 0
-   call $class-overloading/E#constructor
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1868
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   i64.const 0
+   i64.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   call $class-overloading/C#raw_constructor
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    global.set $class-overloading/a
    i32.const 1056
    global.set $class-overloading/which
@@ -2488,7 +2507,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@override$160
+   block $__inlined_func$class-overloading/A#b@override$165
     block $default40
      block $case241
       block $case142
@@ -2503,15 +2522,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@override$160
+       br $__inlined_func$class-overloading/A#b@override$165
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@override$160
+      br $__inlined_func$class-overloading/A#b@override$165
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@override$160
+     br $__inlined_func$class-overloading/A#b@override$165
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2541,7 +2560,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#get:c@override$161
+   block $__inlined_func$class-overloading/A#get:c@override$166
     block $default48
      block $case249
       block $case150
@@ -2556,15 +2575,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#get:c@override$161
+       br $__inlined_func$class-overloading/A#get:c@override$166
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#get:c@override$161
+      br $__inlined_func$class-overloading/A#get:c@override$166
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#get:c@override$161
+     br $__inlined_func$class-overloading/A#get:c@override$166
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2592,7 +2611,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@override$162
+   block $__inlined_func$class-overloading/A#b@override$167
     block $default56
      block $case257
       block $case158
@@ -2607,15 +2626,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@override$162
+       br $__inlined_func$class-overloading/A#b@override$167
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@override$162
+      br $__inlined_func$class-overloading/A#b@override$167
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@override$162
+     br $__inlined_func$class-overloading/A#b@override$167
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2646,7 +2665,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1868
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -2656,12 +2675,33 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1868
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   i64.const 0
+   i64.store
+   global.get $~lib/memory/__stack_pointer
    local.get $0
-   call $class-overloading/E#constructor
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   call $class-overloading/C#raw_constructor
    local.tee $0
+   i32.store offset=4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -2702,7 +2742,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@override$164
+   block $__inlined_func$class-overloading/A#b@override$168
     block $default64
      block $case265
       block $case166
@@ -2717,15 +2757,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@override$164
+       br $__inlined_func$class-overloading/A#b@override$168
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@override$164
+      br $__inlined_func$class-overloading/A#b@override$168
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@override$164
+     br $__inlined_func$class-overloading/A#b@override$168
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2755,7 +2795,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#get:c@override$165
+   block $__inlined_func$class-overloading/A#get:c@override$169
     block $default72
      block $case273
       block $case174
@@ -2770,15 +2810,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#get:c@override$165
+       br $__inlined_func$class-overloading/A#get:c@override$169
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#get:c@override$165
+      br $__inlined_func$class-overloading/A#get:c@override$169
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#get:c@override$165
+     br $__inlined_func$class-overloading/A#get:c@override$169
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2808,7 +2848,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@override$166
+   block $__inlined_func$class-overloading/A#b@override$170
     block $default80
      block $case281
       block $case182
@@ -2823,15 +2863,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@override$166
+       br $__inlined_func$class-overloading/A#b@override$170
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@override$166
+      br $__inlined_func$class-overloading/A#b@override$170
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@override$166
+     br $__inlined_func$class-overloading/A#b@override$170
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2862,7 +2902,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1868
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -2876,8 +2916,6 @@
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   call $~lib/object/Object#constructor
-   local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -2891,7 +2929,7 @@
    global.get $class-overloading/ia
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/IA#foo@override$168
+   block $__inlined_func$class-overloading/IA#foo@override$172
     block $default88
      block $case189
       local.get $0
@@ -2910,11 +2948,11 @@
       end
       i32.const 1680
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/IA#foo@override$168
+      br $__inlined_func$class-overloading/IA#foo@override$172
      end
      i32.const 1712
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/IA#foo@override$168
+     br $__inlined_func$class-overloading/IA#foo@override$172
     end
     unreachable
    end
@@ -2944,7 +2982,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1868
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -2958,8 +2996,6 @@
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   call $~lib/object/Object#constructor
-   local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -2973,7 +3009,7 @@
    global.get $class-overloading/ic
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/IA#foo@override$170
+   block $__inlined_func$class-overloading/IA#foo@override$174
     block $default91
      block $case192
       local.get $0
@@ -2992,11 +3028,11 @@
       end
       i32.const 1680
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/IA#foo@override$170
+      br $__inlined_func$class-overloading/IA#foo@override$174
      end
      i32.const 1712
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/IA#foo@override$170
+     br $__inlined_func$class-overloading/IA#foo@override$174
     end
     unreachable
    end
@@ -3026,7 +3062,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1868
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -3036,42 +3072,12 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1868
-   i32.lt_s
-   br_if $folding-inner1
-   global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store
-   local.get $0
-   i32.eqz
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 14
-    call $~lib/rt/itcms/__new
-    local.tee $0
-    i32.store
-   end
-   global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   call $~lib/object/Object#constructor
+   call $class-overloading/A#raw_constructor
    local.tee $0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $0
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -3083,7 +3089,7 @@
    global.get $class-overloading/b2
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A2#foo@override$1
+   block $__inlined_func$class-overloading/A2#foo@override$183
     local.get $0
     i32.const 8
     i32.sub
@@ -3098,7 +3104,7 @@
      global.get $~lib/memory/__stack_pointer
      i32.const 1868
      i32.lt_s
-     br_if $folding-inner1
+     br_if $folding-inner0
      global.get $~lib/memory/__stack_pointer
      i32.const 0
      i32.store
@@ -3109,7 +3115,7 @@
      global.get $~lib/memory/__stack_pointer
      i32.const 1868
      i32.lt_s
-     br_if $folding-inner1
+     br_if $folding-inner0
      global.get $~lib/memory/__stack_pointer
      i64.const 0
      i64.store
@@ -3119,42 +3125,12 @@
      local.tee $0
      i32.store
      global.get $~lib/memory/__stack_pointer
-     global.get $~lib/memory/__stack_pointer
-     local.get $0
-     i32.store offset=4
-     global.get $~lib/memory/__stack_pointer
-     i32.const 8
-     i32.sub
-     global.set $~lib/memory/__stack_pointer
-     global.get $~lib/memory/__stack_pointer
-     i32.const 1868
-     i32.lt_s
-     br_if $folding-inner1
-     global.get $~lib/memory/__stack_pointer
-     i64.const 0
-     i64.store
-     local.get $0
-     i32.eqz
-     if
-      global.get $~lib/memory/__stack_pointer
-      i32.const 17
-      call $~lib/rt/itcms/__new
-      local.tee $0
-      i32.store
-     end
-     global.get $~lib/memory/__stack_pointer
      local.get $0
      i32.store offset=4
      global.get $~lib/memory/__stack_pointer
      local.get $0
-     call $~lib/object/Object#constructor
+     call $class-overloading/A#raw_constructor
      local.tee $0
-     i32.store
-     global.get $~lib/memory/__stack_pointer
-     i32.const 8
-     i32.add
-     global.set $~lib/memory/__stack_pointer
-     local.get $0
      i32.store
      global.get $~lib/memory/__stack_pointer
      i32.const 8
@@ -3170,7 +3146,7 @@
      global.get $~lib/memory/__stack_pointer
      i32.const 1868
      i32.lt_s
-     br_if $folding-inner1
+     br_if $folding-inner0
      global.get $~lib/memory/__stack_pointer
      i32.const 0
      i32.store
@@ -3199,7 +3175,7 @@
      i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$class-overloading/A2#foo@override$1
+     br $__inlined_func$class-overloading/A2#foo@override$183
     end
     i32.const 1744
     i32.const 1552
@@ -3220,39 +3196,5 @@
   i32.const 1
   call $~lib/builtins/abort
   unreachable
- )
- (func $~lib/object/Object#constructor (param $0 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1868
-  i32.lt_s
-  if
-   i32.const 34656
-   i32.const 34704
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
  )
 )
