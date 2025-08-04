@@ -115,11 +115,22 @@ const paths = [
   [gitignoreFile, "Git configuration that excludes compiled binaries from source control."],
   [asconfigFile, "Configuration file defining both a 'debug' and a 'release' target."],
   [packageFile, "Package info containing the necessary commands to compile to WebAssembly."],
-  [testsIndexFile, "Stater test to check that the module is functioning."],
+  [testsIndexFile, "Starter test to check that the module is functioning."],
   [indexHtmlFile, "Starter HTML file that loads the module in a browser."]
 ];
 
 const formatPath = filePath => "./" + path.relative(projectDir, filePath).replace(/\\/g, "/");
+
+if (fs.existsSync(packageFile)) {
+  const pkg = JSON.parse(fs.readFileSync(packageFile));
+  if ("type" in pkg && pkg["type"] !== "module") {
+    console.error(stdoutColors.red([
+      `Error: The "type" field in ${formatPath(packageFile)} is set to "${pkg["type"]}".`,
+      `       asinit requires the "type" field to be set to "module" (ES modules).`
+    ].join("\n")));
+    process.exit(1);
+  }
+}
 
 console.log([
   "Version: " + version,
