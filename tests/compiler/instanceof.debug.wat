@@ -65,6 +65,9 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/object/Object#raw_constructor (param $this i32) (result i32)
+  local.get $this
+ )
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $this i32) (param $nextWithColor i32)
   local.get $this
   local.get $nextWithColor
@@ -4698,6 +4701,34 @@
    unreachable
   end
  )
+ (func $instanceof/A#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
  (func $instanceof/A#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -4725,9 +4756,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/B#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $instanceof/A#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4763,9 +4822,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $instanceof/A#constructor
+  call $instanceof/A#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/C#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $instanceof/A#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4801,9 +4888,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $instanceof/A#constructor
+  call $instanceof/A#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/Parent<i32>#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4839,9 +4954,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/Child<i32>#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $instanceof/Parent<i32>#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4877,9 +5020,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $instanceof/Parent<i32>#constructor
+  call $instanceof/Parent<i32>#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/Parent<f32>#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4915,9 +5086,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/Child<f32>#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $instanceof/Parent<f32>#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4953,9 +5152,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $instanceof/Parent<f32>#constructor
+  call $instanceof/Parent<f32>#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/Animal#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4991,9 +5218,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/Cat#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $instanceof/Animal#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -5029,9 +5284,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $instanceof/Animal#constructor
+  call $instanceof/Animal#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/BlackCat#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $instanceof/Cat#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -5067,9 +5350,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $instanceof/Cat#constructor
+  call $instanceof/Cat#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/W#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -5105,9 +5416,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/X#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -5143,9 +5482,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/Y#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $instanceof/X#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -5181,9 +5548,37 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $instanceof/X#constructor
+  call $instanceof/X#raw_constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/Z#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $instanceof/Y#raw_constructor
+  local.tee $this
+  i32.store offset=4
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -5219,7 +5614,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $instanceof/Y#constructor
+  call $instanceof/Y#raw_constructor
   local.tee $this
   i32.store
   local.get $this
