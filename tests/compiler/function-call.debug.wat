@@ -481,7 +481,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 268
+   i32.const 273
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -501,7 +501,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 270
+   i32.const 275
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -564,7 +564,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 284
+   i32.const 289
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -717,7 +717,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 201
+   i32.const 206
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -734,7 +734,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 203
+   i32.const 208
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -823,7 +823,7 @@
    if
     i32.const 0
     i32.const 592
-    i32.const 221
+    i32.const 226
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -866,7 +866,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 233
+   i32.const 238
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -884,7 +884,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 234
+   i32.const 239
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -952,7 +952,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 251
+   i32.const 256
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1069,7 +1069,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 382
+   i32.const 387
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1115,7 +1115,7 @@
    if
     i32.const 0
     i32.const 592
-    i32.const 389
+    i32.const 394
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -1147,7 +1147,7 @@
    if
     i32.const 0
     i32.const 592
-    i32.const 402
+    i32.const 407
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -1218,18 +1218,19 @@
  (func $~lib/rt/tlsf/initialize
   (local $rootOffset i32)
   (local $pagesBefore i32)
+  (local $size i32)
   (local $pagesNeeded i32)
   (local $root i32)
-  (local $root|4 i32)
+  (local $root|5 i32)
   (local $tail i32)
   (local $fl i32)
-  (local $root|7 i32)
-  (local $fl|8 i32)
+  (local $root|8 i32)
+  (local $fl|9 i32)
   (local $slMap i32)
   (local $sl i32)
-  (local $root|11 i32)
-  (local $fl|12 i32)
-  (local $sl|13 i32)
+  (local $root|12 i32)
+  (local $fl|13 i32)
+  (local $sl|14 i32)
   (local $head i32)
   (local $memStart i32)
   i32.const 0
@@ -1244,17 +1245,18 @@
   local.set $rootOffset
   memory.size
   local.set $pagesBefore
-  local.get $rootOffset
-  i32.const 1572
-  i32.add
-  i32.const 65535
-  i32.add
-  i32.const 65535
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.const 16
-  i32.shr_u
+  block $~lib/rt/tlsf/sizeRoundToPage|inlined.0 (result i32)
+   local.get $rootOffset
+   i32.const 1572
+   i32.add
+   local.set $size
+   local.get $size
+   i32.const 65535
+   i32.add
+   i32.const 16
+   i32.shr_u
+   br $~lib/rt/tlsf/sizeRoundToPage|inlined.0
+  end
   local.set $pagesNeeded
   local.get $pagesNeeded
   local.get $pagesBefore
@@ -1278,10 +1280,10 @@
   i32.const 0
   call $~lib/rt/tlsf/Root#set:flMap
   local.get $root
-  local.set $root|4
+  local.set $root|5
   i32.const 0
   local.set $tail
-  local.get $root|4
+  local.get $root|5
   local.get $tail
   i32.store offset=1568
   i32.const 0
@@ -1292,13 +1294,13 @@
    i32.lt_u
    if
     local.get $root
-    local.set $root|7
+    local.set $root|8
     local.get $fl
-    local.set $fl|8
+    local.set $fl|9
     i32.const 0
     local.set $slMap
-    local.get $root|7
-    local.get $fl|8
+    local.get $root|8
+    local.get $fl|9
     i32.const 2
     i32.shl
     i32.add
@@ -1312,18 +1314,18 @@
      i32.lt_u
      if
       local.get $root
-      local.set $root|11
+      local.set $root|12
       local.get $fl
-      local.set $fl|12
+      local.set $fl|13
       local.get $sl
-      local.set $sl|13
+      local.set $sl|14
       i32.const 0
       local.set $head
-      local.get $root|11
-      local.get $fl|12
+      local.get $root|12
+      local.get $fl|13
       i32.const 4
       i32.shl
-      local.get $sl|13
+      local.get $sl|14
       i32.add
       i32.const 2
       i32.shl
@@ -1391,7 +1393,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 562
+   i32.const 573
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1720,7 +1722,7 @@
   if
    i32.const 256
    i32.const 592
-   i32.const 461
+   i32.const 472
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1822,7 +1824,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 334
+   i32.const 339
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1893,7 +1895,7 @@
     if
      i32.const 0
      i32.const 592
-     i32.const 347
+     i32.const 352
      i32.const 18
      call $~lib/builtins/abort
      unreachable
@@ -1949,13 +1951,12 @@
  (func $~lib/rt/tlsf/growMemory (param $root i32) (param $size i32)
   (local $pagesBefore i32)
   (local $root|3 i32)
+  (local $size|4 i32)
   (local $pagesNeeded i32)
-  (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   (local $pagesWanted i32)
   (local $pagesAfter i32)
-  i32.const 0
-  drop
   local.get $size
   i32.const 256
   i32.ge_u
@@ -1984,25 +1985,30 @@
   i32.shl
   i32.add
   local.set $size
-  local.get $size
-  i32.const 65535
-  i32.add
-  i32.const 65535
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.const 16
-  i32.shr_u
+  i32.const 0
+  drop
+  block $~lib/rt/tlsf/sizeRoundToPage|inlined.1 (result i32)
+   local.get $size
+   local.set $size|4
+   local.get $size|4
+   i32.const 65535
+   i32.add
+   i32.const 16
+   i32.shr_u
+   br $~lib/rt/tlsf/sizeRoundToPage|inlined.1
+  end
   local.set $pagesNeeded
   local.get $pagesBefore
-  local.tee $5
-  local.get $pagesNeeded
   local.tee $6
-  local.get $5
+  local.get $pagesNeeded
+  local.tee $7
   local.get $6
+  local.get $7
   i32.gt_s
   select
   local.set $pagesWanted
+  i32.const 0
+  drop
   local.get $pagesWanted
   memory.grow
   i32.const 0
@@ -2018,6 +2024,8 @@
   end
   memory.size
   local.set $pagesAfter
+  i32.const 0
+  drop
   local.get $root
   local.get $pagesBefore
   i32.const 16
@@ -2050,7 +2058,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 361
+   i32.const 366
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -2165,7 +2173,7 @@
    if
     i32.const 0
     i32.const 592
-    i32.const 499
+    i32.const 510
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -2185,7 +2193,7 @@
   if
    i32.const 0
    i32.const 592
-   i32.const 501
+   i32.const 512
    i32.const 14
    call $~lib/builtins/abort
    unreachable
