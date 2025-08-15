@@ -2129,6 +2129,7 @@ declare class StaticArray<T> {
 
 /** Class representing a sequence of characters. */
 declare class String {
+  [key: i32]: string;
   static fromCharCode(ls: i32, hs?: i32): string;
   static fromCharCodes(arr: i32[]): string;
   static fromCodePoint(code: i32): string;
