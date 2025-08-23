@@ -270,7 +270,7 @@
   i32.const 0
   i32.const 1168
   i32.const 6
-  i32.const 2
+  i32.const 3
   call $~lib/builtins/abort
   unreachable
  )
