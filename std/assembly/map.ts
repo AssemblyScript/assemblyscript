@@ -76,11 +76,11 @@ export class Map<K,V> {
   constructor(initialEntries: MapInitialEntries<K,V> = []) {
     let entriesLength = initialEntries.length;
 
-    if(entriesLength > 0) { 
-      if(entriesLength >= this.entriesCapacity) this.bucketsMask = entriesLength;
+    if (entriesLength > 0) { 
+      if (entriesLength >= this.entriesCapacity) this.bucketsMask = entriesLength;
       this.rehash((this.bucketsMask << 1) | 1);
 
-      for(let i = 0; i < entriesLength; i++){
+      for (let i = 0; i < entriesLength; i++) {
         let key = initialEntries[i].key;
         let value = initialEntries[i].value;
         let hashCode = HASH<K>(key);

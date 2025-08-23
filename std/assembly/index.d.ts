@@ -2406,7 +2406,7 @@ interface Map<K,V> {
   toString(): string;
 }
 
-type MapInitialEntries<K,V> = {key: V, value:V}[]
+type MapInitialEntries<K,V> = {key: K, value:V}[]
 
 interface MapConstructor {
   new <K, V>(entries?: MapInitialEntries<K,V>): Map<K,V>;
