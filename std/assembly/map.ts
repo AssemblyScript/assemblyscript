@@ -54,6 +54,13 @@ function ENTRY_SIZE<K,V>(): usize {
   return size;
 }
 
+class KeyValue<K,V> {
+  key: K;
+  value: V;
+}
+
+export type MapInitialEntries<K,V> = KeyValue<K,V>[];
+
 export class Map<K,V> {
 
   // buckets referencing their respective first entry, usize[bucketsMask + 1]
@@ -66,8 +73,44 @@ export class Map<K,V> {
   private entriesOffset: i32 = 0;
   private entriesCount: i32 = 0;
 
-  constructor() {
-    /* nop */
+  constructor(initialEntries: MapInitialEntries<K,V> = []) {
+    let entriesLength = initialEntries.length;
+
+    if(entriesLength > 0) { 
+      if(entriesLength >= this.entriesCapacity) this.bucketsMask = entriesLength;
+      this.rehash((this.bucketsMask << 1) | 1);
+
+      for(let i = 0; i < entriesLength; i++){
+        let key = initialEntries[i].key;
+        let value = initialEntries[i].value;
+        let hashCode = HASH<K>(key);
+        let entry = this.find(key, hashCode); // unmanaged!
+        if (entry) {
+          entry.value = value;
+          if (isManaged<V>()) {
+            __link(changetype<usize>(this), changetype<usize>(value), true);
+          }
+        } else {
+          // append new entry
+          let entries = this.entries;
+          let entry = changetype<MapEntry<K,V>>(changetype<usize>(entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<K,V>());
+          // link with the map
+          entry.key = key;
+          if (isManaged<K>()) {
+            __link(changetype<usize>(this), changetype<usize>(key), true);
+          }
+          entry.value = value;
+          if (isManaged<V>()) {
+            __link(changetype<usize>(this), changetype<usize>(value), true);
+          }
+          ++this.entriesCount;
+          // link with previous entry in bucket
+          let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
+          entry.taggedNext = load<usize>(bucketPtrBase);
+          store<usize>(bucketPtrBase, changetype<usize>(entry));
+        }
+      }
+    }
   }
 
   get size(): i32 {

@@ -1,3 +1,4 @@
+
 function testNumeric<K extends number,V extends number>(): void {
   var map = new Map<K,V>();
 
@@ -57,6 +58,26 @@ function testNumeric<K extends number,V extends number>(): void {
 
   // clear
   map.clear();
+  assert(map.size == 0);
+  
+  const initialEntries: MapInitialEntries<K,V> = [];
+
+  for(let k: K = 0; k < 100; ++k){
+    initialEntries.push({
+      key: k,
+      value: 10 + <V>k
+    });
+  }
+
+  map = new Map<K,V>(initialEntries);
+
+  assert(map.size == 100);
+  for(let k: K = 0; k < 100; ++k){
+    assert(map.has(k));
+    assert(map.get(k) == 10 + <V>k);
+    map.delete(k);
+    assert(!map.has(k));
+  }
   assert(map.size == 0);
 }
 

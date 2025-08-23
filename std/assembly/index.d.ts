@@ -2394,7 +2394,7 @@ interface NewableFunction extends Function {
 interface IArguments {}
 interface RegExp {}
 
-declare class Map<K,V> {
+interface Map<K,V> {
   readonly size: i32;
   has(key: K): bool;
   set(key: K, value: V): this;
@@ -2405,6 +2405,14 @@ declare class Map<K,V> {
   values(): V[]; // preliminary
   toString(): string;
 }
+
+type MapInitialEntries<K,V> = {key: V, value:V}[]
+
+interface MapConstructor {
+  new <K, V>(entries?: MapInitialEntries<K,V>): Map<K,V>;
+}
+
+declare const Map: MapConstructor;
 
 declare class Set<K> {
   readonly size: i32;
