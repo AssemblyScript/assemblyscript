@@ -10,7 +10,7 @@
  (data $1.1 (i32.const 1112) "\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data $2 (i32.const 1148) ",")
  (data $2.1 (i32.const 1160) "\02\00\00\00\16\00\00\00r\00t\00/\00f\00l\00a\00g\00s\00.\00t\00s")
- (data $3 (i32.const 1200) "5\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00A\08\00\00A\00\00\00A\00\00\00\81\08\00\00\81\00\00\00\01\t\00\00\01\01\00\00\01\n\00\00\01\02\00\00\01\19\00\00\01\1a\00\00B\08\00\00B\00\00\00\82\08\00\00\82\00\00\00\02\t\00\00\02\01\00\00\02\n\00\00\02\02\00\00\02\19\00\00\02\1a\00\00\02\04\00\00 \00\00\00\02A\00\00\02a\00\00H\08\00\00H\00\00\00\88\08\00\00\88\00\00\00\08\t\00\00\08\01\00\00\08\n\00\00\08\02\00\00\08\19\00\00\08\1a\00\00\08\04\00\00\08A\00\00\08a\00\00P\08\08\00\90\08\14\00\10\t\12\00\10\n\11\00\10\84\10\00P\08\82\00P\08\c2\00\10\c1\10\00\10\e1\10\00\10a\c2\00\10\t2")
+ (data $3 (i32.const 1200) "E\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00A\08\00\00A\00\00\00A\00\00\00\81\08\00\00\81\00\00\00\01\t\00\00\01\01\00\00\01\n\00\00\01\02\00\00\01\19\00\00\01\1a\00\00B\08\00\00B\00\00\00\82\08\00\00\82\00\00\00\02\t\00\00\02\01\00\00\02\n\00\00\02\02\00\00\02\19\00\00\02\1a\00\00\02\04\00\00 \00\00\00\02A\00\00\02a\00\00H\08\00\00H\00\00\00\88\08\00\00\88\00\00\00\08\t\00\00\08\01\00\00\08\n\00\00\08\02\00\00\08\19\00\00\08\1a\00\00\08\04\00\00\08A\00\00\08a\00\00\90\08\14\00 \00\00\00\02A\00\00\10\t\12\00 \00\00\00\02A\00\00\10\n\11\00 \00\00\00\02A\00\00P\08\82\00\00\00\00\00\02A\00\00P\08\c2\00\00\00\00\00\02A\00\00\10\c1\10\00\00\00\00\00\02A\00\00\10\e1\10\00\00\00\00\00\02A\00\00\10a\c2\00\00\00\00\00\02A\00\00\10\t2\00 \00\00\00\02A")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/__typeinfo (param $0 i32) (result i32)
@@ -222,55 +222,45 @@
    br_if $folding-inner0
    i32.const 42
    call $~lib/rt/__typeinfo
-   i32.const 526416
-   i32.ne
-   br_if $folding-inner0
-   i32.const 43
-   call $~lib/rt/__typeinfo
    i32.const 1312912
-   i32.ne
-   br_if $folding-inner0
-   i32.const 44
-   call $~lib/rt/__typeinfo
-   i32.const 1181968
    i32.ne
    br_if $folding-inner0
    i32.const 45
    call $~lib/rt/__typeinfo
-   i32.const 1116688
-   i32.ne
-   br_if $folding-inner0
-   i32.const 46
-   call $~lib/rt/__typeinfo
-   i32.const 1082384
-   i32.ne
-   br_if $folding-inner0
-   i32.const 47
-   call $~lib/rt/__typeinfo
-   i32.const 8521808
+   i32.const 1181968
    i32.ne
    br_if $folding-inner0
    i32.const 48
    call $~lib/rt/__typeinfo
-   i32.const 12716112
-   i32.ne
-   br_if $folding-inner0
-   i32.const 49
-   call $~lib/rt/__typeinfo
-   i32.const 1098000
-   i32.ne
-   br_if $folding-inner0
-   i32.const 50
-   call $~lib/rt/__typeinfo
-   i32.const 1106192
+   i32.const 1116688
    i32.ne
    br_if $folding-inner0
    i32.const 51
    call $~lib/rt/__typeinfo
+   i32.const 8521808
+   i32.ne
+   br_if $folding-inner0
+   i32.const 54
+   call $~lib/rt/__typeinfo
+   i32.const 12716112
+   i32.ne
+   br_if $folding-inner0
+   i32.const 57
+   call $~lib/rt/__typeinfo
+   i32.const 1098000
+   i32.ne
+   br_if $folding-inner0
+   i32.const 60
+   call $~lib/rt/__typeinfo
+   i32.const 1106192
+   i32.ne
+   br_if $folding-inner0
+   i32.const 63
+   call $~lib/rt/__typeinfo
    i32.const 12738832
    i32.ne
    br_if $folding-inner0
-   i32.const 52
+   i32.const 66
    call $~lib/rt/__typeinfo
    i32.const 3279120
    i32.ne
@@ -280,7 +270,7 @@
   i32.const 0
   i32.const 1168
   i32.const 6
-  i32.const 3
+  i32.const 2
   call $~lib/builtins/abort
   unreachable
  )
