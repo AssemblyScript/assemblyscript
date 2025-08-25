@@ -3762,16 +3762,17 @@
   return
  )
  (func $"~lib/map/Map<~lib/string/String,usize>#constructor" (param $this i32) (param $initialEntries i32) (result i32)
+  (local $initialEntriesLength i32)
   (local $i i32)
   (local $key i32)
   (local $value i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $entries i32)
-  (local $8 i32)
-  (local $entry|9 i32)
+  (local $9 i32)
+  (local $entry|10 i32)
   (local $bucketPtrBase i32)
-  (local $11 i32)
+  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -3792,38 +3793,38 @@
    i32.store
   end
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 0
   i32.const 4
   i32.const 4
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=8
-  local.get $11
+  local.get $12
   call $"~lib/map/Map<~lib/string/String,usize>#set:buckets"
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 4
   i32.const 1
   i32.sub
   call $"~lib/map/Map<~lib/string/String,usize>#set:bucketsMask"
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 0
   i32.const 4
   block $"~lib/map/ENTRY_SIZE<~lib/string/String,usize>|inlined.5" (result i32)
@@ -3832,277 +3833,288 @@
   end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=8
-  local.get $11
+  local.get $12
   call $"~lib/map/Map<~lib/string/String,usize>#set:entries"
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 4
   call $"~lib/map/Map<~lib/string/String,usize>#set:entriesCapacity"
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 0
   call $"~lib/map/Map<~lib/string/String,usize>#set:entriesOffset"
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 0
   call $"~lib/map/Map<~lib/string/String,usize>#set:entriesCount"
   local.get $initialEntries
-  if
+  i32.eqz
+  if (result i32)
+   i32.const 1
+  else
    local.get $initialEntries
-   local.set $11
+   local.set $12
    global.get $~lib/memory/__stack_pointer
-   local.get $11
+   local.get $12
    i32.store offset=4
-   local.get $11
+   local.get $12
    call $"~lib/array/Array<~lib/map/KeyValue<~lib/string/String,usize>>#get:length"
+   i32.eqz
+  end
+  if
    local.get $this
-   local.set $11
+   local.set $12
    global.get $~lib/memory/__stack_pointer
-   local.get $11
+   i32.const 20
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $12
+   return
+  end
+  local.get $initialEntries
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store offset=4
+  local.get $12
+  call $"~lib/array/Array<~lib/map/KeyValue<~lib/string/String,usize>>#get:length"
+  local.set $initialEntriesLength
+  local.get $initialEntriesLength
+  local.get $this
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store offset=4
+  local.get $12
+  call $"~lib/map/Map<~lib/string/String,usize>#get:entriesCapacity"
+  i32.ge_s
+  if
+   local.get $this
+   local.set $12
+   global.get $~lib/memory/__stack_pointer
+   local.get $12
    i32.store offset=4
-   local.get $11
-   call $"~lib/map/Map<~lib/string/String,usize>#get:entriesCapacity"
-   i32.ge_s
+   local.get $12
+   local.get $initialEntriesLength
+   call $"~lib/map/Map<~lib/string/String,usize>#set:bucketsMask"
+  end
+  local.get $this
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store offset=4
+  local.get $12
+  local.get $this
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store offset=8
+  local.get $12
+  call $"~lib/map/Map<~lib/string/String,usize>#get:bucketsMask"
+  i32.const 1
+  i32.shl
+  i32.const 1
+  i32.or
+  call $"~lib/map/Map<~lib/string/String,usize>#rehash"
+  i32.const 0
+  local.set $i
+  loop $for-loop|0
+   local.get $i
+   local.get $initialEntriesLength
+   i32.lt_s
    if
-    local.get $this
-    local.set $11
     global.get $~lib/memory/__stack_pointer
-    local.get $11
-    i32.store offset=4
-    local.get $11
     local.get $initialEntries
-    local.set $11
+    local.set $12
     global.get $~lib/memory/__stack_pointer
-    local.get $11
+    local.get $12
     i32.store offset=8
-    local.get $11
-    call $"~lib/array/Array<~lib/map/KeyValue<~lib/string/String,usize>>#get:length"
-    call $"~lib/map/Map<~lib/string/String,usize>#set:bucketsMask"
-   end
-   local.get $this
-   local.set $11
-   global.get $~lib/memory/__stack_pointer
-   local.get $11
-   i32.store offset=4
-   local.get $11
-   local.get $this
-   local.set $11
-   global.get $~lib/memory/__stack_pointer
-   local.get $11
-   i32.store offset=8
-   local.get $11
-   call $"~lib/map/Map<~lib/string/String,usize>#get:bucketsMask"
-   i32.const 1
-   i32.shl
-   i32.const 1
-   i32.or
-   call $"~lib/map/Map<~lib/string/String,usize>#rehash"
-   i32.const 0
-   local.set $i
-   loop $for-loop|0
+    local.get $12
     local.get $i
-    local.get $initialEntries
-    local.set $11
+    call $"~lib/array/Array<~lib/map/KeyValue<~lib/string/String,usize>>#__get"
+    local.set $12
     global.get $~lib/memory/__stack_pointer
-    local.get $11
+    local.get $12
     i32.store offset=4
-    local.get $11
-    call $"~lib/array/Array<~lib/map/KeyValue<~lib/string/String,usize>>#get:length"
-    i32.lt_s
+    local.get $12
+    call $"~lib/map/KeyValue<~lib/string/String,usize>#get:key"
+    local.tee $key
+    i32.store offset=12
+    local.get $initialEntries
+    local.set $12
+    global.get $~lib/memory/__stack_pointer
+    local.get $12
+    i32.store offset=8
+    local.get $12
+    local.get $i
+    call $"~lib/array/Array<~lib/map/KeyValue<~lib/string/String,usize>>#__get"
+    local.set $12
+    global.get $~lib/memory/__stack_pointer
+    local.get $12
+    i32.store offset=4
+    local.get $12
+    call $"~lib/map/KeyValue<~lib/string/String,usize>#get:value"
+    local.set $value
+    local.get $key
+    local.set $12
+    global.get $~lib/memory/__stack_pointer
+    local.get $12
+    i32.store offset=4
+    local.get $12
+    call $~lib/util/hash/HASH<~lib/string/String>
+    local.set $hashCode
+    local.get $this
+    local.set $12
+    global.get $~lib/memory/__stack_pointer
+    local.get $12
+    i32.store offset=4
+    local.get $12
+    local.get $key
+    local.set $12
+    global.get $~lib/memory/__stack_pointer
+    local.get $12
+    i32.store offset=8
+    local.get $12
+    local.get $hashCode
+    call $"~lib/map/Map<~lib/string/String,usize>#find"
+    local.set $entry
+    local.get $entry
     if
-     global.get $~lib/memory/__stack_pointer
-     local.get $initialEntries
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=8
-     local.get $11
-     local.get $i
-     call $"~lib/array/Array<~lib/map/KeyValue<~lib/string/String,usize>>#__get"
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=4
-     local.get $11
-     call $"~lib/map/KeyValue<~lib/string/String,usize>#get:key"
-     local.tee $key
-     i32.store offset=12
-     local.get $initialEntries
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=8
-     local.get $11
-     local.get $i
-     call $"~lib/array/Array<~lib/map/KeyValue<~lib/string/String,usize>>#__get"
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=4
-     local.get $11
-     call $"~lib/map/KeyValue<~lib/string/String,usize>#get:value"
-     local.set $value
-     local.get $key
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=4
-     local.get $11
-     call $~lib/util/hash/HASH<~lib/string/String>
-     local.set $hashCode
-     local.get $this
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=4
-     local.get $11
-     local.get $key
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=8
-     local.get $11
-     local.get $hashCode
-     call $"~lib/map/Map<~lib/string/String,usize>#find"
-     local.set $entry
      local.get $entry
-     if
-      local.get $entry
-      local.get $value
-      call $"~lib/map/MapEntry<~lib/string/String,usize>#set:value"
-      i32.const 0
-      drop
-     else
-      global.get $~lib/memory/__stack_pointer
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      call $"~lib/map/Map<~lib/string/String,usize>#get:entries"
-      local.tee $entries
-      i32.store offset=16
-      local.get $entries
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=8
-      local.get $11
-      call $"~lib/map/Map<~lib/string/String,usize>#get:entriesOffset"
-      local.tee $8
-      i32.const 1
-      i32.add
-      call $"~lib/map/Map<~lib/string/String,usize>#set:entriesOffset"
-      local.get $8
-      block $"~lib/map/ENTRY_SIZE<~lib/string/String,usize>|inlined.4" (result i32)
-       i32.const 12
-       br $"~lib/map/ENTRY_SIZE<~lib/string/String,usize>|inlined.4"
-      end
-      i32.mul
-      i32.add
-      local.set $entry|9
-      local.get $entry|9
-      local.get $key
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      call $"~lib/map/MapEntry<~lib/string/String,usize>#set:key"
-      i32.const 1
-      drop
-      local.get $this
-      local.get $key
-      i32.const 1
-      call $~lib/rt/itcms/__link
-      local.get $entry|9
-      local.get $value
-      call $"~lib/map/MapEntry<~lib/string/String,usize>#set:value"
-      i32.const 0
-      drop
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=8
-      local.get $11
-      call $"~lib/map/Map<~lib/string/String,usize>#get:entriesCount"
-      i32.const 1
-      i32.add
-      call $"~lib/map/Map<~lib/string/String,usize>#set:entriesCount"
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      call $"~lib/map/Map<~lib/string/String,usize>#get:buckets"
-      local.get $hashCode
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      call $"~lib/map/Map<~lib/string/String,usize>#get:bucketsMask"
-      i32.and
-      i32.const 4
-      i32.mul
-      i32.add
-      local.set $bucketPtrBase
-      local.get $entry|9
-      local.get $bucketPtrBase
-      i32.load
-      call $"~lib/map/MapEntry<~lib/string/String,usize>#set:taggedNext"
-      local.get $bucketPtrBase
-      local.get $entry|9
-      i32.store
-     end
-     local.get $i
+     local.get $value
+     call $"~lib/map/MapEntry<~lib/string/String,usize>#set:value"
+     i32.const 0
+     drop
+    else
+     global.get $~lib/memory/__stack_pointer
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     call $"~lib/map/Map<~lib/string/String,usize>#get:entries"
+     local.tee $entries
+     i32.store offset=16
+     local.get $entries
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=8
+     local.get $12
+     call $"~lib/map/Map<~lib/string/String,usize>#get:entriesOffset"
+     local.tee $9
      i32.const 1
      i32.add
-     local.set $i
-     br $for-loop|0
+     call $"~lib/map/Map<~lib/string/String,usize>#set:entriesOffset"
+     local.get $9
+     block $"~lib/map/ENTRY_SIZE<~lib/string/String,usize>|inlined.4" (result i32)
+      i32.const 12
+      br $"~lib/map/ENTRY_SIZE<~lib/string/String,usize>|inlined.4"
+     end
+     i32.mul
+     i32.add
+     local.set $entry|10
+     local.get $entry|10
+     local.get $key
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     call $"~lib/map/MapEntry<~lib/string/String,usize>#set:key"
+     i32.const 1
+     drop
+     local.get $this
+     local.get $key
+     i32.const 1
+     call $~lib/rt/itcms/__link
+     local.get $entry|10
+     local.get $value
+     call $"~lib/map/MapEntry<~lib/string/String,usize>#set:value"
+     i32.const 0
+     drop
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=8
+     local.get $12
+     call $"~lib/map/Map<~lib/string/String,usize>#get:entriesCount"
+     i32.const 1
+     i32.add
+     call $"~lib/map/Map<~lib/string/String,usize>#set:entriesCount"
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     call $"~lib/map/Map<~lib/string/String,usize>#get:buckets"
+     local.get $hashCode
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     call $"~lib/map/Map<~lib/string/String,usize>#get:bucketsMask"
+     i32.and
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $bucketPtrBase
+     local.get $entry|10
+     local.get $bucketPtrBase
+     i32.load
+     call $"~lib/map/MapEntry<~lib/string/String,usize>#set:taggedNext"
+     local.get $bucketPtrBase
+     local.get $entry|10
+     i32.store
     end
+    local.get $i
+    i32.const 1
+    i32.add
+    local.set $i
+    br $for-loop|0
    end
   end
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
  )
  (func $"~lib/map/Map<~lib/string/String,usize>#has" (param $this i32) (param $key i32) (result i32)
   (local $2 i32)
@@ -4187,7 +4199,7 @@
   if
    i32.const 800
    i32.const 864
-   i32.const 146
+   i32.const 147
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -4801,16 +4813,17 @@
   return
  )
  (func $"~lib/map/Map<usize,~lib/string/String>#constructor" (param $this i32) (param $initialEntries i32) (result i32)
+  (local $initialEntriesLength i32)
   (local $i i32)
   (local $key i32)
   (local $value i32)
   (local $hashCode i32)
   (local $entry i32)
   (local $entries i32)
-  (local $8 i32)
-  (local $entry|9 i32)
+  (local $9 i32)
+  (local $entry|10 i32)
   (local $bucketPtrBase i32)
-  (local $11 i32)
+  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -4831,38 +4844,38 @@
    i32.store
   end
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 0
   i32.const 4
   i32.const 4
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=8
-  local.get $11
+  local.get $12
   call $"~lib/map/Map<usize,~lib/string/String>#set:buckets"
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 4
   i32.const 1
   i32.sub
   call $"~lib/map/Map<usize,~lib/string/String>#set:bucketsMask"
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 0
   i32.const 4
   block $"~lib/map/ENTRY_SIZE<usize,~lib/string/String>|inlined.5" (result i32)
@@ -4871,276 +4884,287 @@
   end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=8
-  local.get $11
+  local.get $12
   call $"~lib/map/Map<usize,~lib/string/String>#set:entries"
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 4
   call $"~lib/map/Map<usize,~lib/string/String>#set:entriesCapacity"
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 0
   call $"~lib/map/Map<usize,~lib/string/String>#set:entriesOffset"
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
   i32.store offset=4
-  local.get $11
+  local.get $12
   i32.const 0
   call $"~lib/map/Map<usize,~lib/string/String>#set:entriesCount"
   local.get $initialEntries
-  if
+  i32.eqz
+  if (result i32)
+   i32.const 1
+  else
    local.get $initialEntries
-   local.set $11
+   local.set $12
    global.get $~lib/memory/__stack_pointer
-   local.get $11
+   local.get $12
    i32.store offset=4
-   local.get $11
+   local.get $12
    call $"~lib/array/Array<~lib/map/KeyValue<usize,~lib/string/String>>#get:length"
+   i32.eqz
+  end
+  if
    local.get $this
-   local.set $11
+   local.set $12
    global.get $~lib/memory/__stack_pointer
-   local.get $11
+   i32.const 20
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $12
+   return
+  end
+  local.get $initialEntries
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store offset=4
+  local.get $12
+  call $"~lib/array/Array<~lib/map/KeyValue<usize,~lib/string/String>>#get:length"
+  local.set $initialEntriesLength
+  local.get $initialEntriesLength
+  local.get $this
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store offset=4
+  local.get $12
+  call $"~lib/map/Map<usize,~lib/string/String>#get:entriesCapacity"
+  i32.ge_s
+  if
+   local.get $this
+   local.set $12
+   global.get $~lib/memory/__stack_pointer
+   local.get $12
    i32.store offset=4
-   local.get $11
-   call $"~lib/map/Map<usize,~lib/string/String>#get:entriesCapacity"
-   i32.ge_s
+   local.get $12
+   local.get $initialEntriesLength
+   call $"~lib/map/Map<usize,~lib/string/String>#set:bucketsMask"
+  end
+  local.get $this
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store offset=4
+  local.get $12
+  local.get $this
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store offset=8
+  local.get $12
+  call $"~lib/map/Map<usize,~lib/string/String>#get:bucketsMask"
+  i32.const 1
+  i32.shl
+  i32.const 1
+  i32.or
+  call $"~lib/map/Map<usize,~lib/string/String>#rehash"
+  i32.const 0
+  local.set $i
+  loop $for-loop|0
+   local.get $i
+   local.get $initialEntriesLength
+   i32.lt_s
    if
-    local.get $this
-    local.set $11
-    global.get $~lib/memory/__stack_pointer
-    local.get $11
-    i32.store offset=4
-    local.get $11
     local.get $initialEntries
-    local.set $11
+    local.set $12
     global.get $~lib/memory/__stack_pointer
-    local.get $11
+    local.get $12
     i32.store offset=8
-    local.get $11
-    call $"~lib/array/Array<~lib/map/KeyValue<usize,~lib/string/String>>#get:length"
-    call $"~lib/map/Map<usize,~lib/string/String>#set:bucketsMask"
-   end
-   local.get $this
-   local.set $11
-   global.get $~lib/memory/__stack_pointer
-   local.get $11
-   i32.store offset=4
-   local.get $11
-   local.get $this
-   local.set $11
-   global.get $~lib/memory/__stack_pointer
-   local.get $11
-   i32.store offset=8
-   local.get $11
-   call $"~lib/map/Map<usize,~lib/string/String>#get:bucketsMask"
-   i32.const 1
-   i32.shl
-   i32.const 1
-   i32.or
-   call $"~lib/map/Map<usize,~lib/string/String>#rehash"
-   i32.const 0
-   local.set $i
-   loop $for-loop|0
+    local.get $12
     local.get $i
-    local.get $initialEntries
-    local.set $11
+    call $"~lib/array/Array<~lib/map/KeyValue<usize,~lib/string/String>>#__get"
+    local.set $12
     global.get $~lib/memory/__stack_pointer
-    local.get $11
+    local.get $12
     i32.store offset=4
-    local.get $11
-    call $"~lib/array/Array<~lib/map/KeyValue<usize,~lib/string/String>>#get:length"
-    i32.lt_s
+    local.get $12
+    call $"~lib/map/KeyValue<usize,~lib/string/String>#get:key"
+    local.set $key
+    global.get $~lib/memory/__stack_pointer
+    local.get $initialEntries
+    local.set $12
+    global.get $~lib/memory/__stack_pointer
+    local.get $12
+    i32.store offset=8
+    local.get $12
+    local.get $i
+    call $"~lib/array/Array<~lib/map/KeyValue<usize,~lib/string/String>>#__get"
+    local.set $12
+    global.get $~lib/memory/__stack_pointer
+    local.get $12
+    i32.store offset=4
+    local.get $12
+    call $"~lib/map/KeyValue<usize,~lib/string/String>#get:value"
+    local.tee $value
+    i32.store offset=12
+    local.get $key
+    call $~lib/util/hash/HASH<usize>
+    local.set $hashCode
+    local.get $this
+    local.set $12
+    global.get $~lib/memory/__stack_pointer
+    local.get $12
+    i32.store offset=4
+    local.get $12
+    local.get $key
+    local.get $hashCode
+    call $"~lib/map/Map<usize,~lib/string/String>#find"
+    local.set $entry
+    local.get $entry
     if
-     local.get $initialEntries
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=8
-     local.get $11
-     local.get $i
-     call $"~lib/array/Array<~lib/map/KeyValue<usize,~lib/string/String>>#__get"
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=4
-     local.get $11
-     call $"~lib/map/KeyValue<usize,~lib/string/String>#get:key"
-     local.set $key
-     global.get $~lib/memory/__stack_pointer
-     local.get $initialEntries
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=8
-     local.get $11
-     local.get $i
-     call $"~lib/array/Array<~lib/map/KeyValue<usize,~lib/string/String>>#__get"
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=4
-     local.get $11
-     call $"~lib/map/KeyValue<usize,~lib/string/String>#get:value"
-     local.tee $value
-     i32.store offset=12
-     local.get $key
-     call $~lib/util/hash/HASH<usize>
-     local.set $hashCode
-     local.get $this
-     local.set $11
-     global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store offset=4
-     local.get $11
-     local.get $key
-     local.get $hashCode
-     call $"~lib/map/Map<usize,~lib/string/String>#find"
-     local.set $entry
      local.get $entry
-     if
-      local.get $entry
-      local.get $value
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      call $"~lib/map/MapEntry<usize,~lib/string/String>#set:value"
-      i32.const 1
-      drop
-      local.get $this
-      local.get $value
-      i32.const 1
-      call $~lib/rt/itcms/__link
-     else
-      global.get $~lib/memory/__stack_pointer
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      call $"~lib/map/Map<usize,~lib/string/String>#get:entries"
-      local.tee $entries
-      i32.store offset=16
-      local.get $entries
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=8
-      local.get $11
-      call $"~lib/map/Map<usize,~lib/string/String>#get:entriesOffset"
-      local.tee $8
-      i32.const 1
-      i32.add
-      call $"~lib/map/Map<usize,~lib/string/String>#set:entriesOffset"
-      local.get $8
-      block $"~lib/map/ENTRY_SIZE<usize,~lib/string/String>|inlined.4" (result i32)
-       i32.const 12
-       br $"~lib/map/ENTRY_SIZE<usize,~lib/string/String>|inlined.4"
-      end
-      i32.mul
-      i32.add
-      local.set $entry|9
-      local.get $entry|9
-      local.get $key
-      call $"~lib/map/MapEntry<usize,~lib/string/String>#set:key"
-      i32.const 0
-      drop
-      local.get $entry|9
-      local.get $value
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      call $"~lib/map/MapEntry<usize,~lib/string/String>#set:value"
-      i32.const 1
-      drop
-      local.get $this
-      local.get $value
-      i32.const 1
-      call $~lib/rt/itcms/__link
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=8
-      local.get $11
-      call $"~lib/map/Map<usize,~lib/string/String>#get:entriesCount"
-      i32.const 1
-      i32.add
-      call $"~lib/map/Map<usize,~lib/string/String>#set:entriesCount"
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      call $"~lib/map/Map<usize,~lib/string/String>#get:buckets"
-      local.get $hashCode
-      local.get $this
-      local.set $11
-      global.get $~lib/memory/__stack_pointer
-      local.get $11
-      i32.store offset=4
-      local.get $11
-      call $"~lib/map/Map<usize,~lib/string/String>#get:bucketsMask"
-      i32.and
-      i32.const 4
-      i32.mul
-      i32.add
-      local.set $bucketPtrBase
-      local.get $entry|9
-      local.get $bucketPtrBase
-      i32.load
-      call $"~lib/map/MapEntry<usize,~lib/string/String>#set:taggedNext"
-      local.get $bucketPtrBase
-      local.get $entry|9
-      i32.store
-     end
-     local.get $i
+     local.get $value
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     call $"~lib/map/MapEntry<usize,~lib/string/String>#set:value"
+     i32.const 1
+     drop
+     local.get $this
+     local.get $value
+     i32.const 1
+     call $~lib/rt/itcms/__link
+    else
+     global.get $~lib/memory/__stack_pointer
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     call $"~lib/map/Map<usize,~lib/string/String>#get:entries"
+     local.tee $entries
+     i32.store offset=16
+     local.get $entries
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=8
+     local.get $12
+     call $"~lib/map/Map<usize,~lib/string/String>#get:entriesOffset"
+     local.tee $9
      i32.const 1
      i32.add
-     local.set $i
-     br $for-loop|0
+     call $"~lib/map/Map<usize,~lib/string/String>#set:entriesOffset"
+     local.get $9
+     block $"~lib/map/ENTRY_SIZE<usize,~lib/string/String>|inlined.4" (result i32)
+      i32.const 12
+      br $"~lib/map/ENTRY_SIZE<usize,~lib/string/String>|inlined.4"
+     end
+     i32.mul
+     i32.add
+     local.set $entry|10
+     local.get $entry|10
+     local.get $key
+     call $"~lib/map/MapEntry<usize,~lib/string/String>#set:key"
+     i32.const 0
+     drop
+     local.get $entry|10
+     local.get $value
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     call $"~lib/map/MapEntry<usize,~lib/string/String>#set:value"
+     i32.const 1
+     drop
+     local.get $this
+     local.get $value
+     i32.const 1
+     call $~lib/rt/itcms/__link
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=8
+     local.get $12
+     call $"~lib/map/Map<usize,~lib/string/String>#get:entriesCount"
+     i32.const 1
+     i32.add
+     call $"~lib/map/Map<usize,~lib/string/String>#set:entriesCount"
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     call $"~lib/map/Map<usize,~lib/string/String>#get:buckets"
+     local.get $hashCode
+     local.get $this
+     local.set $12
+     global.get $~lib/memory/__stack_pointer
+     local.get $12
+     i32.store offset=4
+     local.get $12
+     call $"~lib/map/Map<usize,~lib/string/String>#get:bucketsMask"
+     i32.and
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $bucketPtrBase
+     local.get $entry|10
+     local.get $bucketPtrBase
+     i32.load
+     call $"~lib/map/MapEntry<usize,~lib/string/String>#set:taggedNext"
+     local.get $bucketPtrBase
+     local.get $entry|10
+     i32.store
     end
+    local.get $i
+    i32.const 1
+    i32.add
+    local.set $i
+    br $for-loop|0
    end
   end
   local.get $this
-  local.set $11
+  local.set $12
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $12
  )
  (func $"~lib/map/Map<usize,~lib/string/String>#set" (param $this i32) (param $key i32) (param $value i32) (result i32)
   (local $hashCode i32)
@@ -5517,7 +5541,7 @@
   if
    i32.const 800
    i32.const 864
-   i32.const 146
+   i32.const 147
    i32.const 17
    call $~lib/builtins/abort
    unreachable

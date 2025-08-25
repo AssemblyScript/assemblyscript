@@ -60,6 +60,7 @@ function testNumeric<K extends number,V extends number>(): void {
   map.clear();
   assert(map.size == 0);
   
+  // initial entries
   const initialEntries: MapInitialEntries<K,V> = [];
 
   for(let k: K = 0; k < 100; ++k){
@@ -78,6 +79,9 @@ function testNumeric<K extends number,V extends number>(): void {
     map.delete(k);
     assert(!map.has(k));
   }
+  assert(map.size == 0);
+
+  map = new Map<K,V>([]);
   assert(map.size == 0);
 }
 

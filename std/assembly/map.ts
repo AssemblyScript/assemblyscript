@@ -74,39 +74,40 @@ export class Map<K,V> {
   private entriesCount: i32 = 0;
 
   constructor(initialEntries: MapInitialEntries<K,V> | null = null) {
-    if (initialEntries) { 
-      if (initialEntries.length >= this.entriesCapacity) this.bucketsMask = initialEntries.length;
-      this.rehash((this.bucketsMask << 1) | 1);
+    if (!initialEntries || !initialEntries.length) return this;
+    let initialEntriesLength = initialEntries.length;
 
-      for (let i = 0; i < initialEntries.length; i++) {
-        let key = initialEntries[i].key;
-        let value = initialEntries[i].value;
-        let hashCode = HASH<K>(key);
-        let entry = this.find(key, hashCode); // unmanaged!
-        if (entry) {
-          entry.value = value;
-          if (isManaged<V>()) {
-            __link(changetype<usize>(this), changetype<usize>(value), true);
-          }
-        } else {
-          // append new entry
-          let entries = this.entries;
-          let entry = changetype<MapEntry<K,V>>(changetype<usize>(entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<K,V>());
-          // link with the map
-          entry.key = key;
-          if (isManaged<K>()) {
-            __link(changetype<usize>(this), changetype<usize>(key), true);
-          }
-          entry.value = value;
-          if (isManaged<V>()) {
-            __link(changetype<usize>(this), changetype<usize>(value), true);
-          }
-          ++this.entriesCount;
-          // link with previous entry in bucket
-          let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
-          entry.taggedNext = load<usize>(bucketPtrBase);
-          store<usize>(bucketPtrBase, changetype<usize>(entry));
+    if (initialEntriesLength >= this.entriesCapacity) this.bucketsMask = initialEntriesLength;
+    this.rehash((this.bucketsMask << 1) | 1);
+
+    for (let i = 0; i < initialEntriesLength; i++) {
+      let key = initialEntries[i].key;
+      let value = initialEntries[i].value;
+      let hashCode = HASH<K>(key);
+      let entry = this.find(key, hashCode); // unmanaged!
+      if (entry) {
+        entry.value = value;
+        if (isManaged<V>()) {
+          __link(changetype<usize>(this), changetype<usize>(value), true);
         }
+      } else {
+        // append new entry
+        let entries = this.entries;
+        let entry = changetype<MapEntry<K,V>>(changetype<usize>(entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<K,V>());
+        // link with the map
+        entry.key = key;
+        if (isManaged<K>()) {
+          __link(changetype<usize>(this), changetype<usize>(key), true);
+        }
+        entry.value = value;
+        if (isManaged<V>()) {
+          __link(changetype<usize>(this), changetype<usize>(value), true);
+        }
+        ++this.entriesCount;
+        // link with previous entry in bucket
+        let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
+        entry.taggedNext = load<usize>(bucketPtrBase);
+        store<usize>(bucketPtrBase, changetype<usize>(entry));
       }
     }
   }
