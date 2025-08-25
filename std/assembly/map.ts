@@ -73,14 +73,12 @@ export class Map<K,V> {
   private entriesOffset: i32 = 0;
   private entriesCount: i32 = 0;
 
-  constructor(initialEntries: MapInitialEntries<K,V> = []) {
-    let entriesLength = initialEntries.length;
-
-    if (entriesLength > 0) { 
-      if (entriesLength >= this.entriesCapacity) this.bucketsMask = entriesLength;
+  constructor(initialEntries: MapInitialEntries<K,V> | null = null) {
+    if (initialEntries) { 
+      if (initialEntries.length >= this.entriesCapacity) this.bucketsMask = initialEntries.length;
       this.rehash((this.bucketsMask << 1) | 1);
 
-      for (let i = 0; i < entriesLength; i++) {
+      for (let i = 0; i < initialEntries.length; i++) {
         let key = initialEntries[i].key;
         let value = initialEntries[i].value;
         let hashCode = HASH<K>(key);
