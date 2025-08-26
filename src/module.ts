@@ -3019,6 +3019,7 @@ export function isNullableType(type: TypeRef): bool {
 // expressions
 
 export function getExpressionId(expr: ExpressionRef): ExpressionId {
+  if (expr == 0) return ExpressionId.Invalid;
   return binaryen._BinaryenExpressionGetId(expr);
 }
 
