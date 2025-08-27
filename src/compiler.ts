@@ -6764,7 +6764,7 @@ export class Compiler extends DiagnosticEmitter {
       if (thisType.isManaged) {
         let operand = operands[0];
         let precomp = module.runExpression(operand, ExpressionRunnerFlags.Default);
-        if (!isConstZero(precomp)) { // otherwise unnecessary
+        if (!precomp || !isConstZero(precomp)) { // otherwise unnecessary
           operands[operandIndex] = module.tostack(operand);
         }
       }
@@ -6778,7 +6778,7 @@ export class Compiler extends DiagnosticEmitter {
       if (paramType.isManaged) {
         let operand = operands[operandIndex];
         let precomp = module.runExpression(operand, ExpressionRunnerFlags.Default);
-        if (!isConstZero(precomp)) { // otherwise unnecessary
+        if (!precomp || !isConstZero(precomp)) { // otherwise unnecessary
           operands[operandIndex] = module.tostack(operand);
         }
       }
