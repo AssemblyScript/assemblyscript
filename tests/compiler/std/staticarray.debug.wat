@@ -2374,6 +2374,9 @@
   call $~lib/rt/__newBuffer
   return
  )
+ (func $~lib/object/Object#raw_constructor (param $this i32) (result i32)
+  local.get $this
+ )
  (func $~lib/rt/itcms/__link (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
   (local $child i32)
   (local $parent i32)
@@ -3935,6 +3938,34 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $std/staticarray/Ref#raw_constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/object/Object#raw_constructor
+  local.tee $this
+  i32.store offset=4
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
  (func $std/staticarray/Ref#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -3962,7 +3993,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $~lib/object/Object#constructor
+  call $~lib/object/Object#raw_constructor
   local.tee $this
   i32.store
   local.get $this

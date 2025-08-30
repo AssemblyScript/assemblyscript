@@ -4793,6 +4793,35 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
+ (func $resolve-elementaccess/Buffer#raw_constructor (param $this i32) (param $length i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  local.get $length
+  call $~lib/typedarray/Uint8Array#constructor
+  local.tee $this
+  i32.store offset=4
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
  (func $resolve-elementaccess/Buffer#constructor (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer

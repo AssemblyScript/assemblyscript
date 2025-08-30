@@ -120,7 +120,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$142
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$141
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -144,7 +144,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$142
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$141
    end
    local.get $0
    i32.load offset=8
@@ -1804,62 +1804,27 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
-   local.get $6
-   i32.eqz
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 20
-    i32.const 5
-    call $~lib/rt/itcms/__new
-    local.tee $6
-    i32.store
-   end
    global.get $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=4
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1740
-   i32.lt_s
-   br_if $folding-inner1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   local.get $6
-   i32.eqz
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 0
-    i32.const 0
-    call $~lib/rt/itcms/__new
-    local.tee $6
-    i32.store
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
    local.get $6
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $6
    i32.store offset=4
+   global.get $~lib/memory/__stack_pointer
+   local.get $6
+   i32.store
    local.get $6
    f64.const 0
    f64.store
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store
    local.get $6
    f64.const 0
    f64.store offset=8
    global.get $~lib/memory/__stack_pointer
    local.get $6
-   i32.store offset=4
+   i32.store
    local.get $6
    i32.const 0
    i32.store offset=16
@@ -1937,7 +1902,7 @@
     global.get $~lib/memory/__stack_pointer
     i32.const 1168
     i32.store
-    block $__inlined_func$~lib/rt/itcms/__renew$141
+    block $__inlined_func$~lib/rt/itcms/__renew$140
      i32.const 1073741820
      local.get $0
      i32.const 1
@@ -1980,7 +1945,7 @@
       i32.store offset=16
       local.get $0
       local.set $1
-      br $__inlined_func$~lib/rt/itcms/__renew$141
+      br $__inlined_func$~lib/rt/itcms/__renew$140
      end
      local.get $3
      local.get $2
