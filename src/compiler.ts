@@ -55,7 +55,6 @@ import {
   SideEffects,
   SwitchBuilder,
   ExpressionRunnerFlags,
-  isConstZero,
   isConstNegZero,
   isConstExpressionNaN,
   ensureType,
