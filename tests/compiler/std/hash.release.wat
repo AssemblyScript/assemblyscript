@@ -28,80 +28,28 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $~start
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1404
-  i32.lt_s
-  if
-   i32.const 34192
-   i32.const 34240
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   i32.const 0
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store
   i32.const 1056
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1088
-  i32.store
   i32.const 1088
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1120
-  i32.store
   i32.const 1120
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1152
-  i32.store
   i32.const 1152
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1184
-  i32.store
   i32.const 1184
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1216
-  i32.store
   i32.const 1216
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1248
-  i32.store
   i32.const 1248
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1280
-  i32.store
   i32.const 1280
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1328
-  i32.store
   i32.const 1328
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1376
-  i32.store
   i32.const 1376
   call $~lib/util/hash/HASH<~lib/string/String|null>
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/util/hash/HASH<~lib/string/String|null> (param $0 i32)
   (local $1 i32)

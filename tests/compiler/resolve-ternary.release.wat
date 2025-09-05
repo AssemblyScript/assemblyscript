@@ -2492,7 +2492,7 @@
   (local $5 i64)
   (local $6 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner1
@@ -2501,8 +2501,8 @@
    i32.lt_s
    br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store
+   i32.const 0
+   i32.store
    memory.size
    i32.const 16
    i32.shl
@@ -2562,9 +2562,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3232
-   i32.store offset=4
    local.get $0
    i32.const 3232
    call $~lib/string/String.__eq
@@ -2710,9 +2707,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4464
-   i32.store offset=4
    local.get $0
    i32.const 4464
    call $~lib/string/String.__eq
@@ -2768,7 +2762,7 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

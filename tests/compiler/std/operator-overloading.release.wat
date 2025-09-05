@@ -2414,7 +2414,7 @@
  )
  (func $std/operator-overloading/TesterElementAccess#__set (param $0 i32) (param $1 i32) (param $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -2429,14 +2429,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1536
-  i32.store offset=4
   local.get $1
   call $~lib/string/String.__eq
   if
@@ -2455,13 +2452,13 @@
    i32.store offset=4
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
  (func $std/operator-overloading/TesterElementAccess#__get (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -2476,14 +2473,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1536
-  i32.store offset=4
   local.get $1
   call $~lib/string/String.__eq
   if (result i32)
@@ -2500,7 +2494,7 @@
    i32.load offset=4
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -2509,7 +2503,7 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 48
+  i32.const 40
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
@@ -2519,7 +2513,7 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.const 48
+   i32.const 40
    memory.fill
    memory.size
    i32.const 16
@@ -4768,9 +4762,6 @@
    global.get $std/operator-overloading/tea
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1536
-   i32.store offset=4
    local.get $0
    i32.const 1536
    i32.const -1
@@ -4779,9 +4770,6 @@
    global.get $std/operator-overloading/tea
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1568
-   i32.store offset=4
    local.get $0
    i32.const 1568
    i32.const -2
@@ -4806,9 +4794,6 @@
    global.get $std/operator-overloading/tea
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1536
-   i32.store offset=4
    local.get $0
    i32.const 1536
    call $std/operator-overloading/TesterElementAccess#__get
@@ -4842,9 +4827,6 @@
    global.get $std/operator-overloading/tea
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1568
-   i32.store offset=4
    local.get $0
    i32.const 1568
    call $std/operator-overloading/TesterElementAccess#__get
@@ -4863,15 +4845,9 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   i32.const 1536
-   i32.store offset=4
-   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/tea
    local.tee $1
-   i32.store offset=40
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1536
-   i32.store offset=44
+   i32.store offset=4
    local.get $0
    i32.const 1536
    local.get $1
@@ -4885,15 +4861,9 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
-   i32.const 1568
-   i32.store offset=4
-   global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/tea
    local.tee $1
-   i32.store offset=40
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1568
-   i32.store offset=44
+   i32.store offset=4
    local.get $0
    i32.const 1568
    local.get $1
@@ -4906,9 +4876,6 @@
    global.get $std/operator-overloading/tea
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1536
-   i32.store offset=4
    local.get $0
    i32.const 1536
    call $std/operator-overloading/TesterElementAccess#__get
@@ -4924,9 +4891,6 @@
    global.get $std/operator-overloading/tea
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1568
-   i32.store offset=4
    local.get $0
    i32.const 1568
    call $std/operator-overloading/TesterElementAccess#__get
@@ -4941,7 +4905,7 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 48
+   i32.const 40
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

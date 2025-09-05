@@ -3038,6 +3038,18 @@ export function getConstValueI64High(expr: ExpressionRef): i32 {
   return binaryen._BinaryenConstGetValueI64High(expr);
 }
 
+export function getConstValueInteger(expr: ExpressionRef, isWasm64: bool): i64 {
+    let lo: i32 = 0;
+    let hi: i32 = 0;
+    if (isWasm64) {
+      lo = getConstValueI64Low(expr);
+      hi = getConstValueI64High(expr);
+    } else {
+      lo = getConstValueI32(expr);
+    }
+    return i64_new(lo, hi);
+}
+
 export function getConstValueF32(expr: ExpressionRef): f32 {
   return binaryen._BinaryenConstGetValueF32(expr);
 }

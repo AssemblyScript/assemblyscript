@@ -2039,7 +2039,7 @@
  (func $start:resolve-unary
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 24
+  i32.const 20
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
@@ -2049,7 +2049,7 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.const 24
+   i32.const 20
    memory.fill
    memory.size
    i32.const 16
@@ -2089,9 +2089,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3232
-   i32.store offset=4
    local.get $0
    i32.const 3232
    call $~lib/string/String.__eq
@@ -2110,9 +2107,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3328
-   i32.store offset=4
    local.get $0
    i32.const 3328
    call $~lib/string/String.__eq
@@ -2135,9 +2129,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3360
-   i32.store offset=4
    local.get $0
    i32.const 3360
    call $~lib/string/String.__eq
@@ -2160,9 +2151,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3328
-   i32.store offset=4
    local.get $0
    i32.const 3328
    call $~lib/string/String.__eq
@@ -2182,9 +2170,6 @@
    select
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3424
-   i32.store offset=4
    local.get $0
    i32.const 3424
    call $~lib/string/String.__eq
@@ -2204,9 +2189,6 @@
    select
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3392
-   i32.store offset=4
    local.get $0
    i32.const 3392
    call $~lib/string/String.__eq
@@ -2227,9 +2209,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3456
-   i32.store offset=4
    local.get $0
    i32.const 3456
    call $~lib/string/String.__eq
@@ -2253,9 +2232,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3328
-   i32.store offset=4
    local.get $0
    i32.const 3328
    call $~lib/string/String.__eq
@@ -2279,9 +2255,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3360
-   i32.store offset=4
    local.get $0
    i32.const 3360
    call $~lib/string/String.__eq
@@ -2327,16 +2300,13 @@
    global.set $resolve-unary/foo
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-unary/foo
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3488
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 3488
-   i32.store
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 3488
-   i32.store offset=4
+   i32.store
    i32.const 3488
    i32.const 3488
    call $~lib/string/String.__eq
@@ -2351,16 +2321,13 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-unary/foo
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3520
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 3520
-   i32.store
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 3520
-   i32.store offset=4
+   i32.store
    i32.const 3520
    i32.const 3520
    call $~lib/string/String.__eq
@@ -2417,16 +2384,13 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-unary/foo
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3552
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 3552
-   i32.store
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 3552
-   i32.store offset=4
+   i32.store
    i32.const 3552
    i32.const 3552
    call $~lib/string/String.__eq
@@ -2441,16 +2405,13 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-unary/foo
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3584
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 3584
-   i32.store
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 3584
-   i32.store offset=4
+   i32.store
    i32.const 3584
    i32.const 3584
    call $~lib/string/String.__eq
@@ -2466,7 +2427,7 @@
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-unary/foo
    local.tee $0
-   i32.store offset=16
+   i32.store offset=12
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -2489,7 +2450,7 @@
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-unary/foo
    local.tee $0
-   i32.store offset=20
+   i32.store offset=16
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
@@ -2542,16 +2503,13 @@
    global.set $resolve-unary/bar
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-unary/bar
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3616
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 3616
-   i32.store
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 3616
-   i32.store offset=4
+   i32.store
    i32.const 3616
    i32.const 3616
    call $~lib/string/String.__eq
@@ -2566,16 +2524,13 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-unary/bar
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3648
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 3648
-   i32.store
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 3648
-   i32.store offset=4
+   i32.store
    i32.const 3648
    i32.const 3648
    call $~lib/string/String.__eq
@@ -2590,16 +2545,13 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-unary/bar
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3680
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 3680
-   i32.store
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 3680
-   i32.store offset=4
+   i32.store
    i32.const 3680
    i32.const 3680
    call $~lib/string/String.__eq
@@ -2614,16 +2566,13 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-unary/bar
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3712
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 3712
-   i32.store
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 3712
-   i32.store offset=4
+   i32.store
    i32.const 3712
    i32.const 3712
    call $~lib/string/String.__eq
@@ -2636,17 +2585,11 @@
     call $~lib/builtins/abort
     unreachable
    end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3744
-   i32.store
    i32.const 3740
    i32.load
    drop
    global.get $~lib/memory/__stack_pointer
-   i32.const 3808
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 24
+   i32.const 20
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

@@ -357,28 +357,15 @@
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=8
   i32.const 32
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
   i32.const 32
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -390,17 +377,7 @@
    unreachable
   end
   i32.const 112
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
   i32.const 112
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -412,17 +389,7 @@
    unreachable
   end
   i32.const 144
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
   i32.const 144
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -436,7 +403,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $NonNullable/z
   local.tee $0
-  i32.store offset=8
+  i32.store offset=4
   local.get $0
   if (result i32)
    local.get $0
@@ -462,7 +429,7 @@
   local.get $1
   call $NonNullable/safetyCheck<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

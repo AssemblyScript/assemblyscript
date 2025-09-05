@@ -124,6 +124,27 @@
  (export "functionFunction" (func $export:bindings/esm/functionFunction))
  (func $start:bindings/esm~anonymous|0
  )
+ (func $start:bindings/esm
+  i32.const 128
+  i32.const 1
+  f64.const 42
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  call $~lib/builtins/trace
+  i32.const 160
+  call $~lib/bindings/dom/console.log
+  global.get $~lib/bindings/dom/Math.E
+  call $~lib/bindings/dom/Math.log
+  drop
+  global.get $bindings/esm/immutableGlobal
+  drop
+  global.get $bindings/esm/immutableGlobalNested
+  drop
+  call $bindings/esm/Date_getTimezoneOffset
+  drop
+ )
  (func $start:bindings/raw
   call $start:bindings/esm
  )
@@ -3083,50 +3104,6 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $start:bindings/esm
-  (local $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 128
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  i32.const 1
-  f64.const 42
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  call $~lib/builtins/trace
-  i32.const 160
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/bindings/dom/console.log
-  global.get $~lib/bindings/dom/Math.E
-  call $~lib/bindings/dom/Math.log
-  drop
-  global.get $bindings/esm/immutableGlobal
-  drop
-  global.get $bindings/esm/immutableGlobalNested
-  drop
-  call $bindings/esm/Date_getTimezoneOffset
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $bindings/esm/bufferFunction (param $a i32) (param $b i32) (result i32)
   (local $aByteLength i32)

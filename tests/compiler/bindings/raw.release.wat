@@ -2053,27 +2053,6 @@
   end
   i32.const 1
   global.set $~started
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2276
-  i32.lt_s
-  if
-   i32.const 35072
-   i32.const 35120
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1152
-  i32.store
   i32.const 1152
   i32.const 1
   f64.const 42
@@ -2082,9 +2061,6 @@
   f64.const 0
   f64.const 0
   call $~lib/builtins/trace
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1184
-  i32.store
   i32.const 1184
   call $~lib/bindings/dom/console.log
   global.get $~lib/bindings/dom/Math.E
@@ -2092,10 +2068,6 @@
   drop
   call $bindings/esm/Date_getTimezoneOffset
   drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
   memory.size
   i32.const 16
   i32.shl
@@ -2192,7 +2164,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store
-   block $__inlined_func$~lib/string/String#concat$286
+   block $__inlined_func$~lib/string/String#concat$285
     local.get $1
     i32.const 20
     i32.sub
@@ -2211,7 +2183,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 1760
      local.set $2
-     br $__inlined_func$~lib/string/String#concat$286
+     br $__inlined_func$~lib/string/String#concat$285
     end
     global.get $~lib/memory/__stack_pointer
     local.get $2

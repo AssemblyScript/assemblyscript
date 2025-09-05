@@ -1678,7 +1678,7 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
@@ -1689,9 +1689,6 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
-   global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store offset=8
    memory.size
    i32.const 16
    i32.shl
@@ -1849,7 +1846,7 @@
     global.get $~lib/memory/__stack_pointer
     global.get $class-overloading-cast/v
     local.tee $0
-    i32.store offset=8
+    i32.store offset=4
     block $default
      block $case1
       local.get $0
@@ -1876,9 +1873,6 @@
    end
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1488
-   i32.store offset=4
    local.get $0
    i32.const 1488
    call $~lib/string/String.__eq
@@ -1893,13 +1887,10 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading-cast/v2
-   i32.store offset=8
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 1488
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1488
-   i32.store offset=4
    i32.const 1488
    i32.const 1488
    call $~lib/string/String.__eq
@@ -1917,7 +1908,7 @@
     global.get $~lib/memory/__stack_pointer
     global.get $class-overloading-cast/v3
     local.tee $0
-    i32.store offset=8
+    i32.store offset=4
     i32.const 1488
     local.get $0
     i32.const 8
@@ -1931,9 +1922,6 @@
    end
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1488
-   i32.store offset=4
    local.get $0
    i32.const 1488
    call $~lib/string/String.__eq
@@ -2009,10 +1997,7 @@
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading-cast/c
    local.tee $0
-   i32.store offset=8
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1600
-   i32.store offset=12
+   i32.store offset=4
    local.get $0
    i32.const 8
    i32.sub
@@ -2021,9 +2006,6 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1456
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1456
-   i32.store offset=4
    i32.const 1456
    i32.const 1456
    call $~lib/string/String.__eq
@@ -2039,10 +2021,7 @@
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading-cast/c
    local.tee $0
-   i32.store offset=8
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1600
-   i32.store offset=12
+   i32.store offset=4
    local.get $0
    i32.const 8
    i32.sub
@@ -2051,9 +2030,6 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1456
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1456
-   i32.store offset=4
    i32.const 1456
    i32.const 1456
    call $~lib/string/String.__eq
@@ -2156,13 +2132,10 @@
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=8
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 1632
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1632
-   i32.store offset=4
    i32.const 1632
    i32.const 1632
    call $~lib/string/String.__eq
@@ -2176,7 +2149,7 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 16
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

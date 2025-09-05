@@ -35,6 +35,46 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
+ (func $start:std/console
+  i32.const 0
+  i32.const 32
+  call $~lib/console/console.assert<bool>
+  i32.const 1
+  i32.const 64
+  call $~lib/console/console.assert<bool>
+  i32.const 96
+  call $~lib/console/console.log
+  i32.const 144
+  call $~lib/console/console.debug
+  i32.const 192
+  call $~lib/console/console.info
+  i32.const 240
+  call $~lib/console/console.warn
+  i32.const 288
+  call $~lib/console/console.error
+  i32.const 336
+  call $~lib/console/console.time
+  i32.const 336
+  call $~lib/console/console.timeLog
+  i32.const 336
+  call $~lib/console/console.timeEnd
+  i32.const 384
+  call $~lib/console/console.timeLog
+  i32.const 384
+  call $~lib/console/console.timeEnd
+  i32.const 432
+  call $~lib/console/console.time
+  i32.const 432
+  call $~lib/console/console.time
+  i32.const 480
+  call $~lib/console/console.log
+  i32.const 512
+  call $~lib/console/console.log
+  i32.const 544
+  call $~lib/console/console.log
+  i32.const 576
+  call $~lib/console/console.log
+ )
  (func $~start
   call $start:std/console
  )
@@ -247,149 +287,6 @@
   i32.store
   local.get $1
   call $~lib/bindings/dom/console.timeEnd
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $start:std/console
-  (local $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  i32.const 32
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.assert<bool>
-  i32.const 1
-  i32.const 64
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.assert<bool>
-  i32.const 96
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.log
-  i32.const 144
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.debug
-  i32.const 192
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.info
-  i32.const 240
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.warn
-  i32.const 288
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.error
-  i32.const 336
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.time
-  i32.const 336
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.timeLog
-  i32.const 336
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.timeEnd
-  i32.const 384
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.timeLog
-  i32.const 384
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.timeEnd
-  i32.const 432
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.time
-  i32.const 432
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.time
-  i32.const 480
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.log
-  i32.const 512
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.log
-  i32.const 544
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.log
-  i32.const 576
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/console/console.log
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add

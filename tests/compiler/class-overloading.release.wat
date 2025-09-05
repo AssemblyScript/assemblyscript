@@ -1770,7 +1770,7 @@
  )
  (func $class-overloading/C#a<i32> (param $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -1785,8 +1785,8 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
@@ -1795,9 +1795,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1520
-  i32.store offset=4
   i32.const 1520
   i32.const 1520
   call $~lib/string/String.__eq
@@ -1813,7 +1810,7 @@
   i32.const 1616
   global.set $class-overloading/which
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -1905,7 +1902,7 @@
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner1
@@ -1914,8 +1911,8 @@
    i32.lt_s
    br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store
+   i32.const 0
+   i32.store
    memory.size
    i32.const 16
    i32.shl
@@ -1961,9 +1958,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2014,9 +2008,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2067,9 +2058,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2120,9 +2108,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2177,9 +2162,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1616
-   i32.store offset=4
    local.get $0
    i32.const 1616
    call $~lib/string/String.__eq
@@ -2202,9 +2184,6 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1616
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1616
-   i32.store offset=4
    i32.const 1616
    i32.const 1616
    call $~lib/string/String.__eq
@@ -2227,9 +2206,6 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1616
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1616
-   i32.store offset=4
    i32.const 1616
    i32.const 1616
    call $~lib/string/String.__eq
@@ -2250,9 +2226,6 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1616
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1616
-   i32.store offset=4
    i32.const 1616
    i32.const 1616
    call $~lib/string/String.__eq
@@ -2280,9 +2253,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2333,9 +2303,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2386,9 +2353,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2437,9 +2401,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2467,9 +2428,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2520,9 +2478,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2573,9 +2528,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2624,9 +2576,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1520
-   i32.store offset=4
    local.get $0
    i32.const 1520
    call $~lib/string/String.__eq
@@ -2681,9 +2630,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1648
-   i32.store offset=4
    local.get $0
    i32.const 1648
    call $~lib/string/String.__eq
@@ -2734,9 +2680,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1648
-   i32.store offset=4
    local.get $0
    i32.const 1648
    call $~lib/string/String.__eq
@@ -2787,9 +2730,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1648
-   i32.store offset=4
    local.get $0
    i32.const 1648
    call $~lib/string/String.__eq
@@ -2840,9 +2780,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1648
-   i32.store offset=4
    local.get $0
    i32.const 1648
    call $~lib/string/String.__eq
@@ -2922,9 +2859,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1680
-   i32.store offset=4
    local.get $0
    i32.const 1680
    call $~lib/string/String.__eq
@@ -3004,9 +2938,6 @@
    global.get $class-overloading/which
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1712
-   i32.store offset=4
    local.get $0
    i32.const 1712
    call $~lib/string/String.__eq
@@ -3209,7 +3140,7 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

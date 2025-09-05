@@ -4961,16 +4961,13 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=8
   memory.size
   i32.const 16
   i32.shl
@@ -4997,11 +4994,6 @@
   i32.store
   local.get $2
   i32.const 1968
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5021,11 +5013,6 @@
   i32.store
   local.get $2
   i32.const 1968
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5040,14 +5027,9 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store offset=8
+  i32.store offset=4
   local.get $2
   i32.const 2160
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=12
-  local.get $2
   call $~lib/array/Array<f32>#join
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -5055,11 +5037,6 @@
   i32.store
   local.get $2
   i32.const 2192
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5074,14 +5051,9 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store offset=8
+  i32.store offset=4
   local.get $2
   i32.const 2160
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=12
-  local.get $2
   call $~lib/array/Array<f64>#join
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -5089,11 +5061,6 @@
   i32.store
   local.get $2
   i32.const 2192
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5105,7 +5072,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

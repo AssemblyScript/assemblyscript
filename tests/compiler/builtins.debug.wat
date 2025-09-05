@@ -549,16 +549,13 @@
   (local $52 i32)
   (local $53 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=8
   i32.const 1
   drop
   i32.const 0
@@ -2551,7 +2548,7 @@
   local.set $53
   global.get $~lib/memory/__stack_pointer
   local.get $53
-  i32.store offset=8
+  i32.store offset=4
   local.get $53
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name
   local.set $53
@@ -2560,11 +2557,6 @@
   i32.store
   local.get $53
   i32.const 32
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2615,7 +2607,7 @@
   local.set $53
   global.get $~lib/memory/__stack_pointer
   local.get $53
-  i32.store offset=8
+  i32.store offset=4
   local.get $53
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString
   local.set $53
@@ -2624,11 +2616,6 @@
   i32.store
   local.get $53
   i32.const 176
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3270,11 +3257,6 @@
   i32.const 52
   local.set $52
   i32.const 256
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 5
   local.get $48
   f64.convert_i32_u
@@ -3336,17 +3318,7 @@
    unreachable
   end
   i32.const 352
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 352
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3358,17 +3330,7 @@
    unreachable
   end
   i32.const 352
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 352
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3380,17 +3342,7 @@
    unreachable
   end
   i32.const 400
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 400
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3402,17 +3354,7 @@
    unreachable
   end
   i32.const 432
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 432
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3424,17 +3366,7 @@
    unreachable
   end
   i32.const 464
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 464
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3446,17 +3378,7 @@
    unreachable
   end
   i32.const 496
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 496
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3468,17 +3390,7 @@
    unreachable
   end
   i32.const 528
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 528
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3490,17 +3402,7 @@
    unreachable
   end
   i32.const 560
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 560
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3512,17 +3414,7 @@
    unreachable
   end
   i32.const 592
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 592
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3534,17 +3426,7 @@
    unreachable
   end
   i32.const 624
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 624
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3556,17 +3438,7 @@
    unreachable
   end
   i32.const 656
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 656
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3578,17 +3450,7 @@
    unreachable
   end
   i32.const 688
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 688
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3600,17 +3462,7 @@
    unreachable
   end
   i32.const 720
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 720
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3622,17 +3474,7 @@
    unreachable
   end
   i32.const 752
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 752
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3644,17 +3486,7 @@
    unreachable
   end
   i32.const 784
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 784
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3666,17 +3498,7 @@
    unreachable
   end
   i32.const 816
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 816
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3688,17 +3510,7 @@
    unreachable
   end
   i32.const 848
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 848
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3710,17 +3522,7 @@
    unreachable
   end
   i32.const 880
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 880
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3732,17 +3534,7 @@
    unreachable
   end
   i32.const 432
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 432
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3754,17 +3546,7 @@
    unreachable
   end
   i32.const 352
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store
-  local.get $53
   i32.const 352
-  local.set $53
-  global.get $~lib/memory/__stack_pointer
-  local.get $53
-  i32.store offset=4
-  local.get $53
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3902,7 +3684,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
