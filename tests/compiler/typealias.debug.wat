@@ -140,6 +140,64 @@
   i32.const 0
   return
  )
+ (func $typealias/outer_function~inner_function
+  (local $alias f64)
+  f64.const 1
+  local.set $alias
+  i32.const 112
+  i32.const 112
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 17
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $typealias/outer_function
+  (local $alias i64)
+  (local $inner_function i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i64.const 1
+  local.set $alias
+  i32.const 32
+  i32.const 32
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 13
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 144
+  local.tee $inner_function
+  i32.store
+  local.get $inner_function
+  drop
+  i32.const 0
+  global.set $~argumentsLength
+  local.get $inner_function
+  i32.load
+  call_indirect (type $0)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $typealias/generic_type_alias
   i32.const 5
   i32.const 5
@@ -272,100 +330,5 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
   return
- )
- (func $typealias/outer_function~inner_function
-  (local $alias f64)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  f64.const 1
-  local.set $alias
-  i32.const 112
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
-  i32.const 112
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 17
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $typealias/outer_function
-  (local $alias i64)
-  (local $inner_function i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=8
-  i64.const 1
-  local.set $alias
-  i32.const 32
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  i32.const 32
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 13
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 144
-  local.tee $inner_function
-  i32.store offset=8
-  local.get $inner_function
-  drop
-  i32.const 0
-  global.set $~argumentsLength
-  local.get $inner_function
-  i32.load
-  call_indirect (type $0)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
 )

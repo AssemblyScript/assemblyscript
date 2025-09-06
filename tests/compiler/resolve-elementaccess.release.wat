@@ -3420,7 +3420,7 @@
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 24
+  i32.const 20
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
@@ -3430,7 +3430,7 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.const 24
+   i32.const 20
    memory.fill
    memory.size
    i32.const 16
@@ -3515,7 +3515,7 @@
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-elementaccess/arr
    local.tee $0
-   i32.store offset=8
+   i32.store offset=4
    local.get $0
    i32.const 0
    call $~lib/typedarray/Float32Array#__get
@@ -3524,9 +3524,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3168
-   i32.store offset=4
    local.get $0
    i32.const 3168
    call $~lib/string/String.__eq
@@ -3542,7 +3539,7 @@
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-elementaccess/arr
    local.tee $0
-   i32.store offset=8
+   i32.store offset=4
    local.get $0
    i32.const 1
    call $~lib/typedarray/Float32Array#__get
@@ -3551,9 +3548,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3280
-   i32.store offset=4
    local.get $0
    i32.const 3280
    call $~lib/string/String.__eq
@@ -3569,14 +3563,14 @@
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-elementaccess/arr
    local.tee $0
-   i32.store offset=12
+   i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=8
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-elementaccess/arr
    local.tee $1
-   i32.store offset=16
+   i32.store offset=12
    local.get $0
    i32.const 0
    local.get $1
@@ -3587,7 +3581,7 @@
    call $~lib/typedarray/Float32Array#__set
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=8
+   i32.store offset=4
    local.get $0
    i32.const 0
    call $~lib/typedarray/Float32Array#__get
@@ -3596,9 +3590,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3312
-   i32.store offset=4
    local.get $0
    i32.const 3312
    call $~lib/string/String.__eq
@@ -3726,7 +3717,7 @@
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-elementaccess/buf
    local.tee $0
-   i32.store offset=8
+   i32.store offset=4
    local.get $0
    i32.const 0
    call $~lib/typedarray/Uint8Array#__get
@@ -3735,9 +3726,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4720
-   i32.store offset=4
    local.get $0
    i32.const 4720
    call $~lib/string/String.__eq
@@ -3753,7 +3741,7 @@
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-elementaccess/buf
    local.tee $0
-   i32.store offset=8
+   i32.store offset=4
    local.get $0
    i32.const 1
    call $~lib/typedarray/Uint8Array#__get
@@ -3762,9 +3750,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4752
-   i32.store offset=4
    local.get $0
    i32.const 4752
    call $~lib/string/String.__eq
@@ -3780,14 +3765,14 @@
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-elementaccess/buf
    local.tee $0
-   i32.store offset=20
+   i32.store offset=16
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=8
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    global.get $resolve-elementaccess/buf
    local.tee $1
-   i32.store offset=16
+   i32.store offset=12
    local.get $0
    i32.const 0
    local.get $1
@@ -3798,7 +3783,7 @@
    call $~lib/typedarray/Uint8Array#__set
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=8
+   i32.store offset=4
    local.get $0
    i32.const 0
    call $~lib/typedarray/Uint8Array#__get
@@ -3807,9 +3792,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4784
-   i32.store offset=4
    local.get $0
    i32.const 4784
    call $~lib/string/String.__eq
@@ -3856,7 +3838,7 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 24
+   i32.const 20
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

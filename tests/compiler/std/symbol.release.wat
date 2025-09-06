@@ -3571,7 +3571,7 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 20
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -3586,9 +3586,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.const 20
-  memory.fill
+  i32.store offset=8
   i32.const 1888
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3715,11 +3717,8 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 2416
-  i32.store offset=12
-  global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=16
+  i32.store offset=8
   i32.const 2416
   local.get $1
   call $~lib/string/String.__concat
@@ -3727,14 +3726,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2464
-  i32.store offset=8
   local.get $0
   i32.const 2464
   call $~lib/string/String.__concat
   global.get $~lib/memory/__stack_pointer
-  i32.const 20
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -3756,9 +3752,6 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store offset=8
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1056
-   i32.store
    global.get $~lib/symbol/nextId
    local.tee $0
    i32.const 1
@@ -3771,9 +3764,6 @@
    end
    local.get $0
    global.set $std/symbol/sym1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1056
-   i32.store
    global.get $~lib/symbol/nextId
    local.tee $0
    i32.const 1
@@ -3993,14 +3983,8 @@
    global.set $~lib/memory/__stack_pointer
    local.get $0
    global.set $~lib/symbol/idToString
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1056
-   i32.store
    call $~lib/symbol/_Symbol.for
    global.set $std/symbol/sym3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1056
-   i32.store
    call $~lib/symbol/_Symbol.for
    global.set $std/symbol/sym4
    global.get $std/symbol/sym3
@@ -4090,9 +4074,6 @@
    global.get $std/symbol/key3
    local.tee $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1056
-   i32.store offset=12
    local.get $0
    i32.const 1056
    call $~lib/string/String.__eq
@@ -4141,9 +4122,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 2496
-   i32.store offset=12
    local.get $0
    i32.const 2496
    call $~lib/string/String.__eq
@@ -4162,9 +4140,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 2544
-   i32.store offset=12
    local.get $0
    i32.const 2544
    call $~lib/string/String.__eq
@@ -4185,9 +4160,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 2592
-   i32.store offset=12
    local.get $0
    i32.const 2592
    call $~lib/string/String.__eq
@@ -4206,9 +4178,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 2656
-   i32.store offset=12
    local.get $0
    i32.const 2656
    call $~lib/string/String.__eq

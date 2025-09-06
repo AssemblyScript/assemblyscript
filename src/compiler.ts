@@ -55,11 +55,11 @@ import {
   SideEffects,
   SwitchBuilder,
   ExpressionRunnerFlags,
-  isConstZero,
   isConstNegZero,
   isConstExpressionNaN,
   ensureType,
-  createType
+  createType,
+  getConstValueInteger
 } from "./module";
 
 import {
@@ -451,6 +451,8 @@ export class Compiler extends DiagnosticEmitter {
   memorySegments: MemorySegment[] = [];
   /** Map of already compiled static string segments. */
   stringSegments: Map<string,MemorySegment> = new Map();
+  /** Set of static GC object offsets. tostack is unnecessary for them. */
+  staticGcObjectOffsets: Map<i32, Set<i32>> = new Map();
   /** Function table being compiled. First elem is blank. */
   functionTable: Function[] = [];
   /** Arguments length helper global. */
@@ -1939,7 +1941,16 @@ export class Compiler extends DiagnosticEmitter {
       stringSegment = this.addRuntimeMemorySegment(buf);
       segments.set(stringValue, stringSegment);
     }
-    return i64_add(stringSegment.offset, i64_new(totalOverhead));
+    let stringOffset = i64_add(stringSegment.offset, i64_new(totalOverhead));
+    let staticGcObjectOffsets = this.staticGcObjectOffsets;
+    if (staticGcObjectOffsets.has(i64_high(stringOffset))) {
+      assert(staticGcObjectOffsets.get(i64_high(stringOffset))).add(i64_low(stringOffset));
+    } else {
+      let s = new Set<i32>();
+      s.add(i64_low(stringOffset));
+      staticGcObjectOffsets.set(i64_high(stringOffset), s);
+    }
+    return stringOffset;
   }
 
   /** Writes a series of static values of the specified type to a buffer. */
@@ -6754,6 +6765,21 @@ export class Compiler extends DiagnosticEmitter {
     stub.set(CommonFlags.Compiled);
   }
 
+  private needToStack(expr: ExpressionRef): bool {
+    const precomp = this.module.runExpression(expr, ExpressionRunnerFlags.Default);
+    // cannot precompute, so must go to stack
+    if (precomp == 0) return true;
+    const value = getConstValueInteger(precomp, this.options.isWasm64);
+    // zero constant doesn't need to go to stack
+    if (i64_eq(value, i64_zero)) return false;
+    // static GC objects doesn't need to go to stack
+    let staticGcObjectOffsets = this.staticGcObjectOffsets;
+    if (staticGcObjectOffsets.has(i64_high(value))) {
+      if (assert(staticGcObjectOffsets.get(i64_high(value))).has(i64_low(value))) return false;
+    }
+    return true;
+  }
+
   /** Marks managed call operands for the shadow stack. */
   private operandsTostack(signature: Signature, operands: ExpressionRef[]): void {
     if (!this.options.stackSize) return;
@@ -6763,8 +6789,7 @@ export class Compiler extends DiagnosticEmitter {
     if (thisType) {
       if (thisType.isManaged) {
         let operand = operands[0];
-        let precomp = module.runExpression(operand, ExpressionRunnerFlags.Default);
-        if (!precomp || !isConstZero(precomp)) { // otherwise unnecessary
+        if (this.needToStack(operand)) {
           operands[operandIndex] = module.tostack(operand);
         }
       }
@@ -6777,8 +6802,7 @@ export class Compiler extends DiagnosticEmitter {
       let paramType = parameterTypes[parameterIndex];
       if (paramType.isManaged) {
         let operand = operands[operandIndex];
-        let precomp = module.runExpression(operand, ExpressionRunnerFlags.Default);
-        if (!precomp || !isConstZero(precomp)) { // otherwise unnecessary
+        if (this.needToStack(operand)) {
           operands[operandIndex] = module.tostack(operand);
         }
       }

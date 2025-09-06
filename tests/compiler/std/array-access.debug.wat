@@ -541,21 +541,18 @@
  (func $std/array-access/stringArrayMethodCall (param $a i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=8
   local.get $a
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=8
+  i32.store offset=4
   local.get $1
   i32.const 0
   call $~lib/array/Array<~lib/string/String>#__get
@@ -565,16 +562,11 @@
   i32.store
   local.get $1
   i32.const 272
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
   i32.const 0
   call $~lib/string/String#startsWith
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
@@ -692,7 +684,7 @@
  (func $std/array-access/stringArrayArrayMethodCall (param $a i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
@@ -700,20 +692,20 @@
   i64.const 0
   i64.store
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=8
+  i32.const 0
+  i32.store offset=8
   local.get $a
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=12
+  i32.store offset=8
   local.get $1
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=8
+  i32.store offset=4
   local.get $1
   i32.const 1
   call $~lib/array/Array<~lib/string/String>#__get
@@ -723,16 +715,11 @@
   i32.store
   local.get $1
   i32.const 272
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
   i32.const 0
   call $~lib/string/String#startsWith
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1

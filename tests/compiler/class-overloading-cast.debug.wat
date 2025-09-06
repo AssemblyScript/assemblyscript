@@ -3074,16 +3074,13 @@
  (func $start:class-overloading-cast
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=8
   memory.size
   i32.const 16
   i32.shl
@@ -3114,7 +3111,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=8
+  i32.store offset=4
   local.get $0
   i32.const 1
   call $class-overloading-cast/A<i32>#foo@override
@@ -3124,11 +3121,6 @@
   i32.store
   local.get $0
   i32.const 464
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3143,7 +3135,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=8
+  i32.store offset=4
   local.get $0
   i32.const 1
   call $"class-overloading-cast/B<i32,~lib/string/String>#foo"
@@ -3153,11 +3145,6 @@
   i32.store
   local.get $0
   i32.const 464
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3172,7 +3159,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=8
+  i32.store offset=4
   local.get $0
   f64.const 1.1
   call $class-overloading-cast/A<f64>#foo@override
@@ -3182,11 +3169,6 @@
   i32.store
   local.get $0
   i32.const 464
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3204,14 +3186,9 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=8
+  i32.store offset=4
   local.get $0
   i32.const 576
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=12
-  local.get $0
   call $class-overloading-cast/A<~lib/string/String>#foo@override
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3219,11 +3196,6 @@
   i32.store
   local.get $0
   i32.const 432
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3238,14 +3210,9 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=8
+  i32.store offset=4
   local.get $0
   i32.const 576
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=12
-  local.get $0
   call $class-overloading-cast/A<~lib/string/String>#foo@override
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3253,11 +3220,6 @@
   i32.store
   local.get $0
   i32.const 432
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3273,7 +3235,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=8
+  i32.store offset=4
   local.get $0
   f32.const 2.5
   call $class-overloading-cast/D#bar
@@ -3283,11 +3245,6 @@
   i32.store
   local.get $0
   i32.const 608
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3299,7 +3256,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

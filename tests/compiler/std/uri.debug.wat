@@ -3679,16 +3679,13 @@
  (func $start:std/uri
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store offset=8
+  i32.store
   memory.size
   i32.const 16
   i32.shl
@@ -3707,11 +3704,6 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   i32.const 32
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3719,11 +3711,6 @@
   i32.store
   local.get $0
   i32.const 32
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3735,11 +3722,6 @@
    unreachable
   end
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3747,11 +3729,6 @@
   i32.store
   local.get $0
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3763,11 +3740,6 @@
    unreachable
   end
   i32.const 768
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3775,11 +3747,6 @@
   i32.store
   local.get $0
   i32.const 768
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3791,11 +3758,6 @@
    unreachable
   end
   i32.const 800
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3803,11 +3765,6 @@
   i32.store
   local.get $0
   i32.const 800
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3819,11 +3776,6 @@
    unreachable
   end
   i32.const 832
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3831,11 +3783,6 @@
   i32.store
   local.get $0
   i32.const 832
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3847,11 +3794,6 @@
    unreachable
   end
   i32.const 928
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3859,11 +3801,6 @@
   i32.store
   local.get $0
   i32.const 960
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3875,11 +3812,6 @@
    unreachable
   end
   i32.const 992
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3887,11 +3819,6 @@
   i32.store
   local.get $0
   i32.const 1024
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3903,11 +3830,6 @@
    unreachable
   end
   i32.const 1056
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3915,11 +3837,6 @@
   i32.store
   local.get $0
   i32.const 1088
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3931,11 +3848,6 @@
    unreachable
   end
   i32.const 1136
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3943,11 +3855,6 @@
   i32.store
   local.get $0
   i32.const 1168
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3959,11 +3866,6 @@
    unreachable
   end
   i32.const 1216
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3971,11 +3873,6 @@
   i32.store
   local.get $0
   i32.const 1248
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3987,11 +3884,6 @@
    unreachable
   end
   i32.const 1280
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3999,11 +3891,6 @@
   i32.store
   local.get $0
   i32.const 1312
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4015,11 +3902,6 @@
    unreachable
   end
   i32.const 1360
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4027,11 +3909,6 @@
   i32.store
   local.get $0
   i32.const 1392
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4043,11 +3920,6 @@
    unreachable
   end
   i32.const 1488
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4055,11 +3927,6 @@
   i32.store
   local.get $0
   i32.const 1520
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4071,11 +3938,6 @@
    unreachable
   end
   i32.const 1632
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4083,11 +3945,6 @@
   i32.store
   local.get $0
   i32.const 1664
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4099,11 +3956,6 @@
    unreachable
   end
   i32.const 1712
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4111,11 +3963,6 @@
   i32.store
   local.get $0
   i32.const 1744
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4127,11 +3974,6 @@
    unreachable
   end
   i32.const 1792
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4139,11 +3981,6 @@
   i32.store
   local.get $0
   i32.const 1824
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4155,11 +3992,6 @@
    unreachable
   end
   i32.const 1904
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4167,11 +3999,6 @@
   i32.store
   local.get $0
   i32.const 1936
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4183,11 +4010,6 @@
    unreachable
   end
   i32.const 2000
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4195,11 +4017,6 @@
   i32.store
   local.get $0
   i32.const 2048
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4211,11 +4028,6 @@
    unreachable
   end
   i32.const 2128
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4223,11 +4035,6 @@
   i32.store
   local.get $0
   i32.const 2240
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4239,11 +4046,6 @@
    unreachable
   end
   i32.const 32
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4251,11 +4053,6 @@
   i32.store
   local.get $0
   i32.const 32
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4267,11 +4064,6 @@
    unreachable
   end
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4279,11 +4071,6 @@
   i32.store
   local.get $0
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4295,11 +4082,6 @@
    unreachable
   end
   i32.const 2480
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4307,11 +4089,6 @@
   i32.store
   local.get $0
   i32.const 2480
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4323,11 +4100,6 @@
    unreachable
   end
   i32.const 832
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4335,11 +4107,6 @@
   i32.store
   local.get $0
   i32.const 832
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4351,11 +4118,6 @@
    unreachable
   end
   i32.const 2528
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4363,11 +4125,6 @@
   i32.store
   local.get $0
   i32.const 2560
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4379,11 +4136,6 @@
    unreachable
   end
   i32.const 1632
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4391,11 +4143,6 @@
   i32.store
   local.get $0
   i32.const 1664
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4407,11 +4154,6 @@
    unreachable
   end
   i32.const 1712
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4419,11 +4161,6 @@
   i32.store
   local.get $0
   i32.const 1744
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4435,11 +4172,6 @@
    unreachable
   end
   i32.const 1904
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4447,11 +4179,6 @@
   i32.store
   local.get $0
   i32.const 1936
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4463,11 +4190,6 @@
    unreachable
   end
   i32.const 2128
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4475,11 +4197,6 @@
   i32.store
   local.get $0
   i32.const 2128
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4491,11 +4208,6 @@
    unreachable
   end
   i32.const 32
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4503,11 +4215,6 @@
   i32.store
   local.get $0
   i32.const 32
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4519,11 +4226,6 @@
    unreachable
   end
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4531,11 +4233,6 @@
   i32.store
   local.get $0
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4547,11 +4244,6 @@
    unreachable
   end
   i32.const 2624
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4559,11 +4251,6 @@
   i32.store
   local.get $0
   i32.const 2656
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4575,11 +4262,6 @@
    unreachable
   end
   i32.const 2688
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4587,11 +4269,6 @@
   i32.store
   local.get $0
   i32.const 2720
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4603,11 +4280,6 @@
    unreachable
   end
   i32.const 2752
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4615,11 +4287,6 @@
   i32.store
   local.get $0
   i32.const 2752
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4631,11 +4298,6 @@
    unreachable
   end
   i32.const 1712
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4643,11 +4305,6 @@
   i32.store
   local.get $0
   i32.const 1712
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4659,11 +4316,6 @@
    unreachable
   end
   i32.const 2784
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4671,11 +4323,6 @@
   i32.store
   local.get $0
   i32.const 2864
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4687,11 +4334,6 @@
    unreachable
   end
   i32.const 2912
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4699,11 +4341,6 @@
   i32.store
   local.get $0
   i32.const 2864
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4715,11 +4352,6 @@
    unreachable
   end
   i32.const 2992
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4727,11 +4359,6 @@
   i32.store
   local.get $0
   i32.const 2128
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4743,11 +4370,6 @@
    unreachable
   end
   i32.const 1392
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4755,11 +4377,6 @@
   i32.store
   local.get $0
   i32.const 1360
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4771,11 +4388,6 @@
    unreachable
   end
   i32.const 32
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4783,11 +4395,6 @@
   i32.store
   local.get $0
   i32.const 32
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4799,11 +4406,6 @@
    unreachable
   end
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4811,11 +4413,6 @@
   i32.store
   local.get $0
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4827,11 +4424,6 @@
    unreachable
   end
   i32.const 2624
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4839,11 +4431,6 @@
   i32.store
   local.get $0
   i32.const 2624
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4855,11 +4442,6 @@
    unreachable
   end
   i32.const 3120
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4867,11 +4449,6 @@
   i32.store
   local.get $0
   i32.const 3152
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4883,11 +4460,6 @@
    unreachable
   end
   i32.const 3184
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4895,11 +4467,6 @@
   i32.store
   local.get $0
   i32.const 3216
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4911,11 +4478,6 @@
    unreachable
   end
   i32.const 2752
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4923,11 +4485,6 @@
   i32.store
   local.get $0
   i32.const 2752
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4939,11 +4496,6 @@
    unreachable
   end
   i32.const 1712
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4951,11 +4503,6 @@
   i32.store
   local.get $0
   i32.const 1712
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4967,11 +4514,6 @@
    unreachable
   end
   i32.const 2784
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4979,11 +4521,6 @@
   i32.store
   local.get $0
   i32.const 2784
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4995,11 +4532,6 @@
    unreachable
   end
   i32.const 1392
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -5007,11 +4539,6 @@
   i32.store
   local.get $0
   i32.const 1360
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5023,11 +4550,6 @@
    unreachable
   end
   i32.const 3248
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -5035,11 +4557,6 @@
   i32.store
   local.get $0
   i32.const 3248
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5051,11 +4568,6 @@
    unreachable
   end
   i32.const 3296
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -5063,11 +4575,6 @@
   i32.store
   local.get $0
   i32.const 3296
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5079,11 +4586,6 @@
    unreachable
   end
   i32.const 2992
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -5091,11 +4593,6 @@
   i32.store
   local.get $0
   i32.const 2992
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5110,7 +4607,7 @@
   global.set $~lib/memory/__stack_pointer
   call $~lib/rt/itcms/__collect
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

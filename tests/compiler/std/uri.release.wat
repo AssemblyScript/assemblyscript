@@ -2946,7 +2946,7 @@
  (func $start:std/uri
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -2961,11 +2961,8 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store offset=8
+  i32.store
   memory.size
   i32.const 16
   i32.shl
@@ -2998,18 +2995,12 @@
   i32.store
   i32.const 1472
   global.set $~lib/rt/itcms/fromSpace
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store offset=8
   i32.const 1056
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store offset=4
   local.get $0
   i32.const 1056
   call $~lib/string/String.__eq
@@ -3022,18 +3013,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1760
-  i32.store offset=8
   i32.const 1760
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1760
-  i32.store offset=4
   local.get $0
   i32.const 1760
   call $~lib/string/String.__eq
@@ -3046,18 +3031,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1792
-  i32.store offset=8
   i32.const 1792
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1792
-  i32.store offset=4
   local.get $0
   i32.const 1792
   call $~lib/string/String.__eq
@@ -3070,18 +3049,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1824
-  i32.store offset=8
   i32.const 1824
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1824
-  i32.store offset=4
   local.get $0
   i32.const 1824
   call $~lib/string/String.__eq
@@ -3094,18 +3067,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1856
-  i32.store offset=8
   i32.const 1856
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1856
-  i32.store offset=4
   local.get $0
   i32.const 1856
   call $~lib/string/String.__eq
@@ -3118,18 +3085,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1952
-  i32.store offset=8
   i32.const 1952
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1984
-  i32.store offset=4
   local.get $0
   i32.const 1984
   call $~lib/string/String.__eq
@@ -3142,18 +3103,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2016
-  i32.store offset=8
   i32.const 2016
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2048
-  i32.store offset=4
   local.get $0
   i32.const 2048
   call $~lib/string/String.__eq
@@ -3166,18 +3121,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2080
-  i32.store offset=8
   i32.const 2080
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2112
-  i32.store offset=4
   local.get $0
   i32.const 2112
   call $~lib/string/String.__eq
@@ -3190,18 +3139,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2160
-  i32.store offset=8
   i32.const 2160
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2192
-  i32.store offset=4
   local.get $0
   i32.const 2192
   call $~lib/string/String.__eq
@@ -3214,18 +3157,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2240
-  i32.store offset=8
   i32.const 2240
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2272
-  i32.store offset=4
   local.get $0
   i32.const 2272
   call $~lib/string/String.__eq
@@ -3238,18 +3175,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2304
-  i32.store offset=8
   i32.const 2304
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2336
-  i32.store offset=4
   local.get $0
   i32.const 2336
   call $~lib/string/String.__eq
@@ -3262,18 +3193,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2384
-  i32.store offset=8
   i32.const 2384
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2416
-  i32.store offset=4
   local.get $0
   i32.const 2416
   call $~lib/string/String.__eq
@@ -3286,18 +3211,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2512
-  i32.store offset=8
   i32.const 2512
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2544
-  i32.store offset=4
   local.get $0
   i32.const 2544
   call $~lib/string/String.__eq
@@ -3310,18 +3229,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2656
-  i32.store offset=8
   i32.const 2656
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2688
-  i32.store offset=4
   local.get $0
   i32.const 2688
   call $~lib/string/String.__eq
@@ -3334,18 +3247,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2736
-  i32.store offset=8
   i32.const 2736
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2768
-  i32.store offset=4
   local.get $0
   i32.const 2768
   call $~lib/string/String.__eq
@@ -3358,18 +3265,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2816
-  i32.store offset=8
   i32.const 2816
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2848
-  i32.store offset=4
   local.get $0
   i32.const 2848
   call $~lib/string/String.__eq
@@ -3382,18 +3283,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2928
-  i32.store offset=8
   i32.const 2928
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2960
-  i32.store offset=4
   local.get $0
   i32.const 2960
   call $~lib/string/String.__eq
@@ -3406,18 +3301,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3024
-  i32.store offset=8
   i32.const 3024
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3072
-  i32.store offset=4
   local.get $0
   i32.const 3072
   call $~lib/string/String.__eq
@@ -3430,18 +3319,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3152
-  i32.store offset=8
   i32.const 3152
   call $~lib/uri/encodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3264
-  i32.store offset=4
   local.get $0
   i32.const 3264
   call $~lib/string/String.__eq
@@ -3454,18 +3337,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store offset=8
   i32.const 1056
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store offset=4
   local.get $0
   i32.const 1056
   call $~lib/string/String.__eq
@@ -3478,18 +3355,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1760
-  i32.store offset=8
   i32.const 1760
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1760
-  i32.store offset=4
   local.get $0
   i32.const 1760
   call $~lib/string/String.__eq
@@ -3502,18 +3373,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3504
-  i32.store offset=8
   i32.const 3504
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3504
-  i32.store offset=4
   local.get $0
   i32.const 3504
   call $~lib/string/String.__eq
@@ -3526,18 +3391,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1856
-  i32.store offset=8
   i32.const 1856
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1856
-  i32.store offset=4
   local.get $0
   i32.const 1856
   call $~lib/string/String.__eq
@@ -3550,18 +3409,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3552
-  i32.store offset=8
   i32.const 3552
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3584
-  i32.store offset=4
   local.get $0
   i32.const 3584
   call $~lib/string/String.__eq
@@ -3574,18 +3427,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2656
-  i32.store offset=8
   i32.const 2656
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2688
-  i32.store offset=4
   local.get $0
   i32.const 2688
   call $~lib/string/String.__eq
@@ -3598,18 +3445,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2736
-  i32.store offset=8
   i32.const 2736
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2768
-  i32.store offset=4
   local.get $0
   i32.const 2768
   call $~lib/string/String.__eq
@@ -3622,18 +3463,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2928
-  i32.store offset=8
   i32.const 2928
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2960
-  i32.store offset=4
   local.get $0
   i32.const 2960
   call $~lib/string/String.__eq
@@ -3646,18 +3481,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3152
-  i32.store offset=8
   i32.const 3152
   call $~lib/uri/encodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3152
-  i32.store offset=4
   local.get $0
   i32.const 3152
   call $~lib/string/String.__eq
@@ -3670,18 +3499,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store offset=8
   i32.const 1056
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store offset=4
   local.get $0
   i32.const 1056
   call $~lib/string/String.__eq
@@ -3694,18 +3517,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1760
-  i32.store offset=8
   i32.const 1760
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1760
-  i32.store offset=4
   local.get $0
   i32.const 1760
   call $~lib/string/String.__eq
@@ -3718,18 +3535,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3648
-  i32.store offset=8
   i32.const 3648
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3680
-  i32.store offset=4
   local.get $0
   i32.const 3680
   call $~lib/string/String.__eq
@@ -3742,18 +3553,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3712
-  i32.store offset=8
   i32.const 3712
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3744
-  i32.store offset=4
   local.get $0
   i32.const 3744
   call $~lib/string/String.__eq
@@ -3766,18 +3571,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3776
-  i32.store offset=8
   i32.const 3776
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3776
-  i32.store offset=4
   local.get $0
   i32.const 3776
   call $~lib/string/String.__eq
@@ -3790,18 +3589,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2736
-  i32.store offset=8
   i32.const 2736
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2736
-  i32.store offset=4
   local.get $0
   i32.const 2736
   call $~lib/string/String.__eq
@@ -3814,18 +3607,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3808
-  i32.store offset=8
   i32.const 3808
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3888
-  i32.store offset=4
   local.get $0
   i32.const 3888
   call $~lib/string/String.__eq
@@ -3838,18 +3625,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3936
-  i32.store offset=8
   i32.const 3936
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3888
-  i32.store offset=4
   local.get $0
   i32.const 3888
   call $~lib/string/String.__eq
@@ -3862,18 +3643,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4016
-  i32.store offset=8
   i32.const 4016
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3152
-  i32.store offset=4
   local.get $0
   i32.const 3152
   call $~lib/string/String.__eq
@@ -3886,18 +3661,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2416
-  i32.store offset=8
   i32.const 2416
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2384
-  i32.store offset=4
   local.get $0
   i32.const 2384
   call $~lib/string/String.__eq
@@ -3910,18 +3679,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store offset=8
   i32.const 1056
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store offset=4
   local.get $0
   i32.const 1056
   call $~lib/string/String.__eq
@@ -3934,18 +3697,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1760
-  i32.store offset=8
   i32.const 1760
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1760
-  i32.store offset=4
   local.get $0
   i32.const 1760
   call $~lib/string/String.__eq
@@ -3958,18 +3715,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3648
-  i32.store offset=8
   i32.const 3648
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3648
-  i32.store offset=4
   local.get $0
   i32.const 3648
   call $~lib/string/String.__eq
@@ -3982,18 +3733,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4144
-  i32.store offset=8
   i32.const 4144
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4176
-  i32.store offset=4
   local.get $0
   i32.const 4176
   call $~lib/string/String.__eq
@@ -4006,18 +3751,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4208
-  i32.store offset=8
   i32.const 4208
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4240
-  i32.store offset=4
   local.get $0
   i32.const 4240
   call $~lib/string/String.__eq
@@ -4030,18 +3769,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3776
-  i32.store offset=8
   i32.const 3776
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3776
-  i32.store offset=4
   local.get $0
   i32.const 3776
   call $~lib/string/String.__eq
@@ -4054,18 +3787,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2736
-  i32.store offset=8
   i32.const 2736
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2736
-  i32.store offset=4
   local.get $0
   i32.const 2736
   call $~lib/string/String.__eq
@@ -4078,18 +3805,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3808
-  i32.store offset=8
   i32.const 3808
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 3808
-  i32.store offset=4
   local.get $0
   i32.const 3808
   call $~lib/string/String.__eq
@@ -4102,18 +3823,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2416
-  i32.store offset=8
   i32.const 2416
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 2384
-  i32.store offset=4
   local.get $0
   i32.const 2384
   call $~lib/string/String.__eq
@@ -4126,18 +3841,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4272
-  i32.store offset=8
   i32.const 4272
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4272
-  i32.store offset=4
   local.get $0
   i32.const 4272
   call $~lib/string/String.__eq
@@ -4150,18 +3859,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4320
-  i32.store offset=8
   i32.const 4320
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4320
-  i32.store offset=4
   local.get $0
   i32.const 4320
   call $~lib/string/String.__eq
@@ -4174,18 +3877,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4016
-  i32.store offset=8
   i32.const 4016
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4016
-  i32.store offset=4
   local.get $0
   i32.const 4016
   call $~lib/string/String.__eq
@@ -4234,7 +3931,7 @@
   i32.add
   global.set $~lib/rt/itcms/threshold
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

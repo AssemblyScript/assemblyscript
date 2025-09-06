@@ -3163,13 +3163,13 @@
   (local $5 i32)
   (local $6 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 24
+  i32.const 20
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.const 24
+  i32.const 20
   memory.fill
   memory.size
   i32.const 16
@@ -3197,11 +3197,6 @@
   i32.store
   local.get $6
   i32.const 2208
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3221,11 +3216,6 @@
   i32.store
   local.get $6
   i32.const 2304
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3249,11 +3239,6 @@
   i32.store
   local.get $6
   i32.const 2336
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3277,11 +3262,6 @@
   i32.store
   local.get $6
   i32.const 2304
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3302,11 +3282,6 @@
   i32.store
   local.get $6
   i32.const 2400
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3328,11 +3303,6 @@
   i32.store
   local.get $6
   i32.const 2368
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3354,11 +3324,6 @@
   i32.store
   local.get $6
   i32.const 2432
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3383,11 +3348,6 @@
   i32.store
   local.get $6
   i32.const 2304
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3412,11 +3372,6 @@
   i32.store
   local.get $6
   i32.const 2336
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3434,13 +3389,13 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=12
+  i32.store offset=8
   local.get $6
   call $resolve-unary/Foo#plus
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=8
+  i32.store offset=4
   local.get $6
   call $~lib/string/String#toString
   local.set $6
@@ -3449,11 +3404,6 @@
   i32.store
   local.get $6
   i32.const 2464
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3468,13 +3418,13 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=12
+  i32.store offset=8
   local.get $6
   call $resolve-unary/Foo#minus
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=8
+  i32.store offset=4
   local.get $6
   call $~lib/string/String#toString
   local.set $6
@@ -3483,11 +3433,6 @@
   i32.store
   local.get $6
   i32.const 2496
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3554,13 +3499,13 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=12
+  i32.store offset=8
   local.get $6
   call $resolve-unary/Foo#not
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=8
+  i32.store offset=4
   local.get $6
   call $~lib/string/String#toString
   local.set $6
@@ -3569,11 +3514,6 @@
   i32.store
   local.get $6
   i32.const 2528
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3588,13 +3528,13 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=12
+  i32.store offset=8
   local.get $6
   call $resolve-unary/Foo#bitwise_not
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=8
+  i32.store offset=4
   local.get $6
   call $~lib/string/String#toString
   local.set $6
@@ -3603,11 +3543,6 @@
   i32.store
   local.get $6
   i32.const 2560
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3621,7 +3556,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $resolve-unary/foo
   local.tee $2
-  i32.store offset=16
+  i32.store offset=12
   local.get $2
   local.set $6
   global.get $~lib/memory/__stack_pointer
@@ -3651,7 +3586,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $resolve-unary/foo
   local.tee $3
-  i32.store offset=20
+  i32.store offset=16
   local.get $3
   local.set $6
   global.get $~lib/memory/__stack_pointer
@@ -3685,13 +3620,13 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=12
+  i32.store offset=8
   local.get $6
   call $resolve-unary/Bar.prefix_inc
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=8
+  i32.store offset=4
   local.get $6
   call $~lib/string/String#toString
   local.set $6
@@ -3700,11 +3635,6 @@
   i32.store
   local.get $6
   i32.const 2592
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3719,13 +3649,13 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=12
+  i32.store offset=8
   local.get $6
   call $resolve-unary/Bar.prefix_dec
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=8
+  i32.store offset=4
   local.get $6
   call $~lib/string/String#toString
   local.set $6
@@ -3734,11 +3664,6 @@
   i32.store
   local.get $6
   i32.const 2624
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3753,13 +3678,13 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=12
+  i32.store offset=8
   local.get $6
   call $resolve-unary/Bar.postfix_inc
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=8
+  i32.store offset=4
   local.get $6
   call $~lib/string/String#toString
   local.set $6
@@ -3768,11 +3693,6 @@
   i32.store
   local.get $6
   i32.const 2656
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3787,13 +3707,13 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=12
+  i32.store offset=8
   local.get $6
   call $resolve-unary/Bar.postfix_dec
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=8
+  i32.store offset=4
   local.get $6
   call $~lib/string/String#toString
   local.set $6
@@ -3802,11 +3722,6 @@
   i32.store
   local.get $6
   i32.const 2688
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3820,24 +3735,14 @@
   i32.const 1
   drop
   i32.const 2720
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
   call $~lib/string/String#get:length
   drop
   i32.const 2752
   drop
   i32.const 2784
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
   call $resolve-unary/generic<~lib/string/String>
   global.get $~lib/memory/__stack_pointer
-  i32.const 24
+  i32.const 20
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

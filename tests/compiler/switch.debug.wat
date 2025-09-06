@@ -2985,16 +2985,13 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=8
   block $case3|0
    block $case2|0
     block $case1|0
@@ -3010,11 +3007,6 @@
       i32.store offset=4
       local.get $2
       i32.const 80
-      local.set $2
-      global.get $~lib/memory/__stack_pointer
-      local.get $2
-      i32.store offset=8
-      local.get $2
       call $~lib/string/String.__eq
       br_if $case0|0
       local.get $1
@@ -3024,11 +3016,6 @@
       i32.store offset=4
       local.get $2
       i32.const 112
-      local.set $2
-      global.get $~lib/memory/__stack_pointer
-      local.get $2
-      i32.store offset=8
-      local.get $2
       call $~lib/string/String.__eq
       br_if $case1|0
       local.get $1
@@ -3038,11 +3025,6 @@
       i32.store offset=4
       local.get $2
       i32.const 144
-      local.set $2
-      global.get $~lib/memory/__stack_pointer
-      local.get $2
-      i32.store offset=8
-      local.get $2
       call $~lib/string/String.__eq
       br_if $case2|0
       br $case3|0
@@ -3050,7 +3032,7 @@
      i32.const 1
      local.set $2
      global.get $~lib/memory/__stack_pointer
-     i32.const 12
+     i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
      local.get $2
@@ -3059,7 +3041,7 @@
     i32.const 2
     local.set $2
     global.get $~lib/memory/__stack_pointer
-    i32.const 12
+    i32.const 8
     i32.add
     global.set $~lib/memory/__stack_pointer
     local.get $2
@@ -3068,7 +3050,7 @@
    i32.const 3
    local.set $2
    global.get $~lib/memory/__stack_pointer
-   i32.const 12
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $2
@@ -3077,7 +3059,7 @@
   i32.const 4
   local.set $2
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
@@ -3194,16 +3176,13 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=8
   block $case4|0
    block $case3|0
     block $case2|0
@@ -3229,11 +3208,6 @@
        i32.store offset=4
        local.get $2
        i32.const 80
-       local.set $2
-       global.get $~lib/memory/__stack_pointer
-       local.get $2
-       i32.store offset=8
-       local.get $2
        call $~lib/string/String.__eq
        br_if $case1|0
        local.get $1
@@ -3243,11 +3217,6 @@
        i32.store offset=4
        local.get $2
        i32.const 112
-       local.set $2
-       global.get $~lib/memory/__stack_pointer
-       local.get $2
-       i32.store offset=8
-       local.get $2
        call $~lib/string/String.__eq
        br_if $case2|0
        local.get $1
@@ -3257,11 +3226,6 @@
        i32.store offset=4
        local.get $2
        i32.const 144
-       local.set $2
-       global.get $~lib/memory/__stack_pointer
-       local.get $2
-       i32.store offset=8
-       local.get $2
        call $~lib/string/String.__eq
        br_if $case3|0
        br $case4|0
@@ -3269,7 +3233,7 @@
       i32.const 0
       local.set $2
       global.get $~lib/memory/__stack_pointer
-      i32.const 12
+      i32.const 8
       i32.add
       global.set $~lib/memory/__stack_pointer
       local.get $2
@@ -3278,7 +3242,7 @@
      i32.const 1
      local.set $2
      global.get $~lib/memory/__stack_pointer
-     i32.const 12
+     i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
      local.get $2
@@ -3287,7 +3251,7 @@
     i32.const 2
     local.set $2
     global.get $~lib/memory/__stack_pointer
-    i32.const 12
+    i32.const 8
     i32.add
     global.set $~lib/memory/__stack_pointer
     local.get $2
@@ -3296,7 +3260,7 @@
    i32.const 3
    local.set $2
    global.get $~lib/memory/__stack_pointer
-   i32.const 12
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $2
@@ -3305,7 +3269,7 @@
   i32.const 4
   local.set $2
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
@@ -3626,14 +3590,16 @@
  (func $start:switch
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 36
+  i32.const 16
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.const 36
-  memory.fill
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store offset=8
   i32.const 0
   call $switch/doSwitch
   i32.const 0
@@ -4025,11 +3991,6 @@
    unreachable
   end
   i32.const 80
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
   call $switch/doSwitchString
   i32.const 1
   i32.eq
@@ -4043,11 +4004,6 @@
    unreachable
   end
   i32.const 112
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
   call $switch/doSwitchString
   i32.const 2
   i32.eq
@@ -4061,11 +4017,6 @@
    unreachable
   end
   i32.const 144
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
   call $switch/doSwitchString
   i32.const 3
   i32.eq
@@ -4079,11 +4030,6 @@
    unreachable
   end
   i32.const 176
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
   call $switch/doSwitchString
   i32.const 4
   i32.eq
@@ -4114,17 +4060,7 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   i32.const 208
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=12
-  local.get $0
   i32.const 240
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=16
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4132,11 +4068,6 @@
   i32.store offset=4
   local.get $0
   i32.const 704
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4156,17 +4087,7 @@
    unreachable
   end
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=12
-  local.get $0
   i32.const 768
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=16
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4174,11 +4095,6 @@
   i32.store offset=4
   local.get $0
   i32.const 208
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4198,41 +4114,21 @@
    unreachable
   end
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=28
-  local.get $0
   i32.const 800
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=32
-  local.get $0
-  call $~lib/string/String.__concat
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=20
-  local.get $0
-  i32.const 832
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=24
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store offset=12
   local.get $0
-  i32.const 704
+  i32.const 832
+  call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=16
+  i32.store offset=8
   local.get $0
+  i32.const 704
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4240,11 +4136,6 @@
   i32.store offset=4
   local.get $0
   i32.const 704
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4264,29 +4155,14 @@
    unreachable
   end
   i32.const 864
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=20
-  local.get $0
   i32.const 208
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=24
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=12
+  i32.store offset=8
   local.get $0
   i32.const 896
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=16
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4294,11 +4170,6 @@
   i32.store offset=4
   local.get $0
   i32.const 832
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4331,11 +4202,6 @@
    unreachable
   end
   i32.const 80
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
   call $switch/doSwitchNullableString
   i32.const 1
   i32.eq
@@ -4349,11 +4215,6 @@
    unreachable
   end
   i32.const 112
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
   call $switch/doSwitchNullableString
   i32.const 2
   i32.eq
@@ -4367,11 +4228,6 @@
    unreachable
   end
   i32.const 144
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
   call $switch/doSwitchNullableString
   i32.const 3
   i32.eq
@@ -4385,11 +4241,6 @@
    unreachable
   end
   i32.const 176
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
   call $switch/doSwitchNullableString
   i32.const 4
   i32.eq
@@ -4403,17 +4254,7 @@
    unreachable
   end
   i32.const 208
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=12
-  local.get $0
   i32.const 240
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=16
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4421,11 +4262,6 @@
   i32.store offset=4
   local.get $0
   i32.const 704
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4445,17 +4281,7 @@
    unreachable
   end
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=12
-  local.get $0
   i32.const 768
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=16
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4463,11 +4289,6 @@
   i32.store offset=4
   local.get $0
   i32.const 208
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4487,41 +4308,21 @@
    unreachable
   end
   i32.const 736
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=28
-  local.get $0
   i32.const 800
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=32
-  local.get $0
-  call $~lib/string/String.__concat
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=20
-  local.get $0
-  i32.const 832
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=24
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store offset=12
   local.get $0
-  i32.const 704
+  i32.const 832
+  call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=16
+  i32.store offset=8
   local.get $0
+  i32.const 704
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4529,11 +4330,6 @@
   i32.store offset=4
   local.get $0
   i32.const 704
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4553,29 +4349,14 @@
    unreachable
   end
   i32.const 864
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=20
-  local.get $0
   i32.const 208
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=24
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=12
+  i32.store offset=8
   local.get $0
   i32.const 896
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=16
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4583,11 +4364,6 @@
   i32.store offset=4
   local.get $0
   i32.const 832
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=8
-  local.get $0
   call $~lib/string/String.__concat
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -5129,7 +4905,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 36
+  i32.const 16
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

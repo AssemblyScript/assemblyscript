@@ -3118,13 +3118,13 @@
  (func $class-overloading/C#a<i32> (param $this i32) (param $a i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -3140,11 +3140,6 @@
   i32.store
   local.get $2
   i32.const 496
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3158,7 +3153,7 @@
   i32.const 592
   global.set $class-overloading/which
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -3431,13 +3426,13 @@
  (func $start:class-overloading
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   memory.size
   i32.const 16
   i32.shl
@@ -3473,11 +3468,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3505,11 +3495,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3537,11 +3522,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3569,11 +3549,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3604,11 +3579,6 @@
   i32.store
   local.get $0
   i32.const 592
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3636,11 +3606,6 @@
   i32.store
   local.get $0
   i32.const 592
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3668,11 +3633,6 @@
   i32.store
   local.get $0
   i32.const 592
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3698,11 +3658,6 @@
   i32.store
   local.get $0
   i32.const 592
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3733,11 +3688,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3765,11 +3715,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3797,11 +3742,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3827,11 +3767,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3862,11 +3797,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3894,11 +3824,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3926,11 +3851,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3956,11 +3876,6 @@
   i32.store
   local.get $0
   i32.const 496
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3991,11 +3906,6 @@
   i32.store
   local.get $0
   i32.const 624
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4023,11 +3933,6 @@
   i32.store
   local.get $0
   i32.const 624
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4055,11 +3960,6 @@
   i32.store
   local.get $0
   i32.const 624
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4087,11 +3987,6 @@
   i32.store
   local.get $0
   i32.const 624
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4121,11 +4016,6 @@
   i32.store
   local.get $0
   i32.const 656
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4155,11 +4045,6 @@
   i32.store
   local.get $0
   i32.const 688
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4192,7 +4077,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

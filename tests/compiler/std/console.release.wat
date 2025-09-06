@@ -46,42 +46,19 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $~start
+  i32.const 0
+  i32.const 1056
+  call $~lib/console/console.assert<bool>
+  i32.const 1
+  i32.const 1088
+  call $~lib/console/console.assert<bool>
+  i32.const 1120
+  call $~lib/console/console.log
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1612
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1056
-   i32.store
-   i32.const 0
-   i32.const 1056
-   call $~lib/console/console.assert<bool>
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1088
-   i32.store
-   i32.const 1
-   i32.const 1088
-   call $~lib/console/console.assert<bool>
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1120
-   i32.store
-   i32.const 1120
-   call $~lib/console/console.log
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1168
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1612
    i32.lt_s
@@ -98,9 +75,6 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1216
-   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
@@ -122,9 +96,6 @@
    i32.add
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1264
-   i32.store
-   global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -145,9 +116,6 @@
    i32.add
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1312
-   i32.store
-   global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -167,65 +135,28 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1360
-   i32.store
    i32.const 1360
    call $~lib/console/console.time
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1360
-   i32.store
    i32.const 1360
    call $~lib/console/console.timeLog
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1360
-   i32.store
    i32.const 1360
    call $~lib/console/console.timeEnd
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1408
-   i32.store
    i32.const 1408
    call $~lib/console/console.timeLog
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1408
-   i32.store
    i32.const 1408
    call $~lib/console/console.timeEnd
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1456
-   i32.store
    i32.const 1456
    call $~lib/console/console.time
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1456
-   i32.store
    i32.const 1456
    call $~lib/console/console.time
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1504
-   i32.store
    i32.const 1504
    call $~lib/console/console.log
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1536
-   i32.store
    i32.const 1536
    call $~lib/console/console.log
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1568
-   i32.store
    i32.const 1568
    call $~lib/console/console.log
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1600
-   i32.store
    i32.const 1600
    call $~lib/console/console.log
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
    return
   end
   i32.const 34400

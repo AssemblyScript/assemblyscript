@@ -276,13 +276,13 @@
  (func $start:issues/1714
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   call $"issues/1714/foo<i32,i64>"
   i32.const 0
   i32.eq
@@ -302,11 +302,6 @@
   i32.store
   local.get $0
   i32.const 80
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -318,7 +313,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
