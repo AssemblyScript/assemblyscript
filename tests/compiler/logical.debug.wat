@@ -28,6 +28,10 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
+ (global $logical/foo (mut i32) (i32.const 456))
+ (global $logical/bar (mut f64) (f64.const -0))
+ (global $logical/baz (mut i32) (i32.const 321))
+ (global $logical/qux (mut f64) (f64.const 2.718))
  (global $logical/b (mut i32) (i32.const 0))
  (global $logical/c (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 464))
@@ -47,6 +51,10 @@
  (data $9 (i32.const 464) "\08\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
+ (export "foo" (global $logical/foo))
+ (export "bar" (global $logical/bar))
+ (export "baz" (global $logical/baz))
+ (export "qux" (global $logical/qux))
  (export "memory" (memory $0))
  (start $~start)
  (func $logical/testShortcutAnd (param $a i64) (param $b i32) (result i32)
@@ -2926,7 +2934,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 106
+   i32.const 114
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2939,7 +2947,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 107
+   i32.const 115
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2957,7 +2965,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 112
+   i32.const 120
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2970,7 +2978,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 113
+   i32.const 121
    i32.const 1
    call $~lib/builtins/abort
    unreachable

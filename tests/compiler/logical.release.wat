@@ -17,6 +17,10 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $logical/foo (mut i32) (i32.const 456))
+ (global $logical/bar (mut f64) (f64.const -0))
+ (global $logical/baz (mut i32) (i32.const 321))
+ (global $logical/qux (mut f64) (f64.const 2.718))
  (global $logical/b (mut i32) (i32.const 0))
  (global $logical/c (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34292))
@@ -34,6 +38,10 @@
  (data $8 (i32.const 1420) "<")
  (data $8.1 (i32.const 1432) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data $9 (i32.const 1488) "\08\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 ")
+ (export "foo" (global $logical/foo))
+ (export "bar" (global $logical/bar))
+ (export "baz" (global $logical/baz))
+ (export "qux" (global $logical/qux))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -1568,7 +1576,7 @@
     if
      i32.const 0
      i32.const 1056
-     i32.const 106
+     i32.const 114
      i32.const 1
      call $~lib/builtins/abort
      unreachable
@@ -1586,7 +1594,7 @@
     if
      i32.const 0
      i32.const 1056
-     i32.const 112
+     i32.const 120
      i32.const 1
      call $~lib/builtins/abort
      unreachable
