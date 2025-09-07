@@ -1420,7 +1420,7 @@
  )
  (func $~start
   (local $0 i32)
-  block $__inlined_func$start:logical
+  block $__inlined_func$start:logical$1
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
@@ -1595,7 +1595,7 @@
     i32.const 4
     i32.add
     global.set $~lib/memory/__stack_pointer
-    br $__inlined_func$start:logical
+    br $__inlined_func$start:logical$1
    end
    i32.const 34320
    i32.const 34368
