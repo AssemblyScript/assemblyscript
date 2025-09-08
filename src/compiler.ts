@@ -4574,19 +4574,31 @@ export class Compiler extends DiagnosticEmitter {
           }
           leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
           leftType = commonType;
+
+          // This is sometimes needed to make the left trivial
+          let leftPrecompExpr = module.runExpression(leftExpr, ExpressionRunnerFlags.PreserveSideeffects);
+          if (leftPrecompExpr) leftExpr = leftPrecompExpr;
+
           rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
           rightType = commonType;
 
-          // simplify if copying left is trivial
-          if (expr = module.tryCopyTrivialExpression(leftExpr)) {
+          let condExpr = this.makeIsTrueish(leftExpr, this.currentType, left);
+          let condKind = this.evaluateCondition(condExpr);
+
+          if (condKind != ConditionKind.Unknown) {
+            // simplify if left is a constant
+            expr = condKind == ConditionKind.True
+              ? rightExpr
+              : leftExpr;
+          } else if (expr = module.tryCopyTrivialExpression(leftExpr)) {
+            // simplify if copying left is trivial
             expr = module.if(
-              this.makeIsTrueish(leftExpr, this.currentType, left),
+              condExpr,
               rightExpr,
               expr
             );
-
-          // if not possible, tee left to a temp
           } else {
+            // if not possible, tee left to a temp
             let tempLocal = flow.getTempLocal(leftType);
             if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.Wrapped);
             if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.NonNull);
@@ -4654,19 +4666,31 @@ export class Compiler extends DiagnosticEmitter {
           let possiblyNull = leftType.is(TypeFlags.Nullable) && rightType.is(TypeFlags.Nullable);
           leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
           leftType = commonType;
+
+          // This is sometimes needed to make the left trivial
+          let leftPrecompExpr = module.runExpression(leftExpr, ExpressionRunnerFlags.PreserveSideeffects);
+          if (leftPrecompExpr) leftExpr = leftPrecompExpr;
+
           rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
           rightType = commonType;
 
-          // simplify if copying left is trivial
-          if (expr = module.tryCopyTrivialExpression(leftExpr)) {
+          let condExpr = this.makeIsTrueish(leftExpr, this.currentType, left);
+          let condKind = this.evaluateCondition(condExpr);
+
+          if (condKind != ConditionKind.Unknown) {
+            // simplify if left is a constant
+            expr = condKind == ConditionKind.True
+              ? leftExpr
+              : rightExpr;
+          } else if (expr = module.tryCopyTrivialExpression(leftExpr)) {
+            // otherwise, simplify if copying left is trivial
             expr = module.if(
-              this.makeIsTrueish(leftExpr, leftType, left),
+              condExpr,
               expr,
               rightExpr
             );
-
-          // if not possible, tee left to a temp. local
           } else {
+            // if not possible, tee left to a temp. local
             let temp = flow.getTempLocal(leftType);
             let tempIndex = temp.index;
             if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(tempIndex, LocalFlags.Wrapped);

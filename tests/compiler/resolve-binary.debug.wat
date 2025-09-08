@@ -6623,12 +6623,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  if (result i32)
-   i32.const 2
-  else
-   i32.const 1
-  end
+  i32.const 2
   i32.const 10
   call $~lib/number/I32#toString
   local.set $0
@@ -6648,11 +6643,6 @@
    unreachable
   end
   i32.const 0
-  if (result i32)
-   i32.const 2
-  else
-   i32.const 0
-  end
   i32.const 10
   call $~lib/number/I32#toString
   local.set $0
@@ -6672,11 +6662,6 @@
    unreachable
   end
   i32.const 1
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 2
-  end
   i32.const 10
   call $~lib/number/I32#toString
   local.set $0
@@ -6695,12 +6680,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  if (result i32)
-   i32.const 0
-  else
-   i32.const 2
-  end
+  i32.const 2
   i32.const 10
   call $~lib/number/I32#toString
   local.set $0

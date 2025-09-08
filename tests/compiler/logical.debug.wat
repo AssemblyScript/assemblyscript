@@ -28,6 +28,10 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
+ (global $logical/foo (mut i32) (i32.const 456))
+ (global $logical/bar (mut f64) (f64.const -0))
+ (global $logical/baz (mut i32) (i32.const 321))
+ (global $logical/qux (mut f64) (f64.const 2.718))
  (global $logical/b (mut i32) (i32.const 0))
  (global $logical/c (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 464))
@@ -47,6 +51,10 @@
  (data $9 (i32.const 464) "\08\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
+ (export "foo" (global $logical/foo))
+ (export "bar" (global $logical/bar))
+ (export "baz" (global $logical/baz))
+ (export "qux" (global $logical/qux))
  (export "memory" (memory $0))
  (start $~start)
  (func $logical/testShortcutAnd (param $a i64) (param $b i32) (result i32)
@@ -2583,26 +2591,9 @@
   i64.const -9007199254740994
   i64.le_u
   drop
-  i32.const 1
-  if (result i32)
-   i32.const 2
-  else
-   i32.const 1
-  end
+  i32.const 2
   drop
-  f64.const 1
-  i64.reinterpret_f64
-  i64.const 1
-  i64.shl
-  i64.const 2
-  i64.sub
-  i64.const -9007199254740994
-  i64.le_u
-  if (result f64)
-   f64.const 2
-  else
-   f64.const 1
-  end
+  f64.const 2
   i64.reinterpret_f64
   i64.const 1
   i64.shl
@@ -2611,12 +2602,7 @@
   i64.const -9007199254740994
   i64.le_u
   drop
-  i32.const 1
-  if (result i32)
-   i32.const 2
-  else
-   i32.const 1
-  end
+  i32.const 2
   global.set $logical/i
   global.get $logical/i
   i32.const 2
@@ -2630,12 +2616,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  if (result i32)
-   i32.const 0
-  else
-   i32.const 1
-  end
+  i32.const 1
   global.set $logical/i
   global.get $logical/i
   i32.const 1
@@ -2649,14 +2630,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 1
-  i64.const 0
-  i64.ne
-  if (result i64)
-   i64.const 2
-  else
-   i64.const 1
-  end
+  i64.const 2
   global.set $logical/I
   global.get $logical/I
   i64.const 2
@@ -2670,14 +2644,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 0
-  i64.const 0
-  i64.ne
-  if (result i64)
-   i64.const 0
-  else
-   i64.const 1
-  end
+  i64.const 1
   global.set $logical/I
   global.get $logical/I
   i64.const 1
@@ -2691,19 +2658,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 1
-  i32.reinterpret_f32
-  i32.const 1
-  i32.shl
-  i32.const 2
-  i32.sub
-  i32.const -16777218
-  i32.le_u
-  if (result f32)
-   f32.const 2
-  else
-   f32.const 1
-  end
+  f32.const 2
   global.set $logical/f
   global.get $logical/f
   f32.const 2
@@ -2717,19 +2672,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 0
-  i32.reinterpret_f32
-  i32.const 1
-  i32.shl
-  i32.const 2
-  i32.sub
-  i32.const -16777218
-  i32.le_u
-  if (result f32)
-   f32.const 0
-  else
-   f32.const 1
-  end
+  f32.const 1
   global.set $logical/f
   global.get $logical/f
   f32.const 1
@@ -2743,19 +2686,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1
-  i64.reinterpret_f64
-  i64.const 1
-  i64.shl
-  i64.const 2
-  i64.sub
-  i64.const -9007199254740994
-  i64.le_u
-  if (result f64)
-   f64.const 2
-  else
-   f64.const 1
-  end
+  f64.const 2
   global.set $logical/F
   global.get $logical/F
   f64.const 2
@@ -2769,19 +2700,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0
-  i64.reinterpret_f64
-  i64.const 1
-  i64.shl
-  i64.const 2
-  i64.sub
-  i64.const -9007199254740994
-  i64.le_u
-  if (result f64)
-   f64.const 0
-  else
-   f64.const 1
-  end
+  f64.const 1
   global.set $logical/F
   global.get $logical/F
   f64.const 1
@@ -2795,19 +2714,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const nan:0x400000
-  i32.reinterpret_f32
-  i32.const 1
-  i32.shl
-  i32.const 2
-  i32.sub
-  i32.const -16777218
-  i32.le_u
-  if (result f32)
-   f32.const nan:0x400000
-  else
-   f32.const 1
-  end
+  f32.const 1
   global.set $logical/f
   global.get $logical/f
   f32.const 1
@@ -2822,18 +2729,6 @@
    unreachable
   end
   f32.const 1
-  i32.reinterpret_f32
-  i32.const 1
-  i32.shl
-  i32.const 2
-  i32.sub
-  i32.const -16777218
-  i32.le_u
-  if (result f32)
-   f32.const 1
-  else
-   f32.const nan:0x400000
-  end
   global.set $logical/f
   global.get $logical/f
   f32.const 1
@@ -2847,19 +2742,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const nan:0x8000000000000
-  i64.reinterpret_f64
-  i64.const 1
-  i64.shl
-  i64.const 2
-  i64.sub
-  i64.const -9007199254740994
-  i64.le_u
-  if (result f64)
-   f64.const nan:0x8000000000000
-  else
-   f64.const 1
-  end
+  f64.const 1
   global.set $logical/F
   global.get $logical/F
   f64.const 1
@@ -2874,18 +2757,6 @@
    unreachable
   end
   f64.const 1
-  i64.reinterpret_f64
-  i64.const 1
-  i64.shl
-  i64.const 2
-  i64.sub
-  i64.const -9007199254740994
-  i64.le_u
-  if (result f64)
-   f64.const 1
-  else
-   f64.const nan:0x8000000000000
-  end
   global.set $logical/F
   global.get $logical/F
   f64.const 1
@@ -2899,19 +2770,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 1
-  i32.reinterpret_f32
-  i32.const 1
-  i32.shl
-  i32.const 2
-  i32.sub
-  i32.const -16777218
-  i32.le_u
-  if (result f32)
-   f32.const nan:0x400000
-  else
-   f32.const 1
-  end
+  f32.const nan:0x400000
   global.set $logical/f
   global.get $logical/f
   local.tee $0
@@ -2927,18 +2786,6 @@
    unreachable
   end
   f32.const nan:0x400000
-  i32.reinterpret_f32
-  i32.const 1
-  i32.shl
-  i32.const 2
-  i32.sub
-  i32.const -16777218
-  i32.le_u
-  if (result f32)
-   f32.const 1
-  else
-   f32.const nan:0x400000
-  end
   global.set $logical/f
   global.get $logical/f
   local.tee $1
@@ -2953,19 +2800,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1
-  i64.reinterpret_f64
-  i64.const 1
-  i64.shl
-  i64.const 2
-  i64.sub
-  i64.const -9007199254740994
-  i64.le_u
-  if (result f64)
-   f64.const nan:0x8000000000000
-  else
-   f64.const 1
-  end
+  f64.const nan:0x8000000000000
   global.set $logical/F
   global.get $logical/F
   local.tee $2
@@ -2981,18 +2816,6 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  i64.reinterpret_f64
-  i64.const 1
-  i64.shl
-  i64.const 2
-  i64.sub
-  i64.const -9007199254740994
-  i64.le_u
-  if (result f64)
-   f64.const 1
-  else
-   f64.const nan:0x8000000000000
-  end
   global.set $logical/F
   global.get $logical/F
   local.tee $3
@@ -3111,7 +2934,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 106
+   i32.const 114
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -3124,7 +2947,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 107
+   i32.const 115
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -3142,7 +2965,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 112
+   i32.const 120
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -3155,7 +2978,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 113
+   i32.const 121
    i32.const 1
    call $~lib/builtins/abort
    unreachable

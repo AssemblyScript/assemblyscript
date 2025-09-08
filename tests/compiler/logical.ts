@@ -91,6 +91,14 @@ function testContextualBoolOr(someObj: Obj, someInt: i32): bool {
 }
 assert(testContextualBoolOr(new Obj(), 0));
 
+// Test simplification with precomputable LHS operands
+// see: https://github.com/AssemblyScript/assemblyscript/issues/2946
+
+export let foo = 123 && 456;
+export let bar = -0.0 && 1.23;
+export let baz = 321 || 654;
+export let qux = NaN || 2.718;
+
 // Common type
 
 class A {}
