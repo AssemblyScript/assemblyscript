@@ -10026,6 +10026,95 @@ export class Compiler extends DiagnosticEmitter {
   // === Specialized code generation ==============================================================
 
   /** Makes a constant zero of the specified type. */
+  /** Checks if an expression evaluates to a zero value for the given type. */
+  shouldSkipZeroInit(expr: ExpressionRef, type: Type): bool {
+    let module = this.module;
+    // Try to evaluate the expression at compile time
+    let evaled = module.runExpression(expr, ExpressionRunnerFlags.Default);
+    if (!evaled) return false; // Can't evaluate at compile time
+
+    const evaledType = getExpressionType(evaled);
+    switch (type.kind) {
+      case TypeKind.Bool:
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+        // All small integer types are represented as i32 in WebAssembly
+        // But we still check for safety and consistency
+        if (evaledType == TypeRef.I32) {
+          return getConstValueI32(evaled) === 0;
+        }
+        return false;
+      case TypeKind.I64:
+      case TypeKind.U64:
+      case TypeKind.Isize:
+      case TypeKind.Usize:
+        // Only call getConstValueI64* if the expression is actually i64
+        if (evaledType == TypeRef.I64) {
+          return getConstValueI64Low(evaled) === 0 && getConstValueI64High(evaled) === 0;
+        }
+        // For size types on 32-bit platforms, they might be i32
+        if (evaledType == TypeRef.I32 && (type.kind == TypeKind.Isize || type.kind == TypeKind.Usize)) {
+          return getConstValueI32(evaled) === 0;
+        }
+        return false;
+      case TypeKind.F32:
+        if (evaledType == TypeRef.F32) {
+          return getConstValueF32(evaled) === 0.0;
+        }
+        return false;
+      case TypeKind.F64:
+        if (evaledType == TypeRef.F64) {
+          return getConstValueF64(evaled) === 0.0;
+        }
+        return false;
+      default:
+        // For reference types, zero means null
+        if (type.isReference && type.is(TypeFlags.Nullable)) {
+          return getExpressionId(evaled) === ExpressionId.RefNull;
+        }
+        return false;
+    }
+  }
+
+  /** Checks if a field type can use the default zero-initialized memory value. */
+  canUseZeroDefault(type: Type): bool {
+    switch (type.kind) {
+      default: assert(false);
+      case TypeKind.Bool:
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.I64:
+      case TypeKind.U64:
+      case TypeKind.Isize:
+      case TypeKind.Usize:
+      case TypeKind.F32:
+      case TypeKind.F64:
+      case TypeKind.V128:
+        return true; // Value types default to zero in zero-initialized memory
+      case TypeKind.Func:
+      case TypeKind.Extern:
+      case TypeKind.Any:
+      case TypeKind.Eq:
+      case TypeKind.Struct:
+      case TypeKind.Array:
+      case TypeKind.String:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter:
+      case TypeKind.I31:
+        // Reference types: only nullable refs can use zero (null) default
+        return type.is(TypeFlags.Nullable);
+    }
+  }
+
   makeZero(type: Type): ExpressionRef {
     let module = this.module;
     switch (type.kind) {
@@ -10372,6 +10461,7 @@ export class Compiler extends DiagnosticEmitter {
       let parameterIndex = fieldPrototype.parameterIndex;
 
       // Defer non-parameter fields until parameter fields are initialized
+      // Since non-parameter may depend on parameter fields
       if (parameterIndex < 0) {
         if (!nonParameterFields) nonParameterFields = new Array();
         nonParameterFields.push(property);
@@ -10407,16 +10497,25 @@ export class Compiler extends DiagnosticEmitter {
         let initializerNode = fieldPrototype.initializerNode;
         assert(fieldPrototype.parameterIndex < 0);
         let setterInstance = assert(field.setterInstance);
-        let expr = this.makeCallDirect(setterInstance, [
-          module.local_get(thisLocalIndex, sizeTypeRef),
-          initializerNode // use initializer if present, otherwise initialize with zero
-            ? this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit)
-            : this.makeZero(fieldType)
-        ], field.identifierNode, true);
-        if (this.currentType != Type.void) { // in case
-          expr = module.drop(expr);
+
+        if (initializerNode) {
+          // Explicit initializer
+          // Check if we need to initialize this field
+          const valueExpr: ExpressionRef = this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit);
+          if (!this.shouldSkipZeroInit(valueExpr, fieldType)) {
+            let expr = this.makeCallDirect(setterInstance, [
+              module.local_get(thisLocalIndex, sizeTypeRef),
+              valueExpr
+            ], field.identifierNode, true);
+            if (this.currentType != Type.void) { // in case
+              expr = module.drop(expr);
+            }
+            stmts.push(expr);
+          }
+        } else {
+          // No explicit initializer
+          assert(this.canUseZeroDefault(fieldType));
         }
-        stmts.push(expr);
       }
     }
 

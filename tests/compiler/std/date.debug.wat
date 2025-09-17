@@ -3854,30 +3854,6 @@
   local.get $2
   local.get $epochMillis
   call $~lib/date/Date#set:epochMillis
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  call $~lib/date/Date#set:year
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  call $~lib/date/Date#set:month
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  call $~lib/date/Date#set:day
   local.get $epochMillis
   call $~lib/date/invalidDate
   if
