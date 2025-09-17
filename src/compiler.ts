@@ -60,7 +60,7 @@ import {
   ensureType,
   createType,
   getConstValueInteger,
-  isConstNonZero
+  isConstZero
 } from "./module";
 
 import {
@@ -10026,6 +10026,14 @@ export class Compiler extends DiagnosticEmitter {
 
   // === Specialized code generation ==============================================================
 
+  /** Check if possible to optimize the active initialization away if it's zero */
+  canOptimizeZeroInitialization(valueExpr: ExpressionRef): bool {
+    if ((this.options.runtime != Runtime.Incremental) && (this.options.runtime != Runtime.Stub)) {
+      return false;
+    }
+    return isConstZero(valueExpr);
+  }
+
   /** Makes a constant zero of the specified type. */
   makeZero(type: Type): ExpressionRef {
     let module = this.module;
@@ -10417,7 +10425,7 @@ export class Compiler extends DiagnosticEmitter {
           // Memory will be filled with 0 on itcms.__new
           // Memory grow will default to initialized with 0 as wasm spec
           // So, optimize the active initialization away if it's zero
-          if ((this.options.runtime == Runtime.Incremental || this.options.runtime == Runtime.Stub) && isConstNonZero(valueExpr)) {
+          if (!this.canOptimizeZeroInitialization(valueExpr)) {
             let expr = this.makeCallDirect(setterInstance, [
               module.local_get(thisLocalIndex, sizeTypeRef),
               valueExpr
