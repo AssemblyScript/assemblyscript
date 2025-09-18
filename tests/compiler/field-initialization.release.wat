@@ -120,7 +120,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$241
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$229
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -144,7 +144,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$241
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$229
    end
    local.get $0
    i32.load offset=8
@@ -1754,21 +1754,6 @@
   local.tee $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -1887,7 +1872,7 @@
      end
     end
    end
-   block $__inlined_func$~lib/util/string/compareImpl$118
+   block $__inlined_func$~lib/util/string/compareImpl$107
     loop $while-continue|1
      local.get $0
      local.tee $3
@@ -1907,7 +1892,7 @@
       local.get $4
       local.get $5
       i32.ne
-      br_if $__inlined_func$~lib/util/string/compareImpl$118
+      br_if $__inlined_func$~lib/util/string/compareImpl$107
       local.get $2
       i32.const 2
       i32.add
@@ -1970,15 +1955,6 @@
   call $field-initialization/SomeObject#constructor
   local.tee $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
-  local.get $0
-  i32.const 0
-  call $~lib/rt/itcms/__link
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -2112,12 +2088,6 @@
    local.get $1
    call $~lib/object/Object#constructor
    local.tee $1
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 0
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -2291,15 +2261,6 @@
    local.tee $1
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 0
-   i32.store
-   local.get $1
-   i32.const 0
-   call $~lib/rt/itcms/__link
-   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
@@ -2320,7 +2281,7 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -2328,8 +2289,8 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store
+   i32.const 0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 9
@@ -2337,13 +2298,7 @@
    local.tee $1
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $1
@@ -2423,12 +2378,6 @@
    i32.const 11
    call $~lib/rt/itcms/__new
    local.tee $1
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 0
    i32.store
    global.get $~lib/memory/__stack_pointer
    local.get $1
@@ -2536,15 +2485,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store offset=4
-   local.get $1
-   i32.const 0
-   i32.store
-   local.get $1
-   i32.const 0
-   call $~lib/rt/itcms/__link
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
    call $~lib/arraybuffer/ArrayBuffer#constructor
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -2639,7 +2579,7 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -2647,8 +2587,8 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store
+   i32.const 0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 15
@@ -2656,16 +2596,7 @@
    local.tee $1
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 0
-   i32.store
-   local.get $1
-   i32.const 0
-   call $~lib/rt/itcms/__link
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $1
@@ -2759,15 +2690,6 @@
    call $~lib/rt/itcms/__new
    local.tee $1
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 0
-   i32.store
-   local.get $1
-   i32.const 0
-   call $~lib/rt/itcms/__link
    global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store offset=4
@@ -3289,15 +3211,6 @@
    global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store offset=4
-   local.get $1
-   i32.const 0
-   i32.store
-   local.get $1
-   i32.const 0
-   call $~lib/rt/itcms/__link
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
    call $~lib/arraybuffer/ArrayBuffer#constructor
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -3373,15 +3286,6 @@
    call $~lib/rt/itcms/__new
    local.tee $1
    i32.store offset=136
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   i32.const 0
-   i32.store
-   local.get $1
-   i32.const 0
-   call $~lib/rt/itcms/__link
    global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store offset=4

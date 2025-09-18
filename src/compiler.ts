@@ -59,7 +59,8 @@ import {
   isConstExpressionNaN,
   ensureType,
   createType,
-  getConstValueInteger
+  getConstValueInteger,
+  isConstZero
 } from "./module";
 
 import {
@@ -10025,6 +10026,14 @@ export class Compiler extends DiagnosticEmitter {
 
   // === Specialized code generation ==============================================================
 
+  /** Check if possible to optimize the active initialization away if it's zero */
+  canOptimizeZeroInitialization(valueExpr: ExpressionRef): bool {
+    const runtime = this.options.runtime;
+    return (runtime == Runtime.Incremental || runtime == Runtime.Stub)
+      ? isConstZero(valueExpr)
+      : false;
+  }
+
   /** Makes a constant zero of the specified type. */
   makeZero(type: Type): ExpressionRef {
     let module = this.module;
@@ -10372,6 +10381,7 @@ export class Compiler extends DiagnosticEmitter {
       let parameterIndex = fieldPrototype.parameterIndex;
 
       // Defer non-parameter fields until parameter fields are initialized
+      // Since non-parameter may depend on parameter fields
       if (parameterIndex < 0) {
         if (!nonParameterFields) nonParameterFields = new Array();
         nonParameterFields.push(property);
@@ -10407,16 +10417,25 @@ export class Compiler extends DiagnosticEmitter {
         let initializerNode = fieldPrototype.initializerNode;
         assert(fieldPrototype.parameterIndex < 0);
         let setterInstance = assert(field.setterInstance);
-        let expr = this.makeCallDirect(setterInstance, [
-          module.local_get(thisLocalIndex, sizeTypeRef),
-          initializerNode // use initializer if present, otherwise initialize with zero
-            ? this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit)
-            : this.makeZero(fieldType)
-        ], field.identifierNode, true);
-        if (this.currentType != Type.void) { // in case
-          expr = module.drop(expr);
+
+        if (initializerNode) {
+          // Explicit initializer
+          // Check if we need to initialize this field
+          const valueExpr: ExpressionRef = this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit);
+          // Memory will be filled with 0 on itcms.__new
+          // Memory grow will default to initialized with 0 as wasm spec
+          // So, optimize the active initialization away if it's zero
+          if (!this.canOptimizeZeroInitialization(valueExpr)) {
+            let expr = this.makeCallDirect(setterInstance, [
+              module.local_get(thisLocalIndex, sizeTypeRef),
+              valueExpr
+            ], field.identifierNode, true);
+            if (this.currentType != Type.void) { // in case
+              expr = module.drop(expr);
+            }
+            stmts.push(expr);
+          }
         }
-        stmts.push(expr);
       }
     }
 

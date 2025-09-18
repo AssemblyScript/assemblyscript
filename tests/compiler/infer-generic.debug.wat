@@ -2605,14 +2605,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $infer-generic/Ref#set:x
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
