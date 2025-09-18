@@ -10028,10 +10028,10 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Check if possible to optimize the active initialization away if it's zero */
   canOptimizeZeroInitialization(valueExpr: ExpressionRef): bool {
-    if ((this.options.runtime != Runtime.Incremental) && (this.options.runtime != Runtime.Stub)) {
-      return false;
-    }
-    return isConstZero(valueExpr);
+    const runtime = this.options.runtime;
+    return (runtime == Runtime.Incremental || runtime == Runtime.Stub)
+      ? isConstZero(valueExpr)
+      : false;
   }
 
   /** Makes a constant zero of the specified type. */
