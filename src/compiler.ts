@@ -9230,7 +9230,7 @@ export class Compiler extends DiagnosticEmitter {
     let flow = this.currentFlow;
 
     // make a getter for the expression (also obtains the type)
-    const getValueOrigin = this.compileExpression( // reports
+    const getValueOriginal = this.compileExpression( // reports
       expression.operand,
       contextualType.exceptVoid,
       Constraints.None
@@ -9244,11 +9244,11 @@ export class Compiler extends DiagnosticEmitter {
       tempLocal = flow.getTempLocal(this.currentType);
       getValue = module.local_tee(
         tempLocal.index,
-        getValueOrigin,
+        getValueOriginal,
         this.currentType.isManaged
       );
     } else {
-      getValue = getValueOrigin;
+      getValue = getValueOriginal;
     }
 
     let expr: ExpressionRef;
@@ -9262,7 +9262,7 @@ export class Compiler extends DiagnosticEmitter {
           if (overload) {
             let isInstance = overload.is(CommonFlags.Instance);
             if (tempLocal && !isInstance) { // revert: static overload simply returns
-              getValue = getValueOrigin;
+              getValue = getValueOriginal;
               tempLocal = null;
             }
             expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
@@ -9345,7 +9345,7 @@ export class Compiler extends DiagnosticEmitter {
           if (overload) {
             let isInstance = overload.is(CommonFlags.Instance);
             if (tempLocal && !isInstance) { // revert: static overload simply returns
-              getValue = getValueOrigin;
+              getValue = getValueOriginal;
               tempLocal = null;
             }
             expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
