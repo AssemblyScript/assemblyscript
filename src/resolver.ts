@@ -103,7 +103,9 @@ import {
 } from "./tokenizer";
 
 import {
-  BuiltinNames
+  BuiltinNames,
+  builtinTypes,
+  BuiltinTypesContext
 } from "./builtins";
 
 /** Indicates whether errors are reported or not. */
@@ -299,11 +301,7 @@ export class Resolver extends DiagnosticEmitter {
       // Handle special built-in types
       if (isSimpleType) {
         let text = nameNode.identifier.text;
-        if (text == CommonNames.native)   return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.indexof)  return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.valueof)  return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.returnof) return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.nonnull)  return this.resolveBuiltinNotNullableType(node, ctxElement, ctxTypes, reportMode);
+        if (builtinTypes.has(text)) return assert(builtinTypes.get(text))(new BuiltinTypesContext(this, node, ctxElement, ctxTypes, reportMode));
       }
 
       // Resolve normally
@@ -439,138 +437,6 @@ export class Resolver extends DiagnosticEmitter {
     }
     let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest);
     return node.isNullable ? signature.type.asNullable() : signature.type;
-  }
-
-  private resolveBuiltinNativeType(
-    /** The type to resolve. */
-    node: NamedTypeNode,
-    /** Contextual element. */
-    ctxElement: Element,
-    /** Contextual types, i.e. `T`. */
-    ctxTypes: Map<string,Type> | null = null,
-    /** How to proceed with eventual diagnostics. */
-    reportMode: ReportMode = ReportMode.Report
-  ): Type | null {
-    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
-    if (!typeArgumentNode) return null;
-    let typeArgument = this.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
-    if (!typeArgument) return null;
-    switch (typeArgument.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.I32:  return Type.i32;
-      case TypeKind.Isize: if (!this.program.options.isWasm64) return Type.i32;
-      case TypeKind.I64:  return Type.i64;
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.Bool: return Type.u32;
-      case TypeKind.Usize: if (!this.program.options.isWasm64) return Type.u32;
-      case TypeKind.U64:  return Type.u64;
-      case TypeKind.F32:  return Type.f32;
-      case TypeKind.F64:  return Type.f64;
-      case TypeKind.V128: return Type.v128;
-      case TypeKind.Void: return Type.void;
-      default: assert(false);
-    }
-    return null;
-  }
-
-  private resolveBuiltinIndexofType(
-    /** The type to resolve. */
-    node: NamedTypeNode,
-    /** Contextual element. */
-    ctxElement: Element,
-    /** Contextual types, i.e. `T`. */
-    ctxTypes: Map<string,Type> | null = null,
-    /** How to proceed with eventual diagnostics. */
-    reportMode: ReportMode = ReportMode.Report
-  ): Type | null {
-    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
-    if (!typeArgumentNode) return null;
-    let typeArgument = this.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
-    if (!typeArgument) return null;
-    let classReference = typeArgument.classReference;
-    if (!classReference) {
-      if (reportMode == ReportMode.Report) {
-        this.error(
-          DiagnosticCode.Index_signature_is_missing_in_type_0,
-          typeArgumentNode.range, typeArgument.toString()
-        );
-      }
-      return null;
-    }
-    let overload = classReference.lookupOverload(OperatorKind.IndexedGet);
-    if (overload) {
-      let parameterTypes = overload.signature.parameterTypes;
-      if (overload.is(CommonFlags.Static)) {
-        assert(parameterTypes.length == 2);
-        return parameterTypes[1];
-      } else {
-        assert(parameterTypes.length == 1);
-        return parameterTypes[0];
-      }
-    }
-    if (reportMode == ReportMode.Report) {
-      this.error(
-        DiagnosticCode.Index_signature_is_missing_in_type_0,
-        typeArgumentNode.range, typeArgument.toString()
-      );
-    }
-    return null;
-  }
-
-  private resolveBuiltinValueofType(
-    /** The type to resolve. */
-    node: NamedTypeNode,
-    /** Contextual element. */
-    ctxElement: Element,
-    /** Contextual types, i.e. `T`. */
-    ctxTypes: Map<string,Type> | null = null,
-    /** How to proceed with eventual diagnostics. */
-    reportMode: ReportMode = ReportMode.Report
-  ): Type | null {
-    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
-    if (!typeArgumentNode) return null;
-    let typeArgument = this.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
-    if (!typeArgument) return null;
-    let classReference = typeArgument.getClassOrWrapper(this.program);
-    if (classReference) {
-      let overload = classReference.lookupOverload(OperatorKind.IndexedGet);
-      if (overload) return overload.signature.returnType;
-    }
-    if (reportMode == ReportMode.Report) {
-      this.error(
-        DiagnosticCode.Index_signature_is_missing_in_type_0,
-        typeArgumentNode.range, typeArgument.toString()
-      );
-    }
-    return null;
-  }
-
-  private resolveBuiltinReturnTypeType(
-    /** The type to resolve. */
-    node: NamedTypeNode,
-    /** Contextual element. */
-    ctxElement: Element,
-    /** Contextual types, i.e. `T`. */
-    ctxTypes: Map<string,Type> | null = null,
-    /** How to proceed with eventualy diagnostics. */
-    reportMode: ReportMode = ReportMode.Report
-  ): Type | null {
-    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
-    if (!typeArgumentNode) return null;
-    let typeArgument = this.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
-    if (!typeArgument) return null;
-    let signatureReference = typeArgument.getSignature();
-    if (signatureReference) return signatureReference.returnType;
-    if (reportMode == ReportMode.Report) {
-      this.error(
-        DiagnosticCode.Type_0_has_no_call_signatures,
-        typeArgumentNode.range, typeArgument.toString()
-      );
-    }
-    return null;
   }
 
   private resolveBuiltinNotNullableType(
@@ -3814,7 +3680,7 @@ export class Resolver extends DiagnosticEmitter {
     return instance;
   }
 
-  private ensureOneTypeArgument(
+  ensureOneTypeArgument(
     /** The type to resolve. */
     node: NamedTypeNode,
     /** How to proceed with eventual diagnostics. */
