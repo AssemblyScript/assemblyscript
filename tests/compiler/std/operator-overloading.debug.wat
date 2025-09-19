@@ -6190,11 +6190,6 @@
   block $std/operator-overloading/TesterInlineStatic.postInc|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/ais1
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store
-   local.get $9
    local.tee $3
    i32.store offset=16
    i32.const 0
