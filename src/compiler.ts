@@ -48,7 +48,6 @@ import {
   getBlockChildCount,
   getBlockChildAt,
   getBlockName,
-  getLocalSetValue,
   getGlobalGetName,
   isGlobalMutable,
   getSideEffects,
@@ -9231,11 +9230,12 @@ export class Compiler extends DiagnosticEmitter {
     let flow = this.currentFlow;
 
     // make a getter for the expression (also obtains the type)
-    let getValue = this.compileExpression( // reports
+    const getValueOriginal = this.compileExpression( // reports
       expression.operand,
       contextualType.exceptVoid,
       Constraints.None
     );
+    let getValue: ExpressionRef;
 
     // if the value isn't dropped, a temp. local is required to remember the original value,
     // except if a static overload is found, which reverses the use of a temp. (see below)
@@ -9244,16 +9244,17 @@ export class Compiler extends DiagnosticEmitter {
       tempLocal = flow.getTempLocal(this.currentType);
       getValue = module.local_tee(
         tempLocal.index,
-        getValue,
+        getValueOriginal,
         this.currentType.isManaged
       );
+    } else {
+      getValue = getValueOriginal;
     }
 
     let expr: ExpressionRef;
 
     switch (expression.operator) {
       case Token.Plus_Plus: {
-
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
@@ -9261,7 +9262,7 @@ export class Compiler extends DiagnosticEmitter {
           if (overload) {
             let isInstance = overload.is(CommonFlags.Instance);
             if (tempLocal && !isInstance) { // revert: static overload simply returns
-              getValue = getLocalSetValue(getValue);
+              getValue = getValueOriginal;
               tempLocal = null;
             }
             expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
@@ -9337,7 +9338,6 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.Minus_Minus: {
-
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
@@ -9345,11 +9345,11 @@ export class Compiler extends DiagnosticEmitter {
           if (overload) {
             let isInstance = overload.is(CommonFlags.Instance);
             if (tempLocal && !isInstance) { // revert: static overload simply returns
-              getValue = getLocalSetValue(getValue);
+              getValue = getValueOriginal;
               tempLocal = null;
             }
             expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
-            if (overload.is(CommonFlags.Instance)) break;
+            if (isInstance) break;
             return expr; // here
           }
         }
