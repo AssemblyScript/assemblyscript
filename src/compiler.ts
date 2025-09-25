@@ -1532,7 +1532,7 @@ export class Compiler extends DiagnosticEmitter {
       return null;
     }
     let members = enumElement.members;
-    if (!members) return null; // TODO
+    if (!members) return null;
     if (enumElement.toStringFunctionName) return enumElement.toStringFunctionName;
     const functionName = `${enumElement.internalName}#${CommonNames.EnumToString}`;
     enumElement.toStringFunctionName = functionName;
