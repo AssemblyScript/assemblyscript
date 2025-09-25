@@ -1522,56 +1522,41 @@ export class Compiler extends DiagnosticEmitter {
     return true;
   }
 
-  private ensureEnumToString(enumElement: Enum): string | null {
+  private ensureEnumToString(enumElement: Enum, reportNode: Node): string | null {
     if (!this.compileEnum(enumElement)) return null;
+    if (enumElement.is(CommonFlags.Const)) {
+      this.errorRelated(
+        DiagnosticCode.A_const_enum_member_can_only_be_accessed_using_a_string_literal,
+        reportNode.range, enumElement.identifierNode.range
+      );
+      return null;
+    }
     let members = enumElement.members;
     if (!members) return null; // TODO
-
-    let module = this.module;
+    if (enumElement.toStringFunctionName) return enumElement.toStringFunctionName;
     const functionName = `${enumElement.internalName}#${CommonNames.EnumToString}`;
-    const isInline = enumElement.is(CommonFlags.Const) || enumElement.hasDecorator(DecoratorFlags.Inline);
-    let _keys = Map_keys(members), _values = Map_values(members);
-    if (isInline) {
-      let valueToNames: Map<i32, string> = new Map();
-      for (let i = 0, k = _keys.length; i < k; ++i) {
-        let name = unchecked(_keys[i]);
-        let member = unchecked(_values[i]);
-        if (member.kind != ElementKind.EnumValue) continue;
-        let enumValue = <EnumValue>member;
-        valueToNames.set(i64_low(enumValue.constantIntegerValue), name);
-      }
-      let exprs = new Array<ExpressionRef>();
-      for (let [value, names] of valueToNames) {
-        let expr = module.if(
-          module.binary(BinaryOp.EqI32, module.i32(value), module.local_get(0, TypeRef.I32)),
-          module.return(this.ensureStaticString(names))
-        );
-        exprs.push(expr);
-      }
-      exprs.push(module.unreachable());
-      module.addFunction(functionName, TypeRef.I32, TypeRef.I32, null, module.block(null, exprs, TypeRef.I32));
-      return functionName;
-    } else {
-      let internalNameToNames: Map<string, string> = new Map();
-      for (let i = 0, k = _keys.length; i < k; ++i) {
-        let name = unchecked(_keys[i]);
-        let member = unchecked(_values[i]);
-        if (member.kind != ElementKind.EnumValue) continue;
-        let enumValue = <EnumValue>member;
-        internalNameToNames.set(enumValue.internalName, name);
-      }
-      let exprs = new Array<ExpressionRef>();
-      for (let [internalName, names] of internalNameToNames) {
-        let expr = module.if(
-          module.binary(BinaryOp.EqI32, module.global_get(internalName, TypeRef.I32), module.local_get(0, TypeRef.I32)),
-          module.return(this.ensureStaticString(names))
-        );
-        exprs.push(expr);
-      }
-      exprs.push(module.unreachable());
-      module.addFunction(functionName, TypeRef.I32, TypeRef.I32, null, module.block(null, exprs, TypeRef.I32));
-      return functionName;
+    enumElement.toStringFunctionName = functionName;
+    const isInline = enumElement.hasDecorator(DecoratorFlags.Inline);
+    let module = this.module;
+    let exprs = new Array<ExpressionRef>();
+    // when the values are the same, TS returns the last enum value name that appears
+    for (let _keys = Map_keys(members), _values = Map_values(members), i = 1, k = _keys.length; i <= k; ++i) {
+      let enumValueName = unchecked(_keys[k - i]);
+      let member = unchecked(_values[k - i]);
+      if (member.kind != ElementKind.EnumValue) continue;
+      let enumValue = <EnumValue>member;
+      const enumValueExpr = isInline
+        ? module.i32(i64_low(enumValue.constantIntegerValue))
+        : module.global_get(enumValue.internalName, TypeRef.I32);
+      let expr = module.if(
+        module.binary(BinaryOp.EqI32, enumValueExpr, module.local_get(0, TypeRef.I32)),
+        module.return(this.ensureStaticString(enumValueName))
+      );
+      exprs.push(expr);
     }
+    exprs.push(module.unreachable());
+    module.addFunction(functionName, TypeRef.I32, TypeRef.I32, null, module.block(null, exprs, TypeRef.I32));
+    return functionName;
   }
 
   // === Functions ================================================================================
@@ -7147,9 +7132,10 @@ export class Compiler extends DiagnosticEmitter {
     let resolver = this.resolver;
     let targetElement = resolver.lookupExpression(targetExpression, this.currentFlow, Type.auto, ReportMode.Swallow);
     if (targetElement && targetElement.kind == ElementKind.Enum) {
-      const toStringFunctionName = this.ensureEnumToString(<Enum>targetElement);
-      if (toStringFunctionName == null) return module.unreachable();
       const elementExpr = this.compileExpression(expression.elementExpression, Type.i32, Constraints.ConvImplicit);
+      const toStringFunctionName = this.ensureEnumToString(<Enum>targetElement, expression);
+      this.currentType = this.program.stringInstance.type;
+      if (toStringFunctionName == null) return module.unreachable();
       return module.call(toStringFunctionName, [ elementExpr ], TypeRef.I32);
     }
 

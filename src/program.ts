@@ -3449,7 +3449,7 @@ export class Namespace extends DeclaredElement {
 
 /** An enum. */
 export class Enum extends TypedElement {
-
+  toStringFunctionName: string | null = null;
   /** Constructs a new enum. */
   constructor(
     /** Simple name. */
