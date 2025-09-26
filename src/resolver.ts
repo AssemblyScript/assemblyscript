@@ -301,7 +301,11 @@ export class Resolver extends DiagnosticEmitter {
       // Handle special built-in types
       if (isSimpleType) {
         let text = nameNode.identifier.text;
-        if (builtinTypes.has(text)) return assert(builtinTypes.get(text))(new BuiltinTypesContext(this, node, ctxElement, ctxTypes, reportMode));
+        if (builtinTypes.has(text)) {
+          let fn = assert(builtinTypes.get(text));
+          let ctx = new BuiltinTypesContext(this, node, ctxElement, ctxTypes, reportMode);
+          return fn(ctx);
+        }
       }
 
       // Resolve normally
