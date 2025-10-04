@@ -4550,9 +4550,6 @@
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/ais1
    local.tee $0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
    i32.store offset=16
    global.get $~lib/memory/__stack_pointer
    local.get $0

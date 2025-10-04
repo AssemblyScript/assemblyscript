@@ -43,7 +43,8 @@ import {
   NodeKind,
   LiteralExpression,
   ArrayLiteralExpression,
-  IdentifierExpression
+  IdentifierExpression,
+  NamedTypeNode
 } from "./ast";
 
 import {
@@ -85,7 +86,9 @@ import {
   DecoratorFlags,
   Class,
   PropertyPrototype,
-  VariableLikeElement
+  VariableLikeElement,
+  Element,
+  OperatorKind
 } from "./program";
 
 import {
@@ -94,11 +97,13 @@ import {
 } from "./flow";
 
 import {
-  ReportMode
+  ReportMode,
+  Resolver
 } from "./resolver";
 
 import {
   CommonFlags,
+  CommonNames,
   Feature,
   featureToString,
   TypeinfoFlags
@@ -768,6 +773,17 @@ export namespace BuiltinNames {
   export const Object = "~lib/object/Object";
 }
 
+/** Builtin types context. */
+export class BuiltinTypesContext {
+  constructor(
+    public resolver: Resolver,
+    public node: NamedTypeNode,
+    public ctxElement: Element,
+    public ctxTypes: Map<string, Type> | null,
+    public reportMode: ReportMode
+  ) {}
+}
+
 /** Builtin variable compilation context. */
 export class BuiltinVariableContext {
   constructor(
@@ -804,12 +820,151 @@ export class BuiltinFunctionContext {
   ) {}
 }
 
+/** Builtin types map. */
+export const builtinTypes = new Map<string, (ctx: BuiltinTypesContext) => Type | null>();
+
 /** Builtin functions map. */
 export const builtinFunctions = new Map<string, (ctx: BuiltinFunctionContext) => ExpressionRef>();
 
 /** Builtin variables map. */
 export const builtinVariables_onCompile = new Map<string, (ctx: BuiltinVariableContext) => void>();
 export const builtinVariables_onAccess = new Map<string, (ctx: BuiltinVariableContext) => ExpressionRef>();
+
+// === Builtin Types ==========================================================================
+function builtin_resolveNativeType(ctx: BuiltinTypesContext): Type | null {
+  let resolver = ctx.resolver;
+  let node = ctx.node;
+  let ctxElement = ctx.ctxElement;
+  let ctxTypes = ctx.ctxTypes;
+  let reportMode = ctx.reportMode;
+  const typeArgumentNode = resolver.ensureOneTypeArgument(node, reportMode);
+  if (!typeArgumentNode) return null;
+  let typeArgument = resolver.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
+  if (!typeArgument) return null;
+  switch (typeArgument.kind) {
+    case TypeKind.I8:
+    case TypeKind.I16:
+    case TypeKind.I32:  return Type.i32;
+    case TypeKind.Isize: if (!resolver.program.options.isWasm64) return Type.i32;
+    case TypeKind.I64:  return Type.i64;
+    case TypeKind.U8:
+    case TypeKind.U16:
+    case TypeKind.U32:
+    case TypeKind.Bool: return Type.u32;
+    case TypeKind.Usize: if (!resolver.program.options.isWasm64) return Type.u32;
+    case TypeKind.U64:  return Type.u64;
+    case TypeKind.F32:  return Type.f32;
+    case TypeKind.F64:  return Type.f64;
+    case TypeKind.V128: return Type.v128;
+    case TypeKind.Void: return Type.void;
+    default: assert(false);
+  }
+  return null;
+}
+builtinTypes.set(CommonNames.native, builtin_resolveNativeType);
+
+function builtin_resolveIndexOfType(ctx: BuiltinTypesContext): Type | null {
+  let resolver = ctx.resolver;
+  let node = ctx.node;
+  let ctxElement = ctx.ctxElement;
+  let ctxTypes = ctx.ctxTypes;
+  let reportMode = ctx.reportMode;
+  const typeArgumentNode = resolver.ensureOneTypeArgument(node, reportMode);
+  if (!typeArgumentNode) return null;
+  let typeArgument = resolver.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
+  if (!typeArgument) return null;
+  let classReference = typeArgument.classReference;
+  if (!classReference) {
+    if (reportMode == ReportMode.Report) {
+      resolver.error(
+        DiagnosticCode.Index_signature_is_missing_in_type_0,
+        typeArgumentNode.range, typeArgument.toString()
+      );
+    }
+    return null;
+  }
+  let overload = classReference.lookupOverload(OperatorKind.IndexedGet);
+  if (overload) {
+    let parameterTypes = overload.signature.parameterTypes;
+    if (overload.is(CommonFlags.Static)) {
+      assert(parameterTypes.length == 2);
+      return parameterTypes[1];
+    } else {
+      assert(parameterTypes.length == 1);
+      return parameterTypes[0];
+    }
+  }
+  if (reportMode == ReportMode.Report) {
+    resolver.error(
+      DiagnosticCode.Index_signature_is_missing_in_type_0,
+      typeArgumentNode.range, typeArgument.toString()
+    );
+  }
+  return null;
+}
+builtinTypes.set(CommonNames.indexof, builtin_resolveIndexOfType);
+
+function builtin_resolveValueOfType(ctx: BuiltinTypesContext): Type | null {
+  let resolver = ctx.resolver;
+  let node = ctx.node;
+  let ctxElement = ctx.ctxElement;
+  let ctxTypes = ctx.ctxTypes;
+  let reportMode = ctx.reportMode;
+  const typeArgumentNode = resolver.ensureOneTypeArgument(node, reportMode);
+  if (!typeArgumentNode) return null;
+  let typeArgument = resolver.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
+  if (!typeArgument) return null;
+  let classReference = typeArgument.getClassOrWrapper(resolver.program);
+  if (classReference) {
+    let overload = classReference.lookupOverload(OperatorKind.IndexedGet);
+    if (overload) return overload.signature.returnType;
+  }
+  if (reportMode == ReportMode.Report) {
+    resolver.error(
+      DiagnosticCode.Index_signature_is_missing_in_type_0,
+      typeArgumentNode.range, typeArgument.toString()
+    );
+  }
+  return null;
+}
+builtinTypes.set(CommonNames.valueof, builtin_resolveValueOfType);
+
+function builtin_resolveReturnOfType(ctx: BuiltinTypesContext): Type | null {
+  let resolver = ctx.resolver;
+  let node = ctx.node;
+  let ctxElement = ctx.ctxElement;
+  let ctxTypes = ctx.ctxTypes;
+  let reportMode = ctx.reportMode;
+  const typeArgumentNode = resolver.ensureOneTypeArgument(node, reportMode);
+  if (!typeArgumentNode) return null;
+  let typeArgument = resolver.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
+  if (!typeArgument) return null;
+  let signatureReference = typeArgument.getSignature();
+  if (signatureReference) return signatureReference.returnType;
+  if (reportMode == ReportMode.Report) {
+    resolver.error(
+      DiagnosticCode.Type_0_has_no_call_signatures,
+      typeArgumentNode.range, typeArgument.toString()
+    );
+  }
+  return null;
+}
+builtinTypes.set(CommonNames.returnof, builtin_resolveReturnOfType);
+
+function builtin_resolveNonnullableType(ctx: BuiltinTypesContext): Type | null {
+  let resolver = ctx.resolver;
+  let node = ctx.node;
+  let ctxElement = ctx.ctxElement;
+  let ctxTypes = ctx.ctxTypes;
+  let reportMode = ctx.reportMode;
+  const typeArgumentNode = resolver.ensureOneTypeArgument(node, reportMode);
+  if (!typeArgumentNode) return null;
+  let typeArgument = resolver.resolveType(typeArgumentNode, null, ctxElement, ctxTypes, reportMode);
+  if (!typeArgument) return null;
+  if (!typeArgument.isNullableReference) return typeArgument;
+  return typeArgument.nonNullableType;
+}
+builtinTypes.set(CommonNames.nonnull, builtin_resolveNonnullableType);
 
 // === Static type evaluation =================================================================
 
