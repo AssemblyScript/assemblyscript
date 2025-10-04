@@ -2250,29 +2250,34 @@
   local.get $ptr
   return
  )
- (func $assignment-chain/A#set:y (param $this i32) (param $y i64)
-  local.get $this
-  local.get $y
-  i64.store offset=8
- )
  (func $assignment-chain/A#set:x (param $this i32) (param $x i64)
   local.get $this
   local.get $x
   i64.store
  )
- (func $assignment-chain/B#get:_setter_cnt (param $this i32) (result i32)
+ (func $assignment-chain/A#set:y (param $this i32) (param $y i64)
   local.get $this
-  i32.load
+  local.get $y
+  i64.store offset=8
  )
  (func $assignment-chain/B#set:_setter_cnt (param $this i32) (param $_setter_cnt i32)
   local.get $this
   local.get $_setter_cnt
   i32.store
  )
+ (func $assignment-chain/B#set:_getter_cnt (param $this i32) (param $_getter_cnt i32)
+  local.get $this
+  local.get $_getter_cnt
+  i32.store offset=4
+ )
  (func $assignment-chain/B#set:_y (param $this i32) (param $_y f64)
   local.get $this
   local.get $_y
   f64.store offset=8
+ )
+ (func $assignment-chain/B#get:_setter_cnt (param $this i32) (result i32)
+  local.get $this
+  i32.load
  )
  (func $assignment-chain/B#get:_getter_cnt (param $this i32) (result i32)
   local.get $this
@@ -2429,6 +2434,22 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  i64.const 0
+  call $assignment-chain/A#set:x
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  i64.const 0
+  call $assignment-chain/A#set:y
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -2528,6 +2549,30 @@
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  i32.const 0
+  call $assignment-chain/B#set:_setter_cnt
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  i32.const 0
+  call $assignment-chain/B#set:_getter_cnt
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  f64.const 0
+  call $assignment-chain/B#set:_y
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

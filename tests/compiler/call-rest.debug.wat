@@ -3061,6 +3061,14 @@
   local.get $7
   i32.store offset=4
   local.get $7
+  i32.const 0
+  call $call-rest/Foo#set:values
+  local.get $this
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store offset=4
+  local.get $7
   global.get $~lib/memory/__stack_pointer
   i32.const 2
   i32.const 2

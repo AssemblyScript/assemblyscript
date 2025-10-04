@@ -2603,6 +2603,30 @@
    local.tee $this
    i32.store
   end
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store offset=4
+  local.get $4
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#set:buffer
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store offset=4
+  local.get $4
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#set:dataStart
+  local.get $this
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store offset=4
+  local.get $4
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#set:byteLength
   local.get $length
   i32.const 1073741820
   local.get $alignLog2
@@ -2624,7 +2648,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=4
+  i32.store offset=8
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -2633,7 +2657,7 @@
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
-  i32.store offset=8
+  i32.store offset=4
   local.get $4
   local.get $buffer
   local.set $4
@@ -2646,7 +2670,7 @@
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
-  i32.store offset=8
+  i32.store offset=4
   local.get $4
   local.get $buffer
   call $~lib/arraybuffer/ArrayBufferView#set:dataStart
@@ -2654,7 +2678,7 @@
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
-  i32.store offset=8
+  i32.store offset=4
   local.get $4
   local.get $length
   call $~lib/arraybuffer/ArrayBufferView#set:byteLength

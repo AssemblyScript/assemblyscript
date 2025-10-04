@@ -2893,6 +2893,14 @@
   local.get $5
   i32.const 3
   call $inlining/Bar#set:d
+  local.get $this
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store offset=4
+  local.get $5
+  i32.const 0
+  call $inlining/Bar#set:e
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   local.get $this
@@ -2918,6 +2926,14 @@
   local.get $5
   i32.const 1
   call $inlining/Baz#set:a
+  local.get $this|2
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store offset=4
+  local.get $5
+  i32.const 0
+  call $inlining/Baz#set:b
   local.get $this|2
   local.set $5
   global.get $~lib/memory/__stack_pointer

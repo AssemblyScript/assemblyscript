@@ -2357,6 +2357,26 @@
   local.get $this
   i32.load
  )
+ (func $duplicate-fields/A3#set:prot (param $this i32) (param $prot i32)
+  local.get $this
+  local.get $prot
+  i32.store
+ )
+ (func $duplicate-fields/A3#set:pub (param $this i32) (param $pub i32)
+  local.get $this
+  local.get $pub
+  i32.store offset=4
+ )
+ (func $duplicate-fields/B3#set:prot (param $this i32) (param $prot i32)
+  local.get $this
+  local.get $prot
+  i32.store
+ )
+ (func $duplicate-fields/B3#set:pub (param $this i32) (param $pub i32)
+  local.get $this
+  local.get $pub
+  i32.store offset=4
+ )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
   global.get $duplicate-fields/foo
@@ -2506,6 +2526,14 @@
   local.get $2
   i32.store offset=4
   local.get $2
+  i32.const 0
+  call $duplicate-fields/A#set:bar
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
   local.get $bar
   call $duplicate-fields/A#set:bar
   local.get $this
@@ -2536,6 +2564,14 @@
    local.tee $this
    i32.store
   end
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  i32.const 0
+  call $duplicate-fields/B#set:bar
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.set $2
@@ -2592,6 +2628,14 @@
   local.get $2
   i32.store offset=4
   local.get $2
+  i32.const 0
+  call $duplicate-fields/A2#set:bar
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
   local.get $bar
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -2630,6 +2674,14 @@
    local.tee $this
    i32.store
   end
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  i32.const 0
+  call $duplicate-fields/B2#set:bar
   global.get $~lib/memory/__stack_pointer
   local.get $this
   local.set $2
@@ -2693,6 +2745,14 @@
   local.get $2
   i32.store offset=4
   local.get $2
+  i32.const 0
+  call $duplicate-fields/Foo#set:foo
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
   local.get $foo
   call $duplicate-fields/Foo#set:foo
   local.get $this
@@ -2736,6 +2796,22 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/A3#set:prot
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/A3#set:pub
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -2771,6 +2847,22 @@
   call $duplicate-fields/A3#constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/B3#set:prot
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  i32.const 0
+  call $duplicate-fields/B3#set:pub
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

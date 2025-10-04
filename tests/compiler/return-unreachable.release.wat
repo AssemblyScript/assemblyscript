@@ -108,7 +108,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$118
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$121
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -132,7 +132,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$118
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$121
    end
    local.get $0
    i32.load offset=8
@@ -1532,11 +1532,64 @@
   memory.fill
   local.get $1
  )
+ (func $~lib/array/Array<i32>#set:buffer (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $1
+  if
+   local.get $0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1216
+    i32.const 295
+    i32.const 14
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/rt/itcms/white
+   local.get $1
+   i32.const 20
+   i32.sub
+   local.tee $1
+   i32.load offset=4
+   i32.const 3
+   i32.and
+   i32.eq
+   if
+    local.get $0
+    i32.const 20
+    i32.sub
+    i32.load offset=4
+    i32.const 3
+    i32.and
+    local.tee $0
+    global.get $~lib/rt/itcms/white
+    i32.eqz
+    i32.eq
+    if
+     local.get $1
+     call $~lib/rt/itcms/Object#makeGray
+    else
+     global.get $~lib/rt/itcms/state
+     i32.const 1
+     i32.eq
+     local.get $0
+     i32.const 3
+     i32.eq
+     i32.and
+     if
+      local.get $1
+      call $~lib/rt/itcms/Object#makeGray
+     end
+    end
+   end
+  end
+ )
  (func $return-unreachable/test (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -1571,85 +1624,59 @@
    local.tee $0
    i32.store
    global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   local.get $0
+   i32.const 0
+   call $~lib/array/Array<i32>#set:buffer
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   local.get $0
+   i32.const 0
+   i32.store offset=4
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   local.get $0
+   i32.const 0
+   i32.store offset=8
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   local.get $0
+   i32.const 0
+   i32.store offset=12
+   global.get $~lib/memory/__stack_pointer
    i32.const 400
    i32.const 1
    call $~lib/rt/itcms/__new
    local.tee $1
-   i32.store offset=4
+   i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=8
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store offset=12
    local.get $0
    local.get $1
-   i32.store
-   local.get $1
-   if
-    local.get $0
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 1216
-     i32.const 295
-     i32.const 14
-     call $~lib/builtins/abort
-     unreachable
-    end
-    global.get $~lib/rt/itcms/white
-    local.get $1
-    i32.const 20
-    i32.sub
-    local.tee $2
-    i32.load offset=4
-    i32.const 3
-    i32.and
-    i32.eq
-    if
-     local.get $0
-     i32.const 20
-     i32.sub
-     i32.load offset=4
-     i32.const 3
-     i32.and
-     local.tee $4
-     global.get $~lib/rt/itcms/white
-     i32.eqz
-     i32.eq
-     if
-      local.get $2
-      call $~lib/rt/itcms/Object#makeGray
-     else
-      global.get $~lib/rt/itcms/state
-      i32.const 1
-      i32.eq
-      local.get $4
-      i32.const 3
-      i32.eq
-      i32.and
-      if
-       local.get $2
-       call $~lib/rt/itcms/Object#makeGray
-      end
-     end
-    end
-   end
+   call $~lib/array/Array<i32>#set:buffer
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=8
+   i32.store offset=4
    local.get $0
    local.get $1
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=8
+   i32.store offset=4
    local.get $0
    i32.const 400
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=8
+   i32.store offset=4
    local.get $0
    i32.const 100
    i32.store offset=12

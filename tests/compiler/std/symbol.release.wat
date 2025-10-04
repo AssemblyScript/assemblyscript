@@ -206,7 +206,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$242
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$246
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -230,7 +230,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$242
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$246
    end
    local.get $0
    i32.load offset=8
@@ -2193,7 +2193,7 @@
      end
     end
    end
-   block $__inlined_func$~lib/util/string/compareImpl$86
+   block $__inlined_func$~lib/util/string/compareImpl$88
     loop $while-continue|1
      local.get $0
      local.tee $3
@@ -2213,7 +2213,7 @@
       local.get $4
       local.get $5
       i32.ne
-      br_if $__inlined_func$~lib/util/string/compareImpl$86
+      br_if $__inlined_func$~lib/util/string/compareImpl$88
       local.get $2
       i32.const 2
       i32.add
@@ -3511,7 +3511,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store
-   block $__inlined_func$~lib/string/String#concat$249
+   block $__inlined_func$~lib/string/String#concat$253
     local.get $1
     i32.const 20
     i32.sub
@@ -3530,7 +3530,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 1888
      local.set $0
-     br $__inlined_func$~lib/string/String#concat$249
+     br $__inlined_func$~lib/string/String#concat$253
     end
     global.get $~lib/memory/__stack_pointer
     local.get $0
@@ -3884,6 +3884,18 @@
    i32.const 4
    i32.store offset=12
    global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   local.get $0
+   i32.const 0
+   i32.store offset=16
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   local.get $0
+   i32.const 0
+   i32.store offset=20
+   global.get $~lib/memory/__stack_pointer
    i32.const 12
    i32.add
    global.set $~lib/memory/__stack_pointer
@@ -3953,6 +3965,18 @@
    local.get $0
    i32.const 4
    i32.store offset=12
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   local.get $0
+   i32.const 0
+   i32.store offset=16
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
+   local.get $0
+   i32.const 0
+   i32.store offset=20
    global.get $~lib/memory/__stack_pointer
    i32.const 12
    i32.add

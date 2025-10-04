@@ -2242,6 +2242,11 @@
   local.get $ptr
   return
  )
+ (func $issues/2322/lib/Wrapper<i32>#set:v (param $this i32) (param $v i32)
+  local.get $this
+  local.get $v
+  i32.store
+ )
  (func $issues/2322/lib/test<i32> (param $t i32)
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
@@ -2355,6 +2360,14 @@
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  i32.const 0
+  call $issues/2322/lib/Wrapper<i32>#set:v
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
