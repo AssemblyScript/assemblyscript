@@ -3301,14 +3301,6 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 0
-  call $switch/FooClass#set:value
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
   local.get $value
   call $switch/FooClass#set:value
   local.get $this
@@ -3462,14 +3454,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  call $switch/BarClass#set:value
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
