@@ -10420,7 +10420,7 @@ export class Compiler extends DiagnosticEmitter {
 
         const valueExpr: ExpressionRef = 
           initializerNode ? this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit) 
-                          : this.makeZero(fieldType);
+            : this.makeZero(fieldType);
         if(unmanagedClass || !this.canOptimizeZeroInitialization(valueExpr)) {
           let expr = this.makeCallDirect(setterInstance, [
             module.local_get(thisLocalIndex, sizeTypeRef),
