@@ -10418,18 +10418,30 @@ export class Compiler extends DiagnosticEmitter {
         assert(fieldPrototype.parameterIndex < 0);
         let setterInstance = assert(field.setterInstance);
 
-        const valueExpr: ExpressionRef = 
-          initializerNode ? this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit) 
-            : this.makeZero(fieldType);
-        if(unmanagedClass || !this.canOptimizeZeroInitialization(valueExpr)) {
-          let expr = this.makeCallDirect(setterInstance, [
-            module.local_get(thisLocalIndex, sizeTypeRef),
-            valueExpr
-          ], field.identifierNode, true);
-          if (this.currentType != Type.void) { // in case
-            expr = module.drop(expr);
+        if (initializerNode){
+          const valueExpr: ExpressionRef = this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit);
+          if(unmanagedClass || !this.canOptimizeZeroInitialization(valueExpr)) {
+            let expr = this.makeCallDirect(setterInstance, [
+              module.local_get(thisLocalIndex, sizeTypeRef),
+              valueExpr
+            ], field.identifierNode, true);
+            if (this.currentType != Type.void) { // in case
+              expr = module.drop(expr);
+            }
+            stmts.push(expr);
           }
-          stmts.push(expr);
+        } else {
+          if(unmanagedClass || (this.options.runtime != Runtime.Incremental)) {
+            let expr = this.makeCallDirect(setterInstance, [
+              module.local_get(thisLocalIndex, sizeTypeRef),
+              // Create only when necessary since makeZero will allocte persistent memory by Binaryen.
+              this.makeZero(fieldType)
+            ], field.identifierNode, true);
+            if (this.currentType != Type.void) { // in case
+              expr = module.drop(expr);
+            }
+            stmts.push(expr);
+          }
         }
       }
     }
