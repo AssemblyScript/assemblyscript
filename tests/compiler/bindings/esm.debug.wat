@@ -1,23 +1,20 @@
 (module
- (type $0 (func (param i32 i32)))
- (type $1 (func (param i32) (result i32)))
+ (type $0 (func (param i32) (result i32)))
+ (type $1 (func (param i32 i32)))
  (type $2 (func (param i32 i32) (result i32)))
  (type $3 (func (param i32)))
  (type $4 (func))
  (type $5 (func (param i32 i32 i32)))
  (type $6 (func (result i32)))
  (type $7 (func (param i32 i32 i32 i32)))
- (type $8 (func (param i32 i64)))
- (type $9 (func (param i32 i32 f64 f64 f64 f64 f64)))
- (type $10 (func (param f64) (result f64)))
- (type $11 (func (param i64 i64) (result i64)))
- (type $12 (func (result i64)))
- (type $13 (func (param i32 i32 i64) (result i32)))
- (type $14 (func (param i32 f32)))
- (type $15 (func (param i32 f64)))
- (type $16 (func (param i32 i32 i32) (result i32)))
- (type $17 (func (param i32 i32 i64)))
- (type $18 (func (param i32 i32) (result f32)))
+ (type $8 (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $9 (func (param f64) (result f64)))
+ (type $10 (func (param i64 i64) (result i64)))
+ (type $11 (func (result i64)))
+ (type $12 (func (param i32 i32 i64) (result i32)))
+ (type $13 (func (param i32 i32 i32) (result i32)))
+ (type $14 (func (param i32 i32 i64)))
+ (type $15 (func (param i32 i32) (result f32)))
  (import "env" "Math.E" (global $~lib/bindings/dom/Math.E f64))
  (import "env" "globalThis" (global $bindings/esm/immutableGlobal externref))
  (import "env" "globalThis.globalThis" (global $bindings/esm/immutableGlobalNested externref))
@@ -2626,105 +2623,23 @@
   local.get $this
   i32.load offset=4
  )
+ (func $bindings/esm/PlainObject#get:a (param $this i32) (result i32)
+  local.get $this
+  i32.load8_s
+ )
  (func $bindings/esm/PlainObject#set:a (param $this i32) (param $a i32)
   local.get $this
   local.get $a
   i32.store8
  )
+ (func $bindings/esm/PlainObject#get:b (param $this i32) (result i32)
+  local.get $this
+  i32.load16_s offset=2
+ )
  (func $bindings/esm/PlainObject#set:b (param $this i32) (param $b i32)
   local.get $this
   local.get $b
   i32.store16 offset=2
- )
- (func $bindings/esm/PlainObject#set:c (param $this i32) (param $c i32)
-  local.get $this
-  local.get $c
-  i32.store offset=4
- )
- (func $bindings/esm/PlainObject#set:d (param $this i32) (param $d i64)
-  local.get $this
-  local.get $d
-  i64.store offset=8
- )
- (func $bindings/esm/PlainObject#set:e (param $this i32) (param $e i32)
-  local.get $this
-  local.get $e
-  i32.store8 offset=16
- )
- (func $bindings/esm/PlainObject#set:f (param $this i32) (param $f i32)
-  local.get $this
-  local.get $f
-  i32.store16 offset=18
- )
- (func $bindings/esm/PlainObject#set:g (param $this i32) (param $g i32)
-  local.get $this
-  local.get $g
-  i32.store offset=20
- )
- (func $bindings/esm/PlainObject#set:h (param $this i32) (param $h i64)
-  local.get $this
-  local.get $h
-  i64.store offset=24
- )
- (func $bindings/esm/PlainObject#set:i (param $this i32) (param $i i32)
-  local.get $this
-  local.get $i
-  i32.store offset=32
- )
- (func $bindings/esm/PlainObject#set:j (param $this i32) (param $j i32)
-  local.get $this
-  local.get $j
-  i32.store offset=36
- )
- (func $bindings/esm/PlainObject#set:k (param $this i32) (param $k i32)
-  local.get $this
-  local.get $k
-  i32.store8 offset=40
- )
- (func $bindings/esm/PlainObject#set:l (param $this i32) (param $l f32)
-  local.get $this
-  local.get $l
-  f32.store offset=44
- )
- (func $bindings/esm/PlainObject#set:m (param $this i32) (param $m f64)
-  local.get $this
-  local.get $m
-  f64.store offset=48
- )
- (func $bindings/esm/PlainObject#set:n (param $this i32) (param $n i32)
-  local.get $this
-  local.get $n
-  i32.store offset=56
-  local.get $this
-  local.get $n
-  i32.const 0
-  call $~lib/rt/itcms/__link
- )
- (func $bindings/esm/PlainObject#set:o (param $this i32) (param $o i32)
-  local.get $this
-  local.get $o
-  i32.store offset=60
-  local.get $this
-  local.get $o
-  i32.const 0
-  call $~lib/rt/itcms/__link
- )
- (func $bindings/esm/PlainObject#set:p (param $this i32) (param $p i32)
-  local.get $this
-  local.get $p
-  i32.store offset=64
-  local.get $this
-  local.get $p
-  i32.const 0
-  call $~lib/rt/itcms/__link
- )
- (func $bindings/esm/PlainObject#get:a (param $this i32) (result i32)
-  local.get $this
-  i32.load8_s
- )
- (func $bindings/esm/PlainObject#get:b (param $this i32) (result i32)
-  local.get $this
-  i32.load16_s offset=2
  )
  (func $bindings/esm/newInternref (result i32)
   i32.const 0
@@ -3399,30 +3314,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store offset=4
-  local.get $4
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBufferView#set:buffer
-  local.get $this
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store offset=4
-  local.get $4
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBufferView#set:dataStart
-  local.get $this
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store offset=4
-  local.get $4
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBufferView#set:byteLength
   local.get $length
   i32.const 1073741820
   local.get $alignLog2
@@ -3444,7 +3335,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -3453,7 +3344,7 @@
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
-  i32.store offset=4
+  i32.store offset=8
   local.get $4
   local.get $buffer
   local.set $4
@@ -3466,7 +3357,7 @@
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
-  i32.store offset=4
+  i32.store offset=8
   local.get $4
   local.get $buffer
   call $~lib/arraybuffer/ArrayBufferView#set:dataStart
@@ -3474,7 +3365,7 @@
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
-  i32.store offset=4
+  i32.store offset=8
   local.get $4
   local.get $length
   call $~lib/arraybuffer/ArrayBufferView#set:byteLength
@@ -4092,38 +3983,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 2
@@ -4153,7 +4012,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -4162,7 +4021,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -4175,7 +4034,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<i32>#set:dataStart
@@ -4183,7 +4042,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<i32>#set:byteLength
@@ -4191,7 +4050,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<i32>#set:length_
@@ -4620,38 +4479,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/string/String>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/string/String>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/string/String>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<~lib/string/String>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 2
@@ -4681,7 +4508,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -4690,7 +4517,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -4703,7 +4530,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<~lib/string/String>#set:dataStart
@@ -4711,7 +4538,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<~lib/string/String>#set:byteLength
@@ -4719,7 +4546,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<~lib/string/String>#set:length_
@@ -5061,134 +4888,6 @@
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:a
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:b
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:c
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i64.const 0
-  call $bindings/esm/PlainObject#set:d
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:e
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:f
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:g
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i64.const 0
-  call $bindings/esm/PlainObject#set:h
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:i
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:j
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:k
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  f32.const 0
-  call $bindings/esm/PlainObject#set:l
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  f64.const 0
-  call $bindings/esm/PlainObject#set:m
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:n
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:o
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $bindings/esm/PlainObject#set:p
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
