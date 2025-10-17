@@ -1523,6 +1523,8 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   private ensureEnumToString(enumElement: Enum, reportNode: Node): string | null {
+    if (enumElement.toStringFunctionName) return enumElement.toStringFunctionName;
+    
     if (!this.compileEnum(enumElement)) return null;
     if (enumElement.is(CommonFlags.Const)) {
       this.errorRelated(
@@ -1531,13 +1533,16 @@ export class Compiler extends DiagnosticEmitter {
       );
       return null;
     }
+
     let members = enumElement.members;
     if (!members) return null;
-    if (enumElement.toStringFunctionName) return enumElement.toStringFunctionName;
+
+    let module = this.module;
+    const isInline = enumElement.hasDecorator(DecoratorFlags.Inline);
+
     const functionName = `${enumElement.internalName}#${CommonNames.EnumToString}`;
     enumElement.toStringFunctionName = functionName;
-    const isInline = enumElement.hasDecorator(DecoratorFlags.Inline);
-    let module = this.module;
+
     let exprs = new Array<ExpressionRef>();
     // when the values are the same, TS returns the last enum value name that appears
     for (let _keys = Map_keys(members), _values = Map_values(members), i = 1, k = _keys.length; i <= k; ++i) {
@@ -1556,6 +1561,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     exprs.push(module.unreachable());
     module.addFunction(functionName, TypeRef.I32, TypeRef.I32, null, module.block(null, exprs, TypeRef.I32));
+
     return functionName;
   }
 
