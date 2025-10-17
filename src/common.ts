@@ -194,6 +194,8 @@ export namespace CommonNames {
   export const ASC_VERSION_MAJOR = "ASC_VERSION_MAJOR";
   export const ASC_VERSION_MINOR = "ASC_VERSION_MINOR";
   export const ASC_VERSION_PATCH = "ASC_VERSION_PATCH";
+  // enums
+  export const EnumToString = "__enum_to_string";
   // classes
   export const I8 = "I8";
   export const I16 = "I16";
