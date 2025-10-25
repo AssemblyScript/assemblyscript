@@ -105,7 +105,7 @@ const gitignoreFile = path.join(buildDir, ".gitignore");
 const packageFile = path.join(projectDir, "package.json");
 
 const indexHtmlFile = path.join(projectDir, "index.html");
-const testsIndexFile = path.join(testsDir, "index.js");
+const testsIndexFile = path.join(testsDir, "index.test.js");
 
 const paths = [
   [assemblyDir, "Directory holding the AssemblyScript sources being compiled to WebAssembly."],
@@ -358,7 +358,7 @@ function ensurePackageJson() {
         "asbuild:debug": buildDebug,
         "asbuild:release": buildRelease,
         "asbuild": buildAll,
-        "test": "node tests",
+        "test": "node --test tests/**/*",
         "start": "npx serve ."
       },
       "devDependencies": {
@@ -390,7 +390,7 @@ function ensurePackageJson() {
       updated = true;
     }
     if (!scripts["test"] || scripts["test"] == npmDefaultTest) {
-      scripts["test"] = "node tests";
+      scripts["test"] = "node --test tests/**/*";
       pkg["scripts"] = scripts;
       updated = true;
     }
@@ -427,13 +427,16 @@ function ensureTestsDirectory() {
 }
 
 function ensureTestsIndexJs() {
-  console.log("- Making sure that 'tests/index.js' exists...");
+  console.log("- Making sure that 'tests/index.test.js' exists...");
   if (!fs.existsSync(testsIndexFile)) {
     fs.writeFileSync(testsIndexFile, [
-      "import assert from \"assert\";",
+      "import assert from \"node:assert\";",
+      "import { it } from \"node:test\";",
       "import { add } from \"../build/debug.js\";",
-      "assert.strictEqual(add(1, 2), 3);",
-      "console.log(\"ok\");"
+      "",
+      "it(\"add\", () => {",
+      "  assert.strictEqual(add(1, 2), 3);",
+      "});"
     ].join("\n") + "\n");
     console.log(stdoutColors.green("  Created: ") + testsIndexFile);
   } else {
