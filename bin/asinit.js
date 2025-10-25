@@ -430,12 +430,12 @@ function ensureTestsIndexJs() {
   console.log("- Making sure that 'test/index.js' exists...");
   if (!fs.existsSync(testsIndexFile)) {
     fs.writeFileSync(testsIndexFile, [
-      "import assert from \"node:assert\";",
+      "import assert from \"node:assert/strict\";",
       "import { it } from \"node:test\";",
       "import { add } from \"../build/debug.js\";",
       "",
       "it(\"add\", () => {",
-      "  assert.strictEqual(add(1, 2), 3);",
+      "  assert.equal(add(1, 2), 3);",
       "});"
     ].join("\n") + "\n");
     console.log(stdoutColors.green("  Created: ") + testsIndexFile);
