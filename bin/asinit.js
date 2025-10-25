@@ -100,7 +100,7 @@ if (/^(\.\.[/\\])*node_modules[/\\]assemblyscript[/\\]/.test(tsconfigBase)) {
 }
 const entryFile = path.join(assemblyDir, "index.ts");
 const buildDir = path.join(projectDir, "build");
-const testsDir = path.join(projectDir, "tests");
+const testsDir = path.join(projectDir, "test");
 const gitignoreFile = path.join(buildDir, ".gitignore");
 const packageFile = path.join(projectDir, "package.json");
 
@@ -358,7 +358,7 @@ function ensurePackageJson() {
         "asbuild:debug": buildDebug,
         "asbuild:release": buildRelease,
         "asbuild": buildAll,
-        "test": "node --test tests/**/*",
+        "test": "node --test",
         "start": "npx serve ."
       },
       "devDependencies": {
@@ -390,7 +390,7 @@ function ensurePackageJson() {
       updated = true;
     }
     if (!scripts["test"] || scripts["test"] == npmDefaultTest) {
-      scripts["test"] = "node --test tests/**/*";
+      scripts["test"] = "node --test";
       pkg["scripts"] = scripts;
       updated = true;
     }
@@ -416,7 +416,7 @@ function ensurePackageJson() {
 }
 
 function ensureTestsDirectory() {
-  console.log("- Making sure that the 'tests' directory exists...");
+  console.log("- Making sure that the 'test' directory exists...");
   if (!fs.existsSync(testsDir)) {
     fs.mkdirSync(testsDir);
     console.log(stdoutColors.green("  Created: ") + testsDir);
@@ -427,7 +427,7 @@ function ensureTestsDirectory() {
 }
 
 function ensureTestsIndexJs() {
-  console.log("- Making sure that 'tests/index.test.js' exists...");
+  console.log("- Making sure that 'test/index.test.js' exists...");
   if (!fs.existsSync(testsIndexFile)) {
     fs.writeFileSync(testsIndexFile, [
       "import assert from \"node:assert\";",
