@@ -105,7 +105,7 @@ const gitignoreFile = path.join(buildDir, ".gitignore");
 const packageFile = path.join(projectDir, "package.json");
 
 const indexHtmlFile = path.join(projectDir, "index.html");
-const testsIndexFile = path.join(testsDir, "index.test.js");
+const testsIndexFile = path.join(testsDir, "index.js");
 
 const paths = [
   [assemblyDir, "Directory holding the AssemblyScript sources being compiled to WebAssembly."],
@@ -427,7 +427,7 @@ function ensureTestsDirectory() {
 }
 
 function ensureTestsIndexJs() {
-  console.log("- Making sure that 'test/index.test.js' exists...");
+  console.log("- Making sure that 'test/index.js' exists...");
   if (!fs.existsSync(testsIndexFile)) {
     fs.writeFileSync(testsIndexFile, [
       "import assert from \"node:assert\";",
