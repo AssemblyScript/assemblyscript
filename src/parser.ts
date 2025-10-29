@@ -2899,7 +2899,37 @@ export class Parser extends DiagnosticEmitter {
 
     let state = tn.mark();
     let token = tn.next();
+    let label: IdentifierExpression | null = null;
     let statement: Statement | null = null;
+
+    // Detect labeled statements
+    if (token == Token.Identifier) {
+      const preIdentifierState = tn.mark();
+      const identifier = tn.readIdentifier();
+      const range = tn.range();
+
+      if (tn.skip(Token.Colon)) {
+        label = Node.createIdentifierExpression(identifier, range);
+        token = tn.next();
+
+        switch (token) {
+          case Token.Do:
+          case Token.For:
+          case Token.If:
+          case Token.OpenBrace:
+          case Token.Switch:
+          case Token.Try:
+          case Token.While:
+            // Do nothing
+            break;
+          default:
+            this.error(DiagnosticCode.A_label_is_not_allowed_here, range);
+        }
+      } else {
+        tn.reset(preIdentifierState);
+      }
+    }
+
     switch (token) {
       case Token.Break: {
         statement = this.parseBreak(tn);
@@ -2914,15 +2944,15 @@ export class Parser extends DiagnosticEmitter {
         break;
       }
       case Token.Do: {
-        statement = this.parseDoStatement(tn);
+        statement = this.parseDoStatement(tn, label);
         break;
       }
       case Token.For: {
-        statement = this.parseForStatement(tn);
+        statement = this.parseForStatement(tn, label);
         break;
       }
       case Token.If: {
-        statement = this.parseIfStatement(tn);
+        statement = this.parseIfStatement(tn, label);
         break;
       }
       case Token.Let: {
@@ -2934,7 +2964,7 @@ export class Parser extends DiagnosticEmitter {
         break;
       }
       case Token.OpenBrace: {
-        statement = this.parseBlockStatement(tn, topLevel);
+        statement = this.parseBlockStatement(tn, topLevel, label);
         break;
       }
       case Token.Return: {
@@ -2951,7 +2981,7 @@ export class Parser extends DiagnosticEmitter {
         return Node.createEmptyStatement(tn.range(tn.tokenPos));
       }
       case Token.Switch: {
-        statement = this.parseSwitchStatement(tn);
+        statement = this.parseSwitchStatement(tn, label);
         break;
       }
       case Token.Throw: {
@@ -2959,7 +2989,7 @@ export class Parser extends DiagnosticEmitter {
         break;
       }
       case Token.Try: {
-        statement = this.parseTryStatement(tn);
+        statement = this.parseTryStatement(tn, label);
         break;
       }
       case Token.Void: {
@@ -2967,7 +2997,7 @@ export class Parser extends DiagnosticEmitter {
         break;
       }
       case Token.While: {
-        statement = this.parseWhileStatement(tn);
+        statement = this.parseWhileStatement(tn, label);
         break;
       }
       case Token.Type: { // also identifier
@@ -2994,7 +3024,8 @@ export class Parser extends DiagnosticEmitter {
 
   parseBlockStatement(
     tn: Tokenizer,
-    topLevel: bool
+    topLevel: bool,
+    label: IdentifierExpression | null = null
   ): BlockStatement | null {
 
     // at '{': Statement* '}' ';'?
@@ -3013,7 +3044,7 @@ export class Parser extends DiagnosticEmitter {
         statements.push(statement);
       }
     }
-    let ret = Node.createBlockStatement(statements, tn.range(startPos, tn.pos));
+    let ret = Node.createBlockStatement(statements, label, tn.range(startPos, tn.pos));
     if (topLevel) tn.skip(Token.Semicolon);
     return ret;
   }
@@ -3051,7 +3082,8 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseDoStatement(
-    tn: Tokenizer
+    tn: Tokenizer,
+    label: IdentifierExpression | null
   ): DoStatement | null {
 
     // at 'do': Statement 'while' '(' Expression ')' ';'?
@@ -3067,7 +3099,7 @@ export class Parser extends DiagnosticEmitter {
         if (!condition) return null;
 
         if (tn.skip(Token.CloseParen)) {
-          let ret = Node.createDoStatement(statement, condition, tn.range(startPos, tn.pos));
+          let ret = Node.createDoStatement(statement, condition, label, tn.range(startPos, tn.pos));
           tn.skip(Token.Semicolon);
           return ret;
         } else {
@@ -3106,7 +3138,8 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseForStatement(
-    tn: Tokenizer
+    tn: Tokenizer,
+    label: IdentifierExpression | null
   ): Statement | null {
 
     // at 'for': '(' Statement? Expression? ';' Expression? ')' Statement
@@ -3139,7 +3172,7 @@ export class Parser extends DiagnosticEmitter {
               );
               return null;
             }
-            return this.parseForOfStatement(tn, startPos, initializer);
+            return this.parseForOfStatement(tn, startPos, initializer, label);
           }
           if (initializer.kind == NodeKind.Variable) {
             let declarations = (<VariableStatement>initializer).declarations;
@@ -3153,7 +3186,7 @@ export class Parser extends DiagnosticEmitter {
                 ); // recoverable
               }
             }
-            return this.parseForOfStatement(tn, startPos, initializer);
+            return this.parseForOfStatement(tn, startPos, initializer, label);
           }
           this.error(
             DiagnosticCode.Identifier_expected,
@@ -3215,6 +3248,7 @@ export class Parser extends DiagnosticEmitter {
               : null,
             incrementor,
             statement,
+            label,
             tn.range(startPos, tn.pos)
           );
 
@@ -3243,6 +3277,7 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     startPos: i32,
     variable: Statement,
+    label: IdentifierExpression | null
   ): ForOfStatement | null {
 
     // at 'of': Expression ')' Statement
@@ -3265,12 +3300,14 @@ export class Parser extends DiagnosticEmitter {
       variable,
       iterable,
       statement,
+      label,
       tn.range(startPos, tn.pos)
     );
   }
 
   parseIfStatement(
-    tn: Tokenizer
+    tn: Tokenizer,
+    label: IdentifierExpression | null
   ): IfStatement | null {
 
     // at 'if': '(' Expression ')' Statement ('else' Statement)?
@@ -3291,6 +3328,7 @@ export class Parser extends DiagnosticEmitter {
           condition,
           statement,
           elseStatement,
+          label,
           tn.range(startPos, tn.pos)
         );
       } else {
@@ -3309,7 +3347,8 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseSwitchStatement(
-    tn: Tokenizer
+    tn: Tokenizer,
+    label: IdentifierExpression | null
   ): SwitchStatement | null {
 
     // at 'switch': '(' Expression ')' '{' SwitchCase* '}' ';'?
@@ -3326,7 +3365,7 @@ export class Parser extends DiagnosticEmitter {
             if (!switchCase) return null;
             switchCases.push(switchCase);
           }
-          let ret = Node.createSwitchStatement(condition, switchCases, tn.range(startPos, tn.pos));
+          let ret = Node.createSwitchStatement(condition, switchCases, label, tn.range(startPos, tn.pos));
           tn.skip(Token.Semicolon);
           return ret;
         } else {
@@ -3427,7 +3466,8 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseTryStatement(
-    tn: Tokenizer
+    tn: Tokenizer,
+    label: IdentifierExpression | null = null,
   ): TryStatement | null {
 
     // at 'try':
@@ -3511,6 +3551,7 @@ export class Parser extends DiagnosticEmitter {
         catchVariable,
         catchStatements,
         finallyStatements,
+        label,
         tn.range(startPos, tn.pos)
       );
       tn.skip(Token.Semicolon);
@@ -3609,7 +3650,8 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseWhileStatement(
-    tn: Tokenizer
+    tn: Tokenizer,
+    label: IdentifierExpression | null
   ): WhileStatement | null {
 
     // at 'while': '(' Expression ')' Statement ';'?
@@ -3621,7 +3663,7 @@ export class Parser extends DiagnosticEmitter {
       if (tn.skip(Token.CloseParen)) {
         let statement = this.parseStatement(tn);
         if (!statement) return null;
-        let ret = Node.createWhileStatement(expression, statement, tn.range(startPos, tn.pos));
+        let ret = Node.createWhileStatement(expression, statement, label, tn.range(startPos, tn.pos));
         tn.skip(Token.Semicolon);
         return ret;
       } else {
