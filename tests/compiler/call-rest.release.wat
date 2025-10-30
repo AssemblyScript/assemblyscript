@@ -147,7 +147,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$160
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$159
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -171,7 +171,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$160
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$159
    end
    local.get $0
    i32.load offset=8
@@ -2028,7 +2028,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   block $__inlined_func$~lib/rt/itcms/__renew$154
+   block $__inlined_func$~lib/rt/itcms/__renew$153
     i32.const 1073741820
     local.get $2
     i32.const 1
@@ -2071,7 +2071,7 @@
      i32.store offset=16
      local.get $2
      local.set $1
-     br $__inlined_func$~lib/rt/itcms/__renew$154
+     br $__inlined_func$~lib/rt/itcms/__renew$153
     end
     local.get $3
     local.get $4
@@ -2208,15 +2208,6 @@
    call $~lib/rt/itcms/__new
    local.tee $2
    i32.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store offset=4
-   local.get $2
-   i32.const 0
-   i32.store
-   local.get $2
-   i32.const 0
-   call $~lib/rt/itcms/__link
    global.get $~lib/memory/__stack_pointer
    local.get $2
    i32.store offset=4

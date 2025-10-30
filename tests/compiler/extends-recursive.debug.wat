@@ -3,8 +3,8 @@
  (type $1 (func (param i32 i32)))
  (type $2 (func (param i32)))
  (type $3 (func))
- (type $4 (func (param i32 i32 i32)))
- (type $5 (func (param i32 i32) (result i32)))
+ (type $4 (func (param i32 i32) (result i32)))
+ (type $5 (func (param i32 i32 i32)))
  (type $6 (func (param i32 i32 i32 i32)))
  (type $7 (func (param i32 i32 i64) (result i32)))
  (type $8 (func (result i32)))
@@ -2241,83 +2241,6 @@
   local.get $ptr
   return
  )
- (func $~lib/rt/itcms/__link (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
-  (local $child i32)
-  (local $parent i32)
-  (local $parentColor i32)
-  local.get $childPtr
-  i32.eqz
-  if
-   return
-  end
-  i32.const 1
-  drop
-  local.get $parentPtr
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 295
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $childPtr
-  i32.const 20
-  i32.sub
-  local.set $child
-  local.get $child
-  call $~lib/rt/itcms/Object#get:color
-  global.get $~lib/rt/itcms/white
-  i32.eq
-  if
-   local.get $parentPtr
-   i32.const 20
-   i32.sub
-   local.set $parent
-   local.get $parent
-   call $~lib/rt/itcms/Object#get:color
-   local.set $parentColor
-   local.get $parentColor
-   global.get $~lib/rt/itcms/white
-   i32.eqz
-   i32.eq
-   if
-    local.get $expectMultiple
-    if
-     local.get $parent
-     call $~lib/rt/itcms/Object#makeGray
-    else
-     local.get $child
-     call $~lib/rt/itcms/Object#makeGray
-    end
-   else
-    local.get $parentColor
-    i32.const 3
-    i32.eq
-    if (result i32)
-     global.get $~lib/rt/itcms/state
-     i32.const 1
-     i32.eq
-    else
-     i32.const 0
-    end
-    if
-     local.get $child
-     call $~lib/rt/itcms/Object#makeGray
-    end
-   end
-  end
- )
- (func $extends-recursive/Parent#set:child (param $this i32) (param $child i32)
-  local.get $this
-  local.get $child
-  i32.store
-  local.get $this
-  local.get $child
-  i32.const 0
-  call $~lib/rt/itcms/__link
- )
  (func $start:extends-recursive
   memory.size
   i32.const 16
@@ -2459,14 +2382,6 @@
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $extends-recursive/Parent#set:child
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
