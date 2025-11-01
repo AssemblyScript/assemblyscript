@@ -7,7 +7,6 @@
     "allowJs": false,
     "typeRoots": [ "types" ],
     "types": [ "assembly" ],
-    "baseUrl": ".",
     "paths": {
       "*": [
         "./assembly/*"
