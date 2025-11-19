@@ -2400,16 +2400,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<~lib/string/String,usize>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<~lib/string/String,usize>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $~lib/rt/common/OBJECT#get:rtSize (param $this i32) (result i32)
   local.get $this
   i32.load offset=16
@@ -2578,6 +2568,16 @@
   local.get $taggedNext
   i32.store offset=8
  )
+ (func $"~lib/map/Map<~lib/string/String,usize>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<~lib/string/String,usize>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $"~lib/map/Map<usize,~lib/string/String>#set:buckets" (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
@@ -2605,16 +2605,6 @@
   local.get $this
   local.get $entriesCapacity
   i32.store offset=12
- )
- (func $"~lib/map/Map<usize,~lib/string/String>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<usize,~lib/string/String>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
  )
  (func $~lib/util/hash/HASH<usize> (param $key i32) (result i32)
   (local $key|1 i32)
@@ -2734,6 +2724,16 @@
   local.get $this
   local.get $taggedNext
   i32.store offset=8
+ )
+ (func $"~lib/map/Map<usize,~lib/string/String>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<usize,~lib/string/String>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
@@ -2957,22 +2957,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<~lib/string/String,usize>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<~lib/string/String,usize>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<~lib/string/String,usize>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -4063,22 +4047,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<usize,~lib/string/String>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<usize,~lib/string/String>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<usize,~lib/string/String>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

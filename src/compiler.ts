@@ -58,7 +58,8 @@ import {
   isConstExpressionNaN,
   ensureType,
   createType,
-  getConstValueInteger
+  getConstValueInteger,
+  isConstZero
 } from "./module";
 
 import {
@@ -10078,6 +10079,13 @@ export class Compiler extends DiagnosticEmitter {
 
   // === Specialized code generation ==============================================================
 
+  /** Check if possible to optimize the active initialization away if it's zero */
+  canOptimizeZeroInitialization(valueExpr: ExpressionRef): bool {
+    const runtime = this.options.runtime;
+    // Memory will be filled with 0 on itcms.__new
+    return runtime == Runtime.Incremental ? isConstZero(valueExpr) : false;
+  }
+
   /** Makes a constant zero of the specified type. */
   makeZero(type: Type): ExpressionRef {
     let module = this.module;
@@ -10425,6 +10433,7 @@ export class Compiler extends DiagnosticEmitter {
       let parameterIndex = fieldPrototype.parameterIndex;
 
       // Defer non-parameter fields until parameter fields are initialized
+      // Since non-parameter may depend on parameter fields
       if (parameterIndex < 0) {
         if (!nonParameterFields) nonParameterFields = new Array();
         nonParameterFields.push(property);
@@ -10453,6 +10462,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Initialize deferred non-parameter fields
     if (nonParameterFields) {
+      const unmanagedClass = classInstance.type.isUnmanaged;
       for (let i = 0, k = nonParameterFields.length; i < k; ++i) {
         let field = unchecked(nonParameterFields[i]);
         let fieldType = field.type;
@@ -10460,16 +10470,32 @@ export class Compiler extends DiagnosticEmitter {
         let initializerNode = fieldPrototype.initializerNode;
         assert(fieldPrototype.parameterIndex < 0);
         let setterInstance = assert(field.setterInstance);
-        let expr = this.makeCallDirect(setterInstance, [
-          module.local_get(thisLocalIndex, sizeTypeRef),
-          initializerNode // use initializer if present, otherwise initialize with zero
-            ? this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit)
-            : this.makeZero(fieldType)
-        ], field.identifierNode, true);
-        if (this.currentType != Type.void) { // in case
-          expr = module.drop(expr);
+
+        if (initializerNode){
+          const valueExpr: ExpressionRef = this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit);
+          if(unmanagedClass || !this.canOptimizeZeroInitialization(valueExpr)) {
+            let expr = this.makeCallDirect(setterInstance, [
+              module.local_get(thisLocalIndex, sizeTypeRef),
+              valueExpr
+            ], field.identifierNode, true);
+            if (this.currentType != Type.void) { // in case
+              expr = module.drop(expr);
+            }
+            stmts.push(expr);
+          }
+        } else {
+          if(unmanagedClass || (this.options.runtime != Runtime.Incremental)) {
+            let expr = this.makeCallDirect(setterInstance, [
+              module.local_get(thisLocalIndex, sizeTypeRef),
+              // Create only when necessary since makeZero will allocte persistent memory by Binaryen.
+              this.makeZero(fieldType)
+            ], field.identifierNode, true);
+            if (this.currentType != Type.void) { // in case
+              expr = module.drop(expr);
+            }
+            stmts.push(expr);
+          }
         }
-        stmts.push(expr);
       }
     }
 

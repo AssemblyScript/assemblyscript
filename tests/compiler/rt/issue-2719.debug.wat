@@ -2242,11 +2242,6 @@
   local.get $ptr
   return
  )
- (func $rt/issue-2719/issue2719_T#set:v (param $this i32) (param $v i32)
-  local.get $this
-  local.get $v
-  i32.store
- )
  (func $~lib/rt/itcms/__collect
   i32.const 0
   drop
@@ -2292,6 +2287,11 @@
   drop
   i32.const 0
   drop
+ )
+ (func $rt/issue-2719/issue2719_T#set:v (param $this i32) (param $v i32)
+  local.get $this
+  local.get $v
+  i32.store
  )
  (func $rt/issue-2719/issue2719_T#get:v (param $this i32) (result i32)
   local.get $this
@@ -2392,14 +2392,6 @@
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $rt/issue-2719/issue2719_T#set:v
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer

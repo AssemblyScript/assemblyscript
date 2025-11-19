@@ -113,7 +113,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$185
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$179
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -137,7 +137,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$185
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$179
    end
    local.get $0
    i32.load offset=8
@@ -1779,27 +1779,6 @@
    local.tee $0
    i32.store
   end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
   i32.const 1073741820
   local.get $1
   i32.shr_u
@@ -1820,10 +1799,10 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $1
-  i32.store offset=8
+  i32.store offset=4
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=4
+  i32.store offset=8
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
@@ -1835,13 +1814,13 @@
   call $~lib/rt/itcms/__link
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=4
+  i32.store offset=8
   local.get $0
   local.get $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=4
+  i32.store offset=8
   local.get $0
   local.get $2
   i32.store offset=8
@@ -2346,27 +2325,6 @@
      call $~lib/rt/itcms/__new
      local.tee $2
      i32.store
-     global.get $~lib/memory/__stack_pointer
-     local.get $2
-     i32.store offset=4
-     local.get $2
-     i32.const 0
-     i32.store
-     local.get $2
-     i32.const 0
-     call $~lib/rt/itcms/__link
-     global.get $~lib/memory/__stack_pointer
-     local.get $2
-     i32.store offset=4
-     local.get $2
-     i32.const 0
-     i32.store offset=4
-     global.get $~lib/memory/__stack_pointer
-     local.get $2
-     i32.store offset=4
-     local.get $2
-     i32.const 0
-     i32.store offset=8
      global.get $~lib/memory/__stack_pointer
      local.get $0
      i32.store offset=4

@@ -5,17 +5,14 @@
  (type $3 (func))
  (type $4 (func (param i32 i32) (result i32)))
  (type $5 (func (param i32 i32 i32)))
- (type $6 (func (param i32 f64)))
- (type $7 (func (param i32) (result f64)))
- (type $8 (func (param i32 i64)))
- (type $9 (func (param i32) (result i64)))
- (type $10 (func (param i32 i32 i32 i32)))
- (type $11 (func (param i32 i32 i64) (result i32)))
- (type $12 (func (result i32)))
- (type $13 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $14 (func (param i32 f32)))
- (type $15 (func (param i32) (result f32)))
- (type $16 (func (param i32 i32 i32) (result i32)))
+ (type $6 (func (param i32) (result f64)))
+ (type $7 (func (param i32) (result i64)))
+ (type $8 (func (param i32 i32 i32 i32)))
+ (type $9 (func (param i32 i32 i64) (result i32)))
+ (type $10 (func (result i32)))
+ (type $11 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $12 (func (param i32) (result f32)))
+ (type $13 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
@@ -2498,76 +2495,6 @@
   local.get $this
   i32.load offset=4
  )
- (func $object-literal/OmittedTypes#set:int32 (param $this i32) (param $int32 i32)
-  local.get $this
-  local.get $int32
-  i32.store
- )
- (func $object-literal/OmittedTypes#set:uint32 (param $this i32) (param $uint32 i32)
-  local.get $this
-  local.get $uint32
-  i32.store offset=4
- )
- (func $object-literal/OmittedTypes#set:int64 (param $this i32) (param $int64 i64)
-  local.get $this
-  local.get $int64
-  i64.store offset=8
- )
- (func $object-literal/OmittedTypes#set:uint64 (param $this i32) (param $uint64 i64)
-  local.get $this
-  local.get $uint64
-  i64.store offset=16
- )
- (func $object-literal/OmittedTypes#set:float32 (param $this i32) (param $float32 f32)
-  local.get $this
-  local.get $float32
-  f32.store offset=24
- )
- (func $object-literal/OmittedTypes#set:float64 (param $this i32) (param $float64 f64)
-  local.get $this
-  local.get $float64
-  f64.store offset=32
- )
- (func $object-literal/OmittedTypes#set:int8 (param $this i32) (param $int8 i32)
-  local.get $this
-  local.get $int8
-  i32.store8 offset=40
- )
- (func $object-literal/OmittedTypes#set:uint8 (param $this i32) (param $uint8 i32)
-  local.get $this
-  local.get $uint8
-  i32.store8 offset=41
- )
- (func $object-literal/OmittedTypes#set:int16 (param $this i32) (param $int16 i32)
-  local.get $this
-  local.get $int16
-  i32.store16 offset=42
- )
- (func $object-literal/OmittedTypes#set:uint16 (param $this i32) (param $uint16 i32)
-  local.get $this
-  local.get $uint16
-  i32.store16 offset=44
- )
- (func $object-literal/OmittedTypes#set:intsize (param $this i32) (param $intsize i32)
-  local.get $this
-  local.get $intsize
-  i32.store offset=48
- )
- (func $object-literal/OmittedTypes#set:uintsize (param $this i32) (param $uintsize i32)
-  local.get $this
-  local.get $uintsize
-  i32.store offset=52
- )
- (func $object-literal/OmittedTypes#set:alias (param $this i32) (param $alias f64)
-  local.get $this
-  local.get $alias
-  f64.store offset=56
- )
- (func $object-literal/OmittedTypes#set:isTrue (param $this i32) (param $isTrue i32)
-  local.get $this
-  local.get $isTrue
-  i32.store8 offset=64
- )
  (func $object-literal/OmittedTypes#get:int32 (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -2638,11 +2565,6 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $object-literal/MixedOmitted#set:anotherSimpleType (param $this i32) (param $anotherSimpleType f64)
-  local.get $this
-  local.get $anotherSimpleType
-  f64.store offset=8
- )
  (func $object-literal/MixedOmitted#get:simpleType (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -2672,65 +2594,6 @@
   local.get $baz
   i32.const 0
   call $~lib/rt/itcms/__link
- )
- (func $object-literal/OmittedFoo#set:quux (param $this i32) (param $quux i32)
-  local.get $this
-  local.get $quux
-  i32.store offset=8
-  local.get $this
-  local.get $quux
-  i32.const 0
-  call $~lib/rt/itcms/__link
- )
- (func $object-literal/OmittedFoo#set:quuz (param $this i32) (param $quuz i32)
-  local.get $this
-  local.get $quuz
-  i32.store offset=12
-  local.get $this
-  local.get $quuz
-  i32.const 0
-  call $~lib/rt/itcms/__link
- )
- (func $object-literal/OmittedFoo#set:corge (param $this i32) (param $corge i32)
-  local.get $this
-  local.get $corge
-  i32.store offset=16
-  local.get $this
-  local.get $corge
-  i32.const 0
-  call $~lib/rt/itcms/__link
- )
- (func $object-literal/OmittedFoo#set:grault (param $this i32) (param $grault i32)
-  local.get $this
-  local.get $grault
-  i32.store offset=20
-  local.get $this
-  local.get $grault
-  i32.const 0
-  call $~lib/rt/itcms/__link
- )
- (func $object-literal/OmittedFoo#set:garply (param $this i32) (param $garply i32)
-  local.get $this
-  local.get $garply
-  i32.store offset=24
-  local.get $this
-  local.get $garply
-  i32.const 0
-  call $~lib/rt/itcms/__link
- )
- (func $object-literal/OmittedFoo#set:waldo (param $this i32) (param $waldo i32)
-  local.get $this
-  local.get $waldo
-  i32.store offset=28
-  local.get $this
-  local.get $waldo
-  i32.const 0
-  call $~lib/rt/itcms/__link
- )
- (func $object-literal/OmittedFoo#set:fred (param $this i32) (param $fred i32)
-  local.get $this
-  local.get $fred
-  i32.store offset=32
  )
  (func $object-literal/OmittedFoo#set:qux (param $this i32) (param $qux i32)
   local.get $this
@@ -2994,22 +2857,6 @@
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/Managed#set:bar
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/Managed#set:baz
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3400,118 +3247,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedTypes#set:int32
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedTypes#set:uint32
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i64.const 0
-  call $object-literal/OmittedTypes#set:int64
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i64.const 0
-  call $object-literal/OmittedTypes#set:uint64
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  f32.const 0
-  call $object-literal/OmittedTypes#set:float32
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  f64.const 0
-  call $object-literal/OmittedTypes#set:float64
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedTypes#set:int8
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedTypes#set:uint8
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedTypes#set:int16
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedTypes#set:uint16
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedTypes#set:intsize
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedTypes#set:uintsize
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  f64.const 0
-  call $object-literal/OmittedTypes#set:alias
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedTypes#set:isTrue
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -3825,30 +3560,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/MixedOmitted#set:simpleType
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/MixedOmitted#set:complexType
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  f64.const 0
-  call $object-literal/MixedOmitted#set:anotherSimpleType
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -3974,62 +3685,6 @@
   local.get $1
   i32.const 672
   call $object-literal/OmittedFoo#set:baz
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:quux
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:quuz
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:corge
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:grault
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:garply
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:waldo
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $object-literal/OmittedFoo#set:fred
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
