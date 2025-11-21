@@ -620,7 +620,7 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // otherwise resolve the non-generic call as usual
-    return this.resolveFunction(prototype, null, new Map(), reportMode);
+    return this.resolveFunction(prototype, null, new Map(), reportMode, ctxFlow);
   }
 
   private inferGenericTypeArguments(
@@ -1406,7 +1406,10 @@ export class Resolver extends DiagnosticEmitter {
           let member = classLikeTarget.getMember(propertyName);
           if (member) {
             if (member.kind == ElementKind.PropertyPrototype) {
-              let propertyInstance = this.resolveProperty(<PropertyPrototype>member, reportMode);
+              if (!member.is(CommonFlags.Static)) {
+                this.currentThisExpression = targetNode;
+              }
+              let propertyInstance = this.resolveProperty(<PropertyPrototype>member, reportMode, ctxFlow);
               if (!propertyInstance) return null;
               member = propertyInstance;
               if (propertyInstance.is(CommonFlags.Static)) {
@@ -2742,14 +2745,35 @@ export class Resolver extends DiagnosticEmitter {
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> = new Map(),
     /** How to proceed with eventual diagnostics. */
-    reportMode: ReportMode = ReportMode.Report
+    reportMode: ReportMode = ReportMode.Report,
+    /** Contextual flow. */
+    ctxFlow: Flow | null = null
   ): Function | null {
     let classInstance: Class | null = null; // if an instance method
     let instanceKey = typeArguments ? typesToString(typeArguments) : "";
 
     // Instance method prototypes are pre-bound to their concrete class as their parent
     if (prototype.is(CommonFlags.Instance)) {
-      classInstance = assert(prototype.getBoundClassOrInterface());
+
+      // The actual class instance may be a subclass of the bound class
+      if (this.currentThisExpression && ctxFlow) {
+        // In the case of a function or property that uses the polymorphic `this` type,
+        // this is important, so the return is typed as the actual class instance.
+        // Note: It should work without this outer type check, and does when testing, but fails the "bootstrap" build.
+        // TODO: Figure out why and remove the extra check.
+        let type = prototype.functionTypeNode.returnType;
+        if (type.kind == NodeKind.NamedType && (<NamedTypeNode>type).name.identifier.text == CommonNames.this_) {
+          let element = this.lookupExpression(this.currentThisExpression!, ctxFlow);
+          if (element && element.kind == ElementKind.Class) {
+            classInstance = <Class>element;
+          }
+        }
+      }
+
+      // Otherwise, the bound class is the actual class instance
+      if (!classInstance) {
+        classInstance = assert(prototype.getBoundClassOrInterface());
+      }
 
       // check if this exact concrete class and function combination is known already
       let resolvedInstance = prototype.getResolvedInstance(instanceKey);
@@ -2892,9 +2916,9 @@ export class Resolver extends DiagnosticEmitter {
     prototype.setResolvedInstance(instanceKey, instance);
 
     // check against overridden base member
-    if (classInstance) {
+    if (prototype.is(CommonFlags.Instance)) {
       let methodOrPropertyName = instance.declaration.name.text;
-      let baseClass = classInstance.base;
+      let baseClass = (assert(prototype.getBoundClassOrInterface())).base;
       if (baseClass) {
         let baseMember = baseClass.getMember(methodOrPropertyName);
         if (baseMember) {
@@ -3386,6 +3410,14 @@ export class Resolver extends DiagnosticEmitter {
                   );
                   break;
                 }
+                if (assert(boundPrototype.typeNode).kind == NodeKind.NamedType && (<NamedTypeNode>boundPrototype.typeNode).name.identifier.text == CommonNames.this_) {
+                  this.error(
+                    DiagnosticCode.Not_implemented_0,
+                    assert(boundPrototype.typeNode).range,
+                    "Polymorphic 'this' typed fields"
+                  );
+                  break;
+                }
                 let needsLayout = true;
                 if (base) {
                   let existingMember = base.getMember(boundPrototype.name);
@@ -3643,7 +3675,9 @@ export class Resolver extends DiagnosticEmitter {
     /** The prototype of the property. */
     prototype: PropertyPrototype,
     /** How to proceed with eventual diagnostics. */
-    reportMode: ReportMode = ReportMode.Report
+    reportMode: ReportMode = ReportMode.Report,
+    /** Contextual flow. */
+    ctxFlow: Flow | null = null
   ): Property | null {
     let instance = prototype.instance;
     if (instance) return instance;
@@ -3657,7 +3691,8 @@ export class Resolver extends DiagnosticEmitter {
         getterPrototype,
         null,
         new Map(),
-        reportMode
+        reportMode,
+        ctxFlow
       );
       if (getterInstance) {
         instance.getterInstance = getterInstance;
@@ -3670,7 +3705,8 @@ export class Resolver extends DiagnosticEmitter {
         setterPrototype,
         null,
         new Map(),
-        reportMode
+        reportMode,
+        ctxFlow
       );
       if (setterInstance) {
         instance.setterInstance = setterInstance;
