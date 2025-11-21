@@ -2354,6 +2354,8 @@ export class Compiler extends DiagnosticEmitter {
   private compileBlockStatement(
     statement: BlockStatement
   ): ExpressionRef {
+    if (statement.label) return this.compileLabeledBlockStatement(statement);
+
     let statements = statement.statements;
     let outerFlow = this.currentFlow;
     let innerFlow = outerFlow.fork();
@@ -2363,6 +2365,30 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.inherit(innerFlow);
     this.currentFlow = outerFlow;
     return this.module.flatten(stmts);
+  }
+
+  private compileLabeledBlockStatement(
+    statement: BlockStatement
+  ): ExpressionRef {
+    let statements = statement.statements;
+    let outerFlow = this.currentFlow;
+    let innerFlow = outerFlow.fork();
+
+    let labelNode = assert(statement.label);
+    let label = innerFlow.pushControlFlowLabel();
+    let breakLabel = `block-break|${label}`;
+    innerFlow.addUserLabel(labelNode.text, breakLabel, null, labelNode);
+    this.currentFlow = innerFlow;
+
+    let stmts = this.compileStatements(statements);
+    innerFlow.popControlFlowLabel(label);
+    innerFlow.removeUserLabel(labelNode.text);
+
+    outerFlow.inherit(innerFlow);
+    this.currentFlow = outerFlow;
+    return innerFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks)
+      ? this.module.block(breakLabel, stmts)
+      : this.module.flatten(stmts);
   }
 
   private compileTypeDeclaration(statement: TypeDeclaration): ExpressionRef {
@@ -2388,23 +2414,25 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let module = this.module;
     let labelNode = statement.label;
-    if (labelNode) {
-      this.error(
-        DiagnosticCode.Not_implemented_0,
-        labelNode.range,
-        "Break label"
-      );
-      return module.unreachable();
-    }
     let flow = this.currentFlow;
-    let breakLabel = flow.breakLabel;
+    let breakLabel: string | null = null;
+    if (labelNode) {
+      const userLabel = flow.getUserLabel(labelNode.text);
+      if (userLabel) breakLabel = userLabel.breakLabel;
+    } else {
+      breakLabel = flow.breakLabel;
+    }
+
     if (breakLabel == null) {
       this.error(
-        DiagnosticCode.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement,
+        labelNode
+          ? DiagnosticCode.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement
+          : DiagnosticCode.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement,
         statement.range
       );
       return module.unreachable();
     }
+
     flow.set(FlowFlags.Breaks);
     return module.br(breakLabel);
   }
@@ -2413,25 +2441,27 @@ export class Compiler extends DiagnosticEmitter {
     statement: ContinueStatement
   ): ExpressionRef {
     let module = this.module;
-    let label = statement.label;
-    if (label) {
-      this.error(
-        DiagnosticCode.Not_implemented_0,
-        label.range,
-        "Continue label"
-      );
-      return module.unreachable();
-    }
-    // Check if 'continue' is allowed here
+    let labelNode = statement.label;
     let flow = this.currentFlow;
-    let continueLabel = flow.continueLabel;
+    let continueLabel: string | null = null;
+    if (labelNode) {
+      const userLabel = flow.getUserLabel(labelNode.text);
+      if (userLabel) continueLabel = userLabel.continueLabel;
+    } else {
+      continueLabel = flow.continueLabel;
+    }
+
+    // Check if 'continue' is allowed here
     if (continueLabel == null) {
       this.error(
-        DiagnosticCode.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement,
+        labelNode
+          ? DiagnosticCode.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement
+          : DiagnosticCode.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement,
         statement.range
       );
       return module.unreachable();
     }
+
     flow.set(FlowFlags.Continues | FlowFlags.Terminates);
     return module.br(continueLabel);
   }
@@ -2473,6 +2503,8 @@ export class Compiler extends DiagnosticEmitter {
     let continueLabel = `do-continue|${label}`;
     flow.continueLabel = continueLabel;
     let loopLabel = `do-loop|${label}`;
+    let labelNode = statement.label;
+    if (labelNode) flow.addUserLabel(labelNode.text, breakLabel, continueLabel, labelNode);
     this.currentFlow = flow;
     let bodyStmts = new Array<ExpressionRef>();
     let body = statement.body;
@@ -2482,6 +2514,7 @@ export class Compiler extends DiagnosticEmitter {
       bodyStmts.push(this.compileStatement(body));
     }
     flow.popControlFlowLabel(label);
+    if (labelNode) flow.removeUserLabel(labelNode.text);
 
     let possiblyContinues = flow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
     let possiblyBreaks = flow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
@@ -2637,6 +2670,8 @@ export class Compiler extends DiagnosticEmitter {
     bodyFlow.breakLabel = breakLabel;
     let continueLabel = `for-continue|${label}`;
     bodyFlow.continueLabel = continueLabel;
+    let labelNode = statement.label;
+    if (labelNode) bodyFlow.addUserLabel(labelNode.text, breakLabel, continueLabel, labelNode);
     let loopLabel = `for-loop|${label}`;
     this.currentFlow = bodyFlow;
     let bodyStmts = new Array<ExpressionRef>();
@@ -2647,6 +2682,7 @@ export class Compiler extends DiagnosticEmitter {
       bodyStmts.push(this.compileStatement(body));
     }
     bodyFlow.popControlFlowLabel(label);
+    if (labelNode) bodyFlow.removeUserLabel(labelNode.text);
     bodyFlow.breakLabel = null;
     bodyFlow.continueLabel = null;
 
@@ -2747,17 +2783,27 @@ export class Compiler extends DiagnosticEmitter {
     );
     let condKind = this.evaluateCondition(condExprTrueish);
 
+    let flow = this.currentFlow;
+    let label = -1;
+    let labelNode = statement.label;
+    let breakLabel: string | null = null;
+    if (labelNode) {
+      label = flow.pushControlFlowLabel();
+      breakLabel = `if-break|${label}`;
+      flow.addUserLabel(labelNode.text, breakLabel, null, labelNode);
+    }
+
     // Shortcut if the condition is constant
     switch (condKind) {
       case ConditionKind.True: {
-        return module.block(null, [
+        return module.block(breakLabel, [
           module.drop(condExprTrueish),
           this.compileStatement(ifTrue)
         ]);
       }
       case ConditionKind.False: {
         return ifFalse
-          ? module.block(null, [
+          ? module.block(breakLabel, [
               module.drop(condExprTrueish),
               this.compileStatement(ifFalse)
             ])
@@ -2766,8 +2812,6 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // From here on condition is always unknown
-
-    let flow = this.currentFlow;
 
     // Compile ifTrue assuming the condition turned out true
     let thenStmts = new Array<ExpressionRef>();
@@ -2781,6 +2825,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = flow;
 
     // Compile ifFalse assuming the condition turned out false, if present
+    let expr: ExpressionRef;
     let elseFlow = flow.forkElse(condExpr);
     if (ifFalse) {
       this.currentFlow = elseFlow;
@@ -2792,7 +2837,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       flow.inheritAlternatives(thenFlow, elseFlow); // terminates if both do
       this.currentFlow = flow;
-      return module.if(condExprTrueish,
+      expr = module.if(condExprTrueish,
         module.flatten(thenStmts),
         module.flatten(elseStmts)
       );
@@ -2806,10 +2851,15 @@ export class Compiler extends DiagnosticEmitter {
         flow.inheritAlternatives(thenFlow, elseFlow);
       }
       this.currentFlow = flow;
-      return module.if(condExprTrueish,
+      expr = module.if(condExprTrueish,
         module.flatten(thenStmts)
       );
     }
+
+    if (!labelNode) return expr;
+    flow.popControlFlowLabel(label);
+    flow.removeUserLabel(labelNode.text);
+    return module.block(breakLabel, [expr]);
   }
 
   private compileReturnStatement(
@@ -2866,6 +2916,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let module = this.module;
     let cases = statement.cases;
+    let labelNode = statement.label;
     let numCases = cases.length;
 
     // Compile the condition (always executes)
@@ -2887,6 +2938,9 @@ export class Compiler extends DiagnosticEmitter {
     let breakIndex = 1;
     let defaultIndex = -1;
     let label = outerFlow.pushControlFlowLabel();
+    let breakLabel = `break|${label}`;
+    if (labelNode) outerFlow.addUserLabel(labelNode.text, breakLabel, null, labelNode);
+
     for (let i = 0; i < numCases; ++i) {
       let case_ = cases[i];
       if (case_.isDefault) {
@@ -2916,7 +2970,7 @@ export class Compiler extends DiagnosticEmitter {
     // If there is a default case, break to it, otherwise break out of the switch
     breaks[breakIndex] = module.br(defaultIndex >= 0
       ? `case${defaultIndex}|${label}`
-      : `break|${label}`
+      : breakLabel
     );
 
     // Nest the case blocks in order, to be targeted by the br_if sequence
@@ -2932,7 +2986,6 @@ export class Compiler extends DiagnosticEmitter {
       let innerFlow = outerFlow.fork(/* newBreakContext */ true, /* newContinueContext */ false);
       if (fallThroughFlow) innerFlow.mergeBranch(fallThroughFlow);
       this.currentFlow = innerFlow;
-      let breakLabel = `break|${label}`;
       innerFlow.breakLabel = breakLabel;
 
       let isLast = i == numCases - 1;
@@ -2970,6 +3023,7 @@ export class Compiler extends DiagnosticEmitter {
       currentBlock = module.block(nextLabel, stmts, TypeRef.None); // must be a labeled block
     }
     outerFlow.popControlFlowLabel(label);
+    if (labelNode) outerFlow.removeUserLabel(labelNode.text);
 
     // If the switch has a default, we only get past through any breaking flow
     if (defaultIndex >= 0) {
@@ -3281,6 +3335,8 @@ export class Compiler extends DiagnosticEmitter {
     thenFlow.breakLabel = breakLabel;
     let continueLabel = `while-continue|${label}`;
     thenFlow.continueLabel = continueLabel;
+    let labelNode = statement.label;
+    if (labelNode) thenFlow.addUserLabel(labelNode.text, breakLabel, continueLabel, labelNode);
     this.currentFlow = thenFlow;
     let bodyStmts = new Array<ExpressionRef>();
     let body = statement.body;
@@ -3293,6 +3349,7 @@ export class Compiler extends DiagnosticEmitter {
       module.br(continueLabel)
     );
     thenFlow.popControlFlowLabel(label);
+    if (labelNode) thenFlow.removeUserLabel(labelNode.text);
 
     let possiblyContinues = thenFlow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
     let possiblyBreaks = thenFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);

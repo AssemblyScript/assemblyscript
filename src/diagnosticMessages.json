@@ -94,6 +94,8 @@
   "Type expected.": 1110,
   "A 'default' clause cannot appear more than once in a 'switch' statement.": 1113,
   "Duplicate label '{0}'.": 1114,
+  "A 'continue' statement can only jump to a label of an enclosing iteration statement.": 1115,
+  "A 'break' statement can only jump to a label of an enclosing statement": 1116,
   "An export assignment cannot have modifiers.": 1120,
   "Octal literals are not allowed in strict mode.": 1121,
   "Digit expected.": 1124,
@@ -125,6 +127,7 @@
   "A class may only extend another class.": 1311,
   "A parameter property cannot be declared using a rest parameter.": 1317,
   "A default export can only be used in a module.": 1319,
+  "A label is not allowed here.": 1344,
   "An expression of type '{0}' cannot be tested for truthiness.": 1345,
   "An identifier or keyword cannot immediately follow a numeric literal.": 1351,
 
