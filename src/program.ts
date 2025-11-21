@@ -5060,6 +5060,9 @@ function tryMerge(older: Element, newer: Element): DeclaredElement | null {
 
 /** Copies the members of `src` to `dest`. */
 function copyMembers(src: Element, dest: Element): void {
+  let program = src.program;
+  assert(program == dest.program);
+
   let srcMembers = src.members;
   if (srcMembers) {
     let destMembers = dest.members;
@@ -5067,8 +5070,21 @@ function copyMembers(src: Element, dest: Element): void {
     // TODO: for (let [memberName, member] of srcMembers) {
     for (let _keys = Map_keys(srcMembers), i = 0, k = _keys.length; i < k; ++i) {
       let memberName = unchecked(_keys[i]);
-      let member = assert(srcMembers.get(memberName));
-      destMembers.set(memberName, member);
+      let srcMember = assert(srcMembers.get(memberName));
+      // This isn't TS compatible in every case, but the logic involved in
+      // merging, scoping, and making internal names is not currently able to
+      // handle duplicates well.
+      if (destMembers.has(memberName)) {
+        let destMember = assert(destMembers.get(memberName));
+        program.errorRelated(
+          DiagnosticCode.Duplicate_identifier_0,
+          srcMember.declaration.name.range, destMember.declaration.name.range,
+          memberName
+        );
+        continue;
+      }
+
+      destMembers.set(memberName, srcMember);
     }
   }
 }

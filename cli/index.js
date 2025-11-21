@@ -717,6 +717,12 @@ export async function main(argv, options) {
     }
     stats.initializeTime += stats.end(begin);
   }
+  let numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
+  if (numErrors) {
+    const err = Error(`${numErrors} initialize error(s)`);
+    err.stack = err.message; // omit stack
+    return prepareResult(err);
+  }
 
   // Call afterInitialize transform hook
   {
@@ -741,7 +747,7 @@ export async function main(argv, options) {
       ? assemblyscript.getBinaryenModuleRef(module)
       : module.ref
   );
-  let numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
+  numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
   if (numErrors) {
     const err = Error(`${numErrors} compile error(s)`);
     err.stack = err.message; // omit stack
