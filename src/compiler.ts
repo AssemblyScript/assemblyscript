@@ -612,7 +612,7 @@ export class Compiler extends DiagnosticEmitter {
       resolver.discoveredOverride = false;
       for (let _values = Set_values(overrideStubs), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
-        let overrideInstances = resolver.resolveOverrides(instance);
+        let overrideInstances = resolver.resolveOverridesOrImplementations(instance);
         if (overrideInstances) {
           for (let i = 0, k = overrideInstances.length; i < k; ++i) {
             this.compileFunction(overrideInstances[i]);
@@ -6719,7 +6719,7 @@ export class Compiler extends DiagnosticEmitter {
         TypeRef.I32
       )
     );
-    let overrideInstances = this.resolver.resolveOverrides(instance);
+    let overrideInstances = this.resolver.resolveOverridesOrImplementations(instance);
     if (overrideInstances) {
       let mostRecentInheritanceMapping = new Map<Class, Class>();
       for (let i = 0, k = overrideInstances.length; i < k; ++i) {

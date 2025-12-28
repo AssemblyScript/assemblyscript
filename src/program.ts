@@ -1440,7 +1440,7 @@ export class Program extends DiagnosticEmitter {
       }
       if (interfacePrototypes) {
         for (let j = 0, l = interfacePrototypes.length; j < l; ++j) {
-          this.processOverrides(thisPrototype, interfacePrototypes[j]);
+          this.processImplements(thisPrototype, interfacePrototypes[j]);
         }
       }
     }
@@ -1497,6 +1497,124 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+    private processImplements(thisPrototype: ClassPrototype, interfacePrototype: InterfacePrototype): void {
+    let interfaceInstanceMembers = interfacePrototype.instanceMembers;
+    if (interfaceInstanceMembers) {
+      for (let _values = Map_values(interfaceInstanceMembers), i = 0, k = _values.length; i < k; ++i) {
+        let interfaceMember = unchecked(_values[i]);
+        const implMember = this.searchImplementation(thisPrototype, interfaceMember.name);
+        if (!implMember) continue;
+        this.doProcessImplementation(thisPrototype, implMember, interfacePrototype, interfaceMember);
+      }
+    }
+    const interfaceBasePrototype = interfacePrototype.basePrototype;
+    if (interfaceBasePrototype) {
+      assert(interfaceBasePrototype.kind == ElementKind.InterfacePrototype);
+      this.processImplements(thisPrototype, <InterfacePrototype>interfaceBasePrototype);
+    }
+  }
+
+  private searchImplementation(thisPrototype: ClassPrototype, name: string): DeclaredElement | null {
+    let currentPrototype: ClassPrototype | null = thisPrototype;
+    while (currentPrototype) {
+      let currentInstanceMembers = currentPrototype.instanceMembers;
+      if (currentInstanceMembers && currentInstanceMembers.has(name)) {
+        return assert(currentInstanceMembers.get(name));
+      }
+      currentPrototype = currentPrototype.basePrototype;
+    }
+    return null;
+  }
+
+  private doProcessImplementation(
+    thisClass: ClassPrototype,
+    implMember: DeclaredElement,
+    interfacePrototype: InterfacePrototype,
+    interfaceMember: DeclaredElement
+  ): void {
+    if (implMember.kind == ElementKind.FunctionPrototype && interfaceMember.kind == ElementKind.FunctionPrototype) {
+      const implMethod = <FunctionPrototype>implMember;
+      const interfaceMethod = <FunctionPrototype>interfaceMember;
+      if (!implMethod.visibilityEquals(interfaceMethod)) {
+        this.errorRelated(
+          DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
+          implMethod.declaration.name.range,
+          interfaceMethod.declaration.name.range
+        );
+      }
+      interfaceMethod.addUnboundImplementations(thisClass, implMethod);
+      interfaceMethod.setOverrideFlag();
+    } else if (
+      implMember.kind == ElementKind.PropertyPrototype &&
+      interfaceMember.kind == ElementKind.PropertyPrototype
+    ) {
+      const implProperty = <PropertyPrototype>implMember;
+      const interfaceProperty = <PropertyPrototype>interfaceMember;
+      if (!implProperty.visibilityEquals(interfaceProperty)) {
+        this.errorRelated(
+          DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
+          implProperty.declaration.name.range,
+          interfaceProperty.declaration.name.range
+        );
+      }
+      if (interfaceProperty.parent.kind != ElementKind.InterfacePrototype) {
+        // Interface fields/properties can be impled by either, but other
+        // members must match to retain compatiblity with TS/JS.
+        const implIsField = implProperty.isField;
+        if (implIsField != interfaceProperty.isField) {
+          if (implIsField) {
+            // base is property
+            this.errorRelated(
+              DiagnosticCode._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property,
+              implProperty.declaration.name.range,
+              interfaceProperty.declaration.name.range,
+              implProperty.name,
+              interfacePrototype.internalName,
+              thisClass.internalName
+            );
+          } else {
+            // this is property, base is field
+            this.errorRelated(
+              DiagnosticCode._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor,
+              implProperty.declaration.name.range,
+              interfaceProperty.declaration.name.range,
+              implProperty.name,
+              interfacePrototype.internalName,
+              thisClass.internalName
+            );
+          }
+          return;
+        } else if (implIsField) {
+          // base is also field
+          // Fields don't override other fields and can only be redeclared
+          return;
+        }
+      }
+      interfaceProperty.set(CommonFlags.Overridden);
+      const interfaceGetter = interfaceProperty.getterPrototype;
+      if (interfaceGetter) {
+        const implGetter = implProperty.getterPrototype;
+        if (implGetter) interfaceGetter.addUnboundImplementations(thisClass, implGetter);
+        interfaceGetter.setOverrideFlag();
+      }
+      const interfaceSetter = interfaceProperty.setterPrototype;
+      if (interfaceSetter && implProperty.setterPrototype) {
+        const implSetter = implProperty.setterPrototype;
+        if (implSetter) interfaceSetter.addUnboundImplementations(thisClass, implSetter);
+        interfaceSetter.setOverrideFlag();
+      }
+    } else {
+      this.errorRelated(
+        DiagnosticCode.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
+        implMember.declaration.name.range,
+        interfaceMember.declaration.name.range,
+        implMember.name,
+        thisClass.internalName,
+        interfacePrototype.internalName
+      );
+    }
+  }
+
   /** Processes overridden members by this class in a base class. */
   private processOverrides(
     thisPrototype: ClassPrototype,
@@ -1526,7 +1644,7 @@ export class Program extends DiagnosticEmitter {
           for (let i = 0, k = baseInterfacePrototypes.length; i < k; ++i) {
             let baseInterfacePrototype = baseInterfacePrototypes[i];
             if (baseInterfacePrototype != basePrototype) {
-              this.processOverrides(thisPrototype, baseInterfacePrototype);
+              this.processImplements(thisPrototype, baseInterfacePrototype);
             }
           }
         }
@@ -3667,6 +3785,8 @@ export class FunctionPrototype extends DeclaredElement {
   instances: Map<string,Function> | null = null;
   /** Methods overriding this one, if any. These are unbound. */
   unboundOverrides: Set<FunctionPrototype> | null = null;
+  /** Methods implement this one, if any. These are unbound. */
+  unboundImplementations: Map<ClassPrototype, FunctionPrototype> | null = null;
 
   /** Clones of this prototype that are bound to specific classes. */
   private boundPrototypes: Map<Class,FunctionPrototype> | null = null;
@@ -3731,6 +3851,7 @@ export class FunctionPrototype extends DeclaredElement {
     bound.flags = this.flags;
     bound.operatorKind = this.operatorKind;
     bound.unboundOverrides = this.unboundOverrides;
+    bound.unboundImplementations = this.unboundImplementations;
     // NOTE: this.instances holds instances per bound class / unbound
     boundPrototypes.set(classInstance, bound);
     return bound;
@@ -3749,6 +3870,24 @@ export class FunctionPrototype extends DeclaredElement {
     if (!instances) this.instances = instances = new Map();
     else assert(!instances.has(instanceKey));
     instances.set(instanceKey, instance);
+  }
+
+
+  setOverrideFlag(): void {
+    this.set(CommonFlags.Overridden);
+    let instances = this.instances;
+    if (instances) {
+      for (let _values = Map_values(instances), a = 0, b = _values.length; a < b; ++a) {
+        let instance = _values[a];
+        instance.set(CommonFlags.Overridden);
+      }
+    }
+  }
+
+  addUnboundImplementations(thisClass: ClassPrototype, implementMember: DeclaredElement): void {
+    let unboundImplementations = this.unboundImplementations;
+    if (!unboundImplementations) this.unboundImplementations = unboundImplementations = new Map();
+    unboundImplementations.set(thisClass, <FunctionPrototype>implementMember);
   }
 }
 

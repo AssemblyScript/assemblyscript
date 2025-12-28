@@ -3014,12 +3014,21 @@ export class Resolver extends DiagnosticEmitter {
     );
   }
 
+    /** Resolves reachable overrides or implementations of the given instance method. */
+  resolveOverridesOrImplementations(instance: Function): Function[] | null {
+    if (instance.parent.kind == ElementKind.Interface) {
+      return this.resolveImplementations(instance);
+    } else {
+      assert(instance.parent.kind == ElementKind.Class);
+      return this.resolveOverrides(instance);
+    }
+  }
+
+
   /** Resolves reachable overrides of the given instance method. */
-  resolveOverrides(instance: Function): Function[] | null {
+  private resolveOverrides(instance: Function): Function[] | null {
     let overridePrototypes = instance.prototype.unboundOverrides;
     if (!overridePrototypes) return null;
-
-    let parentClassInstance = assert(instance.getBoundClassOrInterface());
     let overrides = new Set<Function>();
 
     // A method's `overrides` property contains its unbound override prototypes
@@ -3034,33 +3043,70 @@ export class Resolver extends DiagnosticEmitter {
       classInstances = (<ClassPrototype>unboundOverrideParent).instances;
       if (!classInstances) continue;
       for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
-        let classInstance = _values[j];
-        // Check if the parent class is a subtype of instance's class
-        if (!classInstance.isAssignableTo(parentClassInstance)) continue;
-        let overrideInstance: Function | null = null;
-        if (instance.isAny(CommonFlags.Get | CommonFlags.Set)) {
-          let propertyName = instance.declaration.name.text;
-          let boundPropertyPrototype = assert(classInstance.getMember(propertyName));
-          assert(boundPropertyPrototype.kind == ElementKind.PropertyPrototype);
-          let boundPropertyInstance = this.resolveProperty(<PropertyPrototype>boundPropertyPrototype);
-          if (!boundPropertyInstance) continue;
-          if (instance.is(CommonFlags.Get)) {
-            overrideInstance = boundPropertyInstance.getterInstance;
-          } else {
-            assert(instance.is(CommonFlags.Set));
-            overrideInstance = boundPropertyInstance.setterInstance;
-          }
-        } else {
-          let boundPrototype = classInstance.getMember(unboundOverridePrototype.name);
-          if (boundPrototype) { // might have errored earlier and wasn't added
-            assert(boundPrototype.kind == ElementKind.FunctionPrototype);
-            overrideInstance = this.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
-          }
-        }
+        const overrideInstance = this.doResolveOverrideOrImplementation(instance, _values[j], unboundOverridePrototype);
         if (overrideInstance) overrides.add(overrideInstance);
       }
     }
     return Set_values(overrides);
+  }
+
+  private resolveImplementations(instance: Function): Function[] | null {
+    let unboundImplementations = instance.prototype.unboundImplementations;
+    if (!unboundImplementations) return null;
+    let implementations = new Set<Function>();
+    for (
+      let _keys = Map_keys(unboundImplementations),
+        _values = Map_values(unboundImplementations),
+        i = 0,
+        k = _keys.length;
+      i < k;
+      ++i
+    ) {
+      /** in {@link classPrototype}, we implement {@link instance} by {@link unboundImplPrototype} */
+      const classPrototype = _keys[i];
+      const unboundImplPrototype = _values[i];
+      assert(!unboundImplPrototype.isBound);
+
+      let classInstances = classPrototype.instances;
+      if (!classInstances) continue;
+      for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
+        const implInstance = this.doResolveOverrideOrImplementation(instance, _values[j], unboundImplPrototype);
+        if (implInstance) implementations.add(implInstance);
+      }
+    }
+    return Set_values(implementations);
+  }
+
+  private doResolveOverrideOrImplementation(
+    instance: Function,
+    classInstance: Class,
+    unboundPrototype: FunctionPrototype
+  ): Function | null {
+    const parentClassInstance = assert(instance.getBoundClassOrInterface());
+    // Check if the parent class is a subtype of instance's class
+    if (!classInstance.isAssignableTo(parentClassInstance)) return null;
+    let ret: Function | null = null;
+    if (instance.isAny(CommonFlags.Get | CommonFlags.Set)) {
+      let propertyName = instance.identifierNode.text;
+      let boundPropertyPrototype = assert(classInstance.getMember(propertyName));
+      assert(boundPropertyPrototype.kind == ElementKind.PropertyPrototype);
+      let boundPropertyInstance = this.resolveProperty(<PropertyPrototype>boundPropertyPrototype);
+      if (!boundPropertyInstance) return null;
+      if (instance.is(CommonFlags.Get)) {
+        ret = boundPropertyInstance.getterInstance;
+      } else {
+        assert(instance.is(CommonFlags.Set));
+        ret = boundPropertyInstance.setterInstance;
+      }
+    } else {
+      let boundPrototype = classInstance.getMember(unboundPrototype.name);
+      if (boundPrototype) {
+        // might have errored earlier and wasn't added
+        assert(boundPrototype.kind == ElementKind.FunctionPrototype);
+        ret = this.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+      }
+    }
+    return ret;
   }
 
   /** Currently resolving classes. */

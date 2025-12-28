@@ -23,17 +23,10 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $class-implements/a (mut i32) (i32.const 0))
- (global $class-implements/c (mut i32) (i32.const 0))
- (global $class-implements/d (mut i32) (i32.const 0))
- (global $class-implements/e (mut i32) (i32.const 0))
- (global $class-implements/f (mut i32) (i32.const 0))
- (global $class-implements/g (mut i32) (i32.const 0))
- (global $class-implements/h (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 480))
- (global $~lib/memory/__data_end i32 (i32.const 568))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33336))
- (global $~lib/memory/__heap_base i32 (i32.const 33336))
+ (global $~lib/rt/__rtti_base i32 (i32.const 496))
+ (global $~lib/memory/__data_end i32 (i32.const 528))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33296))
+ (global $~lib/memory/__heap_base i32 (i32.const 33296))
  (memory $0 1)
  (data $0 (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data $1 (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -43,10 +36,11 @@
  (data $5 (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data $6 (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data $7 (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $8 (i32.const 412) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00&\00\00\00c\00l\00a\00s\00s\00-\00i\00m\00p\00l\00e\00m\00e\00n\00t\00s\00.\00t\00s\00\00\00\00\00\00\00")
- (data $9 (i32.const 480) "\15\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00")
+ (data $8 (i32.const 412) "L\00\00\00\00\00\00\00\00\00\00\00\02\00\00\002\00\00\00i\00m\00p\00l\00-\00i\00n\00t\00e\00r\00f\00a\00c\00e\00-\00i\00n\00-\00b\00a\00s\00e\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
+ (data $9 (i32.const 496) "\07\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
+ (export "test" (func $impl-interface-in-base/test))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $this i32) (param $nextWithColor i32)
@@ -2249,93 +2243,34 @@
   local.get $ptr
   return
  )
- (func $class-implements/A#foo (param $this i32) (result i32)
+ (func $impl-interface-in-base/I#foo (param $this i32) (result i32)
+  unreachable
+ )
+ (func $start:impl-interface-in-base
+  memory.size
+  i32.const 16
+  i32.shl
+  global.get $~lib/memory/__heap_base
+  i32.sub
   i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
+  i32.const 144
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/pinSpace
+  i32.const 176
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/toSpace
+  i32.const 320
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/fromSpace
+  call $impl-interface-in-base/test
+ )
+ (func $impl-interface-in-base/Base#foo (param $this i32) (result i32)
+  i32.const 42
   return
  )
- (func $class-implements/C#foo (param $this i32) (result i32)
-  i32.const 2
-  return
- )
- (func $class-implements/D#foo (param $this i32) (result i32)
-  i32.const 3
-  return
- )
- (func $class-implements/F#foo (param $this i32) (result i32)
-  i32.const 4
-  return
- )
- (func $class-implements/I#foo (param $this i32) (result i32)
-  unreachable
- )
- (func $class-implements/J#foo (param $this i32) (result i32)
-  unreachable
- )
- (func $class-implements/A2#set:foo (param $this i32) (param $foo i32)
-  local.get $this
-  local.get $foo
-  i32.store
- )
- (func $class-implements/A2#get:foo (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $class-implements/I2#get:foo (param $this i32) (result i32)
-  unreachable
- )
- (func $class-implements/I2#set:foo (param $this i32) (param $foo i32)
-  unreachable
- )
- (func $class-implements/A3#set:foo (param $this i32) (param $foo i32)
-  local.get $this
-  local.get $foo
-  i32.store
- )
- (func $class-implements/A3#get:foo (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $class-implements/A4#set:foo (param $this i32) (param $foo i32)
-  local.get $this
-  local.get $foo
-  i32.store
- )
- (func $class-implements/A4#get:foo (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $class-implements/B2#set:_foo (param $this i32) (param $_foo i32)
-  local.get $this
-  local.get $_foo
-  i32.store
- )
- (func $class-implements/B2#get:_foo (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $class-implements/B3#set:_foo2 (param $this i32) (param $_foo2 i32)
-  local.get $this
-  local.get $_foo2
-  i32.store offset=4
- )
- (func $class-implements/B3#get:_foo2 (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $class-implements/B4#set:_foo2 (param $this i32) (param $_foo2 i32)
-  local.get $this
-  local.get $_foo2
-  i32.store offset=4
- )
- (func $class-implements/B4#get:_foo2 (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $class-implements/G#foo (param $this i32) (result i32)
-  i32.const 1
-  return
- )
- (func $class-implements/D#foo@override (param $0 i32) (result i32)
+ (func $impl-interface-in-base/I#foo@override (param $0 i32) (result i32)
   (local $1 i32)
   block $default
    block $case0
@@ -2345,333 +2280,23 @@
     i32.load
     local.set $1
     local.get $1
-    i32.const 11
+    i32.const 6
+    i32.eq
+    br_if $case0
+    local.get $1
+    i32.const 5
     i32.eq
     br_if $case0
     br $default
    end
    local.get $0
-   call $class-implements/F#foo
-   return
-  end
-  local.get $0
-  call $class-implements/D#foo
- )
- (func $class-implements/I#foo@override (param $0 i32) (result i32)
-  (local $1 i32)
-  block $default
-   block $case3
-    block $case2
-     block $case1
-      block $case0
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       local.set $1
-       local.get $1
-       i32.const 11
-       i32.eq
-       br_if $case0
-       local.get $1
-       i32.const 4
-       i32.eq
-       br_if $case1
-       local.get $1
-       i32.const 6
-       i32.eq
-       br_if $case2
-       local.get $1
-       i32.const 8
-       i32.eq
-       br_if $case3
-       local.get $1
-       i32.const 10
-       i32.eq
-       br_if $case3
-       br $default
-      end
-      local.get $0
-      call $class-implements/F#foo
-      return
-     end
-     local.get $0
-     call $class-implements/A#foo
-     return
-    end
-    local.get $0
-    call $class-implements/C#foo
-    return
-   end
-   local.get $0
-   call $class-implements/D#foo
+   call $impl-interface-in-base/Base#foo
    return
   end
   unreachable
- )
- (func $class-implements/J#foo@override (param $0 i32) (result i32)
-  (local $1 i32)
-  block $default
-   block $case2
-    block $case1
-     block $case0
-      local.get $0
-      i32.const 8
-      i32.sub
-      i32.load
-      local.set $1
-      local.get $1
-      i32.const 11
-      i32.eq
-      br_if $case0
-      local.get $1
-      i32.const 8
-      i32.eq
-      br_if $case1
-      local.get $1
-      i32.const 10
-      i32.eq
-      br_if $case1
-      local.get $1
-      i32.const 12
-      i32.eq
-      br_if $case2
-      br $default
-     end
-     local.get $0
-     call $class-implements/F#foo
-     return
-    end
-    local.get $0
-    call $class-implements/D#foo
-    return
-   end
-   local.get $0
-   call $class-implements/G#foo
-   return
-  end
-  unreachable
- )
- (func $class-implements/I2#get:foo@override (param $0 i32) (result i32)
-  (local $1 i32)
-  block $default
-   block $case5
-    block $case4
-     block $case3
-      block $case2
-       block $case1
-        block $case0
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         local.set $1
-         local.get $1
-         i32.const 16
-         i32.eq
-         br_if $case0
-         local.get $1
-         i32.const 17
-         i32.eq
-         br_if $case1
-         local.get $1
-         i32.const 19
-         i32.eq
-         br_if $case2
-         local.get $1
-         i32.const 20
-         i32.eq
-         br_if $case3
-         local.get $1
-         i32.const 14
-         i32.eq
-         br_if $case4
-         local.get $1
-         i32.const 18
-         i32.eq
-         br_if $case5
-         br $default
-        end
-        local.get $0
-        call $class-implements/A3#get:foo
-        return
-       end
-       local.get $0
-       call $class-implements/A4#get:foo
-       return
-      end
-      local.get $0
-      call $class-implements/B3#get:foo
-      return
-     end
-     local.get $0
-     call $class-implements/B4#get:foo
-     return
-    end
-    local.get $0
-    call $class-implements/A2#get:foo
-    return
-   end
-   local.get $0
-   call $class-implements/B2#get:foo
-   return
-  end
-  unreachable
- )
- (func $class-implements/I2#set:foo@override (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  block $default
-   block $case5
-    block $case4
-     block $case3
-      block $case2
-       block $case1
-        block $case0
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         local.set $2
-         local.get $2
-         i32.const 16
-         i32.eq
-         br_if $case0
-         local.get $2
-         i32.const 17
-         i32.eq
-         br_if $case1
-         local.get $2
-         i32.const 19
-         i32.eq
-         br_if $case2
-         local.get $2
-         i32.const 20
-         i32.eq
-         br_if $case3
-         local.get $2
-         i32.const 14
-         i32.eq
-         br_if $case4
-         local.get $2
-         i32.const 18
-         i32.eq
-         br_if $case5
-         br $default
-        end
-        local.get $0
-        local.get $1
-        call $class-implements/A3#set:foo
-        return
-       end
-       local.get $0
-       local.get $1
-       call $class-implements/A4#set:foo
-       return
-      end
-      local.get $0
-      local.get $1
-      call $class-implements/B3#set:foo
-      return
-     end
-     local.get $0
-     local.get $1
-     call $class-implements/B4#set:foo
-     return
-    end
-    local.get $0
-    local.get $1
-    call $class-implements/A2#set:foo
-    return
-   end
-   local.get $0
-   local.get $1
-   call $class-implements/B2#set:foo
-   return
-  end
-  unreachable
- )
- (func $class-implements/B2#get:foo@override (param $0 i32) (result i32)
-  (local $1 i32)
-  block $default
-   block $case1
-    block $case0
-     local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     local.set $1
-     local.get $1
-     i32.const 19
-     i32.eq
-     br_if $case0
-     local.get $1
-     i32.const 20
-     i32.eq
-     br_if $case1
-     br $default
-    end
-    local.get $0
-    call $class-implements/B3#get:foo
-    return
-   end
-   local.get $0
-   call $class-implements/B4#get:foo
-   return
-  end
-  local.get $0
-  call $class-implements/B2#get:foo
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
-  global.get $class-implements/a
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $class-implements/c
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $class-implements/d
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $class-implements/e
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $class-implements/f
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $class-implements/g
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $class-implements/h
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
   i32.const 224
   local.get $0
   call $~lib/rt/itcms/__visit
@@ -2693,63 +2318,18 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $class-implements/B4
-    block $class-implements/B3
-     block $class-implements/B2
-      block $class-implements/A4
-       block $class-implements/A3
-        block $class-implements/I2
-         block $class-implements/A2
-          block $class-implements/K
-           block $class-implements/G
-            block $class-implements/F
-             block $class-implements/E
-              block $class-implements/J
-               block $class-implements/D
-                block $class-implements/B
-                 block $class-implements/C
-                  block $class-implements/I
-                   block $class-implements/A
-                    block $~lib/arraybuffer/ArrayBufferView
-                     block $~lib/string/String
-                      block $~lib/arraybuffer/ArrayBuffer
-                       block $~lib/object/Object
-                        local.get $0
-                        i32.const 8
-                        i32.sub
-                        i32.load
-                        br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $class-implements/A $class-implements/I $class-implements/C $class-implements/B $class-implements/D $class-implements/J $class-implements/E $class-implements/F $class-implements/G $class-implements/K $class-implements/A2 $class-implements/I2 $class-implements/A3 $class-implements/A4 $class-implements/B2 $class-implements/B3 $class-implements/B4 $invalid
-                       end
-                       return
-                      end
-                      return
-                     end
-                     return
-                    end
-                    local.get $0
-                    local.get $1
-                    call $~lib/arraybuffer/ArrayBufferView~visit
-                    return
-                   end
-                   return
-                  end
-                  return
-                 end
-                 return
-                end
-                return
-               end
-               return
-              end
-              return
-             end
-             return
-            end
-            return
-           end
-           return
-          end
-          return
+   block $impl-interface-in-base/Base
+    block $impl-interface-in-base/C
+     block $impl-interface-in-base/I
+      block $~lib/arraybuffer/ArrayBufferView
+       block $~lib/string/String
+        block $~lib/arraybuffer/ArrayBuffer
+         block $~lib/object/Object
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $impl-interface-in-base/I $impl-interface-in-base/C $impl-interface-in-base/Base $invalid
          end
          return
         end
@@ -2757,6 +2337,9 @@
        end
        return
       end
+      local.get $0
+      local.get $1
+      call $~lib/arraybuffer/ArrayBufferView~visit
       return
      end
      return
@@ -2768,98 +2351,22 @@
   unreachable
  )
  (func $~start
-  call $start:class-implements
+  call $start:impl-interface-in-base
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 33360
-   i32.const 33408
+   i32.const 33328
+   i32.const 33376
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $class-implements/A#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/B#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 7
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/C#constructor (param $this i32) (result i32)
+ (func $impl-interface-in-base/Base#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -2886,44 +2393,6 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $class-implements/B#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/D#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 8
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
   call $~lib/object/Object#constructor
   local.tee $this
   i32.store
@@ -2935,7 +2404,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-implements/E#constructor (param $this i32) (result i32)
+ (func $impl-interface-in-base/C#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -2950,7 +2419,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.const 10
+   i32.const 5
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store
@@ -2962,7 +2431,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  call $class-implements/D#constructor
+  call $impl-interface-in-base/Base#constructor
   local.tee $this
   i32.store
   local.get $this
@@ -2973,7 +2442,8 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-implements/F#constructor (param $this i32) (result i32)
+ (func $impl-interface-in-base/test
+  (local $i i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -2983,1204 +2453,31 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 11
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
   global.get $~lib/memory/__stack_pointer
-  local.get $this
+  i32.const 0
+  call $impl-interface-in-base/C#constructor
+  local.tee $i
+  i32.store
+  local.get $i
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=4
   local.get $1
-  call $class-implements/D#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
+  call $impl-interface-in-base/I#foo@override
+  i32.const 42
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 15
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/G#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 12
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/A2#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.const 14
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 1
-  call $class-implements/A2#set:foo
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/A3#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.const 16
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $class-implements/A2#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 5
-  call $class-implements/A3#set:foo
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/A4#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.const 17
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $class-implements/A2#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 7
-  call $class-implements/A4#set:foo
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/B2#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.const 18
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $~lib/object/Object#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 3
-  call $class-implements/B2#set:_foo
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/B2#get:foo (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
-  call $class-implements/B2#get:_foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $class-implements/B3#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 19
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $class-implements/B2#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 9
-  call $class-implements/B3#set:_foo2
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/B3#get:foo (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
-  call $class-implements/B3#get:_foo2
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $class-implements/B4#constructor (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 20
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $class-implements/B2#constructor
-  local.tee $this
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 11
-  call $class-implements/B4#set:_foo2
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $class-implements/B4#get:foo (param $this i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
-  call $class-implements/B4#get:_foo2
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
-  return
- )
- (func $start:class-implements
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 28
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.const 28
-  memory.fill
-  memory.size
-  i32.const 16
-  i32.shl
-  global.get $~lib/memory/__heap_base
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 144
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 176
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 320
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/fromSpace
-  i32.const 0
-  call $class-implements/A#constructor
-  global.set $class-implements/a
-  global.get $class-implements/a
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/A#foo
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 18
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $class-implements/C#constructor
-  global.set $class-implements/c
-  global.get $class-implements/c
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/C#foo
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 28
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $class-implements/D#constructor
-  global.set $class-implements/d
-  global.get $class-implements/d
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/D#foo@override
-  i32.const 3
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 35
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $class-implements/E#constructor
-  global.set $class-implements/e
-  global.get $class-implements/e
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/D#foo@override
-  i32.const 3
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 41
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $class-implements/F#constructor
-  global.set $class-implements/f
-  global.get $class-implements/f
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/F#foo
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 48
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $class-implements/F#constructor
-  global.set $class-implements/g
-  global.get $class-implements/g
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/D#foo@override
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 51
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $class-implements/F#constructor
-  global.set $class-implements/h
-  global.get $class-implements/h
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I#foo@override
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 54
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $class-implements/G#constructor
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/J#foo@override
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 62
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $class-implements/A2#constructor
-  local.tee $0
-  i32.store offset=4
-  local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/A2#get:foo
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 97
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 98
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  i32.const 2
-  call $class-implements/I2#set:foo@override
-  local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/A2#get:foo
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 100
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 101
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $class-implements/A3#constructor
-  local.tee $1
-  i32.store offset=8
-  local.get $1
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/A3#get:foo
-  i32.const 5
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 105
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 5
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 106
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  i32.const 6
-  call $class-implements/I2#set:foo@override
-  local.get $1
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/A3#get:foo
-  i32.const 6
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 108
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 6
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 109
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $class-implements/A4#constructor
-  local.tee $2
-  i32.store offset=12
-  local.get $2
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/A4#get:foo
-  i32.const 7
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 113
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 7
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 114
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  i32.const 8
-  call $class-implements/I2#set:foo@override
-  local.get $2
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/A4#get:foo
-  i32.const 8
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 116
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 8
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 117
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $class-implements/B2#constructor
-  local.tee $3
-  i32.store offset=16
-  local.get $3
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/B2#get:foo@override
-  i32.const 3
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 121
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $3
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 3
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 122
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $3
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  i32.const 4
-  call $class-implements/I2#set:foo@override
-  local.get $3
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/B2#get:foo@override
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 124
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $3
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 125
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $class-implements/B3#constructor
-  local.tee $4
-  i32.store offset=20
-  local.get $4
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/B3#get:foo
-  i32.const 9
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 129
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $4
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 9
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 130
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $4
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  i32.const 10
-  call $class-implements/I2#set:foo@override
-  local.get $4
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/B3#get:foo
-  i32.const 10
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 132
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $4
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 10
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 133
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $class-implements/B4#constructor
-  local.tee $5
-  i32.store offset=24
-  local.get $5
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/B4#get:foo
-  i32.const 11
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 137
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $5
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 11
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 138
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $5
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  i32.const 12
-  call $class-implements/I2#set:foo@override
-  local.get $5
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/B4#get:foo
-  i32.const 12
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 140
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $5
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store
-  local.get $6
-  call $class-implements/I2#get:foo@override
-  i32.const 12
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 141
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 28
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $class-implements/B3#set:foo (param $this i32) (param $foo i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  local.get $foo
-  call $class-implements/B3#set:_foo2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $class-implements/B4#set:foo (param $this i32) (param $foo i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  local.get $foo
-  call $class-implements/B4#set:_foo2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $class-implements/B2#set:foo (param $this i32) (param $foo i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  local.get $foo
-  call $class-implements/B2#set:_foo
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
