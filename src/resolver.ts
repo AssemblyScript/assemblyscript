@@ -3014,7 +3014,7 @@ export class Resolver extends DiagnosticEmitter {
     );
   }
 
-    /** Resolves reachable overrides or implementations of the given instance method. */
+  /** Resolves reachable overrides or implementations of the given instance method. */
   resolveOverridesOrImplementations(instance: Function): Function[] | null {
     if (instance.parent.kind == ElementKind.Interface) {
       return this.resolveImplementations(instance);
@@ -3056,9 +3056,9 @@ export class Resolver extends DiagnosticEmitter {
     let implementations = new Set<Function>();
     for (
       let _keys = Map_keys(unboundImplementations),
-        _values = Map_values(unboundImplementations),
-        i = 0,
-        k = _keys.length;
+          _values = Map_values(unboundImplementations),
+          i = 0,
+          k = _keys.length;
       i < k;
       ++i
     ) {

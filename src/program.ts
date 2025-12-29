@@ -1497,7 +1497,7 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-    private processImplements(thisPrototype: ClassPrototype, interfacePrototype: InterfacePrototype): void {
+  private processImplements(thisPrototype: ClassPrototype, interfacePrototype: InterfacePrototype): void {
     let interfaceInstanceMembers = interfacePrototype.instanceMembers;
     if (interfaceInstanceMembers) {
       for (let _values = Map_values(interfaceInstanceMembers), i = 0, k = _values.length; i < k; ++i) {
