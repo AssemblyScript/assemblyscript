@@ -600,7 +600,7 @@ export async function main(argv, options) {
               if (!entryPath) entryPath = "index";
               const plainName = entryPath;
               if ((sourceText = await readFile(path.join(currentDir, packageName, plainName + extension), baseDir)) != null) {
-                sourcePath = `${libraryPrefix}${packageName}/${plainName}${extension}`;
+                sourcePath = plainName !== "index" ? `${libraryPrefix}${packageName}${extension}` : `${libraryPrefix}${packageName}/${plainName}${extension}`;
                 packageBases.set(sourcePath.replace(extension_re, ""), path.join(currentDir, packageName));
                 break;
               }

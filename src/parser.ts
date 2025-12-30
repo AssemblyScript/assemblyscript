@@ -91,8 +91,6 @@ import {
   mangleInternalPath
 } from "./ast";
 
-import { fs, path, process } from "../util/node.js";
-
 /** Represents a dependee. */
 class Dependee {
   constructor(
@@ -2797,13 +2795,6 @@ export class Parser extends DiagnosticEmitter {
         } else {
           ret = Node.createImportStatement(members, path, tn.range(startPos, tn.pos));
         }
-        // Resolve package.json for non-relative imports
-        if (!path.value.startsWith(".")) {
-          const resolvedPath = this.resolvePackagePath(path.value);
-          if (resolvedPath) {
-            ret.internalPath = resolvedPath;
-          }
-        }
         let internalPath = ret.internalPath;
         if (!this.seenlog.has(internalPath)) {
           this.dependees.set(internalPath, new Dependee(assert(this.currentSource), path));
@@ -2863,32 +2854,6 @@ export class Parser extends DiagnosticEmitter {
         DiagnosticCode.Identifier_expected,
         tn.range()
       );
-    }
-    return null;
-  }
-
-  /** Resolves a package name to its internal path via package.json. */
-  private resolvePackagePath(packageName: string): string | null {
-    try {
-      const nodeModulesPath = path.join(this.baseDir, 'node_modules');
-      const packageJsonPath = path.join(nodeModulesPath, packageName, 'package.json');
-      if (fs.existsSync(packageJsonPath)) {
-        const content = fs.readFileSync(packageJsonPath, 'utf8');
-        const pkg = JSON.parse(content);
-        let entry = pkg.ascMain || pkg.assembly || pkg.main || pkg.module;
-        if (!entry && pkg.exports && pkg.exports["."] && pkg.exports["."].default) {
-          entry = pkg.exports["."].default;
-        }
-        if (entry) {
-          if (entry.startsWith("./")) entry = entry.substring(2);
-          // Remove .ts extension if present
-          const entryPath = entry.replace(/\.ts$/, '');
-          const result = mangleInternalPath(LIBRARY_PREFIX + packageName + '/' + entryPath);
-          return result;
-        }
-      }
-    } catch (e) {
-      // Ignore errors
     }
     return null;
   }

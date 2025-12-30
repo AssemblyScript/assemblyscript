@@ -34,8 +34,6 @@ import {
   CharCode
 } from "./util";
 
-import { fs, path } from "../util/node.js";
-
 import {
   ExpressionRef
 } from "./module";
