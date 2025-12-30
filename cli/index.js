@@ -402,6 +402,7 @@ export async function main(argv, options) {
 
   // Initialize the program
   program = assemblyscript.newProgram(compilerOptions);
+  program.parser.baseDir = baseDir;
 
   // Collect transforms *constructors* from the `--transform` CLI flag as well
   // as the `transform` option into the `transforms` array.
@@ -576,13 +577,34 @@ export async function main(argv, options) {
             }
             paths.push(...opts.path);
             for (const currentDir of paths.map(p => path.relative(baseDir, p))) {
-              const plainName = filePath;
+            // Check for package.json and resolve main
+              let entryPath = filePath;
+              const packageJsonPath = path.join(currentDir, packageName, 'package.json');
+              const packageJsonText = await readFile(packageJsonPath, baseDir);
+              if (packageJsonText != null) {
+                try {
+                  const pkg = JSON.parse(packageJsonText);
+                  let main = pkg.ascMain || pkg.assembly || pkg.main || pkg.module;
+                  if (!main && pkg.exports && pkg.exports["."] && pkg.exports["."].default) {
+                    main = pkg.exports["."].default;
+                  }
+                  if (main) {
+                    // Remove .ts extension if present
+                    entryPath = main.replace(/\.ts$/, '');
+                    if (entryPath.startsWith("./")) entryPath = entryPath.substring(2);
+                  }
+                } catch (e) {
+                  // Ignore parse errors
+                }
+              }
+              if (!entryPath) entryPath = "index";
+              const plainName = entryPath;
               if ((sourceText = await readFile(path.join(currentDir, packageName, plainName + extension), baseDir)) != null) {
                 sourcePath = `${libraryPrefix}${packageName}/${plainName}${extension}`;
                 packageBases.set(sourcePath.replace(extension_re, ""), path.join(currentDir, packageName));
                 break;
               }
-              const indexName = `${filePath}/index`;
+              const indexName = `${entryPath}/index`;
               if ((sourceText = await readFile(path.join(currentDir, packageName, indexName + extension), baseDir)) != null) {
                 sourcePath = `${libraryPrefix}${packageName}/${indexName}${extension}`;
                 packageBases.set(sourcePath.replace(extension_re, ""), path.join(currentDir, packageName));
