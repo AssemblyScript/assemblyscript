@@ -118,6 +118,9 @@ import {
   isPowerOf2
 } from "./util";
 
+// Use the built-in `TextEncoder` for UTF-8 conversion
+declare let TextEncoder: any;
+
 /** Internal names of various compiler built-ins. */
 export namespace BuiltinNames {
 
@@ -749,6 +752,7 @@ export namespace BuiltinNames {
   export const memory_copy = "~lib/memory/memory.copy";
   export const memory_fill = "~lib/memory/memory.fill";
   export const memory_data = "~lib/memory/memory.data";
+  export const memory_dataUTF8 = "~lib/memory/memory.dataUTF8";
 
   // std/typedarray.ts
   export const Int8Array = "~lib/typedarray/Int8Array";
@@ -3490,6 +3494,41 @@ function builtin_memory_data(ctx: BuiltinFunctionContext): ExpressionRef {
   }
 }
 builtinFunctions.set(BuiltinNames.memory_data, builtin_memory_data);
+
+// memory.dataUTF8(value) -> usize
+function builtin_memory_dataUTF8(ctx: BuiltinFunctionContext): ExpressionRef {
+  let compiler = ctx.compiler;
+  let module = compiler.module;
+  if (
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  let operands = ctx.operands;
+  let usizeType = compiler.options.usizeType;
+  let offset: i64;
+  let arg0 = operands[0];
+  if (!arg0.isLiteralKind(LiteralKind.String)) {
+    compiler.error(
+      DiagnosticCode.String_literal_expected,
+      arg0.range
+    );
+    return module.unreachable();
+  }
+  let str = (<StringLiteralExpression>arg0).value;
+  let array : Uint8Array = new TextEncoder('utf8').encode(str);
+  let arrayNullTerminated = new Uint8Array(array.length + 1);
+  arrayNullTerminated.set(array);
+  offset = compiler.addAlignedMemorySegment(arrayNullTerminated, 1).offset;
+  // FIXME: what if recompiles happen? recompiles are bad.
+  compiler.currentType = usizeType;
+  if (usizeType == Type.usize32) {
+    assert(!i64_high(offset));
+    return module.i32(i64_low(offset));
+  } else {
+    return module.i64(i64_low(offset), i64_high(offset));
+  }
+}
+builtinFunctions.set(BuiltinNames.memory_dataUTF8, builtin_memory_dataUTF8);
 
 // === GC =====================================================================================
 
