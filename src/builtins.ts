@@ -118,9 +118,6 @@ import {
   isPowerOf2
 } from "./util";
 
-// Use the built-in `TextEncoder` for UTF-8 conversion
-declare let TextEncoder: any;
-
 /** Internal names of various compiler built-ins. */
 export namespace BuiltinNames {
 
@@ -3495,6 +3492,41 @@ function builtin_memory_data(ctx: BuiltinFunctionContext): ExpressionRef {
 }
 builtinFunctions.set(BuiltinNames.memory_data, builtin_memory_data);
 
+function utf16ToUtf8(str: string) : Uint8Array {
+  let result = new Uint8Array(str.length*3); // max possible length is 1.5x the UTF16 encoding
+  let utf8Length: i32 = 0; // track actual encoded length
+  for (let i: i32 = 0; i < str.length; ++i) {
+    // UTF16 decode
+    let codePoint: u32 = str.charCodeAt(i);
+    if (codePoint >= 0xD800 && codePoint < 0xDC00) {
+      // could be the first half of a surrogate pair (if)
+      let codePoint2: u32 = str.charCodeAt(i + 1);
+      if (i + 1 < str.length && codePoint2 >= 0xDC00 && codePoint2 < 0xE000) {
+        // valid surrogate pair - combine to get the code-point
+        codePoint = ((codePoint&0x3FF)<<10) + (codePoint2&0x3FF) + 0x10000;
+        ++i;
+      }
+    }
+    // UTF8 encode
+    if (codePoint < 0x0080) {
+      result[utf8Length++] = codePoint;
+    } else if (codePoint < 0x0800) {
+      result[utf8Length++] = 0xC0 + (codePoint>>6);
+      result[utf8Length++] = 0x80 + (codePoint&0x3F);
+    } else if (codePoint < 0x10000) {
+      result[utf8Length++] = 0xE0 + ((codePoint>>12)&0x0F);
+      result[utf8Length++] = 0x80 + ((codePoint>>6)&0x3F);
+      result[utf8Length++] = 0x80 + (codePoint&0x3F);
+    } else {
+      result[utf8Length++] = 0xF0 + ((codePoint>>18)&0x07);
+      result[utf8Length++] = 0x80 + ((codePoint>>12)&0x3F);
+      result[utf8Length++] = 0x80 + ((codePoint>>6)&0x3F);
+      result[utf8Length++] = 0x80 + (codePoint&0x3F);
+    }
+  }
+  return result.subarray(0, utf8Length);
+}
+
 // memory.dataUTF8(value) -> usize
 function builtin_memory_dataUTF8(ctx: BuiltinFunctionContext): ExpressionRef {
   let compiler = ctx.compiler;
@@ -3515,7 +3547,7 @@ function builtin_memory_dataUTF8(ctx: BuiltinFunctionContext): ExpressionRef {
     return module.unreachable();
   }
   let str = (<StringLiteralExpression>arg0).value;
-  let array : Uint8Array = new TextEncoder('utf8').encode(str);
+  let array : Uint8Array = utf16ToUtf8(str);
   let arrayNullTerminated = new Uint8Array(array.length + 1);
   arrayNullTerminated.set(array);
   offset = compiler.addAlignedMemorySegment(arrayNullTerminated, 1).offset;
