@@ -3524,7 +3524,9 @@ function utf16ToUtf8(str: string) : Uint8Array {
       result[utf8Length++] = 0x80 + (codePoint&0x3F);
     }
   }
-  return result.subarray(0, utf8Length);
+  let trimmed = new Uint8Array(utf8Length);
+  for (let i: i32 = 0; i < utf8Length; ++i) trimmed[i] = result[i];
+  return trimmed;
 }
 
 // memory.dataUTF8(value) -> usize
