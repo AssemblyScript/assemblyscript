@@ -425,7 +425,7 @@ export async function main(argv, options) {
         } catch (e1) {
           try {
             transform = require(resolved);
-          } catch (e2) {
+          } catch {
             return prepareResult(e1);
           }
         }
@@ -1024,7 +1024,7 @@ export async function main(argv, options) {
     try {
       stats.readCount++;
       return await fs.promises.readFile(name, "utf8");
-    } catch (e) {
+    } catch {
       return null;
     }
   }
@@ -1038,7 +1038,7 @@ export async function main(argv, options) {
       await fs.promises.mkdir(dirPath, { recursive: true });
       await fs.promises.writeFile(filePath, contents);
       return true;
-    } catch (e) {
+    } catch {
       return false;
     }
   }
@@ -1049,7 +1049,7 @@ export async function main(argv, options) {
       stats.readCount++;
       return (await fs.promises.readdir(path.join(baseDir, dirname)))
         .filter(file => extension_re_except_d.test(file));
-    } catch (e) {
+    } catch {
       return null;
     }
   }
@@ -1105,7 +1105,7 @@ async function getConfig(file, baseDir, readFile) {
   let config;
   try {
     config = JSON.parse(contents);
-  } catch(ex) {
+  } catch {
     throw new Error(`Asconfig is not valid json: ${location}`);
   }
 
