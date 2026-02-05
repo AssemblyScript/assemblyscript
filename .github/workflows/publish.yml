@@ -1,64 +1,133 @@
 name: Publish
 on:
-  # Note that the main branch will be used regardless of the branch chosen
-  # in the web interface.
   workflow_dispatch:
   schedule:
-  - cron: '0 0 * * *'
+    - cron: '0 0 * * *'
 jobs:
   release:
     name: Packages
     if: github.repository == 'AssemblyScript/assemblyscript'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
-    - uses: actions/checkout@v4
-      with:
-        ref: main
-        fetch-depth: 0
-    - uses: actions/setup-node@v4
-      with:
-        node-version: current
-    - name: Install dependencies
-      run: npm ci
-    - name: Build packages
-      run: |
-        VERSION=$(npx aspublish --version)
-        if [[ "$VERSION" == "" ]]; then
-          echo "Changes do not trigger a release"
-        elif [[ "$VERSION" != "0."* ]]; then
-          echo "Unexpected version: $VERSION"
-          exit 1
-        else
-          echo "Building version: $VERSION"
-          npm version "$VERSION" --no-git-tag-version
-          npm run build
-          npm test
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: current
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build packages
+        id: build
+        run: |
+          VERSION=$(npx aspublish --version)
+          if [[ "$VERSION" == "" ]]; then
+            echo "Changes do not trigger a release"
+            echo "should_publish=false" >> $GITHUB_OUTPUT
+          elif [[ "$VERSION" != "0."* ]]; then
+            echo "Unexpected version: $VERSION"
+            exit 1
+          else
+            echo "Building version: $VERSION"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "should_publish=true" >> $GITHUB_OUTPUT
+            npm version "$VERSION" --no-git-tag-version
+            npm run build
+            npm test
+            cd lib/loader
+            npm version "$VERSION" --no-git-tag-version
+            npm run build
+            npm test
+            cd ../rtrace
+            npm version "$VERSION" --no-git-tag-version
+            npm run build
+            npm test
+            cd ../..
+          fi
+      - name: Determine npm tag
+        if: steps.build.outputs.should_publish == 'true'
+        id: npm_tag
+        run: |
+          VERSION="${{ steps.build.outputs.version }}"
+          if [[ "$VERSION" == *"-alpha"* ]]; then
+            echo "tag=alpha" >> $GITHUB_OUTPUT
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          elif [[ "$VERSION" == *"-beta"* ]]; then
+            echo "tag=beta" >> $GITHUB_OUTPUT
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          elif [[ "$VERSION" == *"-rc"* ]]; then
+            echo "tag=rc" >> $GITHUB_OUTPUT
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "tag=latest" >> $GITHUB_OUTPUT
+            echo "prerelease=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Publish packages
+        if: steps.build.outputs.should_publish == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NPM_TAG="${{ steps.npm_tag.outputs.tag }}"
+          node ./scripts/prepublish
+          if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
+            npx aspublish --tag "$NPM_TAG"
+          fi
           cd lib/loader
-          npm version "$VERSION" --no-git-tag-version
-          npm run build
-          npm test
+          if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
+            npm publish --access public --tag "$NPM_TAG"
+          fi
           cd ../rtrace
-          npm version "$VERSION" --no-git-tag-version
-          npm run build
-          npm test
+          if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
+            npm publish --access public --tag "$NPM_TAG"
+          fi
           cd ../..
-        fi
-    - name: Publish packages
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      run: |
-        node ./scripts/prepublish
-        if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
-          npx aspublish
-        fi
-        cd lib/loader
-        if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
-          npm publish --access public
-        fi
-        cd ../rtrace
-        if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
-          npm publish --access public
-        fi
-        cd ../..
-        node ./scripts/prepublish --reset
+          node ./scripts/prepublish --reset
+      - name: Generate changelog
+        if: steps.build.outputs.should_publish == 'true'
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v6
+        with:
+          configurationJson: |
+            {
+              "categories": [
+                {
+                  "title": "### Breaking Changes",
+                  "labels": ["breaking", "breaking-change"]
+                },
+                {
+                  "title": "### Features",
+                  "labels": ["feature", "feat", "enhancement"]
+                },
+                {
+                  "title": "### Bug Fixes",
+                  "labels": ["bug", "fix", "bugfix"]
+                },
+                {
+                  "title": "### Other Changes",
+                  "labels": []
+                }
+              ],
+              "template": "#{{CHANGELOG}}",
+              "pr_template": "- #{{TITLE}} ([##{{NUMBER}}](#{{URL}})) by @#{{AUTHOR}}",
+              "empty_template": "- No changes",
+              "tag_resolver": {
+                "method": "semver"
+              }
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub release
+        if: steps.build.outputs.should_publish == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.build.outputs.version }}
+          name: Release v${{ steps.build.outputs.version }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          prerelease: ${{ steps.npm_tag.outputs.prerelease == 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

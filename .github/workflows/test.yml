@@ -9,7 +9,7 @@ jobs:
     name: "Check"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: "Check that distribution files are unmodified"
       if: github.event_name == 'pull_request'
       run: |
@@ -29,8 +29,8 @@ jobs:
         os: ["ubuntu", "macos", "windows"]
         node_version: ["current", "lts/*"]
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.node_version }}
     - name: Install dependencies
@@ -49,8 +49,8 @@ jobs:
       matrix:
         target: ["debug", "release"]
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
         node-version: current
     - name: Install dependencies
@@ -70,8 +70,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Build
@@ -86,8 +86,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
         node-version: current
     - name: Install dependencies
@@ -111,8 +111,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
         node-version: current
     - name: Install dependencies
@@ -129,8 +129,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
         node-version: current
     - name: Install dependencies
