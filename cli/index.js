@@ -34,7 +34,7 @@ import * as optionsUtil from "../util/options.js";
 import * as generated from "./index.generated.js";
 
 import binaryen from "../lib/binaryen.js";
-import * as assemblyscriptJS from "assemblyscript";
+import * as assemblyscriptJS from "@btc-vision/assemblyscript";
 
 // Use the TS->JS variant by default
 let assemblyscript = assemblyscriptJS;
@@ -670,7 +670,7 @@ export async function main(argv, options) {
       .replace(/\\/g, "/")
       .replace(extension_re, "")
       .replace(/\/$/, "");
-    
+
     // Try entryPath.ext, then entryPath/index.ext
     let sourceText = await readFile(sourcePath + extension, baseDir);
     if (sourceText == null) {

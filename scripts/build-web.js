@@ -17,7 +17,7 @@ export function buildWeb() {
   const longUrl = `https://cdn.jsdelivr.net/npm/long@${longVersion}/index.js`;
   const importmap = {
     "imports": {
-      "assemblyscript": `${distUrl}assemblyscript.js`,
+      "@btc-vision/assemblyscript": `${distUrl}assemblyscript.js`,
       "assemblyscript/asc": `${distUrl}asc.js`,
       "binaryen": binaryenUrl,
       "long": longUrl

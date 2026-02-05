@@ -2,7 +2,7 @@
   "name": "@assemblyscript/loader",
   "description": "A convenient loader for AssemblyScript modules.",
   "keywords": [
-    "assemblyscript",
+    "@btc-vision/assemblyscript",
     "loader",
     "glue",
     "interop",
