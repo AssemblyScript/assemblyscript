@@ -1238,12 +1238,8 @@
      i32.eqz
      if
       global.get $~lib/rt/itcms/total
-      i64.extend_i32_u
-      i64.const 200
-      i64.mul
-      i64.const 100
-      i64.div_u
-      i32.wrap_i64
+      i32.const 1
+      i32.shl
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
