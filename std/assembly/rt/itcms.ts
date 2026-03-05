@@ -403,7 +403,12 @@ function interrupt(): void {
     budget -= step();
     if (state == STATE_IDLE) {
       if (TRACE) trace("└ GC (auto) done at cur/max", 2, total, memory.size() << 16);
-      threshold = <usize>(<u64>total * IDLEFACTOR / 100) + GRANULARITY;
+      if (IDLEFACTOR % 100 == 0) {
+        // optimization for the default GC parameters which idle factor is 200%
+        threshold = total * (IDLEFACTOR / 100) + GRANULARITY;
+      } else {
+        threshold = <usize>((<u64>total * IDLEFACTOR) / 100) + GRANULARITY;
+      }
       if (PROFILE) onyield(total);
       return;
     }

@@ -2043,14 +2043,17 @@
    if
     i32.const 0
     drop
-    global.get $~lib/rt/itcms/total
-    i64.extend_i32_u
     i32.const 200
-    i64.extend_i32_u
-    i64.mul
-    i64.const 100
-    i64.div_u
-    i32.wrap_i64
+    i32.const 100
+    i32.rem_u
+    i32.const 0
+    i32.eq
+    drop
+    global.get $~lib/rt/itcms/total
+    i32.const 200
+    i32.const 100
+    i32.div_u
+    i32.mul
     i32.const 1024
     i32.add
     global.set $~lib/rt/itcms/threshold
