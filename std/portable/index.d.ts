@@ -299,7 +299,6 @@ declare namespace f64 {
   /** Negative infinity value. */
   export const NEGATIVE_INFINITY: f64;
   /** Not a number value. */
-  /* eslint no-shadow-restricted-names: "off" */
   export const NaN: f64;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;

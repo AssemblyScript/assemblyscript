@@ -1131,12 +1131,12 @@
     local.get $0
     local.get $1
     i32.ctz
-    local.tee $2
+    local.tee $1
     i32.const 2
     i32.shl
     i32.add
     i32.load offset=4
-    local.tee $1
+    local.tee $2
     i32.eqz
     if
      i32.const 0
@@ -1147,9 +1147,9 @@
      unreachable
     end
     local.get $0
-    local.get $1
-    i32.ctz
     local.get $2
+    i32.ctz
+    local.get $1
     i32.const 4
     i32.shl
     i32.add

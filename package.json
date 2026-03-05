@@ -20,24 +20,27 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "engines": {
-    "node": ">=20",
+    "node": ">=24",
     "npm": ">=10"
   },
   "engineStrict": true,
   "dependencies": {
-    "binaryen": "123.0.0-nightly.20250530",
-    "long": "^5.2.4"
+    "binaryen": "125.0.0-nightly.20251209",
+    "long": "^5.3.2"
   },
   "devDependencies": {
-    "@types/node": "^18.19.75",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
+    "@eslint/js": "^9.39.2",
+    "@types/node": "^25.0.10",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
+    "typescript-eslint": "^8.54.0",
     "as-float": "^1.0.1",
-    "diff": "^7.0.0",
-    "esbuild": "^0.25.0",
-    "eslint": "^8.57.1",
-    "glob": "^10.4.5",
-    "typescript": "^5.7.3"
+    "diff": "^8.0.3",
+    "esbuild": "^0.27.2",
+    "eslint": "^9.39.2",
+    "globals": "^17.1.0",
+    "glob": "^13.0.0",
+    "typescript": "^5.9.3"
   },
   "type": "module",
   "exports": {
@@ -74,7 +77,7 @@
     "check": "npm run check:config && npm run check:import && npm run lint",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
     "check:import": "tsc --noEmit --target ESNEXT --module nodenext --moduleResolution nodenext --experimentalDecorators tests/import/index",
-    "lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
+    "lint": "eslint --max-warnings 0 .",
     "build": "node scripts/build",
     "watch": "node scripts/build --watch",
     "coverage": "npx c8 -- npm test",

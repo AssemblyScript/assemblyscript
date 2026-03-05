@@ -1,18 +1,18 @@
 (module
- (type $i32_=>_none (func (param i32)))
- (type $none_=>_none (func))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $0 (func (param i32)))
+ (type $1 (func (param i32) (result i32)))
+ (type $2 (func))
+ (type $3 (func (param i32 i32 i32 i32)))
+ (type $4 (func (param i32 i32)))
+ (type $5 (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 140))
  (memory $0 1)
- (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (table $0 1 funcref)
+ (data $0 (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data $1 (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "heap_alloc" (func $assembly/index/heap_alloc))
  (export "heap_free" (func $assembly/index/heap_free))
@@ -26,6 +26,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   memory.size
   local.set $1
   local.get $1
@@ -62,8 +63,8 @@
    local.get $5
    i32.gt_s
    select
-   local.set $4
-   local.get $4
+   local.set $6
+   local.get $6
    memory.grow
    i32.const 0
    i32.lt_s
@@ -107,19 +108,22 @@
   i32.const 4
   i32.add
   local.set $2
-  local.get $0
-  local.set $3
-  local.get $3
-  i32.const 4
-  i32.add
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.const 4
-  i32.sub
+  block $~lib/rt/stub/computeSize|inlined.0 (result i32)
+   local.get $0
+   local.set $3
+   local.get $3
+   i32.const 4
+   i32.add
+   i32.const 15
+   i32.add
+   i32.const 15
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.const 4
+   i32.sub
+   br $~lib/rt/stub/computeSize|inlined.0
+  end
   local.set $4
   local.get $2
   local.get $4
@@ -129,14 +133,21 @@
   local.get $4
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $2
+  return
  )
  (func $~lib/memory/heap.alloc (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__alloc
+  return
  )
  (func $assembly/index/heap_alloc (param $0 i32) (result i32)
   local.get $0
   call $~lib/memory/heap.alloc
+  return
+ )
+ (func $~lib/rt/common/BLOCK#get:mmInfo (param $0 i32) (result i32)
+  local.get $0
+  i32.load
  )
  (func $~lib/rt/stub/__free (param $0 i32)
   (local $1 i32)
@@ -166,7 +177,7 @@
   local.set $1
   local.get $0
   local.get $1
-  i32.load
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.add
   global.get $~lib/rt/stub/offset
   i32.eq

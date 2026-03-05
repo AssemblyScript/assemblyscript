@@ -6,7 +6,7 @@
 import { fs } from "./node.js";
 
 var _fetch = typeof fetch === "function" ? fetch :
-  url => new Promise((resolve, reject) => { // eslint-disable-line no-global-assign
+  url => new Promise((resolve, reject) => {
     fs.readFile(url, (err, data) => {
       if (err) reject(err);
       resolve({

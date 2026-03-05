@@ -41,7 +41,7 @@ export default function runner(exports, runs, allocs) {
   console.log("base: " + base);
   try {
     reset();
-  } catch (e) {
+  } catch {
     free(base);
   }
   let currentMem = exports.memory.buffer.byteLength;
@@ -78,7 +78,7 @@ export default function runner(exports, runs, allocs) {
         let ptr = alloc(64, 0);
         if (ptr !== base) throw Error("expected " + base + " but got " + ptr);
         reset();
-      } catch (e) {
+      } catch {
         // should now be possible to reuse the entire memory
         // just try a large portion of the memory here, for example because of
         // SL+1 for allocations in TLSF

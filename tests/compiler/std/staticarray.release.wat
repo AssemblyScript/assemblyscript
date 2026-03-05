@@ -1870,12 +1870,12 @@
        i32.const 2
        i32.shl
        i32.add
-       local.tee $8
+       local.tee $7
        i32.load
-       local.set $7
+       local.set $8
        i32.const 2
        global.set $~argumentsLength
-       local.get $7
+       local.get $8
        local.get $3
        i32.const 3872
        i32.load
@@ -1883,8 +1883,8 @@
        i32.const 0
        i32.le_s
        br_if $while-break|1
-       local.get $8
        local.get $7
+       local.get $8
        i32.store offset=8
        local.get $5
        i32.const 1

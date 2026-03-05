@@ -78,6 +78,7 @@
  (func $start:builtins~anonymous|1
  )
  (func $start:builtins~anonymous|2 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  unreachable
  )
  (func $~start
   call $start:builtins
