@@ -2417,6 +2417,45 @@ declare class Set<K> {
   toString(): string;
 }
 
+declare class FixedMap<K,V> {
+  constructor(initialCapacity?: i32);
+  readonly size: i32;
+  has(key: K): bool;
+  get(key: K): V;
+  set(key: K, value: V): this;
+  delete(key: K): bool;
+  clear(): void;
+  keys(): K[];
+  values(): V[];
+  toString(): string;
+}
+
+declare class FixedArray<T> {
+  [key: number]: T;
+  constructor(capacity: i32);
+  length: i32;
+  readonly capacity: i32;
+  push(value: T): i32;
+  pop(): T;
+  swapDelete(index: i32): void;
+  indexOf(value: T, fromIndex?: i32): i32;
+  includes(value: T, fromIndex?: i32): bool;
+  fill(value: T, start?: i32, end?: i32): this;
+  clear(): void;
+  toString(): string;
+}
+
+declare class FixedSet<T> {
+  constructor(initialCapacity?: i32);
+  readonly size: i32;
+  has(key: T): bool;
+  add(key: T): this;
+  delete(key: T): bool;
+  clear(): void;
+  values(): T[];
+  toString(): string;
+}
+
 interface SymbolConstructor {
   readonly hasInstance: symbol;
   readonly isConcatSpreadable: symbol;

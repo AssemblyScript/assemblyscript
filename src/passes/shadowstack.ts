@@ -667,19 +667,57 @@ export class ShadowStackPass extends Pass {
     // Walk globals (only once, since they don't trigger new function compilation)
     this.walkGlobals();
 
-    // Update functions we added more locals to
-    // TODO: _BinaryenFunctionAddVar ?
-    for (let _keys = Map_keys(this.tempMaps), i = 0, k = _keys.length; i < k; ++i) {
-      this.updateFunction(_keys[i]);
-    }
-
-    // Update exports taking managed arguments
+    // Update exports taking managed arguments. This may trigger compilation
+    // of new functions (e.g., abort via makeStackCheck -> makeStaticAbort).
     let exportMap = this.exportMap;
     for (let _keys = Map_keys(exportMap), i = 0, k = _keys.length; i < k; ++i) {
       let exportName = _keys[i];
       let exportRef = _BinaryenGetExport(module.ref, module.allocStringCached(exportName));
       let managedOperandIndices = changetype<i32[]>(exportMap.get(exportName));
       this.updateExport(exportRef, managedOperandIndices);
+    }
+
+    // Walk and instrument any functions added during export processing
+    let postExportNumFunctions = _BinaryenGetNumFunctions(moduleRef);
+    while (lastNumFunctions < postExportNumFunctions) {
+      for (let i = lastNumFunctions; i < postExportNumFunctions; ++i) {
+        this.walkFunction(_BinaryenGetFunctionByIndex(moduleRef, i));
+      }
+      let instrumentReturns = new InstrumentReturns(this);
+      for (let _keys = Map_keys(this.slotMaps), i = 0, k = _keys.length; i < k; ++i) {
+        let func = _keys[i];
+        if (instrumentedFunctions.has(func)) continue;
+        instrumentedFunctions.add(func);
+        let slotMap = changetype<SlotMap>(this.slotMaps.get(func));
+        let frameSize = slotMap.size * this.ptrSize;
+        instrumentReturns.frameSize = frameSize;
+        instrumentReturns.walkFunction(func);
+        let stmts = new Array<ExpressionRef>();
+        stmts.push(this.makeStackOffset(-frameSize));
+        this.makeStackFill(frameSize, stmts);
+        let body = _BinaryenFunctionGetBody(func);
+        let bodyType = _BinaryenExpressionGetType(body);
+        if (bodyType == TypeRef.Unreachable) {
+          stmts.push(body);
+        } else if (bodyType == TypeRef.None) {
+          stmts.push(body);
+          stmts.push(this.makeStackOffset(+frameSize));
+        } else {
+          let temp = this.getSharedTemp(func, bodyType);
+          stmts.push(module.local_set(temp, body, false));
+          stmts.push(this.makeStackOffset(+frameSize));
+          stmts.push(module.local_get(temp, bodyType));
+        }
+        _BinaryenFunctionSetBody(func, module.flatten(stmts, bodyType));
+      }
+      lastNumFunctions = postExportNumFunctions;
+      postExportNumFunctions = _BinaryenGetNumFunctions(moduleRef);
+    }
+
+    // Update functions we added more locals to
+    // TODO: _BinaryenFunctionAddVar ?
+    for (let _keys = Map_keys(this.tempMaps), i = 0, k = _keys.length; i < k; ++i) {
+      this.updateFunction(_keys[i]);
     }
   }
 }
