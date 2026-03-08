@@ -51,7 +51,7 @@ export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize =
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __tostack(ptr: usize): usize { // eslint-disable-line
+export function __tostack(ptr: usize): usize {
   return ptr;
 }
 

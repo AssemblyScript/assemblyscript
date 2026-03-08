@@ -2417,6 +2417,125 @@ declare class Set<K> {
   toString(): string;
 }
 
+/** Zero-overhead typed pointer. `@unmanaged` — no allocation, no GC. */
+declare class Pointer<T> {
+  /** Creates a pointer from a raw byte offset. */
+  constructor(offset?: usize);
+  /** The raw byte offset. */
+  readonly offset: usize;
+  /** Dereferences the pointer (load/store). */
+  value: T;
+  /** Returns true if the pointer is null (offset == 0). */
+  isNull(): bool;
+  /** Returns true if this pointer has the same offset as `other`. */
+  equals(other: Pointer<T>): bool;
+  /** Copies `count` elements from this pointer to `dst`. */
+  copyTo(dst: Pointer<T>, count: i32): void;
+  /** Returns a null pointer. */
+  static null<T>(): Pointer<T>;
+  [key: number]: T;
+}
+
+/** Zero-overhead endian conversion utilities. */
+declare namespace Endian {
+  /** Load a value from memory in big-endian byte order. */
+  function loadBE<T>(ptr: usize, offset?: usize): T;
+  /** Store a value to memory in big-endian byte order. */
+  function storeBE<T>(ptr: usize, value: T, offset?: usize): void;
+  /** Load a value from memory in little-endian byte order (identity on wasm). */
+  function loadLE<T>(ptr: usize, offset?: usize): T;
+  /** Store a value to memory in little-endian byte order (identity on wasm). */
+  function storeLE<T>(ptr: usize, value: T, offset?: usize): void;
+  /** Convert a value to big-endian byte order (bswap on wasm). */
+  function toBE<T>(value: T): T;
+  /** Convert a value from big-endian byte order (bswap on wasm). */
+  function fromBE<T>(value: T): T;
+  /** Convert a value to little-endian byte order (identity on wasm). */
+  function toLE<T>(value: T): T;
+  /** Convert a value from little-endian byte order (identity on wasm). */
+  function fromLE<T>(value: T): T;
+}
+
+/** Zero-alloc memory view with bounds-checked endian-aware reads/writes. */
+declare class ByteSlice {
+  /** The raw pointer to the viewed memory. */
+  readonly ptr: usize;
+  /** The length of the view in bytes. */
+  readonly length: i32;
+  constructor(ptr: usize, length: i32);
+  getU8(offset: i32): u8;
+  getU16(offset: i32, be?: bool): u16;
+  getU32(offset: i32, be?: bool): u32;
+  getU64(offset: i32, be?: bool): u64;
+  getI8(offset: i32): i8;
+  getI16(offset: i32, be?: bool): i16;
+  getI32(offset: i32, be?: bool): i32;
+  getI64(offset: i32, be?: bool): i64;
+  setU8(offset: i32, value: u8): void;
+  setU16(offset: i32, value: u16, be?: bool): void;
+  setU32(offset: i32, value: u32, be?: bool): void;
+  setU64(offset: i32, value: u64, be?: bool): void;
+  setI8(offset: i32, value: i8): void;
+  setI16(offset: i32, value: i16, be?: bool): void;
+  setI32(offset: i32, value: i32, be?: bool): void;
+  setI64(offset: i32, value: i64, be?: bool): void;
+  slice(start: i32, end?: i32): ByteSlice;
+  copyTo(dst: ByteSlice, dstOff?: i32, srcOff?: i32, count?: i32): void;
+  fill(value: u8, start?: i32, end?: i32): void;
+  equals(other: ByteSlice): bool;
+  toPointer<T>(): Pointer<T>;
+  toString(): string;
+  [key: number]: u8;
+}
+
+/** Type-safe bit manipulation utilities. */
+declare namespace BitFlags {
+  /** Check if all bits in `bit` are set in `flags`. */
+  function has<T>(flags: T, bit: T): bool;
+  /** Check if any bits in `mask` are set in `flags`. */
+  function hasAny<T>(flags: T, mask: T): bool;
+  /** Test whether bit at `index` is set. */
+  function test<T>(flags: T, index: i32): bool;
+  /** Set bits from `bit` in `flags`. */
+  function set<T>(flags: T, bit: T): T;
+  /** Clear bits from `bit` in `flags`. */
+  function clear<T>(flags: T, bit: T): T;
+  /** Toggle bits from `bit` in `flags`. */
+  function toggle<T>(flags: T, bit: T): T;
+  /** Count number of set bits. */
+  function popcount<T>(flags: T): i32;
+  /** Check if no bits are set. */
+  function isEmpty<T>(flags: T): bool;
+}
+
+/** Hex and varint encoding utilities. */
+declare namespace Encoding {
+  namespace Hex {
+    /** Encode bytes to hex chars. Returns chars written. */
+    function encode(src: usize, srcLen: i32, dst: usize): i32;
+    /** Decode hex chars to bytes. Returns bytes written, -1 on error. */
+    function decode(src: usize, srcLen: i32, dst: usize): i32;
+    /** Encode a single byte to 2 hex chars. */
+    function encodeByte(value: u8, dst: usize): void;
+    /** Decode 2 hex chars to a byte. Returns -1 on error. */
+    function decodeByte(src: usize): i32;
+  }
+  namespace Varint {
+    /** Encode u32 as unsigned LEB128. Returns bytes written. */
+    function encodeU32(value: u32, dst: usize): i32;
+    /** Encode u64 as unsigned LEB128. Returns bytes written. */
+    function encodeU64(value: u64, dst: usize): i32;
+    /** Decode unsigned LEB128 u32. */
+    function decodeU32(src: usize, bytesRead: Pointer<i32>): u32;
+    /** Decode unsigned LEB128 u64. */
+    function decodeU64(src: usize, bytesRead: Pointer<i32>): u64;
+    /** Encode u64 as Bitcoin CompactSize. Returns bytes written. */
+    function encodeCompact(value: u64, dst: usize): i32;
+    /** Decode Bitcoin CompactSize. */
+    function decodeCompact(src: usize, bytesRead: Pointer<i32>): u64;
+  }
+}
+
 declare class FixedMap<K,V> {
   constructor(initialCapacity?: i32);
   readonly size: i32;
