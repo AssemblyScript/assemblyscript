@@ -76,7 +76,7 @@ export namespace Encoding {
       return i + 1;
     }
 
-    /** Decode an unsigned LEB128-encoded u32 from `src`. Writes bytes consumed to `bytesRead`. */
+    /** Decode an unsigned LEB128-encoded u32 from `src`. Writes bytes consumed to `bytesRead`. Max 5 bytes. */
     @inline export function decodeU32(src: usize, bytesRead: Pointer<i32>): u32 {
       let result: u32 = 0;
       let shift: u32 = 0;
@@ -87,12 +87,13 @@ export namespace Encoding {
         result |= <u32>(b & 0x7F) << shift;
         shift += 7;
         ++i;
+        if (i >= 5) break; // u32 needs at most 5 LEB128 bytes
       } while (b & 0x80);
       bytesRead.value = i;
       return result;
     }
 
-    /** Decode an unsigned LEB128-encoded u64 from `src`. Writes bytes consumed to `bytesRead`. */
+    /** Decode an unsigned LEB128-encoded u64 from `src`. Writes bytes consumed to `bytesRead`. Max 10 bytes. */
     @inline export function decodeU64(src: usize, bytesRead: Pointer<i32>): u64 {
       let result: u64 = 0;
       let shift: u64 = 0;
@@ -103,6 +104,7 @@ export namespace Encoding {
         result |= <u64>(b & 0x7F) << shift;
         shift += 7;
         ++i;
+        if (i >= 10) break; // u64 needs at most 10 LEB128 bytes
       } while (b & 0x80);
       bytesRead.value = i;
       return result;

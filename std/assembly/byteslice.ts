@@ -1,8 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
-import { Runtime } from "shared/runtime";
 import { Pointer } from "./pointer";
-import { E_INDEXOUTOFRANGE } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 
 // Zero-alloc memory view: pointer + length with bounds-checked endian-aware reads/writes.
 // Unlike DataView, does not own an ArrayBuffer — the viewed memory is unowned/raw.
@@ -13,6 +12,7 @@ export class ByteSlice {
   readonly length: i32;
 
   constructor(ptr: usize, length: i32) {
+    if (length < 0) throw new RangeError(E_INVALIDLENGTH);
     this.ptr = ptr;
     this.length = length;
   }
@@ -137,6 +137,7 @@ export class ByteSlice {
 
   copyTo(dst: ByteSlice, dstOff: i32 = 0, srcOff: i32 = 0, count: i32 = this.length - srcOff): void {
     if (
+      (count >>> 31) |
       (srcOff >>> 31) | i32(srcOff + count > this.length) |
       (dstOff >>> 31) | i32(dstOff + count > dst.length)
     ) throw new RangeError(E_INDEXOUTOFRANGE);

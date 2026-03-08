@@ -2425,6 +2425,14 @@ declare class Pointer<T> {
   readonly offset: usize;
   /** Dereferences the pointer (load/store). */
   value: T;
+  /** Add raw byte offsets of two pointers. */
+  @operator("+") add(other: Pointer<T>): Pointer<T>;
+  /** Subtract raw byte offsets of two pointers. */
+  @operator("-") sub(other: Pointer<T>): Pointer<T>;
+  /** Increment pointer by sizeof<T> bytes. */
+  @operator.prefix("++") inc(): Pointer<T>;
+  /** Decrement pointer by sizeof<T> bytes. */
+  @operator.prefix("--") dec(): Pointer<T>;
   /** Returns true if the pointer is null (offset == 0). */
   isNull(): bool;
   /** Returns true if this pointer has the same offset as `other`. */
@@ -2456,7 +2464,7 @@ declare namespace Endian {
   function fromLE<T>(value: T): T;
 }
 
-/** Zero-alloc memory view with bounds-checked endian-aware reads/writes. */
+/** Zero-alloc memory view with bounds-checked endian-aware reads/writes. Big-endian by default. */
 declare class ByteSlice {
   /** The raw pointer to the viewed memory. */
   readonly ptr: usize;
@@ -2464,21 +2472,33 @@ declare class ByteSlice {
   readonly length: i32;
   constructor(ptr: usize, length: i32);
   getU8(offset: i32): u8;
-  getU16(offset: i32, be?: bool): u16;
-  getU32(offset: i32, be?: bool): u32;
-  getU64(offset: i32, be?: bool): u64;
+  /** @param be Big-endian byte order (default: `true`). */
+  getU16(offset: i32, be?: bool /* = true */): u16;
+  /** @param be Big-endian byte order (default: `true`). */
+  getU32(offset: i32, be?: bool /* = true */): u32;
+  /** @param be Big-endian byte order (default: `true`). */
+  getU64(offset: i32, be?: bool /* = true */): u64;
   getI8(offset: i32): i8;
-  getI16(offset: i32, be?: bool): i16;
-  getI32(offset: i32, be?: bool): i32;
-  getI64(offset: i32, be?: bool): i64;
+  /** @param be Big-endian byte order (default: `true`). */
+  getI16(offset: i32, be?: bool /* = true */): i16;
+  /** @param be Big-endian byte order (default: `true`). */
+  getI32(offset: i32, be?: bool /* = true */): i32;
+  /** @param be Big-endian byte order (default: `true`). */
+  getI64(offset: i32, be?: bool /* = true */): i64;
   setU8(offset: i32, value: u8): void;
-  setU16(offset: i32, value: u16, be?: bool): void;
-  setU32(offset: i32, value: u32, be?: bool): void;
-  setU64(offset: i32, value: u64, be?: bool): void;
+  /** @param be Big-endian byte order (default: `true`). */
+  setU16(offset: i32, value: u16, be?: bool /* = true */): void;
+  /** @param be Big-endian byte order (default: `true`). */
+  setU32(offset: i32, value: u32, be?: bool /* = true */): void;
+  /** @param be Big-endian byte order (default: `true`). */
+  setU64(offset: i32, value: u64, be?: bool /* = true */): void;
   setI8(offset: i32, value: i8): void;
-  setI16(offset: i32, value: i16, be?: bool): void;
-  setI32(offset: i32, value: i32, be?: bool): void;
-  setI64(offset: i32, value: i64, be?: bool): void;
+  /** @param be Big-endian byte order (default: `true`). */
+  setI16(offset: i32, value: i16, be?: bool /* = true */): void;
+  /** @param be Big-endian byte order (default: `true`). */
+  setI32(offset: i32, value: i32, be?: bool /* = true */): void;
+  /** @param be Big-endian byte order (default: `true`). */
+  setI64(offset: i32, value: i64, be?: bool /* = true */): void;
   slice(start: i32, end?: i32): ByteSlice;
   copyTo(dst: ByteSlice, dstOff?: i32, srcOff?: i32, count?: i32): void;
   fill(value: u8, start?: i32, end?: i32): void;
@@ -2488,24 +2508,24 @@ declare class ByteSlice {
   [key: number]: u8;
 }
 
-/** Type-safe bit manipulation utilities. */
+/** Type-safe bit manipulation utilities. Integer types only. */
 declare namespace BitFlags {
   /** Check if all bits in `bit` are set in `flags`. */
-  function has<T>(flags: T, bit: T): bool;
+  function has<T extends number>(flags: T, bit: T): bool;
   /** Check if any bits in `mask` are set in `flags`. */
-  function hasAny<T>(flags: T, mask: T): bool;
+  function hasAny<T extends number>(flags: T, mask: T): bool;
   /** Test whether bit at `index` is set. */
-  function test<T>(flags: T, index: i32): bool;
+  function test<T extends number>(flags: T, index: i32): bool;
   /** Set bits from `bit` in `flags`. */
-  function set<T>(flags: T, bit: T): T;
+  function set<T extends number>(flags: T, bit: T): T;
   /** Clear bits from `bit` in `flags`. */
-  function clear<T>(flags: T, bit: T): T;
+  function clear<T extends number>(flags: T, bit: T): T;
   /** Toggle bits from `bit` in `flags`. */
-  function toggle<T>(flags: T, bit: T): T;
+  function toggle<T extends number>(flags: T, bit: T): T;
   /** Count number of set bits. */
-  function popcount<T>(flags: T): i32;
+  function popcount<T extends number>(flags: T): i32;
   /** Check if no bits are set. */
-  function isEmpty<T>(flags: T): bool;
+  function isEmpty<T extends number>(flags: T): bool;
 }
 
 /** Hex and varint encoding utilities. */
