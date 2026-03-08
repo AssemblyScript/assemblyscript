@@ -66,6 +66,15 @@ export class MiniStack extends Pass {
     this.managedReturns.add(exportName);
   }
 
+  /** Reads a cached string, throwing a descriptive error if null. */
+private readStringOrThrow(ref: number, context: string): string {
+  const result = this.module.readStringCached(ref);
+  if (result == null) {
+    throw new Error(`Failed to read string for ${context}`);
+  }
+  return result;
+}
+
   /** Instruments a function export to also maintain stack depth. */
   instrumentFunctionExport(ref: ExportRef): void {
     assert(_BinaryenExportGetKind(ref) == ExternalKind.Function);
@@ -154,8 +163,10 @@ export class MiniStack extends Pass {
     _BinaryenAddFunctionExport(module.ref, module.allocStringCached(wrapperName), externalNameRef);
   }
 
-  /** Runs the pass. Returns `true` if the mini stack has been added. */
+  /** Runs the pass. Return `true` if mini stack is added. */
   run(): bool {
+    if (!this.validateModule()) return false;
+
     let module = this.module;
     let moduleRef = module.ref;
     let numExports = _BinaryenGetNumExports(moduleRef);
