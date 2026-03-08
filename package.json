@@ -8,7 +8,7 @@
     "@btc-vision/assemblyscript",
     "wasm"
   ],
-  "version": "0.29.2",
+  "version": "0.29.3",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "license": "Apache-2.0",
   "homepage": "https://assemblyscript.org",
