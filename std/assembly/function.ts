@@ -1,3 +1,5 @@
+import { Runtime } from "shared/runtime";
+
 type auto = i32;
 
 @final export abstract class Function<T> {
@@ -32,7 +34,9 @@ type auto = i32;
   // RT integration
 
   @unsafe private __visit(cookie: u32): void {
-    // Env is either `null` (nop) or compiler-generated
-    __visit(this._env, cookie);
+    if (ASC_RUNTIME != Runtime.Memory) {
+      // Env is either `null` (nop) or compiler-generated
+      __visit(this._env, cookie);
+    }
   }
 }

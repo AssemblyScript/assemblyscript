@@ -300,6 +300,7 @@ export async function main(argv, options) {
   switch (opts.runtime) {
     case "stub": runtime = 0; break;
     case "minimal": runtime = 1; break;
+    case "memory": runtime = 3; break;
     /* incremental */
     default: runtime = 2; break;
   }
@@ -731,6 +732,12 @@ export async function main(argv, options) {
     try {
       module = assemblyscript.compile(program);
     } catch (e) {
+      let numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
+      if (numErrors) {
+        const err = Error(`${numErrors} compile error(s)`);
+        err.stack = err.message;
+        return prepareResult(err);
+      }
       crash("compile", e);
     }
     stats.compileTime += stats.end(begin);

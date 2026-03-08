@@ -18,9 +18,11 @@
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/native/ASC_FEATURE_EXCEPTION_HANDLING i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Memory i32 (i32.const 3))
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
@@ -2196,14 +2198,17 @@
    if
     i32.const 0
     drop
-    global.get $~lib/rt/itcms/total
-    i64.extend_i32_u
     i32.const 200
-    i64.extend_i32_u
-    i64.mul
-    i64.const 100
-    i64.div_u
-    i32.wrap_i64
+    i32.const 100
+    i32.rem_u
+    i32.const 0
+    i32.eq
+    drop
+    global.get $~lib/rt/itcms/total
+    i32.const 200
+    i32.const 100
+    i32.div_u
+    i32.mul
     i32.const 1024
     i32.add
     global.set $~lib/rt/itcms/threshold
@@ -3567,11 +3572,6 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 36800
-   i32.const 36848
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -4836,6 +4836,10 @@
     local.get $array
     local.get $newData
     i32.store offset=4
+    i32.const 2
+    global.get $~lib/shared/runtime/Runtime.Memory
+    i32.ne
+    drop
     local.get $array
     local.get $newData
     i32.const 0
@@ -7296,6 +7300,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
   i32.const 0
   drop
   local.get $this

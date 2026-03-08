@@ -1,5 +1,20 @@
 async function instantiate(module, imports = {}) {
-  const { exports } = await WebAssembly.instantiate(module, imports);
+  const adaptedImports = {
+    env: Object.setPrototypeOf({
+      abort(message, fileName, lineNumber, columnNumber) {
+        // ~lib/builtins/__abort_impl(~lib/string/String | null?, ~lib/string/String | null?, u32?, u32?) => void
+        message = __liftString(message >>> 0);
+        fileName = __liftString(fileName >>> 0);
+        lineNumber = lineNumber >>> 0;
+        columnNumber = columnNumber >>> 0;
+        (() => {
+          // @external.js
+          throw Error(`${message} in ${fileName}:${lineNumber}:${columnNumber}`);
+        })();
+      },
+    }, Object.assign(Object.create(globalThis), imports.env || {})),
+  };
+  const { exports } = await WebAssembly.instantiate(module, adaptedImports);
   const memory = exports.memory || imports.env.memory;
   const adaptedExports = Object.setPrototypeOf({
     isString: {

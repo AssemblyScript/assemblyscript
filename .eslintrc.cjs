@@ -65,6 +65,9 @@ module.exports = {
     // Quite often, dealing with multiple related cases at once or otherwise
     // falling through is exactly the point of using a switch.
     "no-fallthrough": "off",
+    "no-useless-assignment": "off",
+    "no-unassigned-vars": "off",
+    "preserve-caught-error": "off",
 
     // Typical false-positives here are `do { ... } while (true)` statements or
     // similar, but the only option provided here is not checking any loops.

@@ -7,6 +7,7 @@
     "exportStart": "_initialize",
     "exportRuntime": true,
     "initialMemory": 768,
+    "stackSize": 65536,
     "runtime": "incremental",
     "bindings": [ "esm" ],
     "stats": true

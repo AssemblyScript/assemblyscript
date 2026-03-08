@@ -1,6 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { HASH } from "./util/hash";
+import { Runtime } from "shared/runtime";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
 
@@ -113,7 +114,9 @@ export class Set<T> {
       entry = changetype<SetEntry<T>>(changetype<usize>(this.entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<T>());
       entry.key = key;
       if (isManaged<T>()) {
-        __link(changetype<usize>(this), changetype<usize>(key), true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(this), changetype<usize>(key), true);
+        }
       }
       ++this.entriesCount;
       // link with previous entry in bucket
@@ -199,22 +202,24 @@ export class Set<T> {
   // RT integration
 
   @unsafe private __visit(cookie: u32): void {
-    __visit(changetype<usize>(this.buckets), cookie);
-    let entries = changetype<usize>(this.entries);
-    if (isManaged<T>()) {
-      let cur = entries;
-      let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<T>();
-      while (cur < end) {
-        let entry = changetype<SetEntry<T>>(cur);
-        if (!(entry.taggedNext & EMPTY)) {
-          let val = changetype<usize>(entry.key);
-          if (isNullable<T>()) {
-            if (val) __visit(val, cookie);
-          } else __visit(val, cookie);
+    if (ASC_RUNTIME != Runtime.Memory) {
+      __visit(changetype<usize>(this.buckets), cookie);
+      let entries = changetype<usize>(this.entries);
+      if (isManaged<T>()) {
+        let cur = entries;
+        let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<T>();
+        while (cur < end) {
+          let entry = changetype<SetEntry<T>>(cur);
+          if (!(entry.taggedNext & EMPTY)) {
+            let val = changetype<usize>(entry.key);
+            if (isNullable<T>()) {
+              if (val) __visit(val, cookie);
+            } else __visit(val, cookie);
+          }
+          cur += ENTRY_SIZE<T>();
         }
-        cur += ENTRY_SIZE<T>();
       }
+      __visit(entries, cookie);
     }
-    __visit(entries, cookie);
   }
 }

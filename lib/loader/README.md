@@ -7,7 +7,7 @@ A tiny module loader that makes working with AssemblyScript modules as convenien
 ## Example
 
 ```ts
-import loader from "@assemblyscript/loader"; // or require
+import loader from "@btc-vision/as-loader"; // or require
 loader.instantiate(
   // Binary to instantiate
   fetch("optimized.wasm"), // or fs.readFileSync
@@ -24,19 +24,19 @@ The loader basically instantiates the module using `WebAssembly` APIs, but also 
 
 ## Installation
 
-The loader can be installed from [npm](https://www.npmjs.com/package/@assemblyscript/loader):
+The loader can be installed from [npm](https://www.npmjs.com/package/@btc-vision/as-loader):
 
 ```sh
-npm install --save @assemblyscript/loader
+npm install --save @btc-vision/as-loader
 ```
 
 On the web:
 
 ```html
 <!-- ESM -->
-<script type="module" src="https://cdn.jsdelivr.net/npm/@assemblyscript/loader/index.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@btc-vision/as-loader/index.js"></script>
 <!-- UMD -->
-<script src="https://cdn.jsdelivr.net/npm/@assemblyscript/loader/umd/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@btc-vision/as-loader/umd/index.js"></script>
 ```
 
 ## Usage

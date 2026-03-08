@@ -33,6 +33,17 @@ export async function instantiate(module, imports = {}) {
           return new Date().getTimezoneOffset();
         })();
       },
+      abort(message, fileName, lineNumber, columnNumber) {
+        // ~lib/builtins/__abort_impl(~lib/string/String | null?, ~lib/string/String | null?, u32?, u32?) => void
+        message = __liftString(message >>> 0);
+        fileName = __liftString(fileName >>> 0);
+        lineNumber = lineNumber >>> 0;
+        columnNumber = columnNumber >>> 0;
+        (() => {
+          // @external.js
+          throw Error(`${message} in ${fileName}:${lineNumber}:${columnNumber}`);
+        })();
+      },
     }, Object.assign(Object.create(globalThis), imports.env || {})),
   };
   const { exports } = await WebAssembly.instantiate(module, adaptedImports);
