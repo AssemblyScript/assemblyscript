@@ -188,8 +188,6 @@ const webPlugin = {
         console.error(e);
         console.log(`${time()} - web - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
         process.exitCode = 1;
-      } finally {
-        buildingDefinitions = false;
       }
     });
   }
@@ -269,6 +267,8 @@ function buildDefinitions() {
 
 if (watch) {
   console.log("Watching for changes. Press RETURN to rebuild definitions.\n");
+  process.stdin.setEncoding("utf8"); 
+  process.stdin.resume();   
   process.stdin.on("data", data => {
     if (data == "\r\n" || data == "\n") {
       process.stdout.write("\u001b[1A");
