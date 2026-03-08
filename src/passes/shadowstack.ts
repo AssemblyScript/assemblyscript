@@ -332,10 +332,12 @@ export class ShadowStackPass extends Pass {
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),
             module.global_get(BuiltinNames.data_end, this.ptrType)
           ),
-          this.compiler.makeStaticAbort(
-            this.compiler.ensureStaticString("stack overflow"),
-            Source.native
-          )
+          this.compiler.options.hasFeature(Feature.ExceptionHandling)
+            ? module.unreachable()
+            : this.compiler.makeStaticAbort(
+                this.compiler.ensureStaticString("stack overflow"),
+                Source.native
+              )
         )
       );
     }

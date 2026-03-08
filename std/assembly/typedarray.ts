@@ -1,6 +1,7 @@
 import { COMPARATOR, SORT } from "./util/sort";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_NOTIMPLEMENTED } from "./util/error";
 import { joinIntegerArray, joinFloatArray } from "./util/string";
+import { Runtime } from "shared/runtime";
 import { REVERSE, FILL } from "./util/bytes";
 import { idof } from "./builtins";
 import { ArrayBufferView } from "./arraybuffer";
@@ -1603,7 +1604,9 @@ function SUBARRAY<TArray extends ArrayBufferView, T extends number>(
   let out = changetype<TArray>(__new(offsetof<TArray>(), idof<TArray>()));
   let buf = changetype<usize>(array.buffer);
   store<usize>(changetype<usize>(out), buf, offsetof<TArray>("buffer"));
-  __link(changetype<usize>(out), buf, false);
+  if (ASC_RUNTIME != Runtime.Memory) {
+    __link(changetype<usize>(out), buf, false);
+  }
   store<usize>(changetype<usize>(out), array.dataStart + (<usize>begin << alignof<T>()), offsetof<TArray>("dataStart"));
   store<u32>(changetype<usize>(out), (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
   return out;
@@ -1681,7 +1684,9 @@ function MAP<TArray extends ArrayBufferView, T extends number>(
     );
   }
   store<usize>(changetype<usize>(out), changetype<usize>(buf), offsetof<TArray>("buffer"));
-  __link(changetype<usize>(out), changetype<usize>(buf), false);
+  if (ASC_RUNTIME != Runtime.Memory) {
+    __link(changetype<usize>(out), changetype<usize>(buf), false);
+  }
   store<usize>(changetype<usize>(out), changetype<usize>(buf), offsetof<TArray>("dataStart"));
   store<u32>(changetype<usize>(out), byteLength, offsetof<TArray>("byteLength"));
   return out;
@@ -1711,7 +1716,9 @@ function FILTER<TArray extends ArrayBufferView, T extends number>(
   let byteLength = j << alignof<T>();
   let data = __renew(changetype<usize>(buf), byteLength);
   store<usize>(changetype<usize>(out), data, offsetof<TArray>("buffer"));
-  __link(changetype<usize>(out), data, false);
+  if (ASC_RUNTIME != Runtime.Memory) {
+    __link(changetype<usize>(out), data, false);
+  }
   store<u32>(changetype<usize>(out), byteLength, offsetof<TArray>("byteLength"));
   store<usize>(changetype<usize>(out), data, offsetof<TArray>("dataStart"));
   return out;
@@ -1876,7 +1883,9 @@ function WRAP<TArray extends ArrayBufferView, T>(
   }
   let out = changetype<TArray>(__new(offsetof<TArray>(), idof<TArray>()));
   store<usize>(changetype<usize>(out), changetype<usize>(buffer), offsetof<TArray>("buffer"));
-  __link(changetype<usize>(out), changetype<usize>(buffer), false);
+  if (ASC_RUNTIME != Runtime.Memory) {
+    __link(changetype<usize>(out), changetype<usize>(buffer), false);
+  }
   store<u32>(changetype<usize>(out), byteLength, offsetof<TArray>("byteLength"));
   store<usize>(changetype<usize>(out), changetype<usize>(buffer) + <usize>byteOffset, offsetof<TArray>("dataStart"));
   return out;

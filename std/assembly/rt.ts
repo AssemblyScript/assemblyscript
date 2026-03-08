@@ -1,4 +1,5 @@
 import { Typeinfo, TypeinfoFlags } from "./shared/typeinfo";
+import { Runtime } from "shared/runtime";
 import { E_INDEXOUTOFRANGE } from "./util/error";
 import { ArrayBufferView } from "./arraybuffer";
 
@@ -39,7 +40,9 @@ export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize =
   // ...since allocating the array may trigger GC steps
   let array = __new(offsetof<i32[]>(), id);
   store<usize>(array, changetype<usize>(buffer), offsetof<ArrayBufferView>("buffer"));
-  __link(array, changetype<usize>(buffer), false);
+  if (ASC_RUNTIME != Runtime.Memory) {
+    __link(array, changetype<usize>(buffer), false);
+  }
   store<usize>(array, changetype<usize>(buffer), offsetof<ArrayBufferView>("dataStart"));
   store<i32>(array, bufferSize, offsetof<ArrayBufferView>("byteLength"));
   store<i32>(array, length, offsetof<i32[]>("length_"));

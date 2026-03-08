@@ -1,6 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
+import { Runtime } from "shared/runtime";
 import { compareImpl, strtol, strtod, isSpace, isAscii, isFinalSigma, toLower8, toUpper8 } from "./util/string";
 import { SPECIALS_UPPER, casemap, bsearch } from "./util/casemap";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_UNPAIRED_SURROGATE } from "./util/error";
@@ -484,7 +485,9 @@ import { Array } from "./array";
         let charStr = changetype<String>(__new(2, idof<String>()));
         store<u16>(changetype<usize>(charStr), load<u16>(changetype<usize>(this) + (<usize>i << 1)));
         store<usize>(resultStart + (<usize>i << alignof<usize>()), changetype<usize>(charStr)); // result[i] = charStr
-        __link(changetype<usize>(result), changetype<usize>(charStr), true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(result), changetype<usize>(charStr), true);
+        }
       }
       return result;
     } else if (!length) {

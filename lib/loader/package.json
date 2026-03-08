@@ -1,5 +1,5 @@
 {
-  "name": "@assemblyscript/loader",
+  "name": "@btc-vision/as-loader",
   "description": "A convenient loader for AssemblyScript modules.",
   "keywords": [
     "@btc-vision/assemblyscript",
@@ -48,6 +48,6 @@
     "README.md"
   ],
   "devDependencies": {
-    "esm2umd": "^0.1.2"
+    "esm2umd": "^0.3.1"
   }
 }

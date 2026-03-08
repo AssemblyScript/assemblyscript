@@ -567,7 +567,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile and export runtime if requested or necessary
-    if (this.options.exportRuntime || (this.options.bindingsHint && this.desiresExportRuntime)) {
+    if ((this.options.exportRuntime || (this.options.bindingsHint && this.desiresExportRuntime)) && this.options.runtime != Runtime.Memory) {
       for (let i = 0, k = runtimeFunctions.length; i < k; ++i) {
         let name = runtimeFunctions[i];
         let instance = program.requireFunction(name);
@@ -2084,7 +2084,7 @@ export class Compiler extends DiagnosticEmitter {
       module.local_get(1, valueTypeRef),
       valueTypeRef, property.memoryOffset
     );
-    if (valueType.isManaged) {
+    if (valueType.isManaged && this.options.runtime != Runtime.Memory) {
       let parent = setterInstance.parent;
       assert(parent.kind == ElementKind.Class);
       if ((<Class>parent).type.isManaged) {
@@ -7841,7 +7841,9 @@ export class Compiler extends DiagnosticEmitter {
     // During recompilation, check if this function already exists
     // Check in program.instancesByName using the internal name that would be generated
     let expectedInternalName = mangleInternalName(functionName, sourceFunction, false);
-    let existingInstance = this.program.instancesByName.get(expectedInternalName);
+    let existingInstance = this.program.instancesByName.has(expectedInternalName)
+      ? this.program.instancesByName.get(expectedInternalName)
+      : null;
     if (existingInstance && existingInstance.kind == ElementKind.Function) {
       let existingFunc = <Function>existingInstance;
       if (existingFunc.is(CommonFlags.Compiled)) {
@@ -8543,7 +8545,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let _keys = Map_keys(captures), i = 0, k = _keys.length; i < k; i++) {
       let local = _keys[i];
       let owner = assert(local.envOwner);
-      let ownerCaptures = envOwners.get(owner);
+      let ownerCaptures = envOwners.has(owner) ? envOwners.get(owner) : null;
       if (!ownerCaptures) {
         ownerCaptures = new Map<Local, i32>();
         envOwners.set(owner, ownerCaptures);

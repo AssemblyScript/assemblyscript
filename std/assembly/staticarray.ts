@@ -29,7 +29,9 @@ export class StaticArray<T> {
         let off = <usize>i << alignof<T>();
         let ref = load<usize>(sourcePtr + off);
         store<usize>(changetype<usize>(out) + off, ref);
-        __link(changetype<usize>(out), ref, true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(out), ref, true);
+        }
       }
     } else {
       memory.copy(changetype<usize>(out), source.dataStart, outSize);
@@ -97,14 +99,18 @@ export class StaticArray<T> {
   @unsafe @operator("{}=") private __uset(index: i32, value: T): void {
     store<T>(changetype<usize>(this) + (<usize>index << alignof<T>()), value);
     if (isManaged<T>()) {
-      __link(changetype<usize>(this), changetype<usize>(value), true);
+      if (ASC_RUNTIME != Runtime.Memory) {
+        __link(changetype<usize>(this), changetype<usize>(value), true);
+      }
     }
   }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): StaticArray<T> {
     if (isManaged<T>()) {
       FILL<usize>(changetype<usize>(this), this.length, changetype<usize>(value), start, end);
-      __link(changetype<usize>(this), changetype<usize>(value), false);
+      if (ASC_RUNTIME != Runtime.Memory) {
+        __link(changetype<usize>(this), changetype<usize>(value), false);
+      }
     } else {
       FILL<T>(changetype<usize>(this), this.length, value, start, end);
     }
@@ -191,14 +197,18 @@ export class StaticArray<T> {
         for (let offset: usize = 0; offset < sourceSize; offset += sizeof<T>()) {
           let ref = load<usize>(thisStart + offset);
           store<usize>(outStart + offset, ref);
-          __link(changetype<usize>(out), ref, true);
+          if (ASC_RUNTIME != Runtime.Memory) {
+            __link(changetype<usize>(out), ref, true);
+          }
         }
         outStart += sourceSize;
         let otherSize = <usize>otherLen << alignof<T>();
         for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
           let ref = load<usize>(otherStart + offset);
           store<usize>(outStart + offset, ref);
-          __link(changetype<usize>(out), ref, true);
+          if (ASC_RUNTIME != Runtime.Memory) {
+            __link(changetype<usize>(out), ref, true);
+          }
         }
       } else {
         memory.copy(outStart, thisStart, sourceSize);
@@ -214,14 +224,18 @@ export class StaticArray<T> {
         for (let offset: usize = 0; offset < sourceSize; offset += sizeof<T>()) {
           let ref = load<usize>(thisStart + offset);
           store<usize>(outStart + offset, ref);
-          __link(changetype<usize>(out), ref, true);
+          if (ASC_RUNTIME != Runtime.Memory) {
+            __link(changetype<usize>(out), ref, true);
+          }
         }
         outStart += sourceSize;
         let otherSize = <usize>otherLen << alignof<T>();
         for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
           let ref = load<usize>(otherStart + offset);
           store<usize>(outStart + offset, ref);
-          __link(changetype<usize>(out), ref, true);
+          if (ASC_RUNTIME != Runtime.Memory) {
+            __link(changetype<usize>(out), ref, true);
+          }
         }
       } else {
         memory.copy(outStart, thisStart, sourceSize);
@@ -253,7 +267,9 @@ export class StaticArray<T> {
         while (off < size) {
           let ref = load<usize>(sourceStart + off);
           store<usize>(outStart + off, ref);
-          __link(changetype<usize>(out), ref, true);
+          if (ASC_RUNTIME != Runtime.Memory) {
+            __link(changetype<usize>(out), ref, true);
+          }
           off += sizeof<usize>();
         }
       } else {
@@ -268,7 +284,9 @@ export class StaticArray<T> {
         while (off < size) {
           let ref = load<usize>(sourceStart + off);
           store<usize>(outStart + off, ref);
-          __link(outStart, ref, true);
+          if (ASC_RUNTIME != Runtime.Memory) {
+            __link(outStart, ref, true);
+          }
           off += sizeof<usize>();
         }
       } else {
@@ -308,7 +326,9 @@ export class StaticArray<T> {
       let result = fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
       store<U>(outStart + (<usize>i << alignof<U>()), result);
       if (isManaged<U>()) {
-        __link(changetype<usize>(out), changetype<usize>(result), true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(out), changetype<usize>(result), true);
+        }
       }
     }
     return out;
@@ -388,13 +408,15 @@ export class StaticArray<T> {
   // RT integration
 
   @unsafe private __visit(cookie: u32): void {
-    if (isManaged<T>()) {
-      let cur = changetype<usize>(this);
-      let end = cur + changetype<OBJECT>(changetype<usize>(this) - TOTAL_OVERHEAD).rtSize;
-      while (cur < end) {
-        let val = load<usize>(cur);
-        if (val) __visit(val, cookie);
-        cur += sizeof<usize>();
+    if (ASC_RUNTIME != Runtime.Memory) {
+      if (isManaged<T>()) {
+        let cur = changetype<usize>(this);
+        let end = cur + changetype<OBJECT>(changetype<usize>(this) - TOTAL_OVERHEAD).rtSize;
+        while (cur < end) {
+          let val = load<usize>(cur);
+          if (val) __visit(val, cookie);
+          cur += sizeof<usize>();
+        }
       }
     }
   }

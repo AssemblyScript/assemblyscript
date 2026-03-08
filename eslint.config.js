@@ -14,6 +14,7 @@ export default tseslint.config(
     ]
   },
 
+
   eslint.configs.recommended,
 
   // === General rules =========================================================
@@ -65,6 +66,9 @@ export default tseslint.config(
       // It is perfectly fine to declare top-level variables with `var`, yet this
       // rule doesn't provide configuration options that would help.
       "no-var": "off",
+      "no-useless-assignment": "off",
+      "no-unassigned-vars": "off",
+      "preserve-caught-error": "off",
 
       // Quite often, dealing with multiple related cases at once or otherwise
       // falling through is exactly the point of using a switch.
@@ -72,7 +76,7 @@ export default tseslint.config(
 
       // Typical false-positives here are `do { ... } while (true)` statements or
       // similar, but the only option provided here is not checking any loops.
-      "no-constant-condition": ["error", { checkLoops: false }],
+      "no-constant-condition": ["error", {checkLoops: false}],
 
       // Functions are nested in blocks occasionally, and there haven't been any
       // problems with this so far, so turning the check off.

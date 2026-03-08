@@ -1674,8 +1674,14 @@ export class Program extends DiagnosticEmitter {
   /** Requires that a global library element of the specified kind is present and returns it. */
   private require(name: string, kind: ElementKind): Element {
     let element = this.lookup(name);
-    if (!element) throw new Error(`Missing standard library component: ${name}`);
-    if (element.kind != kind) throw Error(`Invalid standard library component kind: ${name}`);
+    if (!element) {
+      this.error(DiagnosticCode.Element_0_not_found, null, name);
+      throw new Error(`Missing standard library component: ${name}`);
+    }
+    if (element.kind != kind) {
+      this.error(DiagnosticCode.Element_0_not_found, null, name);
+      throw new Error(`Invalid standard library component kind: ${name}`);
+    }
     return element;
   }
 

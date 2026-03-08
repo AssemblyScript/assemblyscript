@@ -31,7 +31,9 @@ function ensureCapacity(array: usize, newSize: usize, alignLog2: u32, canGrow: b
     if (newData != oldData) { // oldData has been free'd
       store<usize>(array, newData, offsetof<ArrayBufferView>("buffer"));
       store<usize>(array, newData, offsetof<ArrayBufferView>("dataStart"));
-      __link(array, changetype<usize>(newData), false);
+      if (ASC_RUNTIME != Runtime.Memory) {
+        __link(array, changetype<usize>(newData), false);
+      }
     }
     store<u32>(array, <u32>newCapacity, offsetof<ArrayBufferView>("byteLength"));
   }
@@ -133,7 +135,9 @@ export class Array<T> {
     }
     store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     if (isManaged<T>()) {
-      __link(changetype<usize>(this), changetype<usize>(value), true);
+      if (ASC_RUNTIME != Runtime.Memory) {
+        __link(changetype<usize>(this), changetype<usize>(value), true);
+      }
     }
   }
 
@@ -153,7 +157,9 @@ export class Array<T> {
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
     if (isManaged<T>()) {
       FILL<usize>(this.dataStart, this.length_, changetype<usize>(value), start, end);
-      __link(changetype<usize>(this), changetype<usize>(value), false);
+      if (ASC_RUNTIME != Runtime.Memory) {
+        __link(changetype<usize>(this), changetype<usize>(value), false);
+      }
     } else {
       FILL<T>(this.dataStart, this.length_, value, start, end);
     }
@@ -209,7 +215,9 @@ export class Array<T> {
     ensureCapacity(changetype<usize>(this), len, alignof<T>());
     if (isManaged<T>()) {
       store<usize>(this.dataStart + (<usize>oldLen << alignof<T>()), changetype<usize>(value));
-      __link(changetype<usize>(this), changetype<usize>(value), true);
+      if (ASC_RUNTIME != Runtime.Memory) {
+        __link(changetype<usize>(this), changetype<usize>(value), true);
+      }
     } else {
       store<T>(this.dataStart + (<usize>oldLen << alignof<T>()), value);
     }
@@ -230,7 +238,9 @@ export class Array<T> {
       for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
         let ref = load<usize>(thisStart + offset);
         store<usize>(outStart + offset, ref);
-        __link(changetype<usize>(out), ref, true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(out), ref, true);
+        }
       }
       outStart += thisSize;
       let otherStart = other.dataStart;
@@ -238,7 +248,9 @@ export class Array<T> {
       for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
         let ref = load<usize>(otherStart + offset);
         store<usize>(outStart + offset, ref);
-        __link(changetype<usize>(out), ref, true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(out), ref, true);
+        }
       }
     } else {
       memory.copy(outStart, this.dataStart, thisSize);
@@ -288,7 +300,9 @@ export class Array<T> {
       let result = fn(load<T>(this.dataStart + (<usize>i << alignof<T>())), i, this);
       store<U>(outStart + (<usize>i << alignof<U>()), result);
       if (isManaged<U>()) {
-        __link(changetype<usize>(out), changetype<usize>(result), true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(out), changetype<usize>(result), true);
+        }
       }
     }
     return out;
@@ -364,7 +378,9 @@ export class Array<T> {
     );
     store<T>(ptr, value);
     if (isManaged<T>()) {
-      __link(changetype<usize>(this), changetype<usize>(value), true);
+      if (ASC_RUNTIME != Runtime.Memory) {
+        __link(changetype<usize>(this), changetype<usize>(value), true);
+      }
     }
     this.length_ = len;
     return len;
@@ -384,7 +400,9 @@ export class Array<T> {
       while (off < end) {
         let ref = load<usize>(thisBase + off);
         store<usize>(sliceBase + off, ref);
-        __link(changetype<usize>(slice), ref, true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(slice), ref, true);
+        }
         off += sizeof<usize>();
       }
     } else {
@@ -472,7 +490,9 @@ export class Array<T> {
     store<i32>(changetype<usize>(outArray), byteLength, offsetof<T>("byteLength"));
     store<usize>(changetype<usize>(outArray), changetype<usize>(outBuffer), offsetof<T>("dataStart"));
     store<usize>(changetype<usize>(outArray), changetype<usize>(outBuffer), offsetof<T>("buffer"));
-    __link(changetype<usize>(outArray), changetype<usize>(outBuffer), false);
+    if (ASC_RUNTIME != Runtime.Memory) {
+      __link(changetype<usize>(outArray), changetype<usize>(outBuffer), false);
+    }
 
     // set the elements
     let resultOffset: usize = 0;
@@ -498,7 +518,9 @@ export class Array<T> {
     if (isManaged<valueof<T>>()) {
       for (let i = 0; i < size; ++i) {
         let ref = load<usize>(changetype<usize>(outBuffer) + (<usize>i << usize(alignof<valueof<T>>())));
-        __link(changetype<usize>(outBuffer), ref, true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(outBuffer), ref, true);
+        }
       }
     }
 
@@ -512,15 +534,17 @@ export class Array<T> {
   // RT integration
 
   @unsafe private __visit(cookie: u32): void {
-    if (isManaged<T>()) {
-      let cur = this.dataStart;
-      let end = cur + (<usize>this.length_ << alignof<T>());
-      while (cur < end) {
-        let val = load<usize>(cur);
-        if (val) __visit(val, cookie);
-        cur += sizeof<usize>();
+    if (ASC_RUNTIME != Runtime.Memory) {
+      if (isManaged<T>()) {
+        let cur = this.dataStart;
+        let end = cur + (<usize>this.length_ << alignof<T>());
+        while (cur < end) {
+          let val = load<usize>(cur);
+          if (val) __visit(val, cookie);
+          cur += sizeof<usize>();
+        }
       }
+      __visit(changetype<usize>(this.buffer), cookie);
     }
-    __visit(changetype<usize>(this.buffer), cookie);
   }
 }
