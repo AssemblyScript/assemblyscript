@@ -10,12 +10,15 @@ jobs:
     name: Packages
     if: github.repository == 'AssemblyScript/assemblyscript'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         ref: main
         fetch-depth: 0
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: current
     - name: Install dependencies
@@ -46,7 +49,6 @@ jobs:
     - name: Publish packages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
         node ./scripts/prepublish
         if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
