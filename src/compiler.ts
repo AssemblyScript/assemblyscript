@@ -4479,10 +4479,12 @@ export class Compiler extends DiagnosticEmitter {
         compound = true;
         let assignmentLeft = left;
         let setupExprs: ExpressionRef[] | null = null;
-        if (this.needsCompoundAssignmentSideEffectCache(left)) {
+        let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+        if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(left)) {
           let flow = this.currentFlow;
-          if (left.kind == NodeKind.PropertyAccess) {
-            let access = <PropertyAccessExpression>left;
+          let rewrittenTarget: Expression;
+          if (cacheTarget.kind == NodeKind.PropertyAccess) {
+            let access = <PropertyAccessExpression>cacheTarget;
             let receiverExpression = access.expression;
             if (this.expressionHasSideEffects(receiverExpression)) {
               let receiverExpr = this.compileExpression(receiverExpression, Type.auto);
@@ -4492,14 +4494,16 @@ export class Compiler extends DiagnosticEmitter {
               flow.addScopedAlias(receiverName, receiverType, receiverTemp.index);
               flow.setLocalFlag(receiverTemp.index, LocalFlags.Initialized);
               setupExprs = [ module.local_set(receiverTemp.index, receiverExpr, receiverType.isManaged) ];
-              assignmentLeft = Node.createPropertyAccessExpression(
+              rewrittenTarget = Node.createPropertyAccessExpression(
                 Node.createIdentifierExpression(receiverName, receiverExpression.range),
                 access.property,
                 access.range
               );
+            } else {
+              rewrittenTarget = cacheTarget;
             }
           } else {
-            let access = <ElementAccessExpression>left;
+            let access = <ElementAccessExpression>cacheTarget;
             let receiverExpression = access.expression;
             let elementExpression = access.elementExpression;
             let receiverName: string | null = null;
@@ -4527,7 +4531,7 @@ export class Compiler extends DiagnosticEmitter {
               setupExprs.push(module.local_set(elementTemp.index, elementExpr, elementType.isManaged));
             }
 
-            assignmentLeft = Node.createElementAccessExpression(
+            rewrittenTarget = Node.createElementAccessExpression(
               receiverName
                 ? Node.createIdentifierExpression(receiverName, receiverExpression.range)
                 : receiverExpression,
@@ -4537,15 +4541,14 @@ export class Compiler extends DiagnosticEmitter {
               access.range
             );
           }
+          assignmentLeft = this.replaceCompoundAssignmentSideEffectCacheTarget(
+            left,
+            this.wrapCompoundAssignmentCacheSetup(setupExprs, rewrittenTarget)
+          );
         }
 
         leftExpr = this.compileExpression(assignmentLeft, contextualType.intType);
         leftType = this.currentType;
-        if (setupExprs) {
-          let wrappedExprs = setupExprs;
-          wrappedExprs.push(leftExpr);
-          leftExpr = module.block(null, wrappedExprs, leftType.toRef());
-        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4916,15 +4919,91 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   private needsCompoundAssignmentSideEffectCache(target: Expression): bool {
-    if (target.kind == NodeKind.PropertyAccess) {
-      return this.expressionHasSideEffects((<PropertyAccessExpression>target).expression);
+    let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(target);
+    if (!cacheTarget) return false;
+    if (cacheTarget.kind == NodeKind.PropertyAccess) {
+      return this.expressionHasSideEffects((<PropertyAccessExpression>cacheTarget).expression);
     }
-    if (target.kind == NodeKind.ElementAccess) {
-      let access = <ElementAccessExpression>target;
+    if (cacheTarget.kind == NodeKind.ElementAccess) {
+      let access = <ElementAccessExpression>cacheTarget;
       return this.expressionHasSideEffects(access.expression)
           || this.expressionHasSideEffects(access.elementExpression);
     }
     return false;
+  }
+
+  private getCompoundAssignmentSideEffectCacheTarget(target: Expression): Expression | null {
+    while (target.kind == NodeKind.Parenthesized) {
+      target = (<ParenthesizedExpression>target).expression;
+    }
+    switch (target.kind) {
+      case NodeKind.PropertyAccess:
+      case NodeKind.ElementAccess:
+        return target;
+      case NodeKind.Assertion: {
+        let assertion = <AssertionExpression>target;
+        if (assertion.assertionKind == AssertionKind.NonNull) {
+          return this.getCompoundAssignmentSideEffectCacheTarget(assertion.expression);
+        }
+        return null;
+      }
+      case NodeKind.Comma: {
+        let expressions = (<CommaExpression>target).expressions;
+        return this.getCompoundAssignmentSideEffectCacheTarget(expressions[assert(expressions.length) - 1]);
+      }
+      default:
+        return null;
+    }
+  }
+
+  private replaceCompoundAssignmentSideEffectCacheTarget(target: Expression, replacement: Expression): Expression {
+    while (target.kind == NodeKind.Parenthesized) {
+      target = (<ParenthesizedExpression>target).expression;
+      replacement = Node.createParenthesizedExpression(replacement, target.range);
+    }
+    switch (target.kind) {
+      case NodeKind.PropertyAccess:
+      case NodeKind.ElementAccess:
+        return replacement;
+      case NodeKind.Assertion: {
+        let assertion = <AssertionExpression>target;
+        if (assertion.assertionKind == AssertionKind.NonNull) {
+          return Node.createAssertionExpression(
+            AssertionKind.NonNull,
+            this.replaceCompoundAssignmentSideEffectCacheTarget(assertion.expression, replacement),
+            null,
+            assertion.range
+          );
+        }
+        return target;
+      }
+      case NodeKind.Comma: {
+        let comma = <CommaExpression>target;
+        let expressions = comma.expressions;
+        let cloned = new Array<Expression>(expressions.length);
+        for (let i = 0, k = expressions.length - 1; i < k; ++i) {
+          cloned[i] = unchecked(expressions[i]);
+        }
+        cloned[assert(expressions.length) - 1] = this.replaceCompoundAssignmentSideEffectCacheTarget(
+          expressions[assert(expressions.length) - 1],
+          replacement
+        );
+        return Node.createCommaExpression(cloned, comma.range);
+      }
+      default:
+        return target;
+    }
+  }
+
+  private wrapCompoundAssignmentCacheSetup(setupExprs: ExpressionRef[] | null, target: Expression): Expression {
+    if (!setupExprs || !setupExprs.length) return target;
+    let range = target.range;
+    let expressions = new Array<Expression>(setupExprs.length + 1);
+    for (let i = 0, k = setupExprs.length; i < k; ++i) {
+      expressions[i] = Node.createCompiledExpression(unchecked(setupExprs[i]), Type.void, range);
+    }
+    expressions[setupExprs.length] = target;
+    return Node.createCommaExpression(expressions, range);
   }
 
   private expressionHasSideEffects(expression: Expression): bool {
