@@ -831,6 +831,11 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    if (options.willOptimize) {
+      // Binaryen will split this up more efficiently
+      memorySegments = module.combineMemorySegments(memorySegments);
+    }
+
     // Setup internal memory with default name "0"
     module.setMemory(
       initialPages,

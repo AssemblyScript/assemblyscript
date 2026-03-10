@@ -2337,6 +2337,22 @@ export class Module {
   /** Unlimited memory constant. */
   static readonly UNLIMITED_MEMORY: Index = <Index>-1;
 
+  combineMemorySegments(
+    segments: MemorySegment[]
+  ) : MemorySegment[] {
+    if (!segments.length) return segments;
+    segments = segments.slice(0);
+    let lastSegment = segments[segments.length - 1];
+    let length = u32(lastSegment.offset) + lastSegment.buffer.length;
+    let newBuffer = new Uint8Array(u32(length));
+    let k = segments.length;
+    for (let i = 0; i < k; ++i) {
+      let segment = unchecked(segments[i]);
+      newBuffer.set(segment.buffer, u32(segment.offset));
+    }
+    return [new MemorySegment(newBuffer, i64_new(0))];
+  }
+
   setMemory(
     initial: Index,
     maximum: Index,
