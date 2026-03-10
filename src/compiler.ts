@@ -476,6 +476,8 @@ export class Compiler extends DiagnosticEmitter {
   hasCustomFunctionExports: bool = false;
   /** Whether the module would use the exported runtime to lift/lower. */
   desiresExportRuntime: bool = false;
+  /** Unique suffix for synthesized scoped locals used by compound assignments. */
+  private compoundAssignmentTempId: i32 = 0;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -4473,7 +4475,121 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeAnd(leftExpr, rightExpr, commonType);
         break;
       }
-      case Token.Bar_Equals: compound = true;
+      case Token.Bar_Equals: {
+        compound = true;
+        let assignmentLeft = left;
+        let setupExprs: ExpressionRef[] | null = null;
+        if (this.needsCompoundAssignmentSideEffectCache(left)) {
+          let flow = this.currentFlow;
+          if (left.kind == NodeKind.PropertyAccess) {
+            let access = <PropertyAccessExpression>left;
+            let receiverExpression = access.expression;
+            if (this.expressionHasSideEffects(receiverExpression)) {
+              let receiverExpr = this.compileExpression(receiverExpression, Type.auto);
+              let receiverType = this.currentType;
+              let receiverTemp = flow.getTempLocal(receiverType);
+              let receiverName = this.makeCompoundAssignmentTempName(flow);
+              flow.addScopedAlias(receiverName, receiverType, receiverTemp.index);
+              flow.setLocalFlag(receiverTemp.index, LocalFlags.Initialized);
+              setupExprs = [ module.local_set(receiverTemp.index, receiverExpr, receiverType.isManaged) ];
+              assignmentLeft = Node.createPropertyAccessExpression(
+                Node.createIdentifierExpression(receiverName, receiverExpression.range),
+                access.property,
+                access.range
+              );
+            }
+          } else {
+            let access = <ElementAccessExpression>left;
+            let receiverExpression = access.expression;
+            let elementExpression = access.elementExpression;
+            let receiverName: string | null = null;
+            let elementName: string | null = null;
+
+            if (this.expressionHasSideEffects(receiverExpression)) {
+              let receiverExpr = this.compileExpression(receiverExpression, Type.auto);
+              let receiverType = this.currentType;
+              let receiverTemp = flow.getTempLocal(receiverType);
+              receiverName = this.makeCompoundAssignmentTempName(flow);
+              flow.addScopedAlias(receiverName, receiverType, receiverTemp.index);
+              flow.setLocalFlag(receiverTemp.index, LocalFlags.Initialized);
+              if (!setupExprs) setupExprs = [];
+              setupExprs.push(module.local_set(receiverTemp.index, receiverExpr, receiverType.isManaged));
+            }
+
+            if (this.expressionHasSideEffects(elementExpression)) {
+              let elementExpr = this.compileExpression(elementExpression, Type.auto);
+              let elementType = this.currentType;
+              let elementTemp = flow.getTempLocal(elementType);
+              elementName = this.makeCompoundAssignmentTempName(flow);
+              flow.addScopedAlias(elementName, elementType, elementTemp.index);
+              flow.setLocalFlag(elementTemp.index, LocalFlags.Initialized);
+              if (!setupExprs) setupExprs = [];
+              setupExprs.push(module.local_set(elementTemp.index, elementExpr, elementType.isManaged));
+            }
+
+            assignmentLeft = Node.createElementAccessExpression(
+              receiverName
+                ? Node.createIdentifierExpression(receiverName, receiverExpression.range)
+                : receiverExpression,
+              elementName
+                ? Node.createIdentifierExpression(elementName, elementExpression.range)
+                : elementExpression,
+              access.range
+            );
+          }
+        }
+
+        leftExpr = this.compileExpression(assignmentLeft, contextualType.intType);
+        leftType = this.currentType;
+        if (setupExprs) {
+          let wrappedExprs = setupExprs;
+          wrappedExprs.push(leftExpr);
+          leftExpr = module.block(null, wrappedExprs, leftType.toRef());
+        }
+
+        // check operator overload
+        let classReference = leftType.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.BitwiseOr);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, assignmentLeft, leftExpr, leftType, right, expression);
+            break;
+          }
+        }
+
+        if (!leftType.isIntegerValue) {
+          this.error(
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "|", leftType.toString()
+          );
+          return module.unreachable();
+        }
+        rightExpr = this.compileExpression(right, leftType, Constraints.ConvImplicit);
+        rightType = commonType = this.currentType;
+        expr = this.makeOr(leftExpr, rightExpr, commonType);
+
+        let resolver = this.resolver;
+        let target = resolver.lookupExpression(assignmentLeft, this.currentFlow);
+        if (!target) return module.unreachable();
+        let targetType = resolver.getTypeOfElement(target);
+        if (!targetType) targetType = Type.void;
+        if (!this.currentType.isStrictlyAssignableTo(targetType)) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            expression.range, this.currentType.toString(), targetType.toString()
+          );
+          return module.unreachable();
+        }
+        return this.makeAssignment(
+          target,
+          expr,
+          this.currentType,
+          right,
+          resolver.currentThisExpression,
+          resolver.currentElementExpression,
+          contextualType != Type.void
+        );
+      }
       case Token.Bar: {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
@@ -4788,6 +4904,95 @@ export class Compiler extends DiagnosticEmitter {
       resolver.currentElementExpression,
       contextualType != Type.void
     );
+  }
+
+  private makeCompoundAssignmentTempName(flow: Flow): string {
+    let name: string;
+    do {
+      let id = this.compoundAssignmentTempId++;
+      name = "__as_or_assign_tmp" + id.toString();
+    } while (flow.lookup(name));
+    return name;
+  }
+
+  private needsCompoundAssignmentSideEffectCache(target: Expression): bool {
+    if (target.kind == NodeKind.PropertyAccess) {
+      return this.expressionHasSideEffects((<PropertyAccessExpression>target).expression);
+    }
+    if (target.kind == NodeKind.ElementAccess) {
+      let access = <ElementAccessExpression>target;
+      return this.expressionHasSideEffects(access.expression)
+          || this.expressionHasSideEffects(access.elementExpression);
+    }
+    return false;
+  }
+
+  private expressionHasSideEffects(expression: Expression): bool {
+    while (expression.kind == NodeKind.Parenthesized) {
+      expression = (<ParenthesizedExpression>expression).expression;
+    }
+    switch (expression.kind) {
+      case NodeKind.Call:
+      case NodeKind.New:
+      case NodeKind.UnaryPostfix:
+      case NodeKind.Class:
+      case NodeKind.Function:
+      case NodeKind.Compiled:
+        return true;
+      case NodeKind.UnaryPrefix: {
+        let unary = <UnaryPrefixExpression>expression;
+        if (unary.operator == Token.Plus_Plus || unary.operator == Token.Minus_Minus) {
+          return true;
+        }
+        return this.expressionHasSideEffects(unary.operand);
+      }
+      case NodeKind.Binary: {
+        let binary = <BinaryExpression>expression;
+        switch (binary.operator) {
+          case Token.Equals:
+          case Token.Plus_Equals:
+          case Token.Minus_Equals:
+          case Token.Asterisk_Equals:
+          case Token.Asterisk_Asterisk_Equals:
+          case Token.Slash_Equals:
+          case Token.Percent_Equals:
+          case Token.LessThan_LessThan_Equals:
+          case Token.GreaterThan_GreaterThan_Equals:
+          case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
+          case Token.Ampersand_Equals:
+          case Token.Bar_Equals:
+          case Token.Caret_Equals:
+            return true;
+          default:
+            return this.expressionHasSideEffects(binary.left)
+                || this.expressionHasSideEffects(binary.right);
+        }
+      }
+      case NodeKind.Assertion:
+        return this.expressionHasSideEffects((<AssertionExpression>expression).expression);
+      case NodeKind.Comma: {
+        let expressions = (<CommaExpression>expression).expressions;
+        for (let i = 0, k = expressions.length; i < k; ++i) {
+          if (this.expressionHasSideEffects(unchecked(expressions[i]))) return true;
+        }
+        return false;
+      }
+      case NodeKind.ElementAccess: {
+        let access = <ElementAccessExpression>expression;
+        return this.expressionHasSideEffects(access.expression)
+            || this.expressionHasSideEffects(access.elementExpression);
+      }
+      case NodeKind.PropertyAccess:
+        return this.expressionHasSideEffects((<PropertyAccessExpression>expression).expression);
+      case NodeKind.Ternary: {
+        let ternary = <TernaryExpression>expression;
+        return this.expressionHasSideEffects(ternary.condition)
+            || this.expressionHasSideEffects(ternary.ifThen)
+            || this.expressionHasSideEffects(ternary.ifElse);
+      }
+      default:
+        return false;
+    }
   }
 
   makeLt(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
