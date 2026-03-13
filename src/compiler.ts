@@ -4090,6 +4090,7 @@ export class Compiler extends DiagnosticEmitter {
 
     let expr: ExpressionRef;
     let compound = false;
+    let compoundAssignmentCacheContext: CompoundAssignmentCacheContext | null = null;
 
     let operator = expression.operator;
     switch (operator) {
@@ -4110,8 +4111,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.Plus_Equals: compound = true;
       case Token.Plus: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4154,8 +4168,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.Minus_Equals: compound = true;
       case Token.Minus: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4199,8 +4226,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.Asterisk_Equals: compound = true;
       case Token.Asterisk: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4244,8 +4284,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.Asterisk_Asterisk_Equals: compound = true;
       case Token.Asterisk_Asterisk: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4289,8 +4342,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.Slash_Equals: compound = true;
       case Token.Slash: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4334,8 +4400,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.Percent_Equals: compound = true;
       case Token.Percent: {
-        leftExpr = this.compileExpression(left, contextualType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4379,8 +4458,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.LessThan_LessThan_Equals: compound = true;
       case Token.LessThan_LessThan: {
-        leftExpr = this.compileExpression(left, contextualType.intType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType.intType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType.intType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType.intType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4406,8 +4498,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.GreaterThan_GreaterThan_Equals: compound = true;
       case Token.GreaterThan_GreaterThan: {
-        leftExpr = this.compileExpression(left, contextualType.intType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType.intType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType.intType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType.intType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4434,8 +4539,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.GreaterThan_GreaterThan_GreaterThan_Equals: compound = true;
       case Token.GreaterThan_GreaterThan_GreaterThan: {
-        leftExpr = this.compileExpression(left, contextualType.intType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType.intType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType.intType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType.intType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4461,8 +4579,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.Ampersand_Equals: compound = true;
       case Token.Ampersand: {
-        leftExpr = this.compileExpression(left, contextualType.intType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType.intType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType.intType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType.intType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4504,14 +4635,19 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeAnd(leftExpr, rightExpr, commonType);
         break;
       }
-      case Token.Bar_Equals: {
-        let cacheContext: CompoundAssignmentCacheContext | null = null;
-        let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
-        if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
-          cacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType.intType);
-          if (!cacheContext) return module.unreachable();
-          leftExpr = cacheContext.leftExpr;
-          leftType = cacheContext.leftType;
+      case Token.Bar_Equals: compound = true;
+      case Token.Bar: {
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType.intType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType.intType);
+            leftType = this.currentType;
+          }
         } else {
           leftExpr = this.compileExpression(left, contextualType.intType);
           leftType = this.currentType;
@@ -4523,19 +4659,11 @@ export class Compiler extends DiagnosticEmitter {
           let overload = classReference.lookupOverload(OperatorKind.BitwiseOr);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-          } else {
-            if (!leftType.isIntegerValue) {
-              this.error(
-                DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-                expression.range, "|", leftType.toString()
-              );
-              return module.unreachable();
-            }
-            rightExpr = this.compileExpression(right, leftType, Constraints.ConvImplicit);
-            rightType = commonType = this.currentType;
-            expr = this.makeOr(leftExpr, rightExpr, commonType);
+            break;
           }
-        } else {
+        }
+
+        if (compound) {
           if (!leftType.isIntegerValue) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
@@ -4545,91 +4673,44 @@ export class Compiler extends DiagnosticEmitter {
           }
           rightExpr = this.compileExpression(right, leftType, Constraints.ConvImplicit);
           rightType = commonType = this.currentType;
-          expr = this.makeOr(leftExpr, rightExpr, commonType);
-        }
-
-        let resolver = this.resolver;
-        let target: Element | null;
-        let thisExpression: Expression | null;
-        let elementExpression: Expression | null;
-        let thisExpr: ExpressionRef = 0;
-        let indexExpr: ExpressionRef = 0;
-        if (cacheContext) {
-          target = cacheContext.target;
-          thisExpression = cacheContext.assignmentThisExpression;
-          elementExpression = cacheContext.assignmentElementExpression;
-          thisExpr = cacheContext.assignmentThisExpr;
-          indexExpr = cacheContext.assignmentElementExpr;
         } else {
-          target = resolver.lookupExpression(left, this.currentFlow);
-          if (!target) return module.unreachable();
-          thisExpression = resolver.currentThisExpression;
-          elementExpression = resolver.currentElementExpression;
-        }
-
-        target = assert(target);
-        let targetType = resolver.getTypeOfElement(target);
-        if (!targetType) targetType = Type.void;
-        if (!this.currentType.isStrictlyAssignableTo(targetType)) {
-          this.error(
-            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            expression.range, this.currentType.toString(), targetType.toString()
-          );
-          return module.unreachable();
-        }
-
-        let assignmentExpr = this.makeAssignment(
-          target,
-          expr,
-          this.currentType,
-          right,
-          thisExpression,
-          elementExpression,
-          contextualType != Type.void,
-          thisExpr,
-          indexExpr
-        );
-        return cacheContext
-          ? this.prependSetupPrefixExpressions(cacheContext.setupPrefixExprs, assignmentExpr, contextualType != Type.void)
-          : assignmentExpr;
-      }
-      case Token.Bar: {
-        leftExpr = this.compileExpression(left, contextualType.intType);
-        leftType = this.currentType;
-
-        // check operator overload
-        let classReference = leftType.getClassOrWrapper(this.program);
-        if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.BitwiseOr);
-          if (overload) {
-            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-            break;
+          rightExpr = this.compileExpression(right, leftType);
+          rightType = this.currentType;
+          commonType = Type.commonType(leftType, rightType, contextualType);
+          if (!commonType || !commonType.isIntegerValue) {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "|", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return module.unreachable();
           }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
-
-        rightExpr = this.compileExpression(right, leftType);
-        rightType = this.currentType;
-        commonType = Type.commonType(leftType, rightType, contextualType);
-        if (!commonType || !commonType.isIntegerValue) {
-          this.error(
-            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range, "|", leftType.toString(), rightType.toString()
-          );
-          this.currentType = contextualType;
-          return module.unreachable();
-        }
-        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
-        leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
-        rightType = commonType;
 
         expr = this.makeOr(leftExpr, rightExpr, commonType);
         break;
       }
       case Token.Caret_Equals: compound = true;
       case Token.Caret: {
-        leftExpr = this.compileExpression(left, contextualType.intType);
-        leftType = this.currentType;
+        if (compound) {
+          let cacheTarget = this.getCompoundAssignmentSideEffectCacheTarget(left);
+          if (cacheTarget && this.needsCompoundAssignmentSideEffectCache(cacheTarget)) {
+            compoundAssignmentCacheContext = this.prepareCompoundAssignmentCache(cacheTarget, contextualType.intType);
+            if (!compoundAssignmentCacheContext) return module.unreachable();
+            leftExpr = compoundAssignmentCacheContext.leftExpr;
+            leftType = compoundAssignmentCacheContext.leftType;
+          } else {
+            leftExpr = this.compileExpression(left, contextualType.intType);
+            leftType = this.currentType;
+          }
+        } else {
+          leftExpr = this.compileExpression(left, contextualType.intType);
+          leftType = this.currentType;
+        }
 
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -4876,8 +4957,24 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (!compound) return expr;
     let resolver = this.resolver;
-    let target = resolver.lookupExpression(left, this.currentFlow);
-    if (!target) return module.unreachable();
+    let target: Element | null;
+    let thisExpression: Expression | null;
+    let elementExpression: Expression | null;
+    let thisExpr: ExpressionRef = 0;
+    let indexExpr: ExpressionRef = 0;
+    if (compoundAssignmentCacheContext) {
+      target = compoundAssignmentCacheContext.target;
+      thisExpression = compoundAssignmentCacheContext.assignmentThisExpression;
+      elementExpression = compoundAssignmentCacheContext.assignmentElementExpression;
+      thisExpr = compoundAssignmentCacheContext.assignmentThisExpr;
+      indexExpr = compoundAssignmentCacheContext.assignmentElementExpr;
+    } else {
+      target = resolver.lookupExpression(left, this.currentFlow);
+      if (!target) return module.unreachable();
+      thisExpression = resolver.currentThisExpression;
+      elementExpression = resolver.currentElementExpression;
+    }
+    target = assert(target);
     let targetType = resolver.getTypeOfElement(target);
     if (!targetType) targetType = Type.void;
     if (!this.currentType.isStrictlyAssignableTo(targetType)) {
@@ -4887,17 +4984,20 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.unreachable();
     }
-    return this.makeAssignment(
+    let assignmentExpr = this.makeAssignment(
       target,
       expr,
       this.currentType,
       right,
-      resolver.currentThisExpression,
-      resolver.currentElementExpression,
+      thisExpression,
+      elementExpression,
       contextualType != Type.void,
-      0,
-      0
+      thisExpr,
+      indexExpr
     );
+    return compoundAssignmentCacheContext
+      ? this.prependSetupPrefixExpressions(compoundAssignmentCacheContext.setupPrefixExprs, assignmentExpr, contextualType != Type.void)
+      : assignmentExpr;
   }
 
   private prepareCompoundAssignmentCache(
