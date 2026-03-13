@@ -222,7 +222,7 @@
     local.get $0
     global.set $~lib/rt/itcms/iter
    end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink$241
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$240
     local.get $1
     i32.load offset=4
     i32.const -4
@@ -246,7 +246,7 @@
       call $~lib/builtins/abort
       unreachable
      end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink$241
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$240
     end
     local.get $1
     i32.load offset=8
@@ -1248,7 +1248,7 @@
   global.get $~lib/rt/itcms/threshold
   i32.ge_u
   if
-   block $__inlined_func$~lib/rt/itcms/interrupt$69
+   block $__inlined_func$~lib/rt/itcms/interrupt$68
     i32.const 2048
     local.set $1
     loop $do-loop|0
@@ -1265,7 +1265,7 @@
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
-      br $__inlined_func$~lib/rt/itcms/interrupt$69
+      br $__inlined_func$~lib/rt/itcms/interrupt$68
      end
      local.get $1
      i32.const 0
@@ -1492,7 +1492,7 @@
   i32.store
   local.get $0
   if (result i32)
-   block $__inlined_func$~instanceof|instanceof/X$76 (result i32)
+   block $__inlined_func$~instanceof|instanceof/X$75 (result i32)
     block $is_instance
      block $tablify|0
       local.get $0
@@ -1504,7 +1504,7 @@
       br_table $is_instance $tablify|0 $tablify|0 $is_instance $tablify|0 $tablify|0 $is_instance $tablify|0
      end
      i32.const 0
-     br $__inlined_func$~instanceof|instanceof/X$76
+     br $__inlined_func$~instanceof|instanceof/X$75
     end
     i32.const 1
    end
@@ -1549,7 +1549,7 @@
   i32.store
   local.get $0
   if (result i32)
-   block $__inlined_func$~instanceof|instanceof/Y$78 (result i32)
+   block $__inlined_func$~instanceof|instanceof/Y$77 (result i32)
     block $is_instance
      local.get $0
      i32.const 8
@@ -1564,7 +1564,7 @@
      i32.eq
      br_if $is_instance
      i32.const 0
-     br $__inlined_func$~instanceof|instanceof/Y$78
+     br $__inlined_func$~instanceof|instanceof/Y$77
     end
     i32.const 1
    end
@@ -1656,7 +1656,7 @@
   i32.store
   local.get $0
   if (result i32)
-   block $__inlined_func$~instanceof|instanceof/Y$82 (result i32)
+   block $__inlined_func$~instanceof|instanceof/Y$81 (result i32)
     block $is_instance
      local.get $0
      i32.const 8
@@ -1671,7 +1671,7 @@
      i32.eq
      br_if $is_instance
      i32.const 0
-     br $__inlined_func$~instanceof|instanceof/Y$82
+     br $__inlined_func$~instanceof|instanceof/Y$81
     end
     i32.const 1
    end
@@ -2405,7 +2405,7 @@
    i32.store offset=12
    local.get $0
    if (result i32)
-    block $__inlined_func$~anyinstanceof|instanceof/Child$110 (result i32)
+    block $__inlined_func$~anyinstanceof|instanceof/Child$109 (result i32)
      block $is_instance1
       local.get $0
       i32.const 8
@@ -2420,7 +2420,7 @@
       i32.eq
       br_if $is_instance1
       i32.const 0
-      br $__inlined_func$~anyinstanceof|instanceof/Child$110
+      br $__inlined_func$~anyinstanceof|instanceof/Child$109
      end
      i32.const 1
     end
@@ -2450,7 +2450,7 @@
    i32.store offset=16
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat$111 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$110 (result i32)
      block $is_instance2
       local.get $0
       i32.const 8
@@ -2465,7 +2465,7 @@
       i32.eq
       br_if $is_instance2
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat$111
+      br $__inlined_func$~instanceof|instanceof/Cat$110
      end
      i32.const 1
     end
@@ -2509,7 +2509,7 @@
    i32.store offset=24
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat$113 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$112 (result i32)
      block $is_instance4
       local.get $0
       i32.const 8
@@ -2524,7 +2524,7 @@
       i32.eq
       br_if $is_instance4
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat$113
+      br $__inlined_func$~instanceof|instanceof/Cat$112
      end
      i32.const 1
     end
@@ -2569,7 +2569,7 @@
    i32.store offset=32
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat$115 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$114 (result i32)
      block $is_instance6
       local.get $0
       i32.const 8
@@ -2584,7 +2584,7 @@
       i32.eq
       br_if $is_instance6
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat$115
+      br $__inlined_func$~instanceof|instanceof/Cat$114
      end
      i32.const 1
     end
@@ -2648,7 +2648,7 @@
    i32.store offset=40
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat$117 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$116 (result i32)
      block $is_instance8
       local.get $0
       i32.const 8
@@ -2663,7 +2663,7 @@
       i32.eq
       br_if $is_instance8
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat$117
+      br $__inlined_func$~instanceof|instanceof/Cat$116
      end
      i32.const 1
     end
@@ -2717,7 +2717,7 @@
    i32.store offset=48
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat$119 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$118 (result i32)
      block $is_instance10
       local.get $0
       i32.const 8
@@ -2732,7 +2732,7 @@
       i32.eq
       br_if $is_instance10
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat$119
+      br $__inlined_func$~instanceof|instanceof/Cat$118
      end
      i32.const 1
     end
@@ -2787,7 +2787,7 @@
    i32.store offset=56
    local.get $0
    if (result i32)
-    block $__inlined_func$~instanceof|instanceof/Cat$121 (result i32)
+    block $__inlined_func$~instanceof|instanceof/Cat$120 (result i32)
      block $is_instance12
       local.get $0
       i32.const 8
@@ -2802,7 +2802,7 @@
       i32.eq
       br_if $is_instance12
       i32.const 0
-      br $__inlined_func$~instanceof|instanceof/Cat$121
+      br $__inlined_func$~instanceof|instanceof/Cat$120
      end
      i32.const 1
     end

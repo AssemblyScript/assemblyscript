@@ -2345,7 +2345,7 @@
   (local $remaining i32)
   (local $spare i32)
   (local $block|6 i32)
-  (local $block|7 i32)
+  (local $7 i32)
   local.get $block
   call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
@@ -2411,21 +2411,6 @@
    i32.xor
    i32.and
    call $~lib/rt/common/BLOCK#set:mmInfo
-   block $~lib/rt/tlsf/GETRIGHT|inlined.3 (result i32)
-    local.get $block
-    local.set $block|7
-    local.get $block|7
-    i32.const 4
-    i32.add
-    local.get $block|7
-    call $~lib/rt/common/BLOCK#get:mmInfo
-    i32.const 3
-    i32.const -1
-    i32.xor
-    i32.and
-    i32.add
-    br $~lib/rt/tlsf/GETRIGHT|inlined.3
-   end
    block $~lib/rt/tlsf/GETRIGHT|inlined.2 (result i32)
     local.get $block
     local.set $block|6
@@ -2441,6 +2426,9 @@
     i32.add
     br $~lib/rt/tlsf/GETRIGHT|inlined.2
    end
+   local.set $7
+   local.get $7
+   local.get $7
    call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 2
    i32.const -1
