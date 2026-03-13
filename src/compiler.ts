@@ -5273,7 +5273,71 @@ export class Compiler extends DiagnosticEmitter {
     while (expression.kind == NodeKind.Parenthesized) {
       expression = (<ParenthesizedExpression>expression).expression;
     }
-    return expression.kind != NodeKind.Identifier;
+    switch (expression.kind) {
+      case NodeKind.Call:
+      case NodeKind.New:
+      case NodeKind.UnaryPostfix:
+        return true;
+      case NodeKind.UnaryPrefix: {
+        let unaryPrefix = <UnaryPrefixExpression>expression;
+        switch (unaryPrefix.operator) {
+          case Token.Plus_Plus:
+          case Token.Minus_Minus:
+          case Token.Delete:
+          case Token.Await:
+          case Token.Yield:
+            return true;
+          default:
+            return this.expressionHasSideEffects(unaryPrefix.operand);
+        }
+      }
+      case NodeKind.Assertion:
+        return this.expressionHasSideEffects((<AssertionExpression>expression).expression);
+      case NodeKind.PropertyAccess:
+        return this.expressionHasSideEffects((<PropertyAccessExpression>expression).expression);
+      case NodeKind.ElementAccess: {
+        let access = <ElementAccessExpression>expression;
+        return this.expressionHasSideEffects(access.expression)
+            || this.expressionHasSideEffects(access.elementExpression);
+      }
+      case NodeKind.Comma: {
+        let expressions = (<CommaExpression>expression).expressions;
+        for (let i = 0, k = expressions.length; i < k; ++i) {
+          if (this.expressionHasSideEffects(unchecked(expressions[i]))) return true;
+        }
+        return false;
+      }
+      case NodeKind.Ternary: {
+        let ternary = <TernaryExpression>expression;
+        return this.expressionHasSideEffects(ternary.condition)
+            || this.expressionHasSideEffects(ternary.ifThen)
+            || this.expressionHasSideEffects(ternary.ifElse);
+      }
+      case NodeKind.Binary: {
+        let binary = <BinaryExpression>expression;
+        switch (binary.operator) {
+          case Token.Equals:
+          case Token.Plus_Equals:
+          case Token.Minus_Equals:
+          case Token.Asterisk_Equals:
+          case Token.Asterisk_Asterisk_Equals:
+          case Token.Slash_Equals:
+          case Token.Percent_Equals:
+          case Token.LessThan_LessThan_Equals:
+          case Token.GreaterThan_GreaterThan_Equals:
+          case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
+          case Token.Ampersand_Equals:
+          case Token.Bar_Equals:
+          case Token.Caret_Equals:
+            return true;
+          default:
+            return this.expressionHasSideEffects(binary.left)
+                || this.expressionHasSideEffects(binary.right);
+        }
+      }
+      default:
+        return false;
+    }
   }
 
   makeLt(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
