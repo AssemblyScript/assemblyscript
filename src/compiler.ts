@@ -5280,16 +5280,13 @@ export class Compiler extends DiagnosticEmitter {
         return true;
       case NodeKind.UnaryPrefix: {
         let unaryPrefix = <UnaryPrefixExpression>expression;
-        switch (unaryPrefix.operator) {
-          case Token.Plus_Plus:
-          case Token.Minus_Minus:
-          case Token.Delete:
-          case Token.Await:
-          case Token.Yield:
-            return true;
-          default:
-            return this.expressionHasSideEffects(unaryPrefix.operand);
-        }
+        let operator = unaryPrefix.operator;
+        return operator == Token.Plus_Plus
+            || operator == Token.Minus_Minus
+            || operator == Token.Delete
+            || operator == Token.Await
+            || operator == Token.Yield
+            || this.expressionHasSideEffects(unaryPrefix.operand);
       }
       case NodeKind.Assertion:
         return this.expressionHasSideEffects((<AssertionExpression>expression).expression);
