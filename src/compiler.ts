@@ -7079,36 +7079,48 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    let allTrivial = (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) == 0;
+    if(operands && allTrivial) {
+      for(let i = 0; i < numOperands; ++i) {
+        if(!module.isTrivialExpression(operands[i])){
+          allTrivial = false;
+          break;
+        }
+      }
+    }
+
+    let stmts = new Array<ExpressionRef>();
+    let sizeTypeRef = this.options.sizeTypeRef;
+
+    if(!allTrivial){
+      let functionArgLocal = this.currentFlow.getTempLocal(this.options.usizeType);
+      let functionArgSetExpr = module.local_set(functionArgLocal.index, functionArg, true);
+      stmts.push(functionArgSetExpr);
+      functionArg =  module.local_get(functionArgLocal.index, sizeTypeRef);
+    }
+
     // We might be calling a varargs stub here, even if all operands have been
     // provided, so we must set `argumentsLength` in any case. Inject setting it
     // into the index argument, which becomes executed last after any operands.
     let argumentsLength = this.ensureArgumentsLength();
-    let sizeTypeRef = this.options.sizeTypeRef;
-    if (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) {
-      let flow = this.currentFlow;
-      let temp = flow.getTempLocal(this.options.usizeType);
-      let tempIndex = temp.index;
-      functionArg = module.block(null, [
-        module.local_set(tempIndex, functionArg, true), // Function
-        module.global_set(argumentsLength, module.i32(numArguments)),
-        module.local_get(tempIndex, sizeTypeRef)
-      ], sizeTypeRef);
-    } else { // simplify
-      functionArg = module.block(null, [
-        module.global_set(argumentsLength, module.i32(numArguments)),
-        functionArg
-      ], sizeTypeRef);
-    }
+    
+   
+    let functionArgWithVararg = module.block(null, [
+      module.global_set(argumentsLength, module.i32(numArguments)),
+      functionArg
+    ], sizeTypeRef);
+    
     if (operands) this.operandsTostack(signature, operands);
     let expr = module.call_indirect(
       null, // TODO: handle multiple tables
-      module.load(4, false, functionArg, TypeRef.I32), // ._index
+      module.load(4, false, functionArgWithVararg, TypeRef.I32), // ._index
       operands,
       signature.paramRefs,
       signature.resultRefs
     );
     this.currentType = returnType;
-    return expr;
+    stmts.push(expr);
+    return module.flatten(stmts, returnType.toRef());
   }
 
   private compileCommaExpression(
