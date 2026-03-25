@@ -29,15 +29,16 @@
     "long": "^5.2.4"
   },
   "devDependencies": {
-    "@types/node": "^18.19.75",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.5.0",
     "as-float": "^1.0.1",
-    "diff": "^7.0.0",
-    "esbuild": "^0.25.0",
-    "eslint": "^8.57.1",
-    "glob": "^10.4.5",
-    "typescript": "^5.7.3"
+    "diff": "^8.0.4",
+    "esbuild": "^0.27.0",
+    "eslint": "^10.1.0",
+    "glob": "^13.0.6",
+    "globals": "^17.4.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.2"
   },
   "type": "module",
   "exports": {

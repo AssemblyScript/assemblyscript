@@ -395,7 +395,7 @@ function ensurePackageJson() {
       updated = true;
     }
     if (!scripts["start"]) {
-      scripts["start"] = "npx serve .",
+      scripts["start"] = "npx serve .";
       pkg["scripts"] = scripts;
       updated = true;
     }

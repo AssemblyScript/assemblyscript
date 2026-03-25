@@ -425,7 +425,7 @@ export async function main(argv, options) {
         } catch (e1) {
           try {
             transform = require(resolved);
-          } catch (e2) {
+          } catch (_) {
             return prepareResult(e1);
           }
         }
@@ -670,7 +670,7 @@ export async function main(argv, options) {
       .replace(/\\/g, "/")
       .replace(extension_re, "")
       .replace(/\/$/, "");
-    
+
     // Try entryPath.ext, then entryPath/index.ext
     let sourceText = await readFile(sourcePath + extension, baseDir);
     if (sourceText == null) {
@@ -867,7 +867,7 @@ export async function main(argv, options) {
   // Prepare output
   if (!opts.noEmit) {
     if (opts.binaryFile) {
-      // We catched lagacy field for binary output (before 0.20)
+      // We caught legacy field for binary output (before 0.20)
       return prepareResult(Error("Usage of the --binaryFile compiler option is no longer supported. Use --outFile instead."));
     }
     let bindings = opts.bindings || [];
@@ -959,7 +959,7 @@ export async function main(argv, options) {
           writeFile(opts.textFile, out, baseDir)
         );
       } else if (!hasStdout) {
-        hasStdout = true;
+        // hasStdout = true;
         writeStdout(out);
       }
     }
@@ -1106,7 +1106,7 @@ async function getConfig(file, baseDir, readFile) {
   try {
     config = JSON.parse(contents);
   } catch(ex) {
-    throw new Error(`Asconfig is not valid json: ${location}`);
+    throw new Error(`Asconfig is not valid json: ${location}`, { cause: ex });
   }
 
   // validate asconfig shape
