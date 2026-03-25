@@ -41,7 +41,7 @@ export default function runner(exports, runs, allocs) {
   console.log("base: " + base);
   try {
     reset();
-  } catch (e) {
+  } catch {
     free(base);
   }
   let currentMem = exports.memory.buffer.byteLength;
