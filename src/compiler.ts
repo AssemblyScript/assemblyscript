@@ -7186,6 +7186,21 @@ export class Compiler extends DiagnosticEmitter {
     let sourceFunction = flow.sourceFunction;
     let isNamed = declaration.name.text.length > 0;
     let isSemanticallyAnonymous = !isNamed || contextualType != Type.void;
+
+    // Check for duplicate named function declarations before creating the
+    // prototype, since registering a concrete element with a duplicate
+    // internalName would trigger an assertion error.
+    if (!isSemanticallyAnonymous) {
+      let existingLocal = flow.getScopedLocal(declaration.name.text);
+      if (existingLocal) {
+        this.error(
+          DiagnosticCode.Duplicate_identifier_0,
+          declaration.name.range, declaration.name.text
+        );
+        return this.module.unreachable();
+      }
+    }
+
     let prototype = new FunctionPrototype(
       isSemanticallyAnonymous
         ? `${isNamed ? declaration.name.text : "anonymous"}|${sourceFunction.nextAnonymousId++}`
