@@ -1,0 +1,7 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "AS214: Type 'void' is illegal in this context.",
+    "EOF"
+  ]
+}
