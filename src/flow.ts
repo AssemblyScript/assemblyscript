@@ -536,6 +536,17 @@ export class Flow {
     return null;
   }
 
+  /** Looks up a local in outer function scopes (for closures). */
+  lookupLocalInOuter(name: string): Local | null {
+    let outerFlow: Flow | null = this.outer;
+    while (outerFlow) {
+      let local = outerFlow.lookupLocal(name);
+      if (local) return local;
+      outerFlow = outerFlow.outer;
+    }
+    return null;
+  }
+
   /** Looks up the element with the specified name relative to the scope of this flow. */
   lookup(name: string): Element | null {
     let element = this.lookupLocal(name);

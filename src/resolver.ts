@@ -2184,6 +2184,16 @@ export class Resolver extends DiagnosticEmitter {
         return thisLocal;
       }
     }
+    // Check for captured 'this' in closures - look up in outer flow chain
+    let thisLocal = ctxFlow.lookupLocal(CommonNames.this_);
+    if (!thisLocal) {
+      thisLocal = ctxFlow.lookupLocalInOuter(CommonNames.this_);
+    }
+    if (thisLocal) {
+      this.currentThisExpression = null;
+      this.currentElementExpression = null;
+      return thisLocal;
+    }
     let parent = ctxFlow.sourceFunction.parent;
     if (parent) {
       this.currentThisExpression = null;

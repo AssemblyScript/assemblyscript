@@ -1086,6 +1086,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.ExtendedConst) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_STRINGREF, Type.bool,
       i64_new(options.hasFeature(Feature.Stringref) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_CLOSURES, Type.bool,
+      i64_new(options.hasFeature(Feature.Closures) ? 1 : 0, 0));
 
     // remember deferred elements
     let queuedImports = new Array<QueuedImport>();
@@ -3628,6 +3630,18 @@ export class Local extends VariableLikeElement {
   /** Original name of the (temporary) local. */
   private originalName: string;
 
+  /** Whether this local is captured by a closure. */
+  isCaptured: bool = false;
+
+  /** Environment slot index if captured, -1 otherwise. */
+  envSlotIndex: i32 = -1;
+
+  /** The function whose environment this local is stored in. Set when captured. */
+  envOwner: Function | null = null;
+
+  /** Whether this local was accessed as a regular wasm local (before capture was discovered). */
+  wasAccessedAsLocal: bool = false;
+
   /** Constructs a new local variable. */
   constructor(
     /** Simple name. */
@@ -3784,6 +3798,32 @@ export class Function extends TypedElement {
   nextInlineId: i32 = 0;
   /** Counting id of anonymous inner functions. */
   nextAnonymousId: i32 = 0;
+
+  // Closure support
+
+  /** Set of locals from outer scopes that this function captures. Maps Local to slot index. */
+  capturedLocals: Map<Local, i32> | null = null;
+
+  /** The environment class for this function's captured locals, if any. */
+  envClass: Class | null = null;
+
+  /** The local variable holding the environment pointer in outer function. */
+  envLocal: Local | null = null;
+
+  /** The outer function whose environment this closure accesses. */
+  outerFunction: Function | null = null;
+
+  /** Local variable in a closure function that caches the environment pointer from the global.
+   *  This is needed because indirect calls can overwrite the global. */
+  closureEnvLocal: Local | null = null;
+
+  /** Whether this function needs recompilation due to late capture discovery. */
+  needsCaptureRecompile: bool = false;
+
+  /** Whether this function requires an environment (is a closure). */
+  get needsEnvironment(): bool {
+    return this.capturedLocals != null && this.capturedLocals.size > 0;
+  }
 
   /** Constructs a new concrete function. */
   constructor(

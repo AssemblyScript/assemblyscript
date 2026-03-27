@@ -202,6 +202,8 @@ export const FEATURE_RELAXED_SIMD = Feature.RelaxedSimd;
 export const FEATURE_EXTENDED_CONST = Feature.ExtendedConst;
 /** String references. */
 export const FEATURE_STRINGREF = Feature.Stringref;
+/** Closures. */
+export const FEATURE_CLOSURES = Feature.Closures;
 /** All features. */
 export const FEATURES_ALL = Feature.All;
 /** Default features. */

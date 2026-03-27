@@ -43,5 +43,12 @@
     "v8_flags": [
       "--experimental-wasm-relaxed-simd"
     ]
+  },
+  "closures": {
+    "asc_flags": [
+      "--enable closures"
+    ],
+    "v8_flags": [
+    ]
   }
 }
