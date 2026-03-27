@@ -427,6 +427,7 @@ export class ASTBuilder {
     sb.push(isNullable ? "((" : "(");
     let explicitThisType = node.explicitThisType;
     if (explicitThisType) {
+      this.serializeParameterDecorators(node.explicitThisDecorators);
       sb.push("this: ");
       this.visitTypeNode(explicitThisType);
     }
@@ -1153,6 +1154,7 @@ export class ASTBuilder {
       let numParameters = parameters.length;
       let explicitThisType = signature.explicitThisType;
       if (explicitThisType) {
+        this.serializeParameterDecorators(signature.explicitThisDecorators);
         sb.push("this: ");
         this.visitTypeNode(explicitThisType);
       }
@@ -1563,9 +1565,38 @@ export class ASTBuilder {
     indent(sb, this.indentLevel);
   }
 
+  serializeParameterDecorators(decorators: DecoratorNode[] | null): void {
+    if (decorators) {
+      for (let i = 0, k = decorators.length; i < k; ++i) {
+        this.serializeParameterDecorator(decorators[i]);
+      }
+    }
+  }
+
+  private serializeParameterDecorator(node: DecoratorNode): void {
+    let sb = this.sb;
+    sb.push("@");
+    this.visitNode(node.name);
+    let args = node.args;
+    if (args) {
+      sb.push("(");
+      let numArgs = args.length;
+      if (numArgs) {
+        this.visitNode(args[0]);
+        for (let i = 1; i < numArgs; ++i) {
+          sb.push(", ");
+          this.visitNode(args[i]);
+        }
+      }
+      sb.push(")");
+    }
+    sb.push(" ");
+  }
+
   serializeParameter(node: ParameterNode): void {
     let sb = this.sb;
     let kind = node.parameterKind;
+    this.serializeParameterDecorators(node.decorators);
     let implicitFieldDeclaration = node.implicitFieldDeclaration;
     if (implicitFieldDeclaration) {
       this.serializeAccessModifiers(implicitFieldDeclaration);
