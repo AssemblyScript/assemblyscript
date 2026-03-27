@@ -254,10 +254,10 @@ async function runTest(basename) {
 
   if (config.features) {
     config.features.forEach(feature => {
-      if (!features.includes(feature) && !features.includes("*")) {
+      let featureConfig = featuresConfig[feature];
+      if (!features.includes(feature) && !features.includes("*") && !featureConfig.enabled) {
         missing_features.push(feature);
       }
-      let featureConfig = featuresConfig[feature];
       if (featureConfig.asc_flags) {
         featureConfig.asc_flags.forEach(flag => {
           Array.prototype.push.apply(asc_flags, flag.split(" "));

@@ -1,0 +1,9 @@
+{
+  "asc_flags": [
+    "--enable", "exception-handling"
+  ],
+  "stderr": [
+    "AS241: Only Error or its subclasses can be thrown, but found type '~lib/string/String'.",
+    "EOF"
+  ]
+}

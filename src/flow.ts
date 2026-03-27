@@ -265,10 +265,33 @@ export class Flow {
   trueFlows: Map<ExpressionRef,Flow> | null = null;
   /** Alternative flows if a compound expression is false-ish. */
   falseFlows: Map<ExpressionRef,Flow> | null = null;
+  /** Try-finally context: local index for pending action (0=none, 1=return, 2=break, 3=continue). */
+  tryFinallyPendingActionLocal: i32 = -1;
+  /** Try-finally context: local index for pending return value. */
+  tryFinallyPendingValueLocal: i32 = -1;
+  /** Try-finally context: label to branch to for finally dispatch. */
+  tryFinallyDispatchLabel: string | null = null;
+  /** Try-finally context: return type for the pending value. */
+  tryFinallyReturnType: Type | null = null;
 
   /** Tests if this is an inline flow. */
   get isInline(): bool {
     return this.inlineFunction != null;
+  }
+
+  /** Tests if this flow or any parent is in a try-finally context. */
+  get isInTryFinally(): bool {
+    return this.tryFinallyPendingActionLocal >= 0;
+  }
+
+  /** Gets the try-finally context from this flow or a parent flow. */
+  getTryFinallyContext(): Flow | null {
+    let flow: Flow | null = this;
+    while (flow) {
+      if (flow.tryFinallyPendingActionLocal >= 0) return flow;
+      flow = flow.parent;
+    }
+    return null;
   }
 
   /** Gets the source function being compiled. Differs from target when inlining. */

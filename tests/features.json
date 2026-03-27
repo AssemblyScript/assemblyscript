@@ -27,7 +27,8 @@
       "--enable exception-handling"
     ],
     "v8_flags": [
-    ]
+    ],
+    "enabled": true
   },
   "simd": {
     "asc_flags": [

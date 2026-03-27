@@ -2603,12 +2603,31 @@ export abstract class i31 { // FIXME: usage of 'new' requires a class :(
 // @ts-ignore: decorator
 @external("env", "abort")
 @external.js("throw Error(`${message} in ${fileName}:${lineNumber}:${columnNumber}`);")
-declare function abort(
+declare function __abort_impl(
   message?: string | null,
   fileName?: string | null,
   lineNumber?: u32,
   columnNumber?: u32
 ): void;
+
+// When exception-handling is enabled, abort throws an Error that can be caught.
+// When disabled, it calls the external abort function (host implementation).
+function abort(
+  message: string | null = null,
+  fileName: string | null = null,
+  lineNumber: u32 = 0,
+  columnNumber: u32 = 0
+): void {
+  if (isDefined(ASC_FEATURE_EXCEPTION_HANDLING)) {
+    let fullMessage = message ? message : "abort";
+    if (fileName) {
+      fullMessage += " in " + fileName + ":" + lineNumber.toString() + ":" + columnNumber.toString();
+    }
+    throw new Error(fullMessage);
+  } else {
+    __abort_impl(message, fileName, lineNumber, columnNumber);
+  }
+}
 
 // @ts-ignore: decorator
 @external("env", "trace")

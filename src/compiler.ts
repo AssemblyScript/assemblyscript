@@ -61,6 +61,8 @@ import {
   getConstValueInteger
 } from "./module";
 
+import * as binaryen from "./glue/binaryen";
+
 import {
   CommonFlags,
   STATIC_DELIMITER,
@@ -476,6 +478,8 @@ export class Compiler extends DiagnosticEmitter {
   hasCustomFunctionExports: bool = false;
   /** Whether the module would use the exported runtime to lift/lower. */
   desiresExportRuntime: bool = false;
+  /** Whether the exception tag has been created. */
+  exceptionTagEnsured: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -2843,6 +2847,28 @@ export class Compiler extends DiagnosticEmitter {
     // Remember that this flow returns
     flow.set(FlowFlags.Returns | FlowFlags.Terminates);
 
+    // Handle try-finally context: defer return until after finally
+    let tryFinallyContext = flow.getTryFinallyContext();
+    if (tryFinallyContext) {
+      let pendingActionLocal = tryFinallyContext.tryFinallyPendingActionLocal;
+      let pendingValueLocal = tryFinallyContext.tryFinallyPendingValueLocal;
+      let dispatchLabel = assert(tryFinallyContext.tryFinallyDispatchLabel);
+      let stmts = new Array<ExpressionRef>();
+
+      // Store return value if any
+      if (expr && returnType != Type.void) {
+        stmts.push(module.local_set(pendingValueLocal, expr, returnType.isManaged));
+      }
+
+      // Set pending action to RETURN (1)
+      stmts.push(module.local_set(pendingActionLocal, module.i32(1), false));
+
+      // Branch to finally dispatch
+      stmts.push(module.br(dispatchLabel));
+
+      return module.flatten(stmts);
+    }
+
     // Handle inline return
     if (flow.isInline) {
       let inlineReturnLabel = assert(flow.inlineReturnLabel);
@@ -2988,12 +3014,38 @@ export class Compiler extends DiagnosticEmitter {
   private compileThrowStatement(
     statement: ThrowStatement
   ): ExpressionRef {
-    // TODO: requires exception-handling spec.
+    let module = this.module;
     let flow = this.currentFlow;
 
     // Remember that this branch throws
     flow.set(FlowFlags.Throws | FlowFlags.Terminates);
 
+    // If exception handling feature is enabled, use actual throw instruction
+    if (this.options.hasFeature(Feature.ExceptionHandling)) {
+      // Compile the thrown value - should be Error or subclass
+      let valueExpr = this.compileExpression(statement.value, Type.auto);
+      let valueType = this.currentType;
+
+      // Verify that the thrown type is Error or a subclass
+      let errorInstance = this.program.errorInstance;
+      let classReference = valueType.getClass();
+      if (!classReference || !classReference.isAssignableTo(errorInstance)) {
+        this.error(
+          DiagnosticCode.Only_Error_or_its_subclasses_can_be_thrown_but_found_type_0,
+          statement.value.range,
+          valueType.toString()
+        );
+        return module.unreachable();
+      }
+
+      // Ensure exception tag exists
+      let tagName = this.ensureExceptionTag();
+
+      // Emit throw instruction with the error pointer
+      return module.throw(tagName, [valueExpr]);
+    }
+
+    // Fallback: convert throw to abort() call when exception handling is disabled
     let stmts = new Array<ExpressionRef>();
     let value = statement.value;
     let message: Expression | null = null;
@@ -3004,20 +3056,309 @@ export class Compiler extends DiagnosticEmitter {
     stmts.push(
       this.makeAbort(message, statement)
     );
-    return this.module.flatten(stmts);
+    return module.flatten(stmts);
   }
 
   private compileTryStatement(
     statement: TryStatement
   ): ExpressionRef {
-    // TODO: can't yet support something like: try { return ... } finally { ... }
-    // worthwhile to investigate lowering returns to block results (here)?
-    this.error(
-      DiagnosticCode.Not_implemented_0,
-      statement.range,
-      "Exceptions"
-    );
-    return this.module.unreachable();
+    let module = this.module;
+    let outerFlow = this.currentFlow;
+
+    // Check feature flag
+    if (!this.options.hasFeature(Feature.ExceptionHandling)) {
+      this.error(
+        DiagnosticCode.Feature_0_is_not_enabled,
+        statement.range,
+        "exception-handling"
+      );
+      return module.unreachable();
+    }
+
+    // Ensure exception tag exists
+    let tagName = this.ensureExceptionTag();
+
+    // Generate unique label for this try block
+    let label = outerFlow.pushControlFlowLabel();
+    let tryLabel = `try|${label}`;
+
+    // Compile try block body
+    let tryFlow = outerFlow.fork();
+    this.currentFlow = tryFlow;
+    let tryStmts = new Array<ExpressionRef>();
+    this.compileStatements(statement.bodyStatements, tryStmts);
+    let tryBodyExpr = module.flatten(tryStmts);
+    let tryFlowTerminates = tryFlow.isAny(FlowFlags.Terminates);
+
+    let catchTags: string[] = [];
+    let catchBodies: ExpressionRef[] = [];
+    let catchFlow: Flow | null = null;
+    let catchFlowTerminates = false;
+
+    // Compile catch clause if present
+    let catchStatements = statement.catchStatements;
+    let catchVariable = statement.catchVariable;
+    if (catchStatements) {
+      catchFlow = outerFlow.fork();
+      this.currentFlow = catchFlow;
+
+      let catchStmts = new Array<ExpressionRef>();
+
+      // The pop instruction MUST be the very first instruction in the catch block
+      // WebAssembly requires this - we can't wrap it in local.tee or anything else
+      let popExpr = module.pop(this.options.sizeTypeRef);
+
+      // If there's a catch variable, bind it to the popped exception value
+      if (catchVariable) {
+        let catchVarName = catchVariable.text;
+        // The exception value is a pointer to Error object
+        let errorClass = this.program.lookup(CommonNames.Error);
+        let errorType: Type;
+        if (errorClass && errorClass.kind == ElementKind.ClassPrototype) {
+          let resolved = this.resolver.resolveClass(<ClassPrototype>errorClass, null);
+          errorType = resolved ? resolved.type : this.options.usizeType;
+        } else {
+          errorType = this.options.usizeType; // Fallback to usize if Error class not found
+        }
+
+        // Create a scoped local for the catch variable
+        let catchLocal = catchFlow.addScopedLocal(catchVarName, errorType);
+        // Use direct local.set without shadow stack to ensure pop is first
+        catchStmts.push(binaryen._BinaryenLocalSet(module.ref, catchLocal.index, popExpr));
+        // Mark the catch variable as initialized
+        catchFlow.setLocalFlag(catchLocal.index, LocalFlags.Initialized);
+      } else {
+        // No catch variable, but still need to pop the exception value
+        catchStmts.push(module.drop(popExpr));
+      }
+
+      // Compile catch block statements
+      this.compileStatements(catchStatements, catchStmts);
+
+      catchTags.push(tagName);
+      catchBodies.push(module.flatten(catchStmts));
+      catchFlowTerminates = catchFlow.isAny(FlowFlags.Terminates);
+    }
+
+    // Handle finally clause if present
+    let finallyStatements = statement.finallyStatements;
+    if (finallyStatements) {
+      // Set up pending action pattern for deferred control flow
+      // pendingAction: 0=normal, 1=return, 2=break, 3=continue
+      let returnType = outerFlow.returnType;
+      let targetFunction = outerFlow.targetFunction;
+
+      // Create locals for pending action tracking
+      let pendingActionLocal = targetFunction.addLocal(Type.i32);
+      let pendingValueLocal: Local | null = returnType != Type.void
+        ? targetFunction.addLocal(returnType)
+        : null;
+      let pendingValueLocalIndex = pendingValueLocal ? pendingValueLocal.index : -1;
+
+      // Create labels
+      let dispatchLabel = `finally_dispatch|${label}`;
+      let outerTryLabel = `try_finally|${label}`;
+
+      // Set up try-finally context on the flows BEFORE compiling try/catch bodies
+      // We need to recompile try and catch with the context set
+      outerFlow.popControlFlowLabel(label);
+
+      // Re-fork flows with try-finally context
+      let label2 = outerFlow.pushControlFlowLabel();
+      tryLabel = `try|${label2}`;
+
+      tryFlow = outerFlow.fork();
+      tryFlow.tryFinallyPendingActionLocal = pendingActionLocal.index;
+      tryFlow.tryFinallyPendingValueLocal = pendingValueLocalIndex;
+      tryFlow.tryFinallyDispatchLabel = dispatchLabel;
+      tryFlow.tryFinallyReturnType = returnType;
+
+      this.currentFlow = tryFlow;
+      let tryStmts2 = new Array<ExpressionRef>();
+      this.compileStatements(statement.bodyStatements, tryStmts2);
+      tryBodyExpr = module.flatten(tryStmts2);
+      tryFlowTerminates = tryFlow.isAny(FlowFlags.Terminates);
+
+      // Recompile catch with context if present
+      catchTags = [];
+      catchBodies = [];
+      catchFlow = null;
+      catchFlowTerminates = false;
+
+      if (catchStatements) {
+        catchFlow = outerFlow.fork();
+        catchFlow.tryFinallyPendingActionLocal = pendingActionLocal.index;
+        catchFlow.tryFinallyPendingValueLocal = pendingValueLocalIndex;
+        catchFlow.tryFinallyDispatchLabel = dispatchLabel;
+        catchFlow.tryFinallyReturnType = returnType;
+
+        this.currentFlow = catchFlow;
+
+        let catchStmts2 = new Array<ExpressionRef>();
+        let popExpr = module.pop(this.options.sizeTypeRef);
+
+        if (catchVariable) {
+          let catchVarName = catchVariable.text;
+          let errorClass = this.program.lookup(CommonNames.Error);
+          let errorType: Type;
+          if (errorClass && errorClass.kind == ElementKind.ClassPrototype) {
+            let resolved = this.resolver.resolveClass(<ClassPrototype>errorClass, null);
+            errorType = resolved ? resolved.type : this.options.usizeType;
+          } else {
+            errorType = this.options.usizeType;
+          }
+          let catchLocal = catchFlow.addScopedLocal(catchVarName, errorType);
+          catchStmts2.push(binaryen._BinaryenLocalSet(module.ref, catchLocal.index, popExpr));
+          catchFlow.setLocalFlag(catchLocal.index, LocalFlags.Initialized);
+        } else {
+          catchStmts2.push(module.drop(popExpr));
+        }
+
+        this.compileStatements(catchStatements, catchStmts2);
+
+        catchTags.push(tagName);
+        catchBodies.push(module.flatten(catchStmts2));
+        catchFlowTerminates = catchFlow.isAny(FlowFlags.Terminates);
+      }
+
+      this.currentFlow = outerFlow;
+
+      // Build the inner try-catch (if there's a catch clause)
+      let innerTryExpr: ExpressionRef;
+      if (catchBodies.length > 0) {
+        innerTryExpr = module.try(tryLabel, tryBodyExpr, catchTags, catchBodies, null);
+      } else {
+        innerTryExpr = tryBodyExpr;
+      }
+
+      // Compile finally statements for the catch_all path (exception handling)
+      let finallyFlow1 = outerFlow.fork();
+      this.currentFlow = finallyFlow1;
+      let finallyStmts1 = new Array<ExpressionRef>();
+      this.compileStatements(finallyStatements, finallyStmts1);
+      let finallyExpr1 = module.flatten(finallyStmts1);
+
+      // Create catch_all body: run finally, then rethrow
+      let catchAllBody = module.block(null, [
+        finallyExpr1,
+        module.rethrow(outerTryLabel)
+      ]);
+
+      // Outer try with catch_all for exception path
+      let outerTryExpr = module.try(
+        outerTryLabel,
+        innerTryExpr,
+        [],
+        [catchAllBody],
+        null
+      );
+
+      // Compile finally statements for the normal/deferred path
+      let finallyFlow2 = outerFlow.fork();
+      this.currentFlow = finallyFlow2;
+      let finallyStmts2 = new Array<ExpressionRef>();
+      this.compileStatements(finallyStatements, finallyStmts2);
+      let finallyExpr2 = module.flatten(finallyStmts2);
+      let finallyTerminates = finallyFlow2.isAny(FlowFlags.Terminates);
+      let finallyReturns = finallyFlow2.isAny(FlowFlags.Returns);
+
+      this.currentFlow = outerFlow;
+      outerFlow.popControlFlowLabel(label2);
+
+      // Build the dispatch logic after finally
+      let dispatchStmts = new Array<ExpressionRef>();
+
+      // Run finally code
+      dispatchStmts.push(finallyExpr2);
+
+      // If finally always returns/terminates, skip dispatch logic
+      if (!finallyTerminates) {
+        // Dispatch based on pendingAction
+        // if (pendingAction == 1) return pendingValue;
+        if (returnType != Type.void && pendingValueLocal) {
+          dispatchStmts.push(
+            module.if(
+              module.binary(BinaryOp.EqI32,
+                module.local_get(pendingActionLocal.index, TypeRef.I32),
+                module.i32(1)
+              ),
+              module.return(module.local_get(pendingValueLocal.index, returnType.toRef()))
+            )
+          );
+        } else {
+          dispatchStmts.push(
+            module.if(
+              module.binary(BinaryOp.EqI32,
+                module.local_get(pendingActionLocal.index, TypeRef.I32),
+                module.i32(1)
+              ),
+              module.return()
+            )
+          );
+        }
+      }
+
+      // Wrap the try in a block that return can branch to
+      let tryBlock = module.block(dispatchLabel, [outerTryExpr]);
+
+      // Only add unreachable if all paths terminate (no normal completion possible)
+      // If try or catch can complete normally, we need to fall through
+      let allPathsTerminate = catchFlow
+        ? (tryFlowTerminates && catchFlowTerminates)
+        : tryFlowTerminates;
+      if (!finallyTerminates && allPathsTerminate) {
+        dispatchStmts.push(module.unreachable());
+      }
+
+      let fullBlockStmts = new Array<ExpressionRef>(1 + dispatchStmts.length);
+      fullBlockStmts[0] = tryBlock;
+      for (let i = 0; i < dispatchStmts.length; i++) {
+        fullBlockStmts[1 + i] = dispatchStmts[i];
+      }
+      let fullBlock = module.block(null, fullBlockStmts);
+
+      // Merge flow states
+      // If finally always terminates, the whole construct terminates
+      if (finallyTerminates) {
+        outerFlow.set(FlowFlags.Terminates);
+        if (finallyReturns) {
+          outerFlow.set(FlowFlags.Returns);
+        }
+      } else if (catchFlow) {
+        if (tryFlowTerminates && catchFlowTerminates) {
+          outerFlow.set(FlowFlags.Terminates);
+        } else {
+          outerFlow.inheritAlternatives(tryFlow, catchFlow);
+        }
+      } else {
+        outerFlow.mergeSideEffects(tryFlow);
+      }
+
+      return fullBlock;
+    }
+
+    // No finally clause
+    outerFlow.popControlFlowLabel(label);
+    this.currentFlow = outerFlow;
+
+    // Merge flow states
+    if (catchFlow) {
+      if (tryFlowTerminates && catchFlowTerminates) {
+        outerFlow.set(FlowFlags.Terminates);
+      } else if (!catchStatements) {
+        // No catch, only try
+        outerFlow.inherit(tryFlow);
+      } else {
+        outerFlow.inheritAlternatives(tryFlow, catchFlow);
+      }
+    }
+
+    // If no catch handlers, just return the try body (exceptions propagate)
+    if (catchBodies.length == 0) {
+      return tryBodyExpr;
+    }
+
+    return module.try(tryLabel, tryBodyExpr, catchTags, catchBodies, null);
   }
 
   /** Compiles a variable statement. Returns `0` if an initializer is not necessary. */
@@ -6532,6 +6873,19 @@ export class Compiler extends DiagnosticEmitter {
       this.builtinArgumentsLength = module.addGlobal(name, TypeRef.I32, true, module.i32(0));
     }
     return name;
+  }
+
+  /** Ensures the exception tag for exception handling exists. */
+  ensureExceptionTag(): string {
+    let tagName = "error";
+    if (!this.exceptionTagEnsured) {
+      let module = this.module;
+      let sizeTypeRef = this.options.sizeTypeRef;
+      // Tag with single param: pointer to Error object
+      module.addTag(tagName, sizeTypeRef, TypeRef.None);
+      this.exceptionTagEnsured = true;
+    }
+    return tagName;
   }
 
   /** Ensures compilation of the varargs stub for the specified function. */
