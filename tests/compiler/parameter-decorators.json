@@ -1,0 +1,23 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS1206: Decorators are not valid here.",
+    "function regular(@first value: i32): void {}",
+    "TS1206: Decorators are not valid here.",
+    "function rest(@rest ...values: i32[]): void {}",
+    "TS1206: Decorators are not valid here.",
+    "function withthis(@self this: i32, value: i32): i32 { return this; }",
+    "TS1206: Decorators are not valid here.",
+    "constructor(@field public value: i32) {}",
+    "TS1206: Decorators are not valid here.",
+    "method(@arg value: i32): void {}",
+    "TS1206: Decorators are not valid here.",
+    "type Callback = (@arg value: i32) => void;",
+    "TS1206: Decorators are not valid here.",
+    "const expression = function(@arg value: i32): void {};",
+    "TS1206: Decorators are not valid here.",
+    "const arrow = (@arg value: i32): void => {};",
+    "EOF"
+  ]
+}
