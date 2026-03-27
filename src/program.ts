@@ -86,29 +86,61 @@ import {
   ArrowKind,
 
   Expression,
+  ArrayLiteralExpression,
+  AssertionExpression,
+  BinaryExpression,
+  CallExpression,
+  ClassExpression,
+  CommaExpression,
+  ElementAccessExpression,
+  FunctionExpression,
   IdentifierExpression,
+  InstanceOfExpression,
+  LiteralExpression,
+  NewExpression,
+  ObjectLiteralExpression,
+  ParenthesizedExpression,
+  PropertyAccessExpression,
+  TernaryExpression,
+  TemplateLiteralExpression,
+  UnaryPostfixExpression,
+  UnaryPrefixExpression,
   LiteralKind,
   StringLiteralExpression,
 
   Statement,
+  BlockStatement,
   ClassDeclaration,
   DeclarationStatement,
+  DoStatement,
+  ExpressionStatement,
   EnumDeclaration,
   EnumValueDeclaration,
   ExportMember,
   ExportDefaultStatement,
   ExportStatement,
   FieldDeclaration,
+  ForOfStatement,
+  ForStatement,
   FunctionDeclaration,
+  IfStatement,
   ImportDeclaration,
   ImportStatement,
+  IndexSignatureNode,
   InterfaceDeclaration,
   MethodDeclaration,
   NamespaceDeclaration,
+  ReturnStatement,
+  SwitchCase,
+  SwitchStatement,
+  ThrowStatement,
+  TryStatement,
   TypeDeclaration,
   VariableDeclaration,
   VariableLikeDeclarationStatement,
   VariableStatement,
+  VoidStatement,
+  WhileStatement,
   ParameterKind,
   ParameterNode,
   TypeName
@@ -462,6 +494,8 @@ export class Program extends DiagnosticEmitter {
   nextSignatureId: i32 = 0;
   /** An indicator if the program has been initialized. */
   initialized: bool = false;
+  /** Indicates whether the one-shot post-transform parameter decorator validation has run. */
+  parameterDecoratorsValidated: bool = false;
 
   // Lookup maps
 
@@ -1494,6 +1528,386 @@ export class Program extends DiagnosticEmitter {
       if (file.source.sourceKind == SourceKind.UserEntry) {
         this.markModuleExports(file);
       }
+    }
+  }
+
+  /** Rejects parameter decorators that survive transform time. These remain transform-only syntax. */
+  validateParameterDecorators(): void {
+    if (this.parameterDecoratorsValidated) return;
+    this.parameterDecoratorsValidated = true;
+    let sources = this.sources;
+    for (let i = 0, k = sources.length; i < k; ++i) {
+      this.validateParameterDecoratorsInSource(sources[i]);
+    }
+  }
+
+  private validateParameterDecoratorsInSource(source: Source): void {
+    let statements = source.statements;
+    for (let i = 0, k = statements.length; i < k; ++i) {
+      this.validateParameterDecoratorsInStatement(statements[i]);
+    }
+  }
+
+  private validateParameterDecoratorsInStatements(statements: Statement[] | null): void {
+    if (statements) {
+      for (let i = 0, k = statements.length; i < k; ++i) {
+        this.validateParameterDecoratorsInStatement(statements[i]);
+      }
+    }
+  }
+
+  private validateParameterDecoratorsInStatement(statement: Statement | null): void {
+    if (!statement) return;
+    switch (statement.kind) {
+      case NodeKind.Block: {
+        this.validateParameterDecoratorsInStatements((<BlockStatement>statement).statements);
+        break;
+      }
+      case NodeKind.ClassDeclaration:
+      case NodeKind.InterfaceDeclaration: {
+        this.validateParameterDecoratorsInClassDeclaration(<ClassDeclaration>statement);
+        break;
+      }
+      case NodeKind.Do: {
+        let doStatement = <DoStatement>statement;
+        this.validateParameterDecoratorsInStatement(doStatement.body);
+        this.validateParameterDecoratorsInExpression(doStatement.condition);
+        break;
+      }
+      case NodeKind.EnumDeclaration: {
+        this.validateParameterDecoratorsInEnumDeclaration(<EnumDeclaration>statement);
+        break;
+      }
+      case NodeKind.ExportDefault: {
+        this.validateParameterDecoratorsInDeclaration((<ExportDefaultStatement>statement).declaration);
+        break;
+      }
+      case NodeKind.Expression: {
+        this.validateParameterDecoratorsInExpression((<ExpressionStatement>statement).expression);
+        break;
+      }
+      case NodeKind.For: {
+        let forStatement = <ForStatement>statement;
+        this.validateParameterDecoratorsInStatement(forStatement.initializer);
+        this.validateParameterDecoratorsInExpression(forStatement.condition);
+        this.validateParameterDecoratorsInExpression(forStatement.incrementor);
+        this.validateParameterDecoratorsInStatement(forStatement.body);
+        break;
+      }
+      case NodeKind.ForOf: {
+        let forOfStatement = <ForOfStatement>statement;
+        this.validateParameterDecoratorsInStatement(forOfStatement.variable);
+        this.validateParameterDecoratorsInExpression(forOfStatement.iterable);
+        this.validateParameterDecoratorsInStatement(forOfStatement.body);
+        break;
+      }
+      case NodeKind.FunctionDeclaration:
+      case NodeKind.MethodDeclaration: {
+        this.validateParameterDecoratorsInFunctionDeclaration(<FunctionDeclaration>statement);
+        break;
+      }
+      case NodeKind.If: {
+        let ifStatement = <IfStatement>statement;
+        this.validateParameterDecoratorsInExpression(ifStatement.condition);
+        this.validateParameterDecoratorsInStatement(ifStatement.ifTrue);
+        this.validateParameterDecoratorsInStatement(ifStatement.ifFalse);
+        break;
+      }
+      case NodeKind.NamespaceDeclaration: {
+        this.validateParameterDecoratorsInStatements((<NamespaceDeclaration>statement).members);
+        break;
+      }
+      case NodeKind.Return: {
+        this.validateParameterDecoratorsInExpression((<ReturnStatement>statement).value);
+        break;
+      }
+      case NodeKind.Switch: {
+        let switchStatement = <SwitchStatement>statement;
+        this.validateParameterDecoratorsInExpression(switchStatement.condition);
+        let cases = switchStatement.cases;
+        for (let i = 0, k = cases.length; i < k; ++i) {
+          this.validateParameterDecoratorsInSwitchCase(cases[i]);
+        }
+        break;
+      }
+      case NodeKind.Throw: {
+        this.validateParameterDecoratorsInExpression((<ThrowStatement>statement).value);
+        break;
+      }
+      case NodeKind.Try: {
+        let tryStatement = <TryStatement>statement;
+        this.validateParameterDecoratorsInStatements(tryStatement.bodyStatements);
+        this.validateParameterDecoratorsInStatements(tryStatement.catchStatements);
+        this.validateParameterDecoratorsInStatements(tryStatement.finallyStatements);
+        break;
+      }
+      case NodeKind.TypeDeclaration: {
+        this.validateParameterDecoratorsInTypeDeclaration(<TypeDeclaration>statement);
+        break;
+      }
+      case NodeKind.Variable: {
+        let declarations = (<VariableStatement>statement).declarations;
+        for (let i = 0, k = declarations.length; i < k; ++i) {
+          this.validateParameterDecoratorsInVariableLikeDeclaration(declarations[i]);
+        }
+        break;
+      }
+      case NodeKind.Void: {
+        this.validateParameterDecoratorsInExpression((<VoidStatement>statement).expression);
+        break;
+      }
+      case NodeKind.While: {
+        let whileStatement = <WhileStatement>statement;
+        this.validateParameterDecoratorsInExpression(whileStatement.condition);
+        this.validateParameterDecoratorsInStatement(whileStatement.body);
+        break;
+      }
+    }
+  }
+
+  private validateParameterDecoratorsInDeclaration(declaration: DeclarationStatement): void {
+    switch (declaration.kind) {
+      case NodeKind.ClassDeclaration:
+      case NodeKind.InterfaceDeclaration: {
+        this.validateParameterDecoratorsInClassDeclaration(<ClassDeclaration>declaration);
+        break;
+      }
+      case NodeKind.EnumDeclaration: {
+        this.validateParameterDecoratorsInEnumDeclaration(<EnumDeclaration>declaration);
+        break;
+      }
+      case NodeKind.FieldDeclaration:
+      case NodeKind.VariableDeclaration: {
+        this.validateParameterDecoratorsInVariableLikeDeclaration(<VariableLikeDeclarationStatement>declaration);
+        break;
+      }
+      case NodeKind.FunctionDeclaration:
+      case NodeKind.MethodDeclaration: {
+        this.validateParameterDecoratorsInFunctionDeclaration(<FunctionDeclaration>declaration);
+        break;
+      }
+      case NodeKind.NamespaceDeclaration: {
+        this.validateParameterDecoratorsInStatements((<NamespaceDeclaration>declaration).members);
+        break;
+      }
+      case NodeKind.TypeDeclaration: {
+        this.validateParameterDecoratorsInTypeDeclaration(<TypeDeclaration>declaration);
+        break;
+      }
+    }
+  }
+
+  private validateParameterDecoratorsInClassDeclaration(node: ClassDeclaration): void {
+    this.validateParameterDecoratorsInTypeParameters(node.typeParameters);
+    this.validateParameterDecoratorsInType(node.extendsType);
+    let implementsTypes = node.implementsTypes;
+    if (implementsTypes) {
+      for (let i = 0, k = implementsTypes.length; i < k; ++i) {
+        this.validateParameterDecoratorsInType(implementsTypes[i]);
+      }
+    }
+    this.validateParameterDecoratorsInIndexSignature(node.indexSignature);
+    let members = node.members;
+    for (let i = 0, k = members.length; i < k; ++i) {
+      this.validateParameterDecoratorsInDeclaration(members[i]);
+    }
+  }
+
+  private validateParameterDecoratorsInEnumDeclaration(node: EnumDeclaration): void {
+    let values = node.values;
+    for (let i = 0, k = values.length; i < k; ++i) {
+      this.validateParameterDecoratorsInVariableLikeDeclaration(values[i]);
+    }
+  }
+
+  private validateParameterDecoratorsInFunctionDeclaration(node: FunctionDeclaration): void {
+    this.validateParameterDecoratorsInTypeParameters(node.typeParameters);
+    this.validateParameterDecoratorsInFunctionType(node.signature);
+    this.validateParameterDecoratorsInStatement(node.body);
+  }
+
+  private validateParameterDecoratorsInTypeDeclaration(node: TypeDeclaration): void {
+    this.validateParameterDecoratorsInTypeParameters(node.typeParameters);
+    this.validateParameterDecoratorsInType(node.type);
+  }
+
+  private validateParameterDecoratorsInVariableLikeDeclaration(node: VariableLikeDeclarationStatement): void {
+    this.validateParameterDecoratorsInType(node.type);
+    this.validateParameterDecoratorsInExpression(node.initializer);
+  }
+
+  private validateParameterDecoratorsInSwitchCase(node: SwitchCase): void {
+    this.validateParameterDecoratorsInExpression(node.label);
+    this.validateParameterDecoratorsInStatements(node.statements);
+  }
+
+  private validateParameterDecoratorsInIndexSignature(node: IndexSignatureNode | null): void {
+    if (!node) return;
+    this.validateParameterDecoratorsInType(node.keyType);
+    this.validateParameterDecoratorsInType(node.valueType);
+  }
+
+  private validateParameterDecoratorsInExpression(node: Expression | null): void {
+    if (!node) return;
+    switch (node.kind) {
+      case NodeKind.Assertion: {
+        let assertion = <AssertionExpression>node;
+        this.validateParameterDecoratorsInExpression(assertion.expression);
+        this.validateParameterDecoratorsInType(assertion.toType);
+        break;
+      }
+      case NodeKind.Binary: {
+        let binary = <BinaryExpression>node;
+        this.validateParameterDecoratorsInExpression(binary.left);
+        this.validateParameterDecoratorsInExpression(binary.right);
+        break;
+      }
+      case NodeKind.Call: {
+        let call = <CallExpression>node;
+        this.validateParameterDecoratorsInExpression(call.expression);
+        this.validateParameterDecoratorsInTypes(call.typeArguments);
+        this.validateParameterDecoratorsInExpressions(call.args);
+        break;
+      }
+      case NodeKind.Class: {
+        this.validateParameterDecoratorsInClassDeclaration((<ClassExpression>node).declaration);
+        break;
+      }
+      case NodeKind.Comma: {
+        this.validateParameterDecoratorsInExpressions((<CommaExpression>node).expressions);
+        break;
+      }
+      case NodeKind.ElementAccess: {
+        let elementAccess = <ElementAccessExpression>node;
+        this.validateParameterDecoratorsInExpression(elementAccess.expression);
+        this.validateParameterDecoratorsInExpression(elementAccess.elementExpression);
+        break;
+      }
+      case NodeKind.Function: {
+        this.validateParameterDecoratorsInFunctionDeclaration((<FunctionExpression>node).declaration);
+        break;
+      }
+      case NodeKind.InstanceOf: {
+        let instanceOf = <InstanceOfExpression>node;
+        this.validateParameterDecoratorsInExpression(instanceOf.expression);
+        this.validateParameterDecoratorsInType(instanceOf.isType);
+        break;
+      }
+      case NodeKind.Literal: {
+        this.validateParameterDecoratorsInLiteral(<LiteralExpression>node);
+        break;
+      }
+      case NodeKind.New: {
+        let newExpression = <NewExpression>node;
+        this.validateParameterDecoratorsInTypes(newExpression.typeArguments);
+        this.validateParameterDecoratorsInExpressions(newExpression.args);
+        break;
+      }
+      case NodeKind.Parenthesized: {
+        this.validateParameterDecoratorsInExpression((<ParenthesizedExpression>node).expression);
+        break;
+      }
+      case NodeKind.PropertyAccess: {
+        this.validateParameterDecoratorsInExpression((<PropertyAccessExpression>node).expression);
+        break;
+      }
+      case NodeKind.Ternary: {
+        let ternary = <TernaryExpression>node;
+        this.validateParameterDecoratorsInExpression(ternary.condition);
+        this.validateParameterDecoratorsInExpression(ternary.ifThen);
+        this.validateParameterDecoratorsInExpression(ternary.ifElse);
+        break;
+      }
+      case NodeKind.UnaryPostfix: {
+        this.validateParameterDecoratorsInExpression((<UnaryPostfixExpression>node).operand);
+        break;
+      }
+      case NodeKind.UnaryPrefix: {
+        this.validateParameterDecoratorsInExpression((<UnaryPrefixExpression>node).operand);
+        break;
+      }
+    }
+  }
+
+  private validateParameterDecoratorsInExpressions(nodes: Expression[] | null): void {
+    if (nodes) {
+      for (let i = 0, k = nodes.length; i < k; ++i) {
+        this.validateParameterDecoratorsInExpression(nodes[i]);
+      }
+    }
+  }
+
+  private validateParameterDecoratorsInLiteral(node: LiteralExpression): void {
+    switch (node.literalKind) {
+      case LiteralKind.Array: {
+        this.validateParameterDecoratorsInExpressions((<ArrayLiteralExpression>node).elementExpressions);
+        break;
+      }
+      case LiteralKind.Object: {
+        this.validateParameterDecoratorsInExpressions((<ObjectLiteralExpression>node).values);
+        break;
+      }
+      case LiteralKind.Template: {
+        this.validateParameterDecoratorsInExpressions((<TemplateLiteralExpression>node).expressions);
+        break;
+      }
+    }
+  }
+
+  private validateParameterDecoratorsInType(node: TypeNode | null): void {
+    if (!node) return;
+    switch (node.kind) {
+      case NodeKind.FunctionType: {
+        this.validateParameterDecoratorsInFunctionType(<FunctionTypeNode>node);
+        break;
+      }
+      case NodeKind.NamedType: {
+        this.validateParameterDecoratorsInTypes((<NamedTypeNode>node).typeArguments);
+        break;
+      }
+    }
+  }
+
+  private validateParameterDecoratorsInTypes(nodes: TypeNode[] | null): void {
+    if (nodes) {
+      for (let i = 0, k = nodes.length; i < k; ++i) {
+        this.validateParameterDecoratorsInType(nodes[i]);
+      }
+    }
+  }
+
+  private validateParameterDecoratorsInTypeParameters(nodes: TypeParameterNode[] | null): void {
+    if (nodes) {
+      for (let i = 0, k = nodes.length; i < k; ++i) {
+        let node = nodes[i];
+        this.validateParameterDecoratorsInType(node.extendsType);
+        this.validateParameterDecoratorsInType(node.defaultType);
+      }
+    }
+  }
+
+  private validateParameterDecoratorsInFunctionType(node: FunctionTypeNode): void {
+    this.reportParameterDecorators(node.explicitThisDecorators);
+    this.validateParameterDecoratorsInType(node.explicitThisType);
+    let parameters = node.parameters;
+    for (let i = 0, k = parameters.length; i < k; ++i) {
+      this.validateParameterDecoratorsInParameter(parameters[i]);
+    }
+    this.validateParameterDecoratorsInType(node.returnType);
+  }
+
+  private validateParameterDecoratorsInParameter(node: ParameterNode): void {
+    this.reportParameterDecorators(node.decorators);
+    this.validateParameterDecoratorsInType(node.type);
+    this.validateParameterDecoratorsInExpression(node.initializer);
+  }
+
+  private reportParameterDecorators(decorators: DecoratorNode[] | null): void {
+    if (decorators && decorators.length > 0) {
+      this.error(
+        DiagnosticCode.Decorators_are_not_valid_here,
+        Range.join(decorators[0].range, decorators[decorators.length - 1].range)
+      );
     }
   }
 
