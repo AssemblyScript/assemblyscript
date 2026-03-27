@@ -7194,8 +7194,8 @@ export class Compiler extends DiagnosticEmitter {
       let existingLocal = flow.getScopedLocal(declaration.name.text);
       if (existingLocal) {
         this.error(
-          DiagnosticCode.Duplicate_identifier_0,
-          declaration.name.range, declaration.name.text
+          DiagnosticCode.Duplicate_function_implementation,
+          declaration.name.range
         );
         return this.module.unreachable();
       }

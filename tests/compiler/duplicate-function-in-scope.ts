@@ -2,14 +2,8 @@
 // produce a diagnostic instead of crashing the compiler.
 
 export function test(): void {
-  function inner(): i32 {
-    let x: i32 = 0;
-    return x;
-  }
-  function inner(): i32 {
-    let x: i32 = 0;
-    return x + 1;
-  }
+  function inner(): void {}
+  function inner(): void {}
   inner();
 }
 

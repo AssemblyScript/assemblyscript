@@ -2,6 +2,6 @@
   "asc_flags": [],
   "stderr": [
     "EOF",
-    "TS2300: Duplicate identifier 'inner'."
+    "TS2393: Duplicate function implementation."
   ]
 }
