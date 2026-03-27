@@ -536,6 +536,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize();
+    // Reject any parameter decorators that transforms left on the AST.
     this.program.validateParameterDecorators();
 
 

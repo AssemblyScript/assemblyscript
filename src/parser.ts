@@ -698,12 +698,13 @@ export class Parser extends DiagnosticEmitter {
   // Indicates whether tryParseSignature determined that it is handling a Signature
   private tryParseSignatureIsSignature: bool = false;
 
-  /** Parses a function type, as used in type declarations. */
+  /** Parses a function type, preserving parameter decorators for transforms. */
   tryParseFunctionType(
     tn: Tokenizer
   ): FunctionTypeNode | null {
 
-    // at '(': ('...'? Identifier '?'? ':' Type (','  '...'? Identifier '?'? ':' Type)* )? ')' '=>' Type
+    // at '(': (Decorator* ('...'? Identifier '?'? ':' Type | this ':' Type)
+    //   (',' Decorator* ('...'? Identifier '?'? ':' Type | this ':' Type))* )? ')' '=>' Type
 
     let state = tn.mark();
     let startPos = tn.tokenPos;
@@ -937,6 +938,7 @@ export class Parser extends DiagnosticEmitter {
   private parseParameterDecorators(
     tn: Tokenizer
   ): DecoratorNode[] | null {
+    // Preserve parameter decorators in the AST so transforms can inspect or remove them later.
     let decorators: DecoratorNode[] | null = null;
     while (tn.skip(Token.At)) {
       let decorator = this.parseDecorator(tn);
@@ -1249,7 +1251,9 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
+  /** Explicit `this` parameter captured by the current parseParameters call, if any. */
   private parseParametersThis: NamedTypeNode | null = null;
+  /** Decorators on the explicit `this` parameter, preserved for transforms. */
   private parseParametersThisDecorators: DecoratorNode[] | null = null;
 
   parseParameters(
@@ -1257,7 +1261,7 @@ export class Parser extends DiagnosticEmitter {
     isConstructor: bool = false
   ): ParameterNode[] | null {
 
-    // at '(': (Parameter (',' Parameter)*)? ')'
+    // at '(': (Decorator* Parameter (',' Decorator* Parameter)*)? ')'
 
     let parameters = new Array<ParameterNode>();
     let seenRest: ParameterNode | null = null;
@@ -1265,7 +1269,7 @@ export class Parser extends DiagnosticEmitter {
     let reportedRest = false;
     let thisType: TypeNode | null = null;
 
-    // check if there is a leading `this` parameter
+    // check if there is a leading `this` parameter, preserving any decorators on it
     this.parseParametersThis = null;
     this.parseParametersThisDecorators = null;
 
@@ -1361,7 +1365,8 @@ export class Parser extends DiagnosticEmitter {
     decorators: DecoratorNode[] | null = null
   ): ParameterNode | null {
 
-    // before: ('public' | 'private' | 'protected' | '...')? Identifier '?'? (':' Type)? ('=' Expression)?
+    // before: Decorator* ('public' | 'private' | 'protected' | 'readonly')? '...'? Identifier
+    //   '?'? (':' Type)? ('=' Expression)?
 
     let isRest = false;
     let isOptional = false;

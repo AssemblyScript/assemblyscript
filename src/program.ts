@@ -495,7 +495,7 @@ export class Program extends DiagnosticEmitter {
   nextSignatureId: i32 = 0;
   /** An indicator if the program has been initialized. */
   initialized: bool = false;
-  /** An indicator if parameter decorators have been validated. */
+  /** Indicates whether the one-shot post-transform parameter decorator validation has run. */
   parameterDecoratorsValidated: bool = false;
 
   // Lookup maps
@@ -1532,7 +1532,7 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  /** Validates that no parameter decorators survive past transform time. */
+  /** Rejects parameter decorators that survive transform time. These remain transform-only syntax. */
   validateParameterDecorators(): void {
     if (this.parameterDecoratorsValidated) return;
     this.parameterDecoratorsValidated = true;

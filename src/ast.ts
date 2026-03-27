@@ -930,7 +930,7 @@ export class FunctionTypeNode extends TypeNode {
     super(NodeKind.FunctionType, isNullable, range);
   }
 
-  /** Decorators on an explicit `this` parameter, if any. */
+  /** Decorators on an explicit `this` parameter, if any, preserved for transforms. */
   explicitThisDecorators: DecoratorNode[] | null = null;
 }
 
@@ -977,7 +977,7 @@ export class ParameterNode extends Node {
     super(NodeKind.Parameter, range);
   }
 
-  /** Decorators, if any. */
+  /** Decorators, if any, preserved so transforms can rewrite them before validation. */
   decorators: DecoratorNode[] | null = null;
   /** Implicit field declaration, if applicable. */
   implicitFieldDeclaration: FieldDeclaration | null = null;
