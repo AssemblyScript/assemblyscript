@@ -1,3 +1,5 @@
+// Example transform proving that preserved parameter decorators can be stripped
+// during afterInitialize before compilation rejects them.
 console.log("Parameter decorator removal transform loaded");
 
 const NodeKind = {

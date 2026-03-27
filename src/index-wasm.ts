@@ -347,7 +347,7 @@ export function getDependee(program: Program, file: string): string | null {
 
 // Compiler
 
-/** Initializes the program pre-emptively for transform hooks. */
+/** Initializes the program pre-emptively so `afterInitialize` transforms can rewrite the AST before compilation. */
 export function initializeProgram(program: Program): void {
   program.initialize();
 }
