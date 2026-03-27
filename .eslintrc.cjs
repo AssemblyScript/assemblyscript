@@ -2,6 +2,12 @@
 
 module.exports = {
   root: true,
+  ignorePatterns: [
+    // These fixtures intentionally exercise AssemblyScript-only syntax that
+    // TypeScript's parser rejects before lint rules can run.
+    "tests/compiler/parameter-decorators.ts",
+    "tests/transform/parameter-decorators.ts"
+  ],
   parser: "@typescript-eslint/parser",
   plugins: [
     "@typescript-eslint",
