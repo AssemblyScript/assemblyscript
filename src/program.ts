@@ -129,7 +129,6 @@ import {
   IndexSignatureNode,
   InterfaceDeclaration,
   MethodDeclaration,
-  ModuleDeclaration,
   NamespaceDeclaration,
   ReturnStatement,
   SwitchCase,
