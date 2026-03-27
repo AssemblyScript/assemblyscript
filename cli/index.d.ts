@@ -276,7 +276,10 @@ export abstract class Transform {
   /** Called when parsing is complete, before a program is instantiated from the AST. */
   afterParse?(parser: Parser): void | Promise<void>;
 
-  /** Called after the program is instantiated. */
+  /**
+   * Called after the program is instantiated and before compilation-time validation runs.
+   * This is the last hook where transforms can rewrite preserved AST-only syntax before it is rejected.
+   */
   afterInitialize?(program: Program): void | Promise<void>;
 
   /** Called when compilation is complete, before the module is being validated. */

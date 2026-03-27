@@ -718,7 +718,7 @@ export async function main(argv, options) {
     stats.initializeTime += stats.end(begin);
   }
 
-  // Call afterInitialize transform hook
+  // Call afterInitialize transform hook, the last AST rewrite point before compilation-time validation.
   {
     let error = await applyTransform("afterInitialize", program);
     if (error) return prepareResult(error);
