@@ -14,6 +14,8 @@
  (data $22 (i32.const 1214) "\01")
  (data $23 (i32.const 1215) "\01")
  (data $24 (i32.const 1216) "\01")
+ (data $25 (i32.const 1217) ":)")
+ (data $26 (i32.const 1220) "\f0\9f\90\8c")
  (export "memory" (memory $0))
  (start $~start)
  (func $start:memory
@@ -256,6 +258,102 @@
   global.set $memory/ptr
   i32.const 1215
   global.set $memory/ptr
+  i32.const 1217
+  global.set $memory/ptr
+  i32.const 1217
+  i32.load8_u
+  i32.const 58
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 66
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.load8_u offset=1
+  i32.const 41
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 67
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.load8_u offset=2
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 68
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1220
+  global.set $memory/ptr
+  i32.const 1220
+  i32.load8_u
+  i32.const 240
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 71
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.load8_u offset=1
+  i32.const 159
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 72
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.load8_u offset=2
+  i32.const 144
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 73
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.load8_u offset=3
+  i32.const 140
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 74
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.load8_u offset=4
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 75
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~start
   call $start:memory
