@@ -4150,7 +4150,7 @@ export class Compiler extends DiagnosticEmitter {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonType(leftType, rightType, contextualType);
-          if (!commonType || !leftType.isNumericValue) {
+          if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "-", leftType.toString(), rightType.toString()
