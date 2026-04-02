@@ -8,8 +8,8 @@ export function buildWeb() {
   const pkg = JSON.parse(fs.readFileSync(join(__dirname, "../package-lock.json")));
 
   const mainVersion = pkg.version;
-  const binaryenVersion = pkg.dependencies.binaryen.version;
-  const longVersion = pkg.dependencies.long.version;
+  const binaryenVersion = pkg.packages["node_modules/binaryen"].version;
+  const longVersion = pkg.packages["node_modules/long"].version;
 
   const distUrl = mainVersion === "0.0.0" ? `./` : `https://cdn.jsdelivr.net/npm/assemblyscript@${mainVersion}/dist/`;
   const binaryenUrl = `https://cdn.jsdelivr.net/npm/binaryen@${binaryenVersion}/index.js`;
