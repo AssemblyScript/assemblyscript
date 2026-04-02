@@ -1044,7 +1044,7 @@
    call $~lib/rt/tlsf/moveBlock
    local.set $0
   else
-   block $__inlined_func$~lib/rt/tlsf/reallocateBlock$53
+   block $__inlined_func$~lib/rt/tlsf/reallocateBlock$52
     global.get $~lib/rt/tlsf/ROOT
     local.set $3
     local.get $0
@@ -1065,7 +1065,7 @@
      local.get $0
      local.get $5
      call $~lib/rt/tlsf/prepareBlock
-     br $__inlined_func$~lib/rt/tlsf/reallocateBlock$53
+     br $__inlined_func$~lib/rt/tlsf/reallocateBlock$52
     end
     local.get $0
     i32.const 4
@@ -1106,7 +1106,7 @@
       local.get $0
       local.get $5
       call $~lib/rt/tlsf/prepareBlock
-      br $__inlined_func$~lib/rt/tlsf/reallocateBlock$53
+      br $__inlined_func$~lib/rt/tlsf/reallocateBlock$52
      end
     end
     local.get $3

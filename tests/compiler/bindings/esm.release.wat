@@ -1351,7 +1351,7 @@
   global.get $~lib/rt/itcms/threshold
   i32.ge_u
   if
-   block $__inlined_func$~lib/rt/itcms/interrupt$70
+   block $__inlined_func$~lib/rt/itcms/interrupt$69
     i32.const 2048
     local.set $2
     loop $do-loop|0
@@ -1368,7 +1368,7 @@
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
-      br $__inlined_func$~lib/rt/itcms/interrupt$70
+      br $__inlined_func$~lib/rt/itcms/interrupt$69
      end
      local.get $2
      i32.const 0
@@ -2160,7 +2160,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $1
    i32.store
-   block $__inlined_func$~lib/string/String#concat$284
+   block $__inlined_func$~lib/string/String#concat$283
     local.get $1
     i32.const 20
     i32.sub
@@ -2179,7 +2179,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 1760
      local.set $2
-     br $__inlined_func$~lib/string/String#concat$284
+     br $__inlined_func$~lib/string/String#concat$283
     end
     global.get $~lib/memory/__stack_pointer
     local.get $2
@@ -2893,7 +2893,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   block $__inlined_func$~lib/rt/itcms/__renew$269
+   block $__inlined_func$~lib/rt/itcms/__renew$268
     i32.const 1073741820
     local.get $2
     i32.const 1
@@ -2936,7 +2936,7 @@
      i32.store offset=16
      local.get $2
      local.set $1
-     br $__inlined_func$~lib/rt/itcms/__renew$269
+     br $__inlined_func$~lib/rt/itcms/__renew$268
     end
     local.get $3
     local.get $4

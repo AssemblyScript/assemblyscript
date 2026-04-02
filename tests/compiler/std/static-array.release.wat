@@ -137,7 +137,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$155
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$154
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -161,7 +161,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$155
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$154
    end
    local.get $0
    i32.load offset=8
@@ -1432,7 +1432,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   block $__inlined_func$~lib/rt/itcms/__renew$145
+   block $__inlined_func$~lib/rt/itcms/__renew$144
     i32.const 1073741820
     local.get $2
     i32.const 1
@@ -1470,7 +1470,7 @@
      i32.store offset=16
      local.get $2
      local.set $1
-     br $__inlined_func$~lib/rt/itcms/__renew$145
+     br $__inlined_func$~lib/rt/itcms/__renew$144
     end
     local.get $4
     i32.load offset=12
@@ -1490,7 +1490,7 @@
     global.get $~lib/rt/itcms/threshold
     i32.ge_u
     if
-     block $__inlined_func$~lib/rt/itcms/interrupt$69
+     block $__inlined_func$~lib/rt/itcms/interrupt$68
       i32.const 2048
       local.set $1
       loop $do-loop|0
@@ -1507,7 +1507,7 @@
         i32.const 1024
         i32.add
         global.set $~lib/rt/itcms/threshold
-        br $__inlined_func$~lib/rt/itcms/interrupt$69
+        br $__inlined_func$~lib/rt/itcms/interrupt$68
        end
        local.get $1
        i32.const 0

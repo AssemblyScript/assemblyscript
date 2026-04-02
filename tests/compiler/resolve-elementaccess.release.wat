@@ -176,7 +176,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$153
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$152
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -200,7 +200,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$153
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$152
    end
    local.get $0
    i32.load offset=8
@@ -1304,7 +1304,7 @@
   global.get $~lib/rt/itcms/threshold
   i32.ge_u
   if
-   block $__inlined_func$~lib/rt/itcms/interrupt$69
+   block $__inlined_func$~lib/rt/itcms/interrupt$68
     i32.const 2048
     local.set $2
     loop $do-loop|0
@@ -1321,7 +1321,7 @@
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
-      br $__inlined_func$~lib/rt/itcms/interrupt$69
+      br $__inlined_func$~lib/rt/itcms/interrupt$68
      end
      local.get $2
      i32.const 0
@@ -2880,7 +2880,7 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  block $__inlined_func$~lib/util/number/utoa32$79
+  block $__inlined_func$~lib/util/number/utoa32$78
    local.get $0
    i32.const 255
    i32.and
@@ -2893,7 +2893,7 @@
     global.set $~lib/memory/__stack_pointer
     i32.const 3536
     local.set $0
-    br $__inlined_func$~lib/util/number/utoa32$79
+    br $__inlined_func$~lib/util/number/utoa32$78
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 3
@@ -3268,7 +3268,7 @@
      end
     end
    end
-   block $__inlined_func$~lib/util/string/compareImpl$97
+   block $__inlined_func$~lib/util/string/compareImpl$96
     loop $while-continue|1
      local.get $0
      local.tee $3
@@ -3288,7 +3288,7 @@
       local.get $4
       local.get $5
       i32.ne
-      br_if $__inlined_func$~lib/util/string/compareImpl$97
+      br_if $__inlined_func$~lib/util/string/compareImpl$96
       local.get $2
       i32.const 2
       i32.add
