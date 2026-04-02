@@ -182,7 +182,6 @@ const webPlugin = {
 
         const duration = Date.now() - startTime;
         console.log(`${time()} - web - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
-        process.exitCode = 0;
       } catch (e) {
         const duration = Date.now() - startTime;
         console.error(e);
@@ -256,7 +255,6 @@ function buildDefinitions() {
 
     const duration = Date.now() - startTime;
     console.log(`${time()} - dts - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
-    process.exitCode = 0;
   } catch (e) {
     const duration = Date.now() - startTime;
     console.error(e);
