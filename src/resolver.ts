@@ -3063,7 +3063,14 @@ export class Resolver extends DiagnosticEmitter {
           let boundPrototype = classInstance.getMember(unboundOverridePrototype.name);
           if (boundPrototype) { // might have errored earlier and wasn't added
             assert(boundPrototype.kind == ElementKind.FunctionPrototype);
-            overrideInstance = this.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+            let boundFuncPrototype = <FunctionPrototype>boundPrototype;
+            let overrideTypeParams = boundFuncPrototype.typeParameterNodes;
+            let numOverrideTypeParams = overrideTypeParams ? overrideTypeParams.length : 0;
+            let baseTypeArgs = instance.typeArguments;
+            let numBaseTypeArgs = baseTypeArgs ? baseTypeArgs.length : 0;
+            if (numOverrideTypeParams == numBaseTypeArgs) {
+              overrideInstance = this.resolveFunction(boundFuncPrototype, baseTypeArgs);
+            }
           }
         }
         if (overrideInstance) overrides.add(overrideInstance);
@@ -3439,6 +3446,19 @@ export class Resolver extends DiagnosticEmitter {
           default: assert(false);
         }
         if (!member.is(CommonFlags.Abstract)) {
+          // A generic method cannot implement a non-generic interface method
+          // because monomorphization requires a concrete type to generate code,
+          // but virtual dispatch through the interface has no type arguments.
+          if (unimplemented.has(memberName)
+            && member.kind == ElementKind.FunctionPrototype
+            && unimplemented.get(memberName)!.kind == ElementKind.FunctionPrototype
+          ) {
+            let memberTypeParams = (<FunctionPrototype>member).typeParameterNodes;
+            let ifaceTypeParams = (<FunctionPrototype>unimplemented.get(memberName)).typeParameterNodes;
+            let numMemberTypeParams = memberTypeParams ? memberTypeParams.length : 0;
+            let numIfaceTypeParams = ifaceTypeParams ? ifaceTypeParams.length : 0;
+            if (numMemberTypeParams != numIfaceTypeParams) continue;
+          }
           unimplemented.delete(memberName);
         }
       }
