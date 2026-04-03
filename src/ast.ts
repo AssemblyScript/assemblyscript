@@ -439,9 +439,10 @@ export abstract class Node {
 
   static createBlockStatement(
     statements: Statement[],
+    label: IdentifierExpression | null,
     range: Range
   ): BlockStatement {
-    return new BlockStatement(statements, range);
+    return new BlockStatement(statements, label, range);
   }
 
   static createBreakStatement(
@@ -474,9 +475,10 @@ export abstract class Node {
   static createDoStatement(
     body: Statement,
     condition: Expression,
+    label: IdentifierExpression | null,
     range: Range
   ): DoStatement {
-    return new DoStatement(body, condition, range);
+    return new DoStatement(body, condition, label, range);
   }
 
   static createEmptyStatement(
@@ -547,9 +549,10 @@ export abstract class Node {
     condition: Expression,
     ifTrue: Statement,
     ifFalse: Statement | null,
+    label: IdentifierExpression | null,
     range: Range
   ): IfStatement {
-    return new IfStatement(condition, ifTrue, ifFalse, range);
+    return new IfStatement(condition, ifTrue, ifFalse, label, range);
   }
 
   static createImportStatement(
@@ -606,18 +609,20 @@ export abstract class Node {
     condition: Expression | null,
     incrementor: Expression | null,
     body: Statement,
+    label: IdentifierExpression | null,
     range: Range
   ): ForStatement {
-    return new ForStatement(initializer, condition, incrementor, body, range);
+    return new ForStatement(initializer, condition, incrementor, body, label, range);
   }
 
   static createForOfStatement(
     variable: Statement,
     iterable: Expression,
     body: Statement,
+    label: IdentifierExpression | null,
     range: Range
   ): ForOfStatement {
-    return new ForOfStatement(variable, iterable, body, range);
+    return new ForOfStatement(variable, iterable, body, label, range);
   }
 
   static createFunctionDeclaration(
@@ -674,9 +679,10 @@ export abstract class Node {
   static createSwitchStatement(
     condition: Expression,
     cases: SwitchCase[],
+    label: IdentifierExpression | null,
     range: Range
   ): SwitchStatement {
-    return new SwitchStatement(condition, cases, range);
+    return new SwitchStatement(condition, cases, label, range);
   }
 
   static createSwitchCase(
@@ -699,9 +705,10 @@ export abstract class Node {
     catchVariable: IdentifierExpression | null,
     catchStatements: Statement[] | null,
     finallyStatements: Statement[] | null,
+    label: IdentifierExpression | null,
     range: Range
   ): TryStatement {
-    return new TryStatement(bodyStatements, catchVariable, catchStatements, finallyStatements, range);
+    return new TryStatement(bodyStatements, catchVariable, catchStatements, finallyStatements, label, range);
   }
 
   static createTypeDeclaration(
@@ -752,9 +759,10 @@ export abstract class Node {
   static createWhileStatement(
     condition: Expression,
     statement: Statement,
+    label: IdentifierExpression | null,
     range: Range
   ): WhileStatement {
-    return new WhileStatement(condition, statement, range);
+    return new WhileStatement(condition, statement, label, range);
   }
 
   /** Tests if this node is a literal of the specified kind. */
@@ -1787,6 +1795,8 @@ export class BlockStatement extends Statement {
   constructor(
     /** Contained statements. */
     public statements: Statement[],
+    /** Label, if any. */
+    public label: IdentifierExpression | null,
     /** Source range. */
     range: Range
   ) {
@@ -1857,6 +1867,8 @@ export class DoStatement extends Statement {
     public body: Statement,
     /** Condition when to repeat. */
     public condition: Expression,
+    /** Label, if any. */
+    public label: IdentifierExpression | null,
     /** Source range. */
     range: Range
   ) {
@@ -2021,6 +2033,8 @@ export class ForStatement extends Statement {
     public incrementor: Expression | null,
     /** Body statement being looped over. */
     public body: Statement,
+    /** Label, if any. */
+    public label: IdentifierExpression | null,
     /** Source range. */
     range: Range
   ) {
@@ -2037,6 +2051,8 @@ export class ForOfStatement extends Statement {
     public iterable: Expression,
     /** Body statement being looped over. */
     public body: Statement,
+    /** Label, if any. */
+    public label: IdentifierExpression | null,
     /** Source range. */
     range: Range
   ) {
@@ -2107,6 +2123,8 @@ export class IfStatement extends Statement {
     public ifTrue: Statement,
     /** Statement executed when condition is `false`. */
     public ifFalse: Statement | null,
+    /** Label, if any. */
+    public label: IdentifierExpression | null,
     /** Source range. */
     range: Range
   ) {
@@ -2257,6 +2275,8 @@ export class SwitchStatement extends Statement {
     public condition: Expression,
     /** Contained cases. */
     public cases: SwitchCase[],
+    /** Label, if any. */
+    public label: IdentifierExpression | null,
     /** Source range. */
     range: Range
   ) {
@@ -2287,6 +2307,8 @@ export class TryStatement extends Statement {
     public catchStatements: Statement[] | null,
     /** Statements being executed afterwards, if a `finally` clause is present. */
     public finallyStatements: Statement[] | null,
+    /** Label, if any. */
+    public label: IdentifierExpression | null,
     /** Source range. */
     range: Range
   ) {
@@ -2381,6 +2403,8 @@ export class WhileStatement extends Statement {
     public condition: Expression,
     /** Body statement being looped over. */
     public body: Statement,
+    /** Label, if any. */
+    public label: IdentifierExpression | null,
     /** Source range. */
     range: Range
   ) {
