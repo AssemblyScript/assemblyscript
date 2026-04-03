@@ -1,0 +1,6 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "TS2515: Non-abstract class 'override-typeparam-mismatch/CC' does not implement inherited abstract member 'foo' from 'override-typeparam-mismatch/I'."
+  ]
+}
