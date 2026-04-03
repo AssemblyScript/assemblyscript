@@ -24,4 +24,16 @@ class DD implements J {
 let dd:DD = new DD();
 dd.bar<i32>(1);
 
+interface I2 {
+  foo<T, U>(x: i32): i32;
+}
+
+class C2 implements I2 {
+  foo<T>(x: i32): i32 {
+    return x;
+  }
+}
+
+new C2().foo<i32>(1);
+
 ERROR("EOF");
