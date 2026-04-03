@@ -10,3 +10,5 @@ class CC implements I {
 
 let c:I = new CC();
 c.foo(1);
+
+ERROR("EOF");

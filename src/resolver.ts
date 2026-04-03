@@ -3449,13 +3449,12 @@ export class Resolver extends DiagnosticEmitter {
           // A generic method cannot implement a non-generic interface method
           // because monomorphization requires a concrete type to generate code,
           // but virtual dispatch through the interface has no type arguments.
-          let ifaceMember = unimplemented.get(memberName);
-          if (ifaceMember
+          if (unimplemented.has(memberName)
             && member.kind == ElementKind.FunctionPrototype
-            && ifaceMember.kind == ElementKind.FunctionPrototype
+            && unimplemented.get(memberName)!.kind == ElementKind.FunctionPrototype
           ) {
             let memberTypeParams = (<FunctionPrototype>member).typeParameterNodes;
-            let ifaceTypeParams = (<FunctionPrototype>ifaceMember).typeParameterNodes;
+            let ifaceTypeParams = (<FunctionPrototype>unimplemented.get(memberName)).typeParameterNodes;
             let numMemberTypeParams = memberTypeParams ? memberTypeParams.length : 0;
             let numIfaceTypeParams = ifaceTypeParams ? ifaceTypeParams.length : 0;
             if (numMemberTypeParams != numIfaceTypeParams) continue;
