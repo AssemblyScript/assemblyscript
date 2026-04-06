@@ -32,7 +32,7 @@ export function isColorsEnabled(): bool {
 
 /** Sets whether terminal colors are enabled or not. */
 export function setColorsEnabled(isEnabled: bool): bool {
-  let wasEnabled = isEnabled;
+  let wasEnabled = colorsEnabled;
   colorsEnabled = isEnabled;
   return wasEnabled;
 }

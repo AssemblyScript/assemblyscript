@@ -3850,7 +3850,15 @@ export class Function extends TypedElement {
         flow.setLocalFlag(local.index, LocalFlags.Initialized);
       }
     }
-    registerConcreteElement(program, this);
+    if (program.instancesByName.has(this.internalName)) {
+      program.error(
+        DiagnosticCode.Duplicate_function_implementation,
+        prototype.declaration.name.range
+      );
+      this.set(CommonFlags.Errored);
+    } else {
+      registerConcreteElement(program, this);
+    }
   }
 
   /** Gets the types of additional locals that are not parameters. */

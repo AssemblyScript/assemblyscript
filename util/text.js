@@ -105,7 +105,7 @@ export function diff(filename, expected, actual) {
       line.charAt(0) === "+"
         ? stdoutColors.green(line)
         : line.charAt(0) === "-"
-        ? line = stdoutColors.red(line)
+        ? stdoutColors.red(line)
         : line
     ));
   }
