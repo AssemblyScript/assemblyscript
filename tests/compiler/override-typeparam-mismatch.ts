@@ -36,4 +36,31 @@ class C2 implements I2 {
 
 new C2().foo<i32>(1);
 
+// abstract method cannot be generic (AS241)
+abstract class A1 {
+  abstract baz<T>(x: i32): i32;
+}
+
+class FF extends A1 {
+  baz<T>(x: i32): i32 {
+    return x;
+  }
+}
+
+new FF().baz<i32>(1);
+
+// generic method cannot implement non-generic abstract method (TS2515)
+abstract class A2 {
+  abstract qux(x: i32): i32;
+}
+
+class GG extends A2 {
+  qux<T>(x: i32): i32 {
+    return x;
+  }
+}
+
+let a: A2 = new GG();
+a.qux(1);
+
 ERROR("EOF");
