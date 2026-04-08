@@ -1568,12 +1568,12 @@ export class ASTBuilder {
   serializeParameterDecorators(decorators: DecoratorNode[] | null): void {
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
-        this.serializeParameterDecorator(decorators[i]);
+        this.visitParameterDecorator(decorators[i]);
       }
     }
   }
 
-  private serializeParameterDecorator(node: DecoratorNode): void {
+  private visitParameterDecorator(node: DecoratorNode): void {
     let sb = this.sb;
     sb.push("@");
     this.visitNode(node.name);

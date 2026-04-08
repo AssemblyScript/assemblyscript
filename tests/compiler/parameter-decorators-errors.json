@@ -1,0 +1,22 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS1003: Identifier expected.",
+    "function regularEmpty(@first): void {}",
+    "TS1003: Identifier expected.",
+    "function firstEmpty(@first, value: i32): void {}",
+    "TS1206: Decorators are not valid here.",
+    "function regularWrongPos(value @first: i32): void {}",
+    "TS1206: Decorators are not valid here.",
+    "function regularWrongPos2(value: i32 @first): void {}",
+    "TS1206: Decorators are not valid here.",
+    "function restWrongPos(...values @rest: i32[]): void {}",
+    "TS1206: Decorators are not valid here.",
+    "function selfWrongPos(this: i32 @self): void {}",
+    "TS1003: Identifier expected.",
+    "function noLits(@123 value: i32): void {}",
+    "TS1003: Identifier expected.",
+    "function noExprs(@(a + b) value: i32): void {}"
+  ]
+}
