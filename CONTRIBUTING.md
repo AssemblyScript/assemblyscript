@@ -51,4 +51,15 @@ Before submitting your pull request, also make sure that the following condition
 
 Please note that if a pull request is rather complicated, i.e. touches lots of internals, or became stale, it is not uncommon that a core contributor performs the final integration to get it done in good conscience while naming you as a co-author.
 
+Guidelines for **AI**-assisted Contributions
+--------------------------------------------
+
+**AI** tools are welcome as helpers, not authors. Keep these practices in mind:
+
+* Stay accountable: only submit changes you understand and can justify; be ready to explain behavior, edge cases. If an **AI** suggestion feels unclear, rewrite or drop it.
+* Keep humans in the loop: discuss non-trivial ideas early via [Issues](https://github.com/AssemblyScript/assemblyscript/issues) or [Discord](https://discord.gg/assemblyscript), especially when you are unsure about design or impact.
+* Use **AI** for acceleration, optimization and verification: treat **AI** output as a draft for code, tests, or docs; run linters/tests and review the logic **yourself**.
+* Be transparent in PRs: note briefly if **AI** was used and for what (e.g., initial draft, test scaffolding), and call out any parts where you want extra review.
+* Prefer small patches over large dumps; if you cannot confidently explain an **AI**-produced change, open a well-described issue instead.
+
 Thank you!
