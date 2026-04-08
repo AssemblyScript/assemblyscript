@@ -752,6 +752,7 @@ export class Parser extends DiagnosticEmitter {
               this.tryParseSignatureIsSignature = true;
               return null;
             }
+            this.reportInvalidParameterDecorators(tn);
             thisType = <NamedTypeNode>type;
             thisDecorators = decorators;
           } else {
@@ -782,10 +783,12 @@ export class Parser extends DiagnosticEmitter {
               this.tryParseSignatureIsSignature = isSignature;
               return null;
             }
+            this.reportInvalidParameterDecorators(tn);
             let param = Node.createParameter(kind, name, type, null, tn.range(paramStart, tn.pos), decorators);
             if (!parameters) parameters = [ param ];
             else parameters.push(param);
           } else {
+            this.reportInvalidParameterDecorators(tn);
             if (!isSignature) {
               if (tn.peek() == Token.Comma) {
                 isSignature = true;
@@ -947,6 +950,17 @@ export class Parser extends DiagnosticEmitter {
       else decorators.push(decorator);
     }
     return decorators;
+  }
+
+  /** Consumes decorators that appear after a parameter has already started. */
+  private reportInvalidParameterDecorators(tn: Tokenizer): void {
+    let decorators = this.parseParameterDecorators(tn);
+    if (decorators) {
+      this.error(
+        DiagnosticCode.Decorators_are_not_valid_here,
+        Range.join(decorators[0].range, decorators[decorators.length - 1].range)
+      );
+    }
   }
 
   parseVariable(
@@ -1292,6 +1306,7 @@ export class Parser extends DiagnosticEmitter {
               thisType.range
             );
           }
+          this.reportInvalidParameterDecorators(tn);
         } else {
           this.error(
             DiagnosticCode._0_expected,
@@ -1420,12 +1435,14 @@ export class Parser extends DiagnosticEmitter {
           );
         }
       }
+      this.reportInvalidParameterDecorators(tn);
       if (tn.skip(Token.Colon)) {
         type = this.parseType(tn);
         if (!type) return null;
       } else {
         type = Node.createOmittedType(tn.range(tn.pos));
       }
+      this.reportInvalidParameterDecorators(tn);
       let initializer: Expression | null = null;
       if (tn.skip(Token.Equals)) {
         if (isRest) {
