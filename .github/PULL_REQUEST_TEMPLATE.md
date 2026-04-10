@@ -14,9 +14,7 @@ Changes proposed in this pull request:
 - [ ] This PR was AI-assisted
 
   <details>
-  <summary>If yes, complete this section</summary>
-
-  - [ ] I've read the [AI-assisted contribution guidelines](https://github.com/AssemblyScript/assemblyscript/blob/main/CONTRIBUTING.md#guidelines-for-ai-assisted-contributions)
+  <summary>If yes, you can optionally add more details.</summary>
 
   - [ ] AI was used for `code`
   - [ ] AI was used for `tests`
