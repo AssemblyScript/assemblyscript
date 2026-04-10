@@ -10,10 +10,11 @@ jobs:
     steps:
       - name: Check PR Title Prefix
         id: title-check
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
-            const titlePrefixes = ["feat", "fix", "breaking", "chore"];
+            const prefs = ["feat", "fix", "breaking", "chore"];
             const title = context.payload.pull_request.title.toLowerCase();
-            const titleHasValidPrefix = titlePrefixes.some((prefix) => title.startsWith(`${prefix}:`));
-            if (!titleHasValidPrefix) { process.exit(-1); }
+            const hasValidPrefix = prefs.some(prefix => title.startsWith(`${prefix}:`));
+            if (!hasValidPrefix)
+              core.setFailed("PR title must start with 'feat:', 'fix:', 'breaking:' or 'chore:'");
