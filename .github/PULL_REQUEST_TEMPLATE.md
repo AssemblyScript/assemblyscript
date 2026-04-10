@@ -9,29 +9,28 @@ Changes proposed in this pull request:
 ⯈
 ⯈
 
-- [ ] I've read the contributing guidelines
-- [ ] I've added my Github name and email to the [NOTICE](https://github.com/AssemblyScript/assemblyscript/blob/main/NOTICE) file
+- [ ] I've read the [contributing guidelines](https://github.com/AssemblyScript/assemblyscript/blob/main/CONTRIBUTING.md)
+- [ ] I've added my GitHub name and email to the [NOTICE](https://github.com/AssemblyScript/assemblyscript/blob/main/NOTICE) file
+- [ ] This PR was AI-assisted
 
-This pull request was prepared with AI assistance?
+  <details>
+  <summary>If yes, complete this section</summary>
 
-<details>
-<summary>If yes, complete this additional section</summary>
+  - [ ] I've read the [AI-assisted contribution guidelines](https://github.com/AssemblyScript/assemblyscript/blob/main/CONTRIBUTING.md#guidelines-for-ai-assisted-contributions)
 
-- [ ] I followed the [Guidelines for AI-assisted contributions](https://github.com/AssemblyScript/assemblyscript/blob/main/CONTRIBUTING.md#guidelines-for-ai-assisted-contributions)
+  - [ ] AI was used for `code`
+  - [ ] AI was used for `tests`
+  - [ ] AI was used for `documentation`
+  - [ ] AI was used for `PR` or `commit` text
+  - [ ] Other (describe how it was used)
 
-- [ ] AI was used for `Code`
-- [ ] AI was used for `Tests`
-- [ ] AI was used for `Documentation`
-- [ ] AI was used for `PR text` or `Commit text`
-- [ ] Other (describe how it used)
+  **LLM model:**
+  <!-- Example:
+    Claude Opus 4.6
+    Claude Sonnet 4.6 Extended Thinking
+    OpenAI Codex
+    OpenAI GPT-5.4 Thinking
+    GitHub Copilot
+  -->
 
-LLM Model:
-<!-- Example:
-  Claude Opus 4.6
-  Claude Sonnet 4.6 Extended Thinkning
-  OpenAI Codex,
-  OpenAI GPT-5.4 Thinking
-  GitHub Copilot
--->
-
-</details>
+  </details>
