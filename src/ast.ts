@@ -181,9 +181,12 @@ export abstract class Node {
     name: IdentifierExpression,
     type: TypeNode,
     initializer: Expression | null,
-    range: Range
+    range: Range,
+    decorators: DecoratorNode[] | null = null
   ): ParameterNode {
-    return new ParameterNode(parameterKind, name, type, initializer, range);
+    let parameter = new ParameterNode(parameterKind, name, type, initializer, range);
+    parameter.decorators = decorators;
+    return parameter;
   }
 
   // special
@@ -926,6 +929,9 @@ export class FunctionTypeNode extends TypeNode {
   ) {
     super(NodeKind.FunctionType, isNullable, range);
   }
+
+  /** Decorators on an explicit `this` parameter, if any, preserved for transforms. */
+  explicitThisDecorators: DecoratorNode[] | null = null;
 }
 
 /** Represents a type parameter. */
@@ -971,6 +977,8 @@ export class ParameterNode extends Node {
     super(NodeKind.Parameter, range);
   }
 
+  /** Decorators, if any, preserved so transforms can rewrite them before validation. */
+  decorators: DecoratorNode[] | null = null;
   /** Implicit field declaration, if applicable. */
   implicitFieldDeclaration: FieldDeclaration | null = null;
   /** Common flags indicating specific traits. */
