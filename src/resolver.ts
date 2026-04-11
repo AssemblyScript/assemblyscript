@@ -2934,7 +2934,8 @@ export class Resolver extends DiagnosticEmitter {
           } else {
             if (baseMember.kind == ElementKind.FunctionPrototype) {
               let basePrototype = <FunctionPrototype>baseMember;
-              let baseIsGeneric = basePrototype.typeParameterNodes != null && basePrototype.typeParameterNodes.length > 0;
+              let baseTypeParameterNodes = basePrototype.typeParameterNodes;
+              let baseIsGeneric = baseTypeParameterNodes != null && baseTypeParameterNodes.length > 0;
               let instanceIsGeneric = typeArguments != null && typeArguments.length > 0;
               if (baseIsGeneric != instanceIsGeneric) {
                 // Cannot mix generic and non-generic functions in an override chain
