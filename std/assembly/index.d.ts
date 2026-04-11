@@ -1798,6 +1798,8 @@ declare namespace memory {
   export function data(size: i32, align?: i32): usize;
   /** Gets a pointer to a pre-initialized static chunk of memory. Alignment defaults to the size of `T`. Arguments must be compile-time constants. */
   export function data<T>(values: T[], align?: i32): usize;
+  /** Gets a pointer to a pre-initialized static chunk of memory containing null-terminated UTF8. Value must be a compile-time constant. */
+  export function dataUTF8(value: string): usize;
 
   export namespace atomic {
     /** Performs a wait operation on a 32-bit integer value in memory suspending this agent if the condition is met. */

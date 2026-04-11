@@ -59,3 +59,17 @@ assert(ptr + 4 == (ptr = memory.data<u8>([1], 4)));
 assert(ptr + 2 == (ptr = memory.data<u8>([1], 2)));
 assert(ptr + 1 == (ptr = memory.data<u8>([1], 1)));
 assert(ptr + 1 == memory.data<u8>([1], 16));
+
+// Should correctly encode strings to UTF-8
+
+ptr = memory.dataUTF8(":)");
+assert(load<u8>(ptr) == 0x3A);
+assert(load<u8>(ptr + 1) == 0x29);
+assert(load<u8>(ptr + 2) == 0);
+
+ptr = memory.dataUTF8("🐌");
+assert(load<u8>(ptr) == 0xF0);
+assert(load<u8>(ptr + 1) == 0x9F);
+assert(load<u8>(ptr + 2) == 0x90);
+assert(load<u8>(ptr + 3) == 0x8C);
+assert(load<u8>(ptr + 4) == 0x00);
