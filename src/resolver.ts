@@ -2933,11 +2933,24 @@ export class Resolver extends DiagnosticEmitter {
             incompatibleOverride = false;
           } else {
             if (baseMember.kind == ElementKind.FunctionPrototype) {
-              // Possibly generic. Resolve with same type arguments to obtain the correct one.
               let basePrototype = <FunctionPrototype>baseMember;
-              let baseFunction = this.resolveFunction(basePrototype, typeArguments, new Map(), ReportMode.Swallow);
-              if (baseFunction && instance.signature.isAssignableTo(baseFunction.signature, true)) {
-                incompatibleOverride = false;
+              let baseTypeParameterNodes = basePrototype.typeParameterNodes;
+              let baseIsGeneric = baseTypeParameterNodes != null && baseTypeParameterNodes.length > 0;
+              let instanceIsGeneric = typeArguments != null && typeArguments.length > 0;
+              if (baseIsGeneric != instanceIsGeneric) {
+                // Cannot mix generic and non-generic functions in an override chain
+                this.errorRelated(
+                  DiagnosticCode.Cannot_override_generic_method_0_with_a_non_generic_method_or_vice_versa,
+                  instance.identifierAndSignatureRange, baseMember.identifierAndSignatureRange,
+                  methodOrPropertyName
+                );
+                incompatibleOverride = false; // already reported
+              } else {
+                // Possibly generic. Resolve with same type arguments to obtain the correct one.
+                let baseFunction = this.resolveFunction(basePrototype, typeArguments, new Map(), ReportMode.Swallow);
+                if (baseFunction && instance.signature.isAssignableTo(baseFunction.signature, true)) {
+                  incompatibleOverride = false;
+                }
               }
             }
           }
@@ -3069,11 +3082,8 @@ export class Resolver extends DiagnosticEmitter {
             //   arguments to forward to the monomorphized child.
             // - generic child → generic base: OK; type args come from the base call site.
             // - non-generic child → non-generic base: OK; plain vtable override.
-            // FIXME: non-generic child → generic base is also mismatched (resolveFunction
-            //   would assert on typeArguments/typeParameterNodes length mismatch) but that
-            //   case is not yet guarded here. The correct fix is to replace this condition
-            //   with `boundFuncPrototype.is(Generic) == instance.is(Generic)`.
-            if (!boundFuncPrototype.is(CommonFlags.Generic) || instance.is(CommonFlags.Generic)) {
+            // - non-generic child → generic base: skip; mismatched generic-ness.
+            if (boundFuncPrototype.is(CommonFlags.Generic) == instance.is(CommonFlags.Generic)) {
               overrideInstance = this.resolveFunction(boundFuncPrototype, instance.typeArguments);
             }
           }
