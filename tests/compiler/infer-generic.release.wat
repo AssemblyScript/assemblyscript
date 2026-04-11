@@ -1660,7 +1660,7 @@
    i32.const 1200
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 12
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -1670,6 +1670,9 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 1152
    i32.store
@@ -1692,8 +1695,11 @@
     i32.lt_s
     if
      global.get $~lib/memory/__stack_pointer
-     i32.const 1152
+     i32.const 1200
      i32.store offset=4
+     global.get $~lib/memory/__stack_pointer
+     i32.const 1152
+     i32.store offset=8
      i32.const 1156
      i32.load
      local.get $1
@@ -1721,7 +1727,7 @@
     end
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 12
    i32.add
    global.set $~lib/memory/__stack_pointer
    memory.size
