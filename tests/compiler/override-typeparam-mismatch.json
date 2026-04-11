@@ -1,0 +1,13 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "AS241: An interface or abstract method 'foo' cannot have type parameters.",
+    "AS241: An interface or abstract method 'baz' cannot have type parameters.",
+    "TS2515: Non-abstract class 'override-typeparam-mismatch/CC' does not implement inherited abstract member 'foo' from 'override-typeparam-mismatch/I'.",
+    "TS2515: Non-abstract class 'override-typeparam-mismatch/DD' does not implement inherited abstract member 'bar' from 'override-typeparam-mismatch/J'.",
+    "TS2515: Non-abstract class 'override-typeparam-mismatch/C2' does not implement inherited abstract member 'foo' from 'override-typeparam-mismatch/I2'.",
+    "TS2515: Non-abstract class 'override-typeparam-mismatch/FF' does not implement inherited abstract member 'baz' from 'override-typeparam-mismatch/A1'.",
+    "TS2515: Non-abstract class 'override-typeparam-mismatch/GG' does not implement inherited abstract member 'qux' from 'override-typeparam-mismatch/A2'.",
+    "EOF"
+  ]
+}

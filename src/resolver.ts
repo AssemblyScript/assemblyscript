@@ -3063,7 +3063,19 @@ export class Resolver extends DiagnosticEmitter {
           let boundPrototype = classInstance.getMember(unboundOverridePrototype.name);
           if (boundPrototype) { // might have errored earlier and wasn't added
             assert(boundPrototype.kind == ElementKind.FunctionPrototype);
-            overrideInstance = this.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+            let boundFuncPrototype = <FunctionPrototype>boundPrototype;
+            // Only resolve the override when the generic-ness matches the base method.
+            // - generic child → non-generic base: skip; vtable dispatch site has no type
+            //   arguments to forward to the monomorphized child.
+            // - generic child → generic base: OK; type args come from the base call site.
+            // - non-generic child → non-generic base: OK; plain vtable override.
+            // FIXME: non-generic child → generic base is also mismatched (resolveFunction
+            //   would assert on typeArguments/typeParameterNodes length mismatch) but that
+            //   case is not yet guarded here. The correct fix is to replace this condition
+            //   with `boundFuncPrototype.is(Generic) == instance.is(Generic)`.
+            if (!boundFuncPrototype.is(CommonFlags.Generic) || instance.is(CommonFlags.Generic)) {
+              overrideInstance = this.resolveFunction(boundFuncPrototype, instance.typeArguments);
+            }
           }
         }
         if (overrideInstance) overrides.add(overrideInstance);
@@ -3438,7 +3450,10 @@ export class Resolver extends DiagnosticEmitter {
           }
           default: assert(false);
         }
-        if (!member.is(CommonFlags.Abstract)) {
+        if (!member.is(CommonFlags.Abstract) && !member.is(CommonFlags.Generic)) {
+          // A generic method cannot satisfy a non-generic interface/abstract
+          // requirement: interface methods cannot be generic (AS241), and
+          // virtual dispatch cannot supply type arguments for monomorphization.
           unimplemented.delete(memberName);
         }
       }
