@@ -1543,37 +1543,7 @@ export class ASTBuilder {
 
   // other
 
-  serializeDecorator(node: DecoratorNode): void {
-    let sb = this.sb;
-    sb.push("@");
-    this.visitNode(node.name);
-    let args = node.args;
-    if (args) {
-      sb.push("(");
-      let numArgs = args.length;
-      if (numArgs) {
-        this.visitNode(args[0]);
-        for (let i = 1; i < numArgs; ++i) {
-          sb.push(", ");
-          this.visitNode(args[i]);
-        }
-      }
-      sb.push(")\n");
-    } else {
-      sb.push("\n");
-    }
-    indent(sb, this.indentLevel);
-  }
-
-  serializeParameterDecorators(decorators: DecoratorNode[] | null): void {
-    if (decorators) {
-      for (let i = 0, k = decorators.length; i < k; ++i) {
-        this.visitParameterDecorator(decorators[i]);
-      }
-    }
-  }
-
-  private visitParameterDecorator(node: DecoratorNode): void {
+  serializeDecorator(node: DecoratorNode, isInline: bool = false): void {
     let sb = this.sb;
     sb.push("@");
     this.visitNode(node.name);
@@ -1590,7 +1560,20 @@ export class ASTBuilder {
       }
       sb.push(")");
     }
-    sb.push(" ");
+    if (isInline) {
+      sb.push(" ");
+    } else {
+      sb.push("\n");
+      indent(sb, this.indentLevel);
+    }
+  }
+
+  serializeParameterDecorators(decorators: DecoratorNode[] | null): void {
+    if (decorators) {
+      for (let i = 0, k = decorators.length; i < k; ++i) {
+        this.serializeDecorator(decorators[i], true);
+      }
+    }
   }
 
   serializeParameter(node: ParameterNode): void {
