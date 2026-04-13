@@ -18,6 +18,8 @@
     "const expression = function(@arg value: i32): void {};",
     "TS1206: Decorators are not valid here.",
     "const arrow = (@arg value: i32): void => {};",
+    "TS1206: Decorators are not valid here.",
+    "export function nested(@arg value: i32): void {}",
     "EOF"
   ]
 }

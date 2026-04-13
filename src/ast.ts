@@ -1672,6 +1672,8 @@ export class Source extends Node {
   debugInfoIndex: i32 = -1;
   /** Re-exported sources. */
   exportPaths: string[] | null = null;
+  /** Source-level statements that preserved parameter decorators while parsing. */
+  parameterDecoratorStatements: Statement[] | null = null;
 
   /** Checks if this source represents native code. */
   get isNative(): bool {
@@ -2405,6 +2407,383 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
     }
   }
   return null;
+}
+
+/** Generic AST walker. */
+export abstract class NodeWalker {
+
+  /** Indicates whether walking has been stopped. */
+  stopped: bool = false;
+
+  /** Visits a node and its children unless walking has been stopped. */
+  visitNode(node: Node | null): void {
+    if (!node || this.stopped) return;
+    if (!this.visit(node) || this.stopped) return;
+    switch (node.kind) {
+      case NodeKind.Source: {
+        this.visitNodes((<Source>node).statements);
+        break;
+      }
+      case NodeKind.TypeName: {
+        let current: TypeName | null = <TypeName>node;
+        while (current) {
+          this.visitNode(current.identifier);
+          current = current.next;
+        }
+        break;
+      }
+      case NodeKind.NamedType: {
+        let namedType = <NamedTypeNode>node;
+        this.visitNode(namedType.name);
+        this.visitNodes(namedType.typeArguments);
+        break;
+      }
+      case NodeKind.FunctionType: {
+        let functionType = <FunctionTypeNode>node;
+        this.visitNodes(functionType.explicitThisDecorators);
+        this.visitNode(functionType.explicitThisType);
+        this.visitNodes(functionType.parameters);
+        this.visitNode(functionType.returnType);
+        break;
+      }
+      case NodeKind.TypeParameter: {
+        let typeParameter = <TypeParameterNode>node;
+        this.visitNode(typeParameter.name);
+        this.visitNode(typeParameter.extendsType);
+        this.visitNode(typeParameter.defaultType);
+        break;
+      }
+
+      case NodeKind.False:
+      case NodeKind.Null:
+      case NodeKind.Super:
+      case NodeKind.This:
+      case NodeKind.True:
+      case NodeKind.Constructor:
+      case NodeKind.Identifier:
+      case NodeKind.Omitted: {
+        break;
+      }
+      case NodeKind.Assertion: {
+        let assertion = <AssertionExpression>node;
+        this.visitNode(assertion.expression);
+        this.visitNode(assertion.toType);
+        break;
+      }
+      case NodeKind.Binary: {
+        let binary = <BinaryExpression>node;
+        this.visitNode(binary.left);
+        this.visitNode(binary.right);
+        break;
+      }
+      case NodeKind.Call: {
+        let call = <CallExpression>node;
+        this.visitNode(call.expression);
+        this.visitNodes(call.typeArguments);
+        this.visitNodes(call.args);
+        break;
+      }
+      case NodeKind.Class: {
+        this.visitNode((<ClassExpression>node).declaration);
+        break;
+      }
+      case NodeKind.Comma: {
+        this.visitNodes((<CommaExpression>node).expressions);
+        break;
+      }
+      case NodeKind.ElementAccess: {
+        let elementAccess = <ElementAccessExpression>node;
+        this.visitNode(elementAccess.expression);
+        this.visitNode(elementAccess.elementExpression);
+        break;
+      }
+      case NodeKind.Function: {
+        this.visitNode((<FunctionExpression>node).declaration);
+        break;
+      }
+      case NodeKind.InstanceOf: {
+        let instanceOf = <InstanceOfExpression>node;
+        this.visitNode(instanceOf.expression);
+        this.visitNode(instanceOf.isType);
+        break;
+      }
+      case NodeKind.Literal: {
+        let literal = <LiteralExpression>node;
+        switch (literal.literalKind) {
+          case LiteralKind.Array: {
+            this.visitNodes((<ArrayLiteralExpression>literal).elementExpressions);
+            break;
+          }
+          case LiteralKind.Object: {
+            let objectLiteral = <ObjectLiteralExpression>literal;
+            this.visitNodes(objectLiteral.names);
+            this.visitNodes(objectLiteral.values);
+            break;
+          }
+          case LiteralKind.Template: {
+            let templateLiteral = <TemplateLiteralExpression>literal;
+            this.visitNode(templateLiteral.tag);
+            this.visitNodes(templateLiteral.expressions);
+            break;
+          }
+        }
+        break;
+      }
+      case NodeKind.New: {
+        let newExpression = <NewExpression>node;
+        this.visitNode(newExpression.typeName);
+        this.visitNodes(newExpression.typeArguments);
+        this.visitNodes(newExpression.args);
+        break;
+      }
+      case NodeKind.Parenthesized: {
+        this.visitNode((<ParenthesizedExpression>node).expression);
+        break;
+      }
+      case NodeKind.PropertyAccess: {
+        let propertyAccess = <PropertyAccessExpression>node;
+        this.visitNode(propertyAccess.expression);
+        this.visitNode(propertyAccess.property);
+        break;
+      }
+      case NodeKind.Ternary: {
+        let ternary = <TernaryExpression>node;
+        this.visitNode(ternary.condition);
+        this.visitNode(ternary.ifThen);
+        this.visitNode(ternary.ifElse);
+        break;
+      }
+      case NodeKind.UnaryPostfix: {
+        this.visitNode((<UnaryPostfixExpression>node).operand);
+        break;
+      }
+      case NodeKind.UnaryPrefix: {
+        this.visitNode((<UnaryPrefixExpression>node).operand);
+        break;
+      }
+
+      case NodeKind.Block: {
+        this.visitNodes((<BlockStatement>node).statements);
+        break;
+      }
+      case NodeKind.Break: {
+        this.visitNode((<BreakStatement>node).label);
+        break;
+      }
+      case NodeKind.Continue: {
+        this.visitNode((<ContinueStatement>node).label);
+        break;
+      }
+      case NodeKind.Do: {
+        let doStatement = <DoStatement>node;
+        this.visitNode(doStatement.body);
+        this.visitNode(doStatement.condition);
+        break;
+      }
+      case NodeKind.Empty:
+      case NodeKind.Module: {
+        break;
+      }
+      case NodeKind.ExportImport: {
+        let exportImport = <ExportImportStatement>node;
+        this.visitNode(exportImport.name);
+        this.visitNode(exportImport.externalName);
+        break;
+      }
+      case NodeKind.Export: {
+        let exportStatement = <ExportStatement>node;
+        this.visitNodes(exportStatement.members);
+        this.visitNode(exportStatement.path);
+        break;
+      }
+      case NodeKind.ExportDefault: {
+        this.visitNode((<ExportDefaultStatement>node).declaration);
+        break;
+      }
+      case NodeKind.Expression: {
+        this.visitNode((<ExpressionStatement>node).expression);
+        break;
+      }
+      case NodeKind.For: {
+        let forStatement = <ForStatement>node;
+        this.visitNode(forStatement.initializer);
+        this.visitNode(forStatement.condition);
+        this.visitNode(forStatement.incrementor);
+        this.visitNode(forStatement.body);
+        break;
+      }
+      case NodeKind.ForOf: {
+        let forOfStatement = <ForOfStatement>node;
+        this.visitNode(forOfStatement.variable);
+        this.visitNode(forOfStatement.iterable);
+        this.visitNode(forOfStatement.body);
+        break;
+      }
+      case NodeKind.If: {
+        let ifStatement = <IfStatement>node;
+        this.visitNode(ifStatement.condition);
+        this.visitNode(ifStatement.ifTrue);
+        this.visitNode(ifStatement.ifFalse);
+        break;
+      }
+      case NodeKind.Import: {
+        let importStatement = <ImportStatement>node;
+        this.visitNodes(importStatement.declarations);
+        this.visitNode(importStatement.namespaceName);
+        this.visitNode(importStatement.path);
+        break;
+      }
+      case NodeKind.Return: {
+        this.visitNode((<ReturnStatement>node).value);
+        break;
+      }
+      case NodeKind.Switch: {
+        let switchStatement = <SwitchStatement>node;
+        this.visitNode(switchStatement.condition);
+        this.visitNodes(switchStatement.cases);
+        break;
+      }
+      case NodeKind.Throw: {
+        this.visitNode((<ThrowStatement>node).value);
+        break;
+      }
+      case NodeKind.Try: {
+        let tryStatement = <TryStatement>node;
+        this.visitNodes(tryStatement.bodyStatements);
+        this.visitNode(tryStatement.catchVariable);
+        this.visitNodes(tryStatement.catchStatements);
+        this.visitNodes(tryStatement.finallyStatements);
+        break;
+      }
+      case NodeKind.Variable: {
+        let variableStatement = <VariableStatement>node;
+        this.visitNodes(variableStatement.decorators);
+        this.visitNodes(variableStatement.declarations);
+        break;
+      }
+      case NodeKind.Void: {
+        this.visitNode((<VoidStatement>node).expression);
+        break;
+      }
+      case NodeKind.While: {
+        let whileStatement = <WhileStatement>node;
+        this.visitNode(whileStatement.condition);
+        this.visitNode(whileStatement.body);
+        break;
+      }
+
+      case NodeKind.ClassDeclaration:
+      case NodeKind.InterfaceDeclaration: {
+        let classDeclaration = <ClassDeclaration>node;
+        this.visitDeclarationStatement(classDeclaration);
+        this.visitNodes(classDeclaration.typeParameters);
+        this.visitNode(classDeclaration.extendsType);
+        this.visitNodes(classDeclaration.implementsTypes);
+        this.visitNode(classDeclaration.indexSignature);
+        this.visitNodes(classDeclaration.members);
+        break;
+      }
+      case NodeKind.EnumDeclaration: {
+        let enumDeclaration = <EnumDeclaration>node;
+        this.visitDeclarationStatement(enumDeclaration);
+        this.visitNodes(enumDeclaration.values);
+        break;
+      }
+      case NodeKind.EnumValueDeclaration:
+      case NodeKind.FieldDeclaration:
+      case NodeKind.VariableDeclaration: {
+        this.visitVariableLikeDeclaration(<VariableLikeDeclarationStatement>node);
+        break;
+      }
+      case NodeKind.FunctionDeclaration:
+      case NodeKind.MethodDeclaration: {
+        let functionDeclaration = <FunctionDeclaration>node;
+        this.visitDeclarationStatement(functionDeclaration);
+        this.visitNodes(functionDeclaration.typeParameters);
+        this.visitNode(functionDeclaration.signature);
+        this.visitNode(functionDeclaration.body);
+        break;
+      }
+      case NodeKind.ImportDeclaration: {
+        let importDeclaration = <ImportDeclaration>node;
+        this.visitDeclarationStatement(importDeclaration);
+        this.visitNode(importDeclaration.foreignName);
+        break;
+      }
+      case NodeKind.NamespaceDeclaration: {
+        let namespaceDeclaration = <NamespaceDeclaration>node;
+        this.visitDeclarationStatement(namespaceDeclaration);
+        this.visitNodes(namespaceDeclaration.members);
+        break;
+      }
+      case NodeKind.TypeDeclaration: {
+        let typeDeclaration = <TypeDeclaration>node;
+        this.visitDeclarationStatement(typeDeclaration);
+        this.visitNodes(typeDeclaration.typeParameters);
+        this.visitNode(typeDeclaration.type);
+        break;
+      }
+
+      case NodeKind.Decorator: {
+        let decorator = <DecoratorNode>node;
+        this.visitNode(decorator.name);
+        this.visitNodes(decorator.args);
+        break;
+      }
+      case NodeKind.ExportMember: {
+        let exportMember = <ExportMember>node;
+        this.visitNode(exportMember.localName);
+        this.visitNode(exportMember.exportedName);
+        break;
+      }
+      case NodeKind.Parameter: {
+        let parameter = <ParameterNode>node;
+        this.visitNodes(parameter.decorators);
+        this.visitNode(parameter.name);
+        this.visitNode(parameter.type);
+        this.visitNode(parameter.initializer);
+        break;
+      }
+      case NodeKind.SwitchCase: {
+        let switchCase = <SwitchCase>node;
+        this.visitNode(switchCase.label);
+        this.visitNodes(switchCase.statements);
+        break;
+      }
+      case NodeKind.IndexSignature: {
+        let indexSignature = <IndexSignatureNode>node;
+        this.visitNode(indexSignature.keyType);
+        this.visitNode(indexSignature.valueType);
+        break;
+      }
+      default: assert(false);
+    }
+  }
+
+  /** Visits a declaration statement's common children. */
+  protected visitDeclarationStatement(node: DeclarationStatement): void {
+    this.visitNode(node.name);
+    this.visitNodes(node.decorators);
+  }
+
+  /** Visits a variable-like declaration statement's common children. */
+  protected visitVariableLikeDeclaration(node: VariableLikeDeclarationStatement): void {
+    this.visitDeclarationStatement(node);
+    this.visitNode(node.type);
+    this.visitNode(node.initializer);
+  }
+
+  /** Visits a possibly-null array of nodes. */
+  protected visitNodes<T extends Node>(nodes: T[] | null): void {
+    if (!nodes || this.stopped) return;
+    for (let i = 0, k = nodes.length; i < k; ++i) {
+      this.visitNode(nodes[i]);
+      if (this.stopped) break;
+    }
+  }
+
+  /** Called for each visited node. Return `false` to skip its children. */
+  abstract visit(node: Node): bool;
 }
 
 /** Mangles an external to an internal path. */

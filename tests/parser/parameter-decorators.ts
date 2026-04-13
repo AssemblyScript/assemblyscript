@@ -9,3 +9,6 @@ class Box {
 type Callback = (@self this: i32, @arg value: i32, @rest ...values: i32[]) => void;
 const expression = function (@arg value: i32): void {};
 const arrow = (@arg value: i32): void => {};
+namespace ns {
+  export function nested(@arg value: i32): void {}
+}

@@ -118,6 +118,10 @@ export class Parser extends DiagnosticEmitter {
   sources: Source[];
   /** Current overridden module name. */
   currentModuleName: string | null = null;
+  /** Nesting depth of source-level statements while parsing. */
+  currentSourceStatementDepth: i32 = 0;
+  /** Indicates whether the current source-level statement preserved any parameter decorators. */
+  currentSourceStatementHasParameterDecorators: bool = false;
 
   /** Constructs a new parser. */
   constructor(
@@ -197,6 +201,10 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     namespace: NamespaceDeclaration | null = null
   ): Statement | null {
+    let isSourceStatement = this.currentSourceStatementDepth++ == 0;
+    if (isSourceStatement) {
+      this.currentSourceStatementHasParameterDecorators = false;
+    }
     let flags = namespace ? namespace.flags & CommonFlags.Ambient : CommonFlags.None;
     let startPos = -1;
 
@@ -429,7 +437,8 @@ export class Parser extends DiagnosticEmitter {
         case NodeKind.ClassDeclaration:
         case NodeKind.InterfaceDeclaration:
         case NodeKind.NamespaceDeclaration: {
-          return Node.createExportDefaultStatement(<DeclarationStatement>statement, tn.range(startPos, tn.pos));
+          statement = Node.createExportDefaultStatement(<DeclarationStatement>statement, tn.range(startPos, tn.pos));
+          break;
         }
         default: {
           this.error(
@@ -437,6 +446,16 @@ export class Parser extends DiagnosticEmitter {
             tn.range(defaultStart, defaultEnd), "default"
           );
         }
+      }
+    }
+    --this.currentSourceStatementDepth;
+    if (isSourceStatement && statement != null && this.currentSourceStatementHasParameterDecorators) {
+      let source = assert(this.currentSource);
+      let parameterDecoratorStatements = source.parameterDecoratorStatements;
+      if (!parameterDecoratorStatements) {
+        source.parameterDecoratorStatements = [ statement ];
+      } else {
+        parameterDecoratorStatements.push(statement);
       }
     }
     return statement;
@@ -889,6 +908,7 @@ export class Parser extends DiagnosticEmitter {
       tn.range(startPos, tn.pos)
     );
     functionType.explicitThisDecorators = thisDecorators;
+    this.noteFunctionTypeParameterDecorators(functionType);
     return functionType;
   }
 
@@ -960,6 +980,21 @@ export class Parser extends DiagnosticEmitter {
         DiagnosticCode.Decorators_are_not_valid_here,
         Range.join(decorators[0].range, decorators[decorators.length - 1].range)
       );
+    }
+  }
+
+  /** Remembers when a source-level statement preserved parameter decorators in one of its function signatures. */
+  private noteFunctionTypeParameterDecorators(signature: FunctionTypeNode): void {
+    if (signature.explicitThisDecorators) {
+      this.currentSourceStatementHasParameterDecorators = true;
+      return;
+    }
+    let parameters = signature.parameters;
+    for (let i = 0, k = parameters.length; i < k; ++i) {
+      if (parameters[i].decorators) {
+        this.currentSourceStatementHasParameterDecorators = true;
+        return;
+      }
     }
   }
 
@@ -1585,6 +1620,7 @@ export class Parser extends DiagnosticEmitter {
       tn.range(signatureStart, tn.pos)
     );
     signature.explicitThisDecorators = this.parseParametersThisDecorators;
+    this.noteFunctionTypeParameterDecorators(signature);
 
     let body: Statement | null = null;
     if (tn.skip(Token.OpenBrace)) {
@@ -1710,6 +1746,7 @@ export class Parser extends DiagnosticEmitter {
       tn.range(signatureStart, tn.pos)
     );
     signature.explicitThisDecorators = explicitThisDecorators;
+    this.noteFunctionTypeParameterDecorators(signature);
 
     let body: Statement | null = null;
     if (arrowKind) {
@@ -2356,6 +2393,7 @@ export class Parser extends DiagnosticEmitter {
         tn.range(signatureStart, tn.pos)
       );
       signature.explicitThisDecorators = this.parseParametersThisDecorators;
+      this.noteFunctionTypeParameterDecorators(signature);
 
       let body: Statement | null = null;
       if (tn.skip(Token.OpenBrace)) {

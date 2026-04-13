@@ -10,5 +10,8 @@ class Box {
 type Callback = (@arg value: i32) => void;
 const expression = function(@arg value: i32): void {};
 const arrow = (@arg value: i32): void => {};
+namespace ns {
+  export function nested(@arg value: i32): void {}
+}
 
 ERROR("EOF");
