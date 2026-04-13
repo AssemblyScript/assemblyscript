@@ -933,7 +933,10 @@ export class Program extends DiagnosticEmitter {
           Node.createSimpleTypeName(CommonNames.void_, range),
           null, false, range
         ),
-        null, false, range
+        null,
+        null,
+        false,
+        range
       );
     }
     return Node.createFunctionDeclaration(
@@ -2758,6 +2761,7 @@ export class Program extends DiagnosticEmitter {
           [],
           typeNode,
           null,
+          null,
           false,
           declaration.range
         ),
@@ -2785,6 +2789,7 @@ export class Program extends DiagnosticEmitter {
               )
             ],
             Node.createOmittedType(declaration.name.range.atEnd),
+            null,
             null,
             false,
             declaration.range
@@ -4083,7 +4088,7 @@ export class PropertyPrototype extends DeclaredElement {
       fieldDeclaration.decorators,
       fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Get,
       null,
-      new FunctionTypeNode([], typeNode, null, false, nativeRange),
+      new FunctionTypeNode([], typeNode, null, null, false, nativeRange),
       null,
       nativeRange
     );
@@ -4110,7 +4115,10 @@ export class PropertyPrototype extends DeclaredElement {
           ),
           null, false, nativeRange
         ),
-        null, false, nativeRange
+        null,
+        null,
+        false,
+        nativeRange
       ),
       null, nativeRange
     );

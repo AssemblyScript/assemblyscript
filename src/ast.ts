@@ -155,10 +155,11 @@ export abstract class Node {
     parameters: ParameterNode[],
     returnType: TypeNode,
     explicitThisType: NamedTypeNode | null,
+    explicitThisDecorators: DecoratorNode[] | null,
     isNullable: bool,
     range: Range
   ): FunctionTypeNode {
-    return new FunctionTypeNode(parameters, returnType, explicitThisType, isNullable, range);
+    return new FunctionTypeNode(parameters, returnType, explicitThisType, explicitThisDecorators, isNullable, range);
   }
 
   static createOmittedType(
@@ -920,6 +921,8 @@ export class FunctionTypeNode extends TypeNode {
     public returnType: TypeNode,
     /** Explicitly provided this type, if any. */
     public explicitThisType: NamedTypeNode | null, // can't be a function
+    /** Decorators on an explicit `this` parameter, if any, preserved for transforms. */
+    public explicitThisDecorators: DecoratorNode[] | null,
     /** Whether nullable or not. */
     isNullable: bool,
     /** Source range. */
@@ -927,9 +930,6 @@ export class FunctionTypeNode extends TypeNode {
   ) {
     super(NodeKind.FunctionType, isNullable, range);
   }
-
-  /** Decorators on an explicit `this` parameter, if any, preserved for transforms. */
-  explicitThisDecorators: DecoratorNode[] | null = null;
 }
 
 /** Represents a type parameter. */

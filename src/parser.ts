@@ -905,10 +905,10 @@ export class Parser extends DiagnosticEmitter {
       parameters,
       returnType,
       thisType,
+      thisDecorators,
       false,
       tn.range(startPos, tn.pos)
     );
-    functionType.explicitThisDecorators = thisDecorators;
     this.noteFunctionTypeParameterDecorators(functionType);
     return functionType;
   }
@@ -1617,10 +1617,10 @@ export class Parser extends DiagnosticEmitter {
       parameters,
       returnType,
       thisType,
+      this.parseParametersThisDecorators,
       false,
       tn.range(signatureStart, tn.pos)
     );
-    signature.explicitThisDecorators = this.parseParametersThisDecorators;
     this.noteFunctionTypeParameterDecorators(signature);
 
     let body: Statement | null = null;
@@ -1743,10 +1743,10 @@ export class Parser extends DiagnosticEmitter {
       parameters,
       returnType,
       explicitThis,
+      explicitThisDecorators,
       false,
       tn.range(signatureStart, tn.pos)
     );
-    signature.explicitThisDecorators = explicitThisDecorators;
     this.noteFunctionTypeParameterDecorators(signature);
 
     let body: Statement | null = null;
@@ -2390,10 +2390,10 @@ export class Parser extends DiagnosticEmitter {
         parameters,
         returnType,
         thisType,
+        this.parseParametersThisDecorators,
         false,
         tn.range(signatureStart, tn.pos)
       );
-      signature.explicitThisDecorators = this.parseParametersThisDecorators;
       this.noteFunctionTypeParameterDecorators(signature);
 
       let body: Statement | null = null;
