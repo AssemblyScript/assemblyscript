@@ -181,12 +181,10 @@ export abstract class Node {
     name: IdentifierExpression,
     type: TypeNode,
     initializer: Expression | null,
-    range: Range,
-    decorators: DecoratorNode[] | null = null
+    decorators: DecoratorNode[] | null,
+    range: Range
   ): ParameterNode {
-    let parameter = new ParameterNode(parameterKind, name, type, initializer, range);
-    parameter.decorators = decorators;
-    return parameter;
+    return new ParameterNode(parameterKind, name, type, initializer, decorators, range);
   }
 
   // special
@@ -971,14 +969,13 @@ export class ParameterNode extends Node {
     public type: TypeNode,
     /** Initializer expression, if any. */
     public initializer: Expression | null,
+    /** Decorators, if any, preserved so transforms can rewrite them before validation. */
+    public decorators: DecoratorNode[] | null,
     /** Source range. */
     range: Range
   ) {
     super(NodeKind.Parameter, range);
   }
-
-  /** Decorators, if any, preserved so transforms can rewrite them before validation. */
-  decorators: DecoratorNode[] | null = null;
   /** Implicit field declaration, if applicable. */
   implicitFieldDeclaration: FieldDeclaration | null = null;
   /** Common flags indicating specific traits. */

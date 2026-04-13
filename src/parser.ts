@@ -803,7 +803,7 @@ export class Parser extends DiagnosticEmitter {
               return null;
             }
             this.reportInvalidParameterDecorators(tn);
-            let param = Node.createParameter(kind, name, type, null, tn.range(paramStart, tn.pos), decorators);
+            let param = Node.createParameter(kind, name, type, null, decorators, tn.range(paramStart, tn.pos));
             if (!parameters) parameters = [ param ];
             else parameters.push(param);
           } else {
@@ -815,7 +815,7 @@ export class Parser extends DiagnosticEmitter {
               }
             }
             if (isSignature) {
-              let param = Node.createParameter(kind, name, Node.createOmittedType(tn.range(tn.pos)), null, tn.range(paramStart, tn.pos), decorators);
+              let param = Node.createParameter(kind, name, Node.createOmittedType(tn.range(tn.pos)), null, decorators, tn.range(paramStart, tn.pos));
               if (!parameters) parameters = [ param ];
               else parameters.push(param);
               this.error(
@@ -868,6 +868,7 @@ export class Parser extends DiagnosticEmitter {
             firstParamKind,
             firstParamNameNoType,
             Node.createOmittedType(firstParamNameNoType.range.atEnd),
+            null,
             null,
             firstParamNameNoType.range
           );
@@ -1506,8 +1507,8 @@ export class Parser extends DiagnosticEmitter {
         identifier,
         type,
         initializer,
-        Range.join(assert(startRange), tn.range()),
-        decorators
+        decorators,
+        Range.join(assert(startRange), tn.range())
       );
       param.flags |= accessFlags;
       return param;
@@ -4039,6 +4040,7 @@ export class Parser extends DiagnosticEmitter {
                 ParameterKind.Default,
                 identifier,
                 Node.createOmittedType(identifier.range.atEnd),
+                null,
                 null,
                 identifier.range
               )

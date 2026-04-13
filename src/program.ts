@@ -2780,6 +2780,7 @@ export class Program extends DiagnosticEmitter {
                 declaration.name,
                 typeNode,
                 null,
+                null,
                 declaration.name.range
               )
             ],
@@ -4096,7 +4097,10 @@ export class PropertyPrototype extends DeclaredElement {
           new ParameterNode(
             ParameterKind.Default,
             fieldDeclaration.name,
-            typeNode, null, nativeRange
+            typeNode,
+            null,
+            null,
+            nativeRange
           )
         ],
         new NamedTypeNode(
