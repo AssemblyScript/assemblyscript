@@ -771,7 +771,7 @@ export class Parser extends DiagnosticEmitter {
               this.tryParseSignatureIsSignature = true;
               return null;
             }
-            this.reportInvalidParameterDecorators(tn);
+            this.tryParseParameterDecorators(tn);
             thisType = <NamedTypeNode>type;
             thisDecorators = decorators;
           } else {
@@ -802,12 +802,12 @@ export class Parser extends DiagnosticEmitter {
               this.tryParseSignatureIsSignature = isSignature;
               return null;
             }
-            this.reportInvalidParameterDecorators(tn);
+            this.tryParseParameterDecorators(tn);
             let param = Node.createParameter(kind, name, type, null, decorators, tn.range(paramStart, tn.pos));
             if (!parameters) parameters = [ param ];
             else parameters.push(param);
           } else {
-            this.reportInvalidParameterDecorators(tn);
+            this.tryParseParameterDecorators(tn);
             if (!isSignature) {
               if (tn.peek() == Token.Comma) {
                 isSignature = true;
@@ -973,8 +973,8 @@ export class Parser extends DiagnosticEmitter {
     return decorators;
   }
 
-  /** Consumes decorators that appear after a parameter has already started. */
-  private reportInvalidParameterDecorators(tn: Tokenizer): void {
+  /** Tries to parse decorators that appear after a parameter has already started and reports them. */
+  private tryParseParameterDecorators(tn: Tokenizer): void {
     let decorators = this.parseParameterDecorators(tn);
     if (decorators) {
       this.error(
@@ -1342,7 +1342,7 @@ export class Parser extends DiagnosticEmitter {
               thisType.range
             );
           }
-          this.reportInvalidParameterDecorators(tn);
+          this.tryParseParameterDecorators(tn);
         } else {
           this.error(
             DiagnosticCode._0_expected,
@@ -1471,14 +1471,14 @@ export class Parser extends DiagnosticEmitter {
           );
         }
       }
-      this.reportInvalidParameterDecorators(tn);
+      this.tryParseParameterDecorators(tn);
       if (tn.skip(Token.Colon)) {
         type = this.parseType(tn);
         if (!type) return null;
       } else {
         type = Node.createOmittedType(tn.range(tn.pos));
       }
-      this.reportInvalidParameterDecorators(tn);
+      this.tryParseParameterDecorators(tn);
       let initializer: Expression | null = null;
       if (tn.skip(Token.Equals)) {
         if (isRest) {
