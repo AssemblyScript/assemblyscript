@@ -120,7 +120,7 @@ export class Parser extends DiagnosticEmitter {
   currentModuleName: string | null = null;
   /** Nesting depth of source-level statements while parsing. */
   currentSourceStatementDepth: i32 = 0;
-  /** Indicates whether the current source-level statement preserved any parameter decorators. */
+  /** Indicates whether the current source-level statement should be revisited for post-transform parameter-decorator validation. */
   currentSourceStatementHasParameterDecorators: bool = false;
 
   /** Constructs a new parser. */
@@ -210,15 +210,9 @@ export class Parser extends DiagnosticEmitter {
 
     // check decorators
     let decorators: DecoratorNode[] | null = null;
-    while (tn.skip(Token.At)) {
-      if (startPos < 0) startPos = tn.tokenPos;
-      let decorator = this.parseDecorator(tn);
-      if (!decorator) {
-        this.skipStatement(tn);
-        continue;
-      }
-      if (!decorators) decorators = [decorator];
-      else decorators.push(decorator);
+    if (tn.peek() == Token.At) {
+      startPos = tn.nextTokenPos;
+      decorators = this.parseDecorators(tn, true);
     }
 
     // check modifiers
@@ -717,7 +711,7 @@ export class Parser extends DiagnosticEmitter {
   // Indicates whether tryParseSignature determined that it is handling a Signature
   private tryParseSignatureIsSignature: bool = false;
 
-  /** Parses a function type, preserving parameter decorators for transforms. */
+  /** Parses a function type, preserving leading parameter decorators for transforms while still reporting misplaced ones. */
   tryParseFunctionType(
     tn: Tokenizer
   ): FunctionTypeNode | null {
@@ -744,7 +738,8 @@ export class Parser extends DiagnosticEmitter {
       do {
         let paramStart = -1;
         let kind = ParameterKind.Default;
-        let decorators = this.parseParameterDecorators(tn);
+        // Preserve leading parameter decorators in the AST so transforms can inspect or remove them later.
+        let decorators = this.parseDecorators(tn);
         if (decorators) {
           paramStart = decorators[0].range.start;
           isSignature = true;
@@ -915,6 +910,27 @@ export class Parser extends DiagnosticEmitter {
 
   // statements
 
+  /** Parses zero or more decorators starting at the current token. */
+  private parseDecorators(
+    tn: Tokenizer,
+    skipStatementOnError: bool = false
+  ): DecoratorNode[] | null {
+    let decorators: DecoratorNode[] | null = null;
+    while (tn.skip(Token.At)) {
+      let decorator = this.parseDecorator(tn);
+      if (!decorator) {
+        if (skipStatementOnError) {
+          this.skipStatement(tn);
+          continue;
+        }
+        break;
+      }
+      if (!decorators) decorators = [decorator];
+      else decorators.push(decorator);
+    }
+    return decorators;
+  }
+
   parseDecorator(
     tn: Tokenizer
   ): DecoratorNode | null {
@@ -959,23 +975,9 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  private parseParameterDecorators(
-    tn: Tokenizer
-  ): DecoratorNode[] | null {
-    // Preserve parameter decorators in the AST so transforms can inspect or remove them later.
-    let decorators: DecoratorNode[] | null = null;
-    while (tn.skip(Token.At)) {
-      let decorator = this.parseDecorator(tn);
-      if (!decorator) break;
-      if (!decorators) decorators = [decorator];
-      else decorators.push(decorator);
-    }
-    return decorators;
-  }
-
-  /** Tries to parse decorators that appear after a parameter has already started and reports them. */
+  /** Consumes misplaced parameter decorators after a parameter has already started so they diagnose as TS1206 instead of cascading. */
   private tryParseParameterDecorators(tn: Tokenizer): void {
-    let decorators = this.parseParameterDecorators(tn);
+    let decorators = this.parseDecorators(tn);
     if (decorators) {
       this.error(
         DiagnosticCode.Decorators_are_not_valid_here,
@@ -984,7 +986,7 @@ export class Parser extends DiagnosticEmitter {
     }
   }
 
-  /** Remembers when a source-level statement preserved parameter decorators in one of its function signatures. */
+  /** Records source-level statements whose function signatures preserved parameter decorators for post-transform validation. */
   private noteFunctionTypeParameterDecorators(signature: FunctionTypeNode): void {
     if (signature.explicitThisDecorators) {
       this.currentSourceStatementHasParameterDecorators = true;
@@ -1303,7 +1305,7 @@ export class Parser extends DiagnosticEmitter {
 
   /** Explicit `this` parameter captured by the current parseParameters call, if any. */
   private parseParametersThis: NamedTypeNode | null = null;
-  /** Decorators on the explicit `this` parameter, preserved for transforms. */
+  /** Decorators on the explicit `this` parameter captured by the current parseParameters call. Preserved as transform-only syntax. */
   private parseParametersThisDecorators: DecoratorNode[] | null = null;
 
   parseParameters(
@@ -1327,7 +1329,8 @@ export class Parser extends DiagnosticEmitter {
     while (true) {
       if (tn.skip(Token.CloseParen)) break;
 
-      let paramDecorators = this.parseParameterDecorators(tn);
+      // Preserve leading parameter decorators in the AST so transforms can inspect or remove them later.
+      let paramDecorators = this.parseDecorators(tn);
 
       if (first && tn.skip(Token.This)) {
         if (tn.skip(Token.Colon)) {
@@ -1993,14 +1996,9 @@ export class Parser extends DiagnosticEmitter {
     let isInterface = parent.kind == NodeKind.InterfaceDeclaration;
     let startPos = 0;
     let decorators: DecoratorNode[] | null = null;
-    if (tn.skip(Token.At)) {
-      startPos = tn.tokenPos;
-      do {
-        let decorator = this.parseDecorator(tn);
-        if (!decorator) break;
-        if (!decorators) decorators = new Array();
-        decorators.push(decorator);
-      } while (tn.skip(Token.At));
+    if (tn.peek() == Token.At) {
+      startPos = tn.nextTokenPos;
+      decorators = this.parseDecorators(tn);
       if (isInterface && decorators) {
         this.error(
           DiagnosticCode.Decorators_are_not_valid_here,

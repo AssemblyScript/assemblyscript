@@ -248,6 +248,7 @@ export enum OperatorKind {
   // LogicalOr         // a || b
 }
 
+/** Reports transform-only parameter decorators that were preserved by the parser but not removed by transforms. */
 class ParameterDecoratorValidator extends NodeWalker {
   constructor(private diagnostics: DiagnosticEmitter) {
     super();
@@ -1532,7 +1533,7 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  /** Rejects parameter decorators that survive transform time. These remain transform-only syntax. */
+  /** Rejects preserved parameter decorators that survive transform time by revisiting only the source-level statements that contained them. */
   validateParameterDecorators(): void {
     if (this.parameterDecoratorsValidated) return;
     this.parameterDecoratorsValidated = true;
@@ -1547,6 +1548,7 @@ export class Program extends DiagnosticEmitter {
         let statement = parameterDecoratorStatements[j];
         for (let m = 0, n = statements.length; m < n; ++m) {
           if (statements[m] == statement) {
+            // Transforms may delete or replace a remembered statement entirely; only validate nodes still reachable from the source.
             validator.visitNode(statement);
             break;
           }

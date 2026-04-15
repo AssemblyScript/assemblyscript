@@ -921,7 +921,7 @@ export class FunctionTypeNode extends TypeNode {
     public returnType: TypeNode,
     /** Explicitly provided this type, if any. */
     public explicitThisType: NamedTypeNode | null, // can't be a function
-    /** Decorators on an explicit `this` parameter, if any, preserved for transforms. */
+    /** Decorators on an explicit `this` parameter, if any. Preserved as transform-only syntax. */
     public explicitThisDecorators: DecoratorNode[] | null,
     /** Whether nullable or not. */
     isNullable: bool,
@@ -969,7 +969,7 @@ export class ParameterNode extends Node {
     public type: TypeNode,
     /** Initializer expression, if any. */
     public initializer: Expression | null,
-    /** Decorators, if any, preserved so transforms can rewrite them before validation. */
+    /** Decorators, if any. Preserved as transform-only syntax so transforms can rewrite or remove them before validation. */
     public decorators: DecoratorNode[] | null,
     /** Source range. */
     range: Range
@@ -1669,7 +1669,7 @@ export class Source extends Node {
   debugInfoIndex: i32 = -1;
   /** Re-exported sources. */
   exportPaths: string[] | null = null;
-  /** Source-level statements that preserved parameter decorators while parsing. */
+  /** Source-level statements known to contain preserved parameter decorators, revisited after transforms for validation. */
   parameterDecoratorStatements: Statement[] | null = null;
 
   /** Checks if this source represents native code. */
