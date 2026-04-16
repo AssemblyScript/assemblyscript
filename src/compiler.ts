@@ -537,6 +537,7 @@ export class Compiler extends DiagnosticEmitter {
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize();
 
+    
     // Binaryen treats all function references as being leaked to the outside world when
     // the module isn't marked as closed-world (see WebAssembly/binaryen#7135). Therefore,
     // we should mark the module as closed-world when we're definitely sure it is.
