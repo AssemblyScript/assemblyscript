@@ -118,10 +118,6 @@ export class Parser extends DiagnosticEmitter {
   sources: Source[];
   /** Current overridden module name. */
   currentModuleName: string | null = null;
-  /** Nesting depth of source-level statements while parsing. */
-  currentSourceStatementDepth: i32 = 0;
-  /** Indicates whether the current source-level statement should be revisited for post-transform parameter-decorator validation. */
-  currentSourceStatementHasParameterDecorators: bool = false;
 
   /** Constructs a new parser. */
   constructor(
@@ -201,10 +197,6 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     namespace: NamespaceDeclaration | null = null
   ): Statement | null {
-    let isSourceStatement = this.currentSourceStatementDepth++ == 0;
-    if (isSourceStatement) {
-      this.currentSourceStatementHasParameterDecorators = false;
-    }
     let flags = namespace ? namespace.flags & CommonFlags.Ambient : CommonFlags.None;
     let startPos = -1;
 
@@ -440,16 +432,6 @@ export class Parser extends DiagnosticEmitter {
             tn.range(defaultStart, defaultEnd), "default"
           );
         }
-      }
-    }
-    --this.currentSourceStatementDepth;
-    if (isSourceStatement && statement != null && this.currentSourceStatementHasParameterDecorators) {
-      let source = assert(this.currentSource);
-      let parameterDecoratorStatements = source.parameterDecoratorStatements;
-      if (!parameterDecoratorStatements) {
-        source.parameterDecoratorStatements = [ statement ];
-      } else {
-        parameterDecoratorStatements.push(statement);
       }
     }
     return statement;
@@ -904,7 +886,7 @@ export class Parser extends DiagnosticEmitter {
       false,
       tn.range(startPos, tn.pos)
     );
-    this.noteFunctionTypeParameterDecorators(functionType);
+    // this.noteFunctionTypeParameterDecorators(functionType);
     return functionType;
   }
 
@@ -983,21 +965,6 @@ export class Parser extends DiagnosticEmitter {
         DiagnosticCode.Decorators_are_not_valid_here,
         Range.join(decorators[0].range, decorators[decorators.length - 1].range)
       );
-    }
-  }
-
-  /** Records source-level statements whose function signatures preserved parameter decorators for post-transform validation. */
-  private noteFunctionTypeParameterDecorators(signature: FunctionTypeNode): void {
-    if (signature.explicitThisDecorators) {
-      this.currentSourceStatementHasParameterDecorators = true;
-      return;
-    }
-    let parameters = signature.parameters;
-    for (let i = 0, k = parameters.length; i < k; ++i) {
-      if (parameters[i].decorators) {
-        this.currentSourceStatementHasParameterDecorators = true;
-        return;
-      }
     }
   }
 
@@ -1624,7 +1591,7 @@ export class Parser extends DiagnosticEmitter {
       false,
       tn.range(signatureStart, tn.pos)
     );
-    this.noteFunctionTypeParameterDecorators(signature);
+    // this.noteFunctionTypeParameterDecorators(signature);
 
     let body: Statement | null = null;
     if (tn.skip(Token.OpenBrace)) {
@@ -1750,7 +1717,7 @@ export class Parser extends DiagnosticEmitter {
       false,
       tn.range(signatureStart, tn.pos)
     );
-    this.noteFunctionTypeParameterDecorators(signature);
+    // this.noteFunctionTypeParameterDecorators(signature);
 
     let body: Statement | null = null;
     if (arrowKind) {
@@ -2392,7 +2359,7 @@ export class Parser extends DiagnosticEmitter {
         false,
         tn.range(signatureStart, tn.pos)
       );
-      this.noteFunctionTypeParameterDecorators(signature);
+      // this.noteFunctionTypeParameterDecorators(signature);
 
       let body: Statement | null = null;
       if (tn.skip(Token.OpenBrace)) {
