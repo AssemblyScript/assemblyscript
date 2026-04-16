@@ -112,7 +112,6 @@ import {
   ParameterKind,
   ParameterNode,
   TypeName,
-  NodeWalker
 } from "./ast";
 
 import {
@@ -246,36 +245,6 @@ export enum OperatorKind {
   // not overridable:
   // LogicalAnd        // a && b
   // LogicalOr         // a || b
-}
-
-/** Reports transform-only parameter decorators that were preserved by the parser but not removed by transforms. */
-class ParameterDecoratorValidator extends NodeWalker {
-  constructor(private diagnostics: DiagnosticEmitter) {
-    super();
-  }
-
-  visit(node: Node): bool {
-    switch (node.kind) {
-      case NodeKind.FunctionType: {
-        this.reportParameterDecorators((<FunctionTypeNode>node).explicitThisDecorators);
-        break;
-      }
-      case NodeKind.Parameter: {
-        this.reportParameterDecorators((<ParameterNode>node).decorators);
-        break;
-      }
-    }
-    return true;
-  }
-
-  private reportParameterDecorators(decorators: DecoratorNode[] | null): void {
-    if (decorators && decorators.length > 0) {
-      this.diagnostics.error(
-        DiagnosticCode.Decorators_are_not_valid_here,
-        Range.join(decorators[0].range, decorators[decorators.length - 1].range)
-      );
-    }
-  }
 }
 
 export namespace OperatorKind {
@@ -1529,30 +1498,6 @@ export class Program extends DiagnosticEmitter {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.UserEntry) {
         this.markModuleExports(file);
-      }
-    }
-  }
-
-  /** Rejects preserved parameter decorators that survive transform time by revisiting only the source-level statements that contained them. */
-  validateParameterDecorators(): void {
-    if (this.parameterDecoratorsValidated) return;
-    this.parameterDecoratorsValidated = true;
-    let validator = new ParameterDecoratorValidator(this);
-    let sources = this.sources;
-    for (let i = 0, k = sources.length; i < k; ++i) {
-      let source = sources[i];
-      let parameterDecoratorStatements = source.parameterDecoratorStatements;
-      if (!parameterDecoratorStatements) continue;
-      let statements = source.statements;
-      for (let j = 0, l = parameterDecoratorStatements.length; j < l; ++j) {
-        let statement = parameterDecoratorStatements[j];
-        for (let m = 0, n = statements.length; m < n; ++m) {
-          if (statements[m] == statement) {
-            // Transforms may delete or replace a remembered statement entirely; only validate nodes still reachable from the source.
-            validator.visitNode(statement);
-            break;
-          }
-        }
       }
     }
   }
