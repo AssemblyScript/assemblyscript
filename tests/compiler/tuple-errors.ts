@@ -35,3 +35,26 @@ export function TupleReturnUnimplemented6(): [i32[], [i32]] {
 export function TupleReturnUnimplemented7(): [i32, i32] {
   return [0, 1];
 }
+
+type Box<T> = [T, i32];
+
+export function TupleGeneric1(x: Box<i32>): Box<i32> {
+  return x;
+}
+export function TupleGeneric2<T>(x: [i32, T]): [i32, T] {
+  return x;
+}
+
+export function TupleNullable1(x: [i32, i32] | null): [i32, i32] | null {
+  return x;
+}
+export function TupleNullable2(x: [] | null): [] | null {
+  return x;
+}
+
+export function TupleTypeMismatch1(x: [i32, f32]): [f32, i32] {
+  return x;
+}
+export function TupleTypeMismatch2(x: [f64, f32]): [f32, f64] {
+  return x;
+}

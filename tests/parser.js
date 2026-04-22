@@ -6,7 +6,7 @@ import { globSync } from "glob";
 import { diff } from "../util/text.js";
 import { stdoutColors } from "../util/terminal.js";
 import * as optionsUtil from "../util/options.js";
-import { Program, Options, ASTBuilder } from "../dist/assemblyscript.js";
+import { Program, Options, ASTBuilder, Feature } from "../dist/assemblyscript.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -54,6 +54,11 @@ if (argv.length) {
 }
 
 let failures = 0;
+const parserTestFeatures = new Map([
+  ["tuple.ts", [Feature.MultiValue]],
+  ["tuple-more.ts", [Feature.MultiValue]],
+  ["tuple-errors.ts", [Feature.MultiValue]]
+]);
 
 for (const filename of tests) {
   if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts")) continue;
@@ -61,9 +66,16 @@ for (const filename of tests) {
   console.log(stdoutColors.white("Testing parser/" + filename));
 
   let failed = false;
-  const program = new Program(new Options());
-  const parser = program.parser;
+  const options = new Options();
   const sourceText = fs.readFileSync(basedir + "/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n");
+  const features = parserTestFeatures.get(filename);
+  if (features) {
+    for (const feature of features) {
+      options.setFeature(feature);
+    }
+  }
+  const program = new Program(options);
+  const parser = program.parser;
   parser.parseFile(sourceText, filename, true);
   const serializedSourceText = ASTBuilder.build(program.sources[0]);
   const actual = serializedSourceText + parser.diagnostics.map(diagnostic => "// " + diagnostic +"\n").join("");

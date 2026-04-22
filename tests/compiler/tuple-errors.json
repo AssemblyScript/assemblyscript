@@ -3,5 +3,7 @@
     "--enable", "multi-value"
   ],
   "stderr": [
+    "AS100: Not implemented: Tuple types",
+    "18 compile error(s)"
   ]
 }
