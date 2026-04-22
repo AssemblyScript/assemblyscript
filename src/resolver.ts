@@ -45,6 +45,7 @@ import {
 
 import {
   FunctionTypeNode,
+  TupleTypeNode,
   ParameterKind,
   TypeNode,
   NodeKind,
@@ -169,6 +170,10 @@ export class Resolver extends DiagnosticEmitter {
       }
       case NodeKind.FunctionType: {
         resolved = this.resolveFunctionType(<FunctionTypeNode>node, flow, ctxElement, ctxTypes, reportMode);
+        break;
+      }
+      case NodeKind.TupleType: {
+        resolved = this.resolveTupleType(<TupleTypeNode>node, flow, ctxElement, ctxTypes, reportMode);
         break;
       }
       default: assert(false);
@@ -450,6 +455,32 @@ export class Resolver extends DiagnosticEmitter {
     }
     let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest);
     return node.isNullable ? signature.type.asNullable() : signature.type;
+  }
+
+  /** Resolves a {@link TupleTypeNode}. */
+  private resolveTupleType(
+    /** The type to resolve. */
+    node: TupleTypeNode,
+    /** The flow */
+    flow: Flow | null,
+    /** Contextual element. */
+    ctxElement: Element,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> | null = null,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.Report
+  ): Type | null {
+    let elements = node.elements;
+    for (let i = 0, k = elements.length; i < k; ++i) {
+      if (!this.resolveType(elements[i], flow, ctxElement, ctxTypes, reportMode)) return null;
+    }
+    if (reportMode == ReportMode.Report) {
+      this.error(
+        DiagnosticCode.Not_implemented_0,
+        node.range, "Tuple types"
+      );
+    }
+    return null;
   }
 
   private resolveBuiltinNotNullableType(

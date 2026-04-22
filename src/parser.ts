@@ -42,6 +42,7 @@ import {
   TypeName,
   NamedTypeNode,
   FunctionTypeNode,
+  TupleTypeNode,
   ArrowKind,
 
   Expression,
@@ -509,8 +510,19 @@ export class Parser extends DiagnosticEmitter {
 
     let type: TypeNode;
 
+    // 'readonly' Type
+    if (token == Token.Readonly) {
+      let innerType = this.parseType(tn, acceptParenthesized, suppressErrors);
+      if (!innerType) return null;
+      type = Node.createNamedType(
+        Node.createSimpleTypeName("Readonly", tn.range(startPos, tn.pos)),
+        [ innerType ],
+        false,
+        tn.range(startPos, tn.pos)
+      );
+
     // '(' ...
-    if (token == Token.OpenParen) {
+    } else if (token == Token.OpenParen) {
 
       // '(' FunctionSignature ')'
       let isInnerParenthesized = tn.skip(Token.OpenParen);
@@ -562,6 +574,27 @@ export class Parser extends DiagnosticEmitter {
         }
         return null;
       }
+
+    // '[' Type (',' Type)* ']'
+    } else if (token == Token.OpenBracket) {
+      let elements: TypeNode[] = [];
+      if (!tn.skip(Token.CloseBracket)) {
+        do {
+          let element = this.parseType(tn, true, suppressErrors);
+          if (!element) return null;
+          elements.push(element);
+        } while (tn.skip(Token.Comma));
+        if (!tn.skip(Token.CloseBracket)) {
+          if (!suppressErrors) {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(tn.pos), "]"
+            );
+          }
+          return null;
+        }
+      }
+      type = Node.createTupleType(elements, false, tn.range(startPos, tn.pos));
 
     // 'void'
     } else if (token == Token.Void) {
@@ -4578,6 +4611,13 @@ function isCircularTypeAlias(name: string, type: TypeNode): bool {
       let parameters = functionType.parameters;
       for (let i = 0, k = parameters.length; i < k; i++) {
         if (isCircularTypeAlias(name, parameters[i].type)) return true;
+      }
+      break;
+    }
+    case NodeKind.TupleType: {
+      let elements = (<TupleTypeNode>type).elements;
+      for (let i = 0, k = elements.length; i < k; i++) {
+        if (isCircularTypeAlias(name, elements[i])) return true;
       }
       break;
     }
