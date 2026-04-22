@@ -1,0 +1,6 @@
+{
+  "stderr": [
+    "TS2456: Type alias 'Loop' circularly references itself.",
+    "1 parse error(s)"
+  ]
+}
