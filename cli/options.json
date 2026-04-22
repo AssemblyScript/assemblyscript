@@ -222,12 +222,12 @@
       " gc                  Garbage collection (WIP).",
       " stringref           String reference types.",
       " relaxed-simd        Relaxed SIMD operations.",
+      " multi-value         Multi value types.",
       ""
     ],
     "TODO_doesNothingYet": [
       " exception-handling  Exception handling.",
       " tail-calls          Tail call operations.",
-      " multi-value         Multi value types.",
       " memory64            Memory64 operations.",
       " extended-const      Extended const expressions."
     ],
