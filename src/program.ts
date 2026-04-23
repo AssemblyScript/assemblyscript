@@ -437,11 +437,14 @@ export class Program extends DiagnosticEmitter {
   ) {
     super(diagnostics);
     this.module = Module.create(options.stackSize > 0, options.sizeTypeRef);
-    this.parser = new Parser(this.diagnostics, this.sources, this.options);
+    this.parser = new Parser(this.diagnostics, this.sources);
     this.resolver = new Resolver(this);
     let nativeFile = new File(this, Source.native);
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
+
+    // temporary fix
+    this.parser.options = this.options;
   }
 
   /** Module instance. */
