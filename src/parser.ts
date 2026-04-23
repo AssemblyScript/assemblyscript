@@ -578,7 +578,7 @@ export class Parser extends DiagnosticEmitter {
         return null;
       }
 
-    // '[' Type (',' Type)* ']'
+    // '[' ((Identifier ':')? Type (',' (Identifier ':')? Type)*)? ']'
     } else if (token == Token.OpenBracket && this.options && this.options!.hasFeature(Feature.MultiValue)) {
       let elements: TypeNode[] = [];
       let elementNames: (IdentifierExpression | null)[] = [];
