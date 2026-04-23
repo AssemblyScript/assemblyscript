@@ -5,6 +5,7 @@ export type TupleTypeUnimplemented4 = [i32, TupleTypeUnimplemented1];
 export type TupleTypeUnimplemented5 = [string, i32];
 export type TupleTypeUnimplemented6 = [i32[], [i32]];
 export type TupleTypeUnimplemented7 = [i32, i32];
+export type TupleTypeUnimplemented8 = [x: i32, y: i32];
 
 export function TupleParamUnimplemented1(x: []): void { }
 export function TupleParamUnimplemented2(x: [i32]): void { }
@@ -13,6 +14,7 @@ export function TupleParamUnimplemented4(x: [i32, TupleTypeUnimplemented1]): voi
 export function TupleParamUnimplemented5(x: [string, i32]): void { }
 export function TupleParamUnimplemented6(x: [i32[], [i32]]): void { }
 export function TupleParamUnimplemented7(x: [i32, i32]): void { }
+export function TupleParamUnimplemented8(x: [left: i32, right: i32]): void { }
 
 export function TupleReturnUnimplemented1(): [] {
   return [];
@@ -33,6 +35,9 @@ export function TupleReturnUnimplemented6(): [i32[], [i32]] {
   return [new Array<i32>(), [0]];
 }
 export function TupleReturnUnimplemented7(): [i32, i32] {
+  return [0, 1];
+}
+export function TupleReturnUnimplemented8(): [first: i32, second: i32] {
   return [0, 1];
 }
 
