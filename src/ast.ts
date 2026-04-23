@@ -177,13 +177,6 @@ export abstract class Node {
     return new NamedTypeNode(Node.createSimpleTypeName("", range), null, false, range);
   }
 
-  static createReadonlyType(
-    innerType: TypeNode,
-    range: Range
-  ): NamedTypeNode {
-    return new NamedTypeNode(Node.createSimpleTypeName("Readonly", range), [ innerType ], false, range);
-  }
-
   static createTypeParameter(
     name: IdentifierExpression,
     extendsType: NamedTypeNode | null,

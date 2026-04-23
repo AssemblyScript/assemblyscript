@@ -37,16 +37,16 @@ function func2(x: [i32, i32]): [i32, i32] {
 function func3(x: [i32, [i32, i32]], y: i32): [i32, [i32, i32]] {
   return x;
 }
-function func4(x: Readonly<[i32, string]>): [void] {
+function func4(x: [i32, string]): [void] {
   return [void(0)];
 }
-function func5(x: Readonly<[Array<i32>, Array<i32>]>): Readonly<[i32]> {
+function func5(x: [Array<i32>, Array<i32>]): [i32] {
   return [x[1].length];
 }
 function func6(x: [i32, i32] | null): [i32, i32] | null {
   return x;
 }
-function func7(x: Readonly<[[Array<i32>], [string]]>): Readonly<[[Array<i32>], [string]]> {
+function func7(x: [[Array<i32>], [string]]): [[Array<i32>], [string]] {
   return x;
 }
 function func8(x: [left: i32, right: i32]): [first: i32, second: i32] {
@@ -61,7 +61,7 @@ function func10(x: [string | null, i32] | null): [string | null, i32] | null {
 type type0 = [];
 type type1 = [i32, i32];
 type type2 = [i32, [i32, i32]];
-type type3 = Readonly<[i32, string]>;
+type type3 = [i32, string];
 type type4 = [i32, i32] | null;
 type type5 = [[i32, i32], [i32, i32]];
 type type6<T> = [Array<T>, Array<T>, T];

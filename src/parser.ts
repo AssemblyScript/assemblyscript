@@ -514,14 +514,8 @@ export class Parser extends DiagnosticEmitter {
 
     let type: TypeNode;
 
-    // 'readonly' Type
-    if (token == Token.Readonly) {
-      let innerType = this.parseType(tn, acceptParenthesized, suppressErrors);
-      if (!innerType) return null;
-      type = Node.createReadonlyType(innerType, tn.range(startPos, tn.pos));
-
     // '(' ...
-    } else if (token == Token.OpenParen) {
+    if (token == Token.OpenParen) {
 
       // '(' FunctionSignature ')'
       let isInnerParenthesized = tn.skip(Token.OpenParen);
@@ -573,6 +567,13 @@ export class Parser extends DiagnosticEmitter {
         }
         return null;
       }
+
+    // 'readonly' Type
+    } else if (token == Token.Readonly) {
+      let innerType = this.parseType(tn, acceptParenthesized, suppressErrors);
+      if (!innerType) return null;
+      type = innerType;
+      type.range.start = startPos;
 
     // '[' ((Identifier ':')? Type (',' (Identifier ':')? Type)*)? ']'
     } else if (token == Token.OpenBracket && this.options && this.options!.hasFeature(Feature.MultiValue)) {
