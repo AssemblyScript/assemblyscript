@@ -442,6 +442,9 @@ export class Program extends DiagnosticEmitter {
     let nativeFile = new File(this, Source.native);
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
+
+    // temporary fix
+    this.parser.options = this.options;
   }
 
   /** Module instance. */

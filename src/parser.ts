@@ -9,6 +9,7 @@
 
 import {
   CommonFlags,
+  Feature,
   LIBRARY_PREFIX,
   PATH_DELIMITER
 } from "./common";
@@ -91,6 +92,7 @@ import {
 
   mangleInternalPath
 } from "./ast";
+import { Options } from "./compiler";
 
 /** Represents a dependee. */
 class Dependee {
@@ -119,7 +121,8 @@ export class Parser extends DiagnosticEmitter {
   sources: Source[];
   /** Current overridden module name. */
   currentModuleName: string | null = null;
-
+  /** Temporary variable so I can disable parsing tuples if multi-variable is disabled */
+  readonly options: Options | null = null;
   /** Constructs a new parser. */
   constructor(
     diagnostics: DiagnosticMessage[] | null = null,
@@ -576,7 +579,7 @@ export class Parser extends DiagnosticEmitter {
       }
 
     // '[' Type (',' Type)* ']'
-    } else if (token == Token.OpenBracket) {
+    } else if (this.options && this.options.hasFeature(Feature.MultiValue) && token == Token.OpenBracket) {
       let elements: TypeNode[] = [];
       let elementNames: (IdentifierExpression | null)[] = [];
       let hasElementNames = false;
