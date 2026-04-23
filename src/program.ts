@@ -443,7 +443,7 @@ export class Program extends DiagnosticEmitter {
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
 
-    // temporary fix
+    // temporary workaround. remove after multi-value support is finished
     this.parser.options = this.options;
   }
 

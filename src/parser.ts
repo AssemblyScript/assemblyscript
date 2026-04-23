@@ -121,8 +121,8 @@ export class Parser extends DiagnosticEmitter {
   sources: Source[];
   /** Current overridden module name. */
   currentModuleName: string | null = null;
-  /** Compiler options. */
-  options!: Options;
+  /** Compiler options. (temporary. remove after multi-value/tuple support is finished) */
+  options: Options | null = null;
   /** Constructs a new parser. */
   constructor(
     diagnostics: DiagnosticMessage[] | null = null,
@@ -574,7 +574,7 @@ export class Parser extends DiagnosticEmitter {
       }
 
     // '[' ((Identifier ':')? Type (',' (Identifier ':')? Type)*)? ']'
-    } else if (token == Token.OpenBracket && this.options.hasFeature(Feature.MultiValue)) {
+    } else if (token == Token.OpenBracket && this.options && this.options!.hasFeature(Feature.MultiValue)) {
       let elements: TypeNode[] = [];
       let elementNames: (IdentifierExpression | null)[] = [];
       let hasElementNames = false;
