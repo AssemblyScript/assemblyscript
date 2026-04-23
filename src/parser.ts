@@ -121,8 +121,8 @@ export class Parser extends DiagnosticEmitter {
   sources: Source[];
   /** Current overridden module name. */
   currentModuleName: string | null = null;
-// TODO: Remove when multi-value feture will enable by default.
-/** Compiler options. */
+  // TODO: Remove when multi-value feature will enable by default.
+  /** Compiler options. */
   options: Options | null = null;
   /** Constructs a new parser. */
   constructor(
