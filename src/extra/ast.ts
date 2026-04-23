@@ -463,11 +463,22 @@ export class ASTBuilder {
     let sb = this.sb;
     sb.push("[");
     let elements = node.elements;
+    let elementNames = node.elementNames;
     let numElements = elements.length;
     if (numElements) {
+      let name = elementNames ? elementNames[0] : null;
+      if (name) {
+        this.visitIdentifierExpression(name);
+        sb.push(": ");
+      }
       this.visitTypeNode(elements[0]);
       for (let i = 1; i < numElements; ++i) {
         sb.push(", ");
+        name = elementNames ? elementNames[i] : null;
+        if (name) {
+          this.visitIdentifierExpression(name);
+          sb.push(": ");
+        }
         this.visitTypeNode(elements[i]);
       }
     }

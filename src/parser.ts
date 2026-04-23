@@ -578,11 +578,26 @@ export class Parser extends DiagnosticEmitter {
     // '[' Type (',' Type)* ']'
     } else if (token == Token.OpenBracket) {
       let elements: TypeNode[] = [];
+      let elementNames: (IdentifierExpression | null)[] = [];
+      let hasElementNames = false;
       if (!tn.skip(Token.CloseBracket)) {
         do {
+          let elementName: IdentifierExpression | null = null;
+          let state = tn.mark();
+          if (tn.skip(Token.Identifier)) {
+            let name = tn.readIdentifier();
+            let nameRange = tn.range();
+            if (tn.skip(Token.Colon)) {
+              elementName = Node.createIdentifierExpression(name, nameRange);
+              hasElementNames = true;
+            } else {
+              tn.reset(state);
+            }
+          }
           let element = this.parseType(tn, true, suppressErrors);
           if (!element) return null;
           elements.push(element);
+          elementNames.push(elementName);
         } while (tn.skip(Token.Comma));
         if (!tn.skip(Token.CloseBracket)) {
           if (!suppressErrors) {
@@ -594,7 +609,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      type = Node.createTupleType(elements, false, tn.range(startPos, tn.pos));
+      type = Node.createTupleType(elements, hasElementNames ? elementNames : null, false, tn.range(startPos, tn.pos));
 
     // 'void'
     } else if (token == Token.Void) {

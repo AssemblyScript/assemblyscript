@@ -164,10 +164,11 @@ export abstract class Node {
 
   static createTupleType(
     elements: TypeNode[],
+    elementNames: (IdentifierExpression | null)[] | null,
     isNullable: bool,
     range: Range
   ): TupleTypeNode {
-    return new TupleTypeNode(elements, isNullable, range);
+    return new TupleTypeNode(elements, elementNames, isNullable, range);
   }
 
   static createOmittedType(
@@ -948,6 +949,8 @@ export class TupleTypeNode extends TypeNode {
   constructor(
     /** Tuple elements. */
     public elements: TypeNode[],
+    /** Tuple element names, if any. */
+    public elementNames: (IdentifierExpression | null)[] | null,
     /** Whether nullable or not. */
     isNullable: bool,
     /** Source range. */
