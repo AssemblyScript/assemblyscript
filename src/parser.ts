@@ -519,12 +519,7 @@ export class Parser extends DiagnosticEmitter {
     if (token == Token.Readonly) {
       let innerType = this.parseType(tn, acceptParenthesized, suppressErrors);
       if (!innerType) return null;
-      type = Node.createNamedType(
-        Node.createSimpleTypeName("Readonly", tn.range(startPos, tn.pos)),
-        [ innerType ],
-        false,
-        tn.range(startPos, tn.pos)
-      );
+      type = Node.createReadonlyType(innerType, tn.range(startPos, tn.pos));
 
     // '(' ...
     } else if (token == Token.OpenParen) {
