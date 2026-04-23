@@ -390,9 +390,9 @@ export namespace OperatorKind {
       case Token.GreaterThan_GreaterThan_Equals: return OperatorKind.BitwiseShr;
       case Token.GreaterThan_GreaterThan_GreaterThan:
       case Token.GreaterThan_GreaterThan_GreaterThan_Equals: return OperatorKind.BitwiseShrU;
-      case Token.Equals_Equals: 
+      case Token.Equals_Equals:
       case Token.Equals_Equals_Equals: return OperatorKind.Eq;
-      case Token.Exclamation_Equals: 
+      case Token.Exclamation_Equals:
       case Token.Exclamation_Equals_Equals: return OperatorKind.Ne;
       case Token.GreaterThan: return OperatorKind.Gt;
       case Token.GreaterThan_Equals: return OperatorKind.Ge;
@@ -436,15 +436,12 @@ export class Program extends DiagnosticEmitter {
     diagnostics: DiagnosticMessage[] | null = null
   ) {
     super(diagnostics);
-    this.module = Module.create(options.stackSize > 0, options.sizeTypeRef);    
-    this.parser = new Parser(this.diagnostics, this.sources);
+    this.module = Module.create(options.stackSize > 0, options.sizeTypeRef);
+    this.parser = new Parser(this.diagnostics, this.sources, this.options);
     this.resolver = new Resolver(this);
     let nativeFile = new File(this, Source.native);
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
-
-    // temporary fix
-    this.parser.options = this.options;
   }
 
   /** Module instance. */
