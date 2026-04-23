@@ -1,3 +1,6 @@
+function tuple0(): [] {
+  return [];
+}
 function tuple1(): [i32, i32] {
   return [1, 2];
 }
@@ -22,8 +25,11 @@ function tuple7(): [x: i32, y: i32] {
 function tuple8(): [head: i32, tail: [lo: i32, hi: i32]] {
   return [1, [2, 3]];
 }
-function func1(a: i32, b: i32): [i32, i32] {
-  return [a, b];
+function func0(x: []): [] {
+  return [];
+}
+function func1(x: i32, y: i32): [i32, i32] {
+  return [y, x];
 }
 function func2(x: [i32, i32]): [i32, i32] {
   return x;
@@ -46,6 +52,13 @@ function func7(x: Readonly<[[Array<i32>], [string]]>): Readonly<[[Array<i32>], [
 function func8(x: [left: i32, right: i32]): [first: i32, second: i32] {
   return x;
 }
+function func9<T>(x: [T, T, i32]): [T] {
+  return x;
+}
+function func10(x: [string | null, i32] | null): [string | null, i32] | null {
+  return x;
+}
+type type0 = [];
 type type1 = [i32, i32];
 type type2 = [i32, [i32, i32]];
 type type3 = Readonly<[i32, string]>;
