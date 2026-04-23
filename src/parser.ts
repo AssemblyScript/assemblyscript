@@ -122,7 +122,7 @@ export class Parser extends DiagnosticEmitter {
   /** Current overridden module name. */
   currentModuleName: string | null = null;
   /** Temporary variable so I can disable parsing tuples if multi-variable is disabled */
-  readonly options: Options | null = null;
+  options: Options | null = null;
   /** Constructs a new parser. */
   constructor(
     diagnostics: DiagnosticMessage[] | null = null,
