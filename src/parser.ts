@@ -121,7 +121,7 @@ export class Parser extends DiagnosticEmitter {
   sources: Source[];
   /** Current overridden module name. */
   currentModuleName: string | null = null;
-  /** Compiler options. (workaround) */
+  /** Compiler options. */
   options!: Options;
   /** Constructs a new parser. */
   constructor(
