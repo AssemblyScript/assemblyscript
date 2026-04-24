@@ -874,7 +874,7 @@ export async function main(argv, options) {
   // Prepare output
   if (!opts.noEmit) {
     if (opts.binaryFile) {
-      // We catched lagacy field for binary output (before 0.20)
+      // We caught legacy field for binary output (before 0.20)
       return prepareResult(Error("Usage of the --binaryFile compiler option is no longer supported. Use --outFile instead."));
     }
     let bindings = opts.bindings || [];
@@ -966,7 +966,7 @@ export async function main(argv, options) {
           writeFile(opts.textFile, out, baseDir)
         );
       } else if (!hasStdout) {
-        hasStdout = true;
+        // hasStdout = true;
         writeStdout(out);
       }
     }
@@ -1112,8 +1112,8 @@ async function getConfig(file, baseDir, readFile) {
   let config;
   try {
     config = JSON.parse(contents);
-  } catch {
-    throw new Error(`Asconfig is not valid json: ${location}`);
+  } catch(ex) {
+    throw new Error(`Asconfig is not valid json: ${location}`, { cause: ex });
   }
 
   // validate asconfig shape

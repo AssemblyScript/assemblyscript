@@ -1588,7 +1588,8 @@ export class Compiler extends DiagnosticEmitter {
     /** Force compilation of stdlib alternative if a builtin. */
     forceStdAlternative: bool = false
   ): bool {
-    if (instance.is(CommonFlags.Compiled)) return !instance.is(CommonFlags.Errored);
+    if (instance.is(CommonFlags.Errored)) return false;
+    if (instance.is(CommonFlags.Compiled)) return true;
 
     if (!forceStdAlternative) {
       if (instance.hasDecorator(DecoratorFlags.Builtin)) return true;
@@ -4683,7 +4684,7 @@ export class Compiler extends DiagnosticEmitter {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonType(leftType, rightType, contextualType);
-          if (!commonType || !leftType.isNumericValue) {
+          if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "-", leftType.toString(), rightType.toString()

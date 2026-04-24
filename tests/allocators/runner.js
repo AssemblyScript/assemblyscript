@@ -85,7 +85,7 @@ export default function runner(exports, runs, allocs) {
         let size = ((exports.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
         let ptr = alloc(size, 0);
         // if (fill) fill(ptr, 0xac, size);
-        if (ptr !== base) throw Error("expected " + base + " but got " + ptr);
+        if (ptr !== base) throw Error("expected " + base + " but got " + ptr, { cause: e });
         free(ptr);
       }
       testMemChanged();

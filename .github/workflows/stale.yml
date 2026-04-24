@@ -17,6 +17,6 @@ jobs:
         exempt-draft-pr: true
         exempt-all-milestones: true
         exempt-all-assignees: true
-        days-before-issue-stale: 30
-        days-before-pr-stale: 60
+        days-before-issue-stale: 60
+        days-before-pr-stale: 120
         days-before-close: 7

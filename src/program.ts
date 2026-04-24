@@ -2095,6 +2095,13 @@ export class Program extends DiagnosticEmitter {
         }
         case NodeKind.MethodDeclaration: {
           let methodDeclaration = <MethodDeclaration>memberDeclaration;
+          if (methodDeclaration.is(CommonFlags.Abstract) && methodDeclaration.is(CommonFlags.Generic)) {
+            this.error(
+              DiagnosticCode.An_interface_or_abstract_method_0_cannot_have_type_parameters,
+              methodDeclaration.name.range,
+              methodDeclaration.name.text
+            );
+          }
           if (memberDeclaration.isAny(CommonFlags.Get | CommonFlags.Set)) {
             this.initializeProperty(methodDeclaration, element);
           } else {
@@ -2669,6 +2676,13 @@ export class Program extends DiagnosticEmitter {
         }
         case NodeKind.MethodDeclaration: {
           let methodDeclaration = <MethodDeclaration>memberDeclaration;
+          if (methodDeclaration.is(CommonFlags.Generic)) {
+            this.error(
+              DiagnosticCode.An_interface_or_abstract_method_0_cannot_have_type_parameters,
+              methodDeclaration.name.range,
+              methodDeclaration.name.text
+            );
+          }
           if (memberDeclaration.isAny(CommonFlags.Get | CommonFlags.Set)) {
             this.initializeProperty(methodDeclaration, element);
           } else {
@@ -3904,7 +3918,15 @@ export class Function extends TypedElement {
         flow.setLocalFlag(local.index, LocalFlags.Initialized);
       }
     }
-    registerConcreteElement(program, this);
+    if (program.instancesByName.has(this.internalName)) {
+      program.error(
+        DiagnosticCode.Duplicate_function_implementation,
+        prototype.declaration.name.range
+      );
+      this.set(CommonFlags.Errored);
+    } else {
+      registerConcreteElement(program, this);
+    }
   }
 
   /** Gets the types of additional locals that are not parameters. */

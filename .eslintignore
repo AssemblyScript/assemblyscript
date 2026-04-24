@@ -1,9 +1,0 @@
-dist/
-lib/binaryen.js
-lib/parse/index.js
-build/
-raw/
-tests/parser/
-
-# FIXME: Tagged template literal tests with invalid escapes
-tests/compiler/templateliteral.ts
