@@ -223,6 +223,8 @@ import {
   lowerRequiresExportRuntime
 } from "./bindings/js";
 
+import * as binaryen from "./glue/binaryen";
+
 /** Features enabled by default. */
 export const defaultFeatures = Feature.MutableGlobals
                              | Feature.SignExtension
@@ -375,7 +377,9 @@ export const enum Constraints {
   /** Indicates that static data is preferred. */
   PreferStatic = 1 << 4,
   /** Indicates that the value will become `this` of a property access or instance call. */
-  IsThis = 1 << 5
+  IsThis = 1 << 5,
+  /** Indicates that the expression is compiled for an immediate return position. */
+  WillReturn = 1 << 6
 }
 
 /** Runtime features to be activated by the compiler. */
@@ -2825,6 +2829,7 @@ export class Compiler extends DiagnosticEmitter {
     if (valueExpression) {
       let constraints = Constraints.ConvImplicit;
       if (flow.sourceFunction.is(CommonFlags.ModuleExport)) constraints |= Constraints.MustWrap;
+      if (!flow.isInline && this.options.hasFeature(Feature.TailCalls)) constraints |= Constraints.WillReturn;
 
       expr = this.compileExpression(valueExpression, returnType, constraints);
       if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.ReturnsWrapped);
@@ -2853,6 +2858,13 @@ export class Compiler extends DiagnosticEmitter {
           : module.br(inlineReturnLabel, 0, expr)
         : module.br(inlineReturnLabel);
     }
+
+    if (
+      expr &&
+      this.options.hasFeature(Feature.TailCalls) &&
+      getExpressionId(expr) == ExpressionId.Call &&
+      binaryen._BinaryenCallIsReturn(expr)
+    ) return expr;
 
     // Otherwise emit a normal return
     return expr
@@ -6145,6 +6157,8 @@ export class Compiler extends DiagnosticEmitter {
             Constraints.ConvImplicit | Constraints.IsThis
           );
         }
+        if (!this.canTailReturn(constraints, contextualType, functionInstance.signature.returnType))
+          constraints &= ~Constraints.WillReturn;
         return this.compileCallDirect(
           functionInstance,
           expression.args,
@@ -6182,6 +6196,27 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     return module.unreachable();
+  }
+
+  private canTailReturn(constraints: Constraints, contextType: Type, returnType: Type): bool {
+    if ((constraints & Constraints.WillReturn) == 0) return false;
+    // Tail calls are only valid as long as no result conversions are needed.
+    // `compileExpression` skips conversion for:
+    // 1. `currentType == nonnull<contextType>`, and
+    // 2. nullable reference identity (`T | null` -> `T | null`) where conversion is a no-op.
+    let sameWithoutNullable = returnType.equals(contextType.nonNullableType);
+    let sameNullableRef = returnType.isReference && returnType.equals(contextType);
+    if (!sameWithoutNullable && !sameNullableRef) return false;
+    if ((constraints & Constraints.MustWrap) == 0) return true;
+    switch (returnType.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+        return false;
+      default:
+        return true;
+    }
   }
 
   /** Compiles the given arguments like a call expression according to the specified context. */
@@ -6439,7 +6474,13 @@ export class Compiler extends DiagnosticEmitter {
       operands[index] = paramExpr;
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallDirect(instance, operands, reportNode, (constraints & Constraints.WillDrop) != 0);
+    return this.makeCallDirect(
+      instance,
+      operands,
+      reportNode,
+      (constraints & Constraints.WillDrop) != 0,
+      (constraints & Constraints.WillReturn) != 0
+    );
   }
 
   makeCallInline(
@@ -6883,7 +6924,8 @@ export class Compiler extends DiagnosticEmitter {
     instance: Function,
     operands: ExpressionRef[] | null,
     reportNode: Node,
-    immediatelyDropped: bool = false
+    immediatelyDropped: bool = false,
+    isReturn: bool = false
   ): ExpressionRef {
     if (instance.hasDecorator(DecoratorFlags.Inline)) {
       if (!instance.is(CommonFlags.Overridden)) {
@@ -6982,8 +7024,10 @@ export class Compiler extends DiagnosticEmitter {
           lastOperand
         ], lastOperandType.toRef());
         this.operandsTostack(instance.signature, operands);
-        let expr = module.call(instance.internalName, operands, returnTypeRef);
-        if (returnType != Type.void && immediatelyDropped) {
+        let expr = isReturn
+          ? module.return_call(instance.internalName, operands, returnTypeRef)
+          : module.call(instance.internalName, operands, returnTypeRef);
+        if (!isReturn && returnType != Type.void && immediatelyDropped) {
           expr = module.drop(expr);
           this.currentType = Type.void;
         } else {
@@ -6999,7 +7043,9 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (operands) this.operandsTostack(instance.signature, operands);
-    let expr = module.call(instance.internalName, operands, returnType.toRef());
+    let expr = isReturn
+      ? module.return_call(instance.internalName, operands, returnType.toRef())
+      : module.call(instance.internalName, operands, returnType.toRef());
     this.currentType = returnType;
     return expr;
   }

@@ -1,0 +1,6 @@
+{
+  "features": [
+    "tail-calls"
+  ],
+  "skipInstantiate": true
+}
