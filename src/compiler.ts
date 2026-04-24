@@ -2859,12 +2859,7 @@ export class Compiler extends DiagnosticEmitter {
         : module.br(inlineReturnLabel);
     }
 
-    if (
-      expr &&
-      this.options.hasFeature(Feature.TailCalls) &&
-      getExpressionId(expr) == ExpressionId.Call &&
-      binaryen._BinaryenCallIsReturn(expr)
-    ) return expr;
+    if (expr && this.options.hasFeature(Feature.TailCalls) && this.isTailReturnCallExpression(expr)) return expr;
 
     // Otherwise emit a normal return
     return expr
@@ -6173,13 +6168,16 @@ export class Compiler extends DiagnosticEmitter {
     let functionArg = this.compileExpression(expression.expression, Type.auto);
     let signature = this.currentType.getSignature();
     if (signature) {
+      if (!this.canTailReturn(constraints, contextualType, signature.returnType))
+        constraints &= ~Constraints.WillReturn;
       return this.compileCallIndirect(
         signature,
         functionArg,
         expression.args,
         expression,
         0,
-        contextualType == Type.void
+        contextualType == Type.void,
+        constraints
       );
     }
     this.error(
@@ -6216,6 +6214,17 @@ export class Compiler extends DiagnosticEmitter {
         return false;
       default:
         return true;
+    }
+  }
+
+  private isTailReturnCallExpression(expr: ExpressionRef): bool {
+    switch (getExpressionId(expr)) {
+      case ExpressionId.Call:
+        return binaryen._BinaryenCallIsReturn(expr);
+      case ExpressionId.CallIndirect:
+        return binaryen._BinaryenCallIndirectIsReturn(expr);
+      default:
+        return false;
     }
   }
 
@@ -7057,7 +7066,8 @@ export class Compiler extends DiagnosticEmitter {
     argumentExpressions: Expression[],
     reportNode: Node,
     thisArg: ExpressionRef = 0,
-    immediatelyDropped: bool = false
+    immediatelyDropped: bool = false,
+    constraints: Constraints = Constraints.None
   ): ExpressionRef {
     let numArguments = argumentExpressions.length;
 
@@ -7087,7 +7097,14 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallIndirect(signature, functionArg, reportNode, operands, immediatelyDropped);
+    return this.makeCallIndirect(
+      signature,
+      functionArg,
+      reportNode,
+      operands,
+      immediatelyDropped,
+      (constraints & Constraints.WillReturn) != 0
+    );
   }
 
   /** Creates an indirect call to a first-class function. */
@@ -7097,6 +7114,7 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node,
     operands: ExpressionRef[] | null = null,
     immediatelyDropped: bool = false,
+    isReturn: bool = false,
   ): ExpressionRef {
     let module = this.module;
     let numOperands = operands ? operands.length : 0;
@@ -7147,13 +7165,21 @@ export class Compiler extends DiagnosticEmitter {
       ], sizeTypeRef);
     }
     if (operands) this.operandsTostack(signature, operands);
-    let expr = module.call_indirect(
-      null, // TODO: handle multiple tables
-      module.load(4, false, functionArg, TypeRef.I32), // ._index
-      operands,
-      signature.paramRefs,
-      signature.resultRefs
-    );
+    let expr = isReturn // TODO: handle multiple tables here
+      ? module.return_call_indirect(
+          null,
+          module.load(4, false, functionArg, TypeRef.I32),
+          operands,
+          signature.paramRefs,
+          signature.resultRefs
+        )
+      : module.call_indirect(
+          null,
+          module.load(4, false, functionArg, TypeRef.I32),
+          operands,
+          signature.paramRefs,
+          signature.resultRefs
+        );
     this.currentType = returnType;
     return expr;
   }

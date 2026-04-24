@@ -1856,6 +1856,22 @@ export class Module {
     return ret;
   }
 
+  return_call_indirect(
+    tableName: string | null,
+    index: ExpressionRef,
+    operands: ExpressionRef[] | null,
+    params: TypeRef,
+    results: TypeRef
+  ): ExpressionRef {
+    let cStr = this.allocStringCached(tableName != null ? tableName : CommonNames.DefaultTable);
+    let cArr = allocPtrArray(operands);
+    let ret = binaryen._BinaryenReturnCallIndirect(
+      this.ref, cStr, index, cArr, operands ? operands.length : 0, params, results
+    );
+    binaryen._free(cArr);
+    return ret;
+  }
+
   unreachable(): ExpressionRef {
     return binaryen._BinaryenUnreachable(this.ref);
   }
