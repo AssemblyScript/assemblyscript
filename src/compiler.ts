@@ -6152,8 +6152,7 @@ export class Compiler extends DiagnosticEmitter {
             Constraints.ConvImplicit | Constraints.IsThis
           );
         }
-        if (!this.canTailReturn(constraints, contextualType, functionInstance.signature.returnType))
-          constraints &= ~Constraints.WillReturn;
+        if (!this.canTailReturn(constraints, contextualType, functionInstance.signature.returnType))  constraints &= ~Constraints.WillReturn;
         return this.compileCallDirect(
           functionInstance,
           expression.args,
@@ -6168,8 +6167,7 @@ export class Compiler extends DiagnosticEmitter {
     let functionArg = this.compileExpression(expression.expression, Type.auto);
     let signature = this.currentType.getSignature();
     if (signature) {
-      if (!this.canTailReturn(constraints, contextualType, signature.returnType))
-        constraints &= ~Constraints.WillReturn;
+      if (!this.canTailReturn(constraints, contextualType, signature.returnType)) constraints &= ~Constraints.WillReturn;
       return this.compileCallIndirect(
         signature,
         functionArg,
@@ -6483,13 +6481,7 @@ export class Compiler extends DiagnosticEmitter {
       operands[index] = paramExpr;
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallDirect(
-      instance,
-      operands,
-      reportNode,
-      (constraints & Constraints.WillDrop) != 0,
-      (constraints & Constraints.WillReturn) != 0
-    );
+    return this.makeCallDirect(instance, operands, reportNode, (constraints & Constraints.WillDrop) != 0, (constraints & Constraints.WillReturn) != 0);
   }
 
   makeCallInline(
@@ -7097,14 +7089,7 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallIndirect(
-      signature,
-      functionArg,
-      reportNode,
-      operands,
-      immediatelyDropped,
-      (constraints & Constraints.WillReturn) != 0
-    );
+    return this.makeCallIndirect(signature, functionArg, reportNode, operands, immediatelyDropped, (constraints & Constraints.WillReturn) != 0);
   }
 
   /** Creates an indirect call to a first-class function. */
@@ -7165,7 +7150,7 @@ export class Compiler extends DiagnosticEmitter {
       ], sizeTypeRef);
     }
     if (operands) this.operandsTostack(signature, operands);
-    let expr = isReturn // TODO: handle multiple tables here
+    let expr = isReturn
       ? module.return_call_indirect(
           null,
           module.load(4, false, functionArg, TypeRef.I32),
