@@ -134,7 +134,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$1422
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$1421
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -158,7 +158,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$1422
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$1421
    end
    local.get $0
    i32.load offset=8
@@ -1262,7 +1262,7 @@
   global.get $~lib/rt/itcms/threshold
   i32.ge_u
   if
-   block $__inlined_func$~lib/rt/itcms/interrupt$69
+   block $__inlined_func$~lib/rt/itcms/interrupt$68
     i32.const 2048
     local.set $2
     loop $do-loop|0
@@ -1279,7 +1279,7 @@
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
-      br $__inlined_func$~lib/rt/itcms/interrupt$69
+      br $__inlined_func$~lib/rt/itcms/interrupt$68
      end
      local.get $2
      i32.const 0
@@ -2474,7 +2474,7 @@
     select
     local.set $1
    end
-   block $__inlined_func$~lib/rt/itcms/__renew$1377
+   block $__inlined_func$~lib/rt/itcms/__renew$1376
     local.get $4
     i32.const 20
     i32.sub
@@ -2492,7 +2492,7 @@
      i32.store offset=16
      local.get $4
      local.set $2
-     br $__inlined_func$~lib/rt/itcms/__renew$1377
+     br $__inlined_func$~lib/rt/itcms/__renew$1376
     end
     local.get $1
     local.get $3
@@ -3203,7 +3203,7 @@
    i32.add
    i32.load
    local.set $3
-   block $"__inlined_func$~lib/map/Map<i8,i8>#find$1378"
+   block $"__inlined_func$~lib/map/Map<i8,i8>#find$1377"
     loop $while-continue|0
      local.get $3
      if
@@ -3227,7 +3227,7 @@
        i32.const 4
        i32.add
        global.set $~lib/memory/__stack_pointer
-       br $"__inlined_func$~lib/map/Map<i8,i8>#find$1378"
+       br $"__inlined_func$~lib/map/Map<i8,i8>#find$1377"
       end
       local.get $4
       i32.const -2
@@ -5753,7 +5753,7 @@
    i32.add
    i32.load
    local.set $3
-   block $"__inlined_func$~lib/map/Map<u8,u8>#find$1383"
+   block $"__inlined_func$~lib/map/Map<u8,u8>#find$1382"
     loop $while-continue|0
      local.get $3
      if
@@ -5777,7 +5777,7 @@
        i32.const 4
        i32.add
        global.set $~lib/memory/__stack_pointer
-       br $"__inlined_func$~lib/map/Map<u8,u8>#find$1383"
+       br $"__inlined_func$~lib/map/Map<u8,u8>#find$1382"
       end
       local.get $4
       i32.const -2
@@ -7943,7 +7943,7 @@
    i32.add
    i32.load
    local.set $3
-   block $"__inlined_func$~lib/map/Map<i16,i16>#find$1388"
+   block $"__inlined_func$~lib/map/Map<i16,i16>#find$1387"
     loop $while-continue|0
      local.get $3
      if
@@ -7967,7 +7967,7 @@
        i32.const 4
        i32.add
        global.set $~lib/memory/__stack_pointer
-       br $"__inlined_func$~lib/map/Map<i16,i16>#find$1388"
+       br $"__inlined_func$~lib/map/Map<i16,i16>#find$1387"
       end
       local.get $4
       i32.const -2
@@ -9959,7 +9959,7 @@
    i32.add
    i32.load
    local.set $3
-   block $"__inlined_func$~lib/map/Map<u16,u16>#find$1393"
+   block $"__inlined_func$~lib/map/Map<u16,u16>#find$1392"
     loop $while-continue|0
      local.get $3
      if
@@ -9983,7 +9983,7 @@
        i32.const 4
        i32.add
        global.set $~lib/memory/__stack_pointer
-       br $"__inlined_func$~lib/map/Map<u16,u16>#find$1393"
+       br $"__inlined_func$~lib/map/Map<u16,u16>#find$1392"
       end
       local.get $4
       i32.const -2
@@ -15197,7 +15197,7 @@
    i32.add
    i32.load
    local.set $3
-   block $"__inlined_func$~lib/map/Map<i64,i64>#find$1403"
+   block $"__inlined_func$~lib/map/Map<i64,i64>#find$1402"
     loop $while-continue|0
      local.get $3
      if
@@ -15219,7 +15219,7 @@
        i32.const 4
        i32.add
        global.set $~lib/memory/__stack_pointer
-       br $"__inlined_func$~lib/map/Map<i64,i64>#find$1403"
+       br $"__inlined_func$~lib/map/Map<i64,i64>#find$1402"
       end
       local.get $4
       i32.const -2
@@ -17449,7 +17449,7 @@
    i32.add
    i32.load
    local.set $3
-   block $"__inlined_func$~lib/map/Map<u64,u64>#find$1408"
+   block $"__inlined_func$~lib/map/Map<u64,u64>#find$1407"
     loop $while-continue|0
      local.get $3
      if
@@ -17471,7 +17471,7 @@
        i32.const 4
        i32.add
        global.set $~lib/memory/__stack_pointer
-       br $"__inlined_func$~lib/map/Map<u64,u64>#find$1408"
+       br $"__inlined_func$~lib/map/Map<u64,u64>#find$1407"
       end
       local.get $4
       i32.const -2
@@ -22003,7 +22003,7 @@
    i32.add
    i32.load
    local.set $3
-   block $"__inlined_func$~lib/map/Map<f64,f64>#find$1418"
+   block $"__inlined_func$~lib/map/Map<f64,f64>#find$1417"
     loop $while-continue|0
      local.get $3
      if
@@ -22025,7 +22025,7 @@
        i32.const 4
        i32.add
        global.set $~lib/memory/__stack_pointer
-       br $"__inlined_func$~lib/map/Map<f64,f64>#find$1418"
+       br $"__inlined_func$~lib/map/Map<f64,f64>#find$1417"
       end
       local.get $4
       i32.const -2

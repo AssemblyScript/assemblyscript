@@ -167,7 +167,7 @@
     local.get $0
     global.set $~lib/rt/itcms/iter
    end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink$174
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$173
     local.get $1
     i32.load offset=4
     i32.const -4
@@ -191,7 +191,7 @@
       call $~lib/builtins/abort
       unreachable
      end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink$174
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$173
     end
     local.get $1
     i32.load offset=8
@@ -1276,7 +1276,7 @@
   global.get $~lib/rt/itcms/threshold
   i32.ge_u
   if
-   block $__inlined_func$~lib/rt/itcms/interrupt$69
+   block $__inlined_func$~lib/rt/itcms/interrupt$68
     i32.const 2048
     local.set $2
     loop $do-loop|0
@@ -1293,7 +1293,7 @@
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
-      br $__inlined_func$~lib/rt/itcms/interrupt$69
+      br $__inlined_func$~lib/rt/itcms/interrupt$68
      end
      local.get $2
      i32.const 0
@@ -2167,7 +2167,7 @@
    i32.const 0
    call $class-implements/D#constructor
    global.set $class-implements/d
-   block $__inlined_func$class-implements/D#foo@override$163 (result i32)
+   block $__inlined_func$class-implements/D#foo@override$162 (result i32)
     global.get $~lib/memory/__stack_pointer
     global.get $class-implements/d
     local.tee $0
@@ -2179,7 +2179,7 @@
     i32.load
     i32.const 11
     i32.eq
-    br_if $__inlined_func$class-implements/D#foo@override$163
+    br_if $__inlined_func$class-implements/D#foo@override$162
     drop
     i32.const 3
    end
@@ -2224,7 +2224,7 @@
    global.set $~lib/memory/__stack_pointer
    local.get $0
    global.set $class-implements/e
-   block $__inlined_func$class-implements/D#foo@override$165 (result i32)
+   block $__inlined_func$class-implements/D#foo@override$164 (result i32)
     global.get $~lib/memory/__stack_pointer
     global.get $class-implements/e
     local.tee $0
@@ -2236,7 +2236,7 @@
     i32.load
     i32.const 11
     i32.eq
-    br_if $__inlined_func$class-implements/D#foo@override$165
+    br_if $__inlined_func$class-implements/D#foo@override$164
     drop
     i32.const 3
    end
@@ -2257,7 +2257,7 @@
    i32.store
    call $class-implements/F#constructor
    global.set $class-implements/g
-   block $__inlined_func$class-implements/D#foo@override$166 (result i32)
+   block $__inlined_func$class-implements/D#foo@override$165 (result i32)
     global.get $~lib/memory/__stack_pointer
     global.get $class-implements/g
     local.tee $0
@@ -2269,7 +2269,7 @@
     i32.load
     i32.const 11
     i32.eq
-    br_if $__inlined_func$class-implements/D#foo@override$166
+    br_if $__inlined_func$class-implements/D#foo@override$165
     drop
     i32.const 3
    end
@@ -2289,7 +2289,7 @@
    global.get $class-implements/h
    local.tee $0
    i32.store
-   block $__inlined_func$class-implements/I#foo@override$167
+   block $__inlined_func$class-implements/I#foo@override$166
     block $default12
      block $case3
       block $case2
@@ -2305,19 +2305,19 @@
         end
         i32.const 4
         local.set $0
-        br $__inlined_func$class-implements/I#foo@override$167
+        br $__inlined_func$class-implements/I#foo@override$166
        end
        i32.const 1
        local.set $0
-       br $__inlined_func$class-implements/I#foo@override$167
+       br $__inlined_func$class-implements/I#foo@override$166
       end
       i32.const 2
       local.set $0
-      br $__inlined_func$class-implements/I#foo@override$167
+      br $__inlined_func$class-implements/I#foo@override$166
      end
      i32.const 3
      local.set $0
-     br $__inlined_func$class-implements/I#foo@override$167
+     br $__inlined_func$class-implements/I#foo@override$166
     end
     unreachable
    end
@@ -2364,7 +2364,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   block $__inlined_func$class-implements/J#foo@override$169
+   block $__inlined_func$class-implements/J#foo@override$168
     block $default14
      block $case315
       block $case216
@@ -2382,15 +2382,15 @@
        end
        i32.const 4
        local.set $0
-       br $__inlined_func$class-implements/J#foo@override$169
+       br $__inlined_func$class-implements/J#foo@override$168
       end
       i32.const 3
       local.set $0
-      br $__inlined_func$class-implements/J#foo@override$169
+      br $__inlined_func$class-implements/J#foo@override$168
      end
      i32.const 1
      local.set $0
-     br $__inlined_func$class-implements/J#foo@override$169
+     br $__inlined_func$class-implements/J#foo@override$168
     end
     unreachable
    end

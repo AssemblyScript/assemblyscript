@@ -124,7 +124,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$143
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$142
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -148,7 +148,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$143
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$142
    end
    local.get $0
    i32.load offset=8
@@ -1252,7 +1252,7 @@
   global.get $~lib/rt/itcms/threshold
   i32.ge_u
   if
-   block $__inlined_func$~lib/rt/itcms/interrupt$69
+   block $__inlined_func$~lib/rt/itcms/interrupt$68
     i32.const 2048
     local.set $2
     loop $do-loop|0
@@ -1269,7 +1269,7 @@
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
-      br $__inlined_func$~lib/rt/itcms/interrupt$69
+      br $__inlined_func$~lib/rt/itcms/interrupt$68
      end
      local.get $2
      i32.const 0
@@ -1671,7 +1671,7 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  block $__inlined_func$~lib/util/number/utoa64$73
+  block $__inlined_func$~lib/util/number/utoa64$72
    local.get $0
    i64.eqz
    if
@@ -1681,7 +1681,7 @@
     global.set $~lib/memory/__stack_pointer
     i32.const 1728
     local.set $2
-    br $__inlined_func$~lib/util/number/utoa64$73
+    br $__inlined_func$~lib/util/number/utoa64$72
    end
    local.get $0
    i64.const 4294967295
@@ -2339,7 +2339,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
-   block $__inlined_func$~lib/util/number/utoa32$74
+   block $__inlined_func$~lib/util/number/utoa32$73
     local.get $2
     i32.eqz
     if
@@ -2349,7 +2349,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 1728
      local.set $0
-     br $__inlined_func$~lib/util/number/utoa32$74
+     br $__inlined_func$~lib/util/number/utoa32$73
     end
     global.get $~lib/memory/__stack_pointer
     local.get $2

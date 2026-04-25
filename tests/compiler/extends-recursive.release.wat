@@ -115,7 +115,7 @@
     local.get $1
     global.set $~lib/rt/itcms/iter
    end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink$116
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$115
     local.get $0
     i32.load offset=4
     i32.const -4
@@ -139,7 +139,7 @@
       call $~lib/builtins/abort
       unreachable
      end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink$116
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$115
     end
     local.get $0
     i32.load offset=8
@@ -1224,7 +1224,7 @@
   global.get $~lib/rt/itcms/threshold
   i32.ge_u
   if
-   block $__inlined_func$~lib/rt/itcms/interrupt$69
+   block $__inlined_func$~lib/rt/itcms/interrupt$68
     i32.const 2048
     local.set $2
     loop $do-loop|0
@@ -1241,7 +1241,7 @@
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
-      br $__inlined_func$~lib/rt/itcms/interrupt$69
+      br $__inlined_func$~lib/rt/itcms/interrupt$68
      end
      local.get $2
      i32.const 0
