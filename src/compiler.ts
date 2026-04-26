@@ -7092,7 +7092,7 @@ export class Compiler extends DiagnosticEmitter {
     let stmts = new Array<ExpressionRef>();
     let sizeTypeRef = this.options.sizeTypeRef;
 
-    if (!allTrivial){
+    if (!allTrivial) {
       let functionArgLocal = this.currentFlow.getTempLocal(this.options.usizeType);
       let functionArgSetExpr = module.local_set(functionArgLocal.index, functionArg, true);
       stmts.push(functionArgSetExpr);
