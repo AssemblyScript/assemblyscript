@@ -7080,9 +7080,9 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     let allTrivial = (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) == 0;
-    if(operands && allTrivial) {
-      for(let i = 0; i < numOperands; ++i) {
-        if(!module.isTrivialExpression(operands[i])){
+    if (operands && allTrivial) {
+      for (let i = 0; i < numOperands; ++i) {
+        if (!module.isTrivialExpression(operands[i])) {
           allTrivial = false;
           break;
         }
@@ -7092,11 +7092,11 @@ export class Compiler extends DiagnosticEmitter {
     let stmts = new Array<ExpressionRef>();
     let sizeTypeRef = this.options.sizeTypeRef;
 
-    if(!allTrivial){
+    if (!allTrivial){
       let functionArgLocal = this.currentFlow.getTempLocal(this.options.usizeType);
       let functionArgSetExpr = module.local_set(functionArgLocal.index, functionArg, true);
       stmts.push(functionArgSetExpr);
-      functionArg =  module.local_get(functionArgLocal.index, sizeTypeRef);
+      functionArg = module.local_get(functionArgLocal.index, sizeTypeRef);
     }
 
     // We might be calling a varargs stub here, even if all operands have been
