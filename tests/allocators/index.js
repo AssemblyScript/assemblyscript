@@ -40,12 +40,12 @@ async function test(file) {
   try {
     alloc(COMMON_MAX + 1, 0); // unreachable
     overflow = true;
-  } catch (e) { /* nop */ }
+  } catch { /* nop */ }
   if (overflow) throw Error("allocation can overflow COMMON_MAX + 1");
   try {
     alloc(0xffffffff, 0); // unreachable
     overflow = true;
-  } catch (e) { /* nop */ }
+  } catch { /* nop */ }
   if (overflow) throw Error("allocation can overflow 0xffffffff");
 }
 

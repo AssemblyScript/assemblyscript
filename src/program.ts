@@ -390,9 +390,9 @@ export namespace OperatorKind {
       case Token.GreaterThan_GreaterThan_Equals: return OperatorKind.BitwiseShr;
       case Token.GreaterThan_GreaterThan_GreaterThan:
       case Token.GreaterThan_GreaterThan_GreaterThan_Equals: return OperatorKind.BitwiseShrU;
-      case Token.Equals_Equals: 
+      case Token.Equals_Equals:
       case Token.Equals_Equals_Equals: return OperatorKind.Eq;
-      case Token.Exclamation_Equals: 
+      case Token.Exclamation_Equals:
       case Token.Exclamation_Equals_Equals: return OperatorKind.Ne;
       case Token.GreaterThan: return OperatorKind.Gt;
       case Token.GreaterThan_Equals: return OperatorKind.Ge;
@@ -436,12 +436,15 @@ export class Program extends DiagnosticEmitter {
     diagnostics: DiagnosticMessage[] | null = null
   ) {
     super(diagnostics);
-    this.module = Module.create(options.stackSize > 0, options.sizeTypeRef);    
+    this.module = Module.create(options.stackSize > 0, options.sizeTypeRef);
     this.parser = new Parser(this.diagnostics, this.sources);
     this.resolver = new Resolver(this);
     let nativeFile = new File(this, Source.native);
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
+
+    // TODO: temporary workaround. remove after multi-value support is finished
+    this.parser.options = this.options;
   }
 
   /** Module instance. */
@@ -1557,6 +1560,16 @@ export class Program extends DiagnosticEmitter {
     ) {
       let thisMethod = <FunctionPrototype>thisMember;
       let baseMethod = <FunctionPrototype>baseMember;
+      let thisIsGeneric = thisMethod.is(CommonFlags.Generic);
+      let baseIsGeneric = baseMethod.is(CommonFlags.Generic);
+      if (thisIsGeneric != baseIsGeneric) {
+        this.errorRelated(
+          DiagnosticCode.Cannot_override_generic_method_0_with_a_non_generic_method_or_vice_versa,
+          thisMethod.identifierNode.range, baseMethod.identifierNode.range,
+          thisMethod.name
+        );
+        return;
+      }
       if (!thisMethod.visibilityEquals(baseMethod)) {
         this.errorRelated(
           DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
@@ -2079,6 +2092,13 @@ export class Program extends DiagnosticEmitter {
         }
         case NodeKind.MethodDeclaration: {
           let methodDeclaration = <MethodDeclaration>memberDeclaration;
+          if (methodDeclaration.is(CommonFlags.Abstract) && methodDeclaration.is(CommonFlags.Generic)) {
+            this.error(
+              DiagnosticCode.An_interface_or_abstract_method_0_cannot_have_type_parameters,
+              methodDeclaration.name.range,
+              methodDeclaration.name.text
+            );
+          }
           if (memberDeclaration.isAny(CommonFlags.Get | CommonFlags.Set)) {
             this.initializeProperty(methodDeclaration, element);
           } else {
@@ -2653,6 +2673,13 @@ export class Program extends DiagnosticEmitter {
         }
         case NodeKind.MethodDeclaration: {
           let methodDeclaration = <MethodDeclaration>memberDeclaration;
+          if (methodDeclaration.is(CommonFlags.Generic)) {
+            this.error(
+              DiagnosticCode.An_interface_or_abstract_method_0_cannot_have_type_parameters,
+              methodDeclaration.name.range,
+              methodDeclaration.name.text
+            );
+          }
           if (memberDeclaration.isAny(CommonFlags.Get | CommonFlags.Set)) {
             this.initializeProperty(methodDeclaration, element);
           } else {
@@ -3850,7 +3877,15 @@ export class Function extends TypedElement {
         flow.setLocalFlag(local.index, LocalFlags.Initialized);
       }
     }
-    registerConcreteElement(program, this);
+    if (program.instancesByName.has(this.internalName)) {
+      program.error(
+        DiagnosticCode.Duplicate_function_implementation,
+        prototype.declaration.name.range
+      );
+      this.set(CommonFlags.Errored);
+    } else {
+      registerConcreteElement(program, this);
+    }
   }
 
   /** Gets the types of additional locals that are not parameters. */

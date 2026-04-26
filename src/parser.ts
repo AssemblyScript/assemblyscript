@@ -9,6 +9,7 @@
 
 import {
   CommonFlags,
+  Feature,
   LIBRARY_PREFIX,
   PATH_DELIMITER
 } from "./common";
@@ -42,6 +43,7 @@ import {
   TypeName,
   NamedTypeNode,
   FunctionTypeNode,
+  TupleTypeNode,
   ArrowKind,
 
   Expression,
@@ -90,6 +92,7 @@ import {
 
   mangleInternalPath
 } from "./ast";
+import { Options } from "./compiler";
 
 /** Represents a dependee. */
 class Dependee {
@@ -118,7 +121,9 @@ export class Parser extends DiagnosticEmitter {
   sources: Source[];
   /** Current overridden module name. */
   currentModuleName: string | null = null;
-
+  // TODO: Remove when multi-value feature will enable by default.
+  /** Compiler options. */
+  options: Options | null = null;
   /** Constructs a new parser. */
   constructor(
     diagnostics: DiagnosticMessage[] | null = null,
@@ -562,6 +567,49 @@ export class Parser extends DiagnosticEmitter {
         }
         return null;
       }
+
+    // 'readonly' Type
+    } else if (token == Token.Readonly) {
+      let innerType = this.parseType(tn, acceptParenthesized, suppressErrors);
+      if (!innerType) return null;
+      type = innerType;
+      type.range.start = startPos;
+
+    // '[' ((Identifier ':')? Type (',' (Identifier ':')? Type)*)? ']'
+    } else if (token == Token.OpenBracket && this.options && this.options!.hasFeature(Feature.MultiValue)) {
+      let elements: TypeNode[] = [];
+      let elementNames: (IdentifierExpression | null)[] = [];
+      let hasElementNames = false;
+      if (!tn.skip(Token.CloseBracket)) {
+        do {
+          let elementName: IdentifierExpression | null = null;
+          let state = tn.mark();
+          if (tn.skip(Token.Identifier)) {
+            let name = tn.readIdentifier();
+            let nameRange = tn.range();
+            if (tn.skip(Token.Colon)) {
+              elementName = Node.createIdentifierExpression(name, nameRange);
+              hasElementNames = true;
+            } else {
+              tn.reset(state);
+            }
+          }
+          let element = this.parseType(tn, true, suppressErrors);
+          if (!element) return null;
+          elements.push(element);
+          elementNames.push(elementName);
+        } while (tn.skip(Token.Comma));
+        if (!tn.skip(Token.CloseBracket)) {
+          if (!suppressErrors) {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(tn.pos), "]"
+            );
+          }
+          return null;
+        }
+      }
+      type = Node.createTupleType(elements, hasElementNames ? elementNames : null, false, tn.range(startPos, tn.pos));
 
     // 'void'
     } else if (token == Token.Void) {
@@ -4578,6 +4626,13 @@ function isCircularTypeAlias(name: string, type: TypeNode): bool {
       let parameters = functionType.parameters;
       for (let i = 0, k = parameters.length; i < k; i++) {
         if (isCircularTypeAlias(name, parameters[i].type)) return true;
+      }
+      break;
+    }
+    case NodeKind.TupleType: {
+      let elements = (<TupleTypeNode>type).elements;
+      for (let i = 0, k = elements.length; i < k; i++) {
+        if (isCircularTypeAlias(name, elements[i])) return true;
       }
       break;
     }

@@ -45,6 +45,7 @@ import {
 
 import {
   FunctionTypeNode,
+  TupleTypeNode,
   ParameterKind,
   TypeNode,
   NodeKind,
@@ -169,6 +170,10 @@ export class Resolver extends DiagnosticEmitter {
       }
       case NodeKind.FunctionType: {
         resolved = this.resolveFunctionType(<FunctionTypeNode>node, flow, ctxElement, ctxTypes, reportMode);
+        break;
+      }
+      case NodeKind.TupleType: {
+        resolved = this.resolveTupleType(<TupleTypeNode>node, flow, ctxElement, ctxTypes, reportMode);
         break;
       }
       default: assert(false);
@@ -417,6 +422,15 @@ export class Resolver extends DiagnosticEmitter {
         reportMode
       );
       if (!parameterType) return null;
+      if (parameterType == Type.void) {
+        if (reportMode == ReportMode.Report) {
+          this.error(
+            DiagnosticCode.Type_0_is_illegal_in_this_context,
+            parameterTypeNode.range, parameterType.toString()
+          );
+        }
+        return null;
+      }
       parameterTypes[i] = parameterType;
     }
     let returnTypeNode = node.returnType;
@@ -441,6 +455,32 @@ export class Resolver extends DiagnosticEmitter {
     }
     let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest);
     return node.isNullable ? signature.type.asNullable() : signature.type;
+  }
+
+  /** Resolves a {@link TupleTypeNode}. */
+  private resolveTupleType(
+    /** The type to resolve. */
+    node: TupleTypeNode,
+    /** The flow */
+    flow: Flow | null,
+    /** Contextual element. */
+    ctxElement: Element,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> | null = null,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.Report
+  ): Type | null {
+    let elements = node.elements;
+    for (let i = 0, k = elements.length; i < k; ++i) {
+      if (!this.resolveType(elements[i], flow, ctxElement, ctxTypes, reportMode)) return null;
+    }
+    if (reportMode == ReportMode.Report) {
+      this.error(
+        DiagnosticCode.Not_implemented_0,
+        node.range, "Tuple types"
+      );
+    }
+    return null;
   }
 
   private resolveBuiltinNotNullableType(
@@ -2924,11 +2964,24 @@ export class Resolver extends DiagnosticEmitter {
             incompatibleOverride = false;
           } else {
             if (baseMember.kind == ElementKind.FunctionPrototype) {
-              // Possibly generic. Resolve with same type arguments to obtain the correct one.
               let basePrototype = <FunctionPrototype>baseMember;
-              let baseFunction = this.resolveFunction(basePrototype, typeArguments, new Map(), ReportMode.Swallow);
-              if (baseFunction && instance.signature.isAssignableTo(baseFunction.signature, true)) {
-                incompatibleOverride = false;
+              let baseTypeParameterNodes = basePrototype.typeParameterNodes;
+              let baseIsGeneric = baseTypeParameterNodes != null && baseTypeParameterNodes.length > 0;
+              let instanceIsGeneric = typeArguments != null && typeArguments.length > 0;
+              if (baseIsGeneric != instanceIsGeneric) {
+                // Cannot mix generic and non-generic functions in an override chain
+                this.errorRelated(
+                  DiagnosticCode.Cannot_override_generic_method_0_with_a_non_generic_method_or_vice_versa,
+                  instance.identifierAndSignatureRange, baseMember.identifierAndSignatureRange,
+                  methodOrPropertyName
+                );
+                incompatibleOverride = false; // already reported
+              } else {
+                // Possibly generic. Resolve with same type arguments to obtain the correct one.
+                let baseFunction = this.resolveFunction(basePrototype, typeArguments, new Map(), ReportMode.Swallow);
+                if (baseFunction && instance.signature.isAssignableTo(baseFunction.signature, true)) {
+                  incompatibleOverride = false;
+                }
               }
             }
           }
@@ -3054,7 +3107,16 @@ export class Resolver extends DiagnosticEmitter {
           let boundPrototype = classInstance.getMember(unboundOverridePrototype.name);
           if (boundPrototype) { // might have errored earlier and wasn't added
             assert(boundPrototype.kind == ElementKind.FunctionPrototype);
-            overrideInstance = this.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+            let boundFuncPrototype = <FunctionPrototype>boundPrototype;
+            // Only resolve the override when the generic-ness matches the base method.
+            // - generic child → non-generic base: skip; vtable dispatch site has no type
+            //   arguments to forward to the monomorphized child.
+            // - generic child → generic base: OK; type args come from the base call site.
+            // - non-generic child → non-generic base: OK; plain vtable override.
+            // - non-generic child → generic base: skip; mismatched generic-ness.
+            if (boundFuncPrototype.is(CommonFlags.Generic) == instance.is(CommonFlags.Generic)) {
+              overrideInstance = this.resolveFunction(boundFuncPrototype, instance.typeArguments);
+            }
           }
         }
         if (overrideInstance) overrides.add(overrideInstance);
@@ -3429,7 +3491,10 @@ export class Resolver extends DiagnosticEmitter {
           }
           default: assert(false);
         }
-        if (!member.is(CommonFlags.Abstract)) {
+        if (!member.is(CommonFlags.Abstract) && !member.is(CommonFlags.Generic)) {
+          // A generic method cannot satisfy a non-generic interface/abstract
+          // requirement: interface methods cannot be generic (AS241), and
+          // virtual dispatch cannot supply type arguments for monomorphization.
           unimplemented.delete(memberName);
         }
       }

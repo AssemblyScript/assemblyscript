@@ -50,6 +50,7 @@ export const enum NodeKind {
   // types
   NamedType,
   FunctionType,
+  TupleType,
   TypeName,
   TypeParameter,
   Parameter,
@@ -159,6 +160,15 @@ export abstract class Node {
     range: Range
   ): FunctionTypeNode {
     return new FunctionTypeNode(parameters, returnType, explicitThisType, isNullable, range);
+  }
+
+  static createTupleType(
+    elements: TypeNode[],
+    elementNames: (IdentifierExpression | null)[] | null,
+    isNullable: bool,
+    range: Range
+  ): TupleTypeNode {
+    return new TupleTypeNode(elements, elementNames, isNullable, range);
   }
 
   static createOmittedType(
@@ -862,6 +872,12 @@ export abstract class TypeNode extends Node {
       if (functionTypeNode.returnType.hasGenericComponent(typeParameterNodes)) return true;
       let explicitThisType = functionTypeNode.explicitThisType;
       if (explicitThisType && explicitThisType.hasGenericComponent(typeParameterNodes)) return true;
+    } else if (this.kind == NodeKind.TupleType) {
+      let tupleTypeNode = <TupleTypeNode>changetype<TypeNode>(this);
+      let elements = tupleTypeNode.elements;
+      for (let i = 0, k = elements.length; i < k; ++i) {
+        if (elements[i].hasGenericComponent(typeParameterNodes)) return true;
+      }
     } else {
       assert(false);
     }
@@ -925,6 +941,22 @@ export class FunctionTypeNode extends TypeNode {
     range: Range
   ) {
     super(NodeKind.FunctionType, isNullable, range);
+  }
+}
+
+/** Represents a tuple type. */
+export class TupleTypeNode extends TypeNode {
+  constructor(
+    /** Tuple elements. */
+    public elements: TypeNode[],
+    /** Tuple element names, if any. */
+    public elementNames: (IdentifierExpression | null)[] | null,
+    /** Whether nullable or not. */
+    isNullable: bool,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.TupleType, isNullable, range);
   }
 }
 

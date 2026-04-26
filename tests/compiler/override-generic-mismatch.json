@@ -1,0 +1,8 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "AS242: Cannot override generic method 'foo' with a non-generic method or vice versa.",
+    "AS242: Cannot override generic method 'bar' with a non-generic method or vice versa.",
+    "EOF"
+  ]
+}
