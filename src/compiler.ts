@@ -536,7 +536,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize();
-    this.validateParameterDecorators();
     
     // Binaryen treats all function references as being leaked to the outside world when
     // the module isn't marked as closed-world (see WebAssembly/binaryen#7135). Therefore,
@@ -10625,37 +10624,6 @@ export class Compiler extends DiagnosticEmitter {
     }
     this.currentType = toType;
     return expr;
-  }
-
-  /** Rejects any parameter decorators not consumed by transforms. Runs once, after transforms have had their chance. */
-  private validateParameterDecorators(): void {
-    let program = this.program;
-    if (program.parameterDecoratorsValidated) return;
-    program.parameterDecoratorsValidated = true;
-    for (let source of program.sources) {
-      let fts = source.decoratedFunctionTypes;
-      if (!fts) continue;
-      for (let i = 0, k = fts.length; i < k; ++i) {
-        let ft = fts[i];
-        let thisDecorators = ft.explicitThisDecorators;
-        if (thisDecorators && thisDecorators.length > 0) {
-          this.error(
-            DiagnosticCode.Decorators_are_not_valid_here,
-            Range.join(thisDecorators[0].range, thisDecorators[thisDecorators.length - 1].range)
-          );
-        }
-        let params = ft.parameters;
-        for (let j = 0, m = params.length; j < m; ++j) {
-          let decorators = params[j].decorators;
-          if (decorators && decorators.length > 0) {
-            this.error(
-              DiagnosticCode.Decorators_are_not_valid_here,
-              Range.join(decorators[0].range, decorators[decorators.length - 1].range)
-            );
-          }
-        }
-      }
-    }
   }
 }
 
