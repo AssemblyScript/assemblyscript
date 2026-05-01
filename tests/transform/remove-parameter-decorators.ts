@@ -1,8 +1,10 @@
 // Example transform proving that preserved parameter decorators can be stripped
 // during afterInitialize before compilation rejects them.
-console.log("CommonJS parameter decorator removal transform loaded");
+console.log("Parameter decorator removal transform loaded");
 
-exports.afterInitialize = (program) => {
+import type { Program } from "assemblyscript";
+
+export function afterInitialize(program: Program): void {
   console.log("- afterInitialize strip parameter decorators");
   for (const source of program.sources) {
     const fts = source.decoratedFunctionTypes;
@@ -14,4 +16,4 @@ exports.afterInitialize = (program) => {
       }
     }
   }
-};
+}
