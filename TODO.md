@@ -2,8 +2,12 @@ Working document of notes/tasks for trying to figure out how to correctly add de
 
 
 - [ ] Ask claude to explain how the AssemblyScript parser works and try to add a garbage throwaway feature myself manually for learning purposes (eg. `mut` keyword for syntax like `mut myVariable = 10`).
+
 - [ ] After implementing re-read all the stuff dcode and Max have been explaining and try to better understand it
 
+- [ ] Need to add a transform hook for valdiating after parse but before compiliation.
+
+- [ ] Need to add a test case for having a transform validate decorators.
 
 NOTES:
 - AST can be extended without breaking changes, this is perfectly fine and anything that is added will just be ignored by the compiler but at least transformer plugins can then make use of it. No need to validate and throw errors unless it is an AST parse error.
