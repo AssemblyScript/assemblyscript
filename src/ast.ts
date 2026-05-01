@@ -1669,8 +1669,8 @@ export class Source extends Node {
   debugInfoIndex: i32 = -1;
   /** Re-exported sources. */
   exportPaths: string[] | null = null;
-  /** Source-level statements known to contain preserved parameter decorators, revisited after transforms for validation. */
-  parameterDecoratorStatements: Statement[] | null = null;
+  /** Function types with parameter or this-parameter decorators, revisited after transforms for validation. */
+  decoratedFunctionTypes: FunctionTypeNode[] | null = null;
 
   /** Checks if this source represents native code. */
   get isNative(): bool {

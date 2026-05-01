@@ -886,7 +886,7 @@ export class Parser extends DiagnosticEmitter {
       false,
       tn.range(startPos, tn.pos)
     );
-    // this.noteFunctionTypeParameterDecorators(functionType);
+    this.noteFunctionTypeParameterDecorators(functionType);
     return functionType;
   }
 
@@ -955,6 +955,22 @@ export class Parser extends DiagnosticEmitter {
       );
     }
     return null;
+  }
+
+  /** Records a function type that has parameter or this-parameter decorators for post-transform validation. */
+  private noteFunctionTypeParameterDecorators(signature: FunctionTypeNode): void {
+    let hasDecorators = signature.explicitThisDecorators != null && signature.explicitThisDecorators.length > 0;
+    if (!hasDecorators) {
+      let params = signature.parameters;
+      for (let i = 0, k = params.length; i < k; ++i) {
+        if (params[i].decorators != null) { hasDecorators = true; break; }
+      }
+    }
+    if (!hasDecorators) return;
+    let source = signature.range.source;
+    let tracked = source.decoratedFunctionTypes;
+    if (!tracked) source.decoratedFunctionTypes = [signature];
+    else tracked.push(signature);
   }
 
   /** Consumes misplaced parameter decorators after a parameter has already started so they diagnose as TS1206 instead of cascading. */
@@ -1591,7 +1607,7 @@ export class Parser extends DiagnosticEmitter {
       false,
       tn.range(signatureStart, tn.pos)
     );
-    // this.noteFunctionTypeParameterDecorators(signature);
+    this.noteFunctionTypeParameterDecorators(signature);
 
     let body: Statement | null = null;
     if (tn.skip(Token.OpenBrace)) {
@@ -1717,7 +1733,7 @@ export class Parser extends DiagnosticEmitter {
       false,
       tn.range(signatureStart, tn.pos)
     );
-    // this.noteFunctionTypeParameterDecorators(signature);
+    this.noteFunctionTypeParameterDecorators(signature);
 
     let body: Statement | null = null;
     if (arrowKind) {
@@ -2359,7 +2375,7 @@ export class Parser extends DiagnosticEmitter {
         false,
         tn.range(signatureStart, tn.pos)
       );
-      // this.noteFunctionTypeParameterDecorators(signature);
+      this.noteFunctionTypeParameterDecorators(signature);
 
       let body: Statement | null = null;
       if (tn.skip(Token.OpenBrace)) {
