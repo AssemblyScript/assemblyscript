@@ -29,6 +29,13 @@
     "v8_flags": [
     ]
   },
+  "tail-calls": {
+    "asc_flags": [
+      "--enable tail-calls"
+    ],
+    "v8_flags": [
+    ]
+  },
   "simd": {
     "asc_flags": [
       "--enable simd"
