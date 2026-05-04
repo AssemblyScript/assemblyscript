@@ -959,7 +959,8 @@ export class Parser extends DiagnosticEmitter {
 
   /** Records a function type that has parameter or this-parameter decorators for post-transform validation. */
   private noteFunctionTypeParameterDecorators(signature: FunctionTypeNode): void {
-    let hasDecorators = signature.explicitThisDecorators != null && signature.explicitThisDecorators.length > 0;
+    let thisDecorators = signature.explicitThisDecorators;
+    let hasDecorators = thisDecorators != null && thisDecorators.length > 0;
     if (!hasDecorators) {
       let params = signature.parameters;
       for (let i = 0, k = params.length; i < k; ++i) {
