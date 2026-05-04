@@ -462,8 +462,6 @@ export class Program extends DiagnosticEmitter {
   nextSignatureId: i32 = 0;
   /** An indicator if the program has been initialized. */
   initialized: bool = false;
-  /** Indicates whether the one-shot post-transform parameter decorator validation has run. */
-  parameterDecoratorsValidated: bool = false;
 
   // Lookup maps
 

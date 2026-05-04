@@ -1,5 +1,5 @@
 // Example transform proving that preserved parameter decorators can be stripped
-// during afterInitialize before compilation rejects them.
+// during afterInitialize, since the compiler otherwise ignores them.
 console.log("Parameter decorator removal transform loaded");
 
 import type { Program } from "assemblyscript";
