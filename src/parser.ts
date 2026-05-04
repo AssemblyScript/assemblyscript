@@ -207,15 +207,9 @@ export class Parser extends DiagnosticEmitter {
 
     // check decorators
     let decorators: DecoratorNode[] | null = null;
-    while (tn.skip(Token.At)) {
-      if (startPos < 0) startPos = tn.tokenPos;
-      let decorator = this.parseDecorator(tn);
-      if (!decorator) {
-        this.skipStatement(tn);
-        continue;
-      }
-      if (!decorators) decorators = [decorator];
-      else decorators.push(decorator);
+    if (tn.peek() == Token.At) {
+      startPos = tn.nextTokenPos;
+      decorators = this.parseDecorators(tn, true);
     }
 
     // check modifiers
@@ -434,7 +428,8 @@ export class Parser extends DiagnosticEmitter {
         case NodeKind.ClassDeclaration:
         case NodeKind.InterfaceDeclaration:
         case NodeKind.NamespaceDeclaration: {
-          return Node.createExportDefaultStatement(<DeclarationStatement>statement, tn.range(startPos, tn.pos));
+          statement = Node.createExportDefaultStatement(<DeclarationStatement>statement, tn.range(startPos, tn.pos));
+          break;
         }
         default: {
           this.error(
@@ -746,17 +741,19 @@ export class Parser extends DiagnosticEmitter {
   // Indicates whether tryParseSignature determined that it is handling a Signature
   private tryParseSignatureIsSignature: bool = false;
 
-  /** Parses a function type, as used in type declarations. */
+  /** Parses a function type, preserving leading parameter decorators for transforms while still reporting misplaced ones. */
   tryParseFunctionType(
     tn: Tokenizer
   ): FunctionTypeNode | null {
 
-    // at '(': ('...'? Identifier '?'? ':' Type (','  '...'? Identifier '?'? ':' Type)* )? ')' '=>' Type
+    // at '(': (Decorator* ('...'? Identifier '?'? ':' Type | this ':' Type)
+    //   (',' Decorator* ('...'? Identifier '?'? ':' Type | this ':' Type))* )? ')' '=>' Type
 
     let state = tn.mark();
     let startPos = tn.tokenPos;
     let parameters: ParameterNode[] | null = null;
     let thisType: NamedTypeNode | null = null;
+    let thisDecorators: DecoratorNode[] | null = null;
     let isSignature: bool = false;
     let firstParamNameNoType: IdentifierExpression | null = null;
     let firstParamKind: ParameterKind = ParameterKind.Default;
@@ -771,6 +768,13 @@ export class Parser extends DiagnosticEmitter {
       do {
         let paramStart = -1;
         let kind = ParameterKind.Default;
+        // Preserve leading parameter decorators in the AST so transforms can inspect or remove them later.
+        let decorators = this.parseDecorators(tn);
+        if (decorators) {
+          paramStart = decorators[0].range.start;
+          isSignature = true;
+          tn.discard(state);
+        }
         if (tn.skip(Token.Dot_Dot_Dot)) {
           paramStart = tn.tokenPos;
           isSignature = true;
@@ -792,7 +796,9 @@ export class Parser extends DiagnosticEmitter {
               this.tryParseSignatureIsSignature = true;
               return null;
             }
+            this.tryParseParameterDecorators(tn);
             thisType = <NamedTypeNode>type;
+            thisDecorators = decorators;
           } else {
             tn.reset(state);
             this.tryParseSignatureIsSignature = false;
@@ -821,10 +827,12 @@ export class Parser extends DiagnosticEmitter {
               this.tryParseSignatureIsSignature = isSignature;
               return null;
             }
-            let param = Node.createParameter(kind, name, type, null, tn.range(paramStart, tn.pos));
+            this.tryParseParameterDecorators(tn);
+            let param = Node.createParameter(kind, name, type, null, decorators, tn.range(paramStart, tn.pos));
             if (!parameters) parameters = [ param ];
             else parameters.push(param);
           } else {
+            this.tryParseParameterDecorators(tn);
             if (!isSignature) {
               if (tn.peek() == Token.Comma) {
                 isSignature = true;
@@ -832,7 +840,7 @@ export class Parser extends DiagnosticEmitter {
               }
             }
             if (isSignature) {
-              let param = Node.createParameter(kind, name, Node.createOmittedType(tn.range(tn.pos)), null, tn.range(paramStart, tn.pos));
+              let param = Node.createParameter(kind, name, Node.createOmittedType(tn.range(tn.pos)), null, decorators, tn.range(paramStart, tn.pos));
               if (!parameters) parameters = [ param ];
               else parameters.push(param);
               this.error(
@@ -886,6 +894,7 @@ export class Parser extends DiagnosticEmitter {
             firstParamNameNoType,
             Node.createOmittedType(firstParamNameNoType.range.atEnd),
             null,
+            null,
             firstParamNameNoType.range
           );
           if (!parameters) parameters = [ param ];
@@ -917,16 +926,40 @@ export class Parser extends DiagnosticEmitter {
 
     if (!parameters) parameters = [];
 
-    return Node.createFunctionType(
+    let functionType = Node.createFunctionType(
       parameters,
       returnType,
       thisType,
+      thisDecorators,
       false,
       tn.range(startPos, tn.pos)
     );
+    this.noteFunctionTypeParameterDecorators(functionType);
+    return functionType;
   }
 
   // statements
+
+  /** Parses zero or more decorators starting at the current token. */
+  private parseDecorators(
+    tn: Tokenizer,
+    skipStatementOnError: bool = false
+  ): DecoratorNode[] | null {
+    let decorators: DecoratorNode[] | null = null;
+    while (tn.skip(Token.At)) {
+      let decorator = this.parseDecorator(tn);
+      if (!decorator) {
+        if (skipStatementOnError) {
+          this.skipStatement(tn);
+          continue;
+        }
+        break;
+      }
+      if (!decorators) decorators = [decorator];
+      else decorators.push(decorator);
+    }
+    return decorators;
+  }
 
   parseDecorator(
     tn: Tokenizer
@@ -970,6 +1003,34 @@ export class Parser extends DiagnosticEmitter {
       );
     }
     return null;
+  }
+
+  /** Records a function type that has parameter or this-parameter decorators for post-transform validation. */
+  private noteFunctionTypeParameterDecorators(signature: FunctionTypeNode): void {
+    let thisDecorators = signature.explicitThisDecorators;
+    let hasDecorators = thisDecorators != null && thisDecorators.length > 0;
+    if (!hasDecorators) {
+      let params = signature.parameters;
+      for (let i = 0, k = params.length; i < k; ++i) {
+        if (params[i].decorators != null) { hasDecorators = true; break; }
+      }
+    }
+    if (!hasDecorators) return;
+    let source = signature.range.source;
+    let tracked = source.decoratedFunctionTypes;
+    if (!tracked) source.decoratedFunctionTypes = [signature];
+    else tracked.push(signature);
+  }
+
+  /** Consumes misplaced parameter decorators after a parameter has already started so they diagnose as TS1206 instead of cascading. */
+  private tryParseParameterDecorators(tn: Tokenizer): void {
+    let decorators = this.parseDecorators(tn);
+    if (decorators) {
+      this.error(
+        DiagnosticCode.Decorators_are_not_valid_here,
+        Range.join(decorators[0].range, decorators[decorators.length - 1].range)
+      );
+    }
   }
 
   parseVariable(
@@ -1274,14 +1335,17 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
+  /** Explicit `this` parameter captured by the current parseParameters call, if any. */
   private parseParametersThis: NamedTypeNode | null = null;
+  /** Decorators on the explicit `this` parameter captured by the current parseParameters call. Preserved as transform-only syntax. */
+  private parseParametersThisDecorators: DecoratorNode[] | null = null;
 
   parseParameters(
     tn: Tokenizer,
     isConstructor: bool = false
   ): ParameterNode[] | null {
 
-    // at '(': (Parameter (',' Parameter)*)? ')'
+    // at '(': (Decorator* Parameter (',' Decorator* Parameter)*)? ')'
 
     let parameters = new Array<ParameterNode>();
     let seenRest: ParameterNode | null = null;
@@ -1289,42 +1353,54 @@ export class Parser extends DiagnosticEmitter {
     let reportedRest = false;
     let thisType: TypeNode | null = null;
 
-    // check if there is a leading `this` parameter
+    // check if there is a leading `this` parameter, preserving any decorators on it
     this.parseParametersThis = null;
-    if (tn.skip(Token.This)) {
-      if (tn.skip(Token.Colon)) {
-        thisType = this.parseType(tn); // reports
-        if (!thisType) return null;
-        if (thisType.kind == NodeKind.NamedType) {
-          this.parseParametersThis = <NamedTypeNode>thisType;
-        } else {
-          this.error(
-            DiagnosticCode.Identifier_expected,
-            thisType.range
-          );
-        }
-      } else {
-        this.error(
-          DiagnosticCode._0_expected,
-          tn.range(), ":"
-        );
-        return null;
-      }
-      if (!tn.skip(Token.Comma)) {
-        if (tn.skip(Token.CloseParen)) {
-          return parameters;
+    this.parseParametersThisDecorators = null;
+
+    let first = true;
+    while (true) {
+      if (tn.skip(Token.CloseParen)) break;
+
+      // Preserve leading parameter decorators in the AST so transforms can inspect or remove them later.
+      let paramDecorators = this.parseDecorators(tn);
+
+      if (first && tn.skip(Token.This)) {
+        if (tn.skip(Token.Colon)) {
+          thisType = this.parseType(tn); // reports
+          if (!thisType) return null;
+          if (thisType.kind == NodeKind.NamedType) {
+            this.parseParametersThis = <NamedTypeNode>thisType;
+            this.parseParametersThisDecorators = paramDecorators;
+          } else {
+            this.error(
+              DiagnosticCode.Identifier_expected,
+              thisType.range
+            );
+          }
+          this.tryParseParameterDecorators(tn);
         } else {
           this.error(
             DiagnosticCode._0_expected,
-            tn.range(), ")"
+            tn.range(), ":"
           );
           return null;
         }
+        first = false;
+        if (!tn.skip(Token.Comma)) {
+          if (tn.skip(Token.CloseParen)) {
+            break;
+          } else {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), ")"
+            );
+            return null;
+          }
+        }
+        continue;
       }
-    }
 
-    while (!tn.skip(Token.CloseParen)) {
-      let param = this.parseParameter(tn, isConstructor); // reports
+      let param = this.parseParameter(tn, isConstructor, paramDecorators); // reports
       if (!param) return null;
       if (seenRest && !reportedRest) {
         this.error(
@@ -1353,6 +1429,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
       parameters.push(param);
+      first = false;
       if (!tn.skip(Token.Comma)) {
         if (tn.skip(Token.CloseParen)) {
           break;
@@ -1370,24 +1447,28 @@ export class Parser extends DiagnosticEmitter {
 
   parseParameter(
     tn: Tokenizer,
-    isConstructor: bool = false
+    isConstructor: bool = false,
+    decorators: DecoratorNode[] | null = null
   ): ParameterNode | null {
 
-    // before: ('public' | 'private' | 'protected' | '...')? Identifier '?'? (':' Type)? ('=' Expression)?
+    // before: Decorator* ('public' | 'private' | 'protected' | 'readonly')? '...'? Identifier
+    //   '?'? (':' Type)? ('=' Expression)?
 
     let isRest = false;
     let isOptional = false;
-    let startRange: Range | null = null;
+    let startRange: Range | null = decorators
+      ? decorators[0].range
+      : null;
     let accessFlags: CommonFlags = CommonFlags.None;
     if (isConstructor) {
       if (tn.skip(Token.Public)) {
-        startRange = tn.range();
+        if (!startRange) startRange = tn.range();
         accessFlags |= CommonFlags.Public;
       } else if (tn.skip(Token.Protected)) {
-        startRange = tn.range();
+        if (!startRange) startRange = tn.range();
         accessFlags |= CommonFlags.Protected;
       } else if (tn.skip(Token.Private)) {
-        startRange = tn.range();
+        if (!startRange) startRange = tn.range();
         accessFlags |= CommonFlags.Private;
       }
       if (tn.peek() == Token.Readonly) {
@@ -1409,12 +1490,12 @@ export class Parser extends DiagnosticEmitter {
           tn.range()
         );
       } else {
-        startRange = tn.range();
+        if (!startRange) startRange = tn.range();
       }
       isRest = true;
     }
     if (tn.skipIdentifier()) {
-      if (!isRest) startRange = tn.range();
+      if (!isRest && !startRange) startRange = tn.range();
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       let type: TypeNode | null = null;
       if (isOptional = tn.skip(Token.Question)) {
@@ -1425,12 +1506,14 @@ export class Parser extends DiagnosticEmitter {
           );
         }
       }
+      this.tryParseParameterDecorators(tn);
       if (tn.skip(Token.Colon)) {
         type = this.parseType(tn);
         if (!type) return null;
       } else {
         type = Node.createOmittedType(tn.range(tn.pos));
       }
+      this.tryParseParameterDecorators(tn);
       let initializer: Expression | null = null;
       if (tn.skip(Token.Equals)) {
         if (isRest) {
@@ -1459,6 +1542,7 @@ export class Parser extends DiagnosticEmitter {
         identifier,
         type,
         initializer,
+        decorators,
         Range.join(assert(startRange), tn.range())
       );
       param.flags |= accessFlags;
@@ -1568,9 +1652,11 @@ export class Parser extends DiagnosticEmitter {
       parameters,
       returnType,
       thisType,
+      this.parseParametersThisDecorators,
       false,
       tn.range(signatureStart, tn.pos)
     );
+    this.noteFunctionTypeParameterDecorators(signature);
 
     let body: Statement | null = null;
     if (tn.skip(Token.OpenBrace)) {
@@ -1645,7 +1731,16 @@ export class Parser extends DiagnosticEmitter {
     let parameters = this.parseParameters(tn);
     if (!parameters) return null;
 
-    return this.parseFunctionExpressionCommon(tn, name, parameters, this.parseParametersThis, arrowKind, startPos, signatureStart);
+    return this.parseFunctionExpressionCommon(
+      tn,
+      name,
+      parameters,
+      this.parseParametersThis,
+      this.parseParametersThisDecorators,
+      arrowKind,
+      startPos,
+      signatureStart
+    );
   }
 
   private parseFunctionExpressionCommon(
@@ -1653,6 +1748,7 @@ export class Parser extends DiagnosticEmitter {
     name: IdentifierExpression,
     parameters: ParameterNode[],
     explicitThis: NamedTypeNode | null,
+    explicitThisDecorators: DecoratorNode[] | null,
     arrowKind: ArrowKind,
     startPos: i32 = -1,
     signatureStart: i32 = -1
@@ -1682,9 +1778,11 @@ export class Parser extends DiagnosticEmitter {
       parameters,
       returnType,
       explicitThis,
+      explicitThisDecorators,
       false,
       tn.range(signatureStart, tn.pos)
     );
+    this.noteFunctionTypeParameterDecorators(signature);
 
     let body: Statement | null = null;
     if (arrowKind) {
@@ -1930,14 +2028,9 @@ export class Parser extends DiagnosticEmitter {
     let isInterface = parent.kind == NodeKind.InterfaceDeclaration;
     let startPos = 0;
     let decorators: DecoratorNode[] | null = null;
-    if (tn.skip(Token.At)) {
-      startPos = tn.tokenPos;
-      do {
-        let decorator = this.parseDecorator(tn);
-        if (!decorator) break;
-        if (!decorators) decorators = new Array();
-        decorators.push(decorator);
-      } while (tn.skip(Token.At));
+    if (tn.peek() == Token.At) {
+      startPos = tn.nextTokenPos;
+      decorators = this.parseDecorators(tn);
       if (isInterface && decorators) {
         this.error(
           DiagnosticCode.Decorators_are_not_valid_here,
@@ -2327,9 +2420,11 @@ export class Parser extends DiagnosticEmitter {
         parameters,
         returnType,
         thisType,
+        this.parseParametersThisDecorators,
         false,
         tn.range(signatureStart, tn.pos)
       );
+      this.noteFunctionTypeParameterDecorators(signature);
 
       let body: Statement | null = null;
       if (tn.skip(Token.OpenBrace)) {
@@ -3777,6 +3872,7 @@ export class Parser extends DiagnosticEmitter {
             Node.createEmptyIdentifierExpression(tn.range(startPos)),
             [],
             null,
+            null,
             ArrowKind.Parenthesized
           );
         }
@@ -3786,6 +3882,7 @@ export class Parser extends DiagnosticEmitter {
           switch (tn.next(IdentifierHandling.Prefer)) {
 
             // function expression
+            case Token.At:
             case Token.Dot_Dot_Dot: {
               tn.reset(state);
               return this.parseFunctionExpression(tn);
@@ -3974,9 +4071,11 @@ export class Parser extends DiagnosticEmitter {
                 identifier,
                 Node.createOmittedType(identifier.range.atEnd),
                 null,
+                null,
                 identifier.range
               )
             ],
+            null,
             null,
             ArrowKind.Single,
             startPos

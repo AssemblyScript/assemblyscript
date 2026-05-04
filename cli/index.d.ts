@@ -273,6 +273,11 @@ export abstract class Transform {
   /** Lists all files in a directory. */
   listFiles(dirname: string, baseDir: string): (string[] | null) | Promise<string[] | null>;
 
+  /** Called after program initialization, before WASM compilation. Transformers should use
+   *  this hook to perform custom validation of AST constructs such as parameter decorators
+   *  and emit their own diagnostics. Decorators remain in the AST unchanged. */
+  beforeCompile?(program: Program): void | Promise<void>;
+
   /** Called when parsing is complete, before a program is instantiated from the AST. */
   afterParse?(parser: Parser): void | Promise<void>;
 

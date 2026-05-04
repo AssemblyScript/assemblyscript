@@ -156,10 +156,11 @@ export abstract class Node {
     parameters: ParameterNode[],
     returnType: TypeNode,
     explicitThisType: NamedTypeNode | null,
+    explicitThisDecorators: DecoratorNode[] | null,
     isNullable: bool,
     range: Range
   ): FunctionTypeNode {
-    return new FunctionTypeNode(parameters, returnType, explicitThisType, isNullable, range);
+    return new FunctionTypeNode(parameters, returnType, explicitThisType, explicitThisDecorators, isNullable, range);
   }
 
   static createTupleType(
@@ -191,9 +192,10 @@ export abstract class Node {
     name: IdentifierExpression,
     type: TypeNode,
     initializer: Expression | null,
+    decorators: DecoratorNode[] | null,
     range: Range
   ): ParameterNode {
-    return new ParameterNode(parameterKind, name, type, initializer, range);
+    return new ParameterNode(parameterKind, name, type, initializer, decorators, range);
   }
 
   // special
@@ -935,6 +937,8 @@ export class FunctionTypeNode extends TypeNode {
     public returnType: TypeNode,
     /** Explicitly provided this type, if any. */
     public explicitThisType: NamedTypeNode | null, // can't be a function
+    /** Decorators on an explicit `this` parameter, if any. Preserved as transform-only syntax. */
+    public explicitThisDecorators: DecoratorNode[] | null,
     /** Whether nullable or not. */
     isNullable: bool,
     /** Source range. */
@@ -997,12 +1001,13 @@ export class ParameterNode extends Node {
     public type: TypeNode,
     /** Initializer expression, if any. */
     public initializer: Expression | null,
+    /** Decorators, if any. Preserved as transform-only syntax so transforms can rewrite or remove them before validation. */
+    public decorators: DecoratorNode[] | null,
     /** Source range. */
     range: Range
   ) {
     super(NodeKind.Parameter, range);
   }
-
   /** Implicit field declaration, if applicable. */
   implicitFieldDeclaration: FieldDeclaration | null = null;
   /** Common flags indicating specific traits. */
@@ -1696,6 +1701,8 @@ export class Source extends Node {
   debugInfoIndex: i32 = -1;
   /** Re-exported sources. */
   exportPaths: string[] | null = null;
+  /** Function types with parameter or this-parameter decorators, revisited after transforms for validation. */
+  decoratedFunctionTypes: FunctionTypeNode[] | null = null;
 
   /** Checks if this source represents native code. */
   get isNative(): bool {
