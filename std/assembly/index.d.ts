@@ -4,6 +4,7 @@
  *//***/
 
 /// <reference no-default-lib="true"/>
+/// <reference path="./toilscript.ts" />
 
 // Types
 

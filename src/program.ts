@@ -476,6 +476,8 @@ export class Program extends DiagnosticEmitter {
   elementsByDeclaration: Map<DeclarationStatement,DeclaredElement> = new Map();
   /** Element instances by unique internal name. */
   instancesByName: Map<string,Element> = new Map();
+  /** Function decorated with `@main` (toil module entry point), if any. */
+  mainFunction: FunctionPrototype | null = null;
   /** Classes wrapping basic types like `i32`. */
   wrapperClasses: Map<Type,Class> = new Map();
   /** Managed classes contained in the program, by id. */
@@ -2639,6 +2641,7 @@ export class Program extends DiagnosticEmitter {
     if (!declaration.is(CommonFlags.Instance)) {
       if (parent.kind != ElementKind.ClassPrototype) {
         validDecorators |= DecoratorFlags.Global;
+        validDecorators |= DecoratorFlags.Main; // `@main` marks the module entry point
       }
     }
     if (declaration.range.source.isLibrary) {
@@ -2655,6 +2658,16 @@ export class Program extends DiagnosticEmitter {
         DiagnosticCode.Not_implemented_0,
         declaration.range, `Builtin '${element.internalName}'`
       );
+    }
+    if (element.hasDecorator(DecoratorFlags.Main)) { // toil module entry point
+      if (this.mainFunction) {
+        this.error(
+          DiagnosticCode.Duplicate_decorator,
+          declaration.range
+        );
+      } else {
+        this.mainFunction = element;
+      }
     }
     if (!parent.add(name, element)) return null;
     return element;
@@ -2978,7 +2991,9 @@ export enum DecoratorFlags {
   /** Is compiled lazily. */
   Lazy = 1 << 10,
   /** Is considered unsafe code. */
-  Unsafe = 1 << 11
+  Unsafe = 1 << 11,
+  /** Is the toil module entry point (`@main`). */
+  Main = 1 << 12
 }
 
 export namespace DecoratorFlags {
@@ -2999,6 +3014,7 @@ export namespace DecoratorFlags {
       case DecoratorKind.Builtin: return DecoratorFlags.Builtin;
       case DecoratorKind.Lazy: return DecoratorFlags.Lazy;
       case DecoratorKind.Unsafe: return DecoratorFlags.Unsafe;
+      case DecoratorKind.Main: return DecoratorFlags.Main;
       default: return DecoratorFlags.None;
     }
   }

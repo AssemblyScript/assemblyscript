@@ -726,6 +726,22 @@ export class Compiler extends DiagnosticEmitter {
       module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
     }
 
+    // compile and export the `@main` entry point as the WASM export "main", if present
+    let mainPrototype = this.program.mainFunction;
+    if (mainPrototype) {
+      let mainInstance = this.resolver.resolveFunction(mainPrototype, null);
+      if (mainInstance && this.compileFunction(mainInstance)) {
+        if (module.hasExport("main")) {
+          this.error(
+            DiagnosticCode.Start_function_name_0_is_invalid_or_conflicts_with_another_export,
+            mainPrototype.declaration.range, "main"
+          );
+        } else {
+          module.addFunctionExport(mainInstance.internalName, "main");
+        }
+      }
+    }
+
     // NOTE: no more element compiles from here. may go to the start function!
 
     // compile the start function if not empty or if explicitly requested

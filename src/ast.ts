@@ -1033,7 +1033,8 @@ export enum DecoratorKind {
   ExternalJs,
   Builtin,
   Lazy,
-  Unsafe
+  Unsafe,
+  Main
 }
 
 export namespace DecoratorKind {
@@ -1066,6 +1067,10 @@ export namespace DecoratorKind {
         }
         case CharCode.l: {
           if (nameStr == "lazy") return DecoratorKind.Lazy;
+          break;
+        }
+        case CharCode.m: {
+          if (nameStr == "main") return DecoratorKind.Main;
           break;
         }
         case CharCode.o: {
