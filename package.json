@@ -8,7 +8,7 @@
     "toilscript",
     "wasm"
   ],
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "license": "Apache-2.0",
   "homepage": "https://github.com/dacely-cloud/toilscript",
@@ -68,8 +68,8 @@
     }
   },
   "bin": {
-    "asc": "./bin/asc.js",
-    "asinit": "./bin/asinit.js"
+    "toilscript": "./bin/asc.js",
+    "toilinit": "./bin/asinit.js"
   },
   "scripts": {
     "check": "npm run check:config && npm run check:import && npm run lint",

@@ -76,11 +76,11 @@ function printHelp() {
     "Sets up a new ToilScript project or updates an existing one.",
     "",
     stdoutColors.white("SYNTAX"),
-    "  " + stdoutColors.cyan("asinit") + " directory [options]",
+    "  " + stdoutColors.cyan("toilinit") + " directory [options]",
     "",
     stdoutColors.white("EXAMPLES"),
-    "  " + stdoutColors.cyan("asinit") + " .",
-    "  " + stdoutColors.cyan("asinit") + " ./newProject -y",
+    "  " + stdoutColors.cyan("toilinit") + " .",
+    "  " + stdoutColors.cyan("toilinit") + " ./newProject -y",
     "",
     stdoutColors.white("OPTIONS"),
     optionsUtil.help(asinitOptions, { noCategories: true })
@@ -126,7 +126,7 @@ if (fs.existsSync(packageFile)) {
   if ("type" in pkg && pkg["type"] !== "module") {
     console.error(stdoutColors.red([
       `Error: The "type" field in ${formatPath(packageFile)} is set to "${pkg["type"]}".`,
-      `       asinit requires the "type" field to be set to "module" (ES modules).`
+      `       toilinit requires the "type" field to be set to "module" (ES modules).`
     ].join("\n")));
     process.exit(1);
   }
@@ -342,8 +342,8 @@ function ensureGitignore() {
 function ensurePackageJson() {
   console.log("- Making sure that 'package.json' contains the build commands...");
   const entryPath = path.relative(projectDir, entryFile).replace(/\\/g, "/");
-  const buildDebug = "asc " + entryPath + " --target debug";
-  const buildRelease = "asc " + entryPath + " --target release";
+  const buildDebug = "toilscript " + entryPath + " --target debug";
+  const buildRelease = "toilscript " + entryPath + " --target release";
   const buildAll = commands[pm].run + " asbuild:debug && " + commands[pm].run + " asbuild:release";
   if (!fs.existsSync(packageFile)) {
     fs.writeFileSync(packageFile, JSON.stringify({

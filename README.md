@@ -49,10 +49,10 @@ npm uninstall assemblyscript
 npm install toilscript
 ```
 
-The CLI commands remain the same:
+The CLI is `toilscript` (with `toilinit` to scaffold a project):
 
 ```sh
-npx asc your-file.ts --outFile output.wasm
+npx toilscript your-file.ts --outFile output.wasm
 ```
 
 ---
