@@ -1,14 +1,14 @@
-name: CI for AssemblyScript
+name: CI for toilscript
 
 on:
   push:
     branches:
-      - 'v*'
+      - main
     tags:
       - 'v*'
   pull_request:
     branches:
-      - 'v*'
+      - main
 
 jobs:
   test:
@@ -100,6 +100,8 @@ jobs:
 
       - name: Publish to npm
         run: npm publish --access public --provenance --tag ${{ steps.npm_tag.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   release:
     runs-on: ubuntu-latest
