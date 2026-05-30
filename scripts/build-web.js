@@ -11,13 +11,13 @@ export function buildWeb() {
   const binaryenVersion = pkg.packages["node_modules/binaryen"].version || pkg.dependencies.binaryen.version;
   const longVersion = pkg.packages["node_modules/long"].version || pkg.dependencies.long.version;
 
-  const distUrl = mainVersion === "0.0.0" ? `./` : `https://cdn.jsdelivr.net/npm/assemblyscript@${mainVersion}/dist/`;
+  const distUrl = mainVersion === "0.0.0" ? `./` : `https://cdn.jsdelivr.net/npm/toilscript@${mainVersion}/dist/`;
   const binaryenUrl = `https://cdn.jsdelivr.net/npm/binaryen@${binaryenVersion}/index.js`;
   const longUrl = `https://cdn.jsdelivr.net/npm/long@${longVersion}/index.js`;
   const importmap = {
     "imports": {
-      "toilscript": `${distUrl}assemblyscript.js`,
-      "assemblyscript/asc": `${distUrl}asc.js`,
+      "toilscript": `${distUrl}toilscript.js`,
+      "toilscript/asc": `${distUrl}asc.js`,
       "binaryen": binaryenUrl,
       "long": longUrl
     }

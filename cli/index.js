@@ -205,7 +205,7 @@ export async function main(argv, options) {
   const baseDir = path.normalize(opts.baseDir || ".");
 
   // Check if a config file is present
-  let configPath = optionsUtil.resolvePath(opts.config || "asconfig.json", baseDir);
+  let configPath = optionsUtil.resolvePath(opts.config || "toilconfig.json", baseDir);
   let configFile = path.basename(configPath);
   let configDir = path.dirname(configPath);
   let config = await getConfig(configFile, configDir, readFile);
@@ -223,7 +223,7 @@ export async function main(argv, options) {
       "  " + colors.cyan("asc") + " hello" + extension,
       "  " + colors.cyan("asc") + " hello" + extension + " -o hello.wasm -t hello.wat",
       "  " + colors.cyan("asc") + " hello1" + extension + " hello2" + extension + " -o -O > hello.wasm",
-      "  " + colors.cyan("asc") + " --config asconfig.json --target release",
+      "  " + colors.cyan("asc") + " --config toilconfig.json --target release",
       "",
       colors.white("OPTIONS"),
     ].concat(
@@ -239,9 +239,9 @@ export async function main(argv, options) {
     if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
   }
 
-  // Load additional options from asconfig.json
-  const seenAsconfig = new Set();
-  seenAsconfig.add(configPath);
+  // Load additional options from toilconfig.json
+  const seenToilconfig = new Set();
+  seenToilconfig.add(configPath);
   const target = opts.target || "release";
   while (config) {
     // Merge target first
@@ -264,13 +264,13 @@ export async function main(argv, options) {
       }
     }
 
-    // Look up extended asconfig and repeat
+    // Look up extended toilconfig and repeat
     if (config.extends) {
       configPath = optionsUtil.resolvePath(config.extends, configDir, true);
       configFile = path.basename(configPath);
       configDir = path.dirname(configPath);
-      if (seenAsconfig.has(configPath)) break;
-      seenAsconfig.add(configPath);
+      if (seenToilconfig.has(configPath)) break;
+      seenToilconfig.add(configPath);
       config = await getConfig(configFile, configDir, readFile);
     } else {
       break;
@@ -1075,7 +1075,7 @@ export async function main(argv, options) {
     const BAR = stdoutColors.red("▌ ");
     console.error([
       EOL,
-      BAR, "Whoops, the AssemblyScript compiler has crashed during ", stage, " :-(", EOL,
+      BAR, "Whoops, the ToilScript compiler has crashed during ", stage, " :-(", EOL,
       BAR, EOL,
       (typeof e.stack === "string"
         ? [
@@ -1091,7 +1091,7 @@ export async function main(argv, options) {
       ).join(""),
       BAR, EOL,
       BAR, "If you see where the error is, feel free to send us a pull request. If not,", EOL,
-      BAR, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues", EOL,
+      BAR, "please let us know: https://github.com/dacely-cloud/toilscript/issues", EOL,
       BAR, EOL,
       BAR, "Thank you!", EOL
     ].join(""));
@@ -1113,33 +1113,33 @@ async function getConfig(file, baseDir, readFile) {
   try {
     config = JSON.parse(contents);
   } catch(ex) {
-    throw new Error(`Asconfig is not valid json: ${location}`, { cause: ex });
+    throw new Error(`Toilconfig is not valid json: ${location}`, { cause: ex });
   }
 
-  // validate asconfig shape
+  // validate toilconfig shape
   if (config.options && !isObject(config.options)) {
-    throw new Error(`Asconfig.options is not an object: ${location}`);
+    throw new Error(`Toilconfig.options is not an object: ${location}`);
   }
 
   if (config.include && !Array.isArray(config.include)) {
-    throw new Error(`Asconfig.include is not an array: ${location}`);
+    throw new Error(`Toilconfig.include is not an array: ${location}`);
   }
 
   if (config.targets) {
     if (!isObject(config.targets)) {
-      throw new Error(`Asconfig.targets is not an object: ${location}`);
+      throw new Error(`Toilconfig.targets is not an object: ${location}`);
     }
     const targets = Object.keys(config.targets);
     for (let i = 0; i < targets.length; i++) {
       const target = targets[i];
       if (!isObject(config.targets[target])) {
-        throw new Error(`Asconfig.targets.${target} is not an object: ${location}`);
+        throw new Error(`Toilconfig.targets.${target} is not an object: ${location}`);
       }
     }
   }
 
   if (config.extends && typeof config.extends !== "string") {
-    throw new Error(`Asconfig.extends is not a string: ${location}`);
+    throw new Error(`Toilconfig.extends is not a string: ${location}`);
   }
 
   return config;

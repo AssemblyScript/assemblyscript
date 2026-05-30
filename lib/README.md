@@ -5,7 +5,7 @@ Additional packages provided by the main package.
 
 | Package                            | Description
 |------------------------------------|-------------------------
-| [@dacely/as-loader](./loader) | Module loader utility
+| [@dacely/toilscript-loader](./loader) | Module loader utility
 | [@assemblyscript/rtrace](./rtrace) | Runtime tracing utility
 | binaryen | Binaryen proxy
 

@@ -315,7 +315,7 @@ function transformTypes(sourceFile) {
   return result;
 }
 
-const prefix = "types:assemblyscript";
+const prefix = "types:toilscript";
 
 export function generateSrc() {
   const stdout = [];
@@ -353,10 +353,10 @@ export function generateSrc() {
   });
 
   const source = stdout.join("").replace(/\/\/\/ <reference[^>]*>\r?\n/g, "");
-  const sourceFile = ts.createSourceFile("assemblyscript.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
+  const sourceFile = ts.createSourceFile("toilscript.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
   const result = transformTypes(sourceFile);
   fs.writeFileSync(
-    pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.generated.d.ts"),
+    pathUtil.resolve(__dirname, "..", "dist", "toilscript.generated.d.ts"),
     ts.createPrinter().printFile(result.transformed[0])
   );
 }
@@ -370,7 +370,7 @@ export function generateCli() {
       pathUtil.resolve(__dirname, "..", "cli", "index.d.ts")
     ],
     externs: [
-      "./assemblyscript.generated.d.ts"
+      "./toilscript.generated.d.ts"
     ],
     prefix,
     stdout,

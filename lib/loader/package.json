@@ -1,6 +1,6 @@
 {
-  "name": "@dacely/as-loader",
-  "description": "A convenient loader for AssemblyScript modules.",
+  "name": "@dacely/toilscript-loader",
+  "description": "A convenient loader for ToilScript modules.",
   "keywords": [
     "toilscript",
     "loader",

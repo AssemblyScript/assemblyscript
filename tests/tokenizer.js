@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { Tokenizer, Token, Source, SourceKind } from "../dist/assemblyscript.js";
+import { Tokenizer, Token, Source, SourceKind } from "../dist/toilscript.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 

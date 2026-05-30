@@ -60,7 +60,7 @@ if (fs.existsSync(jsonPath) && stderrString) {
 
 
 if (!binary) {
-  console.error("No binary was generated for the asconfig test in " + process.cwd());
+  console.error("No binary was generated for the toilconfig test in " + process.cwd());
   process.exit(1);
 }
 

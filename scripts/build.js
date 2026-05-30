@@ -225,7 +225,7 @@ async function invokeBuild(options) {
 const srcBuild = invokeBuild({
   entryPoints: [ "./src/index.ts" ],
   tsconfig: "./src/tsconfig.json",
-  outfile: "./dist/assemblyscript.js",
+  outfile: "./dist/toilscript.js",
   banner: { js: prelude("The AssemblyScript compiler") },
   plugins: [ diagnosticsPlugin, reportPlugin("src") ],
   ...common

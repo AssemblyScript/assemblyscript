@@ -1,4 +1,4 @@
 /// <reference path="./asc.generated.d.ts" />
-export * from "types:assemblyscript/cli/index";
-import * as asc from "types:assemblyscript/cli/index";
+export * from "types:toilscript/cli/index";
+import * as asc from "types:toilscript/cli/index";
 export default asc;

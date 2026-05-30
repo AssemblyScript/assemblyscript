@@ -14,33 +14,33 @@
   },
   "targets": {
     "debug": {
-      "outFile": "../build/assemblyscript.debug.wasm",
-      "textFile": "../build/assemblyscript.debug.wast",
+      "outFile": "../build/toilscript.debug.wasm",
+      "textFile": "../build/toilscript.debug.wast",
       "debug": true,
       "sourceMap": true
     },
     "release": {
-      "outFile": "../build/assemblyscript.release.wasm",
-      "textFile": "../build/assemblyscript.release.wast",
+      "outFile": "../build/toilscript.release.wasm",
+      "textFile": "../build/toilscript.release.wast",
       "optimizeLevel": 3,
       "shrinkLevel": 0
     },
     "rtraced": {
-      "outFile": "../build/assemblyscript.rtraced.wasm",
-      "textFile": "../build/assemblyscript.rtraced.wast",
+      "outFile": "../build/toilscript.rtraced.wasm",
+      "textFile": "../build/toilscript.rtraced.wast",
       "debug": true,
       "use": "ASC_RTRACE=1",
       "runPasses": []
     },
     "debug-bootstrap": {
-      "outFile": "../build/assemblyscript.debug-bootstrap.wasm",
-      "textFile": "../build/assemblyscript.debug-bootstrap.wast",
+      "outFile": "../build/toilscript.debug-bootstrap.wasm",
+      "textFile": "../build/toilscript.debug-bootstrap.wast",
       "debug": true,
       "sourceMap": true
     },
     "release-bootstrap": {
-      "outFile": "../build/assemblyscript.release-bootstrap.wasm",
-      "textFile": "../build/assemblyscript.release-bootstrap.wast",
+      "outFile": "../build/toilscript.release-bootstrap.wasm",
+      "textFile": "../build/toilscript.release-bootstrap.wast",
       "optimizeLevel": 3,
       "shrinkLevel": 0
     }

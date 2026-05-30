@@ -7,7 +7,7 @@ A tiny module loader that makes working with AssemblyScript modules as convenien
 ## Example
 
 ```ts
-import loader from "@dacely/as-loader"; // or require
+import loader from "@dacely/toilscript-loader"; // or require
 loader.instantiate(
   // Binary to instantiate
   fetch("optimized.wasm"), // or fs.readFileSync
@@ -24,19 +24,19 @@ The loader basically instantiates the module using `WebAssembly` APIs, but also 
 
 ## Installation
 
-The loader can be installed from [npm](https://www.npmjs.com/package/@dacely/as-loader):
+The loader can be installed from [npm](https://www.npmjs.com/package/@dacely/toilscript-loader):
 
 ```sh
-npm install --save @dacely/as-loader
+npm install --save @dacely/toilscript-loader
 ```
 
 On the web:
 
 ```html
 <!-- ESM -->
-<script type="module" src="https://cdn.jsdelivr.net/npm/@dacely/as-loader/index.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@dacely/toilscript-loader/index.js"></script>
 <!-- UMD -->
-<script src="https://cdn.jsdelivr.net/npm/@dacely/as-loader/umd/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@dacely/toilscript-loader/umd/index.js"></script>
 ```
 
 ## Usage

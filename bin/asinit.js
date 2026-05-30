@@ -73,7 +73,7 @@ if (cliOptions.options.help || cliOptions.arguments.length === 0) printHelp();
 
 function printHelp() {
   console.log([
-    "Sets up a new AssemblyScript project or updates an existing one.",
+    "Sets up a new ToilScript project or updates an existing one.",
     "",
     stdoutColors.white("SYNTAX"),
     "  " + stdoutColors.cyan("asinit") + " directory [options]",
@@ -92,11 +92,11 @@ const compilerDir = path.join(dirname, "..");
 const projectDir = path.resolve(cliOptions.arguments[0]);
 const assemblyDir = path.join(projectDir, "assembly");
 const tsconfigFile = path.join(assemblyDir, "tsconfig.json");
-const asconfigFile = path.join(projectDir, "asconfig.json");
+const toilconfigFile = path.join(projectDir, "toilconfig.json");
 let tsconfigBase = path.relative(assemblyDir, path.join(compilerDir, "std", "assembly.json"));
-if (/^(\.\.[/\\])*node_modules[/\\]assemblyscript[/\\]/.test(tsconfigBase)) {
+if (/^(\.\.[/\\])*node_modules[/\\]toilscript[/\\]/.test(tsconfigBase)) {
   // Use node resolution if the compiler is a normal dependency
-  tsconfigBase = "assemblyscript/std/assembly.json";
+  tsconfigBase = "toilscript/std/assembly.json";
 }
 const entryFile = path.join(assemblyDir, "index.ts");
 const buildDir = path.join(projectDir, "build");
@@ -108,12 +108,12 @@ const indexHtmlFile = path.join(projectDir, "index.html");
 const testsIndexFile = path.join(testsDir, "index.js");
 
 const paths = [
-  [assemblyDir, "Directory holding the AssemblyScript sources being compiled to WebAssembly."],
-  [tsconfigFile, "TypeScript configuration inheriting recommended AssemblyScript settings."],
+  [assemblyDir, "Directory holding the ToilScript sources being compiled to WebAssembly."],
+  [tsconfigFile, "TypeScript configuration inheriting recommended ToilScript settings."],
   [entryFile, "Example entry file being compiled to WebAssembly to get you started."],
   [buildDir, "Build artifact directory where compiled WebAssembly files are stored."],
   [gitignoreFile, "Git configuration that excludes compiled binaries from source control."],
-  [asconfigFile, "Configuration file defining both a 'debug' and a 'release' target."],
+  [toilconfigFile, "Configuration file defining both a 'debug' and a 'release' target."],
   [packageFile, "Package info containing the necessary commands to compile to WebAssembly."],
   [testsIndexFile, "Starter test to check that the module is functioning."],
   [indexHtmlFile, "Starter HTML file that loads the module in a browser."]
@@ -199,7 +199,7 @@ function createProject(answer) {
     "",
     stdoutColors.white("  " + commands[pm].test),
     "",
-    "The AssemblyScript documentation covers all the details:",
+    "The ToilScript documentation covers all the details:",
     "",
     "  https://www.assemblyscript.org",
     "",
@@ -264,9 +264,9 @@ function ensureTsconfigJson() {
 }
 
 function ensureAsconfigJson() {
-  console.log("- Making sure that 'asconfig.json' is set up...");
-  if (!fs.existsSync(asconfigFile)) {
-    fs.writeFileSync(asconfigFile, JSON.stringify({
+  console.log("- Making sure that 'toilconfig.json' is set up...");
+  if (!fs.existsSync(toilconfigFile)) {
+    fs.writeFileSync(toilconfigFile, JSON.stringify({
       targets: {
         debug: {
           // -o build/debug.wasm -t build/debug.wat --sourceMap --debug
@@ -290,9 +290,9 @@ function ensureAsconfigJson() {
         bindings: "esm"
       }
     }, null, 2));
-    console.log(stdoutColors.green("  Created: ") + asconfigFile);
+    console.log(stdoutColors.green("  Created: ") + toilconfigFile);
   } else {
-    console.log(stdoutColors.yellow("  Exists: ") + asconfigFile);
+    console.log(stdoutColors.yellow("  Exists: ") + toilconfigFile);
   }
   console.log();
 }

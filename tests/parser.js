@@ -6,7 +6,7 @@ import { globSync } from "glob";
 import { diff } from "../util/text.js";
 import { stdoutColors } from "../util/terminal.js";
 import * as optionsUtil from "../util/options.js";
-import { Program, Options, ASTBuilder, Feature } from "../dist/assemblyscript.js";
+import { Program, Options, ASTBuilder, Feature } from "../dist/toilscript.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
