@@ -1,5 +1,4 @@
 /* eslint-disable no-class-assign */
-/* eslint-disable no-global-assign */
 
 class Foo {}
 namespace Bar {}

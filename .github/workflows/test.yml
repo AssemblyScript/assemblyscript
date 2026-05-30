@@ -2,27 +2,27 @@ name: Test
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 jobs:
   check:
     name: "Check"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-    - name: "Check that distribution files are unmodified"
-      if: github.event_name == 'pull_request'
-      run: |
-        if git --no-pager diff --name-only $(git rev-parse origin/${{ github.base_ref }})...${{ github.sha }} | grep -q "^dist/"; then
-          printf "\nThe pull request modifies distribution files, but it shouldn't.\n" &&
-          printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/main/CONTRIBUTING.md\n" &&
-          exit 1;
-        else
-          printf "\nOK: Distributions files have not been modified.\n";
-        fi
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: "Check that distribution files are unmodified"
+        if: github.event_name == 'pull_request'
+        run: |
+          if git --no-pager diff --name-only $(git rev-parse origin/${{ github.base_ref }})...${{ github.sha }} | grep -q "^dist/"; then
+            printf "\nThe pull request modifies distribution files, but it shouldn't.\n" &&
+            printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/main/CONTRIBUTING.md\n" &&
+            exit 1;
+          else
+            printf "\nOK: Distributions files have not been modified.\n";
+          fi
   compiler:
     name: "Compiler (${{ matrix.os }}, node ${{ matrix.node_version }})"
     runs-on: ${{ matrix.os }}-latest
@@ -30,20 +30,20 @@ jobs:
     strategy:
       matrix:
         os: ["ubuntu", "macos", "windows"]
-        node_version: ["current", "lts/*"]
+        node_version: ["25", "lts/*"]
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-node@v6
-      with:
-        node-version: ${{ matrix.node_version }}
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Build
-      run: npm run build
-    - name: Check
-      run: npm run check
-    - name: Test
-      run: npm test
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node_version }}
+      - name: Install dependencies
+        run: npm ci --no-audit
+      - name: Build
+        run: npm run build
+      - name: Check
+        run: npm run check
+      - name: Test
+        run: npm test
   bootstrap:
     name: "Bootstrap (${{ matrix.target }})"
     runs-on: ubuntu-latest
@@ -52,95 +52,97 @@ jobs:
       matrix:
         target: ["debug", "release"]
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-node@v6
-      with:
-        node-version: current
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Build
-      run: npm run build
-    - name: "Bootstrap ${{ matrix.target }}"
-      run: npm run bootstrap:${{ matrix.target }}
-    - name: "Test ${{ matrix.target }}"
-      run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target }}-bootstrap.js
-    - name: "Compile ${{ matrix.target }} -> ${{ matrix.target == 'debug' && 'release' || 'debug' }}"
-      run: node bin/asc --config src/asconfig.json --target ${{ matrix.target == 'debug' && 'release' || 'debug' }}-bootstrap --wasm ./build/assemblyscript.${{ matrix.target }}-bootstrap.js
-    - name: "Test ${{ matrix.target == 'debug' && 'release' || 'debug' }}"
-      run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target == 'debug' && 'release' || 'debug' }}-bootstrap.js
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: current
+      - name: Install dependencies
+        run: npm ci --no-audit
+      - name: Build
+        run: npm run build
+      - name: "Bootstrap ${{ matrix.target }}"
+        run: npm run bootstrap:${{ matrix.target }}
+      - name: "Test ${{ matrix.target }}"
+        run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target }}-bootstrap.js
+      - name: "Compile ${{ matrix.target }} -> ${{ matrix.target == 'debug' && 'release' || 'debug' }}"
+        run: node bin/asc --config src/asconfig.json --target ${{ matrix.target == 'debug' && 'release' || 'debug' }}-bootstrap --wasm ./build/assemblyscript.${{ matrix.target }}-bootstrap.js
+      - name: "Test ${{ matrix.target == 'debug' && 'release' || 'debug' }}"
+        run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target == 'debug' && 'release' || 'debug' }}-bootstrap.js
   features:
     name: "Features"
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-node@v6
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Build
-      run: npm run build
-    - name: Test experimental features
-      env:
-        ASC_FEATURES: threads,reference-types,gc,exception-handling
-      run: |
-        npm run test:compiler features/threads features/reference-types features/gc features/exception-handling bindings/esm bindings/raw
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: npm ci --no-audit
+      - name: Build
+        run: npm run build
+      - name: Test experimental features
+        env:
+          ASC_FEATURES: threads,reference-types,gc,exception-handling
+        run: |
+          npm run test:compiler features/threads features/reference-types features/gc features/exception-handling bindings/esm bindings/raw
   runtimes:
     name: "Runtimes"
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-node@v6
-      with:
-        node-version: current
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Build
-      run: npm run build
-    - name: Test default allocator
-      run: |
-        cd tests/allocators/default
-        npm run build
-        cd ..
-        npm test default
-    - name: Test stub allocator
-      run: |
-        cd tests/allocators/stub
-        npm run build
-        cd ..
-        npm test stub
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: current
+      - name: Install dependencies
+        run: npm ci --no-audit
+      - name: Build
+        run: npm run build
+      - name: Test default allocator
+        run: |
+          cd tests/allocators/default
+          npm run build
+          cd ..
+          npm test default
+      - name: Test stub allocator
+        run: |
+          cd tests/allocators/stub
+          npm run build
+          cd ..
+          npm test stub
   loader:
     name: "Loader"
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-node@v6
-      with:
-        node-version: current
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Build
-      run: npm run build
-    - name: Test the loader
-      run: |
-        cd lib/loader
-        npm run asbuild
-        npm run test
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: current
+      - name: Install dependencies
+        run: npm ci --no-audit
+      - name: Build
+        run: npm run build
+      - name: Test the loader
+        run: |
+          cd lib/loader
+          npm run asbuild
+          npm run test
   coverage:
     name: "Coverage"
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-node@v6
-      with:
-        node-version: 24
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Build
-      run: npm run build
-    - name: Collect coverage
-      run: npx c8 -r none -- npm test
-    - name: Output coverage summary
-      run: npx c8 report -r text-summary
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: npm ci --no-audit
+      - name: Build
+        run: npm run build
+      - name: Collect coverage
+        run: npx c8 -r none -- npm test
+      - name: Output coverage summary
+        run: npx c8 report -r text-summary

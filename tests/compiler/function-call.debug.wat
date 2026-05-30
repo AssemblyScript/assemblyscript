@@ -4,16 +4,17 @@
  (type $2 (func))
  (type $3 (func (param i32)))
  (type $4 (func (param i32 i32) (result i32)))
- (type $5 (func (param i32 i32 i32)))
- (type $6 (func (param i32 i32 i32) (result i32)))
- (type $7 (func (param i32 i32 i32 i32)))
+ (type $5 (func (param i32 i32 i32 i32)))
+ (type $6 (func (param i32 i32 i32)))
+ (type $7 (func (param i32 i32 i32) (result i32)))
  (type $8 (func (param i32 i32 i64) (result i32)))
  (type $9 (func (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $function-call/fnVoid (mut i32) (i32.const 32))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $function-call/faVoid (mut i32) (i32.const 64))
  (global $function-call/fnRet (mut i32) (i32.const 96))
+ (global $~lib/native/ASC_FEATURE_EXCEPTION_HANDLING i32 (i32.const 0))
  (global $function-call/faRet (mut i32) (i32.const 192))
  (global $function-call/fnThis (mut i32) (i32.const 224))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
@@ -27,6 +28,7 @@
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Memory i32 (i32.const 3))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
@@ -35,6 +37,7 @@
  (global $~lib/memory/__data_end i32 (i32.const 780))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33548))
  (global $~lib/memory/__heap_base i32 (i32.const 33548))
+ (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (memory $0 1)
  (data $0 (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data $1 (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
@@ -261,7 +264,7 @@
   if
    i32.const 448
    i32.const 512
-   i32.const 21
+   i32.const 22
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -2293,152 +2296,6 @@
   i32.add
   return
  )
- (func $~lib/rt/__visit_globals (param $0 i32)
-  (local $1 i32)
-  global.get $function-call/foo
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  i32.const 448
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 256
-  local.get $0
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
- )
- (func $~lib/function/Function<%28%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28%29=>void>#__visit
- )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28this:i32%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28this:i32%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28this:i32%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28this:function-call/Foo%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28this:function-call/Foo%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28this:function-call/Foo%29=>void>#__visit
- )
- (func $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>#__visit
- )
- (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  block $invalid
-   block $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>
-    block $~lib/function/Function<%28this:function-call/Foo%29=>void>
-     block $function-call/Foo
-      block $~lib/function/Function<%28this:i32%29=>i32>
-       block $~lib/function/Function<%28i32%2Ci32%29=>i32>
-        block $~lib/function/Function<%28%29=>void>
-         block $~lib/arraybuffer/ArrayBufferView
-          block $~lib/string/String
-           block $~lib/arraybuffer/ArrayBuffer
-            block $~lib/object/Object
-             local.get $0
-             i32.const 8
-             i32.sub
-             i32.load
-             br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28%29=>void> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28this:i32%29=>i32> $function-call/Foo $~lib/function/Function<%28this:function-call/Foo%29=>void> $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32> $invalid
-            end
-            return
-           end
-           return
-          end
-          return
-         end
-         local.get $0
-         local.get $1
-         call $~lib/arraybuffer/ArrayBufferView~visit
-         return
-        end
-        local.get $0
-        local.get $1
-        call $~lib/function/Function<%28%29=>void>~visit
-        return
-       end
-       local.get $0
-       local.get $1
-       call $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit
-       return
-      end
-      local.get $0
-      local.get $1
-      call $~lib/function/Function<%28this:i32%29=>i32>~visit
-      return
-     end
-     return
-    end
-    local.get $0
-    local.get $1
-    call $~lib/function/Function<%28this:function-call/Foo%29=>void>~visit
-    return
-   end
-   local.get $0
-   local.get $1
-   call $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>~visit
-   return
-  end
-  unreachable
- )
  (func $~start
   call $start:function-call
  )
@@ -2454,6 +2311,38 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $~lib/builtins/abort (param $message i32) (param $fileName i32) (param $lineNumber i32) (param $columnNumber i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  i32.const 0
+  drop
+  local.get $message
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store
+  local.get $4
+  local.get $fileName
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store offset=4
+  local.get $4
+  local.get $lineNumber
+  local.get $columnNumber
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $function-call/Foo#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -2626,7 +2515,7 @@
   global.set $~argumentsLength
   i32.const 720
   i32.load
-  call_indirect (type $6)
+  call_indirect (type $7)
   i32.const 3
   i32.eq
   i32.eqz
@@ -2638,126 +2527,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28this:i32%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28this:i32%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28this:function-call/Foo%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28this:function-call/Foo%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
@@ -2790,5 +2559,291 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $~lib/rt/__visit_globals (param $0 i32)
+  (local $1 i32)
+  global.get $function-call/foo
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  i32.const 448
+  local.get $0
+  call $~lib/rt/itcms/__visit
+  i32.const 256
+  local.get $0
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
+ )
+ (func $~lib/function/Function<%28%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28this:i32%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28this:i32%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28this:i32%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28this:function-call/Foo%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28this:function-call/Foo%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28this:function-call/Foo%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>#__visit
+ )
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
+  block $invalid
+   block $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>
+    block $~lib/function/Function<%28this:function-call/Foo%29=>void>
+     block $function-call/Foo
+      block $~lib/function/Function<%28this:i32%29=>i32>
+       block $~lib/function/Function<%28i32%2Ci32%29=>i32>
+        block $~lib/function/Function<%28%29=>void>
+         block $~lib/arraybuffer/ArrayBufferView
+          block $~lib/string/String
+           block $~lib/arraybuffer/ArrayBuffer
+            block $~lib/object/Object
+             local.get $0
+             i32.const 8
+             i32.sub
+             i32.load
+             br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28%29=>void> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28this:i32%29=>i32> $function-call/Foo $~lib/function/Function<%28this:function-call/Foo%29=>void> $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32> $invalid
+            end
+            return
+           end
+           return
+          end
+          return
+         end
+         local.get $0
+         local.get $1
+         call $~lib/arraybuffer/ArrayBufferView~visit
+         return
+        end
+        local.get $0
+        local.get $1
+        call $~lib/function/Function<%28%29=>void>~visit
+        return
+       end
+       local.get $0
+       local.get $1
+       call $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit
+       return
+      end
+      local.get $0
+      local.get $1
+      call $~lib/function/Function<%28this:i32%29=>i32>~visit
+      return
+     end
+     return
+    end
+    local.get $0
+    local.get $1
+    call $~lib/function/Function<%28this:function-call/Foo%29=>void>~visit
+    return
+   end
+   local.get $0
+   local.get $1
+   call $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>~visit
+   return
+  end
+  unreachable
+ )
+ (func $~lib/function/Function<%28%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28this:i32%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28this:i32%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28this:function-call/Foo%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28this:function-call/Foo%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28this:function-call/Foo%2Ci32%2Ci32%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )

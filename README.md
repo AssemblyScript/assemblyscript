@@ -3,12 +3,74 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AssemblyScript/assemblyscript/actions/workflows/test.yml"><img src="https://img.shields.io/github/actions/workflow/status/AssemblyScript/assemblyscript/test.yml?branch=main&label=test&logo=github" alt="Test status" /></a>
-  <a href="https://github.com/AssemblyScript/assemblyscript/actions/workflows/publish.yml"><img src="https://img.shields.io/github/actions/workflow/status/AssemblyScript/assemblyscript/publish.yml?branch=main&label=publish&logo=github" alt="Publish status" /></a>
-  <a href="https://www.npmjs.com/package/assemblyscript"><img src="https://img.shields.io/npm/v/assemblyscript.svg?color=007acc&logo=npm" alt="npm compiler version" /></a>
-  <a href="https://discord.gg/assemblyscript"><img src="https://img.shields.io/discord/721472913886281818.svg?label=discord&logo=discord&logoColor=ffffff&color=7389D8" alt="Discord online" /></a>
-  <a href="https://stand-with-ukraine.pp.ua"><img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg" alt="#StandWithUkraine" /></a>
+  <a href="https://www.npmjs.com/package/@btc-vision/assemblyscript"><img src="https://img.shields.io/npm/v/@btc-vision/assemblyscript.svg?color=007acc&logo=npm" alt="npm version" /></a>
+  <a href="https://github.com/btc-vision/assemblyscript/releases"><img src="https://img.shields.io/github/v/release/btc-vision/assemblyscript?color=green&logo=github" alt="GitHub release" /></a>
 </p>
+
+---
+
+## WARNING: EXPERIMENTAL FORK
+
+**This is an experimental fork of AssemblyScript maintained by [btc-vision](https://github.com/btc-vision).** It includes features that are not yet available in the official AssemblyScript release:
+
+### Experimental Features
+
+- **Closures** - Full closure support with captured variables
+- **Try-Catch-Finally** - Exception handling with try-catch-finally blocks
+- **Binaryen 125** - Updated to the latest Binaryen version (125.0.0)
+- **Enhanced Shadow Stack** - Improved shadow stack pass for better GC integration
+
+### Changes from Upstream
+
+1. **Closure Support**
+   - Closure capture analysis and recompilation logic
+
+2. **Exception Handling**
+   - Try-catch-finally statement support
+   - Enforced Error type in throw statements
+
+3. **Binaryen Upgrade (123 → 125)**
+   - Updated ExpressionId enum values to match Binaryen 125
+   - Fixed shadow stack pass timing to handle lazy function compilation
+   - Moved `compileVisitGlobals`/`compileVisitMembers` after shadow stack pass
+   - Added iterative shadow stack transformation for newly compiled functions
+
+---
+
+## Installation
+
+```sh
+npm install @btc-vision/assemblyscript
+```
+
+### Usage
+
+This fork is a drop-in replacement for AssemblyScript. Simply replace your import:
+
+```json
+{
+  "dependencies": {
+    "@btc-vision/assemblyscript": "^0.29.0"
+  }
+}
+```
+
+Or if migrating from official AssemblyScript:
+
+```sh
+npm uninstall assemblyscript
+npm install @btc-vision/assemblyscript
+```
+
+The CLI commands remain the same:
+
+```sh
+npx asc your-file.ts --outFile output.wasm
+```
+
+---
+
+## Original README
 
 <p align="justify"><strong>AssemblyScript</strong> compiles a variant of <a href="http://www.typescriptlang.org">TypeScript</a> (basically JavaScript with types) to <a href="http://webassembly.org">WebAssembly</a> using <a href="https://github.com/WebAssembly/binaryen">Binaryen</a>. It generates lean and mean WebAssembly modules while being just an <code>npm install</code> away.</p>
 
@@ -39,7 +101,7 @@
 A development environment can be set up by cloning the repository:
 
 ```sh
-git clone https://github.com/AssemblyScript/assemblyscript.git
+git clone https://github.com/btc-vision/assemblyscript.git
 cd assemblyscript
 npm install
 npm link

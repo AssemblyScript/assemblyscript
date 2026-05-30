@@ -1,16 +1,18 @@
 (module
  (type $0 (func (param i32) (result i32)))
  (type $1 (func))
- (type $2 (func (param f32) (result i32)))
- (type $3 (func (param f64) (result i32)))
- (type $4 (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (type $2 (func (param i32 i32 i32 i32)))
+ (type $3 (func (param f32) (result i32)))
+ (type $4 (func (param f64) (result i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Memory i32 (i32.const 3))
  (global $~lib/memory/__data_end i32 (i32.const 380))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33148))
  (global $~lib/memory/__heap_base i32 (i32.const 33148))
+ (global $~lib/native/ASC_FEATURE_EXCEPTION_HANDLING i32 (i32.const 0))
  (memory $0 1)
  (data $0 (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data $1 (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\00a\00\00\00\00\00\00\00\00\00\00\00")
@@ -885,5 +887,37 @@
   global.set $~lib/memory/__stack_pointer
   local.get $19
   return
+ )
+ (func $~lib/builtins/abort (param $message i32) (param $fileName i32) (param $lineNumber i32) (param $columnNumber i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  i32.const 0
+  drop
+  local.get $message
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store
+  local.get $4
+  local.get $fileName
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store offset=4
+  local.get $4
+  local.get $lineNumber
+  local.get $columnNumber
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )

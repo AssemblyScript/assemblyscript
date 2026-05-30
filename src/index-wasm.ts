@@ -204,6 +204,8 @@ export const FEATURE_EXTENDED_CONST = Feature.ExtendedConst;
 export const FEATURE_STRINGREF = Feature.Strings;
 /** Shared-everything threads. */
 export const FEATURE_SHARED_EVERYTHING = Feature.SharedEverything;
+/** Closures. */
+export const FEATURE_CLOSURES = Feature.Closures;
 /** All features. */
 export const FEATURES_ALL = Feature.All;
 /** Default features. */

@@ -3,12 +3,13 @@
  (type $1 (func (result i32)))
  (type $2 (func (param i32 i32 i32) (result i32)))
  (type $3 (func))
- (type $4 (func (param i64 i64) (result i64)))
- (type $5 (func (param f64 f64) (result f64)))
- (type $6 (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (type $4 (func (param i32 i32 i32 i32)))
+ (type $5 (func (param i64 i64) (result i64)))
+ (type $6 (func (param f64 f64) (result f64)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~lib/native/ASC_FEATURE_EXCEPTION_HANDLING i32 (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 204))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32972))
@@ -105,6 +106,38 @@
    unreachable
   end
  )
+ (func $~lib/builtins/abort (param $message i32) (param $fileName i32) (param $lineNumber i32) (param $columnNumber i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  i32.const 0
+  drop
+  local.get $message
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store
+  local.get $4
+  local.get $fileName
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store offset=4
+  local.get $4
+  local.get $lineNumber
+  local.get $columnNumber
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $function-types/makeAndAdd<i32>@varargs (param $a i32) (param $b i32) (param $adder i32) (result i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -184,7 +217,7 @@
   global.set $~argumentsLength
   global.get $function-types/i64Adder
   i32.load
-  call_indirect (type $4)
+  call_indirect (type $5)
   i64.const 30
   i64.eq
   i32.eqz
@@ -202,7 +235,7 @@
   global.set $~argumentsLength
   call $function-types/makeAdder<f64>
   i32.load
-  call_indirect (type $5)
+  call_indirect (type $6)
   f64.const 4
   f64.eq
   i32.eqz

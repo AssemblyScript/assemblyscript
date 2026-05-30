@@ -4,10 +4,11 @@
  (type $2 (func (param i32)))
  (type $3 (func))
  (type $4 (func (param i32 i32) (result i32)))
- (type $5 (func (param i32 i32 i32)))
- (type $6 (func (param i32 i32 i32 i32)))
+ (type $5 (func (param i32 i32 i32 i32)))
+ (type $6 (func (param i32 i32 i32)))
  (type $7 (func (param i32 i32 i64) (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
+ (global $~lib/native/ASC_FEATURE_EXCEPTION_HANDLING i32 (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
@@ -36,6 +37,15 @@
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $message i32) (param $fileName i32) (param $lineNumber i32) (param $columnNumber i32)
+  i32.const 0
+  drop
+  local.get $message
+  local.get $fileName
+  local.get $lineNumber
+  local.get $columnNumber
+  call $~lib/builtins/__abort_impl
+ )
  (func $~lib/rt/tlsf/Root#set:flMap (param $this i32) (param $flMap i32)
   local.get $this
   local.get $flMap
@@ -1988,6 +1998,17 @@
   i32.const 0
   drop
  )
+ (func $~start
+  i32.const 208
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/fromSpace
+  i32.const 304
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/pinSpace
+  i32.const 400
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/toSpace
+ )
  (func $~lib/rt/tcms/__visit (param $ptr i32) (param $cookie i32)
   (local $obj i32)
   local.get $ptr
@@ -2063,16 +2084,5 @@
    return
   end
   unreachable
- )
- (func $~start
-  i32.const 208
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/fromSpace
-  i32.const 304
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/pinSpace
-  i32.const 400
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/toSpace
  )
 )

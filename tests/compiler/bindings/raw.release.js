@@ -34,7 +34,7 @@ export async function instantiate(module, imports = {}) {
         })();
       },
       abort(message, fileName, lineNumber, columnNumber) {
-        // ~lib/builtins/abort(~lib/string/String | null?, ~lib/string/String | null?, u32?, u32?) => void
+        // ~lib/builtins/__abort_impl(~lib/string/String | null?, ~lib/string/String | null?, u32?, u32?) => void
         message = __liftString(message >>> 0);
         fileName = __liftString(fileName >>> 0);
         lineNumber = lineNumber >>> 0;

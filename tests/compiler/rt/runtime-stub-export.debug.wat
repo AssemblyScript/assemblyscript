@@ -1,11 +1,12 @@
 (module
  (type $0 (func (param i32 i32)))
- (type $1 (func (param i32)))
- (type $2 (func (param i32) (result i32)))
- (type $3 (func))
- (type $4 (func (param i32 i32 i32 i32)))
+ (type $1 (func (param i32 i32 i32 i32)))
+ (type $2 (func (param i32)))
+ (type $3 (func (param i32) (result i32)))
+ (type $4 (func))
  (type $5 (func (param i32 i32) (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
+ (global $~lib/native/ASC_FEATURE_EXCEPTION_HANDLING i32 (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 144))
@@ -23,6 +24,15 @@
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $message i32) (param $fileName i32) (param $lineNumber i32) (param $columnNumber i32)
+  i32.const 0
+  drop
+  local.get $message
+  local.get $fileName
+  local.get $lineNumber
+  local.get $columnNumber
+  call $~lib/builtins/__abort_impl
+ )
  (func $~lib/rt/stub/maybeGrowMemory (param $newOffset i32)
   (local $pagesBefore i32)
   (local $maxOffset i32)

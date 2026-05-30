@@ -28,17 +28,17 @@
  (type $26 (func (param i64 i32 i32)))
  (type $27 (func (param i32 f32 i32) (result i32)))
  (type $28 (func (param i64 i32) (result i32)))
- (type $29 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $30 (func (param f32 i32 i32) (result f32)))
- (type $31 (func (param f64 i32 i32) (result f64)))
- (type $32 (func (param i32 i64 i32)))
- (type $33 (func (param i32 i64) (result i32)))
- (type $34 (func (param i32 i32 i64)))
- (type $35 (func (param i32 i32 f32) (result f32)))
- (type $36 (func (param i32 i32 f64) (result f64)))
- (type $37 (func (param f32 i32 i32)))
- (type $38 (func (param f64 i32 i32)))
- (type $39 (func (param i32 i32 i32 i32)))
+ (type $29 (func (param i32 i32 i32 i32)))
+ (type $30 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $31 (func (param f32 i32 i32) (result f32)))
+ (type $32 (func (param f64 i32 i32) (result f64)))
+ (type $33 (func (param i32 i64 i32)))
+ (type $34 (func (param i32 i64) (result i32)))
+ (type $35 (func (param i32 i32 i64)))
+ (type $36 (func (param i32 i32 f32) (result f32)))
+ (type $37 (func (param i32 i32 f64) (result f64)))
+ (type $38 (func (param f32 i32 i32)))
+ (type $39 (func (param f64 i32 i32)))
  (type $40 (func (param i32 i32 i64) (result i32)))
  (type $41 (func (result i32)))
  (type $42 (func (param f32 f32) (result f32)))
@@ -54,7 +54,7 @@
  (type $52 (func (param i32 i32 f32)))
  (type $53 (func (param f32) (result i32)))
  (type $54 (func (param f64) (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (global $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT i32 (i32.const 1))
  (global $~lib/typedarray/Uint8Array.BYTES_PER_ELEMENT i32 (i32.const 1))
@@ -70,6 +70,8 @@
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Memory i32 (i32.const 3))
+ (global $~lib/native/ASC_FEATURE_EXCEPTION_HANDLING i32 (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -599,7 +601,7 @@
   if
    i32.const 336
    i32.const 400
-   i32.const 21
+   i32.const 22
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -13084,1390 +13086,6 @@
   i32.const 0
   drop
  )
- (func $~lib/rt/__visit_globals (param $0 i32)
-  (local $1 i32)
-  global.get $std/typedarray/forEachValues
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/typedarray/testArrayReverseValues
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/typedarray/testArrayIndexOfAndLastIndexOfValues
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/typedarray/testArrayWrapValues
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/typedarray/setSource1
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/typedarray/setSource2
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/typedarray/setSource3
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/typedarray/setSource7
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  i32.const 336
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 32
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 144
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 7408
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 8464
-  local.get $0
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
- )
- (func $~lib/typedarray/Int8Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Uint8Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Uint8ClampedArray~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Int16Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Uint16Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Int32Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Uint32Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Int64Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Uint64Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Float32Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/typedarray/Float64Array~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView~visit
- )
- (func $~lib/function/Function<%28f64%2Cf64%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28f64%2Cf64%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f64%2Cf64%29=>i32>#__visit
- )
- (func $~lib/array/Array<i8>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/array/Array<i8>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<i8>#__visit
- )
- (func $~lib/array/Array<i32>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<i32>#__visit
- )
- (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit
- )
- (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit
- )
- (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit
- )
- (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit
- )
- (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit
- )
- (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit
- )
- (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit
- )
- (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit
- )
- (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit
- )
- (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit
- )
- (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit
- )
- (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit
- )
- (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit
- )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit
- )
- (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit
- )
- (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit
- )
- (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit
- )
- (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit
- )
- (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#__visit
- )
- (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#__visit
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#__visit
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#__visit
- )
- (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#__visit
- )
- (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#__visit
- )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#__visit
- )
- (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#__visit
- )
- (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#__visit
- )
- (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#__visit
- )
- (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#__visit
- )
- (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#__visit
- )
- (func $~lib/array/Array<f32>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/array/Array<f32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<f32>#__visit
- )
- (func $~lib/array/Array<f64>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/array/Array<f64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<f64>#__visit
- )
- (func $~lib/array/Array<u8>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/array/Array<u8>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<u8>#__visit
- )
- (func $~lib/array/Array<i16>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/array/Array<i16>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<i16>#__visit
- )
- (func $~lib/array/Array<u16>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/array/Array<u16>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<u16>#__visit
- )
- (func $~lib/array/Array<u32>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/array/Array<u32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<u32>#__visit
- )
- (func $~lib/array/Array<i64>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/array/Array<i64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<i64>#__visit
- )
- (func $~lib/array/Array<u64>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/array/Array<u64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<u64>#__visit
- )
- (func $~lib/function/Function<%28i8%2Ci8%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i8%2Ci8%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i8%2Ci8%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28u8%2Cu8%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u8%2Cu8%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u8%2Cu8%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28i16%2Ci16%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i16%2Ci16%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i16%2Ci16%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28u16%2Cu16%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u16%2Cu16%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u16%2Cu16%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28u32%2Cu32%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u32%2Cu32%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u32%2Cu32%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28i64%2Ci64%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28i64%2Ci64%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i64%2Ci64%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28u64%2Cu64%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28u64%2Cu64%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u64%2Cu64%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28f32%2Cf32%29=>i32>#get:_env (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $~lib/function/Function<%28f32%2Cf32%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f32%2Cf32%29=>i32>#__visit
- )
- (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  block $invalid
-   block $~lib/function/Function<%28f32%2Cf32%29=>i32>
-    block $~lib/function/Function<%28u64%2Cu64%29=>i32>
-     block $~lib/function/Function<%28i64%2Ci64%29=>i32>
-      block $~lib/function/Function<%28u32%2Cu32%29=>i32>
-       block $~lib/function/Function<%28i32%2Ci32%29=>i32>
-        block $~lib/function/Function<%28u16%2Cu16%29=>i32>
-         block $~lib/function/Function<%28i16%2Ci16%29=>i32>
-          block $~lib/function/Function<%28u8%2Cu8%29=>i32>
-           block $~lib/function/Function<%28i8%2Ci8%29=>i32>
-            block $~lib/array/Array<u64>
-             block $~lib/array/Array<i64>
-              block $~lib/array/Array<u32>
-               block $~lib/array/Array<u16>
-                block $~lib/array/Array<i16>
-                 block $~lib/array/Array<u8>
-                  block $~lib/array/Array<f64>
-                   block $~lib/array/Array<f32>
-                    block $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>
-                     block $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>
-                      block $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>
-                       block $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>
-                        block $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>
-                         block $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>
-                          block $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>
-                           block $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>
-                            block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>
-                             block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>
-                              block $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>
-                               block $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>
-                                block $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>
-                                 block $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>
-                                  block $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>
-                                   block $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>
-                                    block $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>
-                                     block $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>
-                                      block $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>
-                                       block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>
-                                        block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>
-                                         block $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>
-                                          block $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>
-                                           block $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>
-                                            block $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>
-                                             block $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>
-                                              block $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>
-                                               block $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>
-                                                block $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>
-                                                 block $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>
-                                                  block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>
-                                                   block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>
-                                                    block $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>
-                                                     block $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>
-                                                      block $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>
-                                                       block $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>
-                                                        block $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>
-                                                         block $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>
-                                                          block $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>
-                                                           block $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>
-                                                            block $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>
-                                                             block $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>
-                                                              block $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>
-                                                               block $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>
-                                                                block $~lib/array/Array<i32>
-                                                                 block $~lib/array/Array<i8>
-                                                                  block $~lib/function/Function<%28f64%2Cf64%29=>i32>
-                                                                   block $~lib/typedarray/Float64Array
-                                                                    block $~lib/typedarray/Float32Array
-                                                                     block $~lib/typedarray/Uint64Array
-                                                                      block $~lib/typedarray/Int64Array
-                                                                       block $~lib/typedarray/Uint32Array
-                                                                        block $~lib/typedarray/Int32Array
-                                                                         block $~lib/typedarray/Uint16Array
-                                                                          block $~lib/typedarray/Int16Array
-                                                                           block $~lib/typedarray/Uint8ClampedArray
-                                                                            block $~lib/typedarray/Uint8Array
-                                                                             block $~lib/typedarray/Int8Array
-                                                                              block $~lib/arraybuffer/ArrayBufferView
-                                                                               block $~lib/string/String
-                                                                                block $~lib/arraybuffer/ArrayBuffer
-                                                                                 block $~lib/object/Object
-                                                                                  local.get $0
-                                                                                  i32.const 8
-                                                                                  i32.sub
-                                                                                  i32.load
-                                                                                  br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Int8Array $~lib/typedarray/Uint8Array $~lib/typedarray/Uint8ClampedArray $~lib/typedarray/Int16Array $~lib/typedarray/Uint16Array $~lib/typedarray/Int32Array $~lib/typedarray/Uint32Array $~lib/typedarray/Int64Array $~lib/typedarray/Uint64Array $~lib/typedarray/Float32Array $~lib/typedarray/Float64Array $~lib/function/Function<%28f64%2Cf64%29=>i32> $~lib/array/Array<i8> $~lib/array/Array<i32> $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8> $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8> $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8> $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16> $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32> $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32> $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64> $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64> $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32> $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64> $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8> $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16> $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16> $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32> $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32> $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64> $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64> $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32> $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64> $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool> $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool> $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool> $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool> $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool> $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool> $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool> $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool> $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool> $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void> $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void> $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void> $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void> $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void> $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void> $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void> $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void> $~lib/array/Array<f32> $~lib/array/Array<f64> $~lib/array/Array<u8> $~lib/array/Array<i16> $~lib/array/Array<u16> $~lib/array/Array<u32> $~lib/array/Array<i64> $~lib/array/Array<u64> $~lib/function/Function<%28i8%2Ci8%29=>i32> $~lib/function/Function<%28u8%2Cu8%29=>i32> $~lib/function/Function<%28i16%2Ci16%29=>i32> $~lib/function/Function<%28u16%2Cu16%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28u32%2Cu32%29=>i32> $~lib/function/Function<%28i64%2Ci64%29=>i32> $~lib/function/Function<%28u64%2Cu64%29=>i32> $~lib/function/Function<%28f32%2Cf32%29=>i32> $invalid
-                                                                                 end
-                                                                                 return
-                                                                                end
-                                                                                return
-                                                                               end
-                                                                               return
-                                                                              end
-                                                                              local.get $0
-                                                                              local.get $1
-                                                                              call $~lib/arraybuffer/ArrayBufferView~visit
-                                                                              return
-                                                                             end
-                                                                             local.get $0
-                                                                             local.get $1
-                                                                             call $~lib/typedarray/Int8Array~visit
-                                                                             return
-                                                                            end
-                                                                            local.get $0
-                                                                            local.get $1
-                                                                            call $~lib/typedarray/Uint8Array~visit
-                                                                            return
-                                                                           end
-                                                                           local.get $0
-                                                                           local.get $1
-                                                                           call $~lib/typedarray/Uint8ClampedArray~visit
-                                                                           return
-                                                                          end
-                                                                          local.get $0
-                                                                          local.get $1
-                                                                          call $~lib/typedarray/Int16Array~visit
-                                                                          return
-                                                                         end
-                                                                         local.get $0
-                                                                         local.get $1
-                                                                         call $~lib/typedarray/Uint16Array~visit
-                                                                         return
-                                                                        end
-                                                                        local.get $0
-                                                                        local.get $1
-                                                                        call $~lib/typedarray/Int32Array~visit
-                                                                        return
-                                                                       end
-                                                                       local.get $0
-                                                                       local.get $1
-                                                                       call $~lib/typedarray/Uint32Array~visit
-                                                                       return
-                                                                      end
-                                                                      local.get $0
-                                                                      local.get $1
-                                                                      call $~lib/typedarray/Int64Array~visit
-                                                                      return
-                                                                     end
-                                                                     local.get $0
-                                                                     local.get $1
-                                                                     call $~lib/typedarray/Uint64Array~visit
-                                                                     return
-                                                                    end
-                                                                    local.get $0
-                                                                    local.get $1
-                                                                    call $~lib/typedarray/Float32Array~visit
-                                                                    return
-                                                                   end
-                                                                   local.get $0
-                                                                   local.get $1
-                                                                   call $~lib/typedarray/Float64Array~visit
-                                                                   return
-                                                                  end
-                                                                  local.get $0
-                                                                  local.get $1
-                                                                  call $~lib/function/Function<%28f64%2Cf64%29=>i32>~visit
-                                                                  return
-                                                                 end
-                                                                 local.get $0
-                                                                 local.get $1
-                                                                 call $~lib/array/Array<i8>~visit
-                                                                 return
-                                                                end
-                                                                local.get $0
-                                                                local.get $1
-                                                                call $~lib/array/Array<i32>~visit
-                                                                return
-                                                               end
-                                                               local.get $0
-                                                               local.get $1
-                                                               call $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit
-                                                               return
-                                                              end
-                                                              local.get $0
-                                                              local.get $1
-                                                              call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit
-                                                              return
-                                                             end
-                                                             local.get $0
-                                                             local.get $1
-                                                             call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit
-                                                             return
-                                                            end
-                                                            local.get $0
-                                                            local.get $1
-                                                            call $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit
-                                                            return
-                                                           end
-                                                           local.get $0
-                                                           local.get $1
-                                                           call $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit
-                                                           return
-                                                          end
-                                                          local.get $0
-                                                          local.get $1
-                                                          call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit
-                                                          return
-                                                         end
-                                                         local.get $0
-                                                         local.get $1
-                                                         call $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit
-                                                         return
-                                                        end
-                                                        local.get $0
-                                                        local.get $1
-                                                        call $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit
-                                                        return
-                                                       end
-                                                       local.get $0
-                                                       local.get $1
-                                                       call $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit
-                                                       return
-                                                      end
-                                                      local.get $0
-                                                      local.get $1
-                                                      call $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit
-                                                      return
-                                                     end
-                                                     local.get $0
-                                                     local.get $1
-                                                     call $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit
-                                                     return
-                                                    end
-                                                    local.get $0
-                                                    local.get $1
-                                                    call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit
-                                                    return
-                                                   end
-                                                   local.get $0
-                                                   local.get $1
-                                                   call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit
-                                                   return
-                                                  end
-                                                  local.get $0
-                                                  local.get $1
-                                                  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit
-                                                  return
-                                                 end
-                                                 local.get $0
-                                                 local.get $1
-                                                 call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit
-                                                 return
-                                                end
-                                                local.get $0
-                                                local.get $1
-                                                call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit
-                                                return
-                                               end
-                                               local.get $0
-                                               local.get $1
-                                               call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit
-                                               return
-                                              end
-                                              local.get $0
-                                              local.get $1
-                                              call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit
-                                              return
-                                             end
-                                             local.get $0
-                                             local.get $1
-                                             call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit
-                                             return
-                                            end
-                                            local.get $0
-                                            local.get $1
-                                            call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit
-                                            return
-                                           end
-                                           local.get $0
-                                           local.get $1
-                                           call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit
-                                           return
-                                          end
-                                          local.get $0
-                                          local.get $1
-                                          call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit
-                                          return
-                                         end
-                                         local.get $0
-                                         local.get $1
-                                         call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>~visit
-                                         return
-                                        end
-                                        local.get $0
-                                        local.get $1
-                                        call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>~visit
-                                        return
-                                       end
-                                       local.get $0
-                                       local.get $1
-                                       call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>~visit
-                                       return
-                                      end
-                                      local.get $0
-                                      local.get $1
-                                      call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>~visit
-                                      return
-                                     end
-                                     local.get $0
-                                     local.get $1
-                                     call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>~visit
-                                     return
-                                    end
-                                    local.get $0
-                                    local.get $1
-                                    call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>~visit
-                                    return
-                                   end
-                                   local.get $0
-                                   local.get $1
-                                   call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>~visit
-                                   return
-                                  end
-                                  local.get $0
-                                  local.get $1
-                                  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>~visit
-                                  return
-                                 end
-                                 local.get $0
-                                 local.get $1
-                                 call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>~visit
-                                 return
-                                end
-                                local.get $0
-                                local.get $1
-                                call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>~visit
-                                return
-                               end
-                               local.get $0
-                               local.get $1
-                               call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>~visit
-                               return
-                              end
-                              local.get $0
-                              local.get $1
-                              call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>~visit
-                              return
-                             end
-                             local.get $0
-                             local.get $1
-                             call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>~visit
-                             return
-                            end
-                            local.get $0
-                            local.get $1
-                            call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>~visit
-                            return
-                           end
-                           local.get $0
-                           local.get $1
-                           call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>~visit
-                           return
-                          end
-                          local.get $0
-                          local.get $1
-                          call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>~visit
-                          return
-                         end
-                         local.get $0
-                         local.get $1
-                         call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>~visit
-                         return
-                        end
-                        local.get $0
-                        local.get $1
-                        call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>~visit
-                        return
-                       end
-                       local.get $0
-                       local.get $1
-                       call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>~visit
-                       return
-                      end
-                      local.get $0
-                      local.get $1
-                      call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>~visit
-                      return
-                     end
-                     local.get $0
-                     local.get $1
-                     call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>~visit
-                     return
-                    end
-                    local.get $0
-                    local.get $1
-                    call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>~visit
-                    return
-                   end
-                   local.get $0
-                   local.get $1
-                   call $~lib/array/Array<f32>~visit
-                   return
-                  end
-                  local.get $0
-                  local.get $1
-                  call $~lib/array/Array<f64>~visit
-                  return
-                 end
-                 local.get $0
-                 local.get $1
-                 call $~lib/array/Array<u8>~visit
-                 return
-                end
-                local.get $0
-                local.get $1
-                call $~lib/array/Array<i16>~visit
-                return
-               end
-               local.get $0
-               local.get $1
-               call $~lib/array/Array<u16>~visit
-               return
-              end
-              local.get $0
-              local.get $1
-              call $~lib/array/Array<u32>~visit
-              return
-             end
-             local.get $0
-             local.get $1
-             call $~lib/array/Array<i64>~visit
-             return
-            end
-            local.get $0
-            local.get $1
-            call $~lib/array/Array<u64>~visit
-            return
-           end
-           local.get $0
-           local.get $1
-           call $~lib/function/Function<%28i8%2Ci8%29=>i32>~visit
-           return
-          end
-          local.get $0
-          local.get $1
-          call $~lib/function/Function<%28u8%2Cu8%29=>i32>~visit
-          return
-         end
-         local.get $0
-         local.get $1
-         call $~lib/function/Function<%28i16%2Ci16%29=>i32>~visit
-         return
-        end
-        local.get $0
-        local.get $1
-        call $~lib/function/Function<%28u16%2Cu16%29=>i32>~visit
-        return
-       end
-       local.get $0
-       local.get $1
-       call $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit
-       return
-      end
-      local.get $0
-      local.get $1
-      call $~lib/function/Function<%28u32%2Cu32%29=>i32>~visit
-      return
-     end
-     local.get $0
-     local.get $1
-     call $~lib/function/Function<%28i64%2Ci64%29=>i32>~visit
-     return
-    end
-    local.get $0
-    local.get $1
-    call $~lib/function/Function<%28u64%2Cu64%29=>i32>~visit
-    return
-   end
-   local.get $0
-   local.get $1
-   call $~lib/function/Function<%28f32%2Cf32%29=>i32>~visit
-   return
-  end
-  unreachable
- )
  (func $~start
   call $start:std/typedarray
  )
@@ -14483,6 +13101,38 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $~lib/builtins/abort (param $message i32) (param $fileName i32) (param $lineNumber i32) (param $columnNumber i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  i32.const 0
+  drop
+  local.get $message
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store
+  local.get $4
+  local.get $fileName
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store offset=4
+  local.get $4
+  local.get $lineNumber
+  local.get $columnNumber
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (param $this i32) (param $length i32) (param $alignLog2 i32) (result i32)
   (local $buffer i32)
@@ -16092,7 +14742,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 747
+   i32.const 748
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -16139,7 +14789,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 736
+   i32.const 737
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -16286,6 +14936,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -16345,7 +14999,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1457
+   i32.const 1458
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -16490,6 +15144,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -17121,7 +15779,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1446
+   i32.const 1447
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -17168,7 +15826,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 320
+   i32.const 321
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -17223,7 +15881,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 309
+   i32.const 310
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -17268,7 +15926,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 36
+   i32.const 37
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -17373,7 +16031,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 25
+   i32.const 26
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -17419,7 +16077,7 @@
   if
    i32.const 336
    i32.const 736
-   i32.const 114
+   i32.const 116
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -17709,6 +16367,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -17829,7 +16491,7 @@
   if
    i32.const 336
    i32.const 736
-   i32.const 114
+   i32.const 116
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -18602,7 +17264,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 178
+   i32.const 179
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -18993,7 +17655,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 463
+   i32.const 464
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -19212,7 +17874,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 605
+   i32.const 606
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -19603,7 +18265,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 889
+   i32.const 890
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -19821,7 +18483,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1031
+   i32.const 1032
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -20040,7 +18702,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1173
+   i32.const 1174
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -20259,7 +18921,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1315
+   i32.const 1316
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -20660,7 +19322,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 48
+   i32.const 49
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -20823,7 +19485,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 190
+   i32.const 191
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -20986,7 +19648,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 332
+   i32.const 333
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -21151,7 +19813,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 475
+   i32.const 476
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -21318,7 +19980,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 617
+   i32.const 618
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -21485,7 +20147,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 759
+   i32.const 760
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -21652,7 +20314,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 901
+   i32.const 902
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -21820,7 +20482,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1043
+   i32.const 1044
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -21988,7 +20650,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1185
+   i32.const 1186
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -22156,7 +20818,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1327
+   i32.const 1328
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -22324,7 +20986,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1469
+   i32.const 1470
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -24438,6 +23100,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -24686,6 +23352,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -24729,7 +23399,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 167
+   i32.const 168
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -24979,6 +23649,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -25227,6 +23901,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -25272,7 +23950,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 452
+   i32.const 453
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -25524,6 +24202,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -25569,7 +24251,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 594
+   i32.const 595
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -25821,6 +24503,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -26069,6 +24755,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -26114,7 +24804,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 878
+   i32.const 879
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -26366,6 +25056,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -26412,7 +25106,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1020
+   i32.const 1021
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -26664,6 +25358,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -26710,7 +25408,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1162
+   i32.const 1163
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -26950,7 +25648,7 @@
      global.set $~argumentsLength
      local.get $fn|3
      i32.load
-     call_indirect (type $30)
+     call_indirect (type $31)
      f32.store
      local.get $i
      i32.const 1
@@ -26962,6 +25660,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -27008,7 +25710,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1304
+   i32.const 1305
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -27248,7 +25950,7 @@
      global.set $~argumentsLength
      local.get $fn|3
      i32.load
-     call_indirect (type $31)
+     call_indirect (type $32)
      f64.store
      local.get $i
      i32.const 1
@@ -27260,6 +25962,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -27530,6 +26236,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -27854,6 +26564,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -28178,6 +26892,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -28502,6 +27220,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -28826,6 +27548,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -29150,6 +27876,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -29474,6 +28204,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -29798,6 +28532,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -30122,6 +28860,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -30446,6 +29188,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -30770,6 +29516,10 @@
    local.get $out
    local.get $data
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $data
    i32.const 0
@@ -41989,7 +40739,7 @@
     global.set $~argumentsLength
     local.get $fn|3
     i32.load
-    call_indirect (type $37)
+    call_indirect (type $38)
     local.get $i
     i32.const 1
     i32.add
@@ -42239,7 +40989,7 @@
     global.set $~argumentsLength
     local.get $fn|3
     i32.load
-    call_indirect (type $38)
+    call_indirect (type $39)
     local.get $i
     i32.const 1
     i32.add
@@ -42789,6 +41539,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -43225,6 +41979,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -43661,6 +42419,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -44094,6 +42856,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -44803,6 +43569,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -45233,6 +44003,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -45666,6 +44440,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -46099,6 +44877,10 @@
    local.get $out
    local.get $buf
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buf
    i32.const 0
@@ -60853,7 +59635,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -60872,7 +59654,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -60884,7 +59666,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -60902,7 +59684,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -60917,6 +59699,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -61142,7 +59928,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -61161,7 +59947,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -61173,7 +59959,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -61191,7 +59977,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -61206,6 +59992,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -61653,7 +60443,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -61672,7 +60462,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -61684,7 +60474,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -61702,7 +60492,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -61717,6 +60507,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -62000,7 +60794,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -62019,7 +60813,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -62031,7 +60825,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -62049,7 +60843,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -62064,6 +60858,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -62348,7 +61146,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -62367,7 +61165,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -62379,7 +61177,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -62397,7 +61195,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -62412,6 +61210,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -62699,7 +61501,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -62718,7 +61520,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -62730,7 +61532,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -62748,7 +61550,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -62763,6 +61565,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -63050,7 +61856,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -63069,7 +61875,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -63081,7 +61887,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -63099,7 +61905,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -63114,6 +61920,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -63403,7 +62213,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -63422,7 +62232,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -63434,7 +62244,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -63452,7 +62262,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -63467,6 +62277,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -63759,7 +62573,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -63778,7 +62592,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -63790,7 +62604,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -63808,7 +62622,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -63823,6 +62637,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -64117,7 +62935,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -64136,7 +62954,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -64148,7 +62966,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -64166,7 +62984,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -64181,6 +62999,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -64477,7 +63299,7 @@
    if
     i32.const 336
     i32.const 608
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -64496,7 +63318,7 @@
      if
       i32.const 32
       i32.const 608
-      i32.const 1865
+      i32.const 1872
       i32.const 9
       call $~lib/builtins/abort
       unreachable
@@ -64508,7 +63330,7 @@
     else
      i32.const 32
      i32.const 608
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -64526,7 +63348,7 @@
     if
      i32.const 32
      i32.const 608
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -64541,6 +63363,10 @@
    local.get $out
    local.get $buffer|3
    i32.store
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Memory
+   i32.ne
+   drop
    local.get $out
    local.get $buffer|3
    i32.const 0
@@ -64856,7 +63682,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -65173,7 +63999,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -65315,7 +64141,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -65472,7 +64298,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -65611,7 +64437,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -65713,7 +64539,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -65841,7 +64667,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -66269,7 +65095,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -66586,7 +65412,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -66728,7 +65554,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -66860,7 +65686,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -66999,7 +65825,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -67101,7 +65927,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -67229,7 +66055,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -67657,7 +66483,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -67938,7 +66764,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -68083,7 +66909,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -68237,7 +67063,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -68379,7 +67205,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -68481,7 +67307,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -68631,7 +67457,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -69106,7 +67932,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -69425,7 +68251,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -69567,7 +68393,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -69699,7 +68525,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -69841,7 +68667,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -69969,7 +68795,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -70071,7 +68897,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -70528,7 +69354,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -70847,7 +69673,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -70989,7 +69815,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -71121,7 +69947,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -71263,7 +70089,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -71391,7 +70217,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -71493,7 +70319,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -71947,7 +70773,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -72212,7 +71038,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -72354,7 +71180,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -72486,7 +71312,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -72628,7 +71454,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -72759,7 +71585,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -72890,7 +71716,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -73344,7 +72170,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -73634,7 +72460,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -73776,7 +72602,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -73908,7 +72734,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -74050,7 +72876,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -74181,7 +73007,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -74312,7 +73138,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -74769,7 +73595,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -75091,7 +73917,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -75230,7 +74056,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -75332,7 +74158,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -75474,7 +74300,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -75606,7 +74432,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -75738,7 +74564,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -76196,7 +75022,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -76518,7 +75344,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -76657,7 +75483,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -76759,7 +75585,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -76901,7 +75727,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -77033,7 +75859,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -77165,7 +75991,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -77623,7 +76449,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -77917,7 +76743,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -78019,7 +76845,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -78151,7 +76977,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -78283,7 +77109,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -78415,7 +77241,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -78841,7 +77667,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -79136,7 +77962,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -79269,7 +78095,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -79401,7 +78227,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -79533,7 +78359,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -79665,7 +78491,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -80091,7 +78917,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -80236,7 +79062,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -80388,7 +79214,7 @@
   if
    i32.const 336
    i32.const 608
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -91276,1562 +90102,6 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/function/Function<%28f64%2Cf64%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28f64%2Cf64%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<i8>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/array/Array<i8>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/array/Array<i32>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<f32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/array/Array<f32>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<f64>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/array/Array<f64>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<u8>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/array/Array<u8>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<i16>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/array/Array<i16>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<u16>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/array/Array<u16>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<u32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/array/Array<u32>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<i64>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/array/Array<i64>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<u64>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 0
-  drop
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/array/Array<u64>#get:buffer
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i8%2Ci8%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i8%2Ci8%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u8%2Cu8%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u8%2Cu8%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i16%2Ci16%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i16%2Ci16%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u16%2Cu16%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u16%2Cu16%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u32%2Cu32%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u32%2Cu32%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28i64%2Ci64%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28i64%2Ci64%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28u64%2Cu64%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28u64%2Cu64%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/function/Function<%28f32%2Cf32%29=>i32>#__visit (param $this i32) (param $cookie i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  call $~lib/function/Function<%28f32%2Cf32%29=>i32>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
  (func $~lib/rt/__newArray (param $length i32) (param $alignLog2 i32) (param $id i32) (param $data i32) (result i32)
   (local $bufferSize i32)
   (local $buffer i32)
@@ -92863,6 +90133,10 @@
   local.get $array
   local.get $buffer
   i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
   local.get $array
   local.get $buffer
   i32.const 0
@@ -93818,5 +91092,3201 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
   return
+ )
+ (func $~lib/rt/__visit_globals (param $0 i32)
+  (local $1 i32)
+  global.get $std/typedarray/forEachValues
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $std/typedarray/testArrayReverseValues
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $std/typedarray/testArrayIndexOfAndLastIndexOfValues
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $std/typedarray/testArrayWrapValues
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $std/typedarray/setSource1
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $std/typedarray/setSource2
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $std/typedarray/setSource3
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $std/typedarray/setSource7
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  i32.const 336
+  local.get $0
+  call $~lib/rt/itcms/__visit
+  i32.const 32
+  local.get $0
+  call $~lib/rt/itcms/__visit
+  i32.const 144
+  local.get $0
+  call $~lib/rt/itcms/__visit
+  i32.const 7408
+  local.get $0
+  call $~lib/rt/itcms/__visit
+  i32.const 8464
+  local.get $0
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
+ )
+ (func $~lib/typedarray/Int8Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint8Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint8ClampedArray~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Int16Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint16Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Int32Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint32Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Int64Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint64Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Float32Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Float64Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/function/Function<%28f64%2Cf64%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28f64%2Cf64%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f64%2Cf64%29=>i32>#__visit
+ )
+ (func $~lib/array/Array<i8>#get:buffer (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $~lib/array/Array<i8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i8>#__visit
+ )
+ (func $~lib/array/Array<i32>#get:buffer (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i32>#__visit
+ )
+ (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit
+ )
+ (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit
+ )
+ (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit
+ )
+ (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit
+ )
+ (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit
+ )
+ (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit
+ )
+ (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit
+ )
+ (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit
+ )
+ (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit
+ )
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit
+ )
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit
+ )
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit
+ )
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#__visit
+ )
+ (func $~lib/array/Array<f32>#get:buffer (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $~lib/array/Array<f32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<f32>#__visit
+ )
+ (func $~lib/array/Array<f64>#get:buffer (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $~lib/array/Array<f64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<f64>#__visit
+ )
+ (func $~lib/array/Array<u8>#get:buffer (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $~lib/array/Array<u8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u8>#__visit
+ )
+ (func $~lib/array/Array<i16>#get:buffer (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $~lib/array/Array<i16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i16>#__visit
+ )
+ (func $~lib/array/Array<u16>#get:buffer (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $~lib/array/Array<u16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u16>#__visit
+ )
+ (func $~lib/array/Array<u32>#get:buffer (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $~lib/array/Array<u32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u32>#__visit
+ )
+ (func $~lib/array/Array<i64>#get:buffer (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $~lib/array/Array<i64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i64>#__visit
+ )
+ (func $~lib/array/Array<u64>#get:buffer (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $~lib/array/Array<u64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u64>#__visit
+ )
+ (func $~lib/function/Function<%28i8%2Ci8%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i8%2Ci8%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i8%2Ci8%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28u8%2Cu8%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u8%2Cu8%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u8%2Cu8%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28i16%2Ci16%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i16%2Ci16%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i16%2Ci16%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28u16%2Cu16%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u16%2Cu16%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u16%2Cu16%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28u32%2Cu32%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u32%2Cu32%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u32%2Cu32%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28i64%2Ci64%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i64%2Ci64%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i64%2Ci64%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28u64%2Cu64%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28u64%2Cu64%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u64%2Cu64%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28f32%2Cf32%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28f32%2Cf32%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f32%2Cf32%29=>i32>#__visit
+ )
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
+  block $invalid
+   block $~lib/function/Function<%28f32%2Cf32%29=>i32>
+    block $~lib/function/Function<%28u64%2Cu64%29=>i32>
+     block $~lib/function/Function<%28i64%2Ci64%29=>i32>
+      block $~lib/function/Function<%28u32%2Cu32%29=>i32>
+       block $~lib/function/Function<%28i32%2Ci32%29=>i32>
+        block $~lib/function/Function<%28u16%2Cu16%29=>i32>
+         block $~lib/function/Function<%28i16%2Ci16%29=>i32>
+          block $~lib/function/Function<%28u8%2Cu8%29=>i32>
+           block $~lib/function/Function<%28i8%2Ci8%29=>i32>
+            block $~lib/array/Array<u64>
+             block $~lib/array/Array<i64>
+              block $~lib/array/Array<u32>
+               block $~lib/array/Array<u16>
+                block $~lib/array/Array<i16>
+                 block $~lib/array/Array<u8>
+                  block $~lib/array/Array<f64>
+                   block $~lib/array/Array<f32>
+                    block $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>
+                     block $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>
+                      block $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>
+                       block $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>
+                        block $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>
+                         block $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>
+                          block $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>
+                           block $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>
+                            block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>
+                             block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>
+                              block $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>
+                               block $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>
+                                block $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>
+                                 block $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>
+                                  block $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>
+                                   block $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>
+                                    block $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>
+                                     block $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>
+                                      block $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>
+                                       block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>
+                                        block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>
+                                         block $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>
+                                          block $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>
+                                           block $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>
+                                            block $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>
+                                             block $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>
+                                              block $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>
+                                               block $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>
+                                                block $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>
+                                                 block $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>
+                                                  block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>
+                                                   block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>
+                                                    block $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>
+                                                     block $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>
+                                                      block $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>
+                                                       block $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>
+                                                        block $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>
+                                                         block $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>
+                                                          block $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>
+                                                           block $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>
+                                                            block $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>
+                                                             block $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>
+                                                              block $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>
+                                                               block $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>
+                                                                block $~lib/array/Array<i32>
+                                                                 block $~lib/array/Array<i8>
+                                                                  block $~lib/function/Function<%28f64%2Cf64%29=>i32>
+                                                                   block $~lib/typedarray/Float64Array
+                                                                    block $~lib/typedarray/Float32Array
+                                                                     block $~lib/typedarray/Uint64Array
+                                                                      block $~lib/typedarray/Int64Array
+                                                                       block $~lib/typedarray/Uint32Array
+                                                                        block $~lib/typedarray/Int32Array
+                                                                         block $~lib/typedarray/Uint16Array
+                                                                          block $~lib/typedarray/Int16Array
+                                                                           block $~lib/typedarray/Uint8ClampedArray
+                                                                            block $~lib/typedarray/Uint8Array
+                                                                             block $~lib/typedarray/Int8Array
+                                                                              block $~lib/arraybuffer/ArrayBufferView
+                                                                               block $~lib/string/String
+                                                                                block $~lib/arraybuffer/ArrayBuffer
+                                                                                 block $~lib/object/Object
+                                                                                  local.get $0
+                                                                                  i32.const 8
+                                                                                  i32.sub
+                                                                                  i32.load
+                                                                                  br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Int8Array $~lib/typedarray/Uint8Array $~lib/typedarray/Uint8ClampedArray $~lib/typedarray/Int16Array $~lib/typedarray/Uint16Array $~lib/typedarray/Int32Array $~lib/typedarray/Uint32Array $~lib/typedarray/Int64Array $~lib/typedarray/Uint64Array $~lib/typedarray/Float32Array $~lib/typedarray/Float64Array $~lib/function/Function<%28f64%2Cf64%29=>i32> $~lib/array/Array<i8> $~lib/array/Array<i32> $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8> $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8> $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8> $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16> $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32> $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32> $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64> $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64> $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32> $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64> $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8> $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16> $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16> $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32> $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32> $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64> $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64> $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32> $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64> $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool> $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool> $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool> $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool> $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool> $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool> $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool> $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool> $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool> $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void> $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void> $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void> $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void> $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void> $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void> $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void> $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void> $~lib/array/Array<f32> $~lib/array/Array<f64> $~lib/array/Array<u8> $~lib/array/Array<i16> $~lib/array/Array<u16> $~lib/array/Array<u32> $~lib/array/Array<i64> $~lib/array/Array<u64> $~lib/function/Function<%28i8%2Ci8%29=>i32> $~lib/function/Function<%28u8%2Cu8%29=>i32> $~lib/function/Function<%28i16%2Ci16%29=>i32> $~lib/function/Function<%28u16%2Cu16%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28u32%2Cu32%29=>i32> $~lib/function/Function<%28i64%2Ci64%29=>i32> $~lib/function/Function<%28u64%2Cu64%29=>i32> $~lib/function/Function<%28f32%2Cf32%29=>i32> $invalid
+                                                                                 end
+                                                                                 return
+                                                                                end
+                                                                                return
+                                                                               end
+                                                                               return
+                                                                              end
+                                                                              local.get $0
+                                                                              local.get $1
+                                                                              call $~lib/arraybuffer/ArrayBufferView~visit
+                                                                              return
+                                                                             end
+                                                                             local.get $0
+                                                                             local.get $1
+                                                                             call $~lib/typedarray/Int8Array~visit
+                                                                             return
+                                                                            end
+                                                                            local.get $0
+                                                                            local.get $1
+                                                                            call $~lib/typedarray/Uint8Array~visit
+                                                                            return
+                                                                           end
+                                                                           local.get $0
+                                                                           local.get $1
+                                                                           call $~lib/typedarray/Uint8ClampedArray~visit
+                                                                           return
+                                                                          end
+                                                                          local.get $0
+                                                                          local.get $1
+                                                                          call $~lib/typedarray/Int16Array~visit
+                                                                          return
+                                                                         end
+                                                                         local.get $0
+                                                                         local.get $1
+                                                                         call $~lib/typedarray/Uint16Array~visit
+                                                                         return
+                                                                        end
+                                                                        local.get $0
+                                                                        local.get $1
+                                                                        call $~lib/typedarray/Int32Array~visit
+                                                                        return
+                                                                       end
+                                                                       local.get $0
+                                                                       local.get $1
+                                                                       call $~lib/typedarray/Uint32Array~visit
+                                                                       return
+                                                                      end
+                                                                      local.get $0
+                                                                      local.get $1
+                                                                      call $~lib/typedarray/Int64Array~visit
+                                                                      return
+                                                                     end
+                                                                     local.get $0
+                                                                     local.get $1
+                                                                     call $~lib/typedarray/Uint64Array~visit
+                                                                     return
+                                                                    end
+                                                                    local.get $0
+                                                                    local.get $1
+                                                                    call $~lib/typedarray/Float32Array~visit
+                                                                    return
+                                                                   end
+                                                                   local.get $0
+                                                                   local.get $1
+                                                                   call $~lib/typedarray/Float64Array~visit
+                                                                   return
+                                                                  end
+                                                                  local.get $0
+                                                                  local.get $1
+                                                                  call $~lib/function/Function<%28f64%2Cf64%29=>i32>~visit
+                                                                  return
+                                                                 end
+                                                                 local.get $0
+                                                                 local.get $1
+                                                                 call $~lib/array/Array<i8>~visit
+                                                                 return
+                                                                end
+                                                                local.get $0
+                                                                local.get $1
+                                                                call $~lib/array/Array<i32>~visit
+                                                                return
+                                                               end
+                                                               local.get $0
+                                                               local.get $1
+                                                               call $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit
+                                                               return
+                                                              end
+                                                              local.get $0
+                                                              local.get $1
+                                                              call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit
+                                                              return
+                                                             end
+                                                             local.get $0
+                                                             local.get $1
+                                                             call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit
+                                                             return
+                                                            end
+                                                            local.get $0
+                                                            local.get $1
+                                                            call $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit
+                                                            return
+                                                           end
+                                                           local.get $0
+                                                           local.get $1
+                                                           call $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit
+                                                           return
+                                                          end
+                                                          local.get $0
+                                                          local.get $1
+                                                          call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit
+                                                          return
+                                                         end
+                                                         local.get $0
+                                                         local.get $1
+                                                         call $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit
+                                                         return
+                                                        end
+                                                        local.get $0
+                                                        local.get $1
+                                                        call $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit
+                                                        return
+                                                       end
+                                                       local.get $0
+                                                       local.get $1
+                                                       call $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit
+                                                       return
+                                                      end
+                                                      local.get $0
+                                                      local.get $1
+                                                      call $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit
+                                                      return
+                                                     end
+                                                     local.get $0
+                                                     local.get $1
+                                                     call $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit
+                                                     return
+                                                    end
+                                                    local.get $0
+                                                    local.get $1
+                                                    call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit
+                                                    return
+                                                   end
+                                                   local.get $0
+                                                   local.get $1
+                                                   call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit
+                                                   return
+                                                  end
+                                                  local.get $0
+                                                  local.get $1
+                                                  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit
+                                                  return
+                                                 end
+                                                 local.get $0
+                                                 local.get $1
+                                                 call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit
+                                                 return
+                                                end
+                                                local.get $0
+                                                local.get $1
+                                                call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit
+                                                return
+                                               end
+                                               local.get $0
+                                               local.get $1
+                                               call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit
+                                               return
+                                              end
+                                              local.get $0
+                                              local.get $1
+                                              call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit
+                                              return
+                                             end
+                                             local.get $0
+                                             local.get $1
+                                             call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit
+                                             return
+                                            end
+                                            local.get $0
+                                            local.get $1
+                                            call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit
+                                            return
+                                           end
+                                           local.get $0
+                                           local.get $1
+                                           call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit
+                                           return
+                                          end
+                                          local.get $0
+                                          local.get $1
+                                          call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit
+                                          return
+                                         end
+                                         local.get $0
+                                         local.get $1
+                                         call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>~visit
+                                         return
+                                        end
+                                        local.get $0
+                                        local.get $1
+                                        call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>~visit
+                                        return
+                                       end
+                                       local.get $0
+                                       local.get $1
+                                       call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>~visit
+                                       return
+                                      end
+                                      local.get $0
+                                      local.get $1
+                                      call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>~visit
+                                      return
+                                     end
+                                     local.get $0
+                                     local.get $1
+                                     call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>~visit
+                                     return
+                                    end
+                                    local.get $0
+                                    local.get $1
+                                    call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>~visit
+                                    return
+                                   end
+                                   local.get $0
+                                   local.get $1
+                                   call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>~visit
+                                   return
+                                  end
+                                  local.get $0
+                                  local.get $1
+                                  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>~visit
+                                  return
+                                 end
+                                 local.get $0
+                                 local.get $1
+                                 call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>~visit
+                                 return
+                                end
+                                local.get $0
+                                local.get $1
+                                call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>~visit
+                                return
+                               end
+                               local.get $0
+                               local.get $1
+                               call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>~visit
+                               return
+                              end
+                              local.get $0
+                              local.get $1
+                              call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>~visit
+                              return
+                             end
+                             local.get $0
+                             local.get $1
+                             call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>~visit
+                             return
+                            end
+                            local.get $0
+                            local.get $1
+                            call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>~visit
+                            return
+                           end
+                           local.get $0
+                           local.get $1
+                           call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>~visit
+                           return
+                          end
+                          local.get $0
+                          local.get $1
+                          call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>~visit
+                          return
+                         end
+                         local.get $0
+                         local.get $1
+                         call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>~visit
+                         return
+                        end
+                        local.get $0
+                        local.get $1
+                        call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>~visit
+                        return
+                       end
+                       local.get $0
+                       local.get $1
+                       call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>~visit
+                       return
+                      end
+                      local.get $0
+                      local.get $1
+                      call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>~visit
+                      return
+                     end
+                     local.get $0
+                     local.get $1
+                     call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>~visit
+                     return
+                    end
+                    local.get $0
+                    local.get $1
+                    call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>~visit
+                    return
+                   end
+                   local.get $0
+                   local.get $1
+                   call $~lib/array/Array<f32>~visit
+                   return
+                  end
+                  local.get $0
+                  local.get $1
+                  call $~lib/array/Array<f64>~visit
+                  return
+                 end
+                 local.get $0
+                 local.get $1
+                 call $~lib/array/Array<u8>~visit
+                 return
+                end
+                local.get $0
+                local.get $1
+                call $~lib/array/Array<i16>~visit
+                return
+               end
+               local.get $0
+               local.get $1
+               call $~lib/array/Array<u16>~visit
+               return
+              end
+              local.get $0
+              local.get $1
+              call $~lib/array/Array<u32>~visit
+              return
+             end
+             local.get $0
+             local.get $1
+             call $~lib/array/Array<i64>~visit
+             return
+            end
+            local.get $0
+            local.get $1
+            call $~lib/array/Array<u64>~visit
+            return
+           end
+           local.get $0
+           local.get $1
+           call $~lib/function/Function<%28i8%2Ci8%29=>i32>~visit
+           return
+          end
+          local.get $0
+          local.get $1
+          call $~lib/function/Function<%28u8%2Cu8%29=>i32>~visit
+          return
+         end
+         local.get $0
+         local.get $1
+         call $~lib/function/Function<%28i16%2Ci16%29=>i32>~visit
+         return
+        end
+        local.get $0
+        local.get $1
+        call $~lib/function/Function<%28u16%2Cu16%29=>i32>~visit
+        return
+       end
+       local.get $0
+       local.get $1
+       call $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit
+       return
+      end
+      local.get $0
+      local.get $1
+      call $~lib/function/Function<%28u32%2Cu32%29=>i32>~visit
+      return
+     end
+     local.get $0
+     local.get $1
+     call $~lib/function/Function<%28i64%2Ci64%29=>i32>~visit
+     return
+    end
+    local.get $0
+    local.get $1
+    call $~lib/function/Function<%28u64%2Cu64%29=>i32>~visit
+    return
+   end
+   local.get $0
+   local.get $1
+   call $~lib/function/Function<%28f32%2Cf32%29=>i32>~visit
+   return
+  end
+  unreachable
+ )
+ (func $~lib/function/Function<%28f64%2Cf64%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28f64%2Cf64%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<i8>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/array/Array<i8>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/array/Array<i32>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<f32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/array/Array<f32>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<f64>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/array/Array<f64>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<u8>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/array/Array<u8>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<i16>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/array/Array<i16>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<u16>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/array/Array<u16>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<u32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/array/Array<u32>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<i64>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/array/Array<i64>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/array/Array<u64>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  i32.const 0
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/array/Array<u64>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i8%2Ci8%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i8%2Ci8%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u8%2Cu8%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u8%2Cu8%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i16%2Ci16%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i16%2Ci16%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u16%2Cu16%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u16%2Cu16%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u32%2Cu32%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u32%2Cu32%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28i64%2Ci64%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i64%2Ci64%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28u64%2Cu64%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28u64%2Cu64%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28f32%2Cf32%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Memory
+  i32.ne
+  drop
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28f32%2Cf32%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )

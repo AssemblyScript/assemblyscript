@@ -2,7 +2,7 @@
   "name": "@assemblyscript/rtrace",
   "description": "A tiny utility to sanitize the AssemblyScript runtime.",
   "keywords": [
-    "assemblyscript",
+    "@btc-vision/assemblyscript",
     "rtrace",
     "webassembly",
     "wasm"
@@ -34,8 +34,8 @@
     "test": "node tests"
   },
   "dependencies": {
-    "d3": "^6.3.1",
-    "jsdom": "^16.4.0"
+    "d3": "^7.9.0",
+    "jsdom": "^28.1.0"
   },
   "files": [
     "index.d.ts",

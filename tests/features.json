@@ -27,7 +27,8 @@
       "--enable exception-handling"
     ],
     "v8_flags": [
-    ]
+    ],
+    "enabled": true
   },
   "simd": {
     "asc_flags": [
@@ -42,6 +43,13 @@
     ],
     "v8_flags": [
       "--experimental-wasm-relaxed-simd"
+    ]
+  },
+  "closures": {
+    "asc_flags": [
+      "--enable closures"
+    ],
+    "v8_flags": [
     ]
   }
 }

@@ -2334,7 +2334,10 @@ function builtin_heap_base_compile(ctx: BuiltinVariableContext): void {
   let element = ctx.element;
   let type = element.type;
   compiler.runtimeFeatures |= RuntimeFeatures.Heap;
-  module.addGlobal(element.internalName, type.toRef(), true, compiler.makeZero(type)); // dummy
+  // Only add the dummy global if it doesn't already exist (may be called multiple times due to recompilation)
+  if (!module.getGlobal(element.internalName)) {
+    module.addGlobal(element.internalName, type.toRef(), true, compiler.makeZero(type)); // dummy
+  }
 }
 builtinVariables_onCompile.set(BuiltinNames.heap_base, builtin_heap_base_compile);
 
@@ -2357,7 +2360,10 @@ function builtin_data_end_compile(ctx: BuiltinVariableContext): void {
   let element = ctx.element;
   let type = element.type;
   compiler.runtimeFeatures |= RuntimeFeatures.Data;
-  module.addGlobal(element.internalName, type.toRef(), true, compiler.makeZero(type)); // dummy
+  // Only add the dummy global if it doesn't already exist (may be called multiple times due to recompilation)
+  if (!module.getGlobal(element.internalName)) {
+    module.addGlobal(element.internalName, type.toRef(), true, compiler.makeZero(type)); // dummy
+  }
 }
 builtinVariables_onCompile.set(BuiltinNames.data_end, builtin_data_end_compile);
 
@@ -2380,7 +2386,10 @@ function builtin_stack_pointer_compile(ctx: BuiltinVariableContext): void {
   let element = ctx.element;
   let type = element.type;
   compiler.runtimeFeatures |= RuntimeFeatures.Stack;
-  module.addGlobal(element.internalName, type.toRef(), true, compiler.makeZero(type)); // dummy
+  // Only add the dummy global if it doesn't already exist (may be called multiple times due to recompilation)
+  if (!module.getGlobal(element.internalName)) {
+    module.addGlobal(element.internalName, type.toRef(), true, compiler.makeZero(type)); // dummy
+  }
 }
 builtinVariables_onCompile.set(BuiltinNames.stack_pointer, builtin_stack_pointer_compile);
 
@@ -2403,7 +2412,10 @@ function builtin_rtti_base_compile(ctx: BuiltinVariableContext): void {
   let element = ctx.element;
   let type = element.type;
   compiler.runtimeFeatures |= RuntimeFeatures.Rtti;
-  module.addGlobal(element.internalName, type.toRef(), true, compiler.makeZero(type)); // dummy
+  // Only add the dummy global if it doesn't already exist (may be called multiple times due to recompilation)
+  if (!module.getGlobal(element.internalName)) {
+    module.addGlobal(element.internalName, type.toRef(), true, compiler.makeZero(type)); // dummy
+  }
 }
 builtinVariables_onCompile.set(BuiltinNames.rtti_base, builtin_rtti_base_compile);
 

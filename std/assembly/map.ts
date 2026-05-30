@@ -1,6 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { HASH } from "./util/hash";
+import { Runtime } from "shared/runtime";
 import { E_KEYNOTFOUND } from "./util/error";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
@@ -113,7 +114,9 @@ export class Map<K,V> {
     if (entry) {
       entry.value = value;
       if (isManaged<V>()) {
-        __link(changetype<usize>(this), changetype<usize>(value), true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(this), changetype<usize>(value), true);
+        }
       }
     } else {
       // check if rehashing is necessary
@@ -130,11 +133,15 @@ export class Map<K,V> {
       // link with the map
       entry.key = key;
       if (isManaged<K>()) {
-        __link(changetype<usize>(this), changetype<usize>(key), true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(this), changetype<usize>(key), true);
+        }
       }
       entry.value = value;
       if (isManaged<V>()) {
-        __link(changetype<usize>(this), changetype<usize>(value), true);
+        if (ASC_RUNTIME != Runtime.Memory) {
+          __link(changetype<usize>(this), changetype<usize>(value), true);
+        }
       }
       ++this.entriesCount;
       // link with previous entry in bucket
@@ -231,30 +238,32 @@ export class Map<K,V> {
   // RT integration
 
   @unsafe private __visit(cookie: u32): void {
-    __visit(changetype<usize>(this.buckets), cookie);
-    let entries = changetype<usize>(this.entries);
-    if (isManaged<K>() || isManaged<V>()) {
-      let cur = entries;
-      let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K,V>();
-      while (cur < end) {
-        let entry = changetype<MapEntry<K,V>>(cur);
-        if (!(entry.taggedNext & EMPTY)) {
-          if (isManaged<K>()) {
-            let val = changetype<usize>(entry.key);
-            if (isNullable<K>()) {
-              if (val) __visit(val, cookie);
-            } else __visit(val, cookie);
+    if (ASC_RUNTIME != Runtime.Memory) {
+      __visit(changetype<usize>(this.buckets), cookie);
+      let entries = changetype<usize>(this.entries);
+      if (isManaged<K>() || isManaged<V>()) {
+        let cur = entries;
+        let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K,V>();
+        while (cur < end) {
+          let entry = changetype<MapEntry<K,V>>(cur);
+          if (!(entry.taggedNext & EMPTY)) {
+            if (isManaged<K>()) {
+              let val = changetype<usize>(entry.key);
+              if (isNullable<K>()) {
+                if (val) __visit(val, cookie);
+              } else __visit(val, cookie);
+            }
+            if (isManaged<V>()) {
+              let val = changetype<usize>(entry.value);
+              if (isNullable<V>()) {
+                if (val) __visit(val, cookie);
+              } else __visit(val, cookie);
+            }
           }
-          if (isManaged<V>()) {
-            let val = changetype<usize>(entry.value);
-            if (isNullable<V>()) {
-              if (val) __visit(val, cookie);
-            } else __visit(val, cookie);
-          }
+          cur += ENTRY_SIZE<K,V>();
         }
-        cur += ENTRY_SIZE<K,V>();
       }
+      __visit(entries, cookie);
     }
-    __visit(entries, cookie);
   }
 }

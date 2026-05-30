@@ -8,11 +8,11 @@
  (type $6 (func (param f32 f32 f32 f32 i32) (result i32)))
  (type $7 (func (param f32 f32) (result f32)))
  (type $8 (func (result f64)))
- (type $9 (func (param f64) (result i32)))
- (type $10 (func))
- (type $11 (func (param f64 i32) (result f64)))
- (type $12 (func (param f64 f64 f64) (result f64)))
- (type $13 (func (param i32 i32 i32 i32)))
+ (type $9 (func))
+ (type $10 (func (param f64) (result i32)))
+ (type $11 (func (param i32 i32 i32 i32)))
+ (type $12 (func (param f64 i32) (result f64)))
+ (type $13 (func (param f64 f64 f64) (result f64)))
  (type $14 (func (param f32) (result i32)))
  (type $15 (func (param f32 i32) (result f32)))
  (type $16 (func (param f32 f32 f32) (result f32)))
@@ -36,7 +36,7 @@
  (import "env" "Math.PI" (global $~lib/bindings/dom/Math.PI f64))
  (import "env" "Math.SQRT1_2" (global $~lib/bindings/dom/Math.SQRT1_2 f64))
  (import "env" "Math.SQRT2" (global $~lib/bindings/dom/Math.SQRT2 f64))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (import "env" "Math.abs" (func $~lib/bindings/dom/Math.abs (param f64) (result f64)))
  (import "env" "Math.acos" (func $~lib/bindings/dom/Math.acos (param f64) (result f64)))
  (import "env" "Math.acosh" (func $~lib/bindings/dom/Math.acosh (param f64) (result f64)))
@@ -79,6 +79,7 @@
  (global $std/math/kTwo120 f64 (f64.const 1329227995784915872903807e12))
  (global $~lib/math/NativeMath.E f64 (f64.const 2.718281828459045))
  (global $~lib/math/NativeMathf.E f32 (f32.const 2.7182817459106445))
+ (global $~lib/native/ASC_FEATURE_EXCEPTION_HANDLING i32 (i32.const 0))
  (global $~lib/math/NativeMath.LN2 f64 (f64.const 0.6931471805599453))
  (global $~lib/math/NativeMath.LN10 f64 (f64.const 2.302585092994046))
  (global $~lib/math/NativeMath.LOG2E f64 (f64.const 1.4426950408889634))
@@ -60242,5 +60243,50 @@
  )
  (func $~start
   call $start:std/math
+ )
+ (func $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__data_end
+  i32.lt_s
+  if
+   i32.const 46144
+   i32.const 46192
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $~lib/builtins/abort (param $message i32) (param $fileName i32) (param $lineNumber i32) (param $columnNumber i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  i32.const 0
+  drop
+  local.get $message
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store
+  local.get $4
+  local.get $fileName
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store offset=4
+  local.get $4
+  local.get $lineNumber
+  local.get $columnNumber
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )

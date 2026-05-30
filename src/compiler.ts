@@ -61,6 +61,8 @@ import {
   getConstValueInteger
 } from "./module";
 
+import * as binaryen from "./glue/binaryen";
+
 import {
   CommonFlags,
   STATIC_DELIMITER,
@@ -460,6 +462,8 @@ export class Compiler extends DiagnosticEmitter {
   functionTable: Function[] = [];
   /** Arguments length helper global. */
   builtinArgumentsLength: GlobalRef = 0;
+  /** Closure environment helper global. */
+  closureEnvironmentGlobal: GlobalRef = 0;
   /** Requires runtime features. */
   runtimeFeatures: RuntimeFeatures = RuntimeFeatures.None;
   /** Current inline functions stack. */
@@ -480,6 +484,8 @@ export class Compiler extends DiagnosticEmitter {
   hasCustomFunctionExports: bool = false;
   /** Whether the module would use the exported runtime to lift/lower. */
   desiresExportRuntime: bool = false;
+  /** Whether the exception tag has been created. */
+  exceptionTagEnsured: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -572,7 +578,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile and export runtime if requested or necessary
-    if (this.options.exportRuntime || (this.options.bindingsHint && this.desiresExportRuntime)) {
+    if ((this.options.exportRuntime || (this.options.bindingsHint && this.desiresExportRuntime)) && this.options.runtime != Runtime.Memory) {
       for (let i = 0, k = runtimeFunctions.length; i < k; ++i) {
         let name = runtimeFunctions[i];
         let instance = program.requireFunction(name);
@@ -656,11 +662,9 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // finalize runtime features
+    // finalize runtime features (RTTI only - visitGlobals/visitMembers are compiled after shadow stack pass)
     module.removeGlobal(BuiltinNames.rtti_base);
     if (this.runtimeFeatures & RuntimeFeatures.Rtti) compileRTTI(this);
-    if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
-    if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
 
     let memoryOffset = i64_align(this.memoryOffset, options.usizeType.byteSize);
 
@@ -762,10 +766,20 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // Run custom passes
+    // Run shadow stack pass first (may trigger compilation of functions that need visit functions)
     if (hasShadowStack) {
       this.shadowStack.walkModule();
     }
+
+    // Compile visit functions after shadow stack pass (which may have set runtimeFeatures flags)
+    if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
+    if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
+
+    // Run shadow stack pass again with a fresh instance to transform any __tostack calls in visit functions
+    if (hasShadowStack && (this.runtimeFeatures & (RuntimeFeatures.visitGlobals | RuntimeFeatures.visitMembers))) {
+      new ShadowStackPass(this).walkModule();
+    }
+
     if (program.lookup("ASC_RTRACE") != null) {
       new RtraceMemory(this).walkModule();
     }
@@ -1797,6 +1811,46 @@ export class Compiler extends DiagnosticEmitter {
       : null;
     let bodyStartIndex = stmts.length;
 
+    // Track locals before body compilation for potential recompilation
+    let numLocalsBeforeBody = instance.localsByIndex.length;
+
+    // Track anonymous function counter for potential recompilation
+    let nextAnonymousIdBeforeBody = instance.nextAnonymousId;
+
+    // For closures (functions that capture from outer scope), create a local to cache
+    // the environment pointer. This is needed because indirect calls to other closures
+    // can overwrite the global $~lib/__closure_env.
+    if (instance.outerFunction && !instance.closureEnvLocal) {
+      instance.closureEnvLocal = flow.addScopedLocal("$closureEnv", this.options.usizeType);
+    }
+
+    // On recompilation, mark parameters that are known to be captured from previous pass
+    let capturedLocals = instance.capturedLocals;
+    if (capturedLocals && capturedLocals.size > 0) {
+      // Mark captured parameters and 'this' - they exist before body compilation
+      let hasOwnCapturedLocals = false;
+      for (let _keys = Map_keys(capturedLocals), i = 0, k = _keys.length; i < k; i++) {
+        let capturedLocal = _keys[i];
+        // Only handle parameters/this (they belong to this function)
+        if (capturedLocal.parent == instance) {
+          let localInFlow = flow.lookupLocal(capturedLocal.name);
+          if (localInFlow && !localInFlow.isCaptured) {
+            localInFlow.isCaptured = true;
+            localInFlow.envSlotIndex = capturedLocal.envSlotIndex;
+            localInFlow.envOwner = capturedLocal.envOwner;
+          }
+        }
+        // Check if this instance owns any captured variables (needs envLocal)
+        if (capturedLocal.envOwner == instance) {
+          hasOwnCapturedLocals = true;
+        }
+      }
+      // Only create envLocal if this function owns some captured variables
+      if (hasOwnCapturedLocals && !instance.envLocal) {
+        instance.envLocal = flow.addScopedLocal("$env", this.options.usizeType);
+      }
+    }
+
     // compile statements
     if (bodyNode.kind == NodeKind.Block) {
       stmts = this.compileStatements((<BlockStatement>bodyNode).statements, stmts);
@@ -1822,6 +1876,126 @@ export class Compiler extends DiagnosticEmitter {
         if (flow.isNonnull(expr, returnType)) flow.set(FlowFlags.ReturnsNonNull);
         flow.set(FlowFlags.Returns | FlowFlags.Terminates);
       }
+    }
+
+    // Check if recompilation is needed due to late capture discovery
+    if (instance.needsCaptureRecompile) {
+      // Reset state for recompilation
+      instance.needsCaptureRecompile = false;
+
+      // Reset stmts to before body compilation
+      stmts.length = bodyStartIndex;
+
+      // Reset locals to before body compilation
+      let localsByIndex = instance.localsByIndex;
+      for (let i = numLocalsBeforeBody, k = localsByIndex.length; i < k; i++) {
+        localsByIndex[i].wasAccessedAsLocal = false;
+      }
+      localsByIndex.length = numLocalsBeforeBody;
+
+      // Reset flow flags
+      flow.localFlags.length = numLocalsBeforeBody;
+      flow.unset(
+        FlowFlags.Returns |
+        FlowFlags.ReturnsWrapped |
+        FlowFlags.ReturnsNonNull |
+        FlowFlags.Terminates |
+        FlowFlags.Breaks |
+        FlowFlags.Continues |
+        FlowFlags.AccessesThis |
+        FlowFlags.ConditionallyAccessesThis |
+        FlowFlags.CallsSuper |
+        FlowFlags.MayReturnNonThis
+      );
+
+      // Clear scoped locals added during body compilation
+      // Keep only parameters and 'this' which exist before body compilation
+      let scopedLocals = flow.scopedLocals;
+      if (scopedLocals) {
+        let signature = instance.signature;
+        let numParams = signature.parameterTypes.length;
+        let hasThis = signature.thisType != null;
+        let keysToDelete = new Array<string>();
+        for (let _keys = Map_keys(scopedLocals), i = 0, k = _keys.length; i < k; i++) {
+          let name = _keys[i];
+          let local = assert(scopedLocals.get(name));
+          // Keep parameters and 'this', but remove body-scoped locals
+          let isParam = local.index >= (hasThis ? 1 : 0) && local.index < numParams + (hasThis ? 1 : 0);
+          let isThis = hasThis && local.index == 0;
+          let isEnvLocal = local == instance.envLocal || local == instance.closureEnvLocal;
+          if (!isParam && !isThis && !isEnvLocal) {
+            keysToDelete.push(name);
+          }
+        }
+        for (let i = 0, k = keysToDelete.length; i < k; i++) {
+          scopedLocals.delete(keysToDelete[i]);
+        }
+      }
+
+      // Clear envLocal so it gets recreated with a valid index
+      // The old envLocal's index is invalid after localsByIndex truncation
+      if (instance.envLocal) {
+        let scopedLocals = flow.scopedLocals;
+        if (scopedLocals && scopedLocals.has("$env")) {
+          scopedLocals.delete("$env");
+        }
+        instance.envLocal = null;
+      }
+
+      // Also clear closureEnvLocal so it gets recreated with a valid index
+      if (instance.closureEnvLocal) {
+        let scopedLocals = flow.scopedLocals;
+        if (scopedLocals && scopedLocals.has("$closureEnv")) {
+          scopedLocals.delete("$closureEnv");
+        }
+        instance.closureEnvLocal = null;
+      }
+
+      // Clear wasAccessedAsLocal on parameters that will be marked captured
+      capturedLocals = instance.capturedLocals;
+      if (capturedLocals) {
+        for (let _keys = Map_keys(capturedLocals), i = 0, k = _keys.length; i < k; i++) {
+          _keys[i].wasAccessedAsLocal = false;
+        }
+      }
+
+      // Reset anonymous ID counter so inner functions get the same IDs
+      instance.nextAnonymousId = nextAnonymousIdBeforeBody;
+
+      // Recursively recompile - captures are now known
+      return this.compileFunctionBody(instance, stmts);
+    }
+
+    // Allocate closure environment if this function has captured variables
+    // This is done after compiling the body because we discover captures during body compilation
+    capturedLocals = instance.capturedLocals;
+    if (instance.envLocal && capturedLocals && capturedLocals.size > 0) {
+      let envAlloc = this.compileClosureEnvironmentAllocation(instance);
+      // Insert at the beginning of the body
+      for (let i = stmts.length - 1; i >= bodyStartIndex; --i) {
+        stmts[i + 1] = stmts[i];
+      }
+      stmts[bodyStartIndex] = envAlloc;
+    }
+
+    // For closures (functions that capture from outer scope), emit code to cache the
+    // environment pointer in a local at function entry. This is needed because indirect
+    // calls to other closures can overwrite the global $~lib/__closure_env.
+    let closureEnvLocal = instance.closureEnvLocal;
+    if (closureEnvLocal) {
+      let closureEnvGlobal = this.ensureClosureEnvironmentGlobal();
+      let sizeTypeRef = this.options.sizeTypeRef;
+      let cacheEnv = module.local_set(
+        closureEnvLocal.index,
+        module.global_get(closureEnvGlobal, sizeTypeRef),
+        false // not a reference type
+      );
+
+      // Insert at the beginning of the body
+      for (let i = stmts.length - 1; i >= bodyStartIndex; --i) {
+        stmts[i + 1] = stmts[i];
+      }
+      stmts[bodyStartIndex] = cacheEnv;
     }
 
     // Make constructors return their instance pointer, and prepend a conditional
@@ -1908,8 +2082,7 @@ export class Compiler extends DiagnosticEmitter {
       valueTypeRef, property.memoryOffset
     );
     let flowBefore = this.currentFlow;
-    let flow = getterInstance.flow;
-    this.currentFlow = flow;
+    this.currentFlow = getterInstance.flow;
     if (property.is(CommonFlags.DefinitelyAssigned) && valueType.isReference && !valueType.isNullableReference) {
       body = this.makeRuntimeNonNullCheck(body, valueType, getterInstance.identifierNode);
     }
@@ -1936,7 +2109,7 @@ export class Compiler extends DiagnosticEmitter {
       module.local_get(1, valueTypeRef),
       valueTypeRef, property.memoryOffset
     );
-    if (valueType.isManaged) {
+    if (valueType.isManaged && this.options.runtime != Runtime.Memory) {
       let parent = setterInstance.parent;
       assert(parent.kind == ElementKind.Class);
       if ((<Class>parent).type.isManaged) {
@@ -2868,6 +3041,28 @@ export class Compiler extends DiagnosticEmitter {
     // Remember that this flow returns
     flow.set(FlowFlags.Returns | FlowFlags.Terminates);
 
+    // Handle try-finally context: defer return until after finally
+    let tryFinallyContext = flow.getTryFinallyContext();
+    if (tryFinallyContext) {
+      let pendingActionLocal = tryFinallyContext.tryFinallyPendingActionLocal;
+      let pendingValueLocal = tryFinallyContext.tryFinallyPendingValueLocal;
+      let dispatchLabel = assert(tryFinallyContext.tryFinallyDispatchLabel);
+      let stmts = new Array<ExpressionRef>();
+
+      // Store return value if any
+      if (expr && returnType != Type.void) {
+        stmts.push(module.local_set(pendingValueLocal, expr, returnType.isManaged));
+      }
+
+      // Set pending action to RETURN (1)
+      stmts.push(module.local_set(pendingActionLocal, module.i32(1), false));
+
+      // Branch to finally dispatch
+      stmts.push(module.br(dispatchLabel));
+
+      return module.flatten(stmts);
+    }
+
     // Handle inline return
     if (flow.isInline) {
       let inlineReturnLabel = assert(flow.inlineReturnLabel);
@@ -3013,12 +3208,38 @@ export class Compiler extends DiagnosticEmitter {
   private compileThrowStatement(
     statement: ThrowStatement
   ): ExpressionRef {
-    // TODO: requires exception-handling spec.
+    let module = this.module;
     let flow = this.currentFlow;
 
     // Remember that this branch throws
     flow.set(FlowFlags.Throws | FlowFlags.Terminates);
 
+    // If exception handling feature is enabled, use actual throw instruction
+    if (this.options.hasFeature(Feature.ExceptionHandling)) {
+      // Compile the thrown value - should be Error or subclass
+      let valueExpr = this.compileExpression(statement.value, Type.auto);
+      let valueType = this.currentType;
+
+      // Verify that the thrown type is Error or a subclass
+      let errorInstance = this.program.errorInstance;
+      let classReference = valueType.getClass();
+      if (!classReference || !classReference.isAssignableTo(errorInstance)) {
+        this.error(
+          DiagnosticCode.Only_Error_or_its_subclasses_can_be_thrown_but_found_type_0,
+          statement.value.range,
+          valueType.toString()
+        );
+        return module.unreachable();
+      }
+
+      // Ensure exception tag exists
+      let tagName = this.ensureExceptionTag();
+
+      // Emit throw instruction with the error pointer
+      return module.throw(tagName, [valueExpr]);
+    }
+
+    // Fallback: convert throw to abort() call when exception handling is disabled
     let stmts = new Array<ExpressionRef>();
     let value = statement.value;
     let message: Expression | null = null;
@@ -3029,20 +3250,309 @@ export class Compiler extends DiagnosticEmitter {
     stmts.push(
       this.makeAbort(message, statement)
     );
-    return this.module.flatten(stmts);
+    return module.flatten(stmts);
   }
 
   private compileTryStatement(
     statement: TryStatement
   ): ExpressionRef {
-    // TODO: can't yet support something like: try { return ... } finally { ... }
-    // worthwhile to investigate lowering returns to block results (here)?
-    this.error(
-      DiagnosticCode.Not_implemented_0,
-      statement.range,
-      "Exceptions"
-    );
-    return this.module.unreachable();
+    let module = this.module;
+    let outerFlow = this.currentFlow;
+
+    // Check feature flag
+    if (!this.options.hasFeature(Feature.ExceptionHandling)) {
+      this.error(
+        DiagnosticCode.Feature_0_is_not_enabled,
+        statement.range,
+        "exception-handling"
+      );
+      return module.unreachable();
+    }
+
+    // Ensure exception tag exists
+    let tagName = this.ensureExceptionTag();
+
+    // Generate unique label for this try block
+    let label = outerFlow.pushControlFlowLabel();
+    let tryLabel = `try|${label}`;
+
+    // Compile try block body
+    let tryFlow = outerFlow.fork();
+    this.currentFlow = tryFlow;
+    let tryStmts = new Array<ExpressionRef>();
+    this.compileStatements(statement.bodyStatements, tryStmts);
+    let tryBodyExpr = module.flatten(tryStmts);
+    let tryFlowTerminates = tryFlow.isAny(FlowFlags.Terminates);
+
+    let catchTags: string[] = [];
+    let catchBodies: ExpressionRef[] = [];
+    let catchFlow: Flow | null = null;
+    let catchFlowTerminates = false;
+
+    // Compile catch clause if present
+    let catchStatements = statement.catchStatements;
+    let catchVariable = statement.catchVariable;
+    if (catchStatements) {
+      catchFlow = outerFlow.fork();
+      this.currentFlow = catchFlow;
+
+      let catchStmts = new Array<ExpressionRef>();
+
+      // The pop instruction MUST be the very first instruction in the catch block
+      // WebAssembly requires this - we can't wrap it in local.tee or anything else
+      let popExpr = module.pop(this.options.sizeTypeRef);
+
+      // If there's a catch variable, bind it to the popped exception value
+      if (catchVariable) {
+        let catchVarName = catchVariable.text;
+        // The exception value is a pointer to Error object
+        let errorClass = this.program.lookup(CommonNames.Error);
+        let errorType: Type;
+        if (errorClass && errorClass.kind == ElementKind.ClassPrototype) {
+          let resolved = this.resolver.resolveClass(<ClassPrototype>errorClass, null);
+          errorType = resolved ? resolved.type : this.options.usizeType;
+        } else {
+          errorType = this.options.usizeType; // Fallback to usize if Error class not found
+        }
+
+        // Create a scoped local for the catch variable
+        let catchLocal = catchFlow.addScopedLocal(catchVarName, errorType);
+        // Use direct local.set without shadow stack to ensure pop is first
+        catchStmts.push(binaryen._BinaryenLocalSet(module.ref, catchLocal.index, popExpr));
+        // Mark the catch variable as initialized
+        catchFlow.setLocalFlag(catchLocal.index, LocalFlags.Initialized);
+      } else {
+        // No catch variable, but still need to pop the exception value
+        catchStmts.push(module.drop(popExpr));
+      }
+
+      // Compile catch block statements
+      this.compileStatements(catchStatements, catchStmts);
+
+      catchTags.push(tagName);
+      catchBodies.push(module.flatten(catchStmts));
+      catchFlowTerminates = catchFlow.isAny(FlowFlags.Terminates);
+    }
+
+    // Handle finally clause if present
+    let finallyStatements = statement.finallyStatements;
+    if (finallyStatements) {
+      // Set up pending action pattern for deferred control flow
+      // pendingAction: 0=normal, 1=return, 2=break, 3=continue
+      let returnType = outerFlow.returnType;
+      let targetFunction = outerFlow.targetFunction;
+
+      // Create locals for pending action tracking
+      let pendingActionLocal = targetFunction.addLocal(Type.i32);
+      let pendingValueLocal: Local | null = returnType != Type.void
+        ? targetFunction.addLocal(returnType)
+        : null;
+      let pendingValueLocalIndex = pendingValueLocal ? pendingValueLocal.index : -1;
+
+      // Create labels
+      let dispatchLabel = `finally_dispatch|${label}`;
+      let outerTryLabel = `try_finally|${label}`;
+
+      // Set up try-finally context on the flows BEFORE compiling try/catch bodies
+      // We need to recompile try and catch with the context set
+      outerFlow.popControlFlowLabel(label);
+
+      // Re-fork flows with try-finally context
+      let label2 = outerFlow.pushControlFlowLabel();
+      tryLabel = `try|${label2}`;
+
+      tryFlow = outerFlow.fork();
+      tryFlow.tryFinallyPendingActionLocal = pendingActionLocal.index;
+      tryFlow.tryFinallyPendingValueLocal = pendingValueLocalIndex;
+      tryFlow.tryFinallyDispatchLabel = dispatchLabel;
+      tryFlow.tryFinallyReturnType = returnType;
+
+      this.currentFlow = tryFlow;
+      let tryStmts2 = new Array<ExpressionRef>();
+      this.compileStatements(statement.bodyStatements, tryStmts2);
+      tryBodyExpr = module.flatten(tryStmts2);
+      tryFlowTerminates = tryFlow.isAny(FlowFlags.Terminates);
+
+      // Recompile catch with context if present
+      catchTags = [];
+      catchBodies = [];
+      catchFlow = null;
+      catchFlowTerminates = false;
+
+      if (catchStatements) {
+        catchFlow = outerFlow.fork();
+        catchFlow.tryFinallyPendingActionLocal = pendingActionLocal.index;
+        catchFlow.tryFinallyPendingValueLocal = pendingValueLocalIndex;
+        catchFlow.tryFinallyDispatchLabel = dispatchLabel;
+        catchFlow.tryFinallyReturnType = returnType;
+
+        this.currentFlow = catchFlow;
+
+        let catchStmts2 = new Array<ExpressionRef>();
+        let popExpr = module.pop(this.options.sizeTypeRef);
+
+        if (catchVariable) {
+          let catchVarName = catchVariable.text;
+          let errorClass = this.program.lookup(CommonNames.Error);
+          let errorType: Type;
+          if (errorClass && errorClass.kind == ElementKind.ClassPrototype) {
+            let resolved = this.resolver.resolveClass(<ClassPrototype>errorClass, null);
+            errorType = resolved ? resolved.type : this.options.usizeType;
+          } else {
+            errorType = this.options.usizeType;
+          }
+          let catchLocal = catchFlow.addScopedLocal(catchVarName, errorType);
+          catchStmts2.push(binaryen._BinaryenLocalSet(module.ref, catchLocal.index, popExpr));
+          catchFlow.setLocalFlag(catchLocal.index, LocalFlags.Initialized);
+        } else {
+          catchStmts2.push(module.drop(popExpr));
+        }
+
+        this.compileStatements(catchStatements, catchStmts2);
+
+        catchTags.push(tagName);
+        catchBodies.push(module.flatten(catchStmts2));
+        catchFlowTerminates = catchFlow.isAny(FlowFlags.Terminates);
+      }
+
+      this.currentFlow = outerFlow;
+
+      // Build the inner try-catch (if there's a catch clause)
+      let innerTryExpr: ExpressionRef;
+      if (catchBodies.length > 0) {
+        innerTryExpr = module.try(tryLabel, tryBodyExpr, catchTags, catchBodies, null);
+      } else {
+        innerTryExpr = tryBodyExpr;
+      }
+
+      // Compile finally statements for the catch_all path (exception handling)
+      let finallyFlow1 = outerFlow.fork();
+      this.currentFlow = finallyFlow1;
+      let finallyStmts1 = new Array<ExpressionRef>();
+      this.compileStatements(finallyStatements, finallyStmts1);
+      let finallyExpr1 = module.flatten(finallyStmts1);
+
+      // Create catch_all body: run finally, then rethrow
+      let catchAllBody = module.block(null, [
+        finallyExpr1,
+        module.rethrow(outerTryLabel)
+      ]);
+
+      // Outer try with catch_all for exception path
+      let outerTryExpr = module.try(
+        outerTryLabel,
+        innerTryExpr,
+        [],
+        [catchAllBody],
+        null
+      );
+
+      // Compile finally statements for the normal/deferred path
+      let finallyFlow2 = outerFlow.fork();
+      this.currentFlow = finallyFlow2;
+      let finallyStmts2 = new Array<ExpressionRef>();
+      this.compileStatements(finallyStatements, finallyStmts2);
+      let finallyExpr2 = module.flatten(finallyStmts2);
+      let finallyTerminates = finallyFlow2.isAny(FlowFlags.Terminates);
+      let finallyReturns = finallyFlow2.isAny(FlowFlags.Returns);
+
+      this.currentFlow = outerFlow;
+      outerFlow.popControlFlowLabel(label2);
+
+      // Build the dispatch logic after finally
+      let dispatchStmts = new Array<ExpressionRef>();
+
+      // Run finally code
+      dispatchStmts.push(finallyExpr2);
+
+      // If finally always returns/terminates, skip dispatch logic
+      if (!finallyTerminates) {
+        // Dispatch based on pendingAction
+        // if (pendingAction == 1) return pendingValue;
+        if (returnType != Type.void && pendingValueLocal) {
+          dispatchStmts.push(
+            module.if(
+              module.binary(BinaryOp.EqI32,
+                module.local_get(pendingActionLocal.index, TypeRef.I32),
+                module.i32(1)
+              ),
+              module.return(module.local_get(pendingValueLocal.index, returnType.toRef()))
+            )
+          );
+        } else {
+          dispatchStmts.push(
+            module.if(
+              module.binary(BinaryOp.EqI32,
+                module.local_get(pendingActionLocal.index, TypeRef.I32),
+                module.i32(1)
+              ),
+              module.return()
+            )
+          );
+        }
+      }
+
+      // Wrap the try in a block that return can branch to
+      let tryBlock = module.block(dispatchLabel, [outerTryExpr]);
+
+      // Only add unreachable if all paths terminate (no normal completion possible)
+      // If try or catch can complete normally, we need to fall through
+      let allPathsTerminate = catchFlow
+        ? (tryFlowTerminates && catchFlowTerminates)
+        : tryFlowTerminates;
+      if (!finallyTerminates && allPathsTerminate) {
+        dispatchStmts.push(module.unreachable());
+      }
+
+      let fullBlockStmts = new Array<ExpressionRef>(1 + dispatchStmts.length);
+      fullBlockStmts[0] = tryBlock;
+      for (let i = 0; i < dispatchStmts.length; i++) {
+        fullBlockStmts[1 + i] = dispatchStmts[i];
+      }
+      let fullBlock = module.block(null, fullBlockStmts);
+
+      // Merge flow states
+      // If finally always terminates, the whole construct terminates
+      if (finallyTerminates) {
+        outerFlow.set(FlowFlags.Terminates);
+        if (finallyReturns) {
+          outerFlow.set(FlowFlags.Returns);
+        }
+      } else if (catchFlow) {
+        if (tryFlowTerminates && catchFlowTerminates) {
+          outerFlow.set(FlowFlags.Terminates);
+        } else {
+          outerFlow.inheritAlternatives(tryFlow, catchFlow);
+        }
+      } else {
+        outerFlow.mergeSideEffects(tryFlow);
+      }
+
+      return fullBlock;
+    }
+
+    // No finally clause
+    outerFlow.popControlFlowLabel(label);
+    this.currentFlow = outerFlow;
+
+    // Merge flow states
+    if (catchFlow) {
+      if (tryFlowTerminates && catchFlowTerminates) {
+        outerFlow.set(FlowFlags.Terminates);
+      } else if (!catchStatements) {
+        // No catch, only try
+        outerFlow.inherit(tryFlow);
+      } else {
+        outerFlow.inheritAlternatives(tryFlow, catchFlow);
+      }
+    }
+
+    // If no catch handlers, just return the try body (exceptions propagate)
+    if (catchBodies.length == 0) {
+      return tryBodyExpr;
+    }
+
+    return module.try(tryLabel, tryBodyExpr, catchTags, catchBodies, null);
   }
 
   /** Compiles a variable statement. Returns `0` if an initializer is not necessary. */
@@ -3233,6 +3743,29 @@ export class Compiler extends DiagnosticEmitter {
           flow.unsetLocalFlag(local.index, ~0);
           if (isConst) flow.setLocalFlag(local.index, LocalFlags.Constant);
         }
+
+        // On recompilation, check if this local matches a known captured variable
+        // (captures are discovered during first pass when compiling inner functions)
+        let sourceFunc = flow.sourceFunction;
+        let capturedLocals = sourceFunc.capturedLocals;
+        if (capturedLocals) {
+          // Look for a captured local with matching name and parent
+          for (let _keys = Map_keys(capturedLocals), i = 0, k = _keys.length; i < k; ++i) {
+            let capturedLocal = _keys[i];
+            if (capturedLocal.name == name && capturedLocal.parent == sourceFunc) {
+              // Found a match - copy capture info to the new local
+              local.isCaptured = true;
+              local.envSlotIndex = capturedLocal.envSlotIndex;
+              local.envOwner = capturedLocal.envOwner;
+              // Replace the old local in capturedLocals with the new one
+              let slotIndex = capturedLocals.get(capturedLocal) as i32;
+              capturedLocals.delete(capturedLocal);
+              capturedLocals.set(local, slotIndex);
+              break;
+            }
+          }
+        }
+
         if (initExpr) {
           initializers.push(
             this.makeLocalAssignment(local, initExpr, initType ? initType : type, false)
@@ -5701,13 +6234,15 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.unreachable();
           }
         } else if (!(<Local>target).declaredByFlow(flow)) {
-          // TODO: closures
-          this.error(
-            DiagnosticCode.Not_implemented_0,
-            expression.range,
-            "Closures"
-          );
-          return this.module.unreachable();
+          // Closure: we'll handle the store later after compiling the value
+          if (!(<Local>target).isCaptured || (<Local>target).envSlotIndex < 0) {
+            this.error(
+              DiagnosticCode.Not_implemented_0,
+              expression.range,
+              "Closures"
+            );
+            return this.module.unreachable();
+          }
         }
         if (this.pendingElements.has(target)) {
           this.error(
@@ -6028,6 +6563,40 @@ export class Compiler extends DiagnosticEmitter {
     assert(type != Type.void);
     let localIndex = local.index;
 
+    // Handle closure store: if the local is captured, always store to the environment
+    // This applies both in the declaring function and in inner closures
+    if (local.isCaptured && local.envSlotIndex >= 0) {
+      let sourceFunc = flow.sourceFunction;
+      // Check if we're in the declaring function (outer) or in a closure (inner)
+      let isInDeclaringFunction = local.parent == sourceFunc;
+
+      // In the declaring function, we need to check if environment is set up
+      // In a closure, we always use the environment
+      if (!isInDeclaringFunction || sourceFunc.envLocal) {
+        // Mark the local as initialized for flow analysis
+        flow.setLocalFlag(localIndex, LocalFlags.Initialized);
+        if (type.isNullableReference) {
+          if (!valueType.isNullableReference || flow.isNonnull(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.NonNull);
+          else flow.unsetLocalFlag(localIndex, LocalFlags.NonNull);
+        }
+        if (type.isShortIntegerValue) {
+          if (!flow.canOverflow(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.Wrapped);
+          else flow.unsetLocalFlag(localIndex, LocalFlags.Wrapped);
+        }
+        let storeExpr = this.compileClosureStore(local, valueExpr, valueType);
+        if (tee) {
+          // For tee, we need to return the stored value
+          // Store, then load it back
+          let loadExpr = this.compileClosureLoad(local, local.declaration);
+          this.currentType = type;
+          return module.block(null, [storeExpr, loadExpr], type.toRef());
+        } else {
+          this.currentType = Type.void;
+          return storeExpr;
+        }
+      }
+    }
+
     if (type.isNullableReference) {
       if (!valueType.isNullableReference || flow.isNonnull(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.NonNull);
       else flow.unsetLocalFlag(localIndex, LocalFlags.NonNull);
@@ -6037,6 +6606,11 @@ export class Compiler extends DiagnosticEmitter {
       if (!flow.canOverflow(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.Wrapped);
       else flow.unsetLocalFlag(localIndex, LocalFlags.Wrapped);
     }
+
+    // Track that we accessed this as a regular local (for closure recompilation detection)
+    // Only set if not already captured (to avoid infinite recompilation loops)
+    if (!local.isCaptured) local.wasAccessedAsLocal = true;
+
     if (tee) { // local = value
       this.currentType = type;
       return module.local_tee(localIndex, valueExpr, type.isManaged);
@@ -6557,6 +7131,31 @@ export class Compiler extends DiagnosticEmitter {
       this.builtinArgumentsLength = module.addGlobal(name, TypeRef.I32, true, module.i32(0));
     }
     return name;
+  }
+
+  /** Ensures the closure environment global variable exists. */
+  ensureClosureEnvironmentGlobal(): string {
+    let name = "~lib/__closure_env";
+    if (!this.closureEnvironmentGlobal) {
+      let module = this.module;
+      let sizeTypeRef = this.options.sizeTypeRef;
+      let zero = this.options.isWasm64 ? module.i64(0) : module.i32(0);
+      this.closureEnvironmentGlobal = module.addGlobal(name, sizeTypeRef, true, zero);
+    }
+    return name;
+  }
+
+  /** Ensures the exception tag for exception handling exists. */
+  ensureExceptionTag(): string {
+    let tagName = "error";
+    if (!this.exceptionTagEnsured) {
+      let module = this.module;
+      let sizeTypeRef = this.options.sizeTypeRef;
+      // Tag with single param: pointer to Error object
+      module.addTag(tagName, sizeTypeRef, TypeRef.None);
+      this.exceptionTagEnsured = true;
+    }
+    return tagName;
   }
 
   /** Ensures compilation of the varargs stub for the specified function. */
@@ -7125,9 +7724,56 @@ export class Compiler extends DiagnosticEmitter {
       ], sizeTypeRef);
     }
     if (operands) this.operandsTostack(signature, operands);
+
+    // Only set up closure environment handling when closures feature is enabled
+    if (this.options.hasFeature(Feature.Closures)) {
+      // Load the _env field from Function object and store to global for closure access
+      let closureEnvGlobal = this.ensureClosureEnvironmentGlobal();
+      let usizeSize = this.options.usizeType.byteSize;
+
+      // Get the offset of _env in the Function class
+      // _index is u32 (4 bytes), _env follows at offset 4 (wasm32) or 8 (wasm64 with padding)
+      let envOffset = this.options.isWasm64 ? 8 : 4;
+
+      // We need to evaluate functionArg once, store to temp, then use for both _env and _index
+      let flow = this.currentFlow;
+      let funcTemp = flow.getTempLocal(this.options.usizeType);
+      let funcTempIndex = funcTemp.index;
+
+      let stmts: ExpressionRef[] = [
+        // Store function pointer to temp
+        module.local_set(funcTempIndex, functionArg, true),
+        // Store _env to global: $~lib/__closure_env = func._env
+        module.global_set(closureEnvGlobal,
+          module.load(usizeSize, false,
+            module.local_get(funcTempIndex, sizeTypeRef),
+            sizeTypeRef,
+            envOffset
+          )
+        )
+      ];
+
+      let indexExpr = module.load(4, false,
+        module.local_get(funcTempIndex, sizeTypeRef),
+        TypeRef.I32 // ._index
+      );
+
+      let expr = module.call_indirect(
+        null, // TODO: handle multiple tables
+        module.block(null, stmts.concat([indexExpr]), TypeRef.I32),
+        operands,
+        signature.paramRefs,
+        signature.resultRefs
+      );
+      this.currentType = returnType;
+      return expr;
+    }
+
+    // Without closures, use simpler indirect call (just load _index from Function)
+    let indexExpr = module.load(4, false, functionArg, TypeRef.I32); // ._index at offset 0
     let expr = module.call_indirect(
-      null, // TODO: handle multiple tables
-      module.load(4, false, functionArg, TypeRef.I32), // ._index
+      null,
+      indexExpr,
       operands,
       signature.paramRefs,
       signature.resultRefs
@@ -7211,14 +7857,47 @@ export class Compiler extends DiagnosticEmitter {
     let sourceFunction = flow.sourceFunction;
     let isNamed = declaration.name.text.length > 0;
     let isSemanticallyAnonymous = !isNamed || contextualType != Type.void;
-    let prototype = new FunctionPrototype(
-      isSemanticallyAnonymous
-        ? `${isNamed ? declaration.name.text : "anonymous"}|${sourceFunction.nextAnonymousId++}`
-        : declaration.name.text,
-      sourceFunction,
-      declaration,
-      DecoratorFlags.None
-    );
+
+    // Generate the name for this anonymous/named function
+    let functionName = isSemanticallyAnonymous
+      ? `${isNamed ? declaration.name.text : "anonymous"}|${sourceFunction.nextAnonymousId++}`
+      : declaration.name.text;
+
+    // During recompilation, check if this function already exists
+    // Check in program.instancesByName using the internal name that would be generated
+    let expectedInternalName = mangleInternalName(functionName, sourceFunction, false);
+    let existingInstance = this.program.instancesByName.has(expectedInternalName)
+      ? this.program.instancesByName.get(expectedInternalName)
+      : null;
+    if (existingInstance && existingInstance.kind == ElementKind.Function) {
+      let existingFunc = <Function>existingInstance;
+      if (existingFunc.is(CommonFlags.Compiled)) {
+        // Already compiled - just return a reference to it
+        let offset = this.ensureRuntimeFunction(existingFunc);
+        let capturedLocals = existingFunc.capturedLocals;
+        if (capturedLocals && capturedLocals.size > 0) {
+          return this.compileClosureFunctionCreation(existingFunc, sourceFunction);
+        }
+        this.currentType = existingFunc.signature.type;
+        let expr = this.options.isWasm64
+          ? this.module.i64(i64_low(offset), i64_high(offset))
+          : this.module.i32(i64_low(offset));
+        return expr;
+      }
+    }
+
+    // Reuse existing prototype if available (during recompilation), otherwise create new
+    let prototype: FunctionPrototype;
+    if (existingInstance && existingInstance.kind == ElementKind.Function) {
+      prototype = (<Function>existingInstance).prototype;
+    } else {
+      prototype = new FunctionPrototype(
+        functionName,
+        sourceFunction,
+        declaration,
+        DecoratorFlags.None
+      );
+    }
     let instance: Function | null;
     let contextualTypeArguments = cloneMap(flow.contextualTypeArguments);
     let module = this.module;
@@ -7320,6 +7999,23 @@ export class Compiler extends DiagnosticEmitter {
         contextualTypeArguments
       );
       instance.flow.outer = flow;
+
+      // Analyze captured variables before compiling
+      let captures = this.analyzeCapturedVariables(declaration, flow);
+      if (captures.size > 0) {
+        // Check if closures feature is enabled
+        if (!this.options.hasFeature(Feature.Closures)) {
+          this.error(
+            DiagnosticCode.Feature_0_is_not_enabled,
+            expression.range, "closures"
+          );
+          return module.unreachable();
+        }
+        instance.capturedLocals = captures;
+        instance.outerFunction = sourceFunction;
+        this.ensureClosureEnvironmentsForCaptures(captures, flow);
+      }
+
       let worked = this.compileFunction(instance);
       this.currentType = contextualSignature.type;
       if (!worked) return module.unreachable();
@@ -7329,12 +8025,37 @@ export class Compiler extends DiagnosticEmitter {
       instance = this.resolver.resolveFunction(prototype, null, contextualTypeArguments);
       if (!instance) return this.module.unreachable();
       instance.flow.outer = flow;
+
+      // Analyze captured variables before compiling
+      let captures = this.analyzeCapturedVariables(declaration, flow);
+      if (captures.size > 0) {
+        // Check if closures feature is enabled
+        if (!this.options.hasFeature(Feature.Closures)) {
+          this.error(
+            DiagnosticCode.Feature_0_is_not_enabled,
+            expression.range, "closures"
+          );
+          return module.unreachable();
+        }
+        instance.capturedLocals = captures;
+        instance.outerFunction = sourceFunction;
+        this.ensureClosureEnvironmentsForCaptures(captures, flow);
+      }
+
       let worked = this.compileFunction(instance);
       this.currentType = instance.signature.type;
       if (!worked) return module.unreachable();
     }
 
     let offset = this.ensureRuntimeFunction(instance); // reports
+
+    // If this is a closure, we need to allocate the Function object dynamically
+    // and set the _env field to point to our environment
+    let capturedLocals = instance.capturedLocals;
+    if (capturedLocals && capturedLocals.size > 0) {
+      return this.compileClosureFunctionCreation(instance, sourceFunction);
+    }
+
     let expr = this.options.isWasm64
       ? module.i64(i64_low(offset), i64_high(offset))
       : module.i32(i64_low(offset));
@@ -7366,6 +8087,816 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     return expr;
+  }
+
+  // === Closure Support ==========================================================================
+
+  /** Scans a node and its children for captured variables from outer scopes.
+   *  Resolves names to Local objects and calculates slot indices. */
+  private scanNodeForCaptures(
+    node: Node,
+    outerFlow: Flow,
+    innerFunctionNames: Set<string>,
+    captures: Map<Local, i32>
+  ): void {
+    switch (node.kind) {
+      case NodeKind.Identifier: {
+        let ident = <IdentifierExpression>node;
+        let name = ident.text;
+        // Skip identifiers that are parameters/locals of inner functions
+        if (innerFunctionNames.has(name)) break;
+
+        // Resolve to Local and calculate slot index
+        let local = outerFlow.lookupLocal(name);
+        if (!local) {
+          local = outerFlow.lookupLocalInOuter(name);
+        }
+        if (local && !captures.has(local)) {
+          local.isCaptured = true;
+          if (!local.envOwner) {
+            local.envOwner = <Function>local.parent;
+          }
+          // Check if local was accessed before capture was discovered - need recompilation
+          if (local.wasAccessedAsLocal) {
+            let ownerFunc = <Function>local.parent;
+            ownerFunc.needsCaptureRecompile = true;
+          }
+          if (local.envSlotIndex >= 0) {
+            captures.set(local, local.envSlotIndex);
+          } else {
+            // Calculate proper byte offset with alignment
+            // Consider both current captures AND the outer function's existing captures
+            let ptrSize = this.options.usizeType.byteSize;
+            let currentOffset = ptrSize;
+            // First check existing captured locals on the outer function
+            // Only consider locals that belong to the SAME envOwner
+            let envOwner = local.envOwner;
+            if (envOwner && envOwner.capturedLocals) {
+              let existingCaptures = changetype<Map<Local, i32>>(envOwner.capturedLocals);
+              for (let _keys = Map_keys(existingCaptures), idx = 0, cnt = _keys.length; idx < cnt; ++idx) {
+                let existingLocal = _keys[idx];
+                // Only consider locals owned by the same function
+                if (existingLocal.envOwner == envOwner && existingLocal.envSlotIndex >= 0) {
+                  let endOfSlot = existingLocal.envSlotIndex + existingLocal.type.byteSize;
+                  if (endOfSlot > currentOffset) currentOffset = endOfSlot;
+                }
+              }
+            }
+            // Then check locals in current captures map that belong to the same envOwner
+            for (let _keys = Map_keys(captures), idx = 0, cnt = _keys.length; idx < cnt; ++idx) {
+              let existingLocal = _keys[idx];
+              if (existingLocal.envOwner == envOwner && existingLocal.envSlotIndex >= 0) {
+                let endOfSlot = existingLocal.envSlotIndex + existingLocal.type.byteSize;
+                if (endOfSlot > currentOffset) currentOffset = endOfSlot;
+              }
+            }
+            let typeSize = local.type.byteSize;
+            let align = typeSize;
+            currentOffset = (currentOffset + align - 1) & ~(align - 1);
+            local.envSlotIndex = currentOffset;
+            captures.set(local, local.envSlotIndex);
+          }
+        }
+        break;
+      }
+      case NodeKind.This: {
+        // Handle 'this' capture
+        let local = outerFlow.lookupLocal(CommonNames.this_);
+        if (!local) {
+          local = outerFlow.lookupLocalInOuter(CommonNames.this_);
+        }
+        if (local && !captures.has(local)) {
+          local.isCaptured = true;
+          if (!local.envOwner) {
+            local.envOwner = <Function>local.parent;
+          }
+          // Check if local was accessed before capture was discovered - need recompilation
+          if (local.wasAccessedAsLocal) {
+            let ownerFunc = <Function>local.parent;
+            ownerFunc.needsCaptureRecompile = true;
+          }
+          if (local.envSlotIndex >= 0) {
+            captures.set(local, local.envSlotIndex);
+          } else {
+            // Calculate proper byte offset with alignment
+            // Consider both current captures AND the outer function's existing captures
+            let ptrSize = this.options.usizeType.byteSize;
+            let currentOffset = ptrSize;
+            // First check existing captured locals on the outer function
+            // Only consider locals that belong to the SAME envOwner
+            let envOwner = local.envOwner;
+            if (envOwner && envOwner.capturedLocals) {
+              let existingCaptures = changetype<Map<Local, i32>>(envOwner.capturedLocals);
+              for (let _keys = Map_keys(existingCaptures), idx = 0, cnt = _keys.length; idx < cnt; ++idx) {
+                let existingLocal = _keys[idx];
+                // Only consider locals owned by the same function
+                if (existingLocal.envOwner == envOwner && existingLocal.envSlotIndex >= 0) {
+                  let endOfSlot = existingLocal.envSlotIndex + existingLocal.type.byteSize;
+                  if (endOfSlot > currentOffset) currentOffset = endOfSlot;
+                }
+              }
+            }
+            // Then check locals in current captures map that belong to the same envOwner
+            for (let _keys = Map_keys(captures), idx = 0, cnt = _keys.length; idx < cnt; ++idx) {
+              let existingLocal = _keys[idx];
+              if (existingLocal.envOwner == envOwner && existingLocal.envSlotIndex >= 0) {
+                let endOfSlot = existingLocal.envSlotIndex + existingLocal.type.byteSize;
+                if (endOfSlot > currentOffset) currentOffset = endOfSlot;
+              }
+            }
+            let typeSize = local.type.byteSize;
+            let align = typeSize;
+            currentOffset = (currentOffset + align - 1) & ~(align - 1);
+            local.envSlotIndex = currentOffset;
+            captures.set(local, local.envSlotIndex);
+          }
+        }
+        break;
+      }
+      case NodeKind.Function: {
+        // For nested function expressions, scan their body but add their params to inner names
+        let funcExpr = <FunctionExpression>node;
+        let decl = funcExpr.declaration;
+        let params = decl.signature.parameters;
+        // Scan parameter default values for captures (before adding params to inner names)
+        for (let i = 0, k = params.length; i < k; i++) {
+          let paramInit = params[i].initializer;
+          if (paramInit) {
+            this.scanNodeForCaptures(paramInit, outerFlow, innerFunctionNames, captures);
+          }
+        }
+        for (let i = 0, k = params.length; i < k; i++) {
+          innerFunctionNames.add(params[i].name.text);
+        }
+        let declBody = decl.body;
+        if (declBody) {
+          this.scanNodeForCaptures(declBody, outerFlow, innerFunctionNames, captures);
+        }
+        for (let i = 0, k = params.length; i < k; i++) {
+          innerFunctionNames.delete(params[i].name.text);
+        }
+        break;
+      }
+      // Expression nodes
+      case NodeKind.Assertion: {
+        let expr = <AssertionExpression>node;
+        this.scanNodeForCaptures(expr.expression, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.Binary: {
+        let expr = <BinaryExpression>node;
+        this.scanNodeForCaptures(expr.left, outerFlow, innerFunctionNames, captures);
+        this.scanNodeForCaptures(expr.right, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.Call: {
+        let expr = <CallExpression>node;
+        this.scanNodeForCaptures(expr.expression, outerFlow, innerFunctionNames, captures);
+        let args = expr.args;
+        for (let i = 0, k = args.length; i < k; i++) {
+          this.scanNodeForCaptures(args[i], outerFlow, innerFunctionNames, captures);
+        }
+        break;
+      }
+      case NodeKind.Comma: {
+        let expr = <CommaExpression>node;
+        let expressions = expr.expressions;
+        for (let i = 0, k = expressions.length; i < k; i++) {
+          this.scanNodeForCaptures(expressions[i], outerFlow, innerFunctionNames, captures);
+        }
+        break;
+      }
+      case NodeKind.Literal: {
+        let literal = <LiteralExpression>node;
+        if (literal.literalKind == LiteralKind.Array) {
+          let arrLiteral = <ArrayLiteralExpression>literal;
+          let elements = arrLiteral.elementExpressions;
+          for (let i = 0, k = elements.length; i < k; i++) {
+            let elem = elements[i];
+            if (elem) {
+              this.scanNodeForCaptures(elem, outerFlow, innerFunctionNames, captures);
+            }
+          }
+        } else if (literal.literalKind == LiteralKind.Object) {
+          let objLiteral = <ObjectLiteralExpression>literal;
+          let values = objLiteral.values;
+          for (let i = 0, k = values.length; i < k; i++) {
+            this.scanNodeForCaptures(values[i], outerFlow, innerFunctionNames, captures);
+          }
+        } else if (literal.literalKind == LiteralKind.Template) {
+          let tmplLiteral = <TemplateLiteralExpression>literal;
+          let expressions = tmplLiteral.expressions;
+          for (let i = 0, k = expressions.length; i < k; i++) {
+            this.scanNodeForCaptures(expressions[i], outerFlow, innerFunctionNames, captures);
+          }
+        }
+        // Other literal kinds (Integer, Float, String, RegExp) have no variable refs
+        break;
+      }
+      case NodeKind.ElementAccess: {
+        let expr = <ElementAccessExpression>node;
+        this.scanNodeForCaptures(expr.expression, outerFlow, innerFunctionNames, captures);
+        this.scanNodeForCaptures(expr.elementExpression, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.New: {
+        let expr = <NewExpression>node;
+        this.scanNodeForCaptures(expr.typeName, outerFlow, innerFunctionNames, captures);
+        let args = expr.args;
+        for (let i = 0, k = args.length; i < k; i++) {
+          this.scanNodeForCaptures(args[i], outerFlow, innerFunctionNames, captures);
+        }
+        break;
+      }
+      case NodeKind.Parenthesized: {
+        let expr = <ParenthesizedExpression>node;
+        this.scanNodeForCaptures(expr.expression, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.PropertyAccess: {
+        let expr = <PropertyAccessExpression>node;
+        this.scanNodeForCaptures(expr.expression, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.Ternary: {
+        let expr = <TernaryExpression>node;
+        this.scanNodeForCaptures(expr.condition, outerFlow, innerFunctionNames, captures);
+        this.scanNodeForCaptures(expr.ifThen, outerFlow, innerFunctionNames, captures);
+        this.scanNodeForCaptures(expr.ifElse, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.UnaryPostfix: {
+        let expr = <UnaryPostfixExpression>node;
+        this.scanNodeForCaptures(expr.operand, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.UnaryPrefix: {
+        let expr = <UnaryPrefixExpression>node;
+        this.scanNodeForCaptures(expr.operand, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.InstanceOf: {
+        let expr = <InstanceOfExpression>node;
+        this.scanNodeForCaptures(expr.expression, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      // Statement nodes
+      case NodeKind.Block: {
+        let stmt = <BlockStatement>node;
+        let statements = stmt.statements;
+        for (let i = 0, k = statements.length; i < k; i++) {
+          this.scanNodeForCaptures(statements[i], outerFlow, innerFunctionNames, captures);
+        }
+        break;
+      }
+      case NodeKind.Do: {
+        let stmt = <DoStatement>node;
+        this.scanNodeForCaptures(stmt.body, outerFlow, innerFunctionNames, captures);
+        this.scanNodeForCaptures(stmt.condition, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.Expression: {
+        let stmt = <ExpressionStatement>node;
+        this.scanNodeForCaptures(stmt.expression, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.For: {
+        let stmt = <ForStatement>node;
+        let forInit = stmt.initializer;
+        let forCond = stmt.condition;
+        let forIncr = stmt.incrementor;
+        if (forInit) this.scanNodeForCaptures(forInit, outerFlow, innerFunctionNames, captures);
+        if (forCond) this.scanNodeForCaptures(forCond, outerFlow, innerFunctionNames, captures);
+        if (forIncr) this.scanNodeForCaptures(forIncr, outerFlow, innerFunctionNames, captures);
+        this.scanNodeForCaptures(stmt.body, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.ForOf: {
+        let stmt = <ForOfStatement>node;
+        this.scanNodeForCaptures(stmt.variable, outerFlow, innerFunctionNames, captures);
+        this.scanNodeForCaptures(stmt.iterable, outerFlow, innerFunctionNames, captures);
+        this.scanNodeForCaptures(stmt.body, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.If: {
+        let stmt = <IfStatement>node;
+        this.scanNodeForCaptures(stmt.condition, outerFlow, innerFunctionNames, captures);
+        this.scanNodeForCaptures(stmt.ifTrue, outerFlow, innerFunctionNames, captures);
+        let ifFalse = stmt.ifFalse;
+        if (ifFalse) this.scanNodeForCaptures(ifFalse, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.Return: {
+        let stmt = <ReturnStatement>node;
+        let retValue = stmt.value;
+        if (retValue) this.scanNodeForCaptures(retValue, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.Switch: {
+        let stmt = <SwitchStatement>node;
+        this.scanNodeForCaptures(stmt.condition, outerFlow, innerFunctionNames, captures);
+        let cases = stmt.cases;
+        for (let i = 0, k = cases.length; i < k; i++) {
+          let case_ = cases[i];
+          let caseLabel = case_.label;
+          if (caseLabel) this.scanNodeForCaptures(caseLabel, outerFlow, innerFunctionNames, captures);
+          let stmts = case_.statements;
+          for (let j = 0, l = stmts.length; j < l; j++) {
+            this.scanNodeForCaptures(stmts[j], outerFlow, innerFunctionNames, captures);
+          }
+        }
+        break;
+      }
+      case NodeKind.Throw: {
+        let stmt = <ThrowStatement>node;
+        this.scanNodeForCaptures(stmt.value, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.Try: {
+        let stmt = <TryStatement>node;
+        let bodyStmts = stmt.bodyStatements;
+        for (let i = 0, k = bodyStmts.length; i < k; i++) {
+          this.scanNodeForCaptures(bodyStmts[i], outerFlow, innerFunctionNames, captures);
+        }
+        let catchStmts = stmt.catchStatements;
+        if (catchStmts) {
+          for (let i = 0, k = catchStmts.length; i < k; i++) {
+            this.scanNodeForCaptures(catchStmts[i], outerFlow, innerFunctionNames, captures);
+          }
+        }
+        let finallyStmts = stmt.finallyStatements;
+        if (finallyStmts) {
+          for (let i = 0, k = finallyStmts.length; i < k; i++) {
+            this.scanNodeForCaptures(finallyStmts[i], outerFlow, innerFunctionNames, captures);
+          }
+        }
+        break;
+      }
+      case NodeKind.Variable: {
+        let stmt = <VariableStatement>node;
+        let declarations = stmt.declarations;
+        for (let i = 0, k = declarations.length; i < k; i++) {
+          let decl = declarations[i];
+          // Add the variable name as a local name (not captured from outer)
+          innerFunctionNames.add(decl.name.text);
+          let declInit = decl.initializer;
+          if (declInit) {
+            this.scanNodeForCaptures(declInit, outerFlow, innerFunctionNames, captures);
+          }
+        }
+        break;
+      }
+      case NodeKind.While: {
+        let stmt = <WhileStatement>node;
+        this.scanNodeForCaptures(stmt.condition, outerFlow, innerFunctionNames, captures);
+        this.scanNodeForCaptures(stmt.body, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+      case NodeKind.Void: {
+        let stmt = <VoidStatement>node;
+        this.scanNodeForCaptures(stmt.expression, outerFlow, innerFunctionNames, captures);
+        break;
+      }
+
+      // Leaf nodes - no children to scan, no captures possible
+      case NodeKind.Null:
+      case NodeKind.True:
+      case NodeKind.False:
+      case NodeKind.Super:
+      case NodeKind.Constructor:
+      case NodeKind.Break:
+      case NodeKind.Continue:
+      case NodeKind.Empty:
+      case NodeKind.Omitted:
+      case NodeKind.Comment:
+      case NodeKind.Compiled:
+        break;
+
+      // Class expressions - not supported (will error during compilation)
+      case NodeKind.Class:
+        break;
+
+      // Type nodes - types don't contain runtime captures
+      case NodeKind.TypeName:
+      case NodeKind.NamedType:
+      case NodeKind.FunctionType:
+      case NodeKind.TypeParameter:
+      case NodeKind.Parameter:  // Parameter initializers handled separately in Function case
+        break;
+
+      // Top-level declarations - should not appear inside function bodies being scanned
+      case NodeKind.Source:
+      case NodeKind.ClassDeclaration:
+      case NodeKind.EnumDeclaration:
+      case NodeKind.EnumValueDeclaration:
+      case NodeKind.FunctionDeclaration:
+      case NodeKind.InterfaceDeclaration:
+      case NodeKind.NamespaceDeclaration:
+      case NodeKind.TypeDeclaration:
+      case NodeKind.Import:
+      case NodeKind.Export:
+      case NodeKind.ExportDefault:
+      case NodeKind.ExportImport:
+      case NodeKind.Module:
+      case NodeKind.Decorator:
+      case NodeKind.IndexSignature:
+      case NodeKind.FieldDeclaration:
+      case NodeKind.ImportDeclaration:
+      case NodeKind.ExportMember:
+      case NodeKind.MethodDeclaration:
+      case NodeKind.VariableDeclaration:
+      case NodeKind.SwitchCase:  // Handled inline in Switch case
+        break;
+
+      default:
+        assert(false, "scanNodeForCaptures: unhandled node kind: " + (node.kind as i32).toString());
+    }
+  }
+
+  /** Analyzes a function expression to find captured variables from outer scopes. */
+  private analyzeCapturedVariables(
+    declaration: FunctionDeclaration,
+    outerFlow: Flow
+  ): Map<Local, i32> {
+    let captures = new Map<Local, i32>();
+    let innerFunctionNames = new Set<string>();
+
+    // Scan parameter default values for captures (before adding params to inner names)
+    let params = declaration.signature.parameters;
+    for (let i = 0, k = params.length; i < k; i++) {
+      let paramInit = params[i].initializer;
+      if (paramInit) {
+        this.scanNodeForCaptures(paramInit, outerFlow, innerFunctionNames, captures);
+      }
+    }
+
+    // Add the function's own parameters to the inner names set
+    for (let i = 0, k = params.length; i < k; i++) {
+      innerFunctionNames.add(params[i].name.text);
+    }
+
+    // Scan the function body
+    let body = declaration.body;
+    if (body) {
+      this.scanNodeForCaptures(body, outerFlow, innerFunctionNames, captures);
+    }
+
+    return captures;
+  }
+
+  /** Computes the total size needed for a closure environment. */
+  private computeEnvironmentSize(captures: Map<Local, i32>): i32 {
+    // Calculate the total size based on already-assigned slot indices
+    // The envSlotIndex values were already assigned during capture analysis
+    // Slot 0 is always reserved for the parent environment pointer
+    let usizeSize = this.options.usizeType.byteSize;
+    let maxEnd = usizeSize; // Minimum size is parent pointer slot
+    for (let _keys = Map_keys(captures), i = 0, k = _keys.length; i < k; i++) {
+      let local = _keys[i];
+      let endOfSlot = local.envSlotIndex + local.type.byteSize;
+      if (endOfSlot > maxEnd) maxEnd = endOfSlot;
+    }
+    // Ensure total size is aligned to pointer size
+    return (maxEnd + usizeSize - 1) & ~(usizeSize - 1);
+  }
+
+  /** Ensures closure environments are set up for all functions that own captured variables. */
+  private ensureClosureEnvironmentsForCaptures(
+    captures: Map<Local, i32>,
+    flow: Flow
+  ): void {
+    // Group captures by owner since variables may come from different nesting levels
+    let envOwners = new Map<Function, Map<Local, i32>>();
+    for (let _keys = Map_keys(captures), i = 0, k = _keys.length; i < k; i++) {
+      let local = _keys[i];
+      let owner = assert(local.envOwner);
+      let ownerCaptures = envOwners.has(owner) ? envOwners.get(owner) : null;
+      if (!ownerCaptures) {
+        ownerCaptures = new Map<Local, i32>();
+        envOwners.set(owner, ownerCaptures);
+      }
+      ownerCaptures.set(local, captures.get(local) as i32);
+    }
+    for (let _keys = Map_keys(envOwners), i = 0, k = _keys.length; i < k; i++) {
+      let owner = _keys[i];
+      let ownerCaptures = assert(envOwners.get(owner));
+      this.ensureClosureEnvironment(owner, ownerCaptures, flow);
+    }
+  }
+
+  /** Ensures a closure environment is set up for the outer function. */
+  private ensureClosureEnvironment(
+    outerFunc: Function,
+    captures: Map<Local, i32>,
+    flow: Flow
+  ): void {
+    // If the outer function already has an environment, just merge the captures
+    if (outerFunc.envLocal) {
+      // Merge captures into existing environment
+      let existingCaptures = outerFunc.capturedLocals;
+      if (existingCaptures) {
+        for (let _keys = Map_keys(captures), i = 0, k = _keys.length; i < k; i++) {
+          let local = _keys[i];
+          if (!existingCaptures.has(local)) {
+            existingCaptures.set(local, captures.get(local) as i32);
+          }
+        }
+      }
+      return;
+    }
+
+    // Create a new environment local for the outer function
+    let usizeType = this.options.usizeType;
+    outerFunc.envLocal = flow.addScopedLocal("$env", usizeType);
+    outerFunc.capturedLocals = captures;
+
+    // Compute the environment size
+    this.computeEnvironmentSize(captures);
+  }
+
+  /** Compiles the creation of a closure Function object with environment pointer. */
+  private compileClosureFunctionCreation(
+    instance: Function,
+    outerFunc: Function
+  ): ExpressionRef {
+    let module = this.module;
+    let program = this.program;
+    let options = this.options;
+    let sizeTypeRef = options.sizeTypeRef;
+    let usizeType = options.usizeType;
+
+    // Get the Function wrapper class for this function type
+    let rtInstance = assert(this.resolver.resolveClass(program.functionPrototype, [instance.type]));
+
+    // Create the Function object dynamically using __new
+    let classId = rtInstance.id;
+    let classSize = rtInstance.nextMemoryOffset;
+
+    // Get __new function
+    let newInstance = program.newInstance;
+    assert(newInstance);
+    this.compileFunction(newInstance);
+
+    // Allocate the Function object: __new(size, classId)
+    let allocExpr = module.call(
+      newInstance.internalName,
+      [
+        options.isWasm64 ? module.i64(classSize) : module.i32(classSize),
+        module.i32(classId)
+      ],
+      sizeTypeRef
+    );
+
+    // Store the allocation result in a temp local
+    let flow = this.currentFlow;
+    let funcPtrLocal = flow.getTempLocal(usizeType);
+    flow.setLocalFlag(funcPtrLocal.index, LocalFlags.Wrapped);
+
+    // Get the environment pointer from the outer function
+    // For nested closures, the outer function might not own the environment
+    // - it might be using closureEnvLocal (a cached copy from an even outer function)
+    let envPtrExpr: ExpressionRef;
+    let outerEnvLocal = outerFunc.envLocal;
+    let outerClosureEnvLocal = outerFunc.closureEnvLocal;
+    if (outerEnvLocal) {
+      // Outer function owns an environment - use it
+      envPtrExpr = module.local_get(outerEnvLocal.index, sizeTypeRef);
+    } else if (outerClosureEnvLocal) {
+      // Outer function is a closure - use its cached environment from the outer scope
+      envPtrExpr = module.local_get(outerClosureEnvLocal.index, sizeTypeRef);
+    } else {
+      envPtrExpr = options.isWasm64 ? module.i64(0) : module.i32(0);
+    }
+
+    // Get the function table index
+    let tableBase = options.tableBase;
+    if (!tableBase) tableBase = 1;
+    let funcIndex = tableBase + this.functionTable.indexOf(instance);
+
+    // Get field offsets for Function class
+    let indexOffset = rtInstance.offsetof("_index");
+    let envOffset = rtInstance.offsetof("_env");
+
+    // Build the block:
+    // 1. Allocate Function object
+    // 2. Store _index
+    // 3. Store _env
+    // 4. Return pointer
+    let stmts: ExpressionRef[] = [
+      // funcPtr = __new(size, classId)
+      module.local_set(funcPtrLocal.index, allocExpr, false),
+      // funcPtr._index = index
+      module.store(4, // _index is always u32
+        module.local_get(funcPtrLocal.index, sizeTypeRef),
+        module.i32(funcIndex),
+        TypeRef.I32,
+        indexOffset
+      ),
+      // funcPtr._env = envPtr
+      module.store(usizeType.byteSize,
+        module.local_get(funcPtrLocal.index, sizeTypeRef),
+        envPtrExpr,
+        sizeTypeRef,
+        envOffset
+      ),
+      // Return funcPtr
+      module.local_get(funcPtrLocal.index, sizeTypeRef)
+    ];
+
+    this.currentType = instance.type;
+
+    return module.block(null, stmts, sizeTypeRef);
+  }
+
+  /** Gets the environment pointer for accessing a captured variable. */
+  private getClosureEnvironmentPointer(capturedLocal: Local): ExpressionRef {
+    let module = this.module;
+    let flow = this.currentFlow;
+    let currentFunc = flow.sourceFunction;
+    let sizeTypeRef = this.options.sizeTypeRef;
+    let envOwner = capturedLocal.envOwner;
+
+    // Case 1: We're in the function that owns the environment (the variable was declared here)
+    let envLocal = currentFunc.envLocal;
+    if (envOwner == currentFunc && envLocal) {
+      return module.local_get(envLocal.index, sizeTypeRef);
+    }
+
+    // Case 2: We're in a closure and need to access a variable from an outer scope
+    // Start from our closure's environment and traverse parent pointers
+    let envExpr: ExpressionRef;
+    let closureEnvLocal = currentFunc.closureEnvLocal;
+    if (closureEnvLocal) {
+      envExpr = module.local_get(closureEnvLocal.index, sizeTypeRef);
+    } else {
+      // Fallback to global (shouldn't normally happen)
+      let closureEnvGlobal = this.ensureClosureEnvironmentGlobal();
+      envExpr = module.global_get(closureEnvGlobal, sizeTypeRef);
+    }
+
+    // Count how many levels up we need to go
+    // Start from current function's outer function and walk up to find envOwner
+    // Only count functions that have their own environment (envLocal set)
+    let func: Function | null = currentFunc.outerFunction;
+    let depth = 0;
+    while (func && func != envOwner) {
+      // Only increment depth if this function has its own environment
+      // Functions without envLocal just pass through their parent's environment
+      if (func.envLocal) {
+        depth++;
+      }
+      func = func.outerFunction;
+    }
+
+    // Traverse the parent chain: load parent pointer (at offset 0) `depth` times
+    for (let i = 0; i < depth; i++) {
+      envExpr = module.load(
+        this.options.usizeType.byteSize,
+        false,  // unsigned
+        envExpr,
+        sizeTypeRef,
+        0  // Parent pointer is at offset 0
+      );
+    }
+
+    return envExpr;
+  }
+
+  /** Compiles loading a captured variable from the closure environment. */
+  private compileClosureLoad(local: Local, expression: Node | null = null): ExpressionRef {
+    let module = this.module;
+    let localType = local.type;
+    let slotOffset = local.envSlotIndex;
+
+    // Get the environment pointer
+    let envPtr = this.getClosureEnvironmentPointer(local);
+
+    // Load from the environment: load<Type>(envPtr + slotOffset)
+    this.currentType = localType;
+    return module.load(
+      localType.byteSize,
+      localType.is(TypeFlags.Signed),
+      envPtr,
+      localType.toRef(),
+      slotOffset
+    );
+  }
+
+  /** Compiles storing a value to a captured variable in the closure environment. */
+  private compileClosureStore(
+    local: Local,
+    valueExpr: ExpressionRef,
+    valueType: Type
+  ): ExpressionRef {
+    let module = this.module;
+    let localType = local.type;
+    let slotOffset = local.envSlotIndex;
+
+    // Get the environment pointer
+    let envPtr = this.getClosureEnvironmentPointer(local);
+
+    // Store to the environment: store<Type>(envPtr + slotOffset, value)
+    return module.store(
+      localType.byteSize,
+      envPtr,
+      valueExpr,
+      localType.toRef(),
+      slotOffset
+    );
+  }
+
+  /** Compiles the allocation of a closure environment at function entry. */
+  private compileClosureEnvironmentAllocation(instance: Function): ExpressionRef {
+    let module = this.module;
+    let program = this.program;
+    let options = this.options;
+    let sizeTypeRef = options.sizeTypeRef;
+    let usizeType = options.usizeType;
+
+    let captures = assert(instance.capturedLocals);
+    let envLocal = assert(instance.envLocal);
+
+    // Calculate the total size needed for the environment
+    let envSize = this.computeEnvironmentSize(captures);
+
+    // Get __alloc function for raw memory allocation
+    let allocInstance = program.allocInstance;
+    assert(allocInstance);
+    this.compileFunction(allocInstance);
+
+    // Allocate the environment: __alloc(size)
+    let allocExpr = module.call(
+      allocInstance.internalName,
+      [
+        options.isWasm64 ? module.i64(envSize) : module.i32(envSize)
+      ],
+      sizeTypeRef
+    );
+
+    let stmts: ExpressionRef[] = [];
+
+    // envLocal = __alloc(envSize)
+    stmts.push(
+      module.local_set(envLocal.index, allocExpr, false)
+    );
+
+    // Store parent environment pointer at slot 0
+    // If this is a closure (has outerFunction), use closureEnvLocal as parent
+    // Otherwise, parent is null (0)
+    let parentEnvExpr: ExpressionRef;
+    let closureEnvLocal = instance.closureEnvLocal;
+    if (closureEnvLocal) {
+      // This is a nested closure - use the cached closure env as parent
+      parentEnvExpr = module.local_get(closureEnvLocal.index, sizeTypeRef);
+    } else {
+      // This is the outermost function - no parent
+      parentEnvExpr = options.isWasm64 ? module.i64(0) : module.i32(0);
+    }
+    stmts.push(
+      module.store(
+        usizeType.byteSize,
+        module.local_get(envLocal.index, sizeTypeRef),
+        parentEnvExpr,
+        sizeTypeRef,
+        0  // Parent pointer is at offset 0
+      )
+    );
+
+    // Initialize captured parameters in the environment
+    // Parameters are already initialized, so copy them now
+    // Local variables (var/let) will be initialized later when they're declared
+    let signature = instance.signature;
+    let numParams = signature.parameterTypes.length;
+    let hasThis = signature.thisType != null;
+    let paramStartIndex = hasThis ? 1 : 0;
+    let paramEndIndex = paramStartIndex + numParams;
+
+    for (let _keys = Map_keys(captures), i = 0, k = _keys.length; i < k; i++) {
+      let local = _keys[i];
+      let slotOffset = local.envSlotIndex;
+      let localType = local.type;
+
+      // Copy parameters and 'this' to the environment
+      // Local variables (var/let) will be initialized later when their declaration is compiled
+      let isParameter = local.index >= paramStartIndex && local.index < paramEndIndex;
+      let isThis = hasThis && local.index == 0; // 'this' is at index 0 in methods
+      if (isParameter || isThis) {
+        stmts.push(
+          module.store(
+            localType.byteSize,
+            module.local_get(envLocal.index, sizeTypeRef),
+            module.local_get(local.index, localType.toRef()),
+            localType.toRef(),
+            slotOffset
+          )
+        );
+      }
+    }
+
+    // Mark environment as initialized
+    this.currentFlow.setLocalFlag(envLocal.index, LocalFlags.Initialized);
+
+    return module.flatten(stmts, TypeRef.None);
   }
 
   /** Makes sure the enclosing source file of the specified expression has been compiled. */
@@ -7424,6 +8955,22 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.This: {
         let thisType = sourceFunction.signature.thisType;
+
+        // Check if 'this' is captured from an outer scope (closure case)
+        if (!thisType && this.options.hasFeature(Feature.Closures)) {
+          // Look for 'this' in outer flow - it might be captured
+          let thisLocal = flow.lookupLocal(CommonNames.this_);
+          if (!thisLocal) {
+            thisLocal = flow.lookupLocalInOuter(CommonNames.this_);
+          }
+          if (thisLocal && thisLocal.isCaptured && thisLocal.envSlotIndex >= 0) {
+            // 'this' is captured - load from closure environment
+            flow.set(FlowFlags.AccessesThis);
+            this.currentType = thisLocal.type;
+            return this.compileClosureLoad(thisLocal, expression);
+          }
+        }
+
         if (!thisType) {
           this.error(
             DiagnosticCode._this_cannot_be_referenced_in_current_location,
@@ -7530,6 +9077,31 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileInlineConstant(local, contextualType, constraints);
         }
         let localIndex = local.index;
+
+        // Handle closure access BEFORE initialization check
+        // Captured variables are stored in the environment, not in flow locals
+        if (!local.declaredByFlow(flow)) {
+          // Closure: load from environment (from inner function)
+          if (local.isCaptured && local.envSlotIndex >= 0) {
+            this.currentType = localType;
+            return this.compileClosureLoad(local, expression);
+          }
+          // Not a recognized closure - error
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            expression.range,
+            "Closures"
+          );
+          return module.unreachable();
+        }
+        // Also handle captured locals in the declaring function
+        // When a local is captured, its value lives in the environment
+        let sourceFunc = flow.sourceFunction;
+        if (local.isCaptured && local.envSlotIndex >= 0 && sourceFunc.envLocal) {
+          this.currentType = localType;
+          return this.compileClosureLoad(local, expression);
+        }
+
         if (!flow.isLocalFlag(localIndex, LocalFlags.Initialized)) {
           this.error(
             DiagnosticCode.Variable_0_is_used_before_being_assigned,
@@ -7544,15 +9116,10 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = localType;
         }
 
-        if (!local.declaredByFlow(flow)) {
-          // TODO: closures
-          this.error(
-            DiagnosticCode.Not_implemented_0,
-            expression.range,
-            "Closures"
-          );
-          return module.unreachable();
-        }
+        // Track that we accessed this as a regular local (for closure recompilation detection)
+        // Only set if not already captured (to avoid infinite recompilation loops)
+        if (!local.isCaptured) local.wasAccessedAsLocal = true;
+
         let expr = module.local_get(localIndex, localType.toRef());
         if (isNonNull && localType.isNullableExternalReference && this.options.hasFeature(Feature.GC)) {
           // If the local's type is nullable, but its value is known to be non-null, propagate

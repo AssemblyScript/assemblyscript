@@ -12,7 +12,7 @@ Usage
 -----
 
 ```js
-import assemblyscript from "assemblyscript";
+import assemblyscript from "@btc-vision/assemblyscript";
 ...
 ```
 

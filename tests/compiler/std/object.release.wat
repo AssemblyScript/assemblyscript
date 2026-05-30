@@ -2,7 +2,7 @@
  (type $0 (func (param i32 i32 i32 i32)))
  (type $1 (func (param i32 i32) (result i32)))
  (type $2 (func))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (memory $0 1)
  (data $0 (i32.const 1036) ",")
  (data $0.1 (i32.const 1048) "\02\00\00\00\1a\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00.\00t\00s")
@@ -154,7 +154,7 @@
    i32.const 1056
    i32.const 44
    i32.const 1
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   i32.const 1104
@@ -165,7 +165,7 @@
    i32.const 1056
    i32.const 45
    i32.const 1
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   i32.const 1104
@@ -176,7 +176,7 @@
    i32.const 1056
    i32.const 46
    i32.const 1
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   i32.const 0
@@ -189,7 +189,7 @@
    i32.const 1056
    i32.const 48
    i32.const 1
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   i32.const 1200
@@ -200,7 +200,7 @@
    i32.const 1056
    i32.const 49
    i32.const 1
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   i32.const 0
@@ -211,7 +211,7 @@
    i32.const 1056
    i32.const 50
    i32.const 1
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   memory.size
@@ -329,7 +329,7 @@
    i32.const 1056
    i32.const 74
    i32.const 3
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   i32.const 1352
@@ -341,7 +341,7 @@
    i32.const 1056
    i32.const 76
    i32.const 3
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   i32.const 1384
@@ -353,7 +353,7 @@
    i32.const 1056
    i32.const 77
    i32.const 3
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
  )

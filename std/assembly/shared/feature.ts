@@ -36,8 +36,10 @@ export const enum Feature {
   Strings = 1 << 14, // see: https://github.com/WebAssembly/stringref
   /** Shared-everything threads. */
   SharedEverything = 1 << 15, // see: https://github.com/WebAssembly/shared-everything-threads
+  /** Closures. */
+  Closures = 1 << 16,
   /** All features. */
-  All = (1 << 16) - 1
+  All = (1 << 17) - 1
 }
 
 /** Gets the name of the specified feature one would specify on the command line. */
@@ -59,6 +61,7 @@ export function featureToString(feature: Feature): string {
     case Feature.ExtendedConst: return "extended-const";
     case Feature.Strings: return "stringref";
     case Feature.SharedEverything: return "shared-everything";
+    case Feature.Closures: return "closures";
   }
   assert(false);
   return "";
