@@ -1,3 +1,14 @@
+<p align="center">
+  <a href="https://toil.org" target="_blank" rel="noopener"><img width="100" src="https://avatars1.githubusercontent.com/u/28916798?s=200&v=4" alt="ToilScript logo"></a>
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/toilscript"><img src="https://img.shields.io/npm/v/toilscript.svg?color=007acc&logo=npm" alt="npm version" /></a>
+  <a href="https://github.com/dacely-cloud/toilscript/releases"><img src="https://img.shields.io/github/v/release/dacely-cloud/toilscript?color=green&logo=github" alt="GitHub release" /></a>
+</p>
+
+---
+
 ## ToilScript
 
 **ToilScript is a fork of [AssemblyScript](https://github.com/AssemblyScript/assemblyscript)** that tracks the latest upstream and adds language features not yet available in the official release.
