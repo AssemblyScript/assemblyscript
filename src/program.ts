@@ -2641,7 +2641,9 @@ export class Program extends DiagnosticEmitter {
     if (!declaration.is(CommonFlags.Instance)) {
       if (parent.kind != ElementKind.ClassPrototype) {
         validDecorators |= DecoratorFlags.Global;
-        validDecorators |= DecoratorFlags.Main; // `@main` marks the module entry point
+        if (!declaration.is(CommonFlags.Generic)) {
+          validDecorators |= DecoratorFlags.Main; // `@main` marks the module entry point (non-generic only)
+        }
       }
     }
     if (declaration.range.source.isLibrary) {
