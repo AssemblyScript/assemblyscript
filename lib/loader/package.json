@@ -9,20 +9,23 @@
     "webassembly",
     "wasm"
   ],
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "contributors": [
     "MaxGraey <maxgraey@gmail.com>"
   ],
   "license": "Apache-2.0",
-  "homepage": "https://assemblyscript.org",
+  "homepage": "https://github.com/dacely-cloud/toilscript",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AssemblyScript/assemblyscript.git",
+    "url": "https://github.com/dacely-cloud/toilscript.git",
     "directory": "lib/loader"
   },
   "bugs": {
-    "url": "https://github.com/AssemblyScript/assemblyscript/issues"
+    "url": "https://github.com/dacely-cloud/toilscript/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "type": "module",
   "main": "./umd/index.js",

@@ -4,36 +4,23 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/toilscript"><img src="https://img.shields.io/npm/v/toilscript.svg?color=007acc&logo=npm" alt="npm version" /></a>
-  <a href="https://github.com/btc-vision/assemblyscript/releases"><img src="https://img.shields.io/github/v/release/btc-vision/assemblyscript?color=green&logo=github" alt="GitHub release" /></a>
+  <a href="https://github.com/dacely-cloud/toilscript/releases"><img src="https://img.shields.io/github/v/release/dacely-cloud/toilscript?color=green&logo=github" alt="GitHub release" /></a>
 </p>
 
 ---
 
-## WARNING: EXPERIMENTAL FORK
+## ToilScript
 
-**This is an experimental fork of AssemblyScript maintained by [btc-vision](https://github.com/btc-vision).** It includes features that are not yet available in the official AssemblyScript release:
+**ToilScript is a fork of [AssemblyScript](https://github.com/AssemblyScript/assemblyscript)** that tracks the latest upstream and adds language features not yet available in the official release.
 
-### Experimental Features
+### Added features
 
-- **Closures** - Full closure support with captured variables
-- **Try-Catch-Finally** - Exception handling with try-catch-finally blocks
-- **Binaryen 125** - Updated to the latest Binaryen version (125.0.0)
-- **Enhanced Shadow Stack** - Improved shadow stack pass for better GC integration
+- **Closures** — full closure support with captured variables
+- **Try-catch-finally** — exception handling (a `throw` must be an `Error` or a subclass)
 
-### Changes from Upstream
+### How it's built
 
-1. **Closure Support**
-   - Closure capture analysis and recompilation logic
-
-2. **Exception Handling**
-   - Try-catch-finally statement support
-   - Enforced Error type in throw statements
-
-3. **Binaryen Upgrade (123 → 125)**
-   - Updated ExpressionId enum values to match Binaryen 125
-   - Fixed shadow stack pass timing to handle lazy function compilation
-   - Moved `compileVisitGlobals`/`compileVisitMembers` after shadow stack pass
-   - Added iterative shadow stack transformation for newly compiled functions
+ToilScript is the latest AssemblyScript `main` (Binaryen `129.0.0-nightly`, BigInt-based i64) with the closure and exception-handling work — originally from the [btc-vision](https://github.com/btc-vision/assemblyscript) fork — merged on top. The compiler's config file defaults to `toilconfig.json` (instead of `asconfig.json`).
 
 ---
 
@@ -50,7 +37,7 @@ This fork is a drop-in replacement for AssemblyScript. Simply replace your impor
 ```json
 {
   "dependencies": {
-    "toilscript": "^0.29.0"
+    "toilscript": "^0.1.0"
   }
 }
 ```
@@ -101,8 +88,8 @@ npx asc your-file.ts --outFile output.wasm
 A development environment can be set up by cloning the repository:
 
 ```sh
-git clone https://github.com/btc-vision/assemblyscript.git
-cd assemblyscript
+git clone https://github.com/dacely-cloud/toilscript.git
+cd toilscript
 npm install
 npm link
 ```

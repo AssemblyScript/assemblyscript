@@ -1,0 +1,10 @@
+# Presence of this file stops npm from falling back to .gitignore when packing.
+# Without it, .gitignore (which ignores the built dist/*.js) strips the compiler
+# bundle from the published tarball. What ships is controlled by the "files"
+# allowlist in package.json; this list only trims dev-only content from it.
+src/
+tests/
+scripts/
+.github/
+*.map
+*.tsbuildinfo
