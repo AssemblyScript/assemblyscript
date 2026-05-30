@@ -40,7 +40,7 @@ if (typeof process.env.npm_config_user_agent === "string") {
   }
 }
 
-const asinitOptions = {
+const toilinitOptions = {
   "help": {
     "category": "General",
     "description": "Prints this help message.",
@@ -63,7 +63,7 @@ const asinitOptions = {
   },
 };
 
-const cliOptions = optionsUtil.parse(process.argv.slice(2), asinitOptions);
+const cliOptions = optionsUtil.parse(process.argv.slice(2), toilinitOptions);
 
 if (cliOptions.options.noColors) {
   stdoutColors.enabled = false;
@@ -83,7 +83,7 @@ function printHelp() {
     "  " + stdoutColors.cyan("toilinit") + " ./newProject -y",
     "",
     stdoutColors.white("OPTIONS"),
-    optionsUtil.help(asinitOptions, { noCategories: true })
+    optionsUtil.help(toilinitOptions, { noCategories: true })
   ].join("\n"));
   process.exit(0);
 }
@@ -159,7 +159,7 @@ function createProject(answer) {
   ensureBuildDirectory();
   ensureGitignore();
   ensurePackageJson();
-  ensureAsconfigJson();
+  ensureToilconfigJson();
   ensureTestsDirectory();
   ensureTestsIndexJs();
   ensureIndexHtml();
@@ -263,7 +263,7 @@ function ensureTsconfigJson() {
   console.log();
 }
 
-function ensureAsconfigJson() {
+function ensureToilconfigJson() {
   console.log("- Making sure that 'toilconfig.json' is set up...");
   if (!fs.existsSync(toilconfigFile)) {
     fs.writeFileSync(toilconfigFile, JSON.stringify({

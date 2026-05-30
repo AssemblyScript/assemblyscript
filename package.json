@@ -69,7 +69,7 @@
   },
   "bin": {
     "toilscript": "./bin/toilscript.js",
-    "toilinit": "./bin/asinit.js"
+    "toilinit": "./bin/toilinit.js"
   },
   "scripts": {
     "check": "npm run check:config && npm run check:import && npm run lint",
@@ -80,11 +80,11 @@
     "prepublishOnly": "node scripts/build",
     "watch": "node scripts/build --watch",
     "coverage": "npx c8 -- npm test",
-    "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:browser && npm run test:asconfig && npm run test:transform && npm run test:cli",
+    "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:browser && npm run test:toilconfig && npm run test:transform && npm run test:cli",
     "test:parser": "node --enable-source-maps tests/parser",
     "test:compiler": "node --enable-source-maps --no-warnings tests/compiler",
     "test:browser": "node --enable-source-maps tests/browser",
-    "test:asconfig": "cd tests/asconfig && npm run test",
+    "test:toilconfig": "cd tests/toilconfig && npm run test",
     "test:transform": "npm run test:transform:esm && npm run test:transform:cjs",
     "test:transform:esm": "node bin/toilscript tests/compiler/empty --transform ./tests/transform/index.js --noEmit && node bin/toilscript tests/compiler/empty --transform ./tests/transform/simple.js --noEmit",
     "test:transform:cjs": "node bin/toilscript tests/compiler/empty --transform ./tests/transform/cjs/index.js --noEmit && node bin/toilscript tests/compiler/empty --transform ./tests/transform/cjs/simple.js --noEmit",

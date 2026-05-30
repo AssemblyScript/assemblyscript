@@ -6,7 +6,7 @@
     "std/**/*",
     "tests/**/*",
     "dist/**/*",
-    "bin/asinit.js",
+    "bin/toilinit.js",
     "lib/**/*",
     "scripts/**/*",
     "src/glue/wasm/**/*",
