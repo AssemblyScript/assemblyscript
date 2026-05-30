@@ -34,7 +34,7 @@ import * as optionsUtil from "../util/options.js";
 import * as generated from "./index.generated.js";
 
 import binaryen from "../lib/binaryen.js";
-import * as assemblyscriptJS from "@btc-vision/assemblyscript";
+import * as assemblyscriptJS from "toilscript";
 
 // Use the TS->JS variant by default
 let assemblyscript = assemblyscriptJS;

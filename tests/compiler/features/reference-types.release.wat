@@ -1,17 +1,18 @@
 (module
- (type $0 (func (result externref)))
- (type $1 (func (param externref) (result externref)))
- (type $2 (func))
- (type $3 (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (type $0 (func (param i32 i32 i32 i32)))
+ (type $1 (func (result externref)))
+ (type $2 (func (param externref) (result externref)))
+ (type $3 (func))
  (import "reference-types" "somethingReal" (func $features/reference-types/somethingReal (result externref)))
  (import "reference-types" "external" (func $features/reference-types/external (param externref) (result externref)))
  (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $features/reference-types/funcGlobal (mut funcref) (ref.null nofunc))
  (global $features/reference-types/a externref (ref.null noextern))
  (global $features/reference-types/b funcref (ref.null nofunc))
  (global $features/reference-types/nonNullFunc (mut funcref) (ref.null nofunc))
  (global $features/reference-types/nonNullReal (mut externref) (ref.null noextern))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34012))
  (memory $0 1)
  (data $0 (i32.const 1036) "L")
  (data $0.1 (i32.const 1048) "\02\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s")
@@ -28,6 +29,41 @@
  (export "nonNullReal" (global $features/reference-types/nonNullReal))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1244
+  i32.lt_s
+  if
+   i32.const 34032
+   i32.const 34080
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~start
   (local $0 externref)
   call $features/reference-types/somethingReal

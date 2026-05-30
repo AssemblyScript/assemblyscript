@@ -1,14 +1,15 @@
 (module
  (type $0 (func (param i32 i32) (result i32)))
- (type $1 (func (param i32 i32)))
- (type $2 (func))
- (type $3 (func (param i32) (result i32)))
- (type $4 (func (param i32 i32 i32 i32)))
+ (type $1 (func (param i32 i32 i32 i32)))
+ (type $2 (func (param i32 i32)))
+ (type $3 (func))
+ (type $4 (func (param i32) (result i32)))
  (type $5 (func (param i32 i32 i32)))
  (type $6 (func (param i32 i32 i64)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $heap/ptr (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33932))
  (memory $0 1)
  (data $0 (i32.const 1036) "<")
  (data $0.1 (i32.const 1048) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
@@ -16,6 +17,41 @@
  (data $1.1 (i32.const 1112) "\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1164
+  i32.lt_s
+  if
+   i32.const 33952
+   i32.const 34000
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1050,7 +1086,7 @@
    local.get $0
    call $~lib/rt/tlsf/checkUsedBlock
    local.set $0
-   block $__inlined_func$~lib/rt/tlsf/reallocateBlock$53
+   block $__inlined_func$~lib/rt/tlsf/reallocateBlock$54
     i32.const 32
     call $~lib/rt/tlsf/prepareSize
     local.tee $5
@@ -1066,7 +1102,7 @@
      local.get $0
      local.get $5
      call $~lib/rt/tlsf/prepareBlock
-     br $__inlined_func$~lib/rt/tlsf/reallocateBlock$53
+     br $__inlined_func$~lib/rt/tlsf/reallocateBlock$54
     end
     local.get $0
     i32.const 4
@@ -1107,7 +1143,7 @@
       local.get $0
       local.get $5
       call $~lib/rt/tlsf/prepareBlock
-      br $__inlined_func$~lib/rt/tlsf/reallocateBlock$53
+      br $__inlined_func$~lib/rt/tlsf/reallocateBlock$54
      end
     end
     local.get $3

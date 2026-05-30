@@ -6,11 +6,11 @@
  (type $4 (func (param f64 f64) (result f64)))
  (type $5 (func (param f32 f32) (result f32)))
  (type $6 (func (param f64 f64 f64 f64) (result i32)))
- (type $7 (func (param f64 f64) (result i32)))
- (type $8 (func (param f32 f32) (result i32)))
- (type $9 (func (result f64)))
- (type $10 (func))
- (type $11 (func (param i32 i32 i32 i32)))
+ (type $7 (func (param i32 i32 i32 i32)))
+ (type $8 (func (param f64 f64) (result i32)))
+ (type $9 (func (param f32 f32) (result i32)))
+ (type $10 (func (result f64)))
+ (type $11 (func))
  (type $12 (func (param f64 i32) (result f64)))
  (type $13 (func (param i64 i64) (result i64)))
  (type $14 (func (param f32 f32 f32 f32) (result i32)))
@@ -25,7 +25,6 @@
  (import "env" "Math.PI" (global $~lib/bindings/dom/Math.PI f64))
  (import "env" "Math.SQRT1_2" (global $~lib/bindings/dom/Math.SQRT1_2 f64))
  (import "env" "Math.SQRT2" (global $~lib/bindings/dom/Math.SQRT2 f64))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "Math.cos" (func $~lib/bindings/dom/Math.cos (param f64) (result f64)))
  (import "env" "Math.sqrt" (func $~lib/bindings/dom/Math.sqrt (param f64) (result f64)))
  (import "env" "Math.tan" (func $~lib/bindings/dom/Math.tan (param f64) (result f64)))
@@ -45,6 +44,7 @@
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
  (import "env" "Math.random" (func $~lib/bindings/dom/Math.random (result f64)))
  (import "env" "Math.pow" (func $~lib/bindings/dom/Math.pow (param f64 f64) (result f64)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (import "env" "Math.tanh" (func $~lib/bindings/dom/Math.tanh (param f64) (result f64)))
  (import "env" "Math.sinh" (func $~lib/bindings/dom/Math.sinh (param f64) (result f64)))
  (import "env" "Math.sign" (func $~lib/bindings/dom/Math.sign (param f64) (result f64)))
@@ -68,6 +68,7 @@
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 47136))
  (memory $0 1)
  (data $0 (i32.const 1036) ",")
  (data $0.1 (i32.const 1048) "\02\00\00\00\16\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s")
@@ -212,6 +213,41 @@
  (data $11.128 (i32.const 14353) "`Y\df\bd\d5\d5?\dce\a4\08*\0b\n\bd")
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 14368
+  i32.lt_s
+  if
+   i32.const 47168
+   i32.const 47216
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $std/math/check<f64> (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   (local $3 i32)
   local.get $0
@@ -230,7 +266,7 @@
    f64.ne
    return
   end
-  block $__inlined_func$std/math/ulperr$1077 (result f64)
+  block $__inlined_func$std/math/ulperr$1078 (result f64)
    f64.const 0
    local.get $1
    local.get $1
@@ -239,7 +275,7 @@
    local.get $0
    f64.ne
    i32.and
-   br_if $__inlined_func$std/math/ulperr$1077
+   br_if $__inlined_func$std/math/ulperr$1078
    drop
    local.get $0
    local.get $1
@@ -257,10 +293,10 @@
     i64.shr_u
     i32.wrap_i64
     i32.eq
-    br_if $__inlined_func$std/math/ulperr$1077
+    br_if $__inlined_func$std/math/ulperr$1078
     drop
     f64.const inf
-    br $__inlined_func$std/math/ulperr$1077
+    br $__inlined_func$std/math/ulperr$1078
    end
    local.get $0
    local.get $0
@@ -326,7 +362,7 @@
    f32.ne
    return
   end
-  block $__inlined_func$std/math/ulperrf$1078 (result f32)
+  block $__inlined_func$std/math/ulperrf$1079 (result f32)
    f32.const 0
    local.get $1
    local.get $1
@@ -335,7 +371,7 @@
    local.get $0
    f32.ne
    i32.and
-   br_if $__inlined_func$std/math/ulperrf$1078
+   br_if $__inlined_func$std/math/ulperrf$1079
    drop
    local.get $0
    local.get $1
@@ -351,10 +387,10 @@
     i32.const 31
     i32.shr_u
     i32.eq
-    br_if $__inlined_func$std/math/ulperrf$1078
+    br_if $__inlined_func$std/math/ulperrf$1079
     drop
     f32.const inf
-    br $__inlined_func$std/math/ulperrf$1078
+    br $__inlined_func$std/math/ulperrf$1079
    end
    local.get $0
    local.get $0

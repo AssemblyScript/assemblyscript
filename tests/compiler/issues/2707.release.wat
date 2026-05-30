@@ -2,11 +2,11 @@
  (type $0 (func (param i32) (result i32)))
  (type $1 (func (param i32)))
  (type $2 (func))
- (type $3 (func (param i32 i32)))
- (type $4 (func (param i32 i32 i32 i32)))
+ (type $3 (func (param i32 i32 i32 i32)))
+ (type $4 (func (param i32 i32)))
  (type $5 (func (param i32 i32 i64)))
  (type $6 (func (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -38,6 +38,41 @@
  (elem $0 (i32.const 1) $start:issues/2707~anonymous|0)
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1548
+  i32.lt_s
+  if
+   i32.const 34336
+   i32.const 34384
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/rt/itcms/__visit (param $0 i32)
   local.get $0
   i32.eqz
@@ -477,7 +512,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$119
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$120
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -501,7 +536,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$119
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$120
    end
    local.get $0
    i32.load offset=8
@@ -544,7 +579,7 @@
    if
     i32.const 1328
     i32.const 1392
-    i32.const 21
+    i32.const 22
     i32.const 28
     call $~lib/builtins/abort
     unreachable

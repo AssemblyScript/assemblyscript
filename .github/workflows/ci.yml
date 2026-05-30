@@ -61,14 +61,14 @@ jobs:
       - name: Update npm
         run: npm install -g npm@latest
 
-      - name: Patch package.json for @btc-vision/assemblyscript
+      - name: Patch package.json for toilscript
         run: |
           # Extract version from tag
           VERSION="${{ github.ref_name }}"
           VERSION="${VERSION#v}"  # Remove 'v' prefix if present
 
           # Update package.json: change name and version
-          jq --arg name "@btc-vision/assemblyscript" \
+          jq --arg name "toilscript" \
              --arg version "$VERSION" \
              '.name = $name | .version = $version' \
              package.json > package.json.tmp

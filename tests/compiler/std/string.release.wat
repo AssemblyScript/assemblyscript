@@ -6,11 +6,11 @@
  (type $4 (func))
  (type $5 (func (param i32)))
  (type $6 (func (result i32)))
- (type $7 (func (param i32) (result f64)))
- (type $8 (func (param i64 i32) (result i32)))
- (type $9 (func (param i32 i32) (result f64)))
- (type $10 (func (param i32 i32 i32)))
- (type $11 (func (param i32 i32 i32 i32)))
+ (type $7 (func (param i32 i32 i32 i32)))
+ (type $8 (func (param i32) (result f64)))
+ (type $9 (func (param i64 i32) (result i32)))
+ (type $10 (func (param i32 i32) (result f64)))
+ (type $11 (func (param i32 i32 i32)))
  (type $12 (func (param f64) (result i32)))
  (type $13 (func (param i32 i32 i32 i32) (result i32)))
  (type $14 (func (param i32 i64 i32 i32)))
@@ -21,7 +21,7 @@
  (type $19 (func (param i32 i32 i64)))
  (type $20 (func (param f64 i32) (result f64)))
  (type $21 (func (param i64 i64 i32 i64 i32) (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $std/string/str (mut i32) (i32.const 1056))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -984,6 +984,41 @@
  (export "getString" (func $std/string/getString))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 26636
+  i32.lt_s
+  if
+   i32.const 59424
+   i32.const 59472
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -1349,7 +1384,7 @@
     local.get $0
     local.set $2
     global.get $~lib/memory/__stack_pointer
-    block $__inlined_func$~lib/util/number/ulog_base$180 (result i32)
+    block $__inlined_func$~lib/util/number/ulog_base$176 (result i32)
      local.get $1
      i32.popcnt
      i32.const 1
@@ -1367,7 +1402,7 @@
       i32.div_u
       i32.const 1
       i32.add
-      br $__inlined_func$~lib/util/number/ulog_base$180
+      br $__inlined_func$~lib/util/number/ulog_base$176
      end
      local.get $1
      i64.extend_i32_s
@@ -1690,7 +1725,7 @@
     i64.extend_i32_u
     local.set $4
     global.get $~lib/memory/__stack_pointer
-    block $__inlined_func$~lib/util/number/ulog_base$175 (result i32)
+    block $__inlined_func$~lib/util/number/ulog_base$171 (result i32)
      local.get $1
      i32.popcnt
      i32.const 1
@@ -1708,7 +1743,7 @@
       i32.div_u
       i32.const 1
       i32.add
-      br $__inlined_func$~lib/util/number/ulog_base$175
+      br $__inlined_func$~lib/util/number/ulog_base$171
      end
      local.get $1
      i64.extend_i32_s
@@ -2151,7 +2186,7 @@
   if
    i32.const 1264
    i32.const 15664
-   i32.const 114
+   i32.const 116
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -2174,7 +2209,7 @@
   if
    i32.const 15712
    i32.const 15664
-   i32.const 118
+   i32.const 120
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -2392,7 +2427,7 @@
     i64.extend_i32_u
     local.set $5
     global.get $~lib/memory/__stack_pointer
-    block $__inlined_func$~lib/util/number/ulog_base$171 (result i32)
+    block $__inlined_func$~lib/util/number/ulog_base$167 (result i32)
      local.get $1
      i32.popcnt
      i32.const 1
@@ -2410,7 +2445,7 @@
       i32.div_u
       i32.const 1
       i32.add
-      br $__inlined_func$~lib/util/number/ulog_base$171
+      br $__inlined_func$~lib/util/number/ulog_base$167
      end
      local.get $1
      i64.extend_i32_s
@@ -3169,7 +3204,7 @@
     local.get $0
     local.set $2
     global.get $~lib/memory/__stack_pointer
-    block $__inlined_func$~lib/util/number/ulog_base$185 (result i32)
+    block $__inlined_func$~lib/util/number/ulog_base$181 (result i32)
      local.get $1
      i32.popcnt
      i32.const 1
@@ -3187,7 +3222,7 @@
       i32.div_u
       i32.const 1
       i32.add
-      br $__inlined_func$~lib/util/number/ulog_base$185
+      br $__inlined_func$~lib/util/number/ulog_base$181
      end
      local.get $1
      i64.extend_i32_s
@@ -3973,7 +4008,7 @@
   if
    i32.const 14064
    i32.const 1328
-   i32.const 334
+   i32.const 335
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -5395,7 +5430,7 @@
    if
     i32.const 0
     i32.const 1328
-    i32.const 39
+    i32.const 40
     i32.const 7
     call $~lib/builtins/abort
     unreachable
@@ -8475,7 +8510,7 @@
   if
    i32.const 1264
    i32.const 1328
-   i32.const 57
+   i32.const 58
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -8912,7 +8947,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$287
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$288
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -8936,7 +8971,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$287
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$288
    end
    local.get $0
    i32.load offset=8
@@ -8979,7 +9014,7 @@
    if
     i32.const 1264
     i32.const 1568
-    i32.const 21
+    i32.const 22
     i32.const 28
     call $~lib/builtins/abort
     unreachable
@@ -11855,7 +11890,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   block $__inlined_func$~lib/string/String#charCodeAt$294
+   block $__inlined_func$~lib/string/String#charCodeAt$293
     local.get $0
     i32.const 20
     i32.sub
@@ -11870,7 +11905,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const -1
      local.set $0
-     br $__inlined_func$~lib/string/String#charCodeAt$294
+     br $__inlined_func$~lib/string/String#charCodeAt$293
     end
     local.get $0
     i32.load16_u
@@ -11909,7 +11944,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $4
    i32.store
-   block $__inlined_func$~lib/string/String#codePointAt$295
+   block $__inlined_func$~lib/string/String#codePointAt$294
     local.get $4
     i32.const 20
     i32.sub
@@ -11926,7 +11961,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const -1
      local.set $0
-     br $__inlined_func$~lib/string/String#codePointAt$295
+     br $__inlined_func$~lib/string/String#codePointAt$294
     end
     local.get $0
     i32.const 2
@@ -11944,7 +11979,7 @@
      i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/string/String#codePointAt$295
+     br $__inlined_func$~lib/string/String#codePointAt$294
     end
     local.get $4
     i32.load16_u offset=4
@@ -11958,7 +11993,7 @@
      i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/string/String#codePointAt$295
+     br $__inlined_func$~lib/string/String#codePointAt$294
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 4
@@ -12419,7 +12454,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 2176
    i32.store
-   block $__inlined_func$~lib/string/String#startsWith$296
+   block $__inlined_func$~lib/string/String#startsWith$295
     local.get $4
     i32.const 2172
     i32.load
@@ -12434,7 +12469,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 0
      local.set $0
-     br $__inlined_func$~lib/string/String#startsWith$296
+     br $__inlined_func$~lib/string/String#startsWith$295
     end
     global.get $~lib/memory/__stack_pointer
     local.get $0
@@ -12511,7 +12546,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 2208
    i32.store
-   block $__inlined_func$~lib/string/String#endsWith$297
+   block $__inlined_func$~lib/string/String#endsWith$296
     i32.const 536870910
     local.get $4
     local.get $4
@@ -12534,7 +12569,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 0
      local.set $0
-     br $__inlined_func$~lib/string/String#endsWith$297
+     br $__inlined_func$~lib/string/String#endsWith$296
     end
     global.get $~lib/memory/__stack_pointer
     local.get $0

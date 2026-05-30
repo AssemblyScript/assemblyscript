@@ -11,40 +11,6 @@
  (data $0.1 (i32.const 1048) "\02\00\00\00.\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00-\00b\00l\00o\00c\00k\00l\00o\00c\00a\00l\00s\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
- (func $~start
-  (local $0 i32)
-  global.get $inlining-blocklocals/b
-  local.tee $0
-  i32.const 1
-  i32.add
-  global.set $inlining-blocklocals/b
-  local.get $0
-  global.set $inlining-blocklocals/theCall_b
-  i32.const 3
-  global.set $inlining-blocklocals/theCall_c
-  global.get $inlining-blocklocals/theCall_b
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 19
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $inlining-blocklocals/theCall_c
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 20
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
  (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -79,5 +45,39 @@
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $~start
+  (local $0 i32)
+  global.get $inlining-blocklocals/b
+  local.tee $0
+  i32.const 1
+  i32.add
+  global.set $inlining-blocklocals/b
+  local.get $0
+  global.set $inlining-blocklocals/theCall_b
+  i32.const 3
+  global.set $inlining-blocklocals/theCall_c
+  global.get $inlining-blocklocals/theCall_b
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 19
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $inlining-blocklocals/theCall_c
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 20
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
 )

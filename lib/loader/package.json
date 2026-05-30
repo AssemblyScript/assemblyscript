@@ -1,8 +1,8 @@
 {
-  "name": "@btc-vision/as-loader",
+  "name": "@dacely/as-loader",
   "description": "A convenient loader for AssemblyScript modules.",
   "keywords": [
-    "@btc-vision/assemblyscript",
+    "toilscript",
     "loader",
     "glue",
     "interop",

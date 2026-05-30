@@ -5,7 +5,7 @@ Additional packages provided by the main package.
 
 | Package                            | Description
 |------------------------------------|-------------------------
-| [@btc-vision/as-loader](./loader) | Module loader utility
+| [@dacely/as-loader](./loader) | Module loader utility
 | [@assemblyscript/rtrace](./rtrace) | Runtime tracing utility
 | binaryen | Binaryen proxy
 

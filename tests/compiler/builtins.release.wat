@@ -1,10 +1,10 @@
 (module
  (type $0 (func (param i32 i32) (result i32)))
- (type $1 (func))
- (type $2 (func (param i32 i32 i32 i32)))
+ (type $1 (func (param i32 i32 i32 i32)))
+ (type $2 (func))
  (type $3 (func (param i32 i32 f64 f64 f64 f64 f64)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
@@ -70,6 +70,41 @@
  (export "test" (func $start:builtins~anonymous|1))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 2028
+  i32.lt_s
+  if
+   i32.const 34816
+   i32.const 34864
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -183,7 +218,7 @@
      end
     end
    end
-   block $__inlined_func$~lib/util/string/compareImpl$2
+   block $__inlined_func$~lib/util/string/compareImpl$3
     loop $while-continue|1
      local.get $0
      local.tee $3
@@ -203,7 +238,7 @@
       local.get $4
       local.get $5
       i32.ne
-      br_if $__inlined_func$~lib/util/string/compareImpl$2
+      br_if $__inlined_func$~lib/util/string/compareImpl$3
       local.get $2
       i32.const 2
       i32.add

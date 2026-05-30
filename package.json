@@ -1,23 +1,23 @@
 {
-  "name": "assemblyscript",
+  "name": "toilscript",
   "description": "A TypeScript-like language for WebAssembly.",
   "keywords": [
     "typescript",
     "webassembly",
     "compiler",
-    "assemblyscript",
+    "toilscript",
     "wasm"
   ],
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "license": "Apache-2.0",
-  "homepage": "https://assemblyscript.org",
+  "homepage": "https://github.com/dacely-cloud/toilscript",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AssemblyScript/assemblyscript.git"
+    "url": "https://github.com/dacely-cloud/toilscript.git"
   },
   "bugs": {
-    "url": "https://github.com/AssemblyScript/assemblyscript/issues"
+    "url": "https://github.com/dacely-cloud/toilscript/issues"
   },
   "engines": {
     "node": ">=20",

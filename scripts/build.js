@@ -201,7 +201,7 @@ const common = {
   platform: "node",
   format: "esm",
   external: [
-    "@btc-vision/assemblyscript",
+    "toilscript",
     "binaryen",
     "long"
   ],

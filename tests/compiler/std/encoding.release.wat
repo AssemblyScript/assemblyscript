@@ -1,7 +1,7 @@
 (module
  (type $0 (func))
- (type $1 (func (param i32 i32 i32 i32)))
- (type $2 (func (param i32 i32 i32)))
+ (type $1 (func (param i32 i32 i32)))
+ (type $2 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $std/encoding/decLen (mut i32) (i32.const 0))
  (global $std/encoding/bytesRead (mut i32) (i32.const 0))
@@ -17,6 +17,43 @@
  (data $0.1 (i32.const 1048) "\02\00\00\00\1e\00\00\00s\00t\00d\00/\00e\00n\00c\00o\00d\00i\00n\00g\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1100
+  i32.lt_s
+  if
+   i32.const 33888
+   i32.const 33936
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  i32.const 1
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~start
+  call $start:std/encoding
+ )
  (func $start:std/encoding
   (local $0 i32)
   (local $1 i32)
@@ -698,9 +735,9 @@
     br $for-loop|0
    end
   end
+  i32.const 0
+  local.set $0
   block $~lib/encoding/Encoding.Hex.decode|inlined.0 (result i32)
-   i32.const 0
-   local.set $0
    loop $for-loop|1
     local.get $0
     i32.const 4
@@ -1771,42 +1808,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  call $start:std/encoding
- )
- (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1100
-  i32.lt_s
-  if
-   i32.const 33888
-   i32.const 33936
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.get $1
-  local.get $2
-  i32.const 1
-  call $~lib/builtins/__abort_impl
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
 )

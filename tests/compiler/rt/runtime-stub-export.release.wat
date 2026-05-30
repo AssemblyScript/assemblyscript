@@ -4,7 +4,7 @@
  (type $2 (func (param i32)))
  (type $3 (func (param i32) (result i32)))
  (type $4 (func (param i32 i32) (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1168))
  (memory $0 1)
@@ -43,7 +43,7 @@
    i32.const 1120
    i32.const 86
    i32.const 30
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $0
@@ -57,7 +57,7 @@
    i32.const 1120
    i32.const 33
    i32.const 29
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   global.get $~lib/rt/stub/offset

@@ -6,7 +6,7 @@
  (type $4 (func (param i32 i32 i32 i32)))
  (type $5 (func (param i32 i32 i64)))
  (type $6 (func (param i32) (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
@@ -95,7 +95,7 @@
    i32.const 1184
    i32.const 268
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $3
@@ -109,7 +109,7 @@
    i32.const 1184
    i32.const 270
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $3
@@ -155,7 +155,7 @@
    i32.const 1184
    i32.const 284
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $1
@@ -238,7 +238,7 @@
    i32.const 1184
    i32.const 201
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $1
@@ -252,7 +252,7 @@
    i32.const 1184
    i32.const 203
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $1
@@ -313,7 +313,7 @@
     i32.const 1184
     i32.const 221
     i32.const 16
-    call $~lib/builtins/abort
+    call $~lib/builtins/__abort_impl
     unreachable
    end
    local.get $0
@@ -346,7 +346,7 @@
    i32.const 1184
    i32.const 233
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $4
@@ -361,7 +361,7 @@
    i32.const 1184
    i32.const 234
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $4
@@ -412,7 +412,7 @@
    i32.const 1184
    i32.const 251
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $0
@@ -493,7 +493,7 @@
     i32.const 1120
     i32.const 101
     i32.const 18
-    call $~lib/builtins/abort
+    call $~lib/builtins/__abort_impl
     unreachable
    end
    return
@@ -507,7 +507,7 @@
    i32.const 1120
    i32.const 105
    i32.const 16
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $1
@@ -579,7 +579,7 @@
    i32.const 1184
    i32.const 334
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $0
@@ -631,7 +631,7 @@
      i32.const 1184
      i32.const 347
      i32.const 18
-     call $~lib/builtins/abort
+     call $~lib/builtins/__abort_impl
      unreachable
     end
     local.get $0
@@ -743,7 +743,7 @@
    i32.const 1184
    i32.const 382
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $1
@@ -768,7 +768,7 @@
     i32.const 1184
     i32.const 389
     i32.const 16
-    call $~lib/builtins/abort
+    call $~lib/builtins/__abort_impl
     unreachable
    end
    local.get $3
@@ -795,7 +795,7 @@
     i32.const 1184
     i32.const 402
     i32.const 5
-    call $~lib/builtins/abort
+    call $~lib/builtins/__abort_impl
     unreachable
    end
   end
@@ -917,7 +917,7 @@
    i32.const 1120
    i32.const 195
    i32.const 5
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $1
@@ -966,7 +966,7 @@
     i32.const 1120
     i32.const 181
     i32.const 7
-    call $~lib/builtins/abort
+    call $~lib/builtins/__abort_impl
     unreachable
    end
    local.get $1
@@ -1011,7 +1011,7 @@
    i32.const 1120
    i32.const 125
    i32.const 30
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   global.get $~lib/rt/tlsf/ROOT
@@ -1032,7 +1032,7 @@
    i32.const 1184
    i32.const 461
    i32.const 29
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $4
@@ -1135,7 +1135,7 @@
     i32.const 1184
     i32.const 499
     i32.const 16
-    call $~lib/builtins/abort
+    call $~lib/builtins/__abort_impl
     unreachable
    end
   end
@@ -1150,7 +1150,7 @@
    i32.const 1184
    i32.const 501
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $4
@@ -1169,7 +1169,7 @@
    i32.const 1184
    i32.const 361
    i32.const 14
-   call $~lib/builtins/abort
+   call $~lib/builtins/__abort_impl
    unreachable
   end
   local.get $6
@@ -1302,7 +1302,7 @@
      i32.const 1120
      i32.const 213
      i32.const 16
-     call $~lib/builtins/abort
+     call $~lib/builtins/__abort_impl
      unreachable
     end
     local.get $0
@@ -1342,7 +1342,7 @@
      i32.const 1120
      i32.const 223
      i32.const 16
-     call $~lib/builtins/abort
+     call $~lib/builtins/__abort_impl
      unreachable
     end
     local.get $0
@@ -1379,7 +1379,7 @@
      i32.const 1120
      i32.const 232
      i32.const 16
-     call $~lib/builtins/abort
+     call $~lib/builtins/__abort_impl
      unreachable
     end
     local.get $0
@@ -1442,7 +1442,7 @@
        i32.const 1184
        i32.const 562
        i32.const 3
-       call $~lib/builtins/abort
+       call $~lib/builtins/__abort_impl
        unreachable
       end
       local.get $4

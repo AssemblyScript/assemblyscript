@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@btc-vision/assemblyscript"><img src="https://img.shields.io/npm/v/@btc-vision/assemblyscript.svg?color=007acc&logo=npm" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/toilscript"><img src="https://img.shields.io/npm/v/toilscript.svg?color=007acc&logo=npm" alt="npm version" /></a>
   <a href="https://github.com/btc-vision/assemblyscript/releases"><img src="https://img.shields.io/github/v/release/btc-vision/assemblyscript?color=green&logo=github" alt="GitHub release" /></a>
 </p>
 
@@ -40,7 +40,7 @@
 ## Installation
 
 ```sh
-npm install @btc-vision/assemblyscript
+npm install toilscript
 ```
 
 ### Usage
@@ -50,7 +50,7 @@ This fork is a drop-in replacement for AssemblyScript. Simply replace your impor
 ```json
 {
   "dependencies": {
-    "@btc-vision/assemblyscript": "^0.29.0"
+    "toilscript": "^0.29.0"
   }
 }
 ```
@@ -59,7 +59,7 @@ Or if migrating from official AssemblyScript:
 
 ```sh
 npm uninstall assemblyscript
-npm install @btc-vision/assemblyscript
+npm install toilscript
 ```
 
 The CLI commands remain the same:

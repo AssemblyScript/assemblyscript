@@ -17,9 +17,9 @@
  (type $15 (func (param i32 i32 i32 i32 i32 i32)))
  (type $16 (func (param i32 i32) (result i64)))
  (type $17 (func (param i64 i64 i32 i32) (result i64)))
- (type $18 (func (param i32 i64 i32) (result i32)))
- (type $19 (func (param i32 i64) (result i32)))
- (type $20 (func (param i32 i32 i32 i32)))
+ (type $18 (func (param i32 i32 i32 i32)))
+ (type $19 (func (param i32 i64 i32) (result i32)))
+ (type $20 (func (param i32 i64) (result i32)))
  (type $21 (func (param i32 i32 i64)))
  (type $22 (func (param i32 i32) (result f64)))
  (type $23 (func (param i32 i32) (result f32)))
@@ -41,8 +41,8 @@
  (type $39 (func (param i32 i64 i32)))
  (type $40 (func (result i32)))
  (type $41 (func (param i32 i64 i64 i32 i64 i32) (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -676,6 +676,41 @@
  (elem $0 (i32.const 1) $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1" $"std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0" $"std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1" $"std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0" $"std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0" $~lib/util/sort/COMPARATOR<i8>~anonymous|0 $"std/typedarray/testArraySort<~lib/typedarray/Int8Array,i8>~anonymous|0" $~lib/util/sort/COMPARATOR<u8>~anonymous|0 $"std/typedarray/testArraySort<~lib/typedarray/Uint8Array,u8>~anonymous|0" $~lib/util/sort/COMPARATOR<u8>~anonymous|0 $"std/typedarray/testArraySort<~lib/typedarray/Uint8Array,u8>~anonymous|0" $~lib/util/sort/COMPARATOR<i16>~anonymous|0 $"std/typedarray/testArraySort<~lib/typedarray/Int16Array,i16>~anonymous|0" $~lib/util/sort/COMPARATOR<u16>~anonymous|0 $"std/typedarray/testArraySort<~lib/typedarray/Uint16Array,u16>~anonymous|0" $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $"std/typedarray/testArraySort<~lib/typedarray/Int32Array,i32>~anonymous|0" $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $"std/typedarray/testArraySort<~lib/typedarray/Uint32Array,u32>~anonymous|0" $~lib/util/sort/COMPARATOR<i64>~anonymous|0 $"std/typedarray/testArraySort<~lib/typedarray/Int64Array,i64>~anonymous|0" $~lib/util/sort/COMPARATOR<u64>~anonymous|0 $"std/typedarray/testArraySort<~lib/typedarray/Uint64Array,u64>~anonymous|0" $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $"std/typedarray/testArraySort<~lib/typedarray/Float32Array,f32>~anonymous|0" $"std/typedarray/testArraySort<~lib/typedarray/Float64Array,f64>~anonymous|0")
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 16320
+  i32.lt_s
+  if
+   i32.const 49120
+   i32.const 49168
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/rt/itcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -816,7 +851,7 @@
   if
    i32.const 1360
    i32.const 1760
-   i32.const 114
+   i32.const 116
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -865,7 +900,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 178
+   i32.const 179
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -946,7 +981,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1031
+   i32.const 1032
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -998,7 +1033,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 463
+   i32.const 464
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -1201,7 +1236,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 747
+   i32.const 748
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -1287,7 +1322,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 36
+   i32.const 37
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -1368,7 +1403,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1457
+   i32.const 1458
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -1420,7 +1455,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 889
+   i32.const 890
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -1472,7 +1507,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1315
+   i32.const 1316
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -1522,7 +1557,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 320
+   i32.const 321
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -1638,7 +1673,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1173
+   i32.const 1174
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -1690,7 +1725,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 605
+   i32.const 606
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -1957,7 +1992,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 736
+   i32.const 737
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -2048,7 +2083,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 25
+   i32.const 26
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -2098,7 +2133,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1446
+   i32.const 1447
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -2147,7 +2182,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 309
+   i32.const 310
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -2278,7 +2313,7 @@
      end
     end
    end
-   block $__inlined_func$~lib/util/string/compareImpl$714
+   block $__inlined_func$~lib/util/string/compareImpl$699
     loop $while-continue|1
      local.get $0
      local.tee $3
@@ -2298,7 +2333,7 @@
       local.get $4
       local.get $5
       i32.ne
-      br_if $__inlined_func$~lib/util/string/compareImpl$714
+      br_if $__inlined_func$~lib/util/string/compareImpl$699
       local.get $2
       i32.const 2
       i32.add
@@ -2860,7 +2895,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 167
+   i32.const 168
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -2910,7 +2945,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1162
+   i32.const 1163
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -3003,7 +3038,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 878
+   i32.const 879
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -3054,7 +3089,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 594
+   i32.const 595
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -3106,7 +3141,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1020
+   i32.const 1021
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -3157,7 +3192,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 452
+   i32.const 453
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -3209,7 +3244,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1304
+   i32.const 1305
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5611,7 +5646,7 @@
       if
        i32.const 1360
        i32.const 1760
-       i32.const 114
+       i32.const 116
        i32.const 42
        call $~lib/builtins/abort
        unreachable
@@ -8256,7 +8291,7 @@
   i32.lt_s
   select
   local.set $0
-  block $__inlined_func$~lib/util/bytes/FILL<u32>$202
+  block $__inlined_func$~lib/util/bytes/FILL<u32>$187
    local.get $1
    i32.eqz
    local.get $1
@@ -8281,7 +8316,7 @@
      i32.shl
      memory.fill
     end
-    br $__inlined_func$~lib/util/bytes/FILL<u32>$202
+    br $__inlined_func$~lib/util/bytes/FILL<u32>$187
    end
    loop $for-loop|0
     local.get $0
@@ -10756,7 +10791,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 332
+   i32.const 333
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -10839,7 +10874,7 @@
    if
     i32.const 1360
     i32.const 1632
-    i32.const 1860
+    i32.const 1867
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -10858,7 +10893,7 @@
     else
      i32.const 1056
      i32.const 1632
-     i32.const 1869
+     i32.const 1876
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -10873,7 +10908,7 @@
     if
      i32.const 1056
      i32.const 1632
-     i32.const 1874
+     i32.const 1881
      i32.const 7
      call $~lib/builtins/abort
      unreachable
@@ -10962,7 +10997,7 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
-   block $__inlined_func$~lib/util/string/joinIntegerArray<u8>$1409
+   block $__inlined_func$~lib/util/string/joinIntegerArray<u8>$1410
     local.get $0
     i32.const 1
     i32.sub
@@ -10976,7 +11011,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 7776
      local.set $0
-     br $__inlined_func$~lib/util/string/joinIntegerArray<u8>$1409
+     br $__inlined_func$~lib/util/string/joinIntegerArray<u8>$1410
     end
     local.get $6
     i32.eqz
@@ -10989,7 +11024,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<u8>$1409
+     br $__inlined_func$~lib/util/string/joinIntegerArray<u8>$1410
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 9584
@@ -11082,7 +11117,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<u8>$1409
+     br $__inlined_func$~lib/util/string/joinIntegerArray<u8>$1410
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 8
@@ -11142,7 +11177,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 190
+   i32.const 191
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -11202,7 +11237,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1185
+   i32.const 1186
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -11263,7 +11298,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 901
+   i32.const 902
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -11324,7 +11359,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 617
+   i32.const 618
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -11389,7 +11424,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -11500,7 +11535,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 48
+   i32.const 49
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -11560,7 +11595,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1043
+   i32.const 1044
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -11747,7 +11782,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -11866,7 +11901,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 759
+   i32.const 760
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -11927,7 +11962,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 475
+   i32.const 476
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -12111,7 +12146,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1469
+   i32.const 1470
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -12173,7 +12208,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1327
+   i32.const 1328
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -12608,7 +12643,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$1403
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$1404
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -12632,7 +12667,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$1403
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$1404
    end
    local.get $0
    i32.load offset=8
@@ -12675,7 +12710,7 @@
    if
     i32.const 1360
     i32.const 1424
-    i32.const 21
+    i32.const 22
     i32.const 28
     call $~lib/builtins/abort
     unreachable
@@ -16462,7 +16497,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -16582,7 +16617,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -17885,7 +17920,7 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
-   block $__inlined_func$~lib/util/string/joinIntegerArray<u32>$1413
+   block $__inlined_func$~lib/util/string/joinIntegerArray<u32>$1414
     local.get $0
     i32.const 1
     i32.sub
@@ -17899,7 +17934,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 7776
      local.set $0
-     br $__inlined_func$~lib/util/string/joinIntegerArray<u32>$1413
+     br $__inlined_func$~lib/util/string/joinIntegerArray<u32>$1414
     end
     local.get $6
     i32.eqz
@@ -17912,7 +17947,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<u32>$1413
+     br $__inlined_func$~lib/util/string/joinIntegerArray<u32>$1414
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 9584
@@ -18009,7 +18044,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<u32>$1413
+     br $__inlined_func$~lib/util/string/joinIntegerArray<u32>$1414
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 8
@@ -18596,7 +18631,7 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
-   block $__inlined_func$~lib/util/string/joinIntegerArray<u16>$1411
+   block $__inlined_func$~lib/util/string/joinIntegerArray<u16>$1412
     local.get $0
     i32.const 1
     i32.sub
@@ -18610,7 +18645,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 7776
      local.set $0
-     br $__inlined_func$~lib/util/string/joinIntegerArray<u16>$1411
+     br $__inlined_func$~lib/util/string/joinIntegerArray<u16>$1412
     end
     local.get $6
     i32.eqz
@@ -18623,7 +18658,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<u16>$1411
+     br $__inlined_func$~lib/util/string/joinIntegerArray<u16>$1412
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 9584
@@ -18720,7 +18755,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<u16>$1411
+     br $__inlined_func$~lib/util/string/joinIntegerArray<u16>$1412
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 8
@@ -19201,7 +19236,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -19297,7 +19332,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -19392,7 +19427,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -19463,7 +19498,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -19554,7 +19589,7 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
-   block $__inlined_func$~lib/util/string/joinIntegerArray<i8>$1408
+   block $__inlined_func$~lib/util/string/joinIntegerArray<i8>$1409
     local.get $0
     i32.const 1
     i32.sub
@@ -19568,7 +19603,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 7776
      local.set $0
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i8>$1408
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i8>$1409
     end
     local.get $6
     i32.eqz
@@ -19581,7 +19616,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i8>$1408
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i8>$1409
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 9584
@@ -19674,7 +19709,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i8>$1408
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i8>$1409
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 8
@@ -20222,7 +20257,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -20315,7 +20350,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -20389,7 +20424,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -20488,7 +20523,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -20583,7 +20618,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -20677,7 +20712,7 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
-   block $__inlined_func$~lib/util/string/joinIntegerArray<i64>$5
+   block $__inlined_func$~lib/util/string/joinIntegerArray<i64>$3
     local.get $0
     i32.const 1
     i32.sub
@@ -20691,7 +20726,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 7776
      local.set $0
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i64>$5
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i64>$3
     end
     block $folding-inner0
      local.get $6
@@ -20983,7 +21018,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i64>$5
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i64>$3
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 8
@@ -21465,7 +21500,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -21559,7 +21594,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -21657,7 +21692,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -21756,7 +21791,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -21849,7 +21884,7 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
-   block $__inlined_func$~lib/util/string/joinIntegerArray<i32>$1412
+   block $__inlined_func$~lib/util/string/joinIntegerArray<i32>$1413
     local.get $0
     i32.const 1
     i32.sub
@@ -21863,7 +21898,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 7776
      local.set $0
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i32>$1412
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i32>$1413
     end
     local.get $6
     i32.eqz
@@ -21876,7 +21911,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i32>$1412
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i32>$1413
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 9584
@@ -21973,7 +22008,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i32>$1412
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i32>$1413
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 8
@@ -22561,7 +22596,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -22655,7 +22690,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -22752,7 +22787,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -22827,7 +22862,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -22922,7 +22957,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1902
+   i32.const 1911
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -23015,7 +23050,7 @@
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
-   block $__inlined_func$~lib/util/string/joinIntegerArray<i16>$1410
+   block $__inlined_func$~lib/util/string/joinIntegerArray<i16>$1411
     local.get $0
     i32.const 1
     i32.sub
@@ -23029,7 +23064,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const 7776
      local.set $0
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i16>$1410
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i16>$1411
     end
     local.get $6
     i32.eqz
@@ -23042,7 +23077,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i16>$1410
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i16>$1411
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 9584
@@ -23139,7 +23174,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/util/string/joinIntegerArray<i16>$1410
+     br $__inlined_func$~lib/util/string/joinIntegerArray<i16>$1411
     end
     global.get $~lib/memory/__stack_pointer
     i32.const 8
@@ -25943,7 +25978,7 @@
      global.get $~lib/memory/__stack_pointer
      i32.const 0
      i32.store
-     block $__inlined_func$~lib/util/number/utoa64$749
+     block $__inlined_func$~lib/util/number/utoa64$734
       local.get $3
       i64.eqz
       if
@@ -25953,7 +25988,7 @@
        global.set $~lib/memory/__stack_pointer
        i32.const 8000
        local.set $1
-       br $__inlined_func$~lib/util/number/utoa64$749
+       br $__inlined_func$~lib/util/number/utoa64$734
       end
       local.get $3
       i64.const 4294967295
@@ -32463,7 +32498,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -32900,7 +32935,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -33341,7 +33376,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -33785,7 +33820,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -34226,7 +34261,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -34663,7 +34698,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -35104,7 +35139,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -35548,7 +35583,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -35989,7 +36024,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -36689,7 +36724,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -37313,7 +37348,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1902
+  i32.const 1911
   i32.const 5
   call $~lib/builtins/abort
   unreachable
@@ -37677,7 +37712,7 @@
    if
     i32.const 1056
     i32.const 1632
-    i32.const 1865
+    i32.const 1872
     i32.const 9
     call $~lib/builtins/abort
     unreachable
@@ -37901,7 +37936,7 @@
    if
     i32.const 1056
     i32.const 1632
-    i32.const 1865
+    i32.const 1872
     i32.const 9
     call $~lib/builtins/abort
     unreachable
@@ -38127,7 +38162,7 @@
    if
     i32.const 1056
     i32.const 1632
-    i32.const 1865
+    i32.const 1872
     i32.const 9
     call $~lib/builtins/abort
     unreachable
@@ -38568,7 +38603,7 @@
    if
     i32.const 1056
     i32.const 1632
-    i32.const 1865
+    i32.const 1872
     i32.const 9
     call $~lib/builtins/abort
     unreachable
@@ -38792,7 +38827,7 @@
    if
     i32.const 1056
     i32.const 1632
-    i32.const 1865
+    i32.const 1872
     i32.const 9
     call $~lib/builtins/abort
     unreachable
@@ -39017,7 +39052,7 @@
    if
     i32.const 1056
     i32.const 1632
-    i32.const 1865
+    i32.const 1872
     i32.const 9
     call $~lib/builtins/abort
     unreachable
@@ -39243,7 +39278,7 @@
    if
     i32.const 1056
     i32.const 1632
-    i32.const 1865
+    i32.const 1872
     i32.const 9
     call $~lib/builtins/abort
     unreachable
@@ -39469,7 +39504,7 @@
    if
     i32.const 1056
     i32.const 1632
-    i32.const 1865
+    i32.const 1872
     i32.const 9
     call $~lib/builtins/abort
     unreachable
@@ -68081,7 +68116,7 @@
       end
       i32.const 1360
       i32.const 1632
-      i32.const 1902
+      i32.const 1911
       i32.const 5
       call $~lib/builtins/abort
       unreachable

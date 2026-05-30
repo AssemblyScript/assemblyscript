@@ -1,15 +1,15 @@
 (module
  (type $0 (func (param i32)))
  (type $1 (func))
- (type $2 (func (param i32 i32)))
- (type $3 (func (param i32 i32) (result i32)))
- (type $4 (func (param i32 f32 i32 i32) (result i32)))
- (type $5 (func (param i32 i32 i32 i32)))
+ (type $2 (func (param i32 i32 i32 i32)))
+ (type $3 (func (param i32 i32)))
+ (type $4 (func (param i32 i32) (result i32)))
+ (type $5 (func (param i32 f32 i32 i32) (result i32)))
  (type $6 (func (param i32) (result i32)))
  (type $7 (func (param i32 i32 i64)))
  (type $8 (func (result i32)))
  (type $9 (func (param f32) (result f32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -51,6 +51,41 @@
  (export "test5" (func $export:infer-generic/test2))
  (export "inferAssert" (func $export:infer-generic/inferAssert))
  (start $~start)
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1660
+  i32.lt_s
+  if
+   i32.const 34448
+   i32.const 34496
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/rt/itcms/__visit (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -89,7 +124,7 @@
     local.get $0
     global.set $~lib/rt/itcms/iter
    end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink$138
+   block $__inlined_func$~lib/rt/itcms/Object#unlink$139
     local.get $1
     i32.load offset=4
     i32.const -4
@@ -113,7 +148,7 @@
       call $~lib/builtins/abort
       unreachable
      end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink$138
+     br $__inlined_func$~lib/rt/itcms/Object#unlink$139
     end
     local.get $1
     i32.load offset=8
@@ -156,7 +191,7 @@
     if
      i32.const 1424
      i32.const 1488
-     i32.const 21
+     i32.const 22
      i32.const 28
      call $~lib/builtins/abort
      unreachable
@@ -1486,7 +1521,7 @@
      i32.const 1152
      i32.const 1200
      i32.load
-     call_indirect (type $4)
+     call_indirect (type $5)
      local.set $0
      local.get $1
      i32.const 1

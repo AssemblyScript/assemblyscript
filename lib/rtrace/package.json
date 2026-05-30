@@ -2,7 +2,7 @@
   "name": "@assemblyscript/rtrace",
   "description": "A tiny utility to sanitize the AssemblyScript runtime.",
   "keywords": [
-    "@btc-vision/assemblyscript",
+    "toilscript",
     "rtrace",
     "webassembly",
     "wasm"

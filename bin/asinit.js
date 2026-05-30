@@ -362,7 +362,7 @@ function ensurePackageJson() {
         "start": "npx serve ."
       },
       "devDependencies": {
-        "@btc-vision/assemblyscript": "^" + version
+        "toilscript": "^" + version
       }
     }, null, 2));
     console.log(stdoutColors.green("  Created: ") + packageFile);
@@ -400,8 +400,8 @@ function ensurePackageJson() {
       updated = true;
     }
     let devDependencies = pkg["devDependencies"] || {};
-    if (!devDependencies["@btc-vision/assemblyscript"]) {
-      devDependencies["@btc-vision/assemblyscript"] = "^" + version;
+    if (!devDependencies["toilscript"]) {
+      devDependencies["toilscript"] = "^" + version;
       pkg["devDependencies"] = devDependencies;
       updated = true;
     }

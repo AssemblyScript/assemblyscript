@@ -1,9 +1,9 @@
 (module
  (type $0 (func (param i32)))
- (type $1 (func (param i32 i32)))
- (type $2 (func (param i32 i32 i32 i32)))
- (type $3 (func))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (type $1 (func))
+ (type $2 (func (param i32 i32)))
+ (type $3 (func (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (import "env" "console.warn" (func $~lib/bindings/dom/console.warn (param i32)))
  (import "env" "console.timeLog" (func $~lib/bindings/dom/console.timeLog (param i32)))
  (import "env" "console.timeEnd" (func $~lib/bindings/dom/console.timeEnd (param i32)))
@@ -45,22 +45,43 @@
  (data $13.1 (i32.const 1592) "\02\00\00\00\08\00\00\001\002\003\004")
  (export "memory" (memory $0))
  (start $~start)
+ (func $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1612
+  i32.lt_s
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   call $~stack_check
+   global.get $~lib/memory/__stack_pointer
+   i64.const 0
+   i64.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 34400
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 34448
+   i32.store offset=4
+   i32.const 34400
+   i32.const 34448
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/__abort_impl
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   unreachable
+  end
+ )
  (func $~lib/console/console.log (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
@@ -79,17 +100,7 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
@@ -108,17 +119,7 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
@@ -137,17 +138,7 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
@@ -166,17 +157,7 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
@@ -206,112 +187,91 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1612
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1168
-   i32.store
-   i32.const 1168
-   call $~lib/bindings/dom/console.debug
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1612
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1216
-   i32.store
-   i32.const 1216
-   call $~lib/bindings/dom/console.info
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1612
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1264
-   i32.store
-   i32.const 1264
-   call $~lib/bindings/dom/console.warn
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1612
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1312
-   i32.store
-   i32.const 1312
-   call $~lib/bindings/dom/console.error
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   i32.const 1360
-   call $~lib/console/console.time
-   i32.const 1360
-   call $~lib/console/console.timeLog
-   i32.const 1360
-   call $~lib/console/console.timeEnd
-   i32.const 1408
-   call $~lib/console/console.timeLog
-   i32.const 1408
-   call $~lib/console/console.timeEnd
-   i32.const 1456
-   call $~lib/console/console.time
-   i32.const 1456
-   call $~lib/console/console.time
-   i32.const 1504
-   call $~lib/console/console.log
-   i32.const 1536
-   call $~lib/console/console.log
-   i32.const 1568
-   call $~lib/console/console.log
-   i32.const 1600
-   call $~lib/console/console.log
-   return
-  end
-  i32.const 34400
-  i32.const 34448
-  i32.const 1
-  i32.const 1
-  call $~lib/builtins/abort
-  unreachable
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1168
+  i32.store
+  i32.const 1168
+  call $~lib/bindings/dom/console.debug
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1216
+  i32.store
+  i32.const 1216
+  call $~lib/bindings/dom/console.info
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1264
+  i32.store
+  i32.const 1264
+  call $~lib/bindings/dom/console.warn
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1312
+  i32.store
+  i32.const 1312
+  call $~lib/bindings/dom/console.error
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  i32.const 1360
+  call $~lib/console/console.time
+  i32.const 1360
+  call $~lib/console/console.timeLog
+  i32.const 1360
+  call $~lib/console/console.timeEnd
+  i32.const 1408
+  call $~lib/console/console.timeLog
+  i32.const 1408
+  call $~lib/console/console.timeEnd
+  i32.const 1456
+  call $~lib/console/console.time
+  i32.const 1456
+  call $~lib/console/console.time
+  i32.const 1504
+  call $~lib/console/console.log
+  i32.const 1536
+  call $~lib/console/console.log
+  i32.const 1568
+  call $~lib/console/console.log
+  i32.const 1600
+  call $~lib/console/console.log
  )
 )

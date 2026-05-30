@@ -13,32 +13,6 @@
  (export "ifThenElseBlock" (func $if/ifThenElse))
  (export "ifAlwaysReturns" (func $if/ifAlwaysReturns))
  (export "memory" (memory $0))
- (func $if/ifThenElse (param $0 i32) (result i32)
-  local.get $0
-  i32.const 0
-  i32.ne
- )
- (func $if/ifThen (param $0 i32) (result i32)
-  local.get $0
-  if
-   i32.const 1
-   return
-  end
-  i32.const 0
- )
- (func $if/ifAlwaysReturns (param $0 i32) (result i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 1088
-   i32.const 1056
-   i32.const 37
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
- )
  (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -73,5 +47,31 @@
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $if/ifThenElse (param $0 i32) (result i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+ )
+ (func $if/ifThen (param $0 i32) (result i32)
+  local.get $0
+  if
+   i32.const 1
+   return
+  end
+  i32.const 0
+ )
+ (func $if/ifAlwaysReturns (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 1088
+   i32.const 1056
+   i32.const 37
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
  )
 )

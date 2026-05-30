@@ -1,8 +1,8 @@
 (module
- (type $0 (func (param i32)))
- (type $1 (func))
+ (type $0 (func))
+ (type $1 (func (param i32)))
  (type $2 (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34172))
  (memory $0 1)
  (data $0 (i32.const 1036) "\1c")
@@ -39,17 +39,7 @@
   i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1404
-  i32.lt_s
-  if
-   i32.const 34192
-   i32.const 34240
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
@@ -60,9 +50,9 @@
   if
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   local.tee $1
    i32.store offset=4
-   local.get $1
+   local.get $0
+   local.tee $1
    i32.const 20
    i32.sub
    i32.load offset=16
@@ -224,6 +214,37 @@
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1404
+  i32.lt_s
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   call $~stack_check
+   global.get $~lib/memory/__stack_pointer
+   i64.const 0
+   i64.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 34192
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 34240
+   i32.store offset=4
+   i32.const 34192
+   i32.const 34240
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/__abort_impl
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   unreachable
+  end
  )
  (func $~start
   i32.const 0

@@ -1,8 +1,9 @@
 (module
  (type $0 (func (param i32 i32)))
  (type $1 (func (param i32)))
- (type $2 (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (type $2 (func))
+ (type $3 (func (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33792))
  (memory $0 0)
  (export "memory" (memory $0))
@@ -24,6 +25,37 @@
  (export "testLogicalOrMulti" (func $export:possibly-null/testLogicalOrMulti))
  (export "testAssign" (func $export:possibly-null/testAssign))
  (export "testNeverNull" (func $export:possibly-null/testTrue))
+ (func $~lib/builtins/abort
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1024
+  i32.lt_s
+  if
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 33824
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 33872
+  i32.store offset=4
+  i32.const 33824
+  i32.const 33872
+  i32.const 1
+  i32.const 1
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $export:possibly-null/testWhile3 (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -75,10 +107,6 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 33824
-  i32.const 33872
-  i32.const 1
-  i32.const 1
   call $~lib/builtins/abort
   unreachable
  )
@@ -129,10 +157,6 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 33824
-  i32.const 33872
-  i32.const 1
-  i32.const 1
   call $~lib/builtins/abort
   unreachable
  )
@@ -145,10 +169,6 @@
   i32.const 1024
   i32.lt_s
   if
-   i32.const 33824
-   i32.const 33872
-   i32.const 1
-   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -177,10 +197,6 @@
   i32.const 1024
   i32.lt_s
   if
-   i32.const 33824
-   i32.const 33872
-   i32.const 1
-   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -201,20 +217,16 @@
   i32.const 1024
   i32.lt_s
   if
-   i32.const 33824
-   i32.const 33872
-   i32.const 1
-   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  block $__inlined_func$possibly-null/testNotNeNullContinuation$24
+  block $__inlined_func$possibly-null/testNotNeNullContinuation$20
    local.get $0
    i32.eqz
-   br_if $__inlined_func$possibly-null/testNotNeNullContinuation$24
+   br_if $__inlined_func$possibly-null/testNotNeNullContinuation$20
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -230,10 +242,6 @@
   i32.const 1024
   i32.lt_s
   if
-   i32.const 33824
-   i32.const 33872
-   i32.const 1
-   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -288,10 +296,6 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 33824
-  i32.const 33872
-  i32.const 1
-  i32.const 1
   call $~lib/builtins/abort
   unreachable
  )
@@ -335,10 +339,6 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 33824
-  i32.const 33872
-  i32.const 1
-  i32.const 1
   call $~lib/builtins/abort
   unreachable
  )

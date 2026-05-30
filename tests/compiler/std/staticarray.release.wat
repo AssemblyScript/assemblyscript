@@ -4,14 +4,14 @@
  (type $2 (func (param i32)))
  (type $3 (func))
  (type $4 (func (param i32 i32)))
- (type $5 (func (param i32 i32 i32)))
- (type $6 (func (param i32) (result i32)))
- (type $7 (func (param i32 i32 i32 i32) (result i32)))
- (type $8 (func (param i32 i32 i32 i32)))
+ (type $5 (func (param i32 i32 i32 i32)))
+ (type $6 (func (param i32 i32 i32)))
+ (type $7 (func (param i32) (result i32)))
+ (type $8 (func (param i32 i32 i32 i32) (result i32)))
  (type $9 (func (result i32)))
  (type $10 (func (param i32 i32 i32 i32 i32)))
  (type $11 (func (param i32 i32 i64)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -172,6 +172,41 @@
  (elem $0 (i32.const 1) $start:std/staticarray~anonymous|0 $start:std/staticarray~anonymous|1 $start:std/staticarray~anonymous|2 $start:std/staticarray~anonymous|3 $start:std/staticarray~anonymous|3 $start:std/staticarray~anonymous|5 $start:std/staticarray~anonymous|6 $start:std/staticarray~anonymous|7 $start:std/staticarray~anonymous|8 $start:std/staticarray~anonymous|5 $start:std/staticarray~anonymous|6 $start:std/staticarray~anonymous|5 $start:std/staticarray~anonymous|6 $~lib/util/sort/COMPARATOR<i32>~anonymous|0)
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 3960
+  i32.lt_s
+  if
+   i32.const 36752
+   i32.const 36800
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/rt/itcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -316,7 +351,7 @@
   if
    i32.const 1088
    i32.const 1152
-   i32.const 78
+   i32.const 80
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -469,7 +504,7 @@
      end
     end
    end
-   block $__inlined_func$~lib/util/string/compareImpl$106
+   block $__inlined_func$~lib/util/string/compareImpl$98
     loop $while-continue|1
      local.get $0
      local.tee $3
@@ -489,7 +524,7 @@
       local.get $4
       local.get $5
       i32.ne
-      br_if $__inlined_func$~lib/util/string/compareImpl$106
+      br_if $__inlined_func$~lib/util/string/compareImpl$98
       local.get $2
       i32.const 2
       i32.add
@@ -744,7 +779,7 @@
   if
    i32.const 1088
    i32.const 1152
-   i32.const 78
+   i32.const 80
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -763,7 +798,7 @@
   if
    i32.const 2336
    i32.const 1152
-   i32.const 82
+   i32.const 84
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -803,7 +838,7 @@
   if
    i32.const 1088
    i32.const 1776
-   i32.const 114
+   i32.const 116
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -1218,7 +1253,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   block $__inlined_func$~lib/staticarray/StaticArray<~lib/string/String>#indexOf$274
+   block $__inlined_func$~lib/staticarray/StaticArray<~lib/string/String>#indexOf$273
     local.get $0
     i32.const 20
     i32.sub
@@ -1238,7 +1273,7 @@
      global.set $~lib/memory/__stack_pointer
      i32.const -1
      local.set $2
-     br $__inlined_func$~lib/staticarray/StaticArray<~lib/string/String>#indexOf$274
+     br $__inlined_func$~lib/staticarray/StaticArray<~lib/string/String>#indexOf$273
     end
     local.get $2
     i32.const 0
@@ -1280,7 +1315,7 @@
        i32.const 8
        i32.add
        global.set $~lib/memory/__stack_pointer
-       br $__inlined_func$~lib/staticarray/StaticArray<~lib/string/String>#indexOf$274
+       br $__inlined_func$~lib/staticarray/StaticArray<~lib/string/String>#indexOf$273
       end
       local.get $2
       i32.const 1
@@ -1795,7 +1830,7 @@
   if
    i32.const 1088
    i32.const 1152
-   i32.const 93
+   i32.const 95
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -2482,7 +2517,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$267
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$268
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -2506,7 +2541,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$267
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$268
    end
    local.get $0
    i32.load offset=8
@@ -2549,7 +2584,7 @@
    if
     i32.const 1088
     i32.const 1536
-    i32.const 21
+    i32.const 22
     i32.const 28
     call $~lib/builtins/abort
     unreachable
@@ -3072,7 +3107,7 @@
   if
    i32.const 1680
    i32.const 1152
-   i32.const 178
+   i32.const 184
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -3602,7 +3637,7 @@
   if
    i32.const 1680
    i32.const 1152
-   i32.const 178
+   i32.const 184
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -4843,7 +4878,7 @@
        global.get $~lib/memory/__stack_pointer
        local.get $10
        i32.store
-       block $__inlined_func$~lib/rt/itcms/__renew$224
+       block $__inlined_func$~lib/rt/itcms/__renew$215
         i32.const 1073741820
         local.get $1
         i32.const 1
@@ -4886,7 +4921,7 @@
          i32.store offset=16
          local.get $1
          local.set $2
-         br $__inlined_func$~lib/rt/itcms/__renew$224
+         br $__inlined_func$~lib/rt/itcms/__renew$215
         end
         local.get $4
         local.get $3
@@ -5680,7 +5715,7 @@
    if
     i32.const 1680
     i32.const 1152
-    i32.const 178
+    i32.const 184
     i32.const 7
     call $~lib/builtins/abort
     unreachable
@@ -6385,7 +6420,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   block $__inlined_func$~lib/staticarray/StaticArray<f64>#includes$276 (result i32)
+   block $__inlined_func$~lib/staticarray/StaticArray<f64>#includes$275 (result i32)
     local.get $0
     i32.const 20
     i32.sub
@@ -6400,7 +6435,7 @@
      i32.add
      global.set $~lib/memory/__stack_pointer
      i32.const 0
-     br $__inlined_func$~lib/staticarray/StaticArray<f64>#includes$276
+     br $__inlined_func$~lib/staticarray/StaticArray<f64>#includes$275
     end
     loop $while-continue|0
      local.get $1
@@ -6422,7 +6457,7 @@
        i32.add
        global.set $~lib/memory/__stack_pointer
        i32.const 1
-       br $__inlined_func$~lib/staticarray/StaticArray<f64>#includes$276
+       br $__inlined_func$~lib/staticarray/StaticArray<f64>#includes$275
       end
       local.get $2
       i32.const 1
@@ -6472,7 +6507,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   block $__inlined_func$~lib/staticarray/StaticArray<f32>#includes$277 (result i32)
+   block $__inlined_func$~lib/staticarray/StaticArray<f32>#includes$276 (result i32)
     local.get $0
     i32.const 20
     i32.sub
@@ -6487,7 +6522,7 @@
      i32.add
      global.set $~lib/memory/__stack_pointer
      i32.const 0
-     br $__inlined_func$~lib/staticarray/StaticArray<f32>#includes$277
+     br $__inlined_func$~lib/staticarray/StaticArray<f32>#includes$276
     end
     loop $while-continue|030
      local.get $1
@@ -6509,7 +6544,7 @@
        i32.add
        global.set $~lib/memory/__stack_pointer
        i32.const 1
-       br $__inlined_func$~lib/staticarray/StaticArray<f32>#includes$277
+       br $__inlined_func$~lib/staticarray/StaticArray<f32>#includes$276
       end
       local.get $2
       i32.const 1
@@ -7506,7 +7541,7 @@
      local.get $0
      i32.const 3440
      i32.load
-     call_indirect (type $5)
+     call_indirect (type $6)
      local.get $2
      i32.const 1
      i32.add
@@ -7641,7 +7676,7 @@
      local.get $0
      i32.const 3504
      i32.load
-     call_indirect (type $7)
+     call_indirect (type $8)
      local.set $2
      local.get $1
      i32.const 1
@@ -7719,7 +7754,7 @@
      local.get $0
      i32.const 3536
      i32.load
-     call_indirect (type $7)
+     call_indirect (type $8)
      local.set $2
      local.get $1
      i32.const 1

@@ -2,7 +2,7 @@
  (type $0 (func (param i32) (result i32)))
  (type $1 (func (param i32 i32 i32 i32)))
  (type $2 (func (param i32 i32) (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/__abort_impl (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34076))
  (memory $0 1)
  (data $0 (i32.const 1036) "<")
@@ -21,6 +21,41 @@
  (export "stringArrayArrayPropertyAccess" (func $export:std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $export:std/array-access/stringArrayArrayMethodCall))
  (export "functionArrayElementCall" (func $export:std/array-access/functionArrayElementCall))
+ (func $~lib/builtins/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1308
+  i32.lt_s
+  if
+   i32.const 34096
+   i32.const 34144
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/builtins/__abort_impl
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/array/Array<~lib/array/Array<i32>>#__get (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -50,7 +85,7 @@
   if
    i32.const 1056
    i32.const 1120
-   i32.const 114
+   i32.const 116
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -73,7 +108,7 @@
   if
    i32.const 1168
    i32.const 1120
-   i32.const 118
+   i32.const 120
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -179,7 +214,7 @@
     end
    end
   end
-  block $__inlined_func$~lib/util/string/compareImpl$10
+  block $__inlined_func$~lib/util/string/compareImpl$21
    loop $while-continue|1
     local.get $0
     local.tee $2
@@ -199,7 +234,7 @@
      local.get $4
      local.get $5
      i32.ne
-     br_if $__inlined_func$~lib/util/string/compareImpl$10
+     br_if $__inlined_func$~lib/util/string/compareImpl$21
      local.get $1
      i32.const 2
      i32.add
@@ -516,7 +551,7 @@
    if
     i32.const 1056
     i32.const 1120
-    i32.const 114
+    i32.const 116
     i32.const 42
     call $~lib/builtins/abort
     unreachable
