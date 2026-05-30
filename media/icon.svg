@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="4096" height="4096" viewBox="0 0 4096 4096">
+  <defs>
+    <linearGradient id="capGrad" x1="900" y1="520" x2="3190" y2="1120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#60B7FF"/>
+      <stop offset="0.55" stop-color="#6370FF"/>
+      <stop offset="1" stop-color="#7A49FF"/>
+    </linearGradient>
+    <linearGradient id="stemGrad" x1="1764" y1="920" x2="2340" y2="2700" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3D44FF"/>
+      <stop offset="0.42" stop-color="#7621FF"/>
+      <stop offset="1" stop-color="#C900FF"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="550" y1="3100" x2="3540" y2="3100" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#12B7FF"/>
+      <stop offset="0.56" stop-color="#655DFF"/>
+      <stop offset="1" stop-color="#BE00FF"/>
+    </linearGradient>
+    <linearGradient id="edgeGrad" x1="930" y1="520" x2="3190" y2="2700" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#087DFF" stop-opacity="0.7"/>
+      <stop offset="0.55" stop-color="#351AFF" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#9E00FF" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="930" y1="520" x2="3190" y2="2700" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00B7FF"/>
+      <stop offset="0.55" stop-color="#675DFF"/>
+      <stop offset="1" stop-color="#D500FF"/>
+    </linearGradient>
+    <filter id="iconGlow" x="680" y="330" width="2760" height="2650" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="54" result="blur"/>
+      <feFlood flood-color="#745CFF" flood-opacity="0.32" result="glowColor"/>
+      <feComposite in="glowColor" in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="textGlow" x="300" y="2740" width="3500" height="760" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="28" result="blur"/>
+      <feFlood flood-color="#795CFF" flood-opacity="0.22" result="g"/>
+      <feComposite in="g" in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g filter="url(#iconGlow)">
+    <rect x="1764" y="920" width="576" height="1780" rx="180" ry="180" fill="url(#stemGrad)" stroke="url(#edgeGrad)" stroke-width="4"/>
+    <rect x="1764" y="920" width="576" height="325" fill="url(#stemGrad)"/>
+    <polygon points="1764,920 2340,920 2340,1740 1764,1120" fill="#2318D6" opacity="0.18"/>
+    <path d="M 979.23 645.70 L 975.95 636.88 L 973.14 628.39 L 970.80 620.21 L 968.93 612.35 L 967.52 604.82 L 966.59 597.60 L 966.13 590.71 L 966.14 584.13 L 966.62 577.88 L 967.57 571.95 L 968.98 566.34 L 970.87 561.05 L 973.23 556.08 L 976.06 551.43 L 979.36 547.10 L 983.12 543.09 L 987.36 539.40 L 992.07 536.03 L 997.25 532.99 L 1002.90 530.26 L 1009.01 527.86 L 1015.60 525.77 L 1022.66 524.01 L 1030.19 522.57 L 1038.19 521.44 L 1046.65 520.64 L 1055.59 520.16 L 1065.00 520.00 L 2820.00 520.00 L 2829.53 520.16 L 2838.85 520.64 L 2847.94 521.44 L 2856.82 522.57 L 2865.48 524.01 L 2873.92 525.77 L 2882.14 527.86 L 2890.14 530.26 L 2897.92 532.99 L 2905.49 536.03 L 2912.83 539.40 L 2919.96 543.09 L 2926.87 547.10 L 2933.56 551.43 L 2940.03 556.08 L 2946.28 561.05 L 2952.31 566.34 L 2958.13 571.95 L 2963.72 577.88 L 2969.10 584.13 L 2974.26 590.71 L 2979.20 597.60 L 2983.92 604.82 L 2988.42 612.35 L 2992.70 620.21 L 2996.76 628.39 L 3000.61 636.88 L 3004.23 645.70 L 3140.77 994.30 L 3144.05 1003.12 L 3146.86 1011.61 L 3149.20 1019.79 L 3151.07 1027.65 L 3152.48 1035.18 L 3153.41 1042.40 L 3153.87 1049.29 L 3153.86 1055.87 L 3153.38 1062.12 L 3152.43 1068.05 L 3151.02 1073.66 L 3149.13 1078.95 L 3146.77 1083.92 L 3143.94 1088.57 L 3140.64 1092.90 L 3136.88 1096.91 L 3132.64 1100.60 L 3127.93 1103.97 L 3122.75 1107.01 L 3117.10 1109.74 L 3110.99 1112.14 L 3104.40 1114.23 L 3097.34 1115.99 L 3089.81 1117.43 L 3081.81 1118.56 L 3073.35 1119.36 L 3064.41 1119.84 L 3055.00 1120.00 L 1300.00 1120.00 L 1290.47 1119.84 L 1281.15 1119.36 L 1272.06 1118.56 L 1263.18 1117.43 L 1254.52 1115.99 L 1246.08 1114.23 L 1237.86 1112.14 L 1229.86 1109.74 L 1222.08 1107.01 L 1214.51 1103.97 L 1207.17 1100.60 L 1200.04 1096.91 L 1193.13 1092.90 L 1186.44 1088.57 L 1179.97 1083.92 L 1173.72 1078.95 L 1167.69 1073.66 L 1161.87 1068.05 L 1156.28 1062.12 L 1150.90 1055.87 L 1145.74 1049.29 L 1140.80 1042.40 L 1136.08 1035.18 L 1131.58 1027.65 L 1127.30 1019.79 L 1123.24 1011.61 L 1119.39 1003.12 L 1115.77 994.30 Z" fill="url(#capGrad)" stroke="url(#edgeGrad)" stroke-width="4"/>
+    <path d="M 1065 570 L 2860 570 Q 2970 570 3012 665 L 3060 780 L 1134 780 Q 1068 780 1038 716 L 984 598 Q 994 570 1065 570 Z" fill="#FFFFFF" opacity="0.13"/>
+  </g>
+
+  <g filter="url(#textGlow)">
+    <text x="2048" y="3335" text-anchor="middle" font-family="Inter Display, Inter, Arial, sans-serif" font-size="535" font-weight="800" letter-spacing="-30" fill="url(#textGrad)" stroke="#151331" stroke-opacity="0.58" stroke-width="18" paint-order="stroke fill">ToilScript</text>
+    <text x="2048" y="3335" text-anchor="middle" font-family="Inter Display, Inter, Arial, sans-serif" font-size="535" font-weight="800" letter-spacing="-30" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="3">ToilScript</text>
+  </g>
+</svg>
