@@ -1,4 +1,4 @@
-// hint: asc tests/compiler/simd --enable simd
+// hint: toilscript tests/compiler/simd --enable simd
 {
   // test static array literal
   let arr = [i32x4(1, 2, 3, 4)];

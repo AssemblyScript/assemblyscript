@@ -134,5 +134,5 @@ Other
 Tests in other directories are not run automatically and do not need to be updated. There are also:
 
 * [tests/allocators](./allocators) contains the memory allocator test suite
-* [tests/browser](./browser.js) checks typical browser usage via asc's API
+* [tests/browser](./browser.js) checks typical browser usage via toilscript's API
 * [tests/tokenizer](./tokenizer.js) is a visual test for the tokenizer tokenizing itself

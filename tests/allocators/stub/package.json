@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:debug && npm run build:release",
-    "build:debug": "node ../../../bin/asc assembly/index.ts -t debug.wat -o debug.wasm --runtime stub --sourceMap --stats",
-    "build:release": "node ../../../bin/asc assembly/index.ts -t release.wat -o release.wasm --runtime stub --sourceMap --stats --noAssert --optimize"
+    "build:debug": "node ../../../bin/toilscript assembly/index.ts -t debug.wat -o debug.wasm --runtime stub --sourceMap --stats",
+    "build:release": "node ../../../bin/toilscript assembly/index.ts -t release.wat -o release.wasm --runtime stub --sourceMap --stats --noAssert --optimize"
   }
 }

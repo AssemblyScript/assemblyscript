@@ -234,7 +234,7 @@ const srcBuild = invokeBuild({
 const cliBuild = invokeBuild({
   entryPoints: [ "./cli/index.js" ],
   tsconfig: "./cli/tsconfig.json",
-  outfile: "./dist/asc.js",
+  outfile: "./dist/cli.js",
   banner: { js: prelude("The ToilScript frontend") },
   plugins: [ stdlibPlugin, webPlugin, reportPlugin("cli") ],
   ...common
@@ -276,7 +276,7 @@ if (watch) {
 }
 
 console.log(`src : Compiler as a library
-cli : Compiler frontend asc
+cli : Compiler frontend (toilscript)
 dts : TS definition bundles
 web : Example web template\n`);
 

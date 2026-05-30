@@ -55,7 +55,7 @@ export function __tostack(ptr: usize): usize {
   return ptr;
 }
 
-// These are provided by the respective implementation, included as another entry file by asc:
+// These are provided by the respective implementation, included as another entry file by toilscript:
 
 // // @ts-ignore: decorator
 // @builtin @unsafe

@@ -24,7 +24,7 @@
  * JavaScript as well as the compiler compiled to WebAssembly (eventually).
  *
  * Can also be packaged as a bundle suitable for in-browser use with the standard library injected
- * in the build step. See dist/asc.js for the bundle.
+ * in the build step. See dist/cli.js for the bundle.
  */
 
 import { fs, module, path, process, url } from "../util/node.js";
@@ -217,13 +217,13 @@ export async function main(argv, options) {
     let colors = opts.help ? stdoutColors : stderrColors;
     out.write([
       colors.white("SYNTAX"),
-      "  " + colors.cyan("asc") + " [entryFile ...] [options]",
+      "  " + colors.cyan("toilscript") + " [entryFile ...] [options]",
       "",
       colors.white("EXAMPLES"),
-      "  " + colors.cyan("asc") + " hello" + extension,
-      "  " + colors.cyan("asc") + " hello" + extension + " -o hello.wasm -t hello.wat",
-      "  " + colors.cyan("asc") + " hello1" + extension + " hello2" + extension + " -o -O > hello.wasm",
-      "  " + colors.cyan("asc") + " --config toilconfig.json --target release",
+      "  " + colors.cyan("toilscript") + " hello" + extension,
+      "  " + colors.cyan("toilscript") + " hello" + extension + " -o hello.wasm -t hello.wat",
+      "  " + colors.cyan("toilscript") + " hello1" + extension + " hello2" + extension + " -o -O > hello.wasm",
+      "  " + colors.cyan("toilscript") + " --config toilconfig.json --target release",
       "",
       colors.white("OPTIONS"),
     ].concat(

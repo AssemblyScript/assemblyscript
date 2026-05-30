@@ -17,7 +17,7 @@ export function buildWeb() {
   const importmap = {
     "imports": {
       "toilscript": `${distUrl}toilscript.js`,
-      "toilscript/asc": `${distUrl}asc.js`,
+      "toilscript/cli": `${distUrl}cli.js`,
       "binaryen": binaryenUrl,
       "long": longUrl
     }

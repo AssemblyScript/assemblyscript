@@ -386,10 +386,10 @@ export function generateCli() {
   });
 
   const source = stdout.join("");
-  const sourceFile = ts.createSourceFile("asc.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
+  const sourceFile = ts.createSourceFile("cli.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
   const result = transformTypes(sourceFile);
   fs.writeFileSync(
-    pathUtil.resolve(__dirname, "..", "dist", "asc.generated.d.ts"),
+    pathUtil.resolve(__dirname, "..", "dist", "cli.generated.d.ts"),
     ts.createPrinter().printFile(result.transformed[0])
   );
 }

@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
-import asc from "../../dist/asc.js";
+import toilscript from "../../dist/cli.js";
 import loader from "../../lib/loader/index.js";
 
 const require = createRequire(import.meta.url);
@@ -10,7 +10,7 @@ const args = process.argv.slice(2);
 /** @type {Uint8Array} */
 let binary;
 
-const { error, stderr } = await asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--exportStart", "_start", ...args], {
+const { error, stderr } = await toilscript.main(["assembly/index.ts", "--outFile", "output.wasm", "--exportStart", "_start", ...args], {
   writeFile(name, contents) {
     if (name === "output.wasm") {
       binary = contents;

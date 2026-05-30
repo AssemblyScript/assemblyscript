@@ -12,7 +12,7 @@ coverage/
 
 dist/*.generated.d.ts
 dist/*.map
-dist/asc.js
+dist/cli.js
 dist/toilscript.js
 dist/importmap.json
 dist/web.js

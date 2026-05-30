@@ -1,13 +1,13 @@
-import * as asc from "../dist/asc.js";
+import * as toilscript from "../dist/cli.js";
 
-if (typeof asc.definitionFiles.assembly !== "string") throw Error("missing bundled assembly.d.ts");
-if (typeof asc.definitionFiles.portable !== "string") throw Error("missing bundled portable.d.ts");
+if (typeof toilscript.definitionFiles.assembly !== "string") throw Error("missing bundled assembly.d.ts");
+if (typeof toilscript.definitionFiles.portable !== "string") throw Error("missing bundled portable.d.ts");
 
 const files = { "index.ts": `export function test(): void {}` };
 
-console.log("# asc --version");
+console.log("# toilscript --version");
 {
-  const { stdout, stderr } = await asc.main([ "--version" ]);
+  const { stdout, stderr } = await toilscript.main([ "--version" ]);
 
   console.log(">>> STDOUT >>>");
   process.stdout.write(stdout.toString());
@@ -15,9 +15,9 @@ console.log("# asc --version");
   process.stdout.write(stderr.toString());
 }
 
-console.log("\n# asc --help");
+console.log("\n# toilscript --help");
 {
-  const { stdout, stderr } = await asc.main([ "--help" ]);
+  const { stdout, stderr } = await toilscript.main([ "--help" ]);
 
   console.log(">>> STDOUT >>>");
   process.stdout.write(stdout.toString());
@@ -25,9 +25,9 @@ console.log("\n# asc --help");
   process.stdout.write(stderr.toString());
 }
 
-console.log("\n# asc index.ts --textFile");
+console.log("\n# toilscript index.ts --textFile");
 {
-  const { error, stdout, stderr } = await asc.main([ "index.ts", "--textFile" ], {
+  const { error, stdout, stderr } = await toilscript.main([ "index.ts", "--textFile" ], {
     readFile: (name, baseDir) => {
       console.log("readFile: " + name + ", baseDir=" + baseDir);
       if (Object.prototype.hasOwnProperty.call(files, name)) return files[name];
@@ -52,9 +52,9 @@ console.log("\n# asc index.ts --textFile");
   process.stdout.write(stderr.toString());
 }
 
-console.log("\n# asc.compileString");
+console.log("\n# toilscript.compileString");
 {
-  const { stdout, stderr, text, binary } = await asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, exportTable: true, stats: true });
+  const { stdout, stderr, text, binary } = await toilscript.compileString(`export function test(): void {}`, { optimizeLevel: 3, exportTable: true, stats: true });
   console.log(">>> .stdout >>>");
   process.stdout.write(stdout.toString());
   console.log(">>> .stderr >>>");

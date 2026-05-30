@@ -11,7 +11,7 @@ import * as optionsUtil from "../util/options.js";
 import { coreCount, threadCount } from "../util/cpu.js";
 import { diff } from "../util/text.js";
 import { Rtrace } from "../lib/rtrace/index.js";
-import asc from "../dist/asc.js";
+import toilscript from "../dist/cli.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -132,8 +132,8 @@ async function runTest(basename) {
 
   const configPath = path.join(basedir, basename + ".json");
   const config = fs.existsSync(configPath) ? require(configPath) : {};
-  const stdout = asc.createMemoryStream();
-  const stderr = asc.createMemoryStream(chunk => process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  ")));
+  const stdout = toilscript.createMemoryStream();
+  const stderr = toilscript.createMemoryStream(chunk => process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  ")));
   stderr.isTTY = true;
   const dummy = new Map();
   const writeFile = Map.prototype.set.bind(dummy);
@@ -288,7 +288,7 @@ async function runTest(basename) {
     if (asc_flags) cmd.push(...asc_flags);
     if (args.noColors) cmd.push("--noColors");
     const compileDebug = section("compile debug");
-    const { error } = await asc.main(cmd, { stdout, stderr, writeFile });
+    const { error } = await toilscript.main(cmd, { stdout, stderr, writeFile });
 
     let expectStderr = config.stderr;
     if (error) {
@@ -353,7 +353,7 @@ async function runTest(basename) {
     if (asc_flags) cmd.push(...asc_flags);
     if (args.noColors) cmd.push("--noColors");
     const compileRelease = section("compile release");
-    const { error } = await asc.main(cmd, { stdout, stderr, writeFile });
+    const { error } = await toilscript.main(cmd, { stdout, stderr, writeFile });
 
     if (error) {
       stderr.write("---\n");
@@ -410,7 +410,7 @@ async function runTest(basename) {
     ];
     if (asc_flags) cmd.push(...asc_flags);
     const compileRtraced = section("compile rtraced");
-    const { error } = await asc.main(cmd, { stdout, stderr });
+    const { error } = await toilscript.main(cmd, { stdout, stderr });
 
     if (error) {
       stderr.write("---\n");

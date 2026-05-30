@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://toil.org" target="_blank" rel="noopener"><img width="100" src="https://avatars1.githubusercontent.com/u/28916798?s=200&v=4" alt="ToilScript logo"></a>
+  <a href="https://toil.org" target="_blank" rel="noopener"><img width="100" src="media/icon.png" alt="ToilScript logo"></a>
 </p>
 
 <p align="center">

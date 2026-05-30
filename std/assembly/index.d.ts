@@ -1,5 +1,5 @@
 /**
- * Environment definitions for compiling ToilScript to WebAssembly using asc.
+ * Environment definitions for compiling ToilScript to WebAssembly using toilscript.
  * @module std/assembly
  *//***/
 

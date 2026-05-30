@@ -26,7 +26,7 @@ if ((!hasSourceMaps || ~posCustomArgs) && !isDeno) {
   );
   if (status || signal) process.exitCode = 1;
 } else {
-  const apiResult = (await import("../dist/asc.js")).main(process.argv.slice(2), {
+  const apiResult = (await import("../dist/cli.js")).main(process.argv.slice(2), {
     stdout: process.stdout,
     stderr: process.stderr
   });

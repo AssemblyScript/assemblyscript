@@ -7,7 +7,7 @@ Usage
 For an up to date list of available command line options, see:
 
 ```
-$> asc --help
+$> toilscript --help
 ```
 
 API
@@ -16,9 +16,9 @@ API
 The API accepts the same options as the CLI but also lets you override stdout and stderr. Example:
 
 ```js
-import asc from "toilscript/asc";
+import toilscript from "toilscript/toilscript";
 
-const { error, stdout } = await asc.main([
+const { error, stdout } = await toilscript.main([
   "myModule.ts",
   "--outFile", "myModule.wasm",
   "--optimize",
@@ -44,8 +44,8 @@ The result has the following structure:
 You can also compile a single source string directly (note that this API has limited functionality):
 
 ```js
-import asc from "toilscript/asc";
-const { binary, text, stdout, stderr } = await asc.compileString(`...`, { optimize: 2 });
+import toilscript from "toilscript/toilscript";
+const { binary, text, stdout, stderr } = await toilscript.compileString(`...`, { optimize: 2 });
 ...
 ```
 
@@ -53,6 +53,6 @@ const { binary, text, stdout, stderr } = await asc.compileString(`...`, { optimi
 Available command line options can also be obtained programmatically:
 
 ```js
-import { options } from "toilscript/asc";
+import { options } from "toilscript/toilscript";
 ...
 ```

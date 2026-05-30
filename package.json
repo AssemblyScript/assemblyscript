@@ -46,9 +46,9 @@
       "import": "./dist/toilscript.js",
       "types": "./dist/toilscript.d.ts"
     },
-    "./asc": {
-      "import": "./dist/asc.js",
-      "types": "./dist/asc.d.ts"
+    "./cli": {
+      "import": "./dist/cli.js",
+      "types": "./dist/cli.d.ts"
     },
     "./transform": {
       "import": "./dist/transform.js",
@@ -68,7 +68,7 @@
     }
   },
   "bin": {
-    "toilscript": "./bin/asc.js",
+    "toilscript": "./bin/toilscript.js",
     "toilinit": "./bin/asinit.js"
   },
   "scripts": {
@@ -86,17 +86,17 @@
     "test:browser": "node --enable-source-maps tests/browser",
     "test:asconfig": "cd tests/asconfig && npm run test",
     "test:transform": "npm run test:transform:esm && npm run test:transform:cjs",
-    "test:transform:esm": "node bin/asc tests/compiler/empty --transform ./tests/transform/index.js --noEmit && node bin/asc tests/compiler/empty --transform ./tests/transform/simple.js --noEmit",
-    "test:transform:cjs": "node bin/asc tests/compiler/empty --transform ./tests/transform/cjs/index.js --noEmit && node bin/asc tests/compiler/empty --transform ./tests/transform/cjs/simple.js --noEmit",
+    "test:transform:esm": "node bin/toilscript tests/compiler/empty --transform ./tests/transform/index.js --noEmit && node bin/toilscript tests/compiler/empty --transform ./tests/transform/simple.js --noEmit",
+    "test:transform:cjs": "node bin/toilscript tests/compiler/empty --transform ./tests/transform/cjs/index.js --noEmit && node bin/toilscript tests/compiler/empty --transform ./tests/transform/cjs/simple.js --noEmit",
     "test:cli": "node tests/cli/options.js",
     "asbuild": "npm run asbuild:debug && npm run asbuild:release",
-    "asbuild:debug": "node bin/asc --config src/toilconfig.json --target debug",
-    "asbuild:release": "node bin/asc --config src/toilconfig.json --target release",
-    "asbuild:rtraced": "node bin/asc --config src/toilconfig.json --target rtraced",
+    "asbuild:debug": "node bin/toilscript --config src/toilconfig.json --target debug",
+    "asbuild:release": "node bin/toilscript --config src/toilconfig.json --target release",
+    "asbuild:rtraced": "node bin/toilscript --config src/toilconfig.json --target rtraced",
     "bootstrap": "npm run bootstrap:debug && npm run bootstrap:release",
-    "bootstrap:debug": "node bin/asc --config src/toilconfig.json --target debug && node bin/asc --config src/toilconfig.json --target debug-bootstrap --wasm ./build/toilscript.debug.js && node bin/asc --config src/toilconfig.json --target debug-bootstrap --wasm ./build/toilscript.debug-bootstrap.js && git --no-pager diff --no-index build/toilscript.debug.wast build/toilscript.debug-bootstrap.wast",
-    "bootstrap:release": "node bin/asc --config src/toilconfig.json --target release && node bin/asc --config src/toilconfig.json --target release-bootstrap --wasm ./build/toilscript.release.js && node bin/asc --config src/toilconfig.json --target release-bootstrap --wasm ./build/toilscript.release-bootstrap.js && git --no-pager diff --no-index build/toilscript.release.wast build/toilscript.release-bootstrap.wast",
-    "bootstrap:rtraced": "node bin/asc --config src/toilconfig.json --target rtraced && node bin/asc --config src/toilconfig.json --target rtraced --wasm ./build/toilscript.rtraced.js"
+    "bootstrap:debug": "node bin/toilscript --config src/toilconfig.json --target debug && node bin/toilscript --config src/toilconfig.json --target debug-bootstrap --wasm ./build/toilscript.debug.js && node bin/toilscript --config src/toilconfig.json --target debug-bootstrap --wasm ./build/toilscript.debug-bootstrap.js && git --no-pager diff --no-index build/toilscript.debug.wast build/toilscript.debug-bootstrap.wast",
+    "bootstrap:release": "node bin/toilscript --config src/toilconfig.json --target release && node bin/toilscript --config src/toilconfig.json --target release-bootstrap --wasm ./build/toilscript.release.js && node bin/toilscript --config src/toilconfig.json --target release-bootstrap --wasm ./build/toilscript.release-bootstrap.js && git --no-pager diff --no-index build/toilscript.release.wast build/toilscript.release-bootstrap.wast",
+    "bootstrap:rtraced": "node bin/toilscript --config src/toilconfig.json --target rtraced && node bin/toilscript --config src/toilconfig.json --target rtraced --wasm ./build/toilscript.rtraced.js"
   },
   "files": [
     "bin/",
