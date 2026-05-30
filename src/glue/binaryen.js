@@ -914,7 +914,7 @@ export const {
 } = binaryen;
 
 // Shims for C-API functions whose Emscripten binding now uses BigInt for i64
-// parameters (built with -sWASM_BIGINT). In portable/JS mode AssemblyScript
+// parameters (built with -sWASM_BIGINT). In portable/JS mode ToilScript
 // represents i64 as Long, so we convert between Long and BigInt here.
 
 function toBigInt(long) {

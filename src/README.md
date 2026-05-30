@@ -6,13 +6,13 @@ Portable compiler sources that compile to both JavaScript using `tsc` and WebAss
 Architecture
 ------------
 
-![](https://raw.githubusercontent.com/AssemblyScript/assemblyscript/main/media/architecture.svg)
+![](https://raw.githubusercontent.com/ToilScript/toilscript/main/media/architecture.svg)
 
 Usage
 -----
 
 ```js
-import assemblyscript from "toilscript";
+import toilscript from "toilscript";
 ...
 ```
 
@@ -41,7 +41,7 @@ To build the compiler to a WebAssembly binary, run:
 npm run bootstrap
 ```
 
-Uses the AssemblyScript compiler compiled to JavaScript to compile itself to WebAssembly, building to WebAssembly again using itself compiled to WebAssembly. Builds to `build/`. Performs a `git diff` to make sure that both the initial and the final artifacts are the same. Note that this builds the compiler as a library, while the `asc` frontend setting it up and feeding it source files is JavaScript for now.
+Uses the ToilScript compiler compiled to JavaScript to compile itself to WebAssembly, building to WebAssembly again using itself compiled to WebAssembly. Builds to `build/`. Performs a `git diff` to make sure that both the initial and the final artifacts are the same. Note that this builds the compiler as a library, while the `asc` frontend setting it up and feeding it source files is JavaScript for now.
 
 Running `asc` with the WebAssembly variant:
 

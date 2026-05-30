@@ -1,7 +1,7 @@
 Tests
 =====
 
-This directory contains the test cases for AssemblyScript's parser and compiler. A test case
+This directory contains the test cases for ToilScript's parser and compiler. A test case
 consists of:
 
 * A test file that is parsed or compiled (.ts)

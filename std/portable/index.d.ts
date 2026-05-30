@@ -1,5 +1,5 @@
 /**
- * Environment definitions for compiling AssemblyScript to JavaScript using tsc.
+ * Environment definitions for compiling ToilScript to JavaScript using tsc.
  *
  * Note that semantic differences require additional explicit conversions for full compatibility.
  * For example, when casting an i32 to an u8, doing `<u8>(someI32 & 0xff)` will yield the same

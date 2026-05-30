@@ -2,7 +2,7 @@
 
 `@dacely/toilscript-loader` — a tiny module loader that makes working with ToilScript modules as convenient as it gets without sacrificing efficiency. It about mirrors the relevant parts of the WebAssembly API while also providing utility to allocate and read strings, arrays and classes.
 
-**NOTE:** This mirrors the original AssemblyScript loader (which upstream deprecated in 0.20 in favor of [static bindings](https://www.assemblyscript.org/compiler.html#host-bindings)). It is provided for ToilScript modules that still use the loader pattern.
+**NOTE:** This mirrors the original ToilScript loader (which upstream deprecated in 0.20 in favor of [static bindings](https://toil.org/compiler.html#host-bindings)). It is provided for ToilScript modules that still use the loader pattern.
 
 ## Example
 
@@ -44,7 +44,7 @@ On the web:
 One task the loader does not perform is to implicitly translate between WebAssembly pointers and JavaScript objects, and that's where the mixed in utility comes into play. For example, if one has
 
 ```ts
-// AssemblyScript
+// ToilScript
 export function concat(a: string, b: string): string {
   return a + b
 }
@@ -73,7 +73,7 @@ console.log(doConcat("Hello ", "world!"))
 Arrays (or more advanced classes for that matter) require a bit more cooperation because we need to know their value type in order to work with them properly. To achieve this, every class has a unique id internally, and a chunk of runtime type information (RTTI) is shipped with the module to evaluate class types. Here's an example of working with an `Int32Array`:
 
 ```ts
-// AssemblyScript
+// ToilScript
 export function sum(arr: Int32Array): i32 {
   let sum = 0
   for (let i = 0, k = arr.length; i < k; ++i) {
@@ -104,7 +104,7 @@ This works with all kinds of arrays, except that ids are different and values ar
 If one is instead interested in the values of an array being returned by the module, there are two approaches to this. Let's say we have the following module:
 
 ```ts
-// AssemblyScript
+// ToilScript
 export function getRandomArray(len: i32): Int32Array {
   const arr = new Int32Array(len)
   // fill with random values
@@ -153,7 +153,7 @@ The latter variant can be more efficient (and useful) but is a little dangerous 
 As mentioned earlier, the loader understands how to make a nice object structure of a module's exports, and it is possible to utilize it to work with classes in a more natural way. For example, when calling the following function externally
 
 ```ts
-// AssemblyScript
+// ToilScript
 export class Foo {
   constructor(public str: string) {}
   getString(): string {
@@ -196,7 +196,7 @@ Copying from and extending the examples above is typically sufficient.
     imports?: WasmImports
   ): Promise<ASUtil & T>
   ```
-  Asynchronously instantiates an AssemblyScript module from anything that can be instantiated.
+  Asynchronously instantiates an ToilScript module from anything that can be instantiated.
 
 * ```ts
   function instantiateSync<T>(
@@ -204,7 +204,7 @@ Copying from and extending the examples above is typically sufficient.
     imports?: WasmImports
   ): ASUtil & T
   ```
-  Synchronously instantiates an AssemblyScript module from a WebAssembly.Module or binary buffer. Not recommended.
+  Synchronously instantiates an ToilScript module from a WebAssembly.Module or binary buffer. Not recommended.
 
 * ```ts
   function instantiateStreaming<T>(
@@ -212,7 +212,7 @@ Copying from and extending the examples above is typically sufficient.
     imports?: WasmImports
   ): Promise<ASUtil & T>
   ```
-  Asynchronously instantiates an AssemblyScript module from a response, i.e. as obtained by fetch.
+  Asynchronously instantiates an ToilScript module from a response, i.e. as obtained by fetch.
 
 * ```ts
   function demangle<T>(
@@ -220,7 +220,7 @@ Copying from and extending the examples above is typically sufficient.
     baseModule?: Object
   ): T
   ```
-  Demangles an AssemblyScript module's exports to a friendly object structure. You usually don't have to call this manually as instantiation does this implicitly.
+  Demangles an ToilScript module's exports to a friendly object structure. You usually don't have to call this manually as instantiation does this implicitly.
 
 Note that `T` above can either be omitted if the shape of the module is unknown, or can reference a `.d.ts` (i.e. `typeof MyModule`) as produced by the compiler with the `-d` option.
 
@@ -293,7 +293,7 @@ Making the loader's API any more convenient has its tradeoffs. One would either 
 
 ### More convenient tools
 
-* [as-bind](https://github.com/torch2424/as-bind) is a library, built on top of the loader, to make passing high-level data structures between AssemblyScript and JavaScript more convenient.
+* [as-bind](https://github.com/torch2424/as-bind) is a library, built on top of the loader, to make passing high-level data structures between ToilScript and JavaScript more convenient.
 
 ## Advanced usage
 

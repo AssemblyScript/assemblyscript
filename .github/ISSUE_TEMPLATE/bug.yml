@@ -26,8 +26,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: AssemblyScript version
-      description: "What's the AssemblyScript version used?"
+      label: ToilScript version
+      description: "What's the ToilScript version used?"
       placeholder: "vX.Y.Z"
     validations:
       required: true

@@ -1,6 +1,6 @@
-# AssemblyScript Rtrace
+# ToilScript Rtrace
 
-A tiny utility to sanitize the AssemblyScript runtime. Records allocations and frees performed by the runtime and emits an error if something is off. Also checks for leaks.
+A tiny utility to sanitize the ToilScript runtime. Records allocations and frees performed by the runtime and emits an error if something is off. Also checks for leaks.
 
 Instructions
 ------------

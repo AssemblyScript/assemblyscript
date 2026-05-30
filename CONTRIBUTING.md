@@ -1,12 +1,12 @@
 Contributing
 ============
 
-The following is a set of guidelines for contributing to AssemblyScript and its packages, which are hosted in the [AsssemblyScript Organization](https://github.com/AssemblyScript) on GitHub. These are mostly guidelines, not rules. Use your best judgement, and feel free to propose changes to this document in a pull request.
+The following is a set of guidelines for contributing to ToilScript and its packages, which are hosted in the [ToilScript Organization](https://github.com/dacely-cloud) on GitHub. These are mostly guidelines, not rules. Use your best judgement, and feel free to propose changes to this document in a pull request.
 
 Code of Conduct
 ---------------
 
-This project and everyone participating in it is governed by the [AssemblyScript Code of Conduct](https://github.com/AssemblyScript/.github/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+This project and everyone participating in it is governed by the [ToilScript Code of Conduct](https://github.com/dacely-cloud/.github/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
 Filing Issues
 -------------
@@ -57,7 +57,7 @@ Guidelines for **AI**-assisted Contributions
 **AI** tools are welcome as helpers, not authors. Keep these practices in mind:
 
 * Stay accountable: only submit changes you understand and can justify; be ready to explain behavior, edge cases. If an **AI** suggestion feels unclear, rewrite or drop it.
-* Keep humans in the loop: discuss non-trivial ideas early via [Issues](https://github.com/AssemblyScript/assemblyscript/issues) or [Discord](https://discord.gg/assemblyscript), especially when you are unsure about design or impact.
+* Keep humans in the loop: discuss non-trivial ideas early via [Issues](https://github.com/dacely-cloud/toilscript/issues) or [Discord](https://discord.gg/toilscript), especially when you are unsure about design or impact.
 * Use **AI** for acceleration, optimization and verification: treat **AI** output as a draft for code, tests, or docs; run linters/tests and review the logic **yourself**.
 * Be transparent in PRs: note briefly if **AI** was used and for what (e.g., initial draft, test scaffolding), and call out any parts where you want extra review.
 * Prefer small patches over large dumps; if you cannot confidently explain an **AI**-produced change, open a well-described issue instead.

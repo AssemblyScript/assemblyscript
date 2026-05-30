@@ -18,7 +18,7 @@ function prelude(name) {
     "/**\n",
     " * @license\n",
     " * ", name, "\n",
-    " * Copyright ", new Date().getFullYear().toString(), " Daniel Wirtz / The AssemblyScript Authors\n",
+    " * Copyright ", new Date().getFullYear().toString(), " Daniel Wirtz / The ToilScript Authors\n",
     " * SPDX-License-Identifier: Apache-2.0\n",
     " */"
   ].join("");
@@ -226,7 +226,7 @@ const srcBuild = invokeBuild({
   entryPoints: [ "./src/index.ts" ],
   tsconfig: "./src/tsconfig.json",
   outfile: "./dist/toilscript.js",
-  banner: { js: prelude("The AssemblyScript compiler") },
+  banner: { js: prelude("The ToilScript compiler") },
   plugins: [ diagnosticsPlugin, reportPlugin("src") ],
   ...common
 });
@@ -235,7 +235,7 @@ const cliBuild = invokeBuild({
   entryPoints: [ "./cli/index.js" ],
   tsconfig: "./cli/tsconfig.json",
   outfile: "./dist/asc.js",
-  banner: { js: prelude("The AssemblyScript frontend") },
+  banner: { js: prelude("The ToilScript frontend") },
   plugins: [ stdlibPlugin, webPlugin, reportPlugin("cli") ],
   ...common
 });

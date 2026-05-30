@@ -1,7 +1,7 @@
 /**
  * @fileoverview Abstract Syntax Tree extras.
  *
- * Provides serialization of the AssemblyScript AST back to it source form.
+ * Provides serialization of the ToilScript AST back to it source form.
  *
  * @license Apache-2.0
  */

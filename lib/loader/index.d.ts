@@ -99,25 +99,25 @@ export interface ASUtil {
   __collect(incremental?: boolean): void;
 }
 
-/** Asynchronously instantiates an AssemblyScript module from anything that can be instantiated. */
+/** Asynchronously instantiates an ToilScript module from anything that can be instantiated. */
 export declare function instantiate<T extends Record<string,unknown>>(
   source: WebAssembly.Module | BufferSource | Response | PromiseLike<WebAssembly.Module | BufferSource | Response>,
   imports?: Imports
 ): Promise<ResultObject & { exports: ASUtil & T }>;
 
-/** Synchronously instantiates an AssemblyScript module from a WebAssembly.Module or binary buffer. */
+/** Synchronously instantiates an ToilScript module from a WebAssembly.Module or binary buffer. */
 export declare function instantiateSync<T extends Record<string,unknown>>(
   source: WebAssembly.Module | BufferSource,
   imports?: Imports
 ): ResultObject & { exports: ASUtil & T };
 
-/** Asynchronously instantiates an AssemblyScript module from a response, i.e. as obtained by `fetch`. */
+/** Asynchronously instantiates an ToilScript module from a response, i.e. as obtained by `fetch`. */
 export declare function instantiateStreaming<T extends Record<string,unknown>>(
   source: Response | PromiseLike<Response>,
   imports?: Imports
 ): Promise<ResultObject & { exports: ASUtil & T }>;
 
-/** Demangles an AssemblyScript module's exports to a friendly object structure. */
+/** Demangles an ToilScript module's exports to a friendly object structure. */
 export declare function demangle<T extends Record<string,unknown>>(
   exports: Record<string,unknown>,
   extendedExports?: Record<string,unknown>

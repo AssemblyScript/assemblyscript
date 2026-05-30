@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://www.assemblyscript.org" target="_blank" rel="noopener"><img width="100" src="https://avatars1.githubusercontent.com/u/28916798?s=200&v=4" alt="AssemblyScript logo"></a>
+  <a href="https://toil.org" target="_blank" rel="noopener"><img width="100" src="https://avatars1.githubusercontent.com/u/28916798?s=200&v=4" alt="ToilScript logo"></a>
 </p>
 
 <p align="center">
@@ -11,7 +11,7 @@
 
 ## ToilScript
 
-**ToilScript is a fork of [AssemblyScript](https://github.com/AssemblyScript/assemblyscript)** that tracks the latest upstream and adds language features not yet available in the official release.
+**ToilScript is a fork of [ToilScript](https://github.com/dacely-cloud/toilscript)** that tracks the latest upstream and adds language features not yet available in the official release.
 
 ### Added features
 
@@ -20,7 +20,7 @@
 
 ### How it's built
 
-ToilScript is the latest AssemblyScript `main` (Binaryen `129.0.0-nightly`, BigInt-based i64) with the closure and exception-handling work — originally from the [btc-vision](https://github.com/btc-vision/assemblyscript) fork — merged on top. The compiler's config file defaults to `toilconfig.json` (instead of `asconfig.json`).
+ToilScript is the latest ToilScript `main` (Binaryen `129.0.0-nightly`, BigInt-based i64) with the closure and exception-handling work — originally from the [btc-vision](https://github.com/btc-vision/toilscript) fork — merged on top. The compiler's config file defaults to `toilconfig.json` (instead of `asconfig.json`).
 
 ---
 
@@ -32,7 +32,7 @@ npm install toilscript
 
 ### Usage
 
-This fork is a drop-in replacement for AssemblyScript. Simply replace your import:
+This fork is a drop-in replacement for ToilScript. Simply replace your import:
 
 ```json
 {
@@ -42,10 +42,10 @@ This fork is a drop-in replacement for AssemblyScript. Simply replace your impor
 }
 ```
 
-Or if migrating from official AssemblyScript:
+Or if migrating from official ToilScript:
 
 ```sh
-npm uninstall assemblyscript
+npm uninstall toilscript
 npm install toilscript
 ```
 
@@ -59,28 +59,28 @@ npx toilscript your-file.ts --outFile output.wasm
 
 ## Original README
 
-<p align="justify"><strong>AssemblyScript</strong> compiles a variant of <a href="http://www.typescriptlang.org">TypeScript</a> (basically JavaScript with types) to <a href="http://webassembly.org">WebAssembly</a> using <a href="https://github.com/WebAssembly/binaryen">Binaryen</a>. It generates lean and mean WebAssembly modules while being just an <code>npm install</code> away.</p>
+<p align="justify"><strong>ToilScript</strong> compiles a variant of <a href="http://www.typescriptlang.org">TypeScript</a> (basically JavaScript with types) to <a href="http://webassembly.org">WebAssembly</a> using <a href="https://github.com/WebAssembly/binaryen">Binaryen</a>. It generates lean and mean WebAssembly modules while being just an <code>npm install</code> away.</p>
 
 <h3 align="center">
-  <a href="https://www.assemblyscript.org">About</a> &nbsp;·&nbsp;
-  <a href="https://www.assemblyscript.org/getting-started.html">Getting&nbsp;started</a> &nbsp;·&nbsp;
-  <a href="https://www.assemblyscript.org/examples.html">Examples</a> &nbsp;·&nbsp;
-  <a href="https://www.assemblyscript.org/built-with-assemblyscript.html">Built with AssemblyScript</a>
+  <a href="https://toil.org">About</a> &nbsp;·&nbsp;
+  <a href="https://toil.org/getting-started.html">Getting&nbsp;started</a> &nbsp;·&nbsp;
+  <a href="https://toil.org/examples.html">Examples</a> &nbsp;·&nbsp;
+  <a href="https://toil.org/built-with-toilscript.html">Built with ToilScript</a>
 </h3>
 <br>
 
 <h2 align="center">Contributors</h2>
 
 <p align="center">
-  <a href="https://www.assemblyscript.org/#contributors"><img src="https://www.assemblyscript.org/contributors.svg" alt="Contributor logos" width="720" /></a>
+  <a href="https://toil.org/#contributors"><img src="https://toil.org/contributors.svg" alt="Contributor logos" width="720" /></a>
 </p>
 
 <h2 align="center">Thanks to our sponsors!</h2>
 
-<p align="justify">Most of the maintainers and contributors do this open source work in their free time. If you use AssemblyScript for a serious task or plan to do so, and you'd like us to invest more time on it, <a href="https://opencollective.com/assemblyscript/donate" target="_blank" rel="noopener">please donate</a> to our <a href="https://opencollective.com/assemblyscript" target="_blank" rel="noopener">OpenCollective</a>. By sponsoring this project, your logo will show up below. Thank you so much for your support!</p>
+<p align="justify">Most of the maintainers and contributors do this open source work in their free time. If you use ToilScript for a serious task or plan to do so, and you'd like us to invest more time on it, <a href="https://opencollective.com/toilscript/donate" target="_blank" rel="noopener">please donate</a> to our <a href="https://opencollective.com/toilscript" target="_blank" rel="noopener">OpenCollective</a>. By sponsoring this project, your logo will show up below. Thank you so much for your support!</p>
 
 <p align="center">
-  <a href="https://www.assemblyscript.org/#sponsors"><img src="https://www.assemblyscript.org/sponsors.svg" alt="Sponsor logos" width="720" /></a>
+  <a href="https://toil.org/#sponsors"><img src="https://toil.org/sponsors.svg" alt="Sponsor logos" width="720" /></a>
 </p>
 
 ## Development instructions

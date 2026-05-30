@@ -540,7 +540,7 @@ assert(simpleIIFE() == 10);
 
 // Test 10.4: Closure array manipulation
 // Note: Loop closures need a helper function to capture by value because
-// AssemblyScript closures share their environment (reference semantics).
+// ToilScript closures share their environment (reference semantics).
 function captureLoopValue(val: i32): () => i32 {
   return (): i32 => val;
 }

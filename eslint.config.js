@@ -179,7 +179,7 @@ export default tseslint.config(
       }
     },
 
-    // === AssemblyScript rules (extends TypeScript rules) =====================
+    // === ToilScript rules (extends TypeScript rules) =====================
 
     {
       files: [
@@ -188,10 +188,10 @@ export default tseslint.config(
         "lib/parse/src/**/*.ts"
       ],
       rules: {
-        // AssemblyScript has its own globals
+        // ToilScript has its own globals
         "no-undef": "off",
 
-        // Namespaces are quite useful in AssemblyScript
+        // Namespaces are quite useful in ToilScript
         "@typescript-eslint/no-namespace": "off",
 
         // There is actually codegen difference here
@@ -205,7 +205,7 @@ export default tseslint.config(
       }
     },
 
-    // === Compiler rules (extends AssemblyScript rules) =======================
+    // === Compiler rules (extends ToilScript rules) =======================
 
     {
       files: [
@@ -228,7 +228,7 @@ export default tseslint.config(
       }
     },
 
-    // === Standard Library rules (extends AssemblyScript rules) ===============
+    // === Standard Library rules (extends ToilScript rules) ===============
 
     {
       files: [

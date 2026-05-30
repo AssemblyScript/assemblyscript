@@ -1,6 +1,6 @@
 {
   "name": "@assemblyscript/rtrace",
-  "description": "A tiny utility to sanitize the AssemblyScript runtime.",
+  "description": "A tiny utility to sanitize the ToilScript runtime.",
   "keywords": [
     "toilscript",
     "rtrace",
@@ -13,7 +13,7 @@
   "homepage": "https://assemblyscript.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AssemblyScript/assemblyscript.git",
+    "url": "https://github.com/ToilScript/assemblyscript.git",
     "directory": "lib/rtrace"
   },
   "bugs": {

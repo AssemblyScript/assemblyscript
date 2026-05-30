@@ -1,4 +1,4 @@
-The AssemblyScript Runtime
+The ToilScript Runtime
 ==========================
 
 The runtime provides the functionality necessary to dynamically allocate and deallocate memory of objects, arrays and buffers, as well as collect garbage that is no longer used. The current implementation is either a Two-Color Mark & Sweep (TCMS) garbage collector that must be called manually when the execution stack is unwound or an Incremental Tri-Color Mark & Sweep (ITCMS) garbage collector that is fully automated with a shadow stack, implemented on top of a Two-Level Segregate Fit (TLSF) memory manager. It's not designed to be the fastest of its kind, but intentionally focuses on simplicity and ease of integration until we can replace it with the real deal, i.e. Wasm GC.
@@ -80,4 +80,4 @@ STUB / `--runtime stub`
 
 The stub is a maximally minimal runtime substitute, consisting of a simple and fast bump allocator with no means of freeing up memory again, except when freeing the respective most recently allocated object on top of the bump. Useful where memory is not a concern, and/or where it is sufficient to destroy the whole module including any potential garbage after execution.
 
-See also: [Garbage collection](https://www.assemblyscript.org/garbage-collection.html)
+See also: [Garbage collection](https://toil.org/garbage-collection.html)

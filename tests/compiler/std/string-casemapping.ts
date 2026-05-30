@@ -117,12 +117,12 @@ for (let i = 0; i <= 0x10FFFF; i++) {
   let origUpper = source.toUpperCase();
   let code1: i64, code2: i64;
 
-  // collect all code points for lower case on AssemblyScript side
+  // collect all code points for lower case on ToilScript side
   let origLowerCode = <i64>origLower.codePointAt(0);
   if ((code1 = origLower.codePointAt(1)) >= 0) origLowerCode += <i64>code1 << 16;
   if ((code2 = origLower.codePointAt(2)) >= 0) origLowerCode += <i64>code2 << 32;
 
-  // collect all code points for upper case on AssemblyScript side
+  // collect all code points for upper case on ToilScript side
   let origUpperCode = <i64>origUpper.codePointAt(0);
   if ((code1 = origUpper.codePointAt(1)) >= 0) origUpperCode += <i64>code1 << 16;
   if ((code2 = origUpper.codePointAt(2)) >= 0) origUpperCode += <i64>code2 << 32;

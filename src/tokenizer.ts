@@ -1,5 +1,5 @@
 /**
- * @fileoverview A TypeScript tokenizer modified for AssemblyScript.
+ * @fileoverview A TypeScript tokenizer modified for ToilScript.
  *
  * The `Tokenizer` scans over a source file and returns one syntactic token
  * at a time that the parser will combine to an abstract syntax tree.

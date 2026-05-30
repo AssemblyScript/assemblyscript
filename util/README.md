@@ -16,7 +16,7 @@ Various utility functions shared accross the codebase.
 It is possible to reuse the utility in your own project like so:
 
 ```ts
-import { ... } from "assemblyscript/util/terminal.js";
+import { ... } from "toilscript/util/terminal.js";
 ...
 ```
 

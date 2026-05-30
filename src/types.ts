@@ -1,5 +1,5 @@
 /**
- * @fileoverview Mappings from AssemblyScript types to WebAssembly types.
+ * @fileoverview Mappings from ToilScript types to WebAssembly types.
  * @license Apache-2.0
  */
 

@@ -6,7 +6,7 @@
  * as a flat namespace.
  *
  * Note though that the compiler sources are written in "portable
- * AssemblyScript" that can be compiled to both JavaScript with tsc and
+ * ToilScript" that can be compiled to both JavaScript with tsc and
  * to WebAssembly with asc, and as such require additional glue code
  * depending on the target.
  *

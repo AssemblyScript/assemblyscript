@@ -1,7 +1,7 @@
 /**
  * @fileoverview A thin wrapper around Binaryen's C-API.
  *
- * The AssemblyScript compiler utilizes Binaryen's C-API directly. Even
+ * The ToilScript compiler utilizes Binaryen's C-API directly. Even
  * though it currently imports binaryen.js, none of the JS APIs it
  * provides are used.
  *

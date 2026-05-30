@@ -1,5 +1,5 @@
 /**
- * @fileoverview AssemblyScript's intermediate representation.
+ * @fileoverview ToilScript's intermediate representation.
  *
  * The compiler uses Binaryen IR, which is fairly low level, as its
  * primary intermediate representation, with the following structures
@@ -425,7 +425,7 @@ export namespace OperatorKind {
   }
 }
 
-/** Represents an AssemblyScript program. */
+/** Represents an ToilScript program. */
 export class Program extends DiagnosticEmitter {
 
   /** Constructs a new program, optionally inheriting parser diagnostics. */

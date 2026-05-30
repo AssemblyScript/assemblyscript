@@ -1,5 +1,5 @@
 /**
- * @fileoverview The AssemblyScript compiler.
+ * @fileoverview The ToilScript compiler.
  * @license Apache-2.0
  */
 

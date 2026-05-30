@@ -1,5 +1,5 @@
 /**
- * @fileoverview A TypeScript parser for the AssemblyScript subset.
+ * @fileoverview A TypeScript parser for the ToilScript subset.
  *
  * Takes the tokens produced by the `Tokenizer` and builds an abstract
  * syntax tree composed of `Node`s wrapped in a `Source` out of it.

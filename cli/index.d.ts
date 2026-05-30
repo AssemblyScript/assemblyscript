@@ -6,7 +6,7 @@
 import { OptionDescription } from "../util/options";
 export { OptionDescription };
 
-/** AssemblyScript version. */
+/** ToilScript version. */
 export const version: string;
 
 /** Available CLI options. */

@@ -6,7 +6,7 @@ Additional packages provided by the main package.
 | Package                            | Description
 |------------------------------------|-------------------------
 | [@dacely/toilscript-loader](./loader) | Module loader utility
-| [@assemblyscript/rtrace](./rtrace) | Runtime tracing utility
+| [@toilscript/rtrace](./rtrace) | Runtime tracing utility
 | binaryen | Binaryen proxy
 
 The Binaryen proxy herein is imported accross the code base and forwards the

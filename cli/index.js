@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2020 Daniel Wirtz / The AssemblyScript Authors.
+ * Copyright 2020 Daniel Wirtz / The ToilScript Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ function isNonEmptyString(value) {
 //   return ptrOrObj;
 // }
 
-/** AssemblyScript version. */
+/** ToilScript version. */
 export const version = generated.version;
 
 /** Available CLI options. */
