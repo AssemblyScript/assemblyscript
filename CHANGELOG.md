@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+- Add `std/ts-plugin.cjs`, a TypeScript Language Service plugin that suppresses the decorator-grammar false positives (TS1206, TS1249) stock TypeScript emits for toil-native decorators (`@main`, `@inline`, `@unmanaged`, ...) in editors. Wired into `std/assembly.json` so every project extending it gets a clean editor (VS Code, WebStorm) with no source-level `@ts-ignore`. Editor-only — does not affect `toilscript`/asc builds, and real type errors are still reported.
+- Tighten the `@main` declaration in `std/assembly/toilscript.ts` from `(...args: any[]): any` to a strict generic decorator signature (no `any`).
+
 ## [v0.1.2] - 2026-05-30
 
 - No changes

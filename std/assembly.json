@@ -7,6 +7,7 @@
     "allowJs": false,
     "typeRoots": [ "types" ],
     "types": [ "assembly" ],
+    "plugins": [ { "name": "toilscript/std/ts-plugin.cjs" } ],
     "paths": {
       "*": [
         "./assembly/*"
