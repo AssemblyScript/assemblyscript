@@ -13,4 +13,4 @@
  * exports it as the WebAssembly export `main` — no `export` keyword needed.
  * Exactly one `@main` is allowed per module.
  */
-declare const main: <T extends (...args: never[]) => unknown>(target: T) => void;
+declare function main<T extends (...args: never[]) => unknown>(target: T): void;

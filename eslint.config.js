@@ -92,6 +92,7 @@ export default tseslint.config(
     {
       files: [
         "**/*.js",
+        "**/*.cjs",
         "bin/*"
       ],
       languageOptions: {
