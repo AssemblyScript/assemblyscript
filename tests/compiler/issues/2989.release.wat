@@ -17,14 +17,6 @@
  (elem $0 (i32.const 1) $issues/2989/logA $issues/2989/logB)
  (export "memory" (memory $0))
  (start $~start)
- (func $issues/2989/logA (param $0 i32)
-  i32.const 100
-  global.set $issues/2989/value
- )
- (func $issues/2989/logB (param $0 i32)
-  i32.const 200
-  global.set $issues/2989/value
- )
  (func $~start
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
@@ -70,5 +62,13 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $issues/2989/logB (param $0 i32)
+  i32.const 200
+  global.set $issues/2989/value
+ )
+ (func $issues/2989/logA (param $0 i32)
+  i32.const 100
+  global.set $issues/2989/value
  )
 )
