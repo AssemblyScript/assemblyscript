@@ -325,8 +325,10 @@ export class Options {
   /** Sets whether a feature is enabled. */
   setFeature(feature: Feature, on: bool = true): void {
     if (on) {
+      // Enabling Shared Everything also enables Threads and GC
+      if (feature & Feature.SharedEverything) feature |= Feature.Threads | Feature.GC;
       // Enabling Stringref also enables GC
-      if (feature & Feature.Stringref) feature |= Feature.GC;
+      if (feature & Feature.Strings) feature |= Feature.GC;
       // Enabling GC also enables Reference Types
       if (feature & Feature.GC) feature |= Feature.ReferenceTypes;
       // Enabling Relaxed SIMD also enables SIMD
@@ -336,9 +338,11 @@ export class Options {
       // Disabling Reference Types also disables GC
       if (feature & Feature.ReferenceTypes) feature |= Feature.GC;
       // Disabling GC also disables Stringref
-      if (feature & Feature.GC) feature |= Feature.Stringref;
+      if (feature & Feature.GC) feature |= Feature.Strings;
       // Disabling SIMD also disables Relaxed SIMD
       if (feature & Feature.Simd) feature |= Feature.RelaxedSimd;
+      // Disabling Threads or GC also disables Shared Everything
+      if (feature & (Feature.Threads | Feature.GC)) feature |= Feature.SharedEverything;
       this.features &= ~feature;
     }
   }
@@ -515,7 +519,8 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.Memory64)) featureFlags |= FeatureFlags.Memory64;
     if (options.hasFeature(Feature.RelaxedSimd)) featureFlags |= FeatureFlags.RelaxedSIMD;
     if (options.hasFeature(Feature.ExtendedConst)) featureFlags |= FeatureFlags.ExtendedConst;
-    if (options.hasFeature(Feature.Stringref)) featureFlags |= FeatureFlags.Stringref;
+    if (options.hasFeature(Feature.Strings)) featureFlags |= FeatureFlags.Strings;
+    if (options.hasFeature(Feature.SharedEverything)) featureFlags |= FeatureFlags.SharedEverything;
     module.setFeatures(featureFlags);
 
     // set up the main start function
@@ -534,9 +539,15 @@ export class Compiler extends DiagnosticEmitter {
     let resolver = this.resolver;
     let hasShadowStack = options.stackSize > 0; // implies runtime=incremental
 
+    // Register a dummy memory so Binaryen's EffectAnalyzer can read
+    // memory.shared on loads/stores emitted during compilation. The real
+    // memory is installed by `initDefaultMemory` below, which can't run
+    // here: it needs `memoryOffset` (known only after data layout) and
+    // emits diagnostics / exports that must happen exactly once.
+    this.initDummyMemory();
+
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize();
-
 
     // Binaryen treats all function references as being leaked to the outside world when
     // the module isn't marked as closed-world (see WebAssembly/binaryen#7135). Therefore,
@@ -760,6 +771,19 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     return module;
+  }
+
+  private initDummyMemory(): void {
+    let options = this.options;
+    this.module.setMemory(
+      0,
+      Module.UNLIMITED_MEMORY,
+      [],
+      options.target,
+      null,
+      CommonNames.DefaultMemory,
+      options.sharedMemory
+    );
   }
 
   private initDefaultMemory(memoryOffset: i64): void {
@@ -1524,7 +1548,7 @@ export class Compiler extends DiagnosticEmitter {
 
   private ensureEnumToString(enumElement: Enum, reportNode: Node): string | null {
     if (enumElement.toStringFunctionName) return enumElement.toStringFunctionName;
-    
+
     if (!this.compileEnum(enumElement)) return null;
     if (enumElement.is(CommonFlags.Const)) {
       this.errorRelated(
@@ -2583,7 +2607,7 @@ export class Compiler extends DiagnosticEmitter {
     //    (then                 │ │ (body)                       │
     //     (?block $continue    │ │ if loops: (incrementor) ─────┘
     //      (body)              │ │           recompile body?
-    //     )                    ├◄┘    
+    //     )                    ├◄┘
     //     (incrementor)      ┌◄┘
     //     (br $loop)
     //    )
@@ -2872,17 +2896,17 @@ export class Compiler extends DiagnosticEmitter {
     // Compile the condition (always executes)
     let condExpr = this.compileExpression(statement.condition, Type.auto);
     let condType = this.currentType;
-    
+
     // Shortcut if there are no cases
     if (!numCases) return module.drop(condExpr);
-    
+
     // Assign the condition to a temporary local as we compare it multiple times
     let outerFlow = this.currentFlow;
     let tempLocal = outerFlow.getTempLocal(condType);
     let tempLocalIndex = tempLocal.index;
     let breaks = new Array<ExpressionRef>(1 + numCases);
     breaks[0] = module.local_set(tempLocalIndex, condExpr, condType.isManaged);
-    
+
     // Make one br_if per labeled case and leave it to Binaryen to optimize the
     // sequence of br_ifs to a br_table according to optimization levels
     let breakIndex = 1;
@@ -2894,7 +2918,7 @@ export class Compiler extends DiagnosticEmitter {
         defaultIndex = i;
         continue;
       }
-      
+
       // Compile the equality expression for this case
       const left = statement.condition;
       const leftExpr = module.local_get(tempLocalIndex, condType.toRef());
@@ -2909,7 +2933,7 @@ export class Compiler extends DiagnosticEmitter {
         condType,
         statement
       );
-      
+
       // Add it to the list of breaks
       breaks[breakIndex++] = module.br(`case${i}|${label}`, equalityExpr);
     }
@@ -3863,7 +3887,7 @@ export class Compiler extends DiagnosticEmitter {
     expression: BinaryExpression,
     contextualType: Type,
   ): ExpressionRef {
-    
+
     const left = expression.left;
     const leftExpr = this.compileExpression(left, contextualType);
     const leftType = this.currentType;
@@ -3881,9 +3905,9 @@ export class Compiler extends DiagnosticEmitter {
     );
   }
 
-  /** 
+  /**
    * compile `==` `===` `!=` `!==` BinaryExpression, from previously compiled left and right expressions.
-   * 
+   *
    * This is split from `compileCommutativeCompareBinaryExpression` so that the logic can be reused
    * for switch cases in `compileSwitchStatement`, where the left expression only should be compiled once.
    */
@@ -3901,7 +3925,7 @@ export class Compiler extends DiagnosticEmitter {
 
     let module = this.module;
     let operatorString = operatorTokenToString(operator);
-    
+
     // check operator overload
     const operatorKind = OperatorKind.fromBinaryToken(operator);
     const leftOverload = leftType.lookupOverload(operatorKind, this.program);
@@ -3909,7 +3933,7 @@ export class Compiler extends DiagnosticEmitter {
     if (leftOverload && rightOverload && leftOverload != rightOverload) {
       this.error(
         DiagnosticCode.Ambiguous_operator_overload_0_conflicting_overloads_1_and_2,
-        reportNode.range, 
+        reportNode.range,
         operatorString,
         leftOverload.internalName,
         rightOverload.internalName
@@ -3999,7 +4023,7 @@ export class Compiler extends DiagnosticEmitter {
 
     leftExpr = this.compileExpression(left, contextualType);
     leftType = this.currentType;
-    
+
     // check operator overload
     const operatorKind = OperatorKind.fromBinaryToken(operator);
     const leftOverload = leftType.lookupOverload(operatorKind, this.program);
@@ -4070,7 +4094,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.compileNonCommutativeCompareBinaryExpression(expression, contextualType);
       }
       case Token.Equals_Equals_Equals:
-      case Token.Equals_Equals: 
+      case Token.Equals_Equals:
       case Token.Exclamation_Equals_Equals:
       case Token.Exclamation_Equals: {
         return this.compileCommutativeCompareBinaryExpression(expression, contextualType);
@@ -6352,13 +6376,13 @@ export class Compiler extends DiagnosticEmitter {
     if (numArguments < numParams) {
       return argumentExpressions;
     }
-      
+
     // make an array literal expression from the rest args
     let elements = argumentExpressions.slice(numParams - 1);
     let range = new Range(elements[0].range.start, elements[elements.length - 1].range.end);
     range.source = reportNode.range.source;
     let arrExpr = new ArrayLiteralExpression(elements, range);
-    
+
     // return the original args, but replace the rest args with the array
     const exprs = argumentExpressions.slice(0, numParams - 1);
     exprs.push(arrExpr);
@@ -6622,9 +6646,9 @@ export class Compiler extends DiagnosticEmitter {
       let initializer = declaration.initializer;
       let initExpr: ExpressionRef;
       if (declaration.parameterKind === ParameterKind.Rest) {
-        const arrExpr = new ArrayLiteralExpression([], declaration.range.atEnd);       
+        const arrExpr = new ArrayLiteralExpression([], declaration.range.atEnd);
         initExpr = this.compileArrayLiteral(arrExpr, type, Constraints.ConvExplicit);
-        initExpr = module.local_set(operandIndex, initExpr, type.isManaged);        
+        initExpr = module.local_set(operandIndex, initExpr, type.isManaged);
       } else if (initializer) {
         initExpr = this.compileExpression(
           initializer,
@@ -7881,7 +7905,7 @@ export class Compiler extends DiagnosticEmitter {
     stmts.length = 1;
     stmts.push(
       module.i32(1)
-    ); 
+    );
     module.removeFunction(name);
     module.addFunction(name, sizeType, TypeRef.I32, [ TypeRef.I32 ], module.block(null, stmts, TypeRef.I32));
   }

@@ -70,18 +70,6 @@
  (export "test" (func $start:builtins~anonymous|1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:builtins~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.add
- )
- (func $start:builtins~anonymous|1
- )
- (func $start:builtins~anonymous|2 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
- )
- (func $~start
-  call $start:builtins
- )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -243,6 +231,19 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   i32.const 0
+ )
+ (func $start:builtins~anonymous|1
+ )
+ (func $~start
+  call $start:builtins
+ )
+ (func $start:builtins~anonymous|2 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  unreachable
+ )
+ (func $start:builtins~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.add
  )
  (func $start:builtins
   global.get $~lib/memory/__stack_pointer
@@ -596,12 +597,8 @@
   global.set $builtins/I
   f64.const 1.24e-322
   global.set $builtins/F
-  memory.size
-  drop
   i32.const 1
   memory.grow
-  drop
-  memory.size
   drop
   i32.const 1
   memory.grow

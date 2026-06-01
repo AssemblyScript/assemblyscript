@@ -18,6 +18,7 @@ export type Op = i32;
 export type ExternalKind = u32;
 export type SideEffects = u32;
 export type ExpressionRunnerFlags = u32;
+export type MemoryOrder = u32;
 
 export type StringRef = Ref;
 export type Pointer<T> = Ref;
@@ -95,12 +96,12 @@ export declare function _BinaryenModuleDispose(module: ModuleRef): void;
 
 export declare function _BinaryenSizeofLiteral(): usize;
 export declare function _BinaryenLiteralInt32(literalOut: LiteralRef, x: i32): void;
-export declare function _BinaryenLiteralInt64(literalOut: LiteralRef, x: i32, y: i32): void;
+export declare function _BinaryenLiteralInt64(literalOut: LiteralRef, value: i64): void;
 export declare function _BinaryenLiteralFloat32(literalOut: LiteralRef, x: f32): void;
 export declare function _BinaryenLiteralFloat64(literalOut: LiteralRef, x: f64): void;
 export declare function _BinaryenLiteralVec128(literalOut: LiteralRef, x: ArrayRef<u8>): void;
 export declare function _BinaryenLiteralFloat32Bits(literalOut: LiteralRef, x: i32): void;
-export declare function _BinaryenLiteralFloat64Bits(literalOut: LiteralRef, x: i32, y: i32): void;
+export declare function _BinaryenLiteralFloat64Bits(literalOut: LiteralRef, value: i64): void;
 
 export declare function _BinaryenExpressionGetId(expr: ExpressionRef): ExpressionId;
 export declare function _BinaryenExpressionGetType(expr: ExpressionRef): TypeRef;
@@ -228,7 +229,7 @@ export declare function _BinaryenLoadSetAlign(expr: ExpressionRef, align: u32): 
 export declare function _BinaryenLoadGetPtr(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenLoadSetPtr(expr: ExpressionRef, ptrExpr: ExpressionRef): void;
 // ^ with atomic = true
-export declare function _BinaryenAtomicLoad(module: ModuleRef, bytes: Index, offset: Index, type: TypeRef, ptrExpr: ExpressionRef, memoryName: StringRef): ExpressionRef;
+export declare function _BinaryenAtomicLoad(module: ModuleRef, bytes: Index, offset: Index, type: TypeRef, ptrExpr: ExpressionRef, memoryName: StringRef, memoryOrder: MemoryOrder): ExpressionRef;
 
 export declare function _BinaryenStore(module: ModuleRef, bytes: u32, offset: u32, align: u32, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef, memoryName: StringRef): ExpressionRef;
 export declare function _BinaryenStoreIsAtomic(expr: ExpressionRef): bool;
@@ -246,15 +247,13 @@ export declare function _BinaryenStoreSetValue(expr: ExpressionRef, valueExpr: E
 export declare function _BinaryenStoreGetValueType(expr: ExpressionRef): TypeRef;
 export declare function _BinaryenStoreSetValueType(expr: ExpressionRef, valueType: TypeRef): void;
 // ^ with atomic = true
-export declare function _BinaryenAtomicStore(module: ModuleRef, bytes: Index, offset: Index, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef, memoryName: StringRef): ExpressionRef;
+export declare function _BinaryenAtomicStore(module: ModuleRef, bytes: Index, offset: Index, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef, memoryName: StringRef, memoryOrder: MemoryOrder): ExpressionRef;
 
 export declare function _BinaryenConst(module: ModuleRef, value: LiteralRef): ExpressionRef;
 export declare function _BinaryenConstGetValueI32(expr: ExpressionRef): i32;
 export declare function _BinaryenConstSetValueI32(expr: ExpressionRef, value: i32): void;
-export declare function _BinaryenConstGetValueI64Low(expr: ExpressionRef): i32;
-export declare function _BinaryenConstSetValueI64Low(expr: ExpressionRef, value: i32): void;
-export declare function _BinaryenConstGetValueI64High(expr: ExpressionRef): i32;
-export declare function _BinaryenConstSetValueI64High(expr: ExpressionRef, value: i32): void;
+export declare function _BinaryenConstGetValueI64(expr: ExpressionRef): i64;
+export declare function _BinaryenConstSetValueI64(expr: ExpressionRef, value: i64): void;
 export declare function _BinaryenConstGetValueF32(expr: ExpressionRef): f32;
 export declare function _BinaryenConstSetValueF32(expr: ExpressionRef, value: f32): void;
 export declare function _BinaryenConstGetValueF64(expr: ExpressionRef): f64;
@@ -296,7 +295,7 @@ export declare function _BinaryenNop(module: ModuleRef): ExpressionRef;
 
 export declare function _BinaryenUnreachable(module: ModuleRef): ExpressionRef;
 
-export declare function _BinaryenAtomicRMW(module: ModuleRef, op: Op, bytes: u32, offset: u32, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef, memoryName: StringRef): ExpressionRef;
+export declare function _BinaryenAtomicRMW(module: ModuleRef, op: Op, bytes: u32, offset: u32, ptrExpr: ExpressionRef, valueExpr: ExpressionRef, type: TypeRef, memoryName: StringRef, memoryOrder: MemoryOrder): ExpressionRef;
 export declare function _BinaryenAtomicRMWGetOp(expr: ExpressionRef): Op;
 export declare function _BinaryenAtomicRMWSetOp(expr: ExpressionRef, op: Op): void;
 export declare function _BinaryenAtomicRMWGetBytes(expr: ExpressionRef): u32;
@@ -308,7 +307,7 @@ export declare function _BinaryenAtomicRMWSetPtr(expr: ExpressionRef, ptrExpr: E
 export declare function _BinaryenAtomicRMWGetValue(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenAtomicRMWSetValue(expr: ExpressionRef, valueExpr: ExpressionRef): void;
 
-export declare function _BinaryenAtomicCmpxchg(module: ModuleRef, bytes: u32, offset: u32, ptrExpr: ExpressionRef, expectedExpr: ExpressionRef, replacementExpr: ExpressionRef, type: TypeRef, memoryName: StringRef): ExpressionRef;
+export declare function _BinaryenAtomicCmpxchg(module: ModuleRef, bytes: u32, offset: u32, ptrExpr: ExpressionRef, expectedExpr: ExpressionRef, replacementExpr: ExpressionRef, type: TypeRef, memoryName: StringRef, memoryOrder: MemoryOrder): ExpressionRef;
 export declare function _BinaryenAtomicCmpxchgGetBytes(expr: ExpressionRef): u32;
 export declare function _BinaryenAtomicCmpxchgSetBytes(expr: ExpressionRef, bytes: u32): void;
 export declare function _BinaryenAtomicCmpxchgGetOffset(expr: ExpressionRef): u32;

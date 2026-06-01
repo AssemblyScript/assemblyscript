@@ -1,7 +1,7 @@
 (module
- (type $0 (func))
- (type $1 (func (param i32 i32 i32 i32)))
- (type $2 (func (param i32)))
+ (type $0 (func (param i32)))
+ (type $1 (func))
+ (type $2 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34172))
  (memory $0 1)
@@ -27,30 +27,6 @@
  (data $9.1 (i32.const 1368) "\02\00\00\00\12\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00i")
  (export "memory" (memory $0))
  (start $~start)
- (func $~start
-  i32.const 0
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  i32.const 1056
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  i32.const 1088
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  i32.const 1120
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  i32.const 1152
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  i32.const 1184
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  i32.const 1216
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  i32.const 1248
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  i32.const 1280
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  i32.const 1328
-  call $~lib/util/hash/HASH<~lib/string/String|null>
-  i32.const 1376
-  call $~lib/util/hash/HASH<~lib/string/String|null>
- )
  (func $~lib/util/hash/HASH<~lib/string/String|null> (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -248,5 +224,29 @@
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $~start
+  i32.const 0
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  i32.const 1056
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  i32.const 1088
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  i32.const 1120
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  i32.const 1152
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  i32.const 1184
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  i32.const 1216
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  i32.const 1248
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  i32.const 1280
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  i32.const 1328
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  i32.const 1376
+  call $~lib/util/hash/HASH<~lib/string/String|null>
  )
 )

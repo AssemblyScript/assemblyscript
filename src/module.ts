@@ -210,14 +210,18 @@ export const enum FeatureFlags {
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
   RelaxedSIMD = 4096 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 8192 /* _BinaryenFeatureExtendedConst */,
-  Stringref = 16384 /* _BinaryenFeatureStrings */,
+  Strings = 16384 /* _BinaryenFeatureStrings */,
   MultiMemory = 32768 /* _BinaryenFeatureMultiMemory */,
   StackSwitching = 65536 /* _BinaryenFeatureStackSwitching */,
   SharedEverything = 131072 /* _BinaryenFeatureSharedEverything */,
   FP16 = 262144 /* _BinaryenFeatureFP16 */,
   BulkMemoryOpt = 524288 /* _BinaryenFeatureBulkMemoryOpt */,
   CallIndirectOverlong = 1048576 /* _BinaryenFeatureCallIndirectOverlong */,
-  All = 4194303 /* _BinaryenFeatureAll */
+  RelaxedAtomics = 4194304 /* _BinaryenFeatureRelaxedAtomics */,
+  CustomPageSizes = 8388608 /* _BinaryenFeatureCustomPageSizes */,
+  Multibyte = 16777216 /* _BinaryenFeatureMultibyte */,
+  WideArithmetic = 33554432 /* _BinaryenFeatureWideArithmetic */,
+  All = 67108863 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. See wasm-delegations.def in Binaryen. */
@@ -251,74 +255,83 @@ export const enum ExpressionId {
   AtomicWait = 26 /* _BinaryenAtomicWaitId */,
   AtomicNotify = 27 /* _BinaryenAtomicNotifyId */,
   AtomicFence = 28 /* _BinaryenAtomicFenceId */,
-  SIMDExtract = 29 /* _BinaryenSIMDExtractId */,
-  SIMDReplace = 30 /* _BinaryenSIMDReplaceId */,
-  SIMDShuffle = 31 /* _BinaryenSIMDShuffleId */,
-  SIMDTernary = 32 /* _BinaryenSIMDTernaryId */,
-  SIMDShift = 33 /* _BinaryenSIMDShiftId */,
-  SIMDLoad = 34 /* _BinaryenSIMDLoadId */,
-  SIMDLoadStoreLane = 35 /* _BinaryenSIMDLoadStoreLaneId */,
-  MemoryInit = 36 /* _BinaryenMemoryInitId */,
-  DataDrop = 37 /* _BinaryenDataDropId */,
-  MemoryCopy = 38 /* _BinaryenMemoryCopyId */,
-  MemoryFill = 39 /* _BinaryenMemoryFillId */,
-  Pop = 40 /* _BinaryenPopId */,
-  RefNull = 41 /* _BinaryenRefNullId */,
-  RefIsNull = 42 /* _BinaryenRefIsNullId */,
-  RefFunc = 43 /* _BinaryenRefFuncId */,
-  RefEq = 44 /* _BinaryenRefEqId */,
-  TableGet = 45 /* _BinaryenTableGetId */,
-  TableSet = 46 /* _BinaryenTableSetId */,
-  TableSize = 47 /* _BinaryenTableSizeId */,
-  TableGrow = 48 /* _BinaryenTableGrowId */,
-  TableFill = 49 /* _BinaryenTableFillId */,
-  TableCopy = 50 /* _BinaryenTableCopyId */,
-  TableInit = 51 /* _BinaryenTableInitId */,
-  Try = 52 /* _BinaryenTryId */,
-  TryTable = 53 /* _BinaryenTryTableId */,
-  Throw = 54 /* _BinaryenThrowId */,
-  Rethrow = 55 /* _BinaryenRethrowId */,
-  ThrowRef = 56 /* _BinaryenThrowRefId */,
-  TupleMake = 57 /* _BinaryenTupleMakeId */,
-  TupleExtract = 58 /* _BinaryenTupleExtractId */,
-  RefI31 = 59 /* _BinaryenRefI31Id */,
-  I31Get = 60 /* _BinaryenI31GetId */,
-  CallRef = 61 /* _BinaryenCallRefId */,
-  RefTest = 62 /* _BinaryenRefTestId */,
-  RefCast = 63 /* _BinaryenRefCastId */,
-  RefGetDesc = 64 /* _BinaryenRefGetDescId */,
-  BrOn = 65 /* _BinaryenBrOnId */,
-  StructNew = 66 /* _BinaryenStructNewId */,
-  StructGet = 67 /* _BinaryenStructGetId */,
-  StructSet = 68 /* _BinaryenStructSetId */,
-  StructRMW = 69 /* _BinaryenStructRMWId */,
-  StructCmpxchg = 70 /* _BinaryenStructCmpxchgId */,
-  ArrayNew = 71 /* _BinaryenArrayNewId */,
-  ArrayNewData = 72 /* _BinaryenArrayNewDataId */,
-  ArrayNewElem = 73 /* _BinaryenArrayNewElemId */,
-  ArrayNewFixed = 74 /* _BinaryenArrayNewFixedId */,
-  ArrayGet = 75 /* _BinaryenArrayGetId */,
-  ArraySet = 76 /* _BinaryenArraySetId */,
-  ArrayLen = 77 /* _BinaryenArrayLenId */,
-  ArrayCopy = 78 /* _BinaryenArrayCopyId */,
-  ArrayFill = 79 /* _BinaryenArrayFillId */,
-  ArrayInitData = 80 /* _BinaryenArrayInitDataId */,
-  ArrayInitElem = 81 /* _BinaryenArrayInitElemId */,
-  RefAs = 82 /* _BinaryenRefAsId */,
-  StringNew = 83 /* _BinaryenStringNewId */,
-  StringConst = 84 /* _BinaryenStringConstId */,
-  StringMeasure = 85 /* _BinaryenStringMeasureId */,
-  StringEncode = 86 /* _BinaryenStringEncodeId */,
-  StringConcat = 87 /* _BinaryenStringConcatId */,
-  StringEq = 88 /* _BinaryenStringEqId */,
-  StringWTF16Get = 89 /* _BinaryenStringWTF16GetId */,
-  StringSliceWTF = 90 /* _BinaryenStringSliceWTFId */,
-  ContNew = 91 /* _BinaryenContNewId */,
-  ContBind = 92 /* _BinaryenContBindId */,
-  Suspend = 93 /* _BinaryenSuspendId */,
-  Resume = 94 /* _BinaryenResumeId */,
-  ResumeThrow = 95 /* _BinaryenResumeThrowId */,
-  StackSwitch = 96 /* _BinaryenStackSwitchId */
+  Pause = 29 /* _BinaryenPauseId */,
+  SIMDExtract = 30 /* _BinaryenSIMDExtractId */,
+  SIMDReplace = 31 /* _BinaryenSIMDReplaceId */,
+  SIMDShuffle = 32 /* _BinaryenSIMDShuffleId */,
+  SIMDTernary = 33 /* _BinaryenSIMDTernaryId */,
+  SIMDShift = 34 /* _BinaryenSIMDShiftId */,
+  SIMDLoad = 35 /* _BinaryenSIMDLoadId */,
+  SIMDLoadStoreLane = 36 /* _BinaryenSIMDLoadStoreLaneId */,
+  MemoryInit = 37 /* _BinaryenMemoryInitId */,
+  DataDrop = 38 /* _BinaryenDataDropId */,
+  MemoryCopy = 39 /* _BinaryenMemoryCopyId */,
+  MemoryFill = 40 /* _BinaryenMemoryFillId */,
+  Pop = 41 /* _BinaryenPopId */,
+  RefNull = 42 /* _BinaryenRefNullId */,
+  RefIsNull = 43 /* _BinaryenRefIsNullId */,
+  RefFunc = 44 /* _BinaryenRefFuncId */,
+  RefEq = 45 /* _BinaryenRefEqId */,
+  TableGet = 46 /* _BinaryenTableGetId */,
+  TableSet = 47 /* _BinaryenTableSetId */,
+  TableSize = 48 /* _BinaryenTableSizeId */,
+  TableGrow = 49 /* _BinaryenTableGrowId */,
+  TableFill = 50 /* _BinaryenTableFillId */,
+  TableCopy = 51 /* _BinaryenTableCopyId */,
+  TableInit = 52 /* _BinaryenTableInitId */,
+  ElemDrop = 53 /* _BinaryenElemDropId */,
+  Try = 54 /* _BinaryenTryId */,
+  TryTable = 55 /* _BinaryenTryTableId */,
+  Throw = 56 /* _BinaryenThrowId */,
+  Rethrow = 57 /* _BinaryenRethrowId */,
+  ThrowRef = 58 /* _BinaryenThrowRefId */,
+  TupleMake = 59 /* _BinaryenTupleMakeId */,
+  TupleExtract = 60 /* _BinaryenTupleExtractId */,
+  RefI31 = 61 /* _BinaryenRefI31Id */,
+  I31Get = 62 /* _BinaryenI31GetId */,
+  CallRef = 63 /* _BinaryenCallRefId */,
+  RefTest = 64 /* _BinaryenRefTestId */,
+  RefCast = 65 /* _BinaryenRefCastId */,
+  RefGetDesc = 66 /* _BinaryenRefGetDescId */,
+  BrOn = 67 /* _BinaryenBrOnId */,
+  StructNew = 68 /* _BinaryenStructNewId */,
+  StructGet = 69 /* _BinaryenStructGetId */,
+  StructSet = 70 /* _BinaryenStructSetId */,
+  StructRMW = 71 /* _BinaryenStructRMWId */,
+  StructCmpxchg = 72 /* _BinaryenStructCmpxchgId */,
+  ArrayNew = 73 /* _BinaryenArrayNewId */,
+  ArrayNewData = 74 /* _BinaryenArrayNewDataId */,
+  ArrayNewElem = 75 /* _BinaryenArrayNewElemId */,
+  ArrayNewFixed = 76 /* _BinaryenArrayNewFixedId */,
+  ArrayGet = 77 /* _BinaryenArrayGetId */,
+  ArraySet = 78 /* _BinaryenArraySetId */,
+  ArrayLoad = 79 /* _BinaryenArrayLoadId */,
+  ArrayStore = 80 /* _BinaryenArrayStoreId */,
+  ArrayLen = 81 /* _BinaryenArrayLenId */,
+  ArrayCopy = 82 /* _BinaryenArrayCopyId */,
+  ArrayFill = 83 /* _BinaryenArrayFillId */,
+  ArrayInitData = 84 /* _BinaryenArrayInitDataId */,
+  ArrayInitElem = 85 /* _BinaryenArrayInitElemId */,
+  ArrayRMW = 86 /* _BinaryenArrayRMWId */,
+  ArrayCmpxchg = 87 /* _BinaryenArrayCmpxchgId */,
+  RefAs = 88 /* _BinaryenRefAsId */,
+  StringNew = 89 /* _BinaryenStringNewId */,
+  StringConst = 90 /* _BinaryenStringConstId */,
+  StringMeasure = 91 /* _BinaryenStringMeasureId */,
+  StringEncode = 92 /* _BinaryenStringEncodeId */,
+  StringConcat = 93 /* _BinaryenStringConcatId */,
+  StringEq = 94 /* _BinaryenStringEqId */,
+  StringTest = 95 /* _BinaryenStringTestId */,
+  StringWTF16Get = 96 /* _BinaryenStringWTF16GetId */,
+  StringSliceWTF = 97 /* _BinaryenStringSliceWTFId */,
+  ContNew = 98 /* _BinaryenContNewId */,
+  ContBind = 99 /* _BinaryenContBindId */,
+  Suspend = 100 /* _BinaryenSuspendId */,
+  Resume = 101 /* _BinaryenResumeId */,
+  ResumeThrow = 102 /* _BinaryenResumeThrowId */,
+  StackSwitch = 103 /* _BinaryenStackSwitchId */,
+  StructWait = 104 /* _BinaryenStructWaitId */,
+  StructNotify = 105 /* _BinaryenStructNotifyId */
 }
 
 /** Binaryen external kind constants. */
@@ -328,6 +341,16 @@ export const enum ExternalKind {
   Memory = 2 /* _BinaryenExternalMemory */,
   Global = 3 /* _BinaryenExternalGlobal */,
   Tag = 4 /* _BinaryenExternalTag */
+}
+
+/** Binaryen memory order constants for atomic operations. */
+export const enum MemoryOrder {
+  /** Non-atomic access. */
+  Unordered = 0 /* _BinaryenMemoryOrderUnordered */,
+  /** Sequentially consistent atomic memory operation. */
+  SeqCst = 1 /* _BinaryenMemoryOrderSeqCst */,
+  /** Acquire/Release atomic memory operation; acquire for loads, release for stores. */
+  AcqRel = 2 /* _BinaryenMemoryOrderAcqRel */
 }
 
 /** Binaryen unary operation constants. */
@@ -511,7 +534,7 @@ export const enum UnaryOp {
   AllTrueI64x2 = 83 /* _BinaryenAllTrueVecI64x2 */,
   /** i64x2.bitmask */
   BitmaskI64x2 = 84 /* _BinaryenBitmaskVecI64x2 */,
-  // FIXME FIXME FIXME DONT FORGET TODO: F16 (not in C API yet)
+  // FIXME: f16x8 abs/neg/sqrt/ceil/floor/trunc/nearest (85..91) are in wasm.h but not yet exported via C API
   /** f32x4.abs */
   AbsF32x4 = 92 /* _BinaryenAbsVecF32x4 */,
   /** f32x4.neg */
@@ -600,8 +623,15 @@ export const enum UnaryOp {
   RelaxedTruncF64x2ToI32x4Zero = 134 /* _BinaryenRelaxedTruncZeroSVecF64x2ToVecI32x4 */,
   /** i32x4.relaxed_trunc_f64x2_u_zero */
   RelaxedTruncF64x2ToU32x4Zero = 135 /* _BinaryenRelaxedTruncZeroUVecF64x2ToVecI32x4 */,
+  // FIXME: f16x8 splat/trunc_sat/convert (136..140) are in wasm.h but not yet exported via C API
+  /** f32x4.promote_low_f16x8 */
+  PromoteLowF16x8ToF32x4 = 141 /* _BinaryenPromoteLowVecF16x8ToVecF32x4 */,
+  /** f16x8.demote_f32x4_zero */
+  // DemoteZeroF32x4ToF16x8 = 142 /* TODO_BinaryenDemoteZeroVecF32x4ToVecF16x8 */,
+  /** f16x8.demote_f64x2_zero */
+  // DemoteZeroF64x2ToF16x8 = 143 /* TODO_BinaryeDemoteZeroVecF64x2ToVecF16x8 */,
 
-  _last = RelaxedTruncF64x2ToU32x4Zero,
+  _last = PromoteLowF16x8ToF32x4,
 
   // Target dependent
 
@@ -844,6 +874,7 @@ export const enum BinaryOp {
   LeI64x2 = 110 /* _BinaryenLeSVecI64x2 */,
   /** i64x2.ge_s */
   GeI64x2 = 111 /* _BinaryenGeSVecI64x2 */,
+  // FIXME: f16x8 compare ops (eq/ne/lt/gt/le/ge = 112..117) are in wasm.h but not yet exported via C API
   /** f32x4.eq */
   EqF32x4 = 118 /* _BinaryenEqVecF32x4 */,
   /** f32x4.ne */
@@ -970,6 +1001,7 @@ export const enum BinaryOp {
   ExtmulLowU64x2 = 179 /* _BinaryenExtMulLowUVecI64x2 */,
   /** i64x2.extmul_high_i32x4_u */
   ExtmulHighU64x2 = 180 /* _BinaryenExtMulHighUVecI64x2 */,
+  // FIXME: f16x8 arithmetic ops (add/sub/mul/div/min/max/pmin/pmax = 181..188) are in wasm.h but not yet exported via C API
   /** f32x4.add */
   AddF32x4 = 189 /* _BinaryenAddVecF32x4 */,
   /** f32x4.sub */
@@ -1109,13 +1141,14 @@ export const enum SIMDExtractOp {
   ExtractLaneI16x8 = 2 /* _BinaryenExtractLaneSVecI16x8 */,
   /** i16x8.extract_lane_u */
   ExtractLaneU16x8 = 3 /* _BinaryenExtractLaneUVecI16x8 */,
-  /** i32x4.extract_lane_s */
+  /** i32x4.extract_lane */
   ExtractLaneI32x4 = 4 /* _BinaryenExtractLaneVecI32x4 */,
-  /** i32x4.extract_lane_u */
+  /** i64x2.extract_lane */
   ExtractLaneI64x2 = 5 /* _BinaryenExtractLaneVecI64x2 */,
-  /** i64x2.extract_lane_s */
+  // FIXME: f16x8.extract_lane (= 6) is in wasm.h but not yet exported via C API
+  /** f32x4.extract_lane */
   ExtractLaneF32x4 = 7 /* _BinaryenExtractLaneVecF32x4 */,
-  /** i64x2.extract_lane_u */
+  /** f64x2.extract_lane */
   ExtractLaneF64x2 = 8 /* _BinaryenExtractLaneVecF64x2 */,
 }
 
@@ -1129,6 +1162,7 @@ export const enum SIMDReplaceOp {
   ReplaceLaneI32x4 = 2 /* _BinaryenReplaceLaneVecI32x4 */,
   /** i64x2.replace_lane */
   ReplaceLaneI64x2 = 3 /* _BinaryenReplaceLaneVecI64x2 */,
+  // FIXME: f16x8.replace_lane (= 4) is in wasm.h but not yet exported via C API
   /** f32x4.replace_lane */
   ReplaceLaneF32x4 = 5 /* _BinaryenReplaceLaneVecF32x4 */,
   /** f64x2.replace_lane */
@@ -1215,31 +1249,25 @@ export const enum SIMDLoadStoreLaneOp {
 export const enum SIMDTernaryOp {
   /** v128.bitselect */
   Bitselect = 0 /* _BinaryenBitselectVec128 */,
-
-  // Relaxed SIMD for F16
-  /** f16x8.relaxed_madd */
-  RelaxedMaddVecF16x8 = 1 /* TODO_BinaryenRelaxedMaddVecF16x8 */,
-  /** f16x8.relaxed_nmadd */
-  RelaxedNmaddVecF16x8 = 2 /* TODO_BinaryenRelaxedNmaddVecF16x8 */,
-
   /** f32x4.relaxed_madd */
-  RelaxedMaddF32x4 = 3 /* _BinaryenRelaxedMaddVecF32x4 */,
+  RelaxedMaddF32x4 = 1 /* _BinaryenRelaxedMaddVecF32x4 */,
   /** f32x4.relaxed_nmadd */
-  RelaxedNmaddF32x4 = 4 /* _BinaryenRelaxedNmaddVecF32x4 */,
+  RelaxedNmaddF32x4 = 2 /* _BinaryenRelaxedNmaddVecF32x4 */,
   /** f64x2.relaxed_madd */
-  RelaxedMaddF64x2 = 5 /* _BinaryenRelaxedMaddVecF64x2 */,
+  RelaxedMaddF64x2 = 3 /* _BinaryenRelaxedMaddVecF64x2 */,
   /** f64x2.relaxed_nmadd */
-  RelaxedNmaddF64x2 = 6 /* _BinaryenRelaxedNmaddVecF64x2 */,
+  RelaxedNmaddF64x2 = 4 /* _BinaryenRelaxedNmaddVecF64x2 */,
   /** i8x16.relaxed_laneselect */
-  RelaxedLaneselectI8x16 = 7 /* _BinaryenLaneselectI8x16 */,
+  RelaxedLaneselectI8x16 = 5 /* _BinaryenLaneselectI8x16 */,
   /** i16x8.relaxed_laneselect */
-  RelaxedLaneselectI16x8 = 8 /* _BinaryenLaneselectI16x8 */,
+  RelaxedLaneselectI16x8 = 6 /* _BinaryenLaneselectI16x8 */,
   /** i32x4.relaxed_laneselect */
-  RelaxedLaneselectI32x4 = 9 /* _BinaryenLaneselectI32x4 */,
+  RelaxedLaneselectI32x4 = 7 /* _BinaryenLaneselectI32x4 */,
   /** i64x2.relaxed_laneselect */
-  RelaxedLaneselectI64x2 = 10 /* _BinaryenLaneselectI64x2 */,
+  RelaxedLaneselectI64x2 = 8 /* _BinaryenLaneselectI64x2 */,
   /** i32x4.relaxed_dot_i8x16_i7x16_add_s */
-  RelaxedDotI8x16I7x16AddToI32x4 = 11 /* _BinaryenDotI8x16I7x16AddSToVecI32x4 */,
+  RelaxedDotI8x16I7x16AddToI32x4 = 9 /* _BinaryenDotI8x16I7x16AddSToVecI32x4 */,
+  // FIXME: f16x8 madd/nmadd (= 10, 11) are in wasm.h but not yet exported via C API
 }
 
 /** Binaryen RefAs operation constants. */
@@ -1349,7 +1377,7 @@ export class Module {
 
   i64(valueLow: i32, valueHigh: i32 = 0): ExpressionRef {
     let out = this.lit;
-    binaryen._BinaryenLiteralInt64(out, valueLow, valueHigh);
+    binaryen._BinaryenLiteralInt64(out, i64_new(valueLow, valueHigh));
     return binaryen._BinaryenConst(this.ref, out);
   }
 
@@ -1580,10 +1608,11 @@ export class Module {
     ptr: ExpressionRef,
     type: TypeRef,
     offset: Index = 0,
-    name: string = CommonNames.DefaultMemory
+    name: string = CommonNames.DefaultMemory,
+    order: MemoryOrder = MemoryOrder.SeqCst
   ): ExpressionRef {
     let cStr = this.allocStringCached(name);
-    return binaryen._BinaryenAtomicLoad(this.ref, bytes, offset, type, ptr, cStr);
+    return binaryen._BinaryenAtomicLoad(this.ref, bytes, offset, type, ptr, cStr, order);
   }
 
   atomic_store(
@@ -1592,10 +1621,11 @@ export class Module {
     value: ExpressionRef,
     type: TypeRef,
     offset: Index = 0,
-    name: string = CommonNames.DefaultMemory
+    name: string = CommonNames.DefaultMemory,
+    order: MemoryOrder = MemoryOrder.SeqCst
   ): ExpressionRef {
     let cStr = this.allocStringCached(name);
-    return binaryen._BinaryenAtomicStore(this.ref, bytes, offset, ptr, value, type, cStr);
+    return binaryen._BinaryenAtomicStore(this.ref, bytes, offset, ptr, value, type, cStr, order);
   }
 
   atomic_rmw(
@@ -1605,10 +1635,11 @@ export class Module {
     ptr: ExpressionRef,
     value: ExpressionRef,
     type: TypeRef,
-    name: string = CommonNames.DefaultMemory
+    name: string = CommonNames.DefaultMemory,
+    order: MemoryOrder = MemoryOrder.SeqCst
   ): ExpressionRef {
     let cStr = this.allocStringCached(name);
-    return binaryen._BinaryenAtomicRMW(this.ref, op, bytes, offset, ptr, value, type, cStr);
+    return binaryen._BinaryenAtomicRMW(this.ref, op, bytes, offset, ptr, value, type, cStr, order);
   }
 
   atomic_cmpxchg(
@@ -1618,10 +1649,11 @@ export class Module {
     expected: ExpressionRef,
     replacement: ExpressionRef,
     type: TypeRef,
-    name: string = CommonNames.DefaultMemory
+    name: string = CommonNames.DefaultMemory,
+    order: MemoryOrder = MemoryOrder.SeqCst
   ): ExpressionRef {
     let cStr = this.allocStringCached(name);
-    return binaryen._BinaryenAtomicCmpxchg(this.ref, bytes, offset, ptr, expected, replacement, type, cStr);
+    return binaryen._BinaryenAtomicCmpxchg(this.ref, bytes, offset, ptr, expected, replacement, type, cStr, order);
   }
 
   atomic_wait(
@@ -2471,6 +2503,14 @@ export class Module {
     binaryen._BinaryenSetDebugInfo(on);
   }
 
+  getTrapsNeverHappen(): bool {
+    return binaryen._BinaryenGetTrapsNeverHappen();
+  }
+
+  setTrapsNeverHappen(on: bool): void {
+    binaryen._BinaryenSetTrapsNeverHappen(on);
+  }
+
   getClosedWorld(): bool {
     return binaryen._BinaryenGetClosedWorld();
   }
@@ -2567,6 +2607,10 @@ export class Module {
     binaryen._BinaryenSetAllowInliningFunctionsWithLoops(enabled);
   }
 
+  setPartialInliningIfs(value: i32): void {
+    this.setPassArgument("partial-inlining-ifs", value.toString());
+  }
+
   // meta (module)
 
   getFeatures(): FeatureFlags {
@@ -2603,12 +2647,13 @@ export class Module {
     // Implicitly run costly non-LLVM optimizations on -O3 or -Oz
     if (optimizeLevel >= 3 || shrinkLevel >= 2) optimizeLevel = 4;
 
+    this.clearPassArguments();
+
     this.setOptimizeLevel(optimizeLevel);
     this.setShrinkLevel(shrinkLevel);
     this.setDebugInfo(debugInfo);
     this.setZeroFilledMemory(zeroFilledMemory);
     this.setFastMath(true);
-    this.clearPassArguments();
 
     // OptimizationOptions#parse in src/tools/optimization-options.h
     const stackIR = optimizeLevel >= 2 || shrinkLevel >= 1;
@@ -2620,7 +2665,7 @@ export class Module {
       this.setAlwaysInlineMaxSize(12);
       this.setFlexibleInlineMaxSize(70);
       this.setOneCallerInlineMaxSize(200);
-      this.setAllowInliningFunctionsWithLoops(optimizeLevel >= 3);
+      this.setAllowInliningFunctionsWithLoops(true);
     } else {
       this.setAlwaysInlineMaxSize(
         optimizeLevel <= 1 || shrinkLevel >= 2
@@ -2631,6 +2676,7 @@ export class Module {
       this.setOneCallerInlineMaxSize(80);
       this.setAllowInliningFunctionsWithLoops(false);
     }
+    this.setPartialInliningIfs(optimizeLevel >= 2 ? 4 : 0);
 
     // Pass order here differs substantially from Binaryen's defaults
     // see: Binaryen/src/pass.cpp
@@ -2641,12 +2687,15 @@ export class Module {
 
       passes.push("duplicate-function-elimination");
       passes.push("remove-unused-module-elements"); // +
-
-      // --- PassRunner::addDefaultFunctionOptimizationPasses ---
       if (optimizeLevel >= 2) {
         passes.push("once-reduction");
+      }
+
+      // --- PassRunner::addDefaultFunctionOptimizationPasses ---
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("inlining");
         passes.push("simplify-globals-optimizing");
+        passes.push("generate-global-effects");
       }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("rse");
@@ -2659,7 +2708,6 @@ export class Module {
         passes.push("merge-blocks");
         passes.push("precompute-propagate");
         passes.push("simplify-globals-optimizing");
-        passes.push("gufa-optimizing");
         passes.push("dae-optimizing");
       }
       if (optimizeLevel >= 3) {
@@ -2668,20 +2716,31 @@ export class Module {
         passes.push("vacuum");
         passes.push("simplify-locals-notee-nostructure");
         passes.push("vacuum");
+        passes.push("local-cse");
         passes.push("licm");
         passes.push("merge-locals");
         passes.push("reorder-locals");
       }
       passes.push("optimize-instructions");
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-        passes.push("dce");
+      if (optimizeLevel >= 2) {
+        passes.push("avoid-reinterprets");
       }
+      passes.push("dce");
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
+      passes.push("merge-blocks");
+      if (this.getFeatures() & FeatureFlags.MultiValue) {
+        // Optimize tuples before local opts (as splitting tuples can help local
+        // opts), but also not too early, as we want to be after
+        // optimize-instructions at least (which can remove tuple-related things).
+        passes.push("tuple-optimization");
+      }
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("inlining");
         passes.push("precompute-propagate");
         passes.push("simplify-globals-optimizing");
+      } else if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("precompute-propagate");
       } else {
         passes.push("precompute");
       }
@@ -2703,7 +2762,7 @@ export class Module {
         passes.push("rse");
         passes.push("vacuum");
       }
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+      if (shrinkLevel >= 1) {
         passes.push("merge-locals");
         passes.push("vacuum");
       }
@@ -2756,6 +2815,10 @@ export class Module {
       }
       passes.push("directize"); // replace indirect with direct calls
       passes.push("dae-optimizing"); // reduce arity
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        // whole-program value-flow analysis
+        passes.push("gufa-optimizing");
+      }
       passes.push("inlining-optimizing"); // and inline if possible
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("code-folding");
@@ -2795,18 +2858,32 @@ export class Module {
         passes.push("merge-blocks");
         passes.push("vacuum");
 
+        if (this.getFeatures() & FeatureFlags.Strings) {
+          // Gather strings to globals right before reorder-globals, which will then
+          // sort them properly.
+          passes.push("string-gathering");
+        }
+
         passes.push("simplify-globals-optimizing");
-        passes.push("reorder-globals");
         passes.push("remove-unused-brs");
         passes.push("optimize-instructions");
+        passes.push("vacuum");
       }
+      passes.push("reorder-globals");
+      passes.push("reorder-functions");
       // clean up
-      passes.push("duplicate-function-elimination");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("duplicate-function-elimination");
+      }
       if (shrinkLevel >= 2) {
         passes.push("merge-similar-functions");
       }
       passes.push("memory-packing");
       passes.push("remove-unused-module-elements");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        // release the global-effects cache populated earlier in post-passes.
+        passes.push("discard-global-effects");
+      }
 
       this.runPasses(passes);
     }
@@ -3038,11 +3115,11 @@ export function getConstValueI32(expr: ExpressionRef): i32 {
 }
 
 export function getConstValueI64Low(expr: ExpressionRef): i32 {
-  return binaryen._BinaryenConstGetValueI64Low(expr);
+  return i64_low(binaryen._BinaryenConstGetValueI64(expr));
 }
 
 export function getConstValueI64High(expr: ExpressionRef): i32 {
-  return binaryen._BinaryenConstGetValueI64High(expr);
+  return i64_high(binaryen._BinaryenConstGetValueI64(expr));
 }
 
 export function getConstValueInteger(expr: ExpressionRef, isWasm64: bool): i64 {

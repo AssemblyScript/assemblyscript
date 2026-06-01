@@ -1,6 +1,6 @@
 (module
- (type $0 (func (param i32 i32 i32) (result i32)))
- (type $1 (func (param i32 i32 i32 i32)))
+ (type $0 (func (param i32 i32 i32 i32)))
+ (type $1 (func (param i32 i32 i32) (result i32)))
  (type $2 (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memmove/dest (mut i32) (i32.const 0))

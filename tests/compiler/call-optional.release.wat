@@ -13,30 +13,6 @@
  (elem $0 (i32.const 1) $call-optional/opt@varargs)
  (export "memory" (memory $0))
  (start $~start)
- (func $call-optional/opt@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const -1
-    local.set $1
-   end
-   i32.const -2
-   local.set $2
-  end
-  local.get $1
-  i32.const 3
-  i32.add
-  local.get $2
-  i32.add
- )
  (func $~start
   i32.const 1
   global.set $~argumentsLength
@@ -94,5 +70,29 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $call-optional/opt@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const -1
+    local.set $1
+   end
+   i32.const -2
+   local.set $2
+  end
+  local.get $1
+  i32.const 3
+  i32.add
+  local.get $2
+  i32.add
  )
 )

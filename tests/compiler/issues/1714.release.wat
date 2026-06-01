@@ -1,6 +1,6 @@
 (module
- (type $0 (func (param i32 i32 i32 i32)))
- (type $1 (func))
+ (type $0 (func))
+ (type $1 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33884))
  (memory $0 1)

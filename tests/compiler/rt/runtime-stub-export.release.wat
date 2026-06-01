@@ -1,9 +1,9 @@
 (module
  (type $0 (func))
  (type $1 (func (param i32 i32 i32 i32)))
- (type $2 (func (param i32 i32) (result i32)))
+ (type $2 (func (param i32)))
  (type $3 (func (param i32) (result i32)))
- (type $4 (func (param i32)))
+ (type $4 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1168))
@@ -20,13 +20,21 @@
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~start
+  i32.const 1196
+  global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__unpin (param $0 i32)
+ )
+ (func $~lib/rt/stub/__pin (param $0 i32) (result i32)
+  local.get $0
+ )
  (func $~lib/rt/stub/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   i32.const 1073741804
   i32.gt_u
@@ -41,7 +49,7 @@
   local.get $0
   i32.const 16
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 1073741820
   i32.gt_u
   if
@@ -53,34 +61,33 @@
    unreachable
   end
   global.get $~lib/rt/stub/offset
-  global.get $~lib/rt/stub/offset
   i32.const 4
   i32.add
   local.tee $2
-  local.get $4
+  local.get $3
   i32.const 19
   i32.add
   i32.const -16
   i32.and
   i32.const 4
   i32.sub
-  local.tee $4
+  local.tee $3
   i32.add
-  local.tee $5
+  local.tee $4
   memory.size
-  local.tee $6
+  local.tee $5
   i32.const 16
   i32.shl
   i32.const 15
   i32.add
   i32.const -16
   i32.and
-  local.tee $7
+  local.tee $6
   i32.gt_u
   if
-   local.get $6
    local.get $5
-   local.get $7
+   local.get $4
+   local.get $6
    i32.sub
    i32.const 65535
    i32.add
@@ -88,16 +95,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $7
+   local.tee $6
+   local.get $5
    local.get $6
-   local.get $7
    i32.gt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $7
+    local.get $6
     memory.grow
     i32.const 0
     i32.lt_s
@@ -106,9 +113,10 @@
     end
    end
   end
-  local.get $5
-  global.set $~lib/rt/stub/offset
+  global.get $~lib/rt/stub/offset
   local.get $4
+  global.set $~lib/rt/stub/offset
+  local.get $3
   i32.store
   local.get $2
   i32.const 4
@@ -129,15 +137,6 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/stub/__pin (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~lib/rt/stub/__unpin (param $0 i32)
- )
  (func $~lib/rt/stub/__collect
- )
- (func $~start
-  i32.const 1196
-  global.set $~lib/rt/stub/offset
  )
 )

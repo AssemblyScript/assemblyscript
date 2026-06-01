@@ -1,12 +1,12 @@
 (module
  (type $0 (func (result externref)))
- (type $1 (func))
- (type $2 (func (param externref) (result externref)))
+ (type $1 (func (param externref) (result externref)))
+ (type $2 (func))
  (type $3 (func (param i32 i32 i32 i32)))
- (import "reference-types" "somethingReal" (func $features/reference-types/somethingReal (result externref)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
+ (import "reference-types" "somethingReal" (func $features/reference-types/somethingReal (result externref)))
  (import "reference-types" "external" (func $features/reference-types/external (param externref) (result externref)))
+ (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
  (global $features/reference-types/funcGlobal (mut funcref) (ref.null nofunc))
  (global $features/reference-types/a externref (ref.null noextern))
  (global $features/reference-types/b funcref (ref.null nofunc))
@@ -28,14 +28,6 @@
  (export "nonNullReal" (global $features/reference-types/nonNullReal))
  (export "memory" (memory $0))
  (start $~start)
- (func $features/reference-types/someFunc
- )
- (func $features/reference-types/internal (param $0 externref) (result externref)
-  local.get $0
-  call $features/reference-types/external
-  call $features/reference-types/external
-  call $features/reference-types/external
- )
  (func $~start
   (local $0 externref)
   call $features/reference-types/somethingReal
@@ -110,5 +102,13 @@
   end
   local.get $0
   global.set $features/reference-types/nonNullReal
+ )
+ (func $features/reference-types/internal (param $0 externref) (result externref)
+  local.get $0
+  call $features/reference-types/external
+  call $features/reference-types/external
+  call $features/reference-types/external
+ )
+ (func $features/reference-types/someFunc
  )
 )

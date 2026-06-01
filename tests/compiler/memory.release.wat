@@ -16,6 +16,9 @@
  (data $24 (i32.const 1216) "\01")
  (export "memory" (memory $0))
  (start $~start)
+ (func $~start
+  call $start:memory
+ )
  (func $start:memory
   (local $0 i32)
   i32.const 1024
@@ -256,8 +259,5 @@
   global.set $memory/ptr
   i32.const 1215
   global.set $memory/ptr
- )
- (func $~start
-  call $start:memory
  )
 )

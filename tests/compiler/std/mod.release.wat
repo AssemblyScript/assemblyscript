@@ -1,11 +1,11 @@
 (module
  (type $0 (func))
- (type $1 (func (param f64 f64) (result f64)))
+ (type $1 (func (param i32 i32 i32 i32)))
  (type $2 (func (param f64 f64 f64) (result i32)))
- (type $3 (func (param i32 i32 i32 i32)))
- (type $4 (func (param f32 f32 f32) (result i32)))
- (import "mod" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
+ (type $3 (func (param f32 f32 f32) (result i32)))
+ (type $4 (func (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "mod" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (memory $0 1)
  (data $0 (i32.const 1036) ",")
  (data $0.1 (i32.const 1048) "\02\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s")
@@ -506,6 +506,9 @@
    local.get $2
    f32.eq
   end
+ )
+ (func $~start
+  call $start:std/mod
  )
  (func $start:std/mod
   f64.const 3
@@ -2263,8 +2266,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  call $start:std/mod
  )
 )

@@ -6,10 +6,11 @@
  (export "testFirstWrapped" (func $loop-wrap/testFirstWrapped))
  (export "testSubsequentWrapped" (func $loop-wrap/testSubsequentWrapped))
  (export "memory" (memory $0))
- (func $loop-wrap/testAlwaysWrapped
-  (local $0 i32)
+ (func $loop-wrap/testSubsequentWrapped (param $0 i32)
   loop $do-loop|0
    local.get $0
+   i32.const 255
+   i32.and
    i32.const 10
    i32.ne
    if
@@ -42,11 +43,10 @@
    end
   end
  )
- (func $loop-wrap/testSubsequentWrapped (param $0 i32)
+ (func $loop-wrap/testAlwaysWrapped
+  (local $0 i32)
   loop $do-loop|0
    local.get $0
-   i32.const 255
-   i32.and
    i32.const 10
    i32.ne
    if

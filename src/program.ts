@@ -1088,7 +1088,9 @@ export class Program extends DiagnosticEmitter {
     this.registerConstantInteger(CommonNames.ASC_FEATURE_EXTENDED_CONST, Type.bool,
       i64_new(options.hasFeature(Feature.ExtendedConst) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_STRINGREF, Type.bool,
-      i64_new(options.hasFeature(Feature.Stringref) ? 1 : 0, 0));
+      i64_new(options.hasFeature(Feature.Strings) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_SHARED_EVERYTHING, Type.bool,
+      i64_new(options.hasFeature(Feature.Strings) ? 1 : 0, 0));
 
     // remember deferred elements
     let queuedImports = new Array<QueuedImport>();
@@ -1292,7 +1294,9 @@ export class Program extends DiagnosticEmitter {
     this.registerWrapperClass(Type.bool, CommonNames.Bool);
     this.registerWrapperClass(Type.f32, CommonNames.F32);
     this.registerWrapperClass(Type.f64, CommonNames.F64);
-    if (options.hasFeature(Feature.Simd)) this.registerWrapperClass(Type.v128, CommonNames.V128);
+    if (options.hasFeature(Feature.Simd)) {
+      this.registerWrapperClass(Type.v128, CommonNames.V128);
+    }
     if (options.hasFeature(Feature.ReferenceTypes)) {
       this.registerWrapperClass(Type.func, CommonNames.RefFunc);
       this.registerWrapperClass(Type.extern, CommonNames.RefExtern);
@@ -1303,7 +1307,7 @@ export class Program extends DiagnosticEmitter {
         this.registerWrapperClass(Type.array, CommonNames.RefArray);
         this.registerWrapperClass(Type.i31, CommonNames.RefI31);
       }
-      if (options.hasFeature(Feature.Stringref)) {
+      if (options.hasFeature(Feature.Strings)) {
         this.registerWrapperClass(Type.string, CommonNames.RefString);
       }
     }
@@ -1987,7 +1991,7 @@ export class Program extends DiagnosticEmitter {
       case TypeKind.StringviewWTF16:
       case TypeKind.StringviewIter: {
         return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
-            && this.checkFeatureEnabled(Feature.Stringref, reportNode);
+            && this.checkFeatureEnabled(Feature.Strings, reportNode);
       }
     }
     let classReference = type.getClass();

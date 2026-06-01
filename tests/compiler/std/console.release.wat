@@ -1,18 +1,18 @@
 (module
  (type $0 (func (param i32)))
  (type $1 (func (param i32 i32)))
- (type $2 (func))
- (type $3 (func (param i32 i32 i32 i32)))
- (import "env" "console.assert" (func $~lib/bindings/dom/console.assert (param i32 i32)))
- (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
- (import "env" "console.debug" (func $~lib/bindings/dom/console.debug (param i32)))
- (import "env" "console.info" (func $~lib/bindings/dom/console.info (param i32)))
+ (type $2 (func (param i32 i32 i32 i32)))
+ (type $3 (func))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "console.warn" (func $~lib/bindings/dom/console.warn (param i32)))
- (import "env" "console.error" (func $~lib/bindings/dom/console.error (param i32)))
- (import "env" "console.time" (func $~lib/bindings/dom/console.time (param i32)))
  (import "env" "console.timeLog" (func $~lib/bindings/dom/console.timeLog (param i32)))
  (import "env" "console.timeEnd" (func $~lib/bindings/dom/console.timeEnd (param i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "console.time" (func $~lib/bindings/dom/console.time (param i32)))
+ (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
+ (import "env" "console.info" (func $~lib/bindings/dom/console.info (param i32)))
+ (import "env" "console.error" (func $~lib/bindings/dom/console.error (param i32)))
+ (import "env" "console.debug" (func $~lib/bindings/dom/console.debug (param i32)))
+ (import "env" "console.assert" (func $~lib/bindings/dom/console.assert (param i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34380))
  (memory $0 1)
  (data $0 (i32.const 1036) "\1c")
@@ -45,6 +45,154 @@
  (data $13.1 (i32.const 1592) "\02\00\00\00\08\00\00\001\002\003\004")
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/console/console.log (param $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1612
+  i32.lt_s
+  if
+   i32.const 34400
+   i32.const 34448
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $~lib/bindings/dom/console.log
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/console/console.time (param $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1612
+  i32.lt_s
+  if
+   i32.const 34400
+   i32.const 34448
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $~lib/bindings/dom/console.time
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/console/console.timeLog (param $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1612
+  i32.lt_s
+  if
+   i32.const 34400
+   i32.const 34448
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $~lib/bindings/dom/console.timeLog
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/console/console.timeEnd (param $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1612
+  i32.lt_s
+  if
+   i32.const 34400
+   i32.const 34448
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $~lib/bindings/dom/console.timeEnd
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/console/console.assert<bool> (param $0 i32) (param $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1612
+  i32.lt_s
+  if
+   i32.const 34400
+   i32.const 34448
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.get $1
+  call $~lib/bindings/dom/console.assert
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~start
   i32.const 0
   i32.const 1056
@@ -165,153 +313,5 @@
   i32.const 1
   call $~lib/builtins/abort
   unreachable
- )
- (func $~lib/console/console.assert<bool> (param $0 i32) (param $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.ne
-  local.get $1
-  call $~lib/bindings/dom/console.assert
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/console/console.log (param $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/bindings/dom/console.log
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/console/console.time (param $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/bindings/dom/console.time
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/console/console.timeLog (param $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/bindings/dom/console.timeLog
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/console/console.timeEnd (param $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1612
-  i32.lt_s
-  if
-   i32.const 34400
-   i32.const 34448
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $~lib/bindings/dom/console.timeEnd
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
 )

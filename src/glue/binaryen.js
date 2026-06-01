@@ -4,6 +4,7 @@
  */
 
 import binaryen from "../../lib/binaryen.js";
+import Long from "long";
 
 export const {
   _BinaryenTypeCreate,
@@ -60,12 +61,10 @@ export const {
 
   _BinaryenSizeofLiteral,
   _BinaryenLiteralInt32,
-  _BinaryenLiteralInt64,
   _BinaryenLiteralFloat32,
   _BinaryenLiteralFloat64,
   _BinaryenLiteralVec128,
   _BinaryenLiteralFloat32Bits,
-  _BinaryenLiteralFloat64Bits,
 
   _BinaryenExpressionGetId,
   _BinaryenExpressionGetType,
@@ -211,10 +210,6 @@ export const {
   _BinaryenConst,
   _BinaryenConstGetValueI32,
   _BinaryenConstSetValueI32,
-  _BinaryenConstGetValueI64Low,
-  _BinaryenConstSetValueI64Low,
-  _BinaryenConstGetValueI64High,
-  _BinaryenConstSetValueI64High,
   _BinaryenConstGetValueF32,
   _BinaryenConstSetValueF32,
   _BinaryenConstGetValueF64,
@@ -917,5 +912,33 @@ export const {
   __f64_load
 
 } = binaryen;
+
+// Shims for C-API functions whose Emscripten binding now uses BigInt for i64
+// parameters (built with -sWASM_BIGINT). In portable/JS mode AssemblyScript
+// represents i64 as Long, so we convert between Long and BigInt here.
+
+function toBigInt(long) {
+  return (BigInt(long.high | 0) << 32n) | BigInt(long.low >>> 0);
+}
+
+function toLong(bign) {
+  return Long.fromBits(Number(bign & 0xFFFFFFFFn) | 0, Number(bign >> 32n) | 0);
+}
+
+export function _BinaryenLiteralInt64(lit, val) {
+  return binaryen._BinaryenLiteralInt64(lit, toBigInt(val));
+}
+
+export function _BinaryenLiteralFloat64Bits(lit, val) {
+  return binaryen._BinaryenLiteralFloat64Bits(lit, toBigInt(val));
+}
+
+export function _BinaryenConstGetValueI64(expr) {
+  return toLong(binaryen._BinaryenConstGetValueI64(expr));
+}
+
+export function _BinaryenConstSetValueI64(expr, val) {
+  binaryen._BinaryenConstSetValueI64(expr, toBigInt(val));
+}
 
 export default binaryen;

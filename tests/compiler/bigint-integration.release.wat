@@ -14,9 +14,6 @@
  (export "getInternalValue" (func $bigint-integration/getInternalValue))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $bigint-integration/getInternalValue (result i64)
-  i64.const 9007199254740991
- )
  (func $~start
   global.get $~started
   if
@@ -46,5 +43,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $bigint-integration/getInternalValue (result i64)
+  i64.const 9007199254740991
  )
 )

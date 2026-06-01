@@ -1,8 +1,8 @@
 (module
  (type $0 (func))
- (type $1 (func (param i32 i32 i32) (result i32)))
+ (type $1 (func (param i32 i32 i32 i32)))
  (type $2 (func (param i32)))
- (type $3 (func (param i32 i32 i32 i32)))
+ (type $3 (func (param i32 i32 i32) (result i32)))
  (type $4 (func (param i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33836))
@@ -14,12 +14,6 @@
  (export "testDropWithTypeMismatch" (func $ternary/testDropWithTypeMismatch))
  (export "memory" (memory $0))
  (export "testVoidInclTypeMismatch" (func $export:ternary/testVoidInclTypeMismatch))
- (func $ternary/test (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $1
-  local.get $2
-  local.get $0
-  select
- )
  (func $ternary/testDropWithTypeMismatch (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -46,6 +40,12 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $ternary/test (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $1
+  local.get $2
+  local.get $0
+  select
  )
  (func $export:ternary/testVoidInclTypeMismatch (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
