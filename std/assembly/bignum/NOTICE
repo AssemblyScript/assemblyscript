@@ -1,0 +1,13 @@
+The files in this directory (integer/, fixed/, globals.ts, utils.ts, index.ts)
+are vendored verbatim, without modification, from:
+
+    @btc-vision/as-bignum  version 1.0.0
+    License: Apache-2.0 (see ./LICENSE)
+
+They are bundled into the toilscript standard library so that the 128/256-bit
+integer types are available natively. The parent ../bignum.ts is the only
+toilscript-authored addition: it re-exports u128/i128/u256 from a top-level
+library entry so they are promoted to global types.
+
+To refresh, re-copy the package's `assembly/` tree here (excluding `__tests__/`)
+and keep ../bignum.ts in sync.
