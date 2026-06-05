@@ -2,6 +2,11 @@
 
 ## [v0.1.7] - 2026-06-05
 
+- No changes
+
+
+## [v0.1.7] - 2026-06-05
+
 - Add a native `JSON` standard-library global (no import): a dynamic value tree (`JSON.obj()/arr()/of()/nul()` with chainable `.set()/.push()`, serialized via `toString()`, so a type can implement `toJSON(): JSON`), the typed serializer `JSON.stringify<T>` (booleans, signed and unsigned integers, floats with NaN and Infinity mapping to null, escaped strings, null, and arrays), and `JSON.parse` (recursive descent yielding the value tree, returning an error value on malformed input rather than trapping). Value accessors include `isNull` through `isError`, `asBool`/`asF64`/`asI64`/`asU64`/`asString`, and `length`/`at`/`has`/`get`/`objectKeys`. Covered by an exhaustive `npm run test:json` suite.
 
 
