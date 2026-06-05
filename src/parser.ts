@@ -120,6 +120,20 @@ function dataMethodSuffix(typeName: string): string {
   }
 }
 
+/** Emits the DataWriter statement for one @data value (scalar or nested @data). */
+function dataWriteStmt(typeName: string, valueExpr: string): string {
+  let suffix = dataMethodSuffix(typeName);
+  if (suffix.length != 0) return "__w.write" + suffix + "(" + valueExpr + ");";
+  return valueExpr + ".encodeInto(__w);";
+}
+
+/** Emits the DataReader expression for one @data value (scalar or nested @data). */
+function dataReadExpr(typeName: string): string {
+  let suffix = dataMethodSuffix(typeName);
+  if (suffix.length != 0) return "__r.read" + suffix + "()";
+  return typeName + ".decodeFrom(__r)";
+}
+
 /** Represents a dependee. */
 class Dependee {
   constructor(
@@ -1903,16 +1917,21 @@ export class Parser extends DiagnosticEmitter {
       let typeNode = field.type;
       if (typeNode == null || !(typeNode instanceof NamedTypeNode)) continue;
       let fieldName = field.name.text;
-      let typeName = (<NamedTypeNode>typeNode).name.identifier.text;
-      let suffix = dataMethodSuffix(typeName);
-      if (suffix.length != 0) {
-        writes += "__w.write" + suffix + "(this." + fieldName + ");";
-        reads += "__o." + fieldName + "=__r.read" + suffix + "();";
+      let namedType = <NamedTypeNode>typeNode;
+      let typeName = namedType.name.identifier.text;
+      let typeArgs = namedType.typeArguments;
+      if (typeName == "Array" && typeArgs != null && typeArgs.length == 1 && typeArgs[0] instanceof NamedTypeNode) {
+        // Length-prefixed array of scalars or nested @data.
+        let elemName = (<NamedTypeNode>typeArgs[0]).name.identifier.text;
+        let a = "__a" + i.toString();
+        let c = "__c" + i.toString();
+        let j = "__j" + i.toString();
+        writes += "{const " + a + "=this." + fieldName + ";__w.writeU32(<u32>" + a + ".length);for(let " + j + "=0," + c + "=" + a + ".length;" + j + "<" + c + ";++" + j + "){" + dataWriteStmt(elemName, a + "[" + j + "]") + "}}";
+        reads += "{const " + c + "=__r.readU32();const " + a + "=new Array<" + elemName + ">();for(let " + j + ":u32=0;" + j + "<" + c + ";++" + j + "){" + a + ".push(" + dataReadExpr(elemName) + ");}__o." + fieldName + "=" + a + ";}";
       } else {
-        // Anything else is treated as a nested @data type, which composes by
-        // recursion. A non-@data type yields a clear "no encodeInto" error.
-        writes += "this." + fieldName + ".encodeInto(__w);";
-        reads += "__o." + fieldName + "=" + typeName + ".decodeFrom(__r);";
+        // Scalar, string, bignum, or a nested @data type (handled by recursion).
+        writes += dataWriteStmt(typeName, "this." + fieldName);
+        reads += "__o." + fieldName + "=" + dataReadExpr(typeName) + ";";
       }
     }
     // The instance/static *Into/*From pair carries the recursion; encode/decode
