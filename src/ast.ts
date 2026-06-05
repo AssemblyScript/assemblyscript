@@ -1034,7 +1034,10 @@ export enum DecoratorKind {
   Builtin,
   Lazy,
   Unsafe,
-  Main
+  Main,
+  Data,
+  Remote,
+  Service
 }
 
 export namespace DecoratorKind {
@@ -1047,6 +1050,10 @@ export namespace DecoratorKind {
       switch (nameStr.charCodeAt(0)) {
         case CharCode.b: {
           if (nameStr == "builtin") return DecoratorKind.Builtin;
+          break;
+        }
+        case CharCode.d: {
+          if (nameStr == "data") return DecoratorKind.Data;
           break;
         }
         case CharCode.e: {
@@ -1075,6 +1082,14 @@ export namespace DecoratorKind {
         }
         case CharCode.o: {
           if (nameStr == "operator") return DecoratorKind.Operator;
+          break;
+        }
+        case CharCode.r: {
+          if (nameStr == "remote") return DecoratorKind.Remote;
+          break;
+        }
+        case CharCode.s: {
+          if (nameStr == "service") return DecoratorKind.Service;
           break;
         }
         case CharCode.u: {

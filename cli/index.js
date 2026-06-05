@@ -1012,6 +1012,24 @@ export async function main(argv, options) {
         stderr.write(`Skipped JavaScript binding (no output path)${EOL}`);
       }
     }
+
+    // Write the RPC client module (@data codec + typed Server surface)
+    if (opts.rpcModule != null && opts.rpcModule.length) {
+      let begin = stats.begin();
+      stats.emitCount++;
+      let source;
+      try {
+        source = assemblyscript.buildServerModule(program, opts.rpcRuntime || "toiljs/io");
+      } catch (e) {
+        crash("buildServerModule", e);
+      }
+      stats.emitTime += stats.end(begin);
+      if (source != null) {
+        pending.push(
+          writeFile(opts.rpcModule, source, baseDir)
+        );
+      }
+    }
   }
 
   try {

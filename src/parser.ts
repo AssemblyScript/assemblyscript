@@ -61,6 +61,7 @@ import {
   ContinueStatement,
   DeclarationStatement,
   DecoratorNode,
+  DecoratorKind,
   DoStatement,
   EnumDeclaration,
   EnumValueDeclaration,
@@ -68,6 +69,7 @@ import {
   ExportMember,
   ExportStatement,
   ExpressionStatement,
+  FieldDeclaration,
   ForOfStatement,
   FunctionDeclaration,
   IfStatement,
@@ -93,6 +95,91 @@ import {
   mangleInternalPath
 } from "./ast";
 import { Options } from "./compiler";
+
+/** Maps a `@data` field type name to the DataWriter/DataReader method suffix, or "" if unsupported. */
+function dataMethodSuffix(typeName: string): string {
+  switch (typeName) {
+    case "u8": return "U8";
+    case "u16": return "U16";
+    case "u32": return "U32";
+    case "u64": return "U64";
+    case "i8": return "I8";
+    case "i16": return "I16";
+    case "i32": return "I32";
+    case "i64": return "I64";
+    case "f32": return "F32";
+    case "f64": return "F64";
+    case "bool":
+    case "boolean": return "Bool";
+    case "string": return "String";
+    case "u128": return "U128";
+    case "i128": return "I128";
+    case "u256": return "U256";
+    case "i256": return "I256";
+    default: return "";
+  }
+}
+
+/** Emits the DataWriter statement for one @data value (scalar or nested @data). */
+function dataWriteStmt(typeName: string, valueExpr: string): string {
+  let suffix = dataMethodSuffix(typeName);
+  if (suffix.length != 0) return "__w.write" + suffix + "(" + valueExpr + ");";
+  return valueExpr + ".encodeInto(__w);";
+}
+
+/** Emits the DataReader expression for one @data value (scalar or nested @data). */
+function dataReadExpr(typeName: string): string {
+  let suffix = dataMethodSuffix(typeName);
+  if (suffix.length != 0) return "__r.read" + suffix + "()";
+  return typeName + ".decodeFrom(__r)";
+}
+
+/** Stable per-class message-boundary id (FNV-1a over the class name). */
+function dataTypeId(name: string): u32 {
+  let hash = 0x811c9dc5;
+  for (let i = 0, k = name.length; i < k; ++i) {
+    hash = Math.imul(hash ^ name.charCodeAt(i), 0x01000193) >>> 0;
+  }
+  return hash >>> 0;
+}
+
+/** JSON value expression for a @data value (scalar, bignum as string, or nested @data). */
+function jsonOfExpr(typeName: string, valueExpr: string): string {
+  switch (typeName) {
+    case "bool": case "boolean":
+    case "u8": case "u16": case "u32": case "u64":
+    case "i8": case "i16": case "i32": case "i64":
+    case "f32": case "f64":
+    case "string":
+      return "JSON.of<" + typeName + ">(" + valueExpr + ")";
+    case "u128":
+      return "JSON.arr().push(JSON.of<u64>(" + valueExpr + ".lo)).push(JSON.of<u64>(" + valueExpr + ".hi))";
+    case "i128":
+      return "JSON.arr().push(JSON.of<u64>(" + valueExpr + ".lo)).push(JSON.of<i64>(" + valueExpr + ".hi))";
+    case "u256":
+      return "JSON.arr().push(JSON.of<u64>(" + valueExpr + ".lo1)).push(JSON.of<u64>(" + valueExpr + ".lo2)).push(JSON.of<u64>(" + valueExpr + ".hi1)).push(JSON.of<u64>(" + valueExpr + ".hi2))";
+    case "i256":
+      return "JSON.arr().push(JSON.of<i64>(" + valueExpr + ".lo1)).push(JSON.of<i64>(" + valueExpr + ".lo2)).push(JSON.of<i64>(" + valueExpr + ".hi1)).push(JSON.of<i64>(" + valueExpr + ".hi2))";
+    default:
+      return valueExpr + ".toJSON()";
+  }
+}
+
+/** Value read from a JSON node for a @data field. */
+function jsonReadExpr(typeName: string, jsonExpr: string): string {
+  switch (typeName) {
+    case "bool": case "boolean": return jsonExpr + ".asBool()";
+    case "u8": case "u16": case "u32": case "u64": return "<" + typeName + ">" + jsonExpr + ".asU64()";
+    case "i8": case "i16": case "i32": case "i64": return "<" + typeName + ">" + jsonExpr + ".asI64()";
+    case "f32": case "f64": return "<" + typeName + ">" + jsonExpr + ".asF64()";
+    case "string": return jsonExpr + ".asString()";
+    case "u128": return "new u128(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asU64())";
+    case "i128": return "new i128(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asI64())";
+    case "u256": return "new u256(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asU64()," + jsonExpr + ".at(2).asU64()," + jsonExpr + ".at(3).asU64())";
+    case "i256": return "new i256(" + jsonExpr + ".at(0).asI64()," + jsonExpr + ".at(1).asI64()," + jsonExpr + ".at(2).asI64()," + jsonExpr + ".at(3).asI64())";
+    default: return typeName + ".fromJSON(" + jsonExpr + ")";
+  }
+}
 
 /** Represents a dependee. */
 class Dependee {
@@ -1852,7 +1939,79 @@ export class Parser extends DiagnosticEmitter {
     }
     declaration.range.end = tn.pos;
     declaration.overriddenModuleName = this.currentModuleName;
+    if (!isInterface && decorators != null) {
+      for (let i = 0, k = decorators.length; i < k; ++i) {
+        if (decorators[i].decoratorKind == DecoratorKind.Data) {
+          this.injectDataCodec(declaration);
+          break;
+        }
+      }
+    }
     return declaration;
+  }
+
+  /** Synthesize and append the binary codec members to a `@data` class. */
+  private injectDataCodec(declaration: ClassDeclaration): void {
+    let className = declaration.name.text;
+    let members = declaration.members;
+    let writes = "";
+    let reads = "";
+    let jsonWrites = "";
+    let jsonReads = "";
+    for (let i = 0, k = members.length; i < k; ++i) {
+      let member = members[i];
+      if (member.kind != NodeKind.FieldDeclaration) continue;
+      let field = <FieldDeclaration>member;
+      if (field.is(CommonFlags.Static)) continue;
+      let typeNode = field.type;
+      if (typeNode == null || !(typeNode instanceof NamedTypeNode)) continue;
+      let fieldName = field.name.text;
+      let key = "\"" + fieldName + "\"";
+      let namedType = <NamedTypeNode>typeNode;
+      let typeName = namedType.name.identifier.text;
+      let typeArgs = namedType.typeArguments;
+      if (typeName == "Array" && typeArgs != null && typeArgs.length == 1 && typeArgs[0] instanceof NamedTypeNode) {
+        // Length-prefixed array of scalars or nested @data.
+        let elemName = (<NamedTypeNode>typeArgs[0]).name.identifier.text;
+        let a = "__a" + i.toString();
+        let c = "__c" + i.toString();
+        let j = "__j" + i.toString();
+        writes += "{const " + a + "=this." + fieldName + ";__w.writeU32(<u32>" + a + ".length);for(let " + j + "=0," + c + "=" + a + ".length;" + j + "<" + c + ";++" + j + "){" + dataWriteStmt(elemName, a + "[" + j + "]") + "}}";
+        reads += "{const " + c + "=__r.readU32();const " + a + "=new Array<" + elemName + ">();for(let " + j + ":u32=0;" + j + "<" + c + ";++" + j + "){" + a + ".push(" + dataReadExpr(elemName) + ");}__o." + fieldName + "=" + a + ";}";
+        jsonWrites += "{const " + a + "=this." + fieldName + ";const " + a + "j=JSON.arr();for(let " + j + "=0," + c + "=" + a + ".length;" + j + "<" + c + ";++" + j + "){" + a + "j.push(" + jsonOfExpr(elemName, a + "[" + j + "]") + ");}__j.set(" + key + "," + a + "j);}";
+        jsonReads += "{const " + a + "v=__v.get(" + key + ");const " + a + "=new Array<" + elemName + ">();for(let " + j + "=0," + c + "=" + a + "v.length();" + j + "<" + c + ";++" + j + "){" + a + ".push(" + jsonReadExpr(elemName, a + "v.at(" + j + ")") + ");}__o." + fieldName + "=" + a + ";}";
+      } else {
+        // Scalar, string, bignum, or a nested @data type.
+        writes += dataWriteStmt(typeName, "this." + fieldName);
+        reads += "__o." + fieldName + "=" + dataReadExpr(typeName) + ";";
+        jsonWrites += "__j.set(" + key + "," + jsonOfExpr(typeName, "this." + fieldName) + ");";
+        jsonReads += "__o." + fieldName + "=" + jsonReadExpr(typeName, "__v.get(" + key + ")") + ";";
+      }
+    }
+    let typeId = dataTypeId(className).toString();
+    // Binary codec: the *Into/*From pair carries tagless recursion; encode/decode
+    // own the message-boundary typeId.
+    this.injectClassMember(declaration, "encodeInto(__w: DataWriter): void{" + writes + "}");
+    this.injectClassMember(declaration, "encode(): Uint8Array{const __w=new DataWriter();__w.writeU32(" + typeId + ");this.encodeInto(__w);return __w.toBytes();}");
+    this.injectClassMember(declaration, "static decodeFrom(__r: DataReader): " + className + "{const __o=new " + className + "();" + reads + "return __o;}");
+    this.injectClassMember(declaration, "static decode(__buf: Uint8Array): " + className + "{const __r=new DataReader(__buf);__r.readU32();return " + className + ".decodeFrom(__r);}");
+    this.injectClassMember(declaration, "static dataId(): u32{return " + typeId + ";}");
+    // JSON view, independent of the binary path.
+    this.injectClassMember(declaration, "toJSON(): JSON{const __j=JSON.obj();" + jsonWrites + "return __j;}");
+    this.injectClassMember(declaration, "static fromJSON(__v: JSON): " + className + "{const __o=new " + className + "();" + jsonReads + "return __o;}");
+  }
+
+  /** Parse a synthesized member from source text and append it to the class. */
+  private injectClassMember(declaration: ClassDeclaration, source: string): void {
+    // Reuse the class file's path so synthesized nodes resolve to a registered
+    // source (the compiler looks the enclosing file up by internalPath).
+    let userSource = declaration.range.source;
+    let synthetic = new Source(userSource.sourceKind, userSource.normalizedPath, source);
+    let tn = new Tokenizer(synthetic, this.diagnostics);
+    let member = this.parseClassMember(tn, declaration);
+    if (member != null && member instanceof DeclarationStatement) {
+      declaration.members.push(<DeclarationStatement>member);
+    }
   }
 
   parseClassExpression(tn: Tokenizer): ClassExpression | null {

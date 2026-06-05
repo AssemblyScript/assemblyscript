@@ -76,6 +76,18 @@
     "alias": "t",
     "isPath": true
   },
+  "rpcModule": {
+    "category": "Output",
+    "description": "Emits a .ts module: the @data codec + the typed client-callable Server surface.",
+    "type": "s",
+    "isPath": true
+  },
+  "rpcRuntime": {
+    "category": "Output",
+    "description": "Import specifier for the DataWriter/DataReader codec in the emitted RPC module.",
+    "type": "s",
+    "default": "toiljs/io"
+  },
   "bindings": {
     "category": "Output",
     "description": [
