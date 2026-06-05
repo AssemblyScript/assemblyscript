@@ -1,8 +1,9 @@
 # Changelog
 
-## [v0.1.8] - 2026-06-05
+## [v0.1.9] - 2026-06-05
 
-- No changes
+- Harden the `@data` codegen against hostile input: the generated array decoders now stop at the bytes actually present (`&& r.ok` / `&&__r.ok`) instead of looping on the wire-supplied element count, so a tiny payload claiming billions of elements can no longer exhaust memory (CWE-770). No change to the wire format or to well-formed decoding.
+- Emit a hard compile error for an unsupported `@data` field or `@remote` parameter/return type (a `Map`, a nested array, a non-`@data` class, ...) instead of silently generating an uncompilable client module.
 
 
 ## [v0.1.8] - 2026-06-05
