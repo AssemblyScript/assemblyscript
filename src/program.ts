@@ -2069,7 +2069,8 @@ export class Program extends DiagnosticEmitter {
         DecoratorFlags.Global |
         DecoratorFlags.Final |
         DecoratorFlags.Unmanaged |
-        DecoratorFlags.Data
+        DecoratorFlags.Data |
+        DecoratorFlags.Service
       )
     );
     if (!parent.add(name, element)) return null;
@@ -2191,7 +2192,8 @@ export class Program extends DiagnosticEmitter {
     if (!declaration.is(CommonFlags.Generic)) {
       acceptedFlags |= DecoratorFlags.OperatorBinary
                     |  DecoratorFlags.OperatorPrefix
-                    |  DecoratorFlags.OperatorPostfix;
+                    |  DecoratorFlags.OperatorPostfix
+                    |  DecoratorFlags.Remote; // `@remote` exposes a `@service` method as an RPC endpoint
     }
     if (parent.is(CommonFlags.Ambient)) {
       acceptedFlags |= DecoratorFlags.External;
@@ -2647,6 +2649,9 @@ export class Program extends DiagnosticEmitter {
         }
       }
     }
+    if (!declaration.is(CommonFlags.Generic)) {
+      validDecorators |= DecoratorFlags.Remote; // `@remote` exposes a function as a client RPC endpoint (free fn or @service method)
+    }
     if (declaration.range.source.isLibrary) {
       validDecorators |= DecoratorFlags.Builtin;
     }
@@ -2998,7 +3003,11 @@ export enum DecoratorFlags {
   /** Is the toil module entry point (`@main`). */
   Main = 1 << 12,
   /** Is a `@data` serializable class. */
-  Data = 1 << 13
+  Data = 1 << 13,
+  /** Is a `@remote` client-callable function (RPC endpoint). */
+  Remote = 1 << 14,
+  /** Is a `@service` class that namespaces `@remote` methods. */
+  Service = 1 << 15
 }
 
 export namespace DecoratorFlags {
@@ -3021,6 +3030,8 @@ export namespace DecoratorFlags {
       case DecoratorKind.Unsafe: return DecoratorFlags.Unsafe;
       case DecoratorKind.Main: return DecoratorFlags.Main;
       case DecoratorKind.Data: return DecoratorFlags.Data;
+      case DecoratorKind.Remote: return DecoratorFlags.Remote;
+      case DecoratorKind.Service: return DecoratorFlags.Service;
       default: return DecoratorFlags.None;
     }
   }

@@ -11,6 +11,7 @@ export * from "./flow";
 export * from "./module";
 export * from "./parser";
 export * from "./program";
+export * from "./rpc";
 export * from "./resolver";
 export * from "./tokenizer";
 export * from "./types";

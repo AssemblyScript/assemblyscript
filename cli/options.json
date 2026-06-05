@@ -76,6 +76,12 @@
     "alias": "t",
     "isPath": true
   },
+  "rpcModule": {
+    "category": "Output",
+    "description": "Emits a .ts module: the @data codec + the typed client-callable Server surface.",
+    "type": "s",
+    "isPath": true
+  },
   "bindings": {
     "category": "Output",
     "description": [

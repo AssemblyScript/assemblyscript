@@ -1035,7 +1035,9 @@ export enum DecoratorKind {
   Lazy,
   Unsafe,
   Main,
-  Data
+  Data,
+  Remote,
+  Service
 }
 
 export namespace DecoratorKind {
@@ -1080,6 +1082,14 @@ export namespace DecoratorKind {
         }
         case CharCode.o: {
           if (nameStr == "operator") return DecoratorKind.Operator;
+          break;
+        }
+        case CharCode.r: {
+          if (nameStr == "remote") return DecoratorKind.Remote;
+          break;
+        }
+        case CharCode.s: {
+          if (nameStr == "service") return DecoratorKind.Service;
           break;
         }
         case CharCode.u: {
