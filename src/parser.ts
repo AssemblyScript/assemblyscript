@@ -143,6 +143,35 @@ function dataTypeId(name: string): u32 {
   return hash >>> 0;
 }
 
+/** JSON value expression for a @data value (scalar, bignum as string, or nested @data). */
+function jsonOfExpr(typeName: string, valueExpr: string): string {
+  switch (typeName) {
+    case "bool": case "boolean":
+    case "u8": case "u16": case "u32": case "u64":
+    case "i8": case "i16": case "i32": case "i64":
+    case "f32": case "f64":
+    case "string":
+      return "JSON.of<" + typeName + ">(" + valueExpr + ")";
+    case "u128": case "i128": case "u256": case "i256":
+      return "JSON.of<string>(" + valueExpr + ".toString())";
+    default:
+      return valueExpr + ".toJSON()";
+  }
+}
+
+/** Value read from a JSON node for a @data field. */
+function jsonReadExpr(typeName: string, jsonExpr: string): string {
+  switch (typeName) {
+    case "bool": case "boolean": return jsonExpr + ".asBool()";
+    case "u8": case "u16": case "u32": case "u64": return "<" + typeName + ">" + jsonExpr + ".asU64()";
+    case "i8": case "i16": case "i32": case "i64": return "<" + typeName + ">" + jsonExpr + ".asI64()";
+    case "f32": case "f64": return "<" + typeName + ">" + jsonExpr + ".asF64()";
+    case "string": return jsonExpr + ".asString()";
+    case "u128": case "i128": case "u256": case "i256": return typeName + ".fromString(" + jsonExpr + ".asString())";
+    default: return typeName + ".fromJSON(" + jsonExpr + ")";
+  }
+}
+
 /** Represents a dependee. */
 class Dependee {
   constructor(
@@ -1918,6 +1947,8 @@ export class Parser extends DiagnosticEmitter {
     let members = declaration.members;
     let writes = "";
     let reads = "";
+    let jsonWrites = "";
+    let jsonReads = "";
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
       if (member.kind != NodeKind.FieldDeclaration) continue;
@@ -1926,6 +1957,7 @@ export class Parser extends DiagnosticEmitter {
       let typeNode = field.type;
       if (typeNode == null || !(typeNode instanceof NamedTypeNode)) continue;
       let fieldName = field.name.text;
+      let key = "\"" + fieldName + "\"";
       let namedType = <NamedTypeNode>typeNode;
       let typeName = namedType.name.identifier.text;
       let typeArgs = namedType.typeArguments;
@@ -1937,26 +1969,27 @@ export class Parser extends DiagnosticEmitter {
         let j = "__j" + i.toString();
         writes += "{const " + a + "=this." + fieldName + ";__w.writeU32(<u32>" + a + ".length);for(let " + j + "=0," + c + "=" + a + ".length;" + j + "<" + c + ";++" + j + "){" + dataWriteStmt(elemName, a + "[" + j + "]") + "}}";
         reads += "{const " + c + "=__r.readU32();const " + a + "=new Array<" + elemName + ">();for(let " + j + ":u32=0;" + j + "<" + c + ";++" + j + "){" + a + ".push(" + dataReadExpr(elemName) + ");}__o." + fieldName + "=" + a + ";}";
+        jsonWrites += "{const " + a + "=this." + fieldName + ";const " + a + "j=JSON.arr();for(let " + j + "=0," + c + "=" + a + ".length;" + j + "<" + c + ";++" + j + "){" + a + "j.push(" + jsonOfExpr(elemName, a + "[" + j + "]") + ");}__j.set(" + key + "," + a + "j);}";
+        jsonReads += "{const " + a + "v=__v.get(" + key + ");const " + a + "=new Array<" + elemName + ">();for(let " + j + "=0," + c + "=" + a + "v.length();" + j + "<" + c + ";++" + j + "){" + a + ".push(" + jsonReadExpr(elemName, a + "v.at(" + j + ")") + ");}__o." + fieldName + "=" + a + ";}";
       } else {
-        // Scalar, string, bignum, or a nested @data type (handled by recursion).
+        // Scalar, string, bignum, or a nested @data type.
         writes += dataWriteStmt(typeName, "this." + fieldName);
         reads += "__o." + fieldName + "=" + dataReadExpr(typeName) + ";";
+        jsonWrites += "__j.set(" + key + "," + jsonOfExpr(typeName, "this." + fieldName) + ");";
+        jsonReads += "__o." + fieldName + "=" + jsonReadExpr(typeName, "__v.get(" + key + ")") + ";";
       }
     }
-    // The instance/static *Into/*From pair carries the recursion (tagless, so
-    // nested values inline). encode/decode are the buffer entry points and own
-    // the message-boundary typeId.
     let typeId = dataTypeId(className).toString();
-    this.injectClassMember(declaration,
-      "encodeInto(__w: DataWriter): void{" + writes + "}");
-    this.injectClassMember(declaration,
-      "encode(): Uint8Array{const __w=new DataWriter();__w.writeU32(" + typeId + ");this.encodeInto(__w);return __w.toBytes();}");
-    this.injectClassMember(declaration,
-      "static decodeFrom(__r: DataReader): " + className + "{const __o=new " + className + "();" + reads + "return __o;}");
-    this.injectClassMember(declaration,
-      "static decode(__buf: Uint8Array): " + className + "{const __r=new DataReader(__buf);__r.readU32();return " + className + ".decodeFrom(__r);}");
-    this.injectClassMember(declaration,
-      "static dataId(): u32{return " + typeId + ";}");
+    // Binary codec: the *Into/*From pair carries tagless recursion; encode/decode
+    // own the message-boundary typeId.
+    this.injectClassMember(declaration, "encodeInto(__w: DataWriter): void{" + writes + "}");
+    this.injectClassMember(declaration, "encode(): Uint8Array{const __w=new DataWriter();__w.writeU32(" + typeId + ");this.encodeInto(__w);return __w.toBytes();}");
+    this.injectClassMember(declaration, "static decodeFrom(__r: DataReader): " + className + "{const __o=new " + className + "();" + reads + "return __o;}");
+    this.injectClassMember(declaration, "static decode(__buf: Uint8Array): " + className + "{const __r=new DataReader(__buf);__r.readU32();return " + className + ".decodeFrom(__r);}");
+    this.injectClassMember(declaration, "static dataId(): u32{return " + typeId + ";}");
+    // JSON view, independent of the binary path.
+    this.injectClassMember(declaration, "toJSON(): JSON{const __j=JSON.obj();" + jsonWrites + "return __j;}");
+    this.injectClassMember(declaration, "static fromJSON(__v: JSON): " + className + "{const __o=new " + className + "();" + jsonReads + "return __o;}");
   }
 
   /** Parse a synthesized member from source text and append it to the class. */
