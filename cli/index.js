@@ -1019,7 +1019,7 @@ export async function main(argv, options) {
       stats.emitCount++;
       let source;
       try {
-        source = assemblyscript.buildServerModule(program);
+        source = assemblyscript.buildServerModule(program, opts.rpcRuntime || "toiljs/io");
       } catch (e) {
         crash("buildServerModule", e);
       }

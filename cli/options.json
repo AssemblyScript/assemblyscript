@@ -82,6 +82,12 @@
     "type": "s",
     "isPath": true
   },
+  "rpcRuntime": {
+    "category": "Output",
+    "description": "Import specifier for the DataWriter/DataReader codec in the emitted RPC module.",
+    "type": "s",
+    "default": "toiljs/io"
+  },
   "bindings": {
     "category": "Output",
     "description": [
