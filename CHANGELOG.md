@@ -5,8 +5,9 @@
 - No changes
 
 
-## [Unreleased]
+## [v0.1.5] - 2026-06-05
 
+- Add native `u128`, `i128` and `u256` (plus `i256`) integer types. The audited `@btc-vision/as-bignum` (Apache-2.0) sources are vendored verbatim into `std/assembly/bignum` and promoted to global types via a top-level library entry, with ambient declarations in `std/assembly/index.d.ts`. They are usable with no import, like the built-in integer types.
 - Add `std/ts-plugin.cjs`, a TypeScript Language Service plugin that suppresses the decorator-grammar false positives (TS1206, TS1249) stock TypeScript emits for toil-native decorators (`@main`, `@inline`, `@unmanaged`, ...) in editors. Wired into `std/assembly.json` so every project extending it gets a clean editor (VS Code, WebStorm) with no source-level `@ts-ignore`. Editor-only — does not affect `toilscript`/asc builds, and real type errors are still reported.
 - Tighten the `@main` declaration in `std/assembly/toilscript.ts` from `(...args: any[]): any` to a strict generic decorator signature (no `any`).
 
