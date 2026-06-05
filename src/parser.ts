@@ -1889,12 +1889,12 @@ export class Parser extends DiagnosticEmitter {
     return declaration;
   }
 
-  /** Synthesize and append `encode`/`decode` members to a `@data` class. */
+  /** Synthesize and append the binary codec members to a `@data` class. */
   private injectDataCodec(declaration: ClassDeclaration): void {
     let className = declaration.name.text;
     let members = declaration.members;
-    let encodeBody = "";
-    let decodeBody = "";
+    let writes = "";
+    let reads = "";
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
       if (member.kind != NodeKind.FieldDeclaration) continue;
@@ -1902,16 +1902,29 @@ export class Parser extends DiagnosticEmitter {
       if (field.is(CommonFlags.Static)) continue;
       let typeNode = field.type;
       if (typeNode == null || !(typeNode instanceof NamedTypeNode)) continue;
-      let suffix = dataMethodSuffix((<NamedTypeNode>typeNode).name.identifier.text);
-      if (suffix.length == 0) continue;
       let fieldName = field.name.text;
-      encodeBody += "w.write" + suffix + "(this." + fieldName + ");";
-      decodeBody += "o." + fieldName + "=r.read" + suffix + "();";
+      let typeName = (<NamedTypeNode>typeNode).name.identifier.text;
+      let suffix = dataMethodSuffix(typeName);
+      if (suffix.length != 0) {
+        writes += "__w.write" + suffix + "(this." + fieldName + ");";
+        reads += "__o." + fieldName + "=__r.read" + suffix + "();";
+      } else {
+        // Anything else is treated as a nested @data type, which composes by
+        // recursion. A non-@data type yields a clear "no encodeInto" error.
+        writes += "this." + fieldName + ".encodeInto(__w);";
+        reads += "__o." + fieldName + "=" + typeName + ".decodeFrom(__r);";
+      }
     }
+    // The instance/static *Into/*From pair carries the recursion; encode/decode
+    // are the buffer entry points.
     this.injectClassMember(declaration,
-      "encode(): Uint8Array{const w=new DataWriter();" + encodeBody + "return w.toBytes();}");
+      "encodeInto(__w: DataWriter): void{" + writes + "}");
     this.injectClassMember(declaration,
-      "static decode(__buf: Uint8Array): " + className + "{const r=new DataReader(__buf);const o=new " + className + "();" + decodeBody + "return o;}");
+      "encode(): Uint8Array{const __w=new DataWriter();this.encodeInto(__w);return __w.toBytes();}");
+    this.injectClassMember(declaration,
+      "static decodeFrom(__r: DataReader): " + className + "{const __o=new " + className + "();" + reads + "return __o;}");
+    this.injectClassMember(declaration,
+      "static decode(__buf: Uint8Array): " + className + "{return " + className + ".decodeFrom(new DataReader(__buf));}");
   }
 
   /** Parse a synthesized member from source text and append it to the class. */
