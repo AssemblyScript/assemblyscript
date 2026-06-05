@@ -61,6 +61,7 @@ import {
   ContinueStatement,
   DeclarationStatement,
   DecoratorNode,
+  DecoratorKind,
   DoStatement,
   EnumDeclaration,
   EnumValueDeclaration,
@@ -68,6 +69,7 @@ import {
   ExportMember,
   ExportStatement,
   ExpressionStatement,
+  FieldDeclaration,
   ForOfStatement,
   FunctionDeclaration,
   IfStatement,
@@ -93,6 +95,30 @@ import {
   mangleInternalPath
 } from "./ast";
 import { Options } from "./compiler";
+
+/** Maps a `@data` field type name to the DataWriter/DataReader method suffix, or "" if unsupported. */
+function dataMethodSuffix(typeName: string): string {
+  switch (typeName) {
+    case "u8": return "U8";
+    case "u16": return "U16";
+    case "u32": return "U32";
+    case "u64": return "U64";
+    case "i8": return "I8";
+    case "i16": return "I16";
+    case "i32": return "I32";
+    case "i64": return "I64";
+    case "f32": return "F32";
+    case "f64": return "F64";
+    case "bool":
+    case "boolean": return "Bool";
+    case "string": return "String";
+    case "u128": return "U128";
+    case "i128": return "I128";
+    case "u256": return "U256";
+    case "i256": return "I256";
+    default: return "";
+  }
+}
 
 /** Represents a dependee. */
 class Dependee {
@@ -1852,7 +1878,53 @@ export class Parser extends DiagnosticEmitter {
     }
     declaration.range.end = tn.pos;
     declaration.overriddenModuleName = this.currentModuleName;
+    if (!isInterface && decorators != null) {
+      for (let i = 0, k = decorators.length; i < k; ++i) {
+        if (decorators[i].decoratorKind == DecoratorKind.Data) {
+          this.injectDataCodec(declaration);
+          break;
+        }
+      }
+    }
     return declaration;
+  }
+
+  /** Synthesize and append `encode`/`decode` members to a `@data` class. */
+  private injectDataCodec(declaration: ClassDeclaration): void {
+    let className = declaration.name.text;
+    let members = declaration.members;
+    let encodeBody = "";
+    let decodeBody = "";
+    for (let i = 0, k = members.length; i < k; ++i) {
+      let member = members[i];
+      if (member.kind != NodeKind.FieldDeclaration) continue;
+      let field = <FieldDeclaration>member;
+      if (field.is(CommonFlags.Static)) continue;
+      let typeNode = field.type;
+      if (typeNode == null || !(typeNode instanceof NamedTypeNode)) continue;
+      let suffix = dataMethodSuffix((<NamedTypeNode>typeNode).name.identifier.text);
+      if (suffix.length == 0) continue;
+      let fieldName = field.name.text;
+      encodeBody += "w.write" + suffix + "(this." + fieldName + ");";
+      decodeBody += "o." + fieldName + "=r.read" + suffix + "();";
+    }
+    this.injectClassMember(declaration,
+      "encode(): Uint8Array{const w=new DataWriter();" + encodeBody + "return w.toBytes();}");
+    this.injectClassMember(declaration,
+      "static decode(__buf: Uint8Array): " + className + "{const r=new DataReader(__buf);const o=new " + className + "();" + decodeBody + "return o;}");
+  }
+
+  /** Parse a synthesized member from source text and append it to the class. */
+  private injectClassMember(declaration: ClassDeclaration, source: string): void {
+    // Reuse the class file's path so synthesized nodes resolve to a registered
+    // source (the compiler looks the enclosing file up by internalPath).
+    let userSource = declaration.range.source;
+    let synthetic = new Source(userSource.sourceKind, userSource.normalizedPath, source);
+    let tn = new Tokenizer(synthetic, this.diagnostics);
+    let member = this.parseClassMember(tn, declaration);
+    if (member != null && member instanceof DeclarationStatement) {
+      declaration.members.push(<DeclarationStatement>member);
+    }
   }
 
   parseClassExpression(tn: Tokenizer): ClassExpression | null {
