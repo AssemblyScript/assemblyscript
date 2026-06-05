@@ -10,12 +10,12 @@
 
 /**
  * Marks a single top-level function as the module entry point. The compiler
- * exports it as the WebAssembly export `main` — no `export` keyword needed.
+ * exports it as the WebAssembly export `main`, no `export` keyword needed.
  * Exactly one `@main` is allowed per module.
  */
 declare function main(): void;
 
-// Big integers — native globals implemented in std/assembly/bignum. The
+// Big integers, native globals implemented in std/assembly/bignum. The
 // arithmetic/bitwise/comparison operators
 // (+ - * / % & | ^ << >> == != < > <= >=) are operator overloads resolved by
 // the compiler; the equivalent static methods are listed for tooling.

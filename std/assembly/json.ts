@@ -2,9 +2,9 @@
  * JSON for the ToilScript standard library.
  *
  * `JSON` is a zero-import global (this is a top-level library entry). It is both
- * a dynamic value tree — `JSON.obj().set(...)`, `JSON.arr().push(...)`, returned
- * from a `toJSON(): JSON` method, produced by `JSON.parse` — and the home of the
- * typed serializer `JSON.stringify<T>`.
+ * a dynamic value tree (`JSON.obj().set(...)`, `JSON.arr().push(...)`, returned
+ * from a `toJSON(): JSON` method, or produced by `JSON.parse`), and the home of
+ * the typed serializer `JSON.stringify<T>`.
  *
  * Booleans, integers (signed i64 and unsigned u64), floats (NaN/±Infinity emit
  * `null`), strings, null, arrays and objects are supported. Malformed `parse`
@@ -13,18 +13,18 @@
 
 export class JSON {
     // ---- value kinds ----
-    static readonly NULL: u8 = 0;
-    static readonly BOOL: u8 = 1;
-    static readonly NUM: u8 = 2;
-    static readonly STR: u8 = 3;
-    static readonly ARR: u8 = 4;
-    static readonly OBJ: u8 = 5;
-    static readonly ERR: u8 = 6;
+    private static readonly NULL: u8 = 0;
+    private static readonly BOOL: u8 = 1;
+    private static readonly NUM: u8 = 2;
+    private static readonly STR: u8 = 3;
+    private static readonly ARR: u8 = 4;
+    private static readonly OBJ: u8 = 5;
+    private static readonly ERR: u8 = 6;
 
     // number sub-kinds
-    static readonly N_I64: u8 = 0;
-    static readonly N_U64: u8 = 1;
-    static readonly N_F64: u8 = 2;
+    private static readonly N_I64: u8 = 0;
+    private static readonly N_U64: u8 = 1;
+    private static readonly N_F64: u8 = 2;
 
     kind: u8 = JSON.NULL;
     private b: bool = false;
@@ -239,10 +239,7 @@ export class JSON {
             for (let i = 0, n = arr.length; i < n; i++) parts[i] = JSON.stringify<valueof<T>>(arr[i]);
             return "[" + parts.join(",") + "]";
         }
-        if (isReference<T>() && changetype<usize>(value) == 0) {
-            return "null";
-        }
-        ERROR("JSON.stringify: unsupported type — booleans, numbers, strings, null and arrays only");
+        ERROR("JSON.stringify: unsupported type, booleans, numbers, strings, null and arrays only");
         return unreachable();
     }
 
@@ -336,8 +333,9 @@ class Parser {
         return this.pos >= this.src.length;
     }
 
+    // Always called after an atEnd() guard, so pos is in range.
     private peek(): i32 {
-        return this.pos < this.src.length ? this.src.charCodeAt(this.pos) : -1;
+        return this.src.charCodeAt(this.pos);
     }
 
     private take(): i32 {
@@ -352,8 +350,9 @@ class Parser {
         }
     }
 
+    // Callers return as soon as err is set, so fail is only reached with err empty.
     private fail(message: string): JSON {
-        if (this.err.length == 0) this.err = message;
+        this.err = message;
         return JSON.nul();
     }
 
