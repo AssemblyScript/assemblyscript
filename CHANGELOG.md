@@ -2,6 +2,11 @@
 
 ## [v0.1.8] - 2026-06-05
 
+- No changes
+
+
+## [v0.1.8] - 2026-06-05
+
 - Add the `@data` binary codec: tag a class `@data` and the compiler generates `encode`/`decode` (compact, self-identifying, little-endian, with a stable FNV-1a typeId at the message boundary) plus a `toJSON`/`fromJSON` view, over scalars, `bool`, `string`, native `u128`/`i128`/`u256`/`i256`, nested `@data`, and `Array<T>`. Round-trip covered by `npm run test:data`.
 - Add `@remote` and `@service` decorators plus `--rpcModule <path.ts>` (and `--rpcRuntime`, default `toiljs/io`): the server build emits one TypeScript module describing the client-callable surface, an `export class` per `@data` type (positional constructor, `encodeInto`/`encode`/`decodeFrom`/`decode`/`dataId`, declared field modifiers preserved), plus `declare global { const Server }`, so a client gets a typed `Server.fn()` / `Server.service.method()` API (all async) with no imports.
 
