@@ -149,18 +149,16 @@ function collectSurface(program: Program): RpcSurface {
   return surface;
 }
 
-/** Explicit visibility of a field, or "" when none was declared. */
+/** Visibility of a field: the declared one, defaulting to `public`. */
 function fieldVis(field: FieldDeclaration): string {
   if (field.is(CommonFlags.Private)) return "private";
   if (field.is(CommonFlags.Protected)) return "protected";
-  if (field.is(CommonFlags.Public)) return "public";
-  return "";
+  return "public";
 }
 
-/** `public `/`private `/`protected `/`readonly ` prefix for a field declaration. */
+/** `public `/`private `/`protected ` (+ `readonly `) prefix for a field declaration. */
 function modPrefix(member: RpcMember): string {
-  let prefix = "";
-  if (member.vis.length) prefix += member.vis + " ";
+  let prefix = member.vis + " ";
   if (member.ro) prefix += "readonly ";
   return prefix;
 }
@@ -245,20 +243,40 @@ function defaultValue(ref: TypeRef, dataNames: Set<string>): string {
 }
 
 /**
- * Emits the class for one `@data` type, mirroring the ToilScript `@data` class:
- * fields with defaults plus `encodeInto`/`encode`/`decodeFrom`/`decode`/`dataId`.
+ * Emits the class for one `@data` type, mirroring the ToilScript `@data` class: a
+ * positional constructor (every field, defaulted, so `new T()` and `new T(a, b)`
+ * both work) plus `encodeInto`/`encode`/`decodeFrom`/`decode`/`dataId`. Every member
+ * carries an explicit access modifier.
  */
 function emitDataClass(d: RpcData, dataNames: Set<string>): string {
   let typeId = d.typeId.toString();
   let out = "export class " + d.name + " {\n";
 
+  // Field declarations (initialized by the constructor below).
   for (let f = 0, fk = d.fields.length; f < fk; ++f) {
     let field = d.fields[f];
-    out += "    " + modPrefix(field) + field.name + ": " + tsType(field.ref, dataNames) + " = " + defaultValue(field.ref, dataNames) + ";\n";
+    out += "    " + modPrefix(field) + field.name + ": " + tsType(field.ref, dataNames) + ";\n";
   }
   out += "\n";
 
-  out += "    encodeInto(w: DataWriter): void {\n";
+  // Positional constructor with per-field defaults.
+  if (d.fields.length == 0) {
+    out += "    public constructor() {}\n\n";
+  } else {
+    out += "    public constructor(\n";
+    for (let f = 0, fk = d.fields.length; f < fk; ++f) {
+      let field = d.fields[f];
+      out += "        " + field.name + ": " + tsType(field.ref, dataNames) + " = " + defaultValue(field.ref, dataNames) + ",\n";
+    }
+    out += "    ) {\n";
+    for (let f = 0, fk = d.fields.length; f < fk; ++f) {
+      let field = d.fields[f];
+      out += "        this." + field.name + " = " + field.name + ";\n";
+    }
+    out += "    }\n\n";
+  }
+
+  out += "    public encodeInto(w: DataWriter): void {\n";
   for (let f = 0, fk = d.fields.length; f < fk; ++f) {
     let field = d.fields[f];
     let access = "this." + field.name;
@@ -271,36 +289,38 @@ function emitDataClass(d: RpcData, dataNames: Set<string>): string {
   }
   out += "    }\n\n";
 
-  out += "    encode(): Uint8Array {\n";
+  out += "    public encode(): Uint8Array {\n";
   out += "        const w = new DataWriter();\n";
   out += "        w.writeU32(" + typeId + ");\n";
   out += "        this.encodeInto(w);\n";
   out += "        return w.toBytes();\n";
   out += "    }\n\n";
 
-  out += "    static decodeFrom(r: DataReader): " + d.name + " {\n";
-  out += "        const o = new " + d.name + "();\n";
+  // Read each field into a local (in order), then build via the constructor, so
+  // `readonly` fields are set without a cast.
+  out += "    public static decodeFrom(r: DataReader): " + d.name + " {\n";
   for (let f = 0, fk = d.fields.length; f < fk; ++f) {
     let field = d.fields[f];
-    // `readonly` fields can't be reassigned after construction; cast for the write.
-    let access = field.ro ? "(o as any)." + field.name : "o." + field.name;
     if (field.ref.array) {
       let elemTs = mapName(field.ref.type, dataNames);
-      out += "        { const n = r.readU32(); const a: " + elemTs + "[] = []; for (let i = 0; i < n; i++) a.push(" + readOne(field.ref.type) + "); " + access + " = a; }\n";
+      out += "        const " + field.name + ": " + elemTs + "[] = [];\n";
+      out += "        for (let i = 0, n = r.readU32(); i < n; i++) " + field.name + ".push(" + readOne(field.ref.type) + ");\n";
     } else {
-      out += "        " + access + " = " + readOne(field.ref.type) + ";\n";
+      out += "        const " + field.name + " = " + readOne(field.ref.type) + ";\n";
     }
   }
-  out += "        return o;\n";
+  let args = new Array<string>();
+  for (let f = 0, fk = d.fields.length; f < fk; ++f) args.push(d.fields[f].name);
+  out += "        return new " + d.name + "(" + args.join(", ") + ");\n";
   out += "    }\n\n";
 
-  out += "    static decode(buf: Uint8Array): " + d.name + " {\n";
+  out += "    public static decode(buf: Uint8Array): " + d.name + " {\n";
   out += "        const r = new DataReader(buf);\n";
   out += "        r.readU32();\n";
   out += "        return " + d.name + ".decodeFrom(r);\n";
   out += "    }\n\n";
 
-  out += "    static dataId(): number {\n";
+  out += "    public static dataId(): number {\n";
   out += "        return " + typeId + ";\n";
   out += "    }\n";
 
