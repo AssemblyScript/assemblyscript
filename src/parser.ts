@@ -1977,7 +1977,7 @@ export class Parser extends DiagnosticEmitter {
         let c = "__c" + i.toString();
         let j = "__j" + i.toString();
         writes += "{const " + a + "=this." + fieldName + ";__w.writeU32(<u32>" + a + ".length);for(let " + j + "=0," + c + "=" + a + ".length;" + j + "<" + c + ";++" + j + "){" + dataWriteStmt(elemName, a + "[" + j + "]") + "}}";
-        reads += "{const " + c + "=__r.readU32();const " + a + "=new Array<" + elemName + ">();for(let " + j + ":u32=0;" + j + "<" + c + ";++" + j + "){" + a + ".push(" + dataReadExpr(elemName) + ");}__o." + fieldName + "=" + a + ";}";
+        reads += "{const " + c + "=__r.readU32();const " + a + "=new Array<" + elemName + ">();for(let " + j + ":u32=0;" + j + "<" + c + "&&__r.ok;++" + j + "){" + a + ".push(" + dataReadExpr(elemName) + ");}__o." + fieldName + "=" + a + ";}";
         jsonWrites += "{const " + a + "=this." + fieldName + ";const " + a + "j=JSON.arr();for(let " + j + "=0," + c + "=" + a + ".length;" + j + "<" + c + ";++" + j + "){" + a + "j.push(" + jsonOfExpr(elemName, a + "[" + j + "]") + ");}__j.set(" + key + "," + a + "j);}";
         jsonReads += "{const " + a + "v=__v.get(" + key + ");const " + a + "=new Array<" + elemName + ">();for(let " + j + "=0," + c + "=" + a + "v.length();" + j + "<" + c + ";++" + j + "){" + a + ".push(" + jsonReadExpr(elemName, a + "v.at(" + j + ")") + ");}__o." + fieldName + "=" + a + ";}";
       } else {

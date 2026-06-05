@@ -180,7 +180,9 @@ function mapName(name: string, dataNames: Set<string>): string {
     case "bool": case "boolean": return "boolean";
     case "string": return "string";
     case "void": return "void";
-    default: return dataNames.has(name) ? name : "unknown";
+    default:
+      if (dataNames.has(name)) return name;
+      throw new Error("@data: unsupported type '" + name + "' (use a scalar, string, bool, native bignum, a nested @data class, or T[])");
   }
 }
 
@@ -238,7 +240,9 @@ function defaultValue(ref: TypeRef, dataNames: Set<string>): string {
     case "u256": case "i256": return "0n";
     case "bool": case "boolean": return "false";
     case "string": return "\"\"";
-    default: return dataNames.has(ref.type) ? "new " + ref.type + "()" : "undefined as unknown";
+    default:
+      if (dataNames.has(ref.type)) return "new " + ref.type + "()";
+      throw new Error("@data: unsupported field type '" + ref.type + "'");
   }
 }
 
@@ -304,7 +308,8 @@ function emitDataClass(d: RpcData, dataNames: Set<string>): string {
     if (field.ref.array) {
       let elemTs = mapName(field.ref.type, dataNames);
       out += "        const " + field.name + ": " + elemTs + "[] = [];\n";
-      out += "        for (let i = 0, n = r.readU32(); i < n; i++) " + field.name + ".push(" + readOne(field.ref.type) + ");\n";
+      // `&& r.ok` bounds the loop to the bytes actually present, so a hostile count can't OOM.
+      out += "        for (let i = 0, n = r.readU32(); i < n && r.ok; i++) " + field.name + ".push(" + readOne(field.ref.type) + ");\n";
     } else {
       out += "        const " + field.name + " = " + readOne(field.ref.type) + ";\n";
     }
