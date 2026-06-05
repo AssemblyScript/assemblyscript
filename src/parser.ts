@@ -152,8 +152,14 @@ function jsonOfExpr(typeName: string, valueExpr: string): string {
     case "f32": case "f64":
     case "string":
       return "JSON.of<" + typeName + ">(" + valueExpr + ")";
-    case "u128": case "i128": case "u256": case "i256":
-      return "JSON.of<string>(" + valueExpr + ".toString())";
+    case "u128":
+      return "JSON.arr().push(JSON.of<u64>(" + valueExpr + ".lo)).push(JSON.of<u64>(" + valueExpr + ".hi))";
+    case "i128":
+      return "JSON.arr().push(JSON.of<u64>(" + valueExpr + ".lo)).push(JSON.of<i64>(" + valueExpr + ".hi))";
+    case "u256":
+      return "JSON.arr().push(JSON.of<u64>(" + valueExpr + ".lo1)).push(JSON.of<u64>(" + valueExpr + ".lo2)).push(JSON.of<u64>(" + valueExpr + ".hi1)).push(JSON.of<u64>(" + valueExpr + ".hi2))";
+    case "i256":
+      return "JSON.arr().push(JSON.of<i64>(" + valueExpr + ".lo1)).push(JSON.of<i64>(" + valueExpr + ".lo2)).push(JSON.of<i64>(" + valueExpr + ".hi1)).push(JSON.of<i64>(" + valueExpr + ".hi2))";
     default:
       return valueExpr + ".toJSON()";
   }
@@ -167,7 +173,10 @@ function jsonReadExpr(typeName: string, jsonExpr: string): string {
     case "i8": case "i16": case "i32": case "i64": return "<" + typeName + ">" + jsonExpr + ".asI64()";
     case "f32": case "f64": return "<" + typeName + ">" + jsonExpr + ".asF64()";
     case "string": return jsonExpr + ".asString()";
-    case "u128": case "i128": case "u256": case "i256": return typeName + ".fromString(" + jsonExpr + ".asString())";
+    case "u128": return "new u128(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asU64())";
+    case "i128": return "new i128(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asI64())";
+    case "u256": return "new u256(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asU64()," + jsonExpr + ".at(2).asU64()," + jsonExpr + ".at(3).asU64())";
+    case "i256": return "new i256(" + jsonExpr + ".at(0).asI64()," + jsonExpr + ".at(1).asI64()," + jsonExpr + ".at(2).asI64()," + jsonExpr + ".at(3).asI64())";
     default: return typeName + ".fromJSON(" + jsonExpr + ")";
   }
 }
