@@ -2068,7 +2068,8 @@ export class Program extends DiagnosticEmitter {
       this.checkDecorators(declaration.decorators,
         DecoratorFlags.Global |
         DecoratorFlags.Final |
-        DecoratorFlags.Unmanaged
+        DecoratorFlags.Unmanaged |
+        DecoratorFlags.Data
       )
     );
     if (!parent.add(name, element)) return null;
@@ -2995,7 +2996,9 @@ export enum DecoratorFlags {
   /** Is considered unsafe code. */
   Unsafe = 1 << 11,
   /** Is the toil module entry point (`@main`). */
-  Main = 1 << 12
+  Main = 1 << 12,
+  /** Is a `@data` serializable class. */
+  Data = 1 << 13
 }
 
 export namespace DecoratorFlags {
@@ -3017,6 +3020,7 @@ export namespace DecoratorFlags {
       case DecoratorKind.Lazy: return DecoratorFlags.Lazy;
       case DecoratorKind.Unsafe: return DecoratorFlags.Unsafe;
       case DecoratorKind.Main: return DecoratorFlags.Main;
+      case DecoratorKind.Data: return DecoratorFlags.Data;
       default: return DecoratorFlags.None;
     }
   }

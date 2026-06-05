@@ -1034,7 +1034,8 @@ export enum DecoratorKind {
   Builtin,
   Lazy,
   Unsafe,
-  Main
+  Main,
+  Data
 }
 
 export namespace DecoratorKind {
@@ -1047,6 +1048,10 @@ export namespace DecoratorKind {
       switch (nameStr.charCodeAt(0)) {
         case CharCode.b: {
           if (nameStr == "builtin") return DecoratorKind.Builtin;
+          break;
+        }
+        case CharCode.d: {
+          if (nameStr == "data") return DecoratorKind.Data;
           break;
         }
         case CharCode.e: {
