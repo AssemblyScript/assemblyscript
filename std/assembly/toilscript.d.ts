@@ -15,6 +15,29 @@
  */
 declare function main(): void;
 
+// Typed as their decorator targets (class decorators take the constructor; the method
+// decorator takes target/key/descriptor) so editors accept the bare forms. The compiler
+// handles them natively and ignores these declarations.
+
+/**
+ * Marks a class as a serializable data type: the compiler generates a compact,
+ * self-identifying binary codec (`encode`/`decode`) plus a `toJSON`/`fromJSON`
+ * view, and (with `--rpcModule`) a matching typed client class.
+ */
+declare function data(target: Function): void;
+
+/**
+ * Marks a function (free, or a method of an `@service` class) as a client-callable
+ * RPC endpoint. The server build emits it onto the typed client `Server` surface.
+ */
+declare function remote<T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>): void;
+
+/**
+ * Marks a class as an RPC service: its `@remote` methods are namespaced under the
+ * client `Server` (e.g. `Server.<service>.<method>()`).
+ */
+declare function service(target: Function): void;
+
 // Big integers, native globals implemented in std/assembly/bignum. The
 // arithmetic/bitwise/comparison operators
 // (+ - * / % & | ^ << >> == != < > <= >=) are operator overloads resolved by
