@@ -134,6 +134,15 @@ function dataReadExpr(typeName: string): string {
   return typeName + ".decodeFrom(__r)";
 }
 
+/** Stable per-class message-boundary id (FNV-1a over the class name). */
+function dataTypeId(name: string): u32 {
+  let hash = 0x811c9dc5;
+  for (let i = 0, k = name.length; i < k; ++i) {
+    hash = Math.imul(hash ^ name.charCodeAt(i), 0x01000193) >>> 0;
+  }
+  return hash >>> 0;
+}
+
 /** Represents a dependee. */
 class Dependee {
   constructor(
@@ -1934,16 +1943,20 @@ export class Parser extends DiagnosticEmitter {
         reads += "__o." + fieldName + "=" + dataReadExpr(typeName) + ";";
       }
     }
-    // The instance/static *Into/*From pair carries the recursion; encode/decode
-    // are the buffer entry points.
+    // The instance/static *Into/*From pair carries the recursion (tagless, so
+    // nested values inline). encode/decode are the buffer entry points and own
+    // the message-boundary typeId.
+    let typeId = dataTypeId(className).toString();
     this.injectClassMember(declaration,
       "encodeInto(__w: DataWriter): void{" + writes + "}");
     this.injectClassMember(declaration,
-      "encode(): Uint8Array{const __w=new DataWriter();this.encodeInto(__w);return __w.toBytes();}");
+      "encode(): Uint8Array{const __w=new DataWriter();__w.writeU32(" + typeId + ");this.encodeInto(__w);return __w.toBytes();}");
     this.injectClassMember(declaration,
       "static decodeFrom(__r: DataReader): " + className + "{const __o=new " + className + "();" + reads + "return __o;}");
     this.injectClassMember(declaration,
-      "static decode(__buf: Uint8Array): " + className + "{return " + className + ".decodeFrom(new DataReader(__buf));}");
+      "static decode(__buf: Uint8Array): " + className + "{const __r=new DataReader(__buf);__r.readU32();return " + className + ".decodeFrom(__r);}");
+    this.injectClassMember(declaration,
+      "static dataId(): u32{return " + typeId + ";}");
   }
 
   /** Parse a synthesized member from source text and append it to the class. */
