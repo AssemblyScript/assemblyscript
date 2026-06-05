@@ -2891,8 +2891,8 @@ declare namespace external {
 /** Annotates a global for lazy compilation. */
 declare function lazy(...args: any[]): any;
 
-// Big integers — native globals implemented in std/assembly/bignum (vendored
-// from @btc-vision/as-bignum). The arithmetic/bitwise/comparison operators
+// Big integers — native globals implemented in std/assembly/bignum. The
+// arithmetic/bitwise/comparison operators
 // (+ - * / % & | ^ << >> == != < > <= >=) are operator overloads resolved by
 // the compiler; the equivalent static methods are listed for tooling.
 

@@ -1,5 +1,5 @@
-// Big integer types (u128 / i128 / u256), vendored verbatim from
-// @btc-vision/as-bignum v1.0.0 (Apache-2.0) under ./bignum. See ./bignum/LICENSE.
+// Big integer types (u128 / i128 / u256), implemented under ./bignum
+// (Apache-2.0; see ./bignum/LICENSE).
 //
 // This file is a top-level standard-library entry, so toilscript globalizes its
 // named re-exports the same way it does Array/Map/String. That makes u128, i128
