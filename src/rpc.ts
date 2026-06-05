@@ -252,14 +252,12 @@ function emitDataClass(d: RpcData, dataNames: Set<string>): string {
   let typeId = d.typeId.toString();
   let out = "export class " + d.name + " {\n";
 
-  // fields
   for (let f = 0, fk = d.fields.length; f < fk; ++f) {
     let field = d.fields[f];
     out += "    " + modPrefix(field) + field.name + ": " + tsType(field.ref, dataNames) + " = " + defaultValue(field.ref, dataNames) + ";\n";
   }
   out += "\n";
 
-  // encodeInto (tagless)
   out += "    encodeInto(w: DataWriter): void {\n";
   for (let f = 0, fk = d.fields.length; f < fk; ++f) {
     let field = d.fields[f];
@@ -273,7 +271,6 @@ function emitDataClass(d: RpcData, dataNames: Set<string>): string {
   }
   out += "    }\n\n";
 
-  // encode (message boundary, typeId-prefixed)
   out += "    encode(): Uint8Array {\n";
   out += "        const w = new DataWriter();\n";
   out += "        w.writeU32(" + typeId + ");\n";
@@ -281,7 +278,6 @@ function emitDataClass(d: RpcData, dataNames: Set<string>): string {
   out += "        return w.toBytes();\n";
   out += "    }\n\n";
 
-  // decodeFrom (tagless)
   out += "    static decodeFrom(r: DataReader): " + d.name + " {\n";
   out += "        const o = new " + d.name + "();\n";
   for (let f = 0, fk = d.fields.length; f < fk; ++f) {
@@ -298,7 +294,6 @@ function emitDataClass(d: RpcData, dataNames: Set<string>): string {
   out += "        return o;\n";
   out += "    }\n\n";
 
-  // decode (message boundary)
   out += "    static decode(buf: Uint8Array): " + d.name + " {\n";
   out += "        const r = new DataReader(buf);\n";
   out += "        r.readU32();\n";
