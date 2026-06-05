@@ -2,6 +2,11 @@
 
 ## [v0.1.10] - 2026-06-05
 
+- No changes
+
+
+## [v0.1.10] - 2026-06-05
+
 - Add ambient editor declarations for the `@data`/`@remote`/`@service` decorators (typed as their decorator targets: class decorators take the constructor, the method decorator takes target/key/descriptor) so IDEs resolve them instead of reporting `TS2304: Cannot find name 'data'`. The bundled TS language-service plugin already suppresses the remaining decorator-grammar notices. Compiler behavior unchanged.
 
 
