@@ -9,9 +9,10 @@
 //     let b = u256.fromU128(a);
 //
 // The vendored sources are unmodified; only this thin globalizer is toilscript's.
-// i256 stays import-only (it backs i128/u128 internally); pull it from
-// "bignum/integer/i256" if you need it directly.
+// i256 is the signed-256 backing type of the family (u128/i128 convert to it),
+// so it is globalized too for a self-consistent surface.
 
 export { u128 } from "./bignum/integer/u128";
 export { i128 } from "./bignum/integer/i128";
 export { u256 } from "./bignum/integer/u256";
+export { i256 } from "./bignum/integer/i256";
