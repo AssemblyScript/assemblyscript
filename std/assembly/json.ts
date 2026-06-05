@@ -217,7 +217,7 @@ export class JSON {
         }
     }
 
-    // ---- typed serializer: AS value -> JSON text, by compile-time type ----
+    // ---- typed serializer: a typed value to JSON text, by compile-time type ----
     static stringify<T>(value: T): string {
         if (isBoolean<T>()) {
             return value ? "true" : "false";
