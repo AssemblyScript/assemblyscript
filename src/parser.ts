@@ -53,6 +53,9 @@ import {
   FunctionExpression,
   IdentifierExpression,
   StringLiteralExpression,
+  ObjectLiteralExpression,
+  PropertyAccessExpression,
+  MethodDeclaration,
 
   Statement,
   BlockStatement,
@@ -204,6 +207,8 @@ export class Parser extends DiagnosticEmitter {
   currentSource: Source | null = null;
   /** Map of dependees being depended upon by a source, by path. */
   dependees: Map<string, Dependee> = new Map();
+  /** Normalized paths whose `@rest` runtime import has already been injected. */
+  restImportedSources: Set<string> = new Set();
   /** An array of parsed sources. */
   sources: Source[];
   /** Current overridden module name. */
@@ -557,6 +562,7 @@ export class Parser extends DiagnosticEmitter {
     this.seenlog.clear();
     this.donelog.clear();
     this.dependees.clear();
+    this.restImportedSources.clear();
   }
 
   // types
@@ -1941,9 +1947,11 @@ export class Parser extends DiagnosticEmitter {
     declaration.overriddenModuleName = this.currentModuleName;
     if (!isInterface && decorators != null) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
-        if (decorators[i].decoratorKind == DecoratorKind.Data) {
+        let dk = decorators[i].decoratorKind;
+        if (dk == DecoratorKind.Data) {
           this.injectDataCodec(declaration);
-          break;
+        } else if (dk == DecoratorKind.Rest) {
+          this.injectRestController(declaration, decorators[i]);
         }
       }
     }
@@ -2012,6 +2020,270 @@ export class Parser extends DiagnosticEmitter {
     if (member != null && member instanceof DeclarationStatement) {
       declaration.members.push(<DeclarationStatement>member);
     }
+  }
+
+  /** Parse synthesized top-level statements and append them to the class's source. */
+  private injectTopLevelStatements(declaration: ClassDeclaration, text: string): void {
+    // Run through the real parse path so an injected `import` registers its
+    // dependency against `currentSource` (the controller file) and the backlog.
+    let userSource = declaration.range.source;
+    let synthetic = new Source(userSource.sourceKind, userSource.normalizedPath, text);
+    let tn = new Tokenizer(synthetic, this.diagnostics);
+    while (!tn.skip(Token.EndOfFile)) {
+      let stmt = this.parseTopLevelStatement(tn, null);
+      if (stmt != null) {
+        userSource.statements.push(stmt);
+      } else {
+        this.skipStatement(tn);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Synthesize the HTTP dispatcher for a `@rest` controller: a `__tryRoute`
+   * method that, per `@route`/`@get`/... method, matches the HTTP method + the
+   * prefix-joined path (capturing `:params`), decodes the `@data` body for the
+   * route's stream, invokes the handler, and encodes the `@data` (or `Response`)
+   * return; plus a module-level self-registration into the runtime `Rest` router.
+   */
+  private injectRestController(declaration: ClassDeclaration, restDecorator: DecoratorNode): void {
+    let className = declaration.name.text;
+    let members = declaration.members;
+    let prefix = this.restPrefixOf(restDecorator);
+    let classStream = this.restStreamOf(restDecorator);
+
+    let blocks = "";
+    for (let i = 0, k = members.length; i < k; ++i) {
+      let member = members[i];
+      if (member.kind != NodeKind.MethodDeclaration) continue;
+      let method = <MethodDeclaration>member;
+      let routeDeco = this.routeDecoratorOf(method);
+      if (routeDeco == null) continue;
+      let block = this.buildRouteBlock(prefix, classStream, method, routeDeco);
+      if (block != null) blocks += block;
+    }
+    if (blocks.length == 0) return; // no routes -> nothing to wire
+
+    // Per-controller matcher. `Request`/`Response`/`matchRoute` arrive via the
+    // aliased runtime import below, so the controller file needn't import them.
+    this.injectClassMember(declaration,
+      "__tryRoute(__req: __toilReq): __toilResp | null{" + blocks + "return null;}");
+
+    let runtime = this.restRuntimePath(declaration);
+    let userSource = declaration.range.source;
+    let key = userSource.normalizedPath;
+    if (!this.restImportedSources.has(key)) {
+      this.restImportedSources.add(key);
+      this.injectTopLevelStatements(declaration,
+        "import { Rest as __toilRest, Request as __toilReq, Response as __toilResp, matchRoute as __toilMatch } from " +
+        JSON.stringify(runtime) + ";\n");
+    }
+    this.injectTopLevelStatements(declaration,
+      "__toilRest.register((__q: __toilReq): __toilResp | null => new " + className + "().__tryRoute(__q));\n");
+  }
+
+  /** The mount prefix from `@rest("api")` -> "/api"; "" for the bare/object form (root). */
+  private restPrefixOf(deco: DecoratorNode): string {
+    let args = deco.args;
+    if (args == null || args.length == 0) return "";
+    let a = args[0];
+    if (a instanceof StringLiteralExpression) {
+      let s = (<StringLiteralExpression>a).value.trim();
+      if (s.length == 0 || s == "/") return "";
+      if (!s.startsWith("/")) s = "/" + s;
+      return s.replace(/\/+$/, "");
+    }
+    return "";
+  }
+
+  /** The class-default stream from `@rest({ stream: DataStream.Binary })`, else "JSON". */
+  private restStreamOf(deco: DecoratorNode): string {
+    let args = deco.args;
+    if (args != null && args.length > 0 && args[0] instanceof ObjectLiteralExpression) {
+      let v = this.objectField(<ObjectLiteralExpression>args[0], "stream");
+      if (v != null) {
+        let s = this.enumMember(v);
+        if (s != null) return s;
+      }
+    }
+    return "JSON";
+  }
+
+  /** The `@route`/`@get`/... decorator on a method, or null if it isn't a route. */
+  private routeDecoratorOf(method: MethodDeclaration): DecoratorNode | null {
+    let decos = method.decorators;
+    if (decos == null) return null;
+    for (let i = 0, k = decos.length; i < k; ++i) {
+      switch (decos[i].decoratorKind) {
+        case DecoratorKind.Route:
+        case DecoratorKind.Get:
+        case DecoratorKind.Post:
+        case DecoratorKind.Put:
+        case DecoratorKind.Delete:
+        case DecoratorKind.Patch:
+        case DecoratorKind.Head:
+        case DecoratorKind.Options: return decos[i];
+      }
+    }
+    return null;
+  }
+
+  /** Generate one `if (method && path-match) { decode; call; encode }` route block. */
+  private buildRouteBlock(prefix: string, classStream: string, method: MethodDeclaration, deco: DecoratorNode): string | null {
+    let dk = deco.decoratorKind;
+    let httpMethod: string;
+    let routePath: string;
+    let stream = classStream;
+
+    if (dk == DecoratorKind.Route) {
+      let args = deco.args;
+      if (args == null || args.length == 0 || !(args[0] instanceof ObjectLiteralExpression)) return null;
+      let obj = <ObjectLiteralExpression>args[0];
+      let mv = this.objectField(obj, "method");
+      let pv = this.objectField(obj, "path");
+      if (mv == null || pv == null || !(pv instanceof StringLiteralExpression)) return null;
+      let mName = this.enumMember(mv);
+      if (mName == null) return null;
+      httpMethod = mName;
+      routePath = (<StringLiteralExpression>pv).value;
+      let sv = this.objectField(obj, "stream");
+      if (sv != null) {
+        let s = this.enumMember(sv);
+        if (s != null) stream = s;
+      }
+    } else {
+      httpMethod = this.verbName(dk);
+      let args = deco.args;
+      if (args == null || args.length == 0 || !(args[0] instanceof StringLiteralExpression)) return null;
+      routePath = (<StringLiteralExpression>args[0]).value;
+    }
+
+    let methodValue = this.methodEnumValue(httpMethod);
+    if (methodValue < 0) return null;
+    let fullPath = this.joinPath(prefix, routePath);
+
+    // Classify parameters: a `RouteContext` param receives `__ctx`, anything else
+    // is treated as the `@data` request body and receives `__body`.
+    let params = method.signature.parameters;
+    let bodyType: string | null = null;
+    let callArgs = "";
+    for (let i = 0, k = params.length; i < k; ++i) {
+      let tn = params[i].type;
+      let typeName = (tn instanceof NamedTypeNode) ? (<NamedTypeNode>tn).name.identifier.text : "";
+      if (i > 0) callArgs += ",";
+      if (typeName == "RouteContext") {
+        callArgs += "__ctx";
+      } else {
+        bodyType = typeName;
+        callArgs += "__body";
+      }
+    }
+
+    let rt = method.signature.returnType;
+    let retName = (rt instanceof NamedTypeNode) ? (<NamedTypeNode>rt).name.identifier.text : "";
+    let call = "this." + method.name.text + "(" + callArgs + ")";
+
+    let s = "if(__req.method==" + methodValue.toString() + "){";
+    s += "const __ctx=__toilMatch(" + JSON.stringify(fullPath) + ",__req);";
+    s += "if(__ctx!=null){";
+    if (bodyType != null) {
+      if (stream == "Binary") {
+        s += "const __body=" + bodyType + ".decode(__req.body);";
+      } else {
+        s += "const __body=" + bodyType + ".fromJSON(JSON.parse(__ctx.text()));";
+      }
+    }
+    if (retName == "Response" || retName == "__toilResp") {
+      s += "return " + call + ";";
+    } else if (retName == "void") {
+      s += call + ";return __toilResp.empty(204);";
+    } else if (stream == "Binary") {
+      s += "const __res=" + call + ";return __toilResp.bytes(__res.encode());";
+    } else {
+      s += "const __res=" + call + ";return __toilResp.json(__res.toJSON().toString());";
+    }
+    s += "}}";
+    return s;
+  }
+
+  /** Find an object-literal field value by name, or null. */
+  private objectField(obj: ObjectLiteralExpression, name: string): Expression | null {
+    let names = obj.names;
+    for (let i = 0, k = names.length; i < k; ++i) {
+      if (names[i].text == name) return obj.values[i];
+    }
+    return null;
+  }
+
+  /** The member of an enum access expression (`Methods.GET` -> "GET"), or null. */
+  private enumMember(expr: Expression): string | null {
+    if (expr instanceof PropertyAccessExpression) {
+      return (<PropertyAccessExpression>expr).property.text;
+    }
+    return null;
+  }
+
+  /** The HTTP method name carried by a verb decorator kind. */
+  private verbName(dk: DecoratorKind): string {
+    switch (dk) {
+      case DecoratorKind.Post: return "POST";
+      case DecoratorKind.Put: return "PUT";
+      case DecoratorKind.Delete: return "DELETE";
+      case DecoratorKind.Patch: return "PATCH";
+      case DecoratorKind.Head: return "HEAD";
+      case DecoratorKind.Options: return "OPTIONS";
+      default: return "GET";
+    }
+  }
+
+  /** The runtime `Method` enum value for an HTTP method name, or -1 if unknown. */
+  private methodEnumValue(name: string): i32 {
+    switch (name) {
+      case "GET": return 0;
+      case "POST": return 1;
+      case "PUT": return 2;
+      case "DELETE": return 3;
+      case "PATCH": return 4;
+      case "HEAD": return 5;
+      case "OPTIONS": return 6;
+      default: return -1;
+    }
+  }
+
+  /** Join a mount prefix and a route path into the matcher pattern. */
+  private joinPath(prefix: string, routePath: string): string {
+    let r = routePath.trim();
+    if (r.length == 0) r = "/";
+    if (!r.startsWith("/")) r = "/" + r;
+    if (r == "/") return prefix.length > 0 ? prefix : "/";
+    if (r.length > 1) r = r.replace(/\/+$/, "");
+    let full = prefix + r;
+    return full.length == 0 ? "/" : full;
+  }
+
+  /**
+   * The module specifier to import the REST runtime from: reuse whatever path
+   * this controller already imports a runtime symbol from, else the default.
+   */
+  private restRuntimePath(declaration: ClassDeclaration): string {
+    let stmts = declaration.range.source.statements;
+    for (let i = 0, k = stmts.length; i < k; ++i) {
+      let st = stmts[i];
+      if (st.kind != NodeKind.Import) continue;
+      let imp = <ImportStatement>st;
+      let decls = imp.declarations;
+      if (decls == null) continue;
+      for (let j = 0, n = decls.length; j < n; ++j) {
+        let name = decls[j].foreignName.text;
+        if (name == "Response" || name == "Request" || name == "RouteContext" ||
+            name == "ToilHandler" || name == "Method" || name == "Header" ||
+            name == "Server" || name == "Rest") {
+          return imp.path.value;
+        }
+      }
+    }
+    return "toiljs/server/runtime";
   }
 
   parseClassExpression(tn: Tokenizer): ClassExpression | null {

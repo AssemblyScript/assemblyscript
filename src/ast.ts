@@ -1037,7 +1037,16 @@ export enum DecoratorKind {
   Main,
   Data,
   Remote,
-  Service
+  Service,
+  Rest,
+  Route,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Patch,
+  Head,
+  Options
 }
 
 export namespace DecoratorKind {
@@ -1054,6 +1063,7 @@ export namespace DecoratorKind {
         }
         case CharCode.d: {
           if (nameStr == "data") return DecoratorKind.Data;
+          if (nameStr == "del") return DecoratorKind.Delete; // `@del` (not `@delete`, a reserved word)
           break;
         }
         case CharCode.e: {
@@ -1066,6 +1076,11 @@ export namespace DecoratorKind {
         }
         case CharCode.g: {
           if (nameStr == "global") return DecoratorKind.Global;
+          if (nameStr == "get") return DecoratorKind.Get;
+          break;
+        }
+        case CharCode.h: {
+          if (nameStr == "head") return DecoratorKind.Head;
           break;
         }
         case CharCode.i: {
@@ -1082,10 +1097,19 @@ export namespace DecoratorKind {
         }
         case CharCode.o: {
           if (nameStr == "operator") return DecoratorKind.Operator;
+          if (nameStr == "options") return DecoratorKind.Options;
+          break;
+        }
+        case CharCode.p: {
+          if (nameStr == "post") return DecoratorKind.Post;
+          if (nameStr == "put") return DecoratorKind.Put;
+          if (nameStr == "patch") return DecoratorKind.Patch;
           break;
         }
         case CharCode.r: {
           if (nameStr == "remote") return DecoratorKind.Remote;
+          if (nameStr == "rest") return DecoratorKind.Rest;
+          if (nameStr == "route") return DecoratorKind.Route;
           break;
         }
         case CharCode.s: {

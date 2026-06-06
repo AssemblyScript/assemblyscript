@@ -2070,7 +2070,8 @@ export class Program extends DiagnosticEmitter {
         DecoratorFlags.Final |
         DecoratorFlags.Unmanaged |
         DecoratorFlags.Data |
-        DecoratorFlags.Service
+        DecoratorFlags.Service |
+        DecoratorFlags.Rest
       )
     );
     if (!parent.add(name, element)) return null;
@@ -2193,7 +2194,8 @@ export class Program extends DiagnosticEmitter {
       acceptedFlags |= DecoratorFlags.OperatorBinary
                     |  DecoratorFlags.OperatorPrefix
                     |  DecoratorFlags.OperatorPostfix
-                    |  DecoratorFlags.Remote; // `@remote` exposes a `@service` method as an RPC endpoint
+                    |  DecoratorFlags.Remote   // `@remote` exposes a `@service` method as an RPC endpoint
+                    |  DecoratorFlags.Route;    // `@route`/`@get`/... exposes a `@rest` method as an HTTP route
     }
     if (parent.is(CommonFlags.Ambient)) {
       acceptedFlags |= DecoratorFlags.External;
@@ -3007,7 +3009,11 @@ export enum DecoratorFlags {
   /** Is a `@remote` client-callable function (RPC endpoint). */
   Remote = 1 << 14,
   /** Is a `@service` class that namespaces `@remote` methods. */
-  Service = 1 << 15
+  Service = 1 << 15,
+  /** Is a `@rest` HTTP controller class. */
+  Rest = 1 << 16,
+  /** Is a `@route`/`@get`/`@post`/... HTTP route method. */
+  Route = 1 << 17
 }
 
 export namespace DecoratorFlags {
@@ -3032,6 +3038,15 @@ export namespace DecoratorFlags {
       case DecoratorKind.Data: return DecoratorFlags.Data;
       case DecoratorKind.Remote: return DecoratorFlags.Remote;
       case DecoratorKind.Service: return DecoratorFlags.Service;
+      case DecoratorKind.Rest: return DecoratorFlags.Rest;
+      case DecoratorKind.Route:
+      case DecoratorKind.Get:
+      case DecoratorKind.Post:
+      case DecoratorKind.Put:
+      case DecoratorKind.Delete:
+      case DecoratorKind.Patch:
+      case DecoratorKind.Head:
+      case DecoratorKind.Options: return DecoratorFlags.Route;
       default: return DecoratorFlags.None;
     }
   }

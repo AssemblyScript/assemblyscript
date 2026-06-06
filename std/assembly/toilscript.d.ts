@@ -38,6 +38,35 @@ declare function remote<T>(target: Object, propertyKey: string | symbol, descrip
  */
 declare function service(target: Function): void;
 
+// --- HTTP layer (@rest / @route), handled natively by the compiler; typed here for editors ---
+
+/** HTTP method for `@route({ method: Methods.GET, ... })`. */
+declare enum Methods { GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS }
+
+/** Body/response codec for `@route({ stream: DataStream.JSON, ... })`. */
+declare enum DataStream { JSON, Binary }
+
+interface RestOptions { stream?: DataStream }
+interface RouteOptions { method: Methods; path: string; stream?: DataStream }
+/** A legacy method decorator (the return of a `@route`/`@get`/... factory). */
+type ToilRouteDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => void;
+
+/** Marks a class as an HTTP controller mounted at `prefix` (default `/`). */
+declare function rest(target: Function): void;
+declare function rest(prefix?: string): (target: Function) => void;
+declare function rest(options: RestOptions): (target: Function) => void;
+
+/** Declares an HTTP route on a `@rest` method (`@route({ method, path, stream })`). */
+declare function route(options: RouteOptions): ToilRouteDecorator;
+/** HTTP verb shortcuts for `@route` (`@del` for DELETE, since `delete` is a reserved word). */
+declare function get(path: string): ToilRouteDecorator;
+declare function post(path: string): ToilRouteDecorator;
+declare function put(path: string): ToilRouteDecorator;
+declare function del(path: string): ToilRouteDecorator;
+declare function patch(path: string): ToilRouteDecorator;
+declare function head(path: string): ToilRouteDecorator;
+declare function options(path: string): ToilRouteDecorator;
+
 // Big integers, native globals implemented in std/assembly/bignum. The
 // arithmetic/bitwise/comparison operators
 // (+ - * / % & | ^ << >> == != < > <= >=) are operator overloads resolved by
