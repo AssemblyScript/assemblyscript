@@ -7,6 +7,11 @@
 
 ## [v0.1.13] - 2026-06-06
 
+- No changes
+
+
+## [v0.1.13] - 2026-06-06
+
 - Editor: the language-service plugin now stops a class, method, or function that is used only via a toil-native decorator (`@data`, `@rest`, `@service`, `@remote`, `@route` and the verb shortcuts, `@main`, ...) from being reported as unused ("declared but never used", `TS6133` / `TS6196`), in both the semantic and the suggestion (greying) streams. The check is scoped to the known toil decorators, so an undecorated unused declaration is still flagged. Compiler behavior is unchanged.
 
 
