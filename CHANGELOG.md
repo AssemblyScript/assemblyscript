@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.1.12] - 2026-06-06
+
+- Editor: the language-service plugin now also hides the false `TS2339` ("Property '<m>' does not exist on type '<T>'") for the members the compiler injects into a `@data` class - `encode` / `encodeInto` / `decode` / `decodeFrom` / `toJSON` / `fromJSON` / `dataId`, both instance and static. The suppression is scoped by type to `@data` classes, so a typo, or the same member name on any other type, still surfaces. This lets server code build and return a `Response` carrying a serialized `@data` body (e.g. `Response.json(value.toJSON().toString()).setHeader(...)`) without spurious editor errors. Compiler behavior is unchanged.
+
+
 ## [v0.1.11] - 2026-06-06
 
 - Add the `@rest` / `@route` HTTP layer. Tag a class `@rest("prefix")` and its methods with `@route({ method, path, stream })` or a verb shortcut (`@get` / `@post` / `@put` / `@del` / `@patch` / `@head` / `@options`) to declare HTTP routes. Each controller self-registers, so a handler that calls `Rest.dispatch(req)` serves every route: HTTP method plus the prefix-joined path with `:param` capture, request-body decode and response encode per `DataStream.JSON` / `DataStream.Binary`. Adds globalized `Methods` and `DataStream` enums and their ambient editor declarations.
