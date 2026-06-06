@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.1.15] - 2026-06-06
+
+- The generated client module (`--rpcModule`) is now lint-clean. It leads with `/* eslint-disable */` (it is auto-generated, not meant to be edited or linted), and the generated REST client builds its error messages with a template literal instead of `string + number` concatenation, which `@typescript-eslint/restrict-plus-operands` flags. No behavior or type change; regenerate with a server build to pick it up.
+
+
 ## [v0.1.14] - 2026-06-06
 
 - Editor: the codec members the compiler injects into a `@data` class are now TYPED in the editor, not merely error-free. The language-service plugin declaration-merges typed signatures onto each `@data` class (appending ambient decls to the file the editor sees), so `value.toJSON()` is `JSON`, `value.encode()` is `Uint8Array`, and `Type.decode(bytes)` / `Type.fromJSON(j)` return the class, with autocomplete. A typo or a member on a non-`@data` type still errors. Also adds the ambient declaration for the globalized `JSON` value tree (`JSON.obj()`/`arr()`/`parse()`/`stringify()`, `.set()`/`.push()`/`.get()`/`.toString()`, the `is*`/`as*` accessors). Editor-only; compiler behavior is unchanged.
