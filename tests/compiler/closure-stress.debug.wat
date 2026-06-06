@@ -5605,25 +5605,24 @@
   (local $i i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 20
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=8
+  i32.const 0
+  i32.const 20
+  memory.fill
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $arr
-  local.set $5
+  local.set $6
   global.get $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/array/Array<i32>#get:length
   call $~lib/array/Array<i32>#constructor
   local.tee $result
@@ -5633,39 +5632,43 @@
   loop $for-loop|0
    local.get $i
    local.get $arr
-   local.set $5
+   local.set $6
    global.get $~lib/memory/__stack_pointer
-   local.get $5
+   local.get $6
    i32.store
-   local.get $5
+   local.get $6
    call $~lib/array/Array<i32>#get:length
    i32.lt_s
    if
     local.get $result
-    local.set $5
+    local.set $6
     global.get $~lib/memory/__stack_pointer
-    local.get $5
+    local.get $6
     i32.store
-    local.get $5
+    local.get $6
     local.get $i
-    local.get $arr
-    local.set $5
     global.get $~lib/memory/__stack_pointer
-    local.get $5
-    i32.store offset=12
-    local.get $5
+    local.get $fn
+    local.tee $4
+    i32.store offset=8
+    local.get $arr
+    local.set $6
+    global.get $~lib/memory/__stack_pointer
+    local.get $6
+    i32.store offset=16
+    local.get $6
     local.get $i
     call $~lib/array/Array<i32>#__get
     global.get $~lib/memory/__stack_pointer
     i32.const 1
     global.set $~argumentsLength
-    local.get $fn
-    local.tee $4
-    i32.store offset=8
     local.get $4
+    local.tee $5
+    i32.store offset=12
+    local.get $5
     i32.load offset=4
     global.set $~lib/__closure_env
-    local.get $4
+    local.get $5
     i32.load
     call_indirect (type $1)
     call $~lib/array/Array<i32>#__set
@@ -5677,12 +5680,12 @@
    end
   end
   local.get $result
-  local.set $5
+  local.set $6
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 20
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $6
   return
  )
  (func $closure-stress/testMapWithClosure (result i32)
@@ -5871,17 +5874,16 @@
   (local $i i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 20
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store offset=8
+  i32.const 0
+  i32.const 20
+  memory.fill
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 0
@@ -5893,47 +5895,51 @@
   loop $for-loop|0
    local.get $i
    local.get $arr
-   local.set $5
+   local.set $6
    global.get $~lib/memory/__stack_pointer
-   local.get $5
+   local.get $6
    i32.store offset=4
-   local.get $5
+   local.get $6
    call $~lib/array/Array<i32>#get:length
    i32.lt_s
    if
-    local.get $arr
-    local.set $5
     global.get $~lib/memory/__stack_pointer
-    local.get $5
+    local.get $pred
+    local.tee $4
+    i32.store offset=8
+    local.get $arr
+    local.set $6
+    global.get $~lib/memory/__stack_pointer
+    local.get $6
     i32.store offset=4
-    local.get $5
+    local.get $6
     local.get $i
     call $~lib/array/Array<i32>#__get
     global.get $~lib/memory/__stack_pointer
     i32.const 1
     global.set $~argumentsLength
-    local.get $pred
-    local.tee $4
-    i32.store offset=8
     local.get $4
+    local.tee $5
+    i32.store offset=12
+    local.get $5
     i32.load offset=4
     global.set $~lib/__closure_env
-    local.get $4
+    local.get $5
     i32.load
     call_indirect (type $1)
     if
      local.get $result
-     local.set $5
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $5
+     local.get $6
      i32.store offset=4
-     local.get $5
+     local.get $6
      local.get $arr
-     local.set $5
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $5
-     i32.store offset=12
-     local.get $5
+     local.get $6
+     i32.store offset=16
+     local.get $6
      local.get $i
      call $~lib/array/Array<i32>#__get
      call $~lib/array/Array<i32>#push
@@ -5947,12 +5953,12 @@
    end
   end
   local.get $result
-  local.set $5
+  local.set $6
   global.get $~lib/memory/__stack_pointer
-  i32.const 16
+  i32.const 20
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $6
   return
  )
  (func $closure-stress/testFilterWithClosure (result i32)
@@ -6058,14 +6064,18 @@
   (local $i i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store offset=8
   local.get $initial
   local.set $acc
   i32.const 0
@@ -6073,33 +6083,37 @@
   loop $for-loop|0
    local.get $i
    local.get $arr
-   local.set $6
+   local.set $7
    global.get $~lib/memory/__stack_pointer
-   local.get $6
+   local.get $7
    i32.store
-   local.get $6
+   local.get $7
    call $~lib/array/Array<i32>#get:length
    i32.lt_s
    if
+    global.get $~lib/memory/__stack_pointer
+    local.get $fn
+    local.tee $5
+    i32.store offset=4
     local.get $acc
     local.get $arr
-    local.set $6
+    local.set $7
     global.get $~lib/memory/__stack_pointer
-    local.get $6
+    local.get $7
     i32.store
-    local.get $6
+    local.get $7
     local.get $i
     call $~lib/array/Array<i32>#__get
     global.get $~lib/memory/__stack_pointer
     i32.const 2
     global.set $~argumentsLength
-    local.get $fn
-    local.tee $5
-    i32.store offset=4
     local.get $5
+    local.tee $6
+    i32.store offset=8
+    local.get $6
     i32.load offset=4
     global.set $~lib/__closure_env
-    local.get $5
+    local.get $6
     i32.load
     call_indirect (type $4)
     local.set $acc
@@ -6111,12 +6125,12 @@
    end
   end
   local.get $acc
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   return
  )
  (func $closure-stress/testReduceWithClosure (result i32)
@@ -7934,14 +7948,16 @@
   (local $39 i32)
   (local $40 i32)
   (local $41 i32)
+  (local $42 i32)
+  (local $43 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 172
+  i32.const 180
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.const 172
+  i32.const 180
   memory.fill
   memory.size
   i32.const 16
@@ -8800,13 +8816,17 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $~lib/memory/__stack_pointer
+  global.get $closure-stress/add5
+  local.tee $28
+  i32.store offset=108
   i32.const 0
   global.get $~lib/memory/__stack_pointer
   i32.const 1
   global.set $~argumentsLength
   global.get $closure-stress/add10
   local.tee $27
-  i32.store offset=112
+  i32.store offset=116
   local.get $27
   i32.load offset=4
   global.set $~lib/__closure_env
@@ -8816,13 +8836,13 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1
   global.set $~argumentsLength
-  global.get $closure-stress/add5
-  local.tee $28
-  i32.store offset=108
   local.get $28
+  local.tee $29
+  i32.store offset=112
+  local.get $29
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $28
+  local.get $29
   i32.load
   call_indirect (type $1)
   i32.const 15
@@ -8847,12 +8867,12 @@
   i32.const 1
   global.set $~argumentsLength
   global.get $closure-stress/double
-  local.tee $29
-  i32.store offset=116
-  local.get $29
+  local.tee $30
+  i32.store offset=120
+  local.get $30
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $29
+  local.get $30
   i32.load
   call_indirect (type $1)
   i32.const 10
@@ -8871,12 +8891,12 @@
   i32.const 1
   global.set $~argumentsLength
   global.get $closure-stress/triple
-  local.tee $30
-  i32.store offset=120
-  local.get $30
+  local.tee $31
+  i32.store offset=124
+  local.get $31
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $30
+  local.get $31
   i32.load
   call_indirect (type $1)
   i32.const 15
@@ -8890,29 +8910,33 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $~lib/memory/__stack_pointer
+  global.get $closure-stress/double
+  local.tee $33
+  i32.store offset=128
   i32.const 4
   global.get $~lib/memory/__stack_pointer
   i32.const 1
   global.set $~argumentsLength
   global.get $closure-stress/triple
-  local.tee $31
-  i32.store offset=128
-  local.get $31
+  local.tee $32
+  i32.store offset=136
+  local.get $32
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $31
+  local.get $32
   i32.load
   call_indirect (type $1)
   global.get $~lib/memory/__stack_pointer
   i32.const 1
   global.set $~argumentsLength
-  global.get $closure-stress/double
-  local.tee $32
-  i32.store offset=124
-  local.get $32
+  local.get $33
+  local.tee $34
+  i32.store offset=132
+  local.get $34
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $32
+  local.get $34
   i32.load
   call_indirect (type $1)
   i32.const 24
@@ -8927,17 +8951,17 @@
    unreachable
   end
   global.get $closure-stress/double
-  local.set $41
+  local.set $43
   global.get $~lib/memory/__stack_pointer
-  local.get $41
-  i32.store offset=132
-  local.get $41
+  local.get $43
+  i32.store offset=140
+  local.get $43
   global.get $closure-stress/add5
-  local.set $41
+  local.set $43
   global.get $~lib/memory/__stack_pointer
-  local.get $41
-  i32.store offset=136
-  local.get $41
+  local.get $43
+  i32.store offset=144
+  local.get $43
   call $closure-stress/compose
   global.set $closure-stress/addThenDouble
   i32.const 3
@@ -8945,12 +8969,12 @@
   i32.const 1
   global.set $~argumentsLength
   global.get $closure-stress/addThenDouble
-  local.tee $33
-  i32.store offset=140
-  local.get $33
+  local.tee $35
+  i32.store offset=148
+  local.get $35
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $33
+  local.get $35
   i32.load
   call_indirect (type $1)
   i32.const 16
@@ -8980,12 +9004,12 @@
   i32.const 0
   global.set $~argumentsLength
   call $closure-stress/emptyClosure
-  local.tee $34
-  i32.store offset=144
-  local.get $34
+  local.tee $36
+  i32.store offset=152
+  local.get $36
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $34
+  local.get $36
   i32.load
   call_indirect (type $0)
   i32.const 42
@@ -9028,12 +9052,12 @@
   global.set $~argumentsLength
   i32.const 0
   call $closure-stress/multipleClosureReturns
-  local.tee $35
-  i32.store offset=148
-  local.get $35
+  local.tee $37
+  i32.store offset=156
+  local.get $37
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $35
+  local.get $37
   i32.load
   call_indirect (type $0)
   i32.const 10
@@ -9052,12 +9076,12 @@
   global.set $~argumentsLength
   i32.const 1
   call $closure-stress/multipleClosureReturns
-  local.tee $36
-  i32.store offset=152
-  local.get $36
+  local.tee $38
+  i32.store offset=160
+  local.get $38
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $36
+  local.get $38
   i32.load
   call_indirect (type $0)
   i32.const 20
@@ -9076,12 +9100,12 @@
   global.set $~argumentsLength
   i32.const 2
   call $closure-stress/multipleClosureReturns
-  local.tee $37
-  i32.store offset=156
-  local.get $37
+  local.tee $39
+  i32.store offset=164
+  local.get $39
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $37
+  local.get $39
   i32.load
   call_indirect (type $0)
   i32.const 30
@@ -9102,12 +9126,12 @@
   i32.const 1
   global.set $~argumentsLength
   global.get $closure-stress/fact
-  local.tee $38
-  i32.store offset=160
-  local.get $38
+  local.tee $40
+  i32.store offset=168
+  local.get $40
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $38
+  local.get $40
   i32.load
   call_indirect (type $1)
   i32.const 120
@@ -9126,12 +9150,12 @@
   i32.const 1
   global.set $~argumentsLength
   global.get $closure-stress/fact
-  local.tee $39
-  i32.store offset=164
-  local.get $39
+  local.tee $41
+  i32.store offset=172
+  local.get $41
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $39
+  local.get $41
   i32.load
   call_indirect (type $1)
   i32.const 720
@@ -9218,11 +9242,11 @@
    unreachable
   end
   call $closure-stress/captureString
-  local.set $41
+  local.set $43
   global.get $~lib/memory/__stack_pointer
-  local.get $41
-  i32.store offset=132
-  local.get $41
+  local.get $43
+  i32.store offset=140
+  local.get $43
   i32.const 2816
   call $~lib/string/String.__eq
   i32.eqz
@@ -9235,11 +9259,11 @@
    unreachable
   end
   call $closure-stress/mutateStringRef
-  local.set $41
+  local.set $43
   global.get $~lib/memory/__stack_pointer
-  local.get $41
-  i32.store offset=132
-  local.get $41
+  local.get $43
+  i32.store offset=140
+  local.get $43
   i32.const 3104
   call $~lib/string/String.__eq
   i32.eqz
@@ -9283,12 +9307,12 @@
   i32.const 0
   global.set $~argumentsLength
   global.get $closure-stress/addResult
-  local.tee $40
-  i32.store offset=168
-  local.get $40
+  local.tee $42
+  i32.store offset=176
+  local.get $42
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $40
+  local.get $42
   i32.load
   call_indirect (type $0)
   i32.const 7
@@ -9341,7 +9365,7 @@
   i32.const 1
   drop
   global.get $~lib/memory/__stack_pointer
-  i32.const 172
+  i32.const 180
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -10121,16 +10145,25 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store offset=8
   global.get $~lib/__closure_env
   local.set $$closureEnv
+  global.get $~lib/memory/__stack_pointer
+  local.get $$closureEnv
+  i32.load offset=4
+  local.tee $3
+  i32.store
   local.get $x
   global.get $~lib/memory/__stack_pointer
   i32.const 1
@@ -10138,7 +10171,7 @@
   local.get $$closureEnv
   i32.load offset=8
   local.tee $2
-  i32.store offset=4
+  i32.store offset=8
   local.get $2
   i32.load offset=4
   global.set $~lib/__closure_env
@@ -10148,22 +10181,21 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1
   global.set $~argumentsLength
-  local.get $$closureEnv
-  i32.load offset=4
-  local.tee $3
-  i32.store
   local.get $3
+  local.tee $4
+  i32.store offset=4
+  local.get $4
   i32.load offset=4
   global.set $~lib/__closure_env
-  local.get $3
+  local.get $4
   i32.load
   call_indirect (type $1)
-  local.set $4
+  local.set $5
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $5
  )
  (func $~lib/arraybuffer/ArrayBuffer#constructor (param $this i32) (param $length i32) (result i32)
   (local $buffer i32)
