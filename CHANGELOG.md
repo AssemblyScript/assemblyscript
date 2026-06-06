@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.1.13] - 2026-06-06
+
+- Editor: the language-service plugin now stops a class, method, or function that is used only via a toil-native decorator (`@data`, `@rest`, `@service`, `@remote`, `@route` and the verb shortcuts, `@main`, ...) from being reported as unused ("declared but never used", `TS6133` / `TS6196`), in both the semantic and the suggestion (greying) streams. The check is scoped to the known toil decorators, so an undecorated unused declaration is still flagged. Compiler behavior is unchanged.
+
+
 ## [v0.1.12] - 2026-06-06
 
 - Editor: the language-service plugin now also hides the false `TS2339` ("Property '<m>' does not exist on type '<T>'") for the members the compiler injects into a `@data` class - `encode` / `encodeInto` / `decode` / `decodeFrom` / `toJSON` / `fromJSON` / `dataId`, both instance and static. The suppression is scoped by type to `@data` classes, so a typo, or the same member name on any other type, still surfaces. This lets server code build and return a `Response` carrying a serialized `@data` body (e.g. `Response.json(value.toJSON().toString()).setHeader(...)`) without spurious editor errors. Compiler behavior is unchanged.

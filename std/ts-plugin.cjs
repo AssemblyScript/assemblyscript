@@ -5,21 +5,26 @@
  * top-level functions and globals (`@main`, `@inline`, `@unmanaged`, ...), so
  * the editor's language service flags them as errors even though the toilscript
  * compiler handles them correctly. It also can't see the members the compiler
- * injects into a `@data` class (`encode`/`decode`/`toJSON`/...). This plugin runs
- * only inside the editor's language service (VS Code, WebStorm, etc. - never
- * `tsc`/compiler builds) and removes exactly those false positives:
+ * injects into a `@data` class, and treats a class/method that is only ever used
+ * via a toil decorator (`@data`, `@rest`, `@service`, `@remote`, ...) as unused.
+ * This plugin runs only inside the editor's language service (VS Code, WebStorm,
+ * etc. - never `tsc`/compiler builds) and removes exactly those false positives:
  *
  *   TS1206  "Decorators are not valid here."
  *   TS1249  "A decorator can only decorate a method implementation, not an overload."
  *   TS2339  "Property '<m>' does not exist on type '<T>'." - but ONLY when `<m>` is a
- *           `@data`-injected member and `<T>` is a `@data` class (so a typo on any
- *           other type still surfaces).
+ *           `@data`-injected member and `<T>` is a `@data` class (a typo on any other
+ *           type still surfaces).
+ *   TS6133 / TS6196  "'<x>' is declared but never used." - but ONLY when `<x>` is a
+ *           class/method/function carrying a toil-native decorator (so the compiler
+ *           uses it); an undecorated unused declaration is still greyed out.
  *
  * Every other diagnostic - unknown types, bad calls, missing names - passes
  * through untouched, so real type errors are still surfaced.
  */
 const DECORATOR_GRAMMAR_CODES = new Set([1206, 1249]);
 const PROPERTY_NOT_EXIST = 2339;
+const DECLARED_NEVER_USED = new Set([6133, 6196]);
 
 /** Members the compiler injects into every `@data` class (instance + static). */
 const DATA_MEMBERS = new Set([
@@ -30,6 +35,32 @@ const DATA_MEMBERS = new Set([
   'toJSON',
   'fromJSON',
   'dataId',
+]);
+
+/** Toil-native decorators whose presence means the compiler uses the declaration. */
+const TOIL_DECORATORS = new Set([
+  'data',
+  'remote',
+  'service',
+  'rest',
+  'route',
+  'get',
+  'post',
+  'put',
+  'del',
+  'patch',
+  'head',
+  'options',
+  'main',
+  'global',
+  'inline',
+  'external',
+  'unmanaged',
+  'final',
+  'operator',
+  'lazy',
+  'unsafe',
+  'builtin',
 ]);
 
 function init(modules) {
@@ -46,21 +77,24 @@ function init(modules) {
     return found;
   }
 
-  /** Whether a class declaration carries the `@data` decorator (bare or called). */
-  function hasDataDecorator(decl) {
+  /** A decorator's bare name, for `@name` and `@name(...)`. */
+  function decoratorName(d) {
+    const e = d.expression;
+    return e && (e.text || (e.expression && e.expression.text));
+  }
+
+  function declHasDecorator(decl, names) {
     const decorators = (ts.getDecorators ? ts.getDecorators(decl) : decl.decorators) || [];
-    for (const d of decorators) {
-      const e = d.expression;
-      const name = e && (e.text || (e.expression && e.expression.text));
-      if (name === 'data') return true;
-    }
-    return false;
+    return decorators.some((d) => {
+      const n = decoratorName(d);
+      return typeof names === 'string' ? n === names : !!n && names.has(n);
+    });
   }
 
   function declsAreDataClass(declarations) {
     return (
       !!declarations &&
-      declarations.some((d) => ts.isClassDeclaration(d) && hasDataDecorator(d))
+      declarations.some((d) => ts.isClassDeclaration(d) && declHasDecorator(d, 'data'))
     );
   }
 
@@ -74,6 +108,18 @@ function init(modules) {
     return !!sym && declsAreDataClass(sym.declarations);
   }
 
+  function canHoldDecorators(node) {
+    return (
+      ts.isClassDeclaration(node) ||
+      ts.isClassExpression(node) ||
+      ts.isMethodDeclaration(node) ||
+      ts.isFunctionDeclaration(node) ||
+      ts.isPropertyDeclaration(node) ||
+      ts.isGetAccessorDeclaration(node) ||
+      ts.isSetAccessorDeclaration(node)
+    );
+  }
+
   return {
     create(info) {
       const ls = info.languageService;
@@ -85,6 +131,7 @@ function init(modules) {
         proxy[key] = typeof value === 'function' ? value.bind(ls) : value;
       }
 
+      // A TS2339 for a `@data`-injected member accessed on a `@data` class.
       const isInjectedDataMember = (fileName, diag) => {
         if (diag.code !== PROPERTY_NOT_EXIST || diag.start == null) return false;
         const program = ls.getProgram();
@@ -101,15 +148,36 @@ function init(modules) {
         return resolvesToDataClass(access.expression, program.getTypeChecker());
       };
 
+      // A "declared but never used" for a class/method/function with a toil decorator.
+      const isToilDecoratedUnused = (fileName, diag) => {
+        if (!DECLARED_NEVER_USED.has(diag.code) || diag.start == null) return false;
+        const program = ls.getProgram();
+        const sf = program && program.getSourceFile(fileName);
+        if (!sf) return false;
+        const node = nodeAt(sf, diag.start);
+        if (!node) return false;
+        const decl = canHoldDecorators(node) ? node : node.parent;
+        return !!decl && canHoldDecorators(decl) && declHasDecorator(decl, TOIL_DECORATORS);
+      };
+
       const strip = (fileName, diagnostics) =>
         diagnostics.filter(
-          (d) => !DECORATOR_GRAMMAR_CODES.has(d.code) && !isInjectedDataMember(fileName, d),
+          (d) =>
+            !DECORATOR_GRAMMAR_CODES.has(d.code) &&
+            !isInjectedDataMember(fileName, d) &&
+            !isToilDecoratedUnused(fileName, d),
         );
 
       proxy.getSemanticDiagnostics = (fileName) =>
         strip(fileName, ls.getSemanticDiagnostics(fileName));
       proxy.getSyntacticDiagnostics = (fileName) =>
         strip(fileName, ls.getSyntacticDiagnostics(fileName));
+
+      // The "unused" greying is a suggestion diagnostic when `noUnusedLocals` is off.
+      if (typeof ls.getSuggestionDiagnostics === 'function') {
+        proxy.getSuggestionDiagnostics = (fileName) =>
+          ls.getSuggestionDiagnostics(fileName).filter((d) => !isToilDecoratedUnused(fileName, d));
+      }
 
       return proxy;
     },
