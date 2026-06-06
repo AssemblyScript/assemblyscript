@@ -1,26 +1,22 @@
 /**
  * ToilScript TypeScript Language Service plugin.
  *
- * Stock TypeScript has no grammar for toil-native decorators applied to
- * top-level functions and globals (`@main`, `@inline`, `@unmanaged`, ...), so
- * the editor's language service flags them as errors even though the toilscript
- * compiler handles them correctly. It also can't see the members the compiler
- * injects into a `@data` class, and treats a class/method that is only ever used
- * via a toil decorator (`@data`, `@rest`, `@service`, `@remote`, ...) as unused.
- * This plugin runs only inside the editor's language service (VS Code, WebStorm,
- * etc. - never `tsc`/compiler builds) and removes exactly those false positives:
+ * Stock TypeScript can't see what the toilscript compiler does to a source file:
+ * the native decorators on top-level functions (`@main`, `@inline`, ...), the
+ * members it injects into a `@data` class (`encode`/`decode`/`toJSON`/...), or the
+ * fact that a class used only via a toil decorator is actually used. This plugin
+ * runs only inside the editor's language service (VS Code, WebStorm, etc. - never
+ * `tsc`/compiler builds) and bridges that gap:
  *
- *   TS1206  "Decorators are not valid here."
- *   TS1249  "A decorator can only decorate a method implementation, not an overload."
- *   TS2339  "Property '<m>' does not exist on type '<T>'." - but ONLY when `<m>` is a
- *           `@data`-injected member and `<T>` is a `@data` class (a typo on any other
- *           type still surfaces).
- *   TS6133 / TS6196  "'<x>' is declared but never used." - but ONLY when `<x>` is a
- *           class/method/function carrying a toil-native decorator (so the compiler
- *           uses it); an undecorated unused declaration is still greyed out.
+ *  1. Declaration-merges TYPED members onto each `@data` class (so `value.toJSON()`
+ *     is `JSON`, `Type.decode(bytes)` is the class, etc.) by appending ambient decls
+ *     to the file the editor sees. Diagnostics in that appended region are hidden.
+ *  2. As a fallback (if 1 doesn't apply), still removes the false positives:
+ *       TS1206 / TS1249  decorator grammar
+ *       TS2339  a `@data`-injected member accessed on a `@data` class
+ *       TS6133 / TS6196  a toil-decorated class/method reported as unused
  *
- * Every other diagnostic - unknown types, bad calls, missing names - passes
- * through untouched, so real type errors are still surfaced.
+ * Every other diagnostic passes through untouched, so real errors still surface.
  */
 const DECORATOR_GRAMMAR_CODES = new Set([1206, 1249]);
 const PROPERTY_NOT_EXIST = 2339;
@@ -98,12 +94,10 @@ function init(modules) {
     );
   }
 
-  /** Whether `expr` is (an instance of, or the static side of) a `@data` class. */
   function resolvesToDataClass(expr, checker) {
     const type = checker.getTypeAtLocation(expr);
     const typeSym = type && type.getSymbol && type.getSymbol();
     if (typeSym && declsAreDataClass(typeSym.declarations)) return true;
-    // Static access like `Player.decode(...)`: resolve the identifier's own symbol.
     const sym = checker.getSymbolAtLocation(expr);
     return !!sym && declsAreDataClass(sym.declarations);
   }
@@ -120,9 +114,66 @@ function init(modules) {
     );
   }
 
+  /**
+   * Ambient declarations to append so the editor types each `@data` class's injected
+   * codec members. Returns "" when the file declares no `@data` class. Uses only
+   * editor-visible globals (`Uint8Array`, `JSON`, `u32`), so the appended block is
+   * itself error-free; any diagnostics there are filtered anyway.
+   */
+  function dataAugmentation(text) {
+    if (text.indexOf('@data') < 0) return '';
+    let sf;
+    try {
+      sf = ts.createSourceFile('__toil_aug__.ts', text, ts.ScriptTarget.Latest, true);
+    } catch {
+      return '';
+    }
+    let out = '';
+    sf.forEachChild((node) => {
+      if (ts.isClassDeclaration(node) && node.name && declHasDecorator(node, 'data')) {
+        const n = node.name.text;
+        out +=
+          `\n// toilscript: editor types for the compiler-injected @data ${n} codec\n` +
+          `interface ${n} { encode(): Uint8Array; toJSON(): JSON; }\n` +
+          `declare namespace ${n} { function decode(buf: Uint8Array): ${n}; function fromJSON(v: JSON): ${n}; function dataId(): u32; }\n`;
+      }
+    });
+    return out;
+  }
+
   return {
     create(info) {
       const ls = info.languageService;
+      const host = info.languageServiceHost;
+
+      // Original text length per augmented file, so diagnostics in the appended region drop.
+      const originalLength = new Map();
+
+      // Inject the typed @data members into the editor's view of each source file.
+      if (typeof host.getScriptSnapshot === 'function' && typeof host.getScriptVersion === 'function') {
+        const origSnapshot = host.getScriptSnapshot.bind(host);
+        const origVersion = host.getScriptVersion.bind(host);
+        host.getScriptSnapshot = (fileName) => {
+          const snap = origSnapshot(fileName);
+          if (!snap) return snap;
+          let aug = '';
+          try {
+            aug = dataAugmentation(snap.getText(0, snap.getLength()));
+          } catch {
+            aug = '';
+          }
+          if (!aug) {
+            originalLength.delete(fileName);
+            return snap;
+          }
+          const text = snap.getText(0, snap.getLength());
+          originalLength.set(fileName, text.length);
+          return ts.ScriptSnapshot.fromString(text + aug);
+        };
+        // A stable suffix so the service re-reads once and picks up the augmentation; it
+        // still changes whenever the underlying file changes.
+        host.getScriptVersion = (fileName) => origVersion(fileName) + ':toil-data';
+      }
 
       // Proxy the language service, forwarding everything to the real one.
       const proxy = Object.create(null);
@@ -131,7 +182,12 @@ function init(modules) {
         proxy[key] = typeof value === 'function' ? value.bind(ls) : value;
       }
 
-      // A TS2339 for a `@data`-injected member accessed on a `@data` class.
+      const inAugmentedRegion = (fileName, diag) => {
+        const len = originalLength.get(fileName);
+        return len != null && diag.start != null && diag.start >= len;
+      };
+
+      // Fallback: a TS2339 for a `@data`-injected member on a `@data` class.
       const isInjectedDataMember = (fileName, diag) => {
         if (diag.code !== PROPERTY_NOT_EXIST || diag.start == null) return false;
         const program = ls.getProgram();
@@ -164,6 +220,7 @@ function init(modules) {
         diagnostics.filter(
           (d) =>
             !DECORATOR_GRAMMAR_CODES.has(d.code) &&
+            !inAugmentedRegion(fileName, d) &&
             !isInjectedDataMember(fileName, d) &&
             !isToilDecoratedUnused(fileName, d),
         );
@@ -173,10 +230,11 @@ function init(modules) {
       proxy.getSyntacticDiagnostics = (fileName) =>
         strip(fileName, ls.getSyntacticDiagnostics(fileName));
 
-      // The "unused" greying is a suggestion diagnostic when `noUnusedLocals` is off.
       if (typeof ls.getSuggestionDiagnostics === 'function') {
         proxy.getSuggestionDiagnostics = (fileName) =>
-          ls.getSuggestionDiagnostics(fileName).filter((d) => !isToilDecoratedUnused(fileName, d));
+          ls
+            .getSuggestionDiagnostics(fileName)
+            .filter((d) => !inAugmentedRegion(fileName, d) && !isToilDecoratedUnused(fileName, d));
       }
 
       return proxy;

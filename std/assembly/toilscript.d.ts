@@ -323,3 +323,54 @@ declare class i256 {
   isNeg(): bool;
   isZero(): bool;
 }
+
+/**
+ * The dynamic JSON value tree. A `@data` class's `toJSON()` returns one of these, and
+ * `JSON.parse(...)` produces one. Globalized by std/assembly/json, so it needs no import.
+ */
+declare class JSON {
+  /** A JSON null. */
+  static nul(): JSON;
+  /** An empty JSON object, build it with `.set(key, value)`. */
+  static obj(): JSON;
+  /** An empty JSON array, build it with `.push(value)`. */
+  static arr(): JSON;
+  /** Wrap a scalar/string/bool/array as a JSON value. */
+  static of<T>(value: T): JSON;
+  /** Parse JSON text into a value tree (returns an error value on malformed input). */
+  static parse(text: string): JSON;
+  /** Serialize a scalar/string/bool/array value to a JSON string. */
+  static stringify<T>(value: T): string;
+
+  /** Append a value to a JSON array; returns `this` for chaining. */
+  push(value: JSON): JSON;
+  /** Set a key on a JSON object; returns `this` for chaining. */
+  set(key: string, value: JSON): JSON;
+
+  isNull(): bool;
+  isBool(): bool;
+  isNumber(): bool;
+  isString(): bool;
+  isArray(): bool;
+  isObject(): bool;
+
+  asBool(): bool;
+  asF64(): f64;
+  asI64(): i64;
+  asU64(): u64;
+  asString(): string;
+
+  /** Element count of an array (or 0). */
+  length(): i32;
+  /** Element at `index` of an array. */
+  at(index: i32): JSON;
+  /** Whether an object has `key`. */
+  has(key: string): bool;
+  /** Value for `key` on an object. */
+  get(key: string): JSON;
+  /** The keys of an object. */
+  objectKeys(): Array<string>;
+
+  /** Serialize this value tree to a JSON string. */
+  toString(): string;
+}

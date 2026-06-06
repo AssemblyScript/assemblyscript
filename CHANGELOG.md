@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.1.14] - 2026-06-06
+
+- Editor: the codec members the compiler injects into a `@data` class are now TYPED in the editor, not merely error-free. The language-service plugin declaration-merges typed signatures onto each `@data` class (appending ambient decls to the file the editor sees), so `value.toJSON()` is `JSON`, `value.encode()` is `Uint8Array`, and `Type.decode(bytes)` / `Type.fromJSON(j)` return the class, with autocomplete. A typo or a member on a non-`@data` type still errors. Also adds the ambient declaration for the globalized `JSON` value tree (`JSON.obj()`/`arr()`/`parse()`/`stringify()`, `.set()`/`.push()`/`.get()`/`.toString()`, the `is*`/`as*` accessors). Editor-only; compiler behavior is unchanged.
+
+
 ## [v0.1.13] - 2026-06-06
 
 - Editor: the language-service plugin now stops a class, method, or function that is used only via a toil-native decorator (`@data`, `@rest`, `@service`, `@remote`, `@route` and the verb shortcuts, `@main`, ...) from being reported as unused ("declared but never used", `TS6133` / `TS6196`), in both the semantic and the suggestion (greying) streams. The check is scoped to the known toil decorators, so an undecorated unused declaration is still flagged. Compiler behavior is unchanged.
