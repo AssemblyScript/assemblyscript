@@ -2,6 +2,11 @@
 
 ## [v0.1.11] - 2026-06-06
 
+- No changes
+
+
+## [v0.1.11] - 2026-06-06
+
 - Add the `@rest` / `@route` HTTP layer. Tag a class `@rest("prefix")` and its methods with `@route({ method, path, stream })` or a verb shortcut (`@get` / `@post` / `@put` / `@del` / `@patch` / `@head` / `@options`) to declare HTTP routes. Each controller self-registers, so a handler that calls `Rest.dispatch(req)` serves every route: HTTP method plus the prefix-joined path with `:param` capture, request-body decode and response encode per `DataStream.JSON` / `DataStream.Binary`. Adds globalized `Methods` and `DataStream` enums and their ambient editor declarations.
 - Extend `--rpcModule` to also emit a working, typed `Server.REST.<controller>.<route>(args)` `fetch` client (URL building, path params, JSON/binary body, typed response parse) into the generated client module, alongside the existing `@data` classes and the `@remote`/`@service` surface. Route `:param` names are emitted as safe object keys (quoted unless a plain identifier), so a hostile route path cannot inject code into the generated client.
 - Security: bound JSON parse nesting depth at 512. The recursive-descent parser had no depth limit, so a small hostile input (e.g. a body of `[[[[...`) could overflow the stack and trap the instance, reachable wherever untrusted JSON is parsed (now including `@rest` JSON-stream request bodies). Over-nested input now fails as an ordinary parse error; valid JSON is unaffected.
