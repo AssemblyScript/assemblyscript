@@ -320,9 +320,18 @@ export class JSON {
 }
 
 /** Recursive-descent parser producing a `JSON` value tree. Internal. */
+/**
+ * Maximum array/object nesting depth. Recursive descent costs stack per level, so an
+ * unbounded depth lets a small hostile input (e.g. `[[[[...`) overflow the stack and trap
+ * the instance. 512 is far beyond any real-world JSON yet far below the overflow point, so
+ * over-nested input fails as a normal parse error instead of crashing.
+ */
+const JSON_MAX_DEPTH: i32 = 512;
+
 class Parser {
     private src: string;
     private pos: i32 = 0;
+    private depth: i32 = 0;
     err: string = "";
 
     constructor(src: string) {
@@ -468,11 +477,13 @@ class Parser {
     }
 
     private parseArray(): JSON {
+        if (++this.depth > JSON_MAX_DEPTH) return this.fail("maximum nesting depth exceeded");
         this.pos++; // [
         const j = JSON.arr();
         this.skipWs();
         if (!this.atEnd() && this.peek() == 0x5d) {
             this.pos++;
+            this.depth--;
             return j;
         }
         while (true) {
@@ -484,15 +495,18 @@ class Parser {
             if (c == 0x5d) break; // ]
             if (c != 0x2c) return this.fail("expected ',' or ']'"); // ,
         }
+        this.depth--;
         return j;
     }
 
     private parseObject(): JSON {
+        if (++this.depth > JSON_MAX_DEPTH) return this.fail("maximum nesting depth exceeded");
         this.pos++; // {
         const j = JSON.obj();
         this.skipWs();
         if (!this.atEnd() && this.peek() == 0x7d) {
             this.pos++;
+            this.depth--;
             return j;
         }
         while (true) {
@@ -510,6 +524,7 @@ class Parser {
             if (c == 0x7d) break; // }
             if (c != 0x2c) return this.fail("expected ',' or '}'"); // ,
         }
+        this.depth--;
         return j;
     }
 }
