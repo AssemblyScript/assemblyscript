@@ -2,6 +2,11 @@
 
 ## [v0.1.15] - 2026-06-06
 
+- No changes
+
+
+## [v0.1.15] - 2026-06-06
+
 - The generated client module (`--rpcModule`) is now lint-clean. It leads with `/* eslint-disable */` (it is auto-generated, not meant to be edited or linted), and the generated REST client builds its error messages with a template literal instead of `string + number` concatenation, which `@typescript-eslint/restrict-plus-operands` flags. No behavior or type change; regenerate with a server build to pick it up.
 
 
