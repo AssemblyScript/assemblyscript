@@ -2807,10 +2807,93 @@ declare namespace console {
   export function timeEnd(label?: string): void;
 }
 
-/** Browser-like crypto utilities. */
+/** Opaque key handle for the Web Crypto API (per-request on the edge). */
+declare class CryptoKey {
+  readonly handle: u32;
+  readonly type: string;
+  readonly extractable: bool;
+  readonly algorithm: i32;
+  readonly usages: i32;
+  algorithmName(): string;
+  hasUsage(u: i32): bool;
+}
+declare class CryptoKeyPair {
+  readonly publicKey: CryptoKey;
+  readonly privateKey: CryptoKey;
+}
+/** Base class for the algorithm-parameter objects passed to SubtleCrypto. */
+declare abstract class AlgorithmParams {}
+declare class AesGcmParams extends AlgorithmParams {
+  constructor(iv: Uint8Array, additionalData?: Uint8Array, tagLength?: i32);
+}
+declare class AesCbcParams extends AlgorithmParams {
+  constructor(iv: Uint8Array);
+}
+declare class AesCtrParams extends AlgorithmParams {
+  constructor(counter: Uint8Array, length?: i32);
+}
+declare class HmacImportParams extends AlgorithmParams {
+  constructor(hash: i32);
+}
+declare class HmacParams extends AlgorithmParams {}
+declare class Pbkdf2Params extends AlgorithmParams {
+  constructor(hash: i32, salt: Uint8Array, iterations: u32);
+}
+declare class HkdfParams extends AlgorithmParams {
+  constructor(hash: i32, salt: Uint8Array, info?: Uint8Array);
+}
+declare class EcdsaParams extends AlgorithmParams {
+  constructor(hash: i32);
+}
+declare class EcKeyImportParams extends AlgorithmParams {
+  constructor(alg: i32, namedCurve: i32);
+}
+declare class Ed25519Params extends AlgorithmParams {}
+declare class X25519ImportParams extends AlgorithmParams {}
+declare class EcdhParams extends AlgorithmParams {
+  constructor(alg: i32, publicKeyHandle: i32);
+}
+/** Synchronous SubtleCrypto (no Promises). Returns values directly. */
+declare class SubtleCrypto {
+  digest(algorithm: string, data: Uint8Array): Uint8Array;
+  importKey(format: string, keyData: Uint8Array, algorithm: AlgorithmParams, extractable: bool, usages: i32): CryptoKey;
+  exportKey(format: string, key: CryptoKey): Uint8Array;
+  encrypt(algorithm: AlgorithmParams, key: CryptoKey, data: Uint8Array): Uint8Array;
+  decrypt(algorithm: AlgorithmParams, key: CryptoKey, data: Uint8Array): Uint8Array;
+  sign(algorithm: AlgorithmParams, key: CryptoKey, data: Uint8Array): Uint8Array;
+  verify(algorithm: AlgorithmParams, key: CryptoKey, signature: Uint8Array, data: Uint8Array): bool;
+  deriveBits(algorithm: AlgorithmParams, baseKey: CryptoKey, length: i32): Uint8Array;
+  deriveKey(algorithm: AlgorithmParams, baseKey: CryptoKey, lengthBits: i32, derivedKeyAlgorithm: AlgorithmParams, extractable: bool, usages: i32): CryptoKey;
+}
+
+// Algorithm / format / curve / usage ids (the Web Crypto ABI contract).
+declare const ALG_SHA_1: i32, ALG_SHA_256: i32, ALG_SHA_384: i32, ALG_SHA_512: i32;
+declare const ALG_AES_GCM: i32, ALG_AES_CBC: i32, ALG_AES_CTR: i32, ALG_AES_KW: i32;
+declare const ALG_HMAC: i32, ALG_ECDSA: i32, ALG_ED25519: i32, ALG_ECDH: i32, ALG_X25519: i32, ALG_HKDF: i32, ALG_PBKDF2: i32;
+declare const CURVE_P256: i32, CURVE_P384: i32;
+declare const USAGE_ENCRYPT: i32, USAGE_DECRYPT: i32, USAGE_SIGN: i32, USAGE_VERIFY: i32;
+declare const USAGE_DERIVE_KEY: i32, USAGE_DERIVE_BITS: i32, USAGE_WRAP_KEY: i32, USAGE_UNWRAP_KEY: i32;
+
+/** Browser-like Web Crypto (synchronous SubtleCrypto + ergonomic helpers). */
 declare namespace crypto {
+  /** The synchronous SubtleCrypto instance. */
+  export const subtle: SubtleCrypto;
   /** Fills `array` with cryptographically strong random values. */
   export function getRandomValues(array: Uint8Array): void;
+  /** An RFC 4122 version-4 UUID string. */
+  export function randomUUID(): string;
+  export function sha1(data: Uint8Array): Uint8Array;
+  export function sha256(data: Uint8Array): Uint8Array;
+  export function sha384(data: Uint8Array): Uint8Array;
+  export function sha512(data: Uint8Array): Uint8Array;
+  export function sha1Text(s: string): Uint8Array;
+  export function sha256Text(s: string): Uint8Array;
+  export function sha384Text(s: string): Uint8Array;
+  export function sha512Text(s: string): Uint8Array;
+  export function hmacSha256(key: Uint8Array, msg: Uint8Array): Uint8Array;
+  export function hmacSha256Text(key: Uint8Array, msg: string): Uint8Array;
+  /** Lowercase hex string of `bytes`. */
+  export function toHex(bytes: Uint8Array): string;
 }
 
 // Decorators

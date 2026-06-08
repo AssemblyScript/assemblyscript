@@ -68,8 +68,11 @@ function utf8Bytes(s: string): Uint8Array {
 }
 
 export namespace crypto {
-  /// The synchronous SubtleCrypto singleton.
-  export const subtle: SubtleCrypto = new SubtleCrypto();
+  /// The synchronous SubtleCrypto singleton. `@lazy` defers initialization to
+  /// first use so accessing `crypto.subtle` from global scope (without an
+  /// explicit import of "crypto") doesn't hit a cross-module init-order error.
+  // @ts-ignore: decorator
+  @lazy export const subtle: SubtleCrypto = new SubtleCrypto();
 
   /// Fill `array` with cryptographically strong random bytes.
   export function getRandomValues(array: Uint8Array): void {
