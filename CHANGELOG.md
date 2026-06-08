@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.1.17] - 2026-06-08
+
+### Other Changes
+
+- fix: serialize bigint REST bodies and type generated encode() as ArrayBuffer-backed ([#2](https://github.com/dacely-cloud/toilscript/pull/2)) by @BlobMaster41
+- feat(crypto): synchronous Web Crypto / SubtleCrypto std module ([#3](https://github.com/dacely-cloud/toilscript/pull/3)) by @BlobMaster41
+
+
+
+
 ## [v0.1.16] - 2026-06-08
 
 - Add a synchronous Web Crypto / SubtleCrypto standard-library module
