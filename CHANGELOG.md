@@ -1,8 +1,23 @@
 # Changelog
 
-## [v0.1.15] - 2026-06-06
+## [v0.1.16] - 2026-06-08
 
-- No changes
+- Add a synchronous Web Crypto / SubtleCrypto standard-library module
+  (`std/assembly/crypto.ts` + `crypto/{algorithms,key,subtle}.ts` +
+  `bindings/webcrypto.ts`), backed by metered `env.crypto.*` host functions. The
+  surface: `crypto.subtle.digest/encrypt/decrypt/sign/verify/importKey/exportKey/
+  deriveBits/deriveKey`, `crypto.getRandomValues`, `crypto.randomUUID`, plus
+  ergonomic helpers (`crypto.sha256`/`sha512`/`hmacSha256`, `*Text` string
+  variants, `crypto.toHex`). Algorithms: SHA-1/256/384/512 (+SHA-3), HMAC,
+  PBKDF2, HKDF, AES-GCM/CBC/CTR, ECDSA (P-256/P-384), Ed25519, ECDH, X25519.
+- Deliberate deviations from the web spec: the API is synchronous (no Promises);
+  algorithm parameters are small classes (`AesGcmParams`, ...) not object
+  literals; key usages are an `i32` bitmask; `deriveKey` takes an explicit bit
+  length. RSA, on-host key generation, and the `jwk` format are not provided —
+  RSA was dropped because the only pure-Rust implementation has an unfixable
+  timing side-channel (RUSTSEC-2023-0071); keys are imported, never generated.
+- `crypto.getRandomValues` moved out of `bindings/dom.ts` (the old
+  `getRandomValuesN` import) into the new module, backed by `crypto.fill_random`.
 
 
 ## [v0.1.15] - 2026-06-06

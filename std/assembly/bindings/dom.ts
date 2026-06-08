@@ -280,12 +280,5 @@ export declare namespace performance {
   export function now(): f64;
 }
 
-export namespace crypto {
-  export function getRandomValues(array: Uint8Array): void {
-    let values = getRandomValuesN(array.length);
-    array.set(values);
-  }
-  @external("env", "crypto.getRandomValuesN")
-  @external.js("let a = new Uint8Array(n); crypto.getRandomValues(a); return a;")
-  export declare function getRandomValuesN(n: u32): Uint8Array;
-}
+// crypto.getRandomValues moved to the dedicated Web Crypto module
+// (std/assembly/crypto.ts), backed by the `crypto.fill_random` host import.
