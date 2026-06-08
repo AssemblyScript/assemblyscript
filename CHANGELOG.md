@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.1.18] - 2026-06-08
+
+### Other Changes
+
+- fix(crypto): global crypto usable from global scope + typed in the editor ([#6](https://github.com/dacely-cloud/toilscript/pull/6)) by @BlobMaster41
+
+
+
+
 ## [v0.1.17] - 2026-06-08
 
 ### Other Changes
