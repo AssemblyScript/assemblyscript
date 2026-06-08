@@ -495,7 +495,9 @@ function emitDataClass(d: RpcData, dataNames: Set<string>): string {
   }
   out += "    }\n\n";
 
-  out += "    public encode(): Uint8Array {\n";
+  // `Uint8Array<ArrayBuffer>` (not the `ArrayBufferLike` default) so the bytes are
+  // accepted directly as a `fetch` body for `@rest({ stream: DataStream.Binary })` routes.
+  out += "    public encode(): Uint8Array<ArrayBuffer> {\n";
   out += "        const w = new DataWriter();\n";
   out += "        w.writeU32(" + typeId + ");\n";
   out += "        this.encodeInto(w);\n";
@@ -603,6 +605,40 @@ function emitRestClient(surface: RpcSurface, dataNames: Set<string>): string {
   out += "    return path;\n";
   out += "}\n\n";
 
+  // Whether any route sends a JSON body (so the `__toilJson` helper is actually used).
+  let needsJson = false;
+  for (let c = 0, ck = surface.rest.length; c < ck && !needsJson; ++c) {
+    let ctrl = surface.rest[c];
+    for (let i = 0, k = ctrl.routes.length; i < k; ++i) {
+      let r = ctrl.routes[i];
+      if (r.bodyType != null && r.stream != "Binary") { needsJson = true; break; }
+    }
+  }
+
+  // JSON body serializer. `JSON.stringify` throws on a `bigint`, and `@data` fields map
+  // 64-bit/bignum types to `bigint`; emit those as raw JSON number tokens (no quotes) so
+  // the server's JSON reader (`asU64`/`asI64`, which ignore string tokens) reads them back.
+  if (needsJson) {
+  out += "function __toilJson(v: any): string {\n";
+  out += "    if (v === null || v === undefined) return \"null\";\n";
+  out += "    const t = typeof v;\n";
+  out += "    if (t === \"bigint\") return v.toString();\n";
+  out += "    if (t === \"number\") return Number.isFinite(v) ? String(v) : \"null\";\n";
+  out += "    if (t === \"boolean\") return v ? \"true\" : \"false\";\n";
+  out += "    if (t === \"string\") return JSON.stringify(v);\n";
+  out += "    if (Array.isArray(v)) return \"[\" + v.map((x: any) => __toilJson(x)).join(\",\") + \"]\";\n";
+  out += "    let s = \"{\", first = true;\n";
+  out += "    for (const k in v) {\n";
+  out += "        if (!Object.prototype.hasOwnProperty.call(v, k)) continue;\n";
+  out += "        const val = v[k];\n";
+  out += "        if (val === undefined || typeof val === \"function\") continue;\n";
+  out += "        s += (first ? \"\" : \",\") + JSON.stringify(k) + \":\" + __toilJson(val);\n";
+  out += "        first = false;\n";
+  out += "    }\n";
+  out += "    return s + \"}\";\n";
+  out += "}\n\n";
+  }
+
   out += "const __toilRest = {\n";
   for (let c = 0, ck = surface.rest.length; c < ck; ++c) {
     let ctrl = surface.rest[c];
@@ -616,7 +652,7 @@ function emitRestClient(surface: RpcSurface, dataNames: Set<string>): string {
       let headers = "{ ";
       if (ct.length) headers += JSON.stringify("content-type") + ": " + JSON.stringify(ct) + ", ";
       headers += "...(args?.headers ?? {}) }";
-      let bodyInit = r.bodyType != null ? (r.stream == "Binary" ? ", body: args.body.encode()" : ", body: JSON.stringify(args.body)") : "";
+      let bodyInit = r.bodyType != null ? (r.stream == "Binary" ? ", body: args.body.encode()" : ", body: __toilJson(args.body)") : "";
       out += "            const __res = await fetch(__url, { method: " + JSON.stringify(r.http) + ", headers: " + headers + bodyInit + " });\n";
       out += "            if (!__res.ok) throw new Error(`" + "Server.REST." + ctrl.key + "." + r.name + " ${__res.status}`);\n";
       if (r.returnsResponse) {
