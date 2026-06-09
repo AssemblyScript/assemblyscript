@@ -458,8 +458,6 @@ export class Compiler extends DiagnosticEmitter {
   staticGcObjectOffsets: Map<i32, Set<i32>> = new Map();
   /** Function table being compiled. First elem is blank. */
   functionTable: Function[] = [];
-  /** Whether the default function table has been declared in the module yet. */
-  functionTableDeclared: bool = false;
   /** Arguments length helper global. */
   builtinArgumentsLength: GlobalRef = 0;
   /** Requires runtime features. */
@@ -879,12 +877,21 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  /** Ensures the default function table is declared so indirect calls can be built and their effects analyzed. */
-  ensureFunctionTable(): void {
-    if (this.functionTableDeclared) return;
-    this.functionTableDeclared = true;
+  /** Declares the default function table early so an indirect call's effects can be analyzed before it is populated. */
+  private ensureFunctionTable(): void {
+    // imported tables are declared by initDefaultTable. only the local default table
+    // needs to exist early, since effect analysis of an indirect call looks it up
+    if (!this.options.importTable) {
+      this.module.ensureFunctionTable(CommonNames.DefaultTable);
+    }
+  }
+
+  private initDefaultTable(): void {
     let options = this.options;
     let module = this.module;
+
+    // import and/or export table if requested (default table is named '0' by Binaryen).
+    // non-imported tables are declared lazily on first indirect call, see ensureFunctionTable
     if (options.importTable) {
       module.addTableImport(
         CommonNames.DefaultTable,
@@ -898,19 +905,6 @@ export class Compiler extends DiagnosticEmitter {
           null
         );
       }
-    } else {
-      module.ensureFunctionTable(CommonNames.DefaultTable);
-    }
-  }
-
-  private initDefaultTable(): void {
-    let options = this.options;
-    let module = this.module;
-
-    // declare the default table now if imported (default table is named '0' by Binaryen).
-    // non-imported tables are declared lazily on first indirect call, see ensureFunctionTable
-    if (options.importTable) {
-      this.ensureFunctionTable();
     }
     if (options.exportTable) {
       module.addTableExport(CommonNames.DefaultTable, ExportNames.Table);
