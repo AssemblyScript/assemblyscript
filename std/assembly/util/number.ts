@@ -2,24 +2,14 @@
 
 import { idof } from "../builtins";
 import { CharCode } from "./string";
+import { dtoa_buffered as dtoa_buffered_double } from "./xjb/dtoa";
+import { ftoa_buffered as ftoa_buffered_single } from "./xjb/ftoa";
 
 // @ts-ignore: decorator
 @inline
-export const MAX_DOUBLE_LENGTH = 28;
-
-// @ts-ignore: decorator
-@lazy @inline const POWERS10 = memory.data<u32>([
-  1,
-  10,
-  100,
-  1000,
-  10000,
-  100000,
-  1000000,
-  10000000,
-  100000000,
-  1000000000
-]);
+// xjb-as buffered writers may overshoot the logical end by up to one 8-char
+// block, so reserve >= 32 code units (>= 64 bytes) of headroom per value.
+export const MAX_DOUBLE_LENGTH = 32;
 
 /*
   Lookup table for pairwise char codes in range [0-99]
@@ -81,46 +71,6 @@ f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff";
 
 // @ts-ignore: decorator
 @lazy @inline const ANY_DIGITS = "0123456789abcdefghijklmnopqrstuvwxyz";
-
-// @ts-ignore: decorator
-@lazy @inline const EXP_POWERS = memory.data<i16>([/* eslint-disable indent */
-  -1220, -1193, -1166, -1140, -1113, -1087, -1060, -1034, -1007,  -980,
-   -954,  -927,  -901,  -874,  -847,  -821,  -794,  -768,  -741,  -715,
-   -688,  -661,  -635,  -608,  -582,  -555,  -529,  -502,  -475,  -449,
-   -422,  -396,  -369,  -343,  -316,  -289,  -263,  -236,  -210,  -183,
-   -157,  -130,  -103,   -77,   -50,   -24,     3,    30,    56,    83,
-    109,   136,   162,   189,   216,   242,   269,   295,   322,   348,
-    375,   402,   428,   455,   481,   508,   534,   561,   588,   614,
-    641,   667,   694,   720,   747,   774,   800,   827,   853,   880,
-    907,   933,   960,   986,  1013,  1039,  1066
-/* eslint-enable indent */]);
-
-// 1e-348, 1e-340, ..., 1e340
-// @ts-ignore: decorator
-@lazy @inline const FRC_POWERS = memory.data<u64>([
-  0xFA8FD5A0081C0288, 0xBAAEE17FA23EBF76, 0x8B16FB203055AC76, 0xCF42894A5DCE35EA,
-  0x9A6BB0AA55653B2D, 0xE61ACF033D1A45DF, 0xAB70FE17C79AC6CA, 0xFF77B1FCBEBCDC4F,
-  0xBE5691EF416BD60C, 0x8DD01FAD907FFC3C, 0xD3515C2831559A83, 0x9D71AC8FADA6C9B5,
-  0xEA9C227723EE8BCB, 0xAECC49914078536D, 0x823C12795DB6CE57, 0xC21094364DFB5637,
-  0x9096EA6F3848984F, 0xD77485CB25823AC7, 0xA086CFCD97BF97F4, 0xEF340A98172AACE5,
-  0xB23867FB2A35B28E, 0x84C8D4DFD2C63F3B, 0xC5DD44271AD3CDBA, 0x936B9FCEBB25C996,
-  0xDBAC6C247D62A584, 0xA3AB66580D5FDAF6, 0xF3E2F893DEC3F126, 0xB5B5ADA8AAFF80B8,
-  0x87625F056C7C4A8B, 0xC9BCFF6034C13053, 0x964E858C91BA2655, 0xDFF9772470297EBD,
-  0xA6DFBD9FB8E5B88F, 0xF8A95FCF88747D94, 0xB94470938FA89BCF, 0x8A08F0F8BF0F156B,
-  0xCDB02555653131B6, 0x993FE2C6D07B7FAC, 0xE45C10C42A2B3B06, 0xAA242499697392D3,
-  0xFD87B5F28300CA0E, 0xBCE5086492111AEB, 0x8CBCCC096F5088CC, 0xD1B71758E219652C,
-  0x9C40000000000000, 0xE8D4A51000000000, 0xAD78EBC5AC620000, 0x813F3978F8940984,
-  0xC097CE7BC90715B3, 0x8F7E32CE7BEA5C70, 0xD5D238A4ABE98068, 0x9F4F2726179A2245,
-  0xED63A231D4C4FB27, 0xB0DE65388CC8ADA8, 0x83C7088E1AAB65DB, 0xC45D1DF942711D9A,
-  0x924D692CA61BE758, 0xDA01EE641A708DEA, 0xA26DA3999AEF774A, 0xF209787BB47D6B85,
-  0xB454E4A179DD1877, 0x865B86925B9BC5C2, 0xC83553C5C8965D3D, 0x952AB45CFA97A0B3,
-  0xDE469FBD99A05FE3, 0xA59BC234DB398C25, 0xF6C69A72A3989F5C, 0xB7DCBF5354E9BECE,
-  0x88FCF317F22241E2, 0xCC20CE9BD35C78A5, 0x98165AF37B2153DF, 0xE2A0B5DC971F303A,
-  0xA8D9D1535CE3B396, 0xFB9B7CD9A4A7443C, 0xBB764C4CA7A44410, 0x8BAB8EEFB6409C1A,
-  0xD01FEF10A657842C, 0x9B10A4E5E9913129, 0xE7109BFBA19C0C9D, 0xAC2820D9623BF429,
-  0x80444B5E7AA7CF85, 0xBF21E44003ACDD2D, 0x8E679C2F5E44FF8F, 0xD433179D9C8CB841,
-  0x9E19DB92B4E31BA9, 0xEB96BF6EBADF77D9, 0xAF87023B9BF0EE6B
-]);
 
 // @ts-ignore: decorator
 @inline
@@ -460,301 +410,44 @@ export function itoa64(value: i64, radix: i32): String {
   return out;
 }
 
+
+// Scratch buffer for the String path. Sized well above any rendered length so
+// xjb's in-register block stores (which can overshoot the logical end) stay
+// contained, matching xjb's own internal 128-byte SCRATCH.
 // @ts-ignore: decorator
-@lazy let _K: i32 = 0;
+@lazy @inline const dtoa_buf = memory.data(128);
 
-// // @ts-ignore: decorator
-// @lazy
-// let _frc: u64 = 0;
-
-// @ts-ignore: decorator
-@lazy let _exp: i32 = 0;
-
-// @ts-ignore: decorator
-@lazy let _frc_minus: u64 = 0;
-
-// @ts-ignore: decorator
-@lazy let _frc_plus: u64 = 0;
-
-// @ts-ignore: decorator
-@lazy let _frc_pow: u64 = 0;
-
-// @ts-ignore: decorator
-@lazy let _exp_pow: i32 = 0;
-
+// xjb produces ECMAScript-exact output. AssemblyScript renders integer-valued
+// floats with a trailing ".0" (e.g. "1" -> "1.0", "0" -> "0.0"); fractional
+// ("." present) and exponential ("e" present) forms, plus NaN/Infinity (which
+// contain letters), are left untouched. So append ".0" iff the rendered value
+// is a bare "[-]?digits" integer.
 // @ts-ignore: decorator
 @inline
-function umul64f(u: u64, v: u64): u64 {
-  let u0 = u & 0xFFFFFFFF;
-  let v0 = v & 0xFFFFFFFF;
-
-  let u1 = u >> 32;
-  let v1 = v >> 32;
-
-  let l = u0 * v0;
-  let t = u1 * v0 + (l >> 32);
-  let w = u0 * v1 + (t & 0xFFFFFFFF);
-
-  w += 0x7FFFFFFF; // rounding
-
-  t >>= 32;
-  w >>= 32;
-
-  return u1 * v1 + t + w;
-}
-
-// @ts-ignore: decorator
-@inline
-function umul64e(e1: i32, e2: i32): i32 {
-  return e1 + e2 + 64; // where 64 is significand size
-}
-
-// @ts-ignore: decorator
-@inline
-function normalizedBoundaries(f: u64, e: i32, isSingle: bool): void {
-  let frc = (f << 1) + 1;
-  let exp = e - 1;
-  let off = <i32>clz<u64>(frc);
-  frc <<= off;
-  exp  -= off;
-
-  let m = 1 + i32(f == (isSingle ? 0x00800000 : 0x0010000000000000));
-
-  _frc_plus  = frc;
-  _frc_minus = ((f << m) - 1) << e - m - exp;
-  _exp = exp;
-}
-
-// @ts-ignore: decorator
-@inline
-function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u64, wp_w: u64): void {
-  let lastp = buffer + ((len - 1) << 1);
-  let digit = load<u16>(lastp);
-  while (
-    rest < wp_w &&
-    delta - rest >= ten_kappa && (
-      rest + ten_kappa < wp_w ||
-      wp_w - rest > rest + ten_kappa - wp_w
-    )
-  ) {
-    --digit;
-    rest += ten_kappa;
+function dtoa_dotZero(buffer: usize, len: u32): u32 {
+  let p = buffer;
+  let end = buffer + (<usize>len << 1);
+  while (p < end) {
+    let c = <i32>load<u16>(p);
+    if ((c < CharCode._0 || c > CharCode._9) && c != CharCode.MINUS) return len;
+    p += 2;
   }
-  store<u16>(lastp, digit);
+  store<u16>(end, CharCode.DOT);
+  store<u16>(end, CharCode._0, 2);
+  return len + 2;
 }
-
-// @ts-ignore: decorator
-@inline
-function getCachedPower(minExp: i32): void {
-  const c = reinterpret<f64>(0x3FD34413509F79FE); // 1 / lg(10) = 0.30102999566398114
-  let dk = (-61 - minExp) * c + 347;	            // dk must be positive, so can do ceiling in positive
-  let k = <i32>dk;
-  k += i32(k != dk); // conversion with ceil
-
-  let index = (k >> 3) + 1;
-  _K = 348 - (index << 3);	// decimal exponent no need lookup table
-  _frc_pow = load<u64>(FRC_POWERS + (<usize>index << alignof<u64>()));
-  _exp_pow = load<i16>(EXP_POWERS + (<usize>index << alignof<i16>()));
-}
-
-// @ts-ignore: decorator
-@inline
-function grisu2(value: f64, buffer: usize, sign: i32, isSingle: bool): i32 {
-  let frc: u64;
-  let exp: i32;
-
-  // frexp routine
-  if (isSingle) {
-    let uv = reinterpret<u32>(<f32>value);
-    exp = (uv & 0x7F800000) >>> 23;
-    let sid = uv & 0x007FFFFF;
-    frc = (u64(exp != 0) << 23) + sid;
-    exp = (exp || 1) - (0x7F + 23);
-  } else {
-    let uv = reinterpret<u64>(value);
-    exp = i32((uv & 0x7FF0000000000000) >>> 52);
-    let sid = uv & 0x000FFFFFFFFFFFFF;
-    frc = (u64(exp != 0) << 52) + sid;
-    exp = (exp || 1) - (0x3FF + 52);
-  }
-
-  normalizedBoundaries(frc, exp, isSingle);
-  getCachedPower(_exp);
-
-  // normalize
-  let off = <i32>clz<u64>(frc);
-  frc <<= off;
-  exp  -= off;
-
-  let frc_pow = _frc_pow;
-  let exp_pow = _exp_pow;
-
-  let w_frc = umul64f(frc, frc_pow);
-  let w_exp = umul64e(exp, exp_pow);
-
-  let wp_frc = umul64f(_frc_plus, frc_pow) - 1;
-  let wp_exp = umul64e(_exp, exp_pow);
-
-  let wm_frc = umul64f(_frc_minus, frc_pow) + 1;
-  let delta  = wp_frc - wm_frc;
-
-  return genDigits(buffer, w_frc, w_exp, wp_frc, wp_exp, delta, sign);
-}
-
-function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, sign: i32): i32 {
-  let one_exp = -mp_exp;
-  let one_frc = (<u64>1) << one_exp;
-  let mask    = one_frc - 1;
-
-  let wp_w_frc = mp_frc - w_frc;
-
-  let p1 = u32(mp_frc >> one_exp);
-  let p2 = mp_frc & mask;
-
-  let kappa = <i32>decimalCount32(p1);
-  let len = sign;
-
-  while (kappa > 0) {
-    let d: u32;
-    switch (kappa) {
-      case 10: { d = p1 / 1000000000; p1 %= 1000000000; break; }
-      case  9: { d = p1 /  100000000; p1 %=  100000000; break; }
-      case  8: { d = p1 /   10000000; p1 %=   10000000; break; }
-      case  7: { d = p1 /    1000000; p1 %=    1000000; break; }
-      case  6: { d = p1 /     100000; p1 %=     100000; break; }
-      case  5: { d = p1 /      10000; p1 %=      10000; break; }
-      case  4: { d = p1 /       1000; p1 %=       1000; break; }
-      case  3: { d = p1 /        100; p1 %=        100; break; }
-      case  2: { d = p1 /         10; p1 %=         10; break; }
-      case  1: { d = p1;              p1 =           0; break; }
-      default: { d = 0; break; }
-    }
-
-    if (d | len) store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d);
-
-    --kappa;
-    let tmp = ((<u64>p1) << one_exp) + p2;
-    if (tmp <= delta) {
-      _K += kappa;
-      grisuRound(buffer, len, delta, tmp, <u64>load<u32>(POWERS10 + (<usize>kappa << alignof<u32>())) << one_exp, wp_w_frc);
-      return len;
-    }
-  }
-
-  while (true) {
-    p2    *= 10;
-    delta *= 10;
-
-    let d = p2 >> one_exp;
-    if (d | len) store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d);
-
-    p2 &= mask;
-    --kappa;
-    if (p2 < delta) {
-      _K += kappa;
-      wp_w_frc *= <u64>load<u32>(POWERS10 + (<usize>-kappa << alignof<u32>()));
-      grisuRound(buffer, len, delta, p2, one_frc, wp_w_frc);
-      return len;
-    }
-  }
-}
-
-// @ts-ignore: decorator
-@inline
-function genExponent(buffer: usize, k: i32): i32 {
-  let sign = k < 0;
-  if (sign) k = -k;
-  let decimals = decimalCount32(k) + 1;
-  utoa32_dec_core(buffer, k, decimals);
-  store<u16>(buffer, <u16>select<u32>(CharCode.MINUS, CharCode.PLUS, sign));
-  return decimals;
-}
-
-function prettify(buffer: usize, length: i32, k: i32): i32 {
-  if (!k) {
-    store<u32>(buffer + (length << 1), CharCode.DOT | (CharCode._0 << 16));
-    return length + 2;
-  }
-
-  let kk = length + k;
-  if (length <= kk && kk <= 21) {
-    // 1234e7 -> 12340000000
-    for (let i = length; i < kk; ++i) {
-      store<u16>(buffer + (i << 1), CharCode._0);
-    }
-    store<u32>(buffer + (kk << 1), CharCode.DOT | (CharCode._0 << 16));
-    return kk + 2;
-  } else if (kk > 0 && kk <= 21) {
-    // 1234e-2 -> 12.34
-    let ptr = buffer + (kk << 1);
-    memory.copy(
-      ptr + 2,
-      ptr,
-      -k << 1
-    );
-    store<u16>(buffer + (kk << 1), CharCode.DOT);
-    return length + 1;
-  } else if (-6 < kk && kk <= 0) {
-    // 1234e-6 -> 0.001234
-    let offset = 2 - kk;
-    memory.copy(
-      buffer + (offset << 1),
-      buffer,
-      length << 1
-    );
-    store<u32>(buffer, CharCode._0 | (CharCode.DOT << 16));
-    for (let i = 2; i < offset; ++i) {
-      store<u16>(buffer + (i << 1), CharCode._0);
-    }
-    return length + offset;
-  } else if (length == 1) {
-    // 1e30
-    store<u16>(buffer, CharCode.e, 2);
-    length = genExponent(buffer + 4, kk - 1);
-    return length + 2;
-  } else {
-    let len = length << 1;
-    memory.copy(
-      buffer + 4,
-      buffer + 2,
-      len - 2
-    );
-    store<u16>(buffer,       CharCode.DOT, 2);
-    store<u16>(buffer + len, CharCode.e,   2);
-    length += genExponent(buffer + len + 4, kk - 1);
-    return length + 2;
-  }
-}
-
-function dtoa_core(buffer: usize, value: f64, isSingle: bool): i32 {
-  let sign = i32(value < 0);
-  if (sign) {
-    value = -value;
-    store<u16>(buffer, CharCode.MINUS);
-  }
-  // assert(value > 0 && value <= (isSingle ? f32.MAX_VALUE : f64.MAX_VALUE));
-  let len = grisu2(value, buffer, sign, isSingle);
-  len = prettify(buffer + (sign << 1), len - sign, _K);
-  return len + sign;
-}
-
-// @ts-ignore: decorator
-@lazy @inline const dtoa_buf = memory.data(MAX_DOUBLE_LENGTH << 1);
 
 export function dtoa<T extends number>(value: T): String {
-  const isSingle = isFloat<T>() && sizeof<T>() == 4;
-  return dtoa_impl(value, isSingle);
-}
-
-// @ts-ignore: decorator
-@inline
-function dtoa_impl(value: f64, isSingle: bool): String {
-  if (value == 0) return "0.0";
-  if (!isFinite(value)) {
-    if (isNaN(value)) return "NaN";
-    return select<String>("-Infinity", "Infinity", value < 0);
+  let len: u32;
+  if (isFloat<T>() && sizeof<T>() == 4) {
+    // @ts-ignore: type
+    len = ftoa_buffered_single(dtoa_buf, <f32>value);
+  } else {
+    // @ts-ignore: type
+    len = dtoa_buffered_double(dtoa_buf, <f64>value);
   }
-  let size = dtoa_core(dtoa_buf, value, isSingle) << 1;
+  len = dtoa_dotZero(dtoa_buf, len);
+  let size = <usize>len << 1;
   let result = changetype<String>(__new(size, idof<String>()));
   memory.copy(changetype<usize>(result), dtoa_buf, size);
   return result;
@@ -839,35 +532,13 @@ export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
 }
 
 export function dtoa_buffered<T extends number>(buffer: usize, value: T): u32 {
-  const isSingle = isFloat<T>() && sizeof<T>() == 4;
-  return dtoa_buffered_impl(buffer, value, isSingle);
-}
-
-// @ts-ignore: decorator
-@inline
-function dtoa_buffered_impl(buffer: usize, value: f64, isSingle: bool): u32 {
-  if (value == 0) {
-    store<u16>(buffer, CharCode._0);
-    store<u16>(buffer, CharCode.DOT, 2);
-    store<u16>(buffer, CharCode._0,  4);
-    return 3;
+  let len: u32;
+  if (isFloat<T>() && sizeof<T>() == 4) {
+    // @ts-ignore: type
+    len = ftoa_buffered_single(buffer, <f32>value);
+  } else {
+    // @ts-ignore: type
+    len = dtoa_buffered_double(buffer, <f64>value);
   }
-  if (!isFinite(value)) {
-    if (isNaN(value)) {
-      store<u16>(buffer, CharCode.N);
-      store<u16>(buffer, CharCode.a, 2);
-      store<u16>(buffer, CharCode.N, 4);
-      return 3;
-    } else {
-      let sign = value < 0;
-      if (sign) {
-        store<u16>(buffer, CharCode.MINUS); // -
-        buffer += 2;
-      }
-      store<u64>(buffer, 0x690066006E0049, 0); // ifnI
-      store<u64>(buffer, 0x7900740069006E, 8); // ytin
-      return 8 + u32(sign);
-    }
-  }
-  return dtoa_core(buffer, value, isSingle);
+  return dtoa_dotZero(buffer, len);
 }
