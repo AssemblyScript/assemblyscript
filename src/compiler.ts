@@ -877,15 +877,6 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  /** Declares the default function table early so an indirect call's effects can be analyzed before it is populated. */
-  private ensureFunctionTable(): void {
-    // imported tables are declared by initDefaultTable. only the local default table
-    // needs to exist early, since effect analysis of an indirect call looks it up
-    if (!this.options.importTable) {
-      this.module.ensureFunctionTable(CommonNames.DefaultTable);
-    }
-  }
-
   private initDefaultTable(): void {
     let options = this.options;
     let module = this.module;
@@ -2163,7 +2154,10 @@ export class Compiler extends DiagnosticEmitter {
     if (!memorySegment) {
 
       // Add to the function table, declaring it on first use so effect analysis works
-      this.ensureFunctionTable();
+      if (!this.options.importTable) {
+        this.module.ensureFunctionTable(CommonNames.DefaultTable);
+      }
+
       let functionTable = this.functionTable;
       let tableBase = this.options.tableBase;
       if (!tableBase) tableBase = 1; // leave first elem blank
@@ -7139,13 +7133,11 @@ export class Compiler extends DiagnosticEmitter {
     // provided, so we must set `argumentsLength` in any case. Inject setting it
     // into the index argument, which becomes executed last after any operands.
     let argumentsLength = this.ensureArgumentsLength();
-    
-   
     let functionArgWithVararg = module.block(null, [
       module.global_set(argumentsLength, module.i32(numArguments)),
       functionArg
     ], sizeTypeRef);
-    
+
     if (operands) this.operandsTostack(signature, operands);
     let expr = module.call_indirect(
       null, // TODO: handle multiple tables
