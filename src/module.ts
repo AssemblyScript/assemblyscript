@@ -331,7 +331,9 @@ export const enum ExpressionId {
   ResumeThrow = 102 /* _BinaryenResumeThrowId */,
   StackSwitch = 103 /* _BinaryenStackSwitchId */,
   StructWait = 104 /* _BinaryenStructWaitId */,
-  StructNotify = 105 /* _BinaryenStructNotifyId */
+  StructNotify = 105 /* _BinaryenStructNotifyId */,
+  WideIntAddSub = 106 /* _BinaryenWideIntAddSubId */,
+  WideIntMul = 107 /* _BinaryenWideIntMulId */
 }
 
 /** Binaryen external kind constants. */
@@ -1057,7 +1059,7 @@ export const enum BinaryOp {
   /** i16x8.relaxed_q15mulr_s */
   RelaxedQ15MulrI16x8 = 215 /* _BinaryenRelaxedQ15MulrSVecI16x8 */,
   /** i16x8.relaxed_dot_i8x16_i7x16_s */
-  RelaxedDotI8x16I7x16ToI16x8 = 216 /* _BinaryenDotI8x16I7x16SToVecI16x8 */,
+  RelaxedDotI8x16I7x16ToI16x8 = 216 /* _BinaryenRelaxedDotI8x16I7x16SToVecI16x8 */,
 
   _last = RelaxedDotI8x16I7x16ToI16x8,
 
@@ -1258,15 +1260,15 @@ export const enum SIMDTernaryOp {
   /** f64x2.relaxed_nmadd */
   RelaxedNmaddF64x2 = 4 /* _BinaryenRelaxedNmaddVecF64x2 */,
   /** i8x16.relaxed_laneselect */
-  RelaxedLaneselectI8x16 = 5 /* _BinaryenLaneselectI8x16 */,
+  RelaxedLaneselectI8x16 = 5 /* _BinaryenRelaxedLaneselectI8x16 */,
   /** i16x8.relaxed_laneselect */
-  RelaxedLaneselectI16x8 = 6 /* _BinaryenLaneselectI16x8 */,
+  RelaxedLaneselectI16x8 = 6 /* _BinaryenRelaxedLaneselectI16x8 */,
   /** i32x4.relaxed_laneselect */
-  RelaxedLaneselectI32x4 = 7 /* _BinaryenLaneselectI32x4 */,
+  RelaxedLaneselectI32x4 = 7 /* _BinaryenRelaxedLaneselectI32x4 */,
   /** i64x2.relaxed_laneselect */
-  RelaxedLaneselectI64x2 = 8 /* _BinaryenLaneselectI64x2 */,
+  RelaxedLaneselectI64x2 = 8 /* _BinaryenRelaxedLaneselectI64x2 */,
   /** i32x4.relaxed_dot_i8x16_i7x16_add_s */
-  RelaxedDotI8x16I7x16AddToI32x4 = 9 /* _BinaryenDotI8x16I7x16AddSToVecI32x4 */,
+  RelaxedDotI8x16I7x16AddToI32x4 = 9 /* _BinaryenRelaxedDotI8x16I7x16AddSToVecI32x4 */,
   // FIXME: f16x8 madd/nmadd (= 10, 11) are in wasm.h but not yet exported via C API
 }
 
@@ -1275,9 +1277,25 @@ export const enum RefAsOp {
   /** ref.as_non_null */
   NonNull = 0 /* _BinaryenRefAsNonNull */,
   /** any.convert_extern */
-  ExternInternalize = 1 /* _BinaryenRefAsAnyConvertExtern */,
+  AnyConvertExtern = 1 /* _BinaryenRefAsAnyConvertExtern */,
   /** extern.convert_any */
-  ExternExternalize = 2 /* _BinaryenRefAsExternConvertAny */
+  ExternConvertAny = 2 /* _BinaryenRefAsExternConvertAny */
+}
+
+/** Binaryen wide integer add/sub operation constants. */
+export const enum WideIntAddSubOp {
+  /** i64.add128 */
+  Add = 0 /* _BinaryenAddInt128 */,
+  /** i64.sub128 */
+  Sub = 1 /* _BinaryenSubInt128 */
+}
+
+/** Binaryen wide integer multiply operation constants. */
+export const enum WideIntMulOp {
+  /** i64.mul_wide_s */
+  SignedI64 = 0 /* _BinaryenMulWideSInt64 */,
+  /** i64.mul_wide_u */
+  UnsignedI64 = 1 /* _BinaryenMulWideUInt64 */
 }
 
 /** Binaryen BrOn operation constants. */
@@ -1509,6 +1527,24 @@ export class Module {
       }
     }
     return binaryen._BinaryenBinary(this.ref, op, left, right);
+  }
+
+  wide_int_add_sub(
+    op: WideIntAddSubOp,
+    leftLow: ExpressionRef,
+    leftHigh: ExpressionRef,
+    rightLow: ExpressionRef,
+    rightHigh: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenWideIntAddSub(this.ref, op, leftLow, leftHigh, rightLow, rightHigh);
+  }
+
+  wide_int_mul(
+    op: WideIntMulOp,
+    left: ExpressionRef,
+    right: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenWideIntMul(this.ref, op, left, right);
   }
 
   memory_size(name: string = CommonNames.DefaultMemory, is64: bool = false): ExpressionRef {
