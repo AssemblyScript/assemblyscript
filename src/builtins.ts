@@ -3812,6 +3812,7 @@ function builtin_call_indirect(ctx: BuiltinFunctionContext): ExpressionRef {
     paramTypeRefs[i] = compiler.currentType.toRef();
   }
   compiler.currentType = returnType;
+  compiler.ensureFunctionTable();
   return module.call_indirect(null /* TODO */, indexArg, operandExprs, createType(paramTypeRefs), returnType.toRef());
 }
 builtinFunctions.set(BuiltinNames.call_indirect, builtin_call_indirect);

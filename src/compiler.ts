@@ -458,6 +458,8 @@ export class Compiler extends DiagnosticEmitter {
   staticGcObjectOffsets: Map<i32, Set<i32>> = new Map();
   /** Function table being compiled. First elem is blank. */
   functionTable: Function[] = [];
+  /** Whether the default function table has been declared in the module yet. */
+  functionTableDeclared: bool = false;
   /** Arguments length helper global. */
   builtinArgumentsLength: GlobalRef = 0;
   /** Requires runtime features. */
@@ -877,11 +879,12 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  private initDefaultTable(): void {
+  /** Ensures the default function table is declared so indirect calls can be built and their effects analyzed. */
+  ensureFunctionTable(): void {
+    if (this.functionTableDeclared) return;
+    this.functionTableDeclared = true;
     let options = this.options;
     let module = this.module;
-
-    // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) {
       module.addTableImport(
         CommonNames.DefaultTable,
@@ -895,6 +898,19 @@ export class Compiler extends DiagnosticEmitter {
           null
         );
       }
+    } else {
+      module.ensureFunctionTable(CommonNames.DefaultTable);
+    }
+  }
+
+  private initDefaultTable(): void {
+    let options = this.options;
+    let module = this.module;
+
+    // declare the default table now if imported (default table is named '0' by Binaryen).
+    // non-imported tables are declared lazily on first indirect call, see ensureFunctionTable
+    if (options.importTable) {
+      this.ensureFunctionTable();
     }
     if (options.exportTable) {
       module.addTableExport(CommonNames.DefaultTable, ExportNames.Table);
@@ -2152,7 +2168,8 @@ export class Compiler extends DiagnosticEmitter {
     let memorySegment = instance.memorySegment;
     if (!memorySegment) {
 
-      // Add to the function table
+      // Add to the function table, declaring it on first use so effect analysis works
+      this.ensureFunctionTable();
       let functionTable = this.functionTable;
       let tableBase = this.options.tableBase;
       if (!tableBase) tableBase = 1; // leave first elem blank

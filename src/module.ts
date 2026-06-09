@@ -2486,6 +2486,14 @@ export class Module {
     binaryen._free(cArr);
   }
 
+  /** Ensures that an empty function table of the given name exists, to be sized and filled later. */
+  ensureFunctionTable(name: string): void {
+    let cStr = this.allocStringCached(name);
+    if (!binaryen._BinaryenGetTable(this.ref, cStr)) {
+      binaryen._BinaryenAddTable(this.ref, cStr, 0, Module.UNLIMITED_TABLE, TypeRef.Funcref);
+    }
+  }
+
   /* setFunctionTable(
     initial: Index,
     maximum: Index,
