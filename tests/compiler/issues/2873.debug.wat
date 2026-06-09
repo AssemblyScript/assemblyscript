@@ -5,27 +5,83 @@
  (type $3 (func (param i32 i32) (result i32)))
  (type $4 (func))
  (type $5 (func (param i32 i32 i32) (result i32)))
- (type $6 (func (param i32 i32 i32)))
- (type $7 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
- (type $8 (func (param i32 f64 i32) (result i32)))
- (type $9 (func (param i32 i32 i32 i32)))
- (type $10 (func (param i32 i32 i64) (result i32)))
- (type $11 (func (result i32)))
- (type $12 (func (param f32 i32) (result i32)))
- (type $13 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $14 (func (param f64 i32) (result i32)))
- (type $15 (func (param i32 f32) (result i32)))
- (type $16 (func (param i32 f64) (result i32)))
+ (type $6 (func (param i64)))
+ (type $7 (func (param i32 f32) (result i32)))
+ (type $8 (func (param i32 i32 i32)))
+ (type $9 (func (param i32 f64) (result i32)))
+ (type $10 (func (param i64) (result i64)))
+ (type $11 (func (param i32 i32 i32 i32)))
+ (type $12 (func (param i32 i32 i64) (result i32)))
+ (type $13 (func (result i32)))
+ (type $14 (func (param f32 i32) (result i32)))
+ (type $15 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $16 (func (param f64 i32) (result i32)))
  (type $17 (func (param f32) (result i32)))
  (type $18 (func (param f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
- (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
- (global $~lib/util/number/_exp (mut i32) (i32.const 0))
- (global $~lib/util/number/_K (mut i32) (i32.const 0))
- (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
- (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
+ (global $~lib/native/ASC_FEATURE_SIMD i32 (i32.const 0))
+ (global $~lib/util/xjb/xjb/HAS_SIMD i32 (i32.const 0))
+ (global $~lib/util/xjb/xjb/gPow10Hi (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/xjb/gPow10Lo (mut i64) (i64.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/util/xjb/xjb/TABLE_COMPRESSED i32 (i32.const 0))
+ (global $~lib/util/xjb/xjb/DIV10K_EXP i32 (i32.const 40))
+ (global $~lib/util/xjb/xjb/DIV10K_SIG i64 (i64.const 109951163))
+ (global $~lib/util/xjb/xjb/NEG10K i64 (i64.const 4294957296))
+ (global $~lib/util/xjb/xjb/DIV100_EXP i32 (i32.const 19))
+ (global $~lib/util/xjb/xjb/DIV100_SIG i64 (i64.const 5243))
+ (global $~lib/util/xjb/xjb/NEG100 i64 (i64.const 65436))
+ (global $~lib/util/xjb/xjb/DIV10_EXP i32 (i32.const 10))
+ (global $~lib/util/xjb/xjb/DIV10_SIG i64 (i64.const 103))
+ (global $~lib/util/xjb/xjb/NEG10 i64 (i64.const 246))
+ (global $~lib/util/xjb/xjb/ZEROS i64 (i64.const 3472328296227680304))
+ (global $~lib/util/xjb/xjb/POW10_SMALL i32 (i32.const 8))
+ (global $~lib/util/xjb/xjb/DIGIT_PAIRS i32 (i32.const 136))
+ (global $~lib/util/xjb/xjb/gBcd (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/xjb/gBcdLen (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/xjb/gDigHi (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/xjb/gDigLo (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/xjb/gDigNum (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/xjb/gSig (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/xjb/gExp (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/xjb/gLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/xjb/gHasLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/xjb/DOUBLE_EXP_OFFSET i32 (i32.const 1075))
+ (global $~lib/util/xjb/xjb/EXTRA_SHIFT i32 (i32.const 6))
+ (global $~lib/util/xjb/xjb/BIASED_HALF i64 (i64.const -9223372036854775802))
+ (global $~lib/util/xjb/xjb/DOUBLE_MAX_DIGITS10 i32 (i32.const 17))
+ (global $~lib/util/xjb/xjb/MIN_FIXED_DEC_EXP i32 (i32.const -6))
+ (global $~lib/util/xjb/xjb/MAX_FIXED_DEC_EXP i32 (i32.const 20))
+ (global $~lib/util/xjb/xjb/SCRATCH i32 (i32.const 336))
+ (global $~lib/util/xjb/ftoa/HAS_SIMD i32 (i32.const 0))
+ (global $~lib/util/xjb/ftoa/POW10_FLOAT_HI i32 (i32.const 464))
+ (global $~lib/util/xjb/ftoa/H37 i32 (i32.const 1080))
+ (global $~lib/util/xjb/ftoa/DIV10K_EXP i32 (i32.const 40))
+ (global $~lib/util/xjb/ftoa/DIV10K_SIG i64 (i64.const 109951163))
+ (global $~lib/util/xjb/ftoa/NEG10K i64 (i64.const 4294957296))
+ (global $~lib/util/xjb/ftoa/DIV100_EXP i32 (i32.const 19))
+ (global $~lib/util/xjb/ftoa/DIV100_SIG i64 (i64.const 5243))
+ (global $~lib/util/xjb/ftoa/NEG100 i64 (i64.const 65436))
+ (global $~lib/util/xjb/ftoa/DIV10_EXP i32 (i32.const 10))
+ (global $~lib/util/xjb/ftoa/DIV10_SIG i64 (i64.const 103))
+ (global $~lib/util/xjb/ftoa/NEG10 i64 (i64.const 246))
+ (global $~lib/util/xjb/ftoa/ZEROS i64 (i64.const 3472328296227680304))
+ (global $~lib/util/xjb/ftoa/DIGIT_PAIRS i32 (i32.const 1336))
+ (global $~lib/util/xjb/ftoa/gBcd (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/ftoa/gBcdLen (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/ftoa/gDigHi (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/ftoa/gDigNum (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/ftoa/gSig (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/ftoa/gExp (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/ftoa/gLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/ftoa/gHasLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/ftoa/FLOAT_EXP_OFFSET i32 (i32.const 150))
+ (global $~lib/util/xjb/ftoa/FLOAT_BIT i32 (i32.const 36))
+ (global $~lib/util/xjb/ftoa/FLOAT_ONE_BIAS i64 (i64.const 17179869177))
+ (global $~lib/util/xjb/ftoa/MIN_FIXED_DEC_EXP i32 (i32.const -6))
+ (global $~lib/util/xjb/ftoa/MAX_FIXED_DEC_EXP i32 (i32.const 20))
+ (global $~lib/util/xjb/ftoa/FLOAT_MAX_DIGITS10 i32 (i32.const 9))
+ (global $~lib/util/xjb/ftoa/SCRATCH i32 (i32.const 1536))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -40,1607 +96,1735 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $issues/2873/f32arr i32 (i32.const 2080))
- (global $issues/2873/f64arr i32 (i32.const 2288))
- (global $~lib/rt/__rtti_base i32 (i32.const 2320))
- (global $~lib/memory/__data_end i32 (i32.const 2348))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 35116))
- (global $~lib/memory/__heap_base i32 (i32.const 35116))
+ (global $issues/2873/f32arr i32 (i32.const 12240))
+ (global $issues/2873/f64arr i32 (i32.const 12448))
+ (global $~lib/rt/__rtti_base i32 (i32.const 12480))
+ (global $~lib/memory/__data_end i32 (i32.const 12508))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 45276))
+ (global $~lib/memory/__heap_base i32 (i32.const 45276))
  (memory $0 1)
- (data $0 (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\000\00.\000\00\00\00\00\00\00\00")
- (data $1 (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\00N\00a\00N\00\00\00\00\00\00\00")
- (data $2 (i32.const 76) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\12\00\00\00-\00I\00n\00f\00i\00n\00i\00t\00y\00\00\00\00\00\00\00\00\00\00\00")
- (data $3 (i32.const 124) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\10\00\00\00I\00n\00f\00i\00n\00i\00t\00y\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $4 (i32.const 176) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $5 (i32.const 232) "\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\rXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
- (data $6 (i32.const 928) "<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\r\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
- (data $7 (i32.const 1104) "\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
- (data $8 (i32.const 1144) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
- (data $9 (i32.const 1548) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data $10 (i32.const 1612) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $11 (i32.const 1680) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $12 (i32.const 1712) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $13 (i32.const 1740) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
- (data $14 (i32.const 1804) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data $15 (i32.const 1856) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $16 (i32.const 1884) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $17 (i32.const 1948) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\001\00.\001\00\00\00\00\00\00\00")
- (data $18 (i32.const 1980) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\002\008\007\003\00.\00t\00s\00")
- (data $19 (i32.const 2028) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00\cd\cc\8c?\cd\cc\0c@33S@")
- (data $20 (i32.const 2060) ",\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\10\00\00\00\00\08\00\00\00\08\00\00\0c\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $21 (i32.const 2108) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $22 (i32.const 2140) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\00,\00\00\00\00\00\00\00\00\00\00\00")
- (data $23 (i32.const 2172) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\16\00\00\001\00.\001\00,\002\00.\002\00,\003\00.\003\00\00\00\00\00\00\00")
- (data $24 (i32.const 2220) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00\9a\99\99\99\99\99\f1?\9a\99\99\99\99\99\01@ffffff\n@\00\00\00\00")
- (data $25 (i32.const 2268) ",\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\10\00\00\00\c0\08\00\00\c0\08\00\00\18\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $26 (i32.const 2320) "\06\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\02\19\00\00\02\1a\00\00")
+ (data $0 (i32.const 8) "\01\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00d\00\00\00\00\00\00\00\e8\03\00\00\00\00\00\00\10\'\00\00\00\00\00\00\a0\86\01\00\00\00\00\00@B\0f\00\00\00\00\00\80\96\98\00\00\00\00\00\00\e1\f5\05\00\00\00\00\00\ca\9a;\00\00\00\00\00\e4\0bT\02\00\00\00\00\e8vH\17\00\00\00\00\10\a5\d4\e8\00\00\00\00\a0rN\18\t\00\00\00@z\10\f3Z\00\00\00\80\c6\a4~\8d\03\00")
+ (data $1 (i32.const 136) "00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899")
+ (data $2 (i32.const 336) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $3 (i32.const 464) "p\\\ea{\ce2~\8f\1a\c7C\c6\b0\b7\96\e5\ae\05\03\05\'\c6\ab\b7\bf7\cf\d0\b8\d1\ef\92\fe%\e5\1a\8eO\19\eb2\ebP\e2\a4?\14\bc\f5\88\r\b5P\99v\96!\dbH\bb\1a\c2\bd\f0\b4\15\07\c9{\ce\97\c0]\11l:\96\0b\13\9a\c7\1b\e0\c3V\df\84\f6\06\e3L6\12\197\c5\9e\b5p+\a8\ad\c5\9d\97\"\81E@|o\fc\dfNg\04\cd\c9\f2\c9\e6\0b\b96\d7\07\8f\a1\85\t\94\f8x9?\81:\0f \f4\'\8f\cb\ce\c8\a5\19\90\b9\a5o\a5\a0\84\14@aQY\84\00\a1\ed\cc\ce\1b\c2\d3\00\b4W\n?\16h\a9\00\90\acn2x\86\87\00\80z\17\b7&\d7\d8\00\00b\ac\c5\ebx\ad\00\00\e8\89\04#\c7\8a\00\00@v:k\0b\de\00\00\00\c5.\bc\a2\b1\00\00\00\04\bf\c9\1b\8e\00\00\00\a01\a9_\e3\00\00\00\80\f4 \e6\b5\00\00\00\00*\e7\84\91\00\00\00\00\10\a5\d4\e8\00\00\00\00@\b7C\ba\00\00\00\00\00\f9\02\95\00\00\00\00\00(k\ee\00\00\00\00\00 \bc\be\00\00\00\00\00\80\96\98\00\00\00\00\00\00$\f4\00\00\00\00\00\00P\c3\00\00\00\00\00\00@\9c\00\00\00\00\00\00\00\fa\00\00\00\00\00\00\00\c8\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00\80\cd\cc\cc\cc\cc\cc\cc\cc\0b\d7\a3p=\n\d7\a3<\dfO\8d\97n\12\83,e\19\e2X\17\b7\d1$\84G\1bG\ac\c5\a7\b6il\af\05\bd7\86\bdBz\e5\d5\94\bf\d6\fd\cea\84\11w\cc\ab\98\a5\b46A_p\89\bf\d5\ed\bd\ce\fe\e6\db\ff\aa$\cb\0b\ff\eb\af\cc\88Po\t\cc\bc\8c\14\0e\b4KB\13.\e1\10\d8\\\t5\dc$\b4\da\ac\b0:\f7|\1d\90\\\e1M\c4\be\94\95\e6J\b4\a462\aaw\b8\08]\1d\92\8e\ee\92\93\a6a\95\b6}J\1e\ec\eb\1a\11\92d\08\e5\bc\ef{\datP\a0\1d\97\b2,\f7\ba\80\00\c9\f1(\8a\92\95\00\9am\c1S;uD\cd\14\be\9aR\c5\ee\d3\ae\87\96\f7\db\9dXv%\06\12\c6I~\e0\91\b7\d1t\9e\0e\ca\00\83\f2\b5\87\fd?;\9a5\f5\f7\d2\ca2\fc\14^\f7_B\a2\f5\fcCK,\b3\ce\81\bb\949E\ad\1e\b1\cf")
+ (data $4 (i32.const 1080) "\"\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#")
+ (data $5 (i32.const 1336) "00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899")
+ (data $6 (i32.const 1536) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $7 (i32.const 1664) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $8 (i32.const 1804) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data $9 (i32.const 1868) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $10 (i32.const 1936) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $11 (i32.const 1968) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $12 (i32.const 1996) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
+ (data $13 (i32.const 2060) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data $14 (i32.const 2112) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $15 (i32.const 2140) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $16 (i32.const 2204) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\001\00.\001\00\00\00\00\00\00\00")
+ (data $17 (i32.const 2236) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\002\008\007\003\00.\00t\00s\00")
+ (data $18 (i32.const 2288) "\0c}\fd\fe\96\c1_\cc\c8rb\a9I\edS\1eO\dc\bc\be\fc\b1w\ffz\0f\bb\13\9c\e8\e8%\b1\t6\f7=\cf\aa\9f\ac\e9T\8ca\91\b1w\1d\8c\03u\r\83\95\c7\17$j\ef\b9\f5\9d\d5%oD\d2\d0\e3z\f9\1d\adDk(s\05Kw\c5j\83b\ce\ec\9b2\ec\nC\f9g\e3N\d5vE$\fb\01\e8\c2?\a7\cd\93\f7A\9c\"\8a\d4V\edy\02\a2\f3\0f\11\c1xuRCk\d6DV4\8cAE\98\a9\aaxk\89\13\n\83\0c\d6kA\ef\91V\beS\d5V\c6k\98\cc#\8f\cb\c6\11k6\ec\ed\a8\8a\ec\b7\86\be\bf,9?\1c\eb\02\a2\b3\94\a9\d6\f32\14\d7\f7{\07O\e3\a5\83\8a\e0\b9S\cc\b0?\d9\cc\f5\da\c9\"\\\8f$\adX\e8h\ff\9c\8f\0f@\b3\d1\be\95\99\d96l7\91\a1\1f\c2\b9\t\08\10#-\fb\ff\8fDG\85\b5\8a\a72(\0c\n\d4\ab\f9\f9\ff\b3\15\99\e6\e2lQ?2\8f\0c\c9\16;\fc\7f\90\ad\1f\d0\8d\e3\92g\7f\d9\a7=\aeJ\fb\9f\f4\98\'D\b1\9cwA\df\cf\11\cd\99\1d\fa\c71\7f1\95\dd\83\d5\11\d7CV@@R\fc\1c\7f\ef>}\8ar%kf\ea5(Hf;\e4^\ab\8e\1c\ad\cf\ee\05\00eC2\da@J\9d6V\b2c\d8\82j\07@>\d4\be\90hN\"\e2uO>\87\91\a2\04\e8\a6DwZ\02\e2\aaZS\e3\r\a96\cb\05\a2\d0\15\15q\83\9aU1(\\Q\d3\03>\87\caD[Z\r\91\80\d5\1e\99\d9\12\84\c2\86\94\fe\nyX\e8\b6\e0\8af\ff\8f\17\a5r\a89\beM\97nb\e3\98-@\ffs]\ce\8f\12\c8-!=\n\fb\8e\7f\1c\88\7fh\fa\80\99\0b\9d\bc4f\e6|r\9f#j\9f\029\a1\80N\c4\eb\c1\ff\1f\1cN\87\acDGC\87\c9 b\b5f\b2\ff\'\a3\"\a9\d7\15\19\14\e9\fb\a8\bab\00\9f\ff\f1K\b5\c9\a6\ad\8f\acq\9d\a9\b4=`\c3?wo\"|\10\99\b3\17\ce\c4\d3!M8\b4\0fU\cb+\9bT\7f\a0\9d\01\f6Hj`F\a1S*~\fb\e0\94O\84\02\c1\99mB\fc\cbDt\da.9\19zc%C1\c0\08S\fb\feU\11\91\fa\88\9fX\bc\ee\93=\f0\ca\'\ba~\abU5y\b5c\b75u|&\96\deX4/\8bU\c1K\a2<%\83\92\1b\b0\bb\16o\01\fb\ed\aa\b1\9e\cb\8b\ee#w\"\9c\ea\dc\ca\c1y\a9\15^F_\17uv\8a\95\a1\92\c9\1e\19\ec\89\cd\fa\0b6]\12\14\ed\faI\b7{f\1fg\ec\80\f9\ce\84\f4\16Y\a8y\1c\e5\1a@\e7\80\'\e1\b7\82\d2X\ae7\t\cc1\8f\10\88\90\b0\b8\ec\b2\d1\07\ef\99\85\0b?\fe\b2\15\aa\b4\dc\e6\a7\1f\86\c9j\00g\ce\ce\bd\df\9a\d4\e1\93\e0\91\a7g\bdB`\00A\a1\d6\8b\e0$m\\,\bb\c8\e0mSx@\91I\cc\ae\18n\88s\f7\e9\faXHh\96\90\f5[\7f\da\9e\89jPu\a49\af-\01^zy\99\8f\88\03\96BR\c9\06\84mx\81\f5\d8\d7\7f\b3\aa\83;\d3\a6{\08\e5\c8\d6\e12\cf\cd_`\d5d\n\88\90\9aJ\1e\fb&\cd\7f\a1\e0;\\\85\7f\06U\9a\a0\ee\f2\\o\c0\df\c9\d8J\b3\a6\1eH\ea\c0H\aa/\f4\8b\b0W\fc\8e\1d`\d0&\da$\f1\da\94;\f1W\ce\b6]y\12<\82X\08\b7\d6\08=\c5v\ed\81$\b5\17\17\cb\a2n\cad\0cK\8cvTh\a2m\a2\dd\dc}\cb\t\fd}\cf]/\94\a9\02\0b\t\0b\15T]\feL|]C5;\f9\d3\e1\a6\e5&\8dT\fa\9e\afm\1aJ\01\c5{\c4\9a\10\9fp\b0\e9\b8\c6\1b\t\a1\9cA\b6\9a5\c0\d4\c6\8c\1c$g\f8bK\c9\03\d2c\01\c3\f8D\fc\d7\91v@\9b\1d\cf]Bc\de\e0y6V\fbM6\94\10\c2\e4B\f5\12\fc\15Y\98\c4+z\e1C\b9\94\f2\9d\93\b2\17{[o>Z[\ecl\ca\f3\9c\97B\9c\cf\ee,\99\05\a71r\'\08\bd0\84\bdS\83\83*x\ff\c6P\bdN1J\ec<\e5\ec(d$5V\bf\f8\a46\d1^\ae\13F\0f\94\99\be6\e1\95w\1b\87\84\85\f6\99\98\17\13\b9?n\84Y{U\e2(\e5&t\c0~\ddW\e7\cf\89\e5/\da\ea\1a3O\98H8o\ea\96\90!v\ef]\c8\d2\f0?c\beZ\06\0b\a5\bc\b4\a9Skuz\07\ed\0f\fbm\f1\c7M\ce\eb\e1\94(\c6\12YI\e8\d3\bd\e4\f6\9c\f0`3\8d\\\d9\bb\ab\d7-qd\ec\9d4\c4,9\80\b0\b3\cf\aa\96My\8d\bdg\c5A\f5wG\a0\dc\a0\83U\fc\a0\d7\f0\ec`\1bI\f9\aa,\e4\89Dr\b5\9d\c4\86\16\f49b\9b\b7\d57]\ac\d5\ce\"\c5u(\1c1\c7:\82%\cb\85t\d7\8b\82k6\932c}\bcdq\f7\9e\d3\a8\86\971\03\02\9c\ff]\ae\eb\bdM\b5\86\08S\a8\fc\fd\83\02\83\7f\f5\d9f-\a1b\a8\cag\d2{\fd$\c3c\dfr\d0`\bc\a4=\a9\de\80\83m\1e\f7Y\9e\cbGBx\eb\r\8dS\16a\a4\08\e6t\f0\85\be\d9RVfQp\e8[y\cd\8b\1f\92l\'.\90g\f6\df2Fq\d9k\80\b6S\db\a3\d8\1c\ba\00\f3\97\bf\97\cd\cf\86\a0\a4(\d2\cc\0e\a4\e8\80\f0}\af\fd\c0\83\a8\c8\cd\b2\06\80\12\cd\"al]\1b=\b1\a4\d2\fa\81_\08 W\80kyc\1a1\c6\ee\a6\c3\9c\b0;\05t60\e3\cb\fc`\bdw\aa\90\f4\c3\9c\8a\06\11D\fc\db\be;\b9\ac\15\d5\b4\f1\f4D-H\15U\fb\92\ee\c5\f3\8b-\05\11\17\99J\1cM-\15\dd\1bu\b6\f0\eexF\d5\\\bf]c\a0xZ\d4b\d2\e4\ac*\17\98\n4\ef4|\c8\16q\89\fb\86\0e\acz\0e\9f\86\80\95\a0M=\ae\e65]\d4\12W\19\d2F\a8\e0\ba\t\a1\ccY`\83t\89\d7\ac\9f\86X\d2\98\e9K\c9?p8\a4\d1+\06\cc#Tw\83\ff\91\cf\dd\'F\a3\06c{\08\bf,)Ud\7f\b6B\d5\b1\17L\c8;\1a\ca\eewsj=\1f\e4\93J\9e\1d_\ba\ca >\f5*\88b\86\93\8e\9c\ee\82r{\b4~T\8d\b25*\fbg8\b2C\aa#O\9aa\9e\e91\1f\c3\f4\f9\81\c6\de\d4\94\ec\e2\00\fa\05d~\f3\f98<\11<\8b\04\dd\d3\8d@\bc\83\de^p8G\8b\15\0b\aeE\d4H\b1P\ab$\96v\8c\06\19\ee\da\8d\d9W\t\9b\dd$\d6\ad;\c9\17\a4\cf\d4\a8\f8\87\d6\e5\80\n\d7\a5L\e5\bc\1d\8d\03\n\d3\f6\a9L\1f!\cdL\cf\9f^+ep\84\cc\87t\d4\1fgi\00 \c3Gv;?\c6\d2\df\d4\c8\84s\e0A\00\f4\d9\ec)\t\cfw\c7\17\n\fb\a5\90XR\00q\10h\f4\cc\c2U\b9\9d\ccy\cf\b4\eef@\8d\14\82q\bf\99\d5\93\e2\1f\ac\810U@H\d8L\f1\c6/\00\cb8\db\'\17\a2|jPZ\0e\a0\ad\b8;\c0\fd\06\d2\f1\9c\ca\1c\85\e4\f0\11\08\d9\a6J0\bd\88F.D\fdc\a6\1dm\16J\8f\90.>v\15\ec\9cJ\9e\fe\872\04N\8eY\9a\ba\cd\d3\1a\'D\dd\c5\fd)?\85\e1\f1\ef@(\c1\88\e10\95T\f7|\f4\8e\e6Y\ee+\d1\b9x\f5\8c>\dd\94\9a\ceX\190\f8t\bb\82\e7\d620\8e\14:\c1\01\af\1f<6Rj\e3\a1\8c?\bc\b1\99\88\f1\c1\9a\'\cb\c3\e6D\dc\e5\b7\a7\15\0f`\f5\96\b9\c0\f8^:\10\ab)\de\a5\11\db\12\b8\b2\bc\e7\f0\b6\f6H\d4\15tV\0f\d6\91\17f\df\eb!\add4[I\1b\11\95\c9%\bb\ce\9fk\934\ec\be\00\d9\r\b1\ca\fb;\efi\c2\87F\b8B\a7\ee@OQ]=\fa\nk\04\b3)X\e6\12Q*\11\a3\a5\b4\0c\dc\e6\c2\e2\0f\1a\f7\8f\abr\ba\ea\85\e7\f0G\93\a0s\db\93\e0\f4\b3V\0fieg!\edY\b8\88P\d2\b8\18\f2\e0,S\c3>\c1ih0sUr\83sO\97\8c\fb\13:\c7\18BA\1e\cf\eaNdP#\bd\af\fa\98\08\f9\9e\92\d1\e5\83\a5b}$l\ac\db9\bfJ\b7F\f7E\dfr\a7]\ce\96\c3K\89\83\b7\8e2\8c\ba\8bkO\11\f5\81|\b4\9e\abde2?/\a9n\06\a2Ur\a2\9ba\86\d6\bd\fe\fe\0e{S\n\c8\85u\87E\01\fd\13\866__\e9,t\06\bd\e7R\e9\96A\fc\98\a7\047\b7#8\11H,\a0\a7\a3\fcQ;\7f\d1\c5\04\a5,\86\15Z\f7\c4H\e6=\13\85\ef\82\fb\"\e7\dbsM\98\9a\f5\da_\rXf\ab\a3\ba\eb\e0\d2\d0`>\c1\b3\d1\b7\10\ee?\96\cc\a8&\99\07\05\f9\8d1\1f\c6\e5\94\e9\cf\bb\ffRp\7fIFw\f1\fd\d3\9b\0f\fd\f1a\d5\9f3\a6\ef\ed\8b\ea\b6\fe\c8\82S|n\ba\ca\c7\c0\8fk\e9.\a5d\fe{ch\1b\ni\bd\f9\b0s\c6\a3z\ce\fd=->!Q\a6a\16\9cN\08\\\a6\0c\a1\be\06\b8\8di\e5\0f\fa\1b\c3b\n\f3\cfOInH&\f1\c3\de\93\f8\e2\f3\fa\cc\ef\c3\a3\db\89Z\b7v:k\\\dbm\98\1c\e0uZF)\96\f8e\14\t\863R\89\be#X\13\f1\97\b3\bb\f6\7fY\8bg\c0\a6+\ee,.X\ed}\a0jt\ef\17\b7@8H\db\94\dc\1cW\b4N\a4\c2\a8\eb\dd\e4PF\1a\12\ba\13\e4labM\f3\92f\15\1e\e5\d7\a0\96\e8\17\1d\c8\f9\ba \b0w`\cd2\ef\86$^\91.\12\1d\dct\14\ce\n\b8\80\ff\aa\a8\ad\b5\b5\baV$\13\92\99\81\r\e6`\bf\d5\12\19#\e3il\ed\97\f6\ff\e1\10\8f\9c\97\c5\ab\ef\f5\8d\c1c\f4\1e\fa?\8d\ca\b3\83\fd\b6\96ks\b1\b2|\b1\a6\f8\8f0\bd\a0\e4\bcd|F\d0\dd\de\db]\d0\f6\b3|\ac\e4\0e\f6\be\r,\a2\8ak\a9:Bz\f0\cdk\9d\92\b3.\11\b7J\ad\c6S\c9\d2\98l\c1\86Dw`z\d5d\9d\d8\b7\a8{\07\bf\c7q\e8\8bJ|l\05_b\87rI\add\d7\1cG\11-]\9b\c7\c6\f6:\a9\cf\9b\d8=\r\e4\98\d5y4\82yx\b4\89\d3\c3\c2N\8d\10\1d\ffJ\cb`\f1K\cb\106\84\ba9QX*r\df\ce\fe\b8\ed\1e\fe\94C\a5(\88e\ee\b4N\97\c2>\'\a9\a6=z\94\ce2\ea\fe)b\"=s\87\b8)\88f\cc\1c\81_R?Z}5\06\08\a8&4*\80\ffc\a1\f7&\cf\b0\dc\c2\07\caR0\c14`\ff\bc\c9\b5\f0\02\dd\93\b3\89\fcg|\f1A8?,\fc\e2\acC\d4x \ac\bb\c0\ed6)\83\a7\9b\9d\rL\aa\84K\94K\d51\a9\84\f3c\91\02\c5\11\df\d4e^y\9e\n}\d3e\f0\bc5C\f6\d5\16J\ff\b5\17FM.\a4?\16\96\01\ea\99EN\8e\bf\d1\ceKP9\8d\cf\9b\fb\81d\c0\d6\e1q/\86\c2^\e4\88p\c3\82z\a2}\f0LZN\bb\'sv]U&\ba\91\8c\85N\96o\f8\10\d5\f8\07j:\ea\af(\b6\ef&\e2\bb\8b6U\n\f7\89\04\89\e5\db\b2\a3\ab\b0\da\ea.\84\ea\cct\acE+o\c9OFk\ae\c8\92\9d\92\12\00\c9\8b\0b;\cb\bb\e3\17\06\daz\b7D7\17@\bbn\ce\t\bd\aa\dc\9d\87\90Y\e5\15\05\1d\10j\nB\cc\b6\ea\a9\c2T\faW\8f-#\12J\82F\a9\9fdeT\f3\e9\f8-\b3\f9\ab\96\dc\"\98\93G\bd~)p$w\f9\df\f7V\bc\93+~xY6\ef\19\c6v\ea\fb\8bZ\b6U<\dbN\ebW\03k\a0w\14\e5\fa\ae\f1#k\0b\92\"\e6\ed\c4\85\88\95Y\9e\b9\da\ed\ecE\8e6\ab_\e9\9bSu\fd\f7\02\b4\88\14\b4\eb\18\02\cb\db\11\81\a8\d2\fc\b5\03\e1\aa\19\a1&\9f\c2\bdR\d6\a2R\07|\a3D\99\d5_I\f0F3m\e7K\a5\93\84-\e6\ca\7f\85\db-V\0c@\a4po\8e\b8\e5\b8\9f\bd\df\a6R\b9k\0fP\cdL\cb\b2&\1f\a7\07\ad\97\d0\a7\a7F\13\a4\00 ~/xs\c8$\cc^\82\c8(\0c\8cf\00\d4\8e;V\90\fa-\7f\f6\a2\fa2\0f/\80\00\89r\cak4y\f9\1e\b4\cb\b9\ff\d2:\a0@+O\bc\86\81\d7\b7&\a1\fe\a8\bf\87I\c8\10\f6\e26\f4\b0\e62\b8$\9f\c9\d7\f4-}\ca\d9\rC1]\a0?\e6\ed\c6\bb\rry\1c=P\91\94}t\88\cf_\a9\f8*\91\ce\97cL\a4u|\ceH\b5\e1\dbi\9b\ba\1a\e1>\be\af\86\c9\1b\02\9b\"\daRD\c2ha\99\ce\ad[\e8\fb\a2\c2A\ab\90g\d5\f2\c3\b9?B\99r\e2\fa\a5\19\tk\ba`\c5\97\1a\d4g\c9\9f\87\cd\dc\0f`\cb\05\e9\b8\b6\bd \c9\c1\bb\87\e9\00T\138>G#g$\edh;\b2\aa\e9#\01)\0b\e3\86\0cv\c06\94!e\af\nr\b6\a0\f9\ce\9b\a8\8f\93pD\b9i>[\8d\0e\e4\08\f8\c2\c2\92s\b8\8c\95\e7\04\0e\b20\12\1d\0b\b6\b9\b9;H\f3w\bd\90\c2Ho^+\f2\c6\b1(\a8J\1a\f0\d5\ec\b4\f3\1a\0b6\b6\ae8\1e2R\dd l\0b(\e2\b0\e1\8d\c3c\da\c6%_S\8a\94#\07Y\8d\0e\ad8Z~H\9cW7\e8\acy\ecH\af\b0Q\d8\c6\f0\9dZ\83-D\"\18\98\'\1b\db\dce\8e\f8lE1\e4\f8k\15\0f\bf\f8\f0\08\8a\ffX\1bd\cb\9e\8e\1b\c5\da\d2\ee6-\8b\ac?/\"=~Fr\e2w\91\87\aa\84\f8\ad\d7\0f\bbj\cc\1d\d8\0e[\ea\ba\94\eaR\bb\cc\86\e9\b4\c2\9f\12G\e9\98\a5\e99\a5\'\ea\7f\a8$b\b3G\d7\98#?\0ed\88\8e\b1\e4\9f\d2\ad:\a0\19\r\7f\ec\8e\89>\15\f9\ee\ee\a3\83\ac$\040h\cfS\19+\8eZ\b7\aa\ea\8c\a4\d7-\05<B\c3\a8_\b611eU%\b0\cdMy\06\cb\12\f4\927\11\bf>_U\17\8e\80\d0\0b\e4\be\8b\d8\bb\e2\d6n\0e\b7*\9d\b1\a0\c4\0e\9d\ae\ae\cej[\8b\n\d2du\04\de\c8uRDZZ\82E\f2.\8d\06\be\92\85\15\fb\12g\d5\f0\f0\e2\d6\ee=\18\c4\b6{s\ed\9ck`\85\96\d6MFUL\1eu\a4Z\d0(\c4\86\b8&<L\e1\97\aa\dfe\92Mq\043\f5\a8f0K\9f\d9=\d5\ab\7f{\d0\c6\e2?\99)@\fe\8e\03\a8F\e5\96_\9a\84x\db\8f\bf3\d0\bdr\04R\98\de|\f7\c0\a5V\d2s\ef@Dm\8f\85f>\96\ad\9a\98\'vc\a8\95\a8J\a4y\13\00\e7\ddY\c1~\b1S|\12\bbR]\rX\18\c0`U\afq\de\9dh\1b\d7\e9\a6\b4\10n\1e\f0\b8\aa\r\07\abb!q&\92\e8p\ca\04\13\96\b3\ca\d1\c8U\bbi\r\b0\b6\"\r\fd\c5\97{`=\05;+*\c4\10\\\e4jP|\b7}\9a\b8\8c\e3\04[\9az\8a\b9\8eB\b2\ad\92\8e`\f3w\1c\c6\f1@\19\edg\b2\d3\1eY7\b28\f0U\a37.\91_\e8\01\df\88f/\c5\deFlk\c6\e2\bc\ba;1a\8b\15\a0=;K\ac##w\1bl\a9\8a}9\ae\1a\08\r\n^\97\ec\abU\"\c7S\ed\dc\c7\d9!J\90\8c5\bd\e7\96uu\\T\14\ea\1c\88T.\dawA\d6P~\d2\92si\99$$\aa\e9\b9\d0\d5\d1\0b\e5\dd\87w\d0\c3\bf-\ad\d4d\e8DK\c6N^\95\b4Jb\da\97<\ec\84>\11\0b\ef;\f1Z\bda\dd\fa\d0\bdK\'\a6\8e\d5\cd\ea\8a\ad\b1\ec\ba\949E\ad\1e\b1\cf\f2J\81\a5\ed\18\deg\f4\fcCK,\b3\ce\81\d7\cep\87\94\cf\ea\801\fc\14^\f7_B\a2\8d\02M\a9y\83%\a1>;\9a5\f5\f7\d2\ca0C\a0\13X\e4n\t\r\ca\00\83\f2\b5\87\fd\fcS\88\18n\9d\ca\8bH~\e0\91\b7\d1t\9e}4U\cfd\a2^w\da\9dXv%\06\12\c6\9d\81*\03\feJ6\95Q\c5\ee\d3\ae\87\96\f7\04\"\f5\83\bd\dd\83:R;uD\cd\14\be\9aB5yr\96j\92\c4\'\8a\92\95\00\9am\c1\93\82\17\0f<\05\b7u\b1,\f7\ba\80\00\c9\f18c\dd\12\8b\c6$S\ee{\datP\a0\1d\97\03^\ca\eb\16\fc\f6\d3\ea\1a\11\92d\08\e5\bc\84\f5\bc\a6\1c\bb\f4\88\a5a\95\b6}J\1e\ec\e52l\d0\e3\e91+\07]\1d\92\8e\ee\92\93\cf\9fCb.2\ff:I\b4\a462\aaw\b8\c2\87\d4\fa\b9\fe\be\t[\e1M\c4\be\94\95\e6\b3\a9\89yh\be.L\d9\ac\b0:\f7|\1d\90\10\n\f6K\017\9d\0f\0f\d8\\\t5\dc$\b4\94\8c\f3\9e\c1\84\84S\13\0e\b4KB\13.\e1\b9o\b0\06\f2\a5e(\cb\88Po\t\cc\bc\8c\d3E.D\b7\87?\f9\fe\aa$\cb\0b\ff\eb\afH\d79\15\a5i\8f\f7\be\d5\ed\bd\ce\fe\e6\db\1bM\88Z\0eDs\b5\97\a5\b46A_p\8900\95\f8\88\nh1\fc\cea\84\11w\cc\ab=|\ba6+\r\c2\fd\bcBz\e5\d5\94\bf\d6L\1bi\04v\902=\b5il\af\05\bd7\86\0f\b1\c1\c2I\9a?\a6#\84G\1bG\ac\c5\a7S\1dr3\dc\80\cf\0f+e\19\e2X\17\b7\d1\a8\a4N@\13a\c3\d3;\dfO\8d\97n\12\83\e9&1\08\ac\1cZd\n\d7\a3p=\n\d7\a3\a3p=\n\d7\a3p=\cc\cc\cc\cc\cc\cc\cc\cc\cc\cc\cc\cc\cc\cc\cc\cc\00\00\00\00\00\00\00\80\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\c8\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\fa\00\00\00\00\00\00\00\00\00\00\00\00\00\00@\9c\00\00\00\00\00\00\00\00\00\00\00\00\00\00P\c3\00\00\00\00\00\00\00\00\00\00\00\00\00\00$\f4\00\00\00\00\00\00\00\00\00\00\00\00\00\80\96\98\00\00\00\00\00\00\00\00\00\00\00\00\00 \bc\be\00\00\00\00\00\00\00\00\00\00\00\00\00(k\ee\00\00\00\00\00\00\00\00\00\00\00\00\00\f9\02\95\00\00\00\00\00\00\00\00\00\00\00\00@\b7C\ba\00\00\00\00\00\00\00\00\00\00\00\00\10\a5\d4\e8\00\00\00\00\00\00\00\00\00\00\00\00*\e7\84\91\00\00\00\00\00\00\00\00\00\00\00\80\f4 \e6\b5\00\00\00\00\00\00\00\00\00\00\00\a01\a9_\e3\00\00\00\00\00\00\00\00\00\00\00\04\bf\c9\1b\8e\00\00\00\00\00\00\00\00\00\00\00\c5.\bc\a2\b1\00\00\00\00\00\00\00\00\00\00@v:k\0b\de\00\00\00\00\00\00\00\00\00\00\e8\89\04#\c7\8a\00\00\00\00\00\00\00\00\00\00b\ac\c5\ebx\ad\00\00\00\00\00\00\00\00\00\80z\17\b7&\d7\d8\00\00\00\00\00\00\00\00\00\90\acn2x\86\87\00\00\00\00\00\00\00\00\00\b4W\n?\16h\a9\00\00\00\00\00\00\00\00\00\a1\ed\cc\ce\1b\c2\d3\00\00\00\00\00\00\00\00\a0\84\14@aQY\84\00\00\00\00\00\00\00\00\c8\a5\19\90\b9\a5o\a5\00\00\00\00\00\00\00\00:\0f \f4\'\8f\cb\ce\00\00\00\00\00\00\00\00\84\t\94\f8x9?\81\00\00\00\00\00\00\00@\e5\0b\b96\d7\07\8f\a1\00\00\00\00\00\00\00P\deNg\04\cd\c9\f2\c9\00\00\00\00\00\00\00\a4\96\"\81E@|o\fc\00\00\00\00\00\00\00M\9d\b5p+\a8\ad\c5\9d\00\00\00\00\00\00 \f0\05\e3L6\12\197\c5\00\00\00\00\00\00(l\c6\1b\e0\c3V\df\84\f6\00\00\00\00\00\002\c7\\\11l:\96\0b\13\9a\00\00\00\00\00@\7f<\b3\15\07\c9{\ce\97\c0\00\00\00\00\00\10\9fK \dbH\bb\1a\c2\bd\f0\00\00\00\00\00\d4\86\1e\f4\88\r\b5P\99v\96\00\00\00\00\80D\14\131\ebP\e2\a4?\14\bc\00\00\00\00\a0U\d9\17\fd%\e5\1a\8eO\19\eb\00\00\00\00\08\ab\cf]\be7\cf\d0\b8\d1\ef\92\00\00\00\00\e5\ca\a1Z\ad\05\03\05\'\c6\ab\b7\00\00\00@\9e=J\f1\19\c7C\c6\b0\b7\96\e5\00\00\00\d0\05\cd\9cmo\\\ea{\ce2~\8f\00\00\00\a2#\00\82\e4\8b\f3\e4\1a\82\bf]\b3\00\00\80\8a,\80\a2\ddn0\9e\a1b/5\e0\00\00 \ad7 \0b\d5E\de\02\a5\9d=!\8c\00\004\cc\"\f4&E\d6\95C\0e\05\8d)\af\00\00A\7f+\b1p\96L{\d4QF\f0\f3\da\00@\11_v\dd\0c<\0f\cd$\f3+v\d8\88\00\c8j\fbi\n\88\a5S\00\ee\ef\b6\93\0e\ab\00zEz\04\r\ea\8eh\80\e9\ab\a48\d2\d5\80\d8\d6\98E\90\a4rA\f0q\ebfc\a3\85PG\86\7f+\da\a6GQlN\a6@<\0c\a7$\d9g_\b6\90\90\99e\07\e2\cfPK\cf\d0m\cfA\f7\e3\b4\f4\ff\9fD\ed\81\12\8f\81\82\a4!\89z\0e\f1\f8\bf\c7\95h\"\d7\f2!\a3\rj+\19R-\f7\af9\bb\02\eb\8co\ea\cb\90Dv\9f\a6\f8\f4\9b\08j\c3%p\0b\e5\fe\b4\d5SG\d06\f2\02E\"\9a\17&\'O\9f\90e\94,Bb\d7\01\d6\aa\80\9d\ef\f0\"\c7\f5~\b9\b7\d2:MB\8b\d5\e0\84+\ad\eb\f8\b2\de\a7e\87\89\e0\d2w\85\0c3;L\93\9b/\eb\88\9f\f4U\ccc\d5\a6\cf\ffI\1fx\c2\fb%k\c7qk\bf<\8a\90\c3\7f\1c\'\16\f3z\efE9NF\ef\8bV:\da\cfq\d8\ed\97\ac\b5\cb\e3\f0\8bu\97\ec\c8\d0C\8eN\e9\bd\17\a3\be\1c\ed\eeR=\'\fb\c4\d41\a2c\ed\ddK\eec\a8\aa\a7L\f8\1c\fb$_E^\94j\eft>\a9\ca\e8\8f6\e49\ee\b6\d6u\b9D+\12\8eS\fd\e2\b3D]\c8\a9dL\d3\e7\16\b6\96q\a8\bc\db`J:\1d\ea\be\0f\e4\90\cd1\feF\e9U\89\bc\dd\88\a4\a4\ae\13\1d\b5A\be\bd\98c\ab\abk\14\ab\cdM\9aXd\e2\d1-\ed~<\96\96\c6\ec\8a\a0p`\b7~\8d\a2<T\cf\e5\1d\1e\fc\a8\ad\c8\8c8e\de\b0\cbK)C_\a5%;\12\d9\fa\af\86\fe\15\dd\be\9e\f3\13\b7\0e\efI\ab\c7\fc-\14\bf-\8a7Cxl2i5n\96\f9{9\d9.\b9\ac\04T\96\07\7f\c3\c2I\fb\f7\da\87\8fz\e7\d7\06\e9{\c9^t3\dc\fd\da\e8\b4\99\ac\f0\86\a3q\ed=\bb(\a0i\bc\11#\"\c0\d7\ac\a8\0c\ceh\r\ea2\08\c4+\d6\ab*\b0\r\d8\d2\90\01\c3\90\a4?\n\f5\dbe\ab\1a\8e\08\c7\83\fa\e0y\da\c6g&yR?V\a1\b1\ca\b8\a48Y\18\91\b8\01pW&\cf\ab\t^\fd\e6\cd\86o^\b5&\02L\edxa\0b\c6Z^\b0\80\b4\05[1X\81OT\d69\8ew\f1u\dc\a0!\c7\b1=\aeaciL\c8q\d5m\93\13\c9\e98\1e\cd\19:\bc\03_:\ceJIxX\fb#\c7e@\a0H\ab\04{\e4\c0\ce-K\17\9dv\9c?(d\r\ebb\9a\1dqB\f9\1d]\c4\94\83O2\bd\d0\a5;\00e\r\93wet\f5yd\e3~\ecD\8f\ca _\e8\bbj\bfh\99\cb\1eN\cf\13\8b\99~\e8v\e2jE\ef\c2\bf~\a6!\c3\d8\ed?\9e\a2\14\9b\c5\16\ab\b3\ef\1e\10\ea\f3N\e9\cf\c5\e5\ec\80;\eeJ\d0\95\12JrX\d1\f1\a1\bb\1f(a\ca\a9]D\bb\97\dc\8e\aeEn\8a*&r\f9<\14u\15\ea\bd\932\1a\d7\t-\f5X\e7\1b\a6,iM\92V\9c_p&&<Y.\e1\a2\cfw\c3\e0\b6l\83w\0c\b0/\8boz\99\8b\c3U\f4\98\e4Gd\95\0f\9c\fbm\0b\ec?7\9a\b5\98\df\8e\ac^\bd\89A\bd$G\e7\0f\c5\00\e3~\97\b2W\b6,\ec\91\ec\edX\e1S\f6\c0\9b^=\df\ed\e37g\b6g)/l\f4\99X![\86\8bt\ee\82\00\d2\e0y\bd\87q\c0\ae\e9\f1g\ae\11\aa\a3\80\06Y\d8\ec\e9\8dp\1ad\ee\01\da\95\94\cc Ho\0e\e8\b2X\86\90\fe4A\88\dd\dc\7f\14\8d\05\t1\de\ee\a74>\82Q\aa\15\d4\9fY\f0FK\bd\96\ea\d1\c1\cd\e2\e5\d4\1a\c9\07p\ac\18\9el\9e2#\99\c0\ad\0f\85\b0\dd\04\c6k\cf\e2\03E\ffk\bf0\99S\a6\1c\15\86\b7F\83\db\84\16\ffF\ef|\7f\e8\cfc\9age\18d\12\e6n_\8c\15\aeO\f1\81~\c0`?\8f~\cbOIw\ef\9a\99\a3m\a2\9d\f08\0f3^\be\e3\1cU\ab\01\80\0c\t\cb\c5,\07\d3\bf\f5\ad\\c*\16\02\a0O\cb\fd\f6\f7\c8\c7/s\d9s~\daM\01\c4\11\9f\9e\fa\9a\dd\dc\fd\e7g(\1dQ\a1\015\d6F\c6\b8\01\15T\fd\e1\81\b2e\a5\tB\c2\8b\d8\f7&B\1a\a9|Z\"\1f_\07FiYW\e7\9aXi\b0\e9\8dxu37\89\97\c3/-\a1\c1\ae\83\1cd\b1\d6R\00\84k}\b4{x\t\f2\9a\a4#\bd]\8cg\c02c\cePM\ebE\97\e0F6\96\ba\b7@\f8\ff\fb\01\a5 f\17\bd\98\d8\c3;\a9\e5P\b6\ffzB\ce\a8?]\ec\be\ce\b4\8a\13\1f\e5\a3\df\8c\e9\80\c9G\ba\937\01\b16l3o\c6\17\f0#\e1\bb\d9\a8\b8\84A]DG\00\0b\b8\1d\ecl\d9*\10\d3\e6\e5\91t\15Y\c0\r\a6\92\13\e4\c7\1a\eaC\90/\dbh\ad7\98\c8\87w\18\ddy\a1\e4T\b4\fb\11\c3\98E\be\ba)\94^T\d8\c9\1dj\e1z\d6\f3\fe\d6m)\f4\1d\bb4\'\9eR\e2\8c\0cfX_\a6\e4\99\18\e4\e9\01\b1E\e7\1a\b0\8f\7f.\f7\cf]\c0^]dB\1d\17\a1!\dcs\1f\fa\f4Cupv\ba~Ir\ae\04\95\89\a8S\1cyJI\06ji\de\db\0e\daE\fa\ab\92hc\17\9d\db\87\04\03\d6\92\92P\d7\f8\d6\b6B<]\84\d2\a9E\c2\c5\9b[\92\86[\86\b2\a9E\ba\92#\8a\0b2\b7\82\f26h\f2\a7\1e\14\d7hw\acl\8e\ffd#\afD\02\ef\d1&\d9\0cC\95\d7\072\1f\1fv\edja5\83\b8\07\e8I\bd\e6D\7f\e7\a6\d3\a8\c5\b9\02\a4\a6\tb\9cl \16_\a1\90\08\137h\03\cd\0f\8cz\c3\87\a8\db6dZ\e5k\"!\"\80\89\97,\daTII\c2\fd\b0\de\06k\a9*\a0l\bd\b7\10\aa\9b\db\f2=]\96\c8\c5S5\c8\c7\ac\e5\94\94\82\92o\8c\f4\bb:\b7\a8B\fa\f9\17\1f\ba9#w\cb\d7x\b5\84r\a9i\9c\fbnS\14\04v*\ff\r\d7\e2%\cf\13\84\c3\baJh\19\85\13\f5\fe\d1\8c[\ef\c2\18e\f4i]\c2_fX\b2~\028\99\d5y/\bf\98az\d9\fb?w/\ef\03\86\ffJX\fb\ee\be\fa\d8\cf\fa\0fU\fb\aa\84g\bf].\ba\aa\ee8\cf\83\f9S*\ba\95\b2\a0\97\fa\\\b4*\95\83a\f2{tZ\94\dd\df\88=9tau\ba\e4\f9\ee\9a\11q\f9\94\17\eb\8cG\d1\b9\12\e9]\b8\aa\01V\cd7z\ee\12\b8\cc\"\b4\ab\91:\b3\n\c1U\e0b\ac\aa\17\e6\7f+\a1\16\b6\t`M1k\98{W\94\9d\df_vI\9c\e3\0b\b8\a0\fd\85~Z\ed}\c2\eb\fb\e9\adA\8e\07s\84\be\13\8fX\14\1c\b3\e6zd\19\d2\b1\c8\8f%\ae\d8\b2nY\e3_\a0\99\bd\9fF\de\bb\f3\ae\d9\8e_\cao\ee;\04\80\d6#\ec\8aTX\rH\b9{\de%\e9J\05 \cc,\a7\adj\ae\10\9a\a7\1aV\af\a4\9d\06(\ff\f7\10\d9\04\da\94\80Q\a1+\1b\86\"\04y\ff\9a\aa\87B\08]\f0\d2D\fb\90(+EW\bfA\95\a9SJt\ac\07\16:5\f2u\16-/\92\fa\d3\e8\\\91\97\89\9b\88B\b7\t.|]\9b|\84\11\da\ba\fe5a\95i%\8c9\db4\c2\9b\a5\95\90i~\83\b9\faC.\ef\07\12\c2\b2\02\cf\bb\f4\03^\e4g\f9\94}\f5DK\b9\afa\81\f5x\c2\ba\ee\e0\1b\1d\dc2\16\9e\a7\1b\ba\a12\17si*\d9bd\93\bf\9b\85\91\a2(\ca\fe\dc\cf\03u\8f{}x\af\02\e75\cb\b2\fc>\d4\c3DRs\da\\\ab\ada\b0\01\bf\ef\9d\a7d\faj\13\88\08:\16\19z\1c\c2\aek\c5\d0\fd\b8E\18\aa\8a\08[\9f\98\a3r\9a\c6\f6E=\'W\9eT\ad\8a\99c?\a6\87 <\9aK\86x\f6\e2T\ac6\7f<\cf\8f\a9(\cb\c0\dd\a7\16\b4\1bjW\84\9f\0b\c3\f3\d3\f2\fd\f0\d5Q\1c\a1\a2DmeC\e7Yx\c4\b7\9e\96%\b3\b1\a4\e5Jd\9f\14ap\96\b5eF\bc\ee\1f\de\r\9f]=\87Yy\0c\fc\"\ffW\eb\ea\a7U\d1\06\b5\0c\a9\d8\cb\87\ddu\ff\16\93\f2\88\d5B$\f1\a7\t\ce\be\e9TS\bf\dc\b7/\eb\8aSm\ed\11\0c\81.$*(\ef\d3\e5\fa\a5m\a8\c8h\16\8f\10\9dV\1ayu\a4\8f\bc\87Di}\01n\f9UD\ec`\d7\92\8d\b3\ac\a9\95\c3\dc\81\c97jU\'9\8d\f7p\e0\17\14{\f4S\e2\bb\85b\95\b8C\b8\9aF\8c\8e\ec\ccxtm\95\93\bb\ba\a6TfAX\af\b2\'\00\97\d1\c8z8ji\d0\e9\bfQ.\db\9e1\c0\fc\05{\99\06\e2A\"\f2\17\f3\fc\88\03\1f\f8\bd\e3\ec\1fDZ\d2\aa\ee\dd/<\ab\c3&v\ad\1c\e8\'\d5\f1\86Uj\d5;\0b\d6t\b0\d3\d8#\e2q\8aVtube\05\c7\85IN\84gV-\87\f6l\d1\12\bb\be\c68\a7\dbae\01\ac\f8(\b4\c7\85\d7in\f8\06\d1R\ba\be\01\d763\e1\9c\b3&\02E[\a4\82s4\17aF\02\c0\ec\84`\b0B\16rM\a3\90\01]\f9\d7\02\f0\'\a5x\\\d3\9b\ce \cc\f4A\b4\f7\8d\03\ec1\ce\963\c8B\02)\ffqR\a1uq\04g~A> \bdi\a1y\9f\86\d3\84\e9\c6b\00\0f\d1Mh,\c4\tX\c7h\08\e6\a3x{\c0REa\8275\0c.\f9\82\8a\df\ccV\9ap\a7\cb|\b1B\a1\c7\bc\9b\91\b6\0b@v`\a6\88\fe\db]\93\89\f9\ab\c25\a4\0e\d0\93\f8\cfj\feR5\f8\eb\f7V\f3CM\12\c4\b8\f6\83\05\deS!{\f3Z\16\98Jp\8bz3zr\c3\d6\a8\e9Y\b0\f1\1b\be\\L.Y\c0\18Ot\0c\13dp\1c\ee\a2\eds\dfyo\f0\deb\11\e7\8b>\c6\d1\d4\85\94\a8+\acEV\cb\dd\8a\e1.\ce7\06J\a7\b9\926\17\d7+>\95m\99\ba\c1\c5\87\1c\11\e87\04\dd\cc\b6\8d\fa\c8\a0\14\99\db\d4\b1\n\91\a2\"\n@\92\98\9c\1d\c8Y\7f\12J^M\b5K\ab\0c\d0\b6\be\03%:0\1f\97\dc\b5\a0\e2\1d\d6\0f\84d\aeD.$~s\de\a9q\a4\8d\d2\e5\89\d2\fe\ec\ea\\\ad]\10V\14\8e\r\b1G_,\87>\a8%t\18u\94k\99\f1P\dd\19w\f7(N\12/\d1/\c9<\e3\ff\96R\8ao\aa\9a\d9pk\bd\82{\fb\0b\dc\bf<\e7\ac\0bU\01\10M\c6lcZ\fa\0e\d3\ef\0b!\d8N\aa\01T\e0\f7G<x\\\e9\e3u\a7\14\87q\n\814\ec\fa\ace\96\b3\e3\\S\d1\d9\a8\rM\a1A\a79\18\7f|\a0\1c4\a8E\10\d3P\a0\t\12\11H\de\1eM\e4\91 \89+\ea\832\04F\ab\n\edJ\93`]\b6hk\b6\e4\a4?\85\17VM\a8\1d\f8\b9\f4\e3B\06\e4\1d\ce\8ef\9d\ab`\12%6\f3x\ce\e9\83\ae\d2\80\19`Bk|+\d7\c10\17B\e4$Z\07\a1\1f\f8\12\86[\f6L\b2\fc\9cR\1d\ae0I\c9\'\b6\97g\f23\e0\de<D\a7\a4\d9|\9b\fb\b1\a3}\01\ef@\98\16\a5\8a\e8\06\08.A\9dN\86\ee`\95(\1f\8eN\ad\a2\08\8ay\91\c4\e2\'*\b9\ba\f2\a6\f1\a2X\cb\8a\ec\d7\b5\f5\db\b1tgi\af\10\aee\17\bf\d6\f3\a6\91\99)\ef\a8\e0\a1m\ca\ac?\ddn\cc\b0\10\f6\bf\f3*\d3X\n\t\fd\17\8e\94\8a\ff\dc\94\f3\ef\b0\f5\07\efLK\fc\dd\d9\9c\b6\1f\n=\f8\95\8e\f9d\15\10\af\bdJ\0fD\a4\a7LLv\bb\f17\be\1a\d4\1am\9d\13U\8d\d1_\dfS\ea\ed\c5m!\89a\c8\84,U\f8\e2\9bkt\92\b4\9b\e4\b4\f5<\fd2wj\b6\db\82\86\11\b7\a1\c2\1d\"3\8c\bc?\15\05\a4\92#\e8\d5\e4J3\a5\ea?\af\ab\0f-\83\a6;\16\b1\05\8f\0e@\a7\f2\87M\cb)\f8#\90\ca[\1d\c7\b2\12\10Q\ef\e9 >t\f6,4\bd\b2\e4x\df\16T%k$\a9M\91\1a\9c@\b6\ef\8e\ab\8b\8eT\f7\c2\b6\89\d0\1a \c3\d0\a3\abr\96\ae\b1)\b5s$\ac\84\a1\e8\f3\c4\8cV\0f<\da\1et\a2\90-\d7\e5\c9q\18\fb\17\96\89e\88\92\88ez|\a6/~\8d\de\f9\9d\fb\eb~\aa\b7\ea\fe\98\1b\90\bb\dd1Vx\85\fa\a6\1e\d5e\a5>\7f\"t*U\de5k\93\\(3\85_\'\87\8f\95\88:\d5V\03F\b8s\f2\7f\a67\f1h\f3\ba*\89\8a,\84W\a6\10\ef\1f\d0\85-C\b0iu+-\9b\b2\f6gj\f5\13\82s\fc)\0eb);\9cB_\f4\01\c5\f2\98\a2\8f{\b4\91\ba\f3I\83\13wqBv/?\cbs\9a!6\a9p\1c$\d7\d4\r\d3S\fb\0e\fe\10\01\aa\83\d3\8c#\ed\06\a5\e8c\14]\c9\9e\aa@J2\0486\f4H\ce\e2|Y\b4{\c6\d5\d0\dc>\05\c6C\b1\da\81\1b\dco\a1\1a\f8\n\05\94\8e\86\b7\94\dd(1\91\e9\e5\a4\10\9b&\83\1c\19\b4\f2|\car}\f5c\1f\ce\d4\c1\f0\a3c\1fa/\1c\fd\cf\dc\f2<\a7\01J\f2\ec\8c<g9;c\bc\01\ca\17\86\08An\97\13\d8\85\e0\03\05\be\d5\82\bc\9d\a7J\d1I\bd\18N\a7\d8D\86-K\a2+\85Q\9dE\9c\ec\9e!\d1\0e\d6\e7\f8\ddE;\f3R\82\ab\e1\93\03\b5B\c9\e5\90\bb\ca\17\n\b0\e7b\16\da\b8Cb\93;\1fuj=\9d\0c\9c\a1\fb\9b\10\e7\d4:x\ng\12\c5\0c\e2\87\01E}aj\90\c5$\8bf\80+\fb\'\da\e9A\96\dc\f9\84\b4\f6\ed-\80`\f6\f9\b1Qd\d2\bbS8\a6\e1si9\a0\f8sx^\b2~cU4\e3\07\8d\e8\e1#d{H\0b\db_^\bcj\01\dcI\b0b\da,=\9a\1a\ce\91\f7uk\c5\01S\\\dc\fb\10x\cc@\a1Av\ba)c\1b\e1\b3\b9\89\9d\n\cb\7f\c8\04\e9\a9)\f4;b\d9 (\acD\cd\bd\9f\faEcT3\f1\ca\ba\0f)2\d7\95@\adGy\17|\a9\c0\d6\be\d4\a9Y\7f\86]H\cc\cc\ab\8e\edIp\8c\eeI\140\1f\a8tZ\ff\bfV\f2h\\\8c/j\\\19\fc&\d2\111\ffo\ec.\83s\b7]\c2\d9\8f]X\83\ab~\ff\c5S\fd1\c8%\f52\d0\f3t.\a4U^\7f\b7\a8|>\bao\b2?\c40\12:\cd\eb5_\e5\d2\1b\ce(\85\cf\a7z^KD\80\b3\81[\cfc\d1\80yf\c3Q\196^U\a0\1fb2\c3\bc\05\e1\d7@4\a6\9f\c3\b5j\c8\a7\fa\fe\f3+G\d9\8dP\c1\8f\874c\85\faQ\b9\fe\f0\f6\98O\b1\d2\d8\b9\d4\00^\93\9c\d33\9fV\9a\bf\d1n\07O\e8\t\815\b8\c3\c8\00G\ec\80/\86\n\c8bbL\e1B\a6\f4\fa\c0X\'a\bb\'\cd\bd}\bd\cf\cc\e9\e7\98\9cx\97\b8\1c\d58\80,\dd\ac\03@\e4!\bf\c3V\bd\e6c\nG\e0x\14\98\04P]\ea\eet\acl\e0\fc\ccX\18\cb\0c\df\02RzR\95\c8\ebC\0c\1e\807\0f\fd\cf\96\83\e6\18\a7\ba\ba\e6T\8f%`\05\d3\fd\83|$ \dfP\e9i *\f3.\b8\c6G~\d2\cd\16t\8b\d2\91AT\faW\1d3\dcL\1dG\81\1cQ.G\b6R\e9\f8\ad\e4?\13\e0\e5\98\a1c\e5\f9\d8\e3\a6#w\d9\dd\0f\18X\8f\ffD^/\9cg\8eHv\ea\a7\ea\t\0fWs?\d65;\83\01\b2\da\13\e5Qe\cc\d2,O\cfK\03\n\e4\81\de\d1X^\a6~\7f\07\f8\91a\0fB\86.\11\8b\82\f7\fa\'\af\af\04\fb\f69\93\d2\'z\d5\adc\b5\f9\f1\9a\db\c5yt\088\c7\b1\d8J\d9\bc\"x\ae\81R7\18H\05\83\1co\c7\ce\87\b5\15\0b\r\91\93\"\8f\9a\c6\a3\e3Jy\c2\a9\"\dbMPu8\eb\b2A\b8\8c\9c\9d\173\d4\ebQa\a4\92\06\a6_(\f3\d7\81\c2\ee\9f\843\d3\bc\a6\1b\c4\c7\db\f3\efM\"s\ea\c7\a5\00\08l\90\"\b5\b9\12\efk\e1\ea\0f\e59\cf\00\n\874k\"h\d7u\e3\cc\f2)/\84\81@f\d4\00\83\15\a1\e6S\1c\80o\f4:\e5\a1\d0\7f\t\c1\e3ZI`h#`\8b\b1\89^\ca\c4\dfK\b1\9c\b1[8B,8\ee\1d,\f6\fc\b5\d7\9e\dd\03\9erF\a9\1b\e3\b4\92\db\19\9e\d1F\83j\c2\a2\07l")
+ (data $19 (i32.const 12188) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00\cd\cc\8c?\cd\cc\0c@33S@")
+ (data $20 (i32.const 12220) ",\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\10\00\00\00\b0/\00\00\b0/\00\00\0c\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $21 (i32.const 12268) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $22 (i32.const 12300) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\00,\00\00\00\00\00\00\00\00\00\00\00")
+ (data $23 (i32.const 12332) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\16\00\00\001\00.\001\00,\002\00.\002\00,\003\00.\003\00\00\00\00\00\00\00")
+ (data $24 (i32.const 12380) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00\9a\99\99\99\99\99\f1?\9a\99\99\99\99\99\01@ffffff\n@\00\00\00\00")
+ (data $25 (i32.const 12428) ",\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\10\00\00\00p0\00\00p0\00\00\18\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $26 (i32.const 12480) "\06\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\02\19\00\00\02\1a\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/util/number/decimalCount32 (param $value i32) (result i32)
+ (func $~lib/polyfills/bswap<u64> (param $value i64) (result i64)
+  (local $a i64)
+  (local $b i64)
+  (local $v i64)
+  i32.const 1
+  drop
+  i32.const 8
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
   local.get $value
-  i32.const 100000
-  i32.lt_u
-  if
-   local.get $value
-   i32.const 100
-   i32.lt_u
-   if
-    i32.const 1
-    local.get $value
-    i32.const 10
-    i32.ge_u
-    i32.add
-    return
-   else
-    i32.const 3
-    local.get $value
-    i32.const 10000
-    i32.ge_u
-    i32.add
-    local.get $value
-    i32.const 1000
-    i32.ge_u
-    i32.add
-    return
-   end
-   unreachable
-  else
-   local.get $value
-   i32.const 10000000
-   i32.lt_u
-   if
-    i32.const 6
-    local.get $value
-    i32.const 1000000
-    i32.ge_u
-    i32.add
-    return
-   else
-    i32.const 8
-    local.get $value
-    i32.const 1000000000
-    i32.ge_u
-    i32.add
-    local.get $value
-    i32.const 100000000
-    i32.ge_u
-    i32.add
-    return
-   end
-   unreachable
-  end
-  unreachable
- )
- (func $~lib/util/number/genDigits (param $buffer i32) (param $w_frc i64) (param $w_exp i32) (param $mp_frc i64) (param $mp_exp i32) (param $delta i64) (param $sign i32) (result i32)
-  (local $one_exp i32)
-  (local $one_frc i64)
-  (local $mask i64)
-  (local $wp_w_frc i64)
-  (local $p1 i32)
-  (local $p2 i64)
-  (local $kappa i32)
-  (local $len i32)
-  (local $d i32)
-  (local $16 i32)
-  (local $17 i32)
-  (local $tmp i64)
-  (local $buffer|19 i32)
-  (local $len|20 i32)
-  (local $delta|21 i64)
-  (local $rest i64)
-  (local $ten_kappa i64)
-  (local $wp_w i64)
-  (local $lastp i32)
-  (local $digit i32)
-  (local $d|27 i64)
-  (local $28 i32)
-  (local $buffer|29 i32)
-  (local $len|30 i32)
-  (local $delta|31 i64)
-  (local $rest|32 i64)
-  (local $ten_kappa|33 i64)
-  (local $wp_w|34 i64)
-  (local $lastp|35 i32)
-  (local $digit|36 i32)
-  i32.const 0
-  local.get $mp_exp
-  i32.sub
-  local.set $one_exp
-  i64.const 1
-  local.get $one_exp
-  i64.extend_i32_s
+  i64.const 8
+  i64.shr_u
+  i64.const 71777214294589695
+  i64.and
+  local.set $a
+  local.get $value
+  i64.const 71777214294589695
+  i64.and
+  i64.const 8
   i64.shl
-  local.set $one_frc
-  local.get $one_frc
-  i64.const 1
-  i64.sub
-  local.set $mask
-  local.get $mp_frc
-  local.get $w_frc
-  i64.sub
-  local.set $wp_w_frc
-  local.get $mp_frc
-  local.get $one_exp
+  local.set $b
+  local.get $a
+  local.get $b
+  i64.or
+  local.set $v
+  local.get $v
+  i64.const 16
+  i64.shr_u
+  i64.const 281470681808895
+  i64.and
+  local.set $a
+  local.get $v
+  i64.const 281470681808895
+  i64.and
+  i64.const 16
+  i64.shl
+  local.set $b
+  local.get $a
+  local.get $b
+  i64.or
+  i64.const 32
+  i64.rotr
+  return
+ )
+ (func $~lib/util/xjb/ftoa/toBcd8 (param $abcdefgh i64)
+  (local $abcd_efgh i64)
+  (local $ab_cd_ef_gh i64)
+  (local $a_b_c_d_e_f_g_h i64)
+  (local $bcd i64)
+  local.get $abcdefgh
+  global.get $~lib/util/xjb/ftoa/NEG10K
+  local.get $abcdefgh
+  global.get $~lib/util/xjb/ftoa/DIV10K_SIG
+  i64.mul
+  global.get $~lib/util/xjb/ftoa/DIV10K_EXP
   i64.extend_i32_s
   i64.shr_u
-  i32.wrap_i64
-  local.set $p1
-  local.get $mp_frc
-  local.get $mask
+  i64.mul
+  i64.add
+  local.set $abcd_efgh
+  local.get $abcd_efgh
+  global.get $~lib/util/xjb/ftoa/NEG100
+  local.get $abcd_efgh
+  global.get $~lib/util/xjb/ftoa/DIV100_SIG
+  i64.mul
+  global.get $~lib/util/xjb/ftoa/DIV100_EXP
+  i64.extend_i32_s
+  i64.shr_u
+  i64.const 545460846719
   i64.and
-  local.set $p2
-  local.get $p1
-  call $~lib/util/number/decimalCount32
-  local.set $kappa
-  local.get $sign
-  local.set $len
-  loop $while-continue|0
-   local.get $kappa
+  i64.mul
+  i64.add
+  local.set $ab_cd_ef_gh
+  local.get $ab_cd_ef_gh
+  global.get $~lib/util/xjb/ftoa/NEG10
+  local.get $ab_cd_ef_gh
+  global.get $~lib/util/xjb/ftoa/DIV10_SIG
+  i64.mul
+  global.get $~lib/util/xjb/ftoa/DIV10_EXP
+  i64.extend_i32_s
+  i64.shr_u
+  i64.const 4222189076152335
+  i64.and
+  i64.mul
+  i64.add
+  local.set $a_b_c_d_e_f_g_h
+  local.get $a_b_c_d_e_f_g_h
+  call $~lib/polyfills/bswap<u64>
+  local.set $bcd
+  local.get $bcd
+  global.set $~lib/util/xjb/ftoa/gBcd
+  i32.const 70
+  i64.extend_i32_s
+  local.get $bcd
+  i64.const 1
+  i64.shl
+  i64.const 1
+  i64.or
+  i64.clz
+  i64.sub
+  i64.const 8
+  i64.div_u
+  i32.wrap_i64
+  global.set $~lib/util/xjb/ftoa/gBcdLen
+ )
+ (func $~lib/util/xjb/ftoa/ftoa_buffered (param $buffer i32) (param $value f32) (result i32)
+  (local $bits i32)
+  (local $binExp i32)
+  (local $binSig i64)
+  (local $buf i32)
+  (local $bits|6 i32)
+  (local $binExp|7 i32)
+  (local $binSig|8 i64)
+  (local $neg i32)
+  (local $isNormal i32)
+  (local $buf|11 i32)
+  (local $buf|12 i32)
+  (local $neg|13 i32)
+  (local $p i32)
+  (local $ascii i64)
+  (local $off i32)
+  (local $base i32)
+  (local $binSig|18 i64)
+  (local $rawExp i32)
+  (local $regular i32)
+  (local $expBin i32)
+  (local $k i32)
+  (local $h i32)
+  (local $pow10Hi i64)
+  (local $t0 i64)
+  (local $t1 i64)
+  (local $mid i64)
+  (local $hi64 i64)
+  (local $halfUlp i64)
+  (local $dotOne i64)
+  (local $mUp i64)
+  (local $one i32)
+  (local $upDown i32)
+  (local $decSig i64)
+  (local $decExp i32)
+  (local $q i64)
+  (local $last i32)
+  (local $binSig|38 i64)
+  (local $rawExp|39 i32)
+  (local $regular|40 i32)
+  (local $expBin|41 i32)
+  (local $k|42 i32)
+  (local $h|43 i32)
+  (local $pow10Hi|44 i64)
+  (local $t0|45 i64)
+  (local $t1|46 i64)
+  (local $mid|47 i64)
+  (local $hi64|48 i64)
+  (local $halfUlp|49 i64)
+  (local $dotOne|50 i64)
+  (local $mUp|51 i64)
+  (local $one|52 i32)
+  (local $upDown|53 i32)
+  (local $hasLastDigit i32)
+  (local $hasExtraDigit i32)
+  (local $decExp|56 i32)
+  (local $start i32)
+  (local $value|58 i64)
+  (local $buf|59 i32)
+  (local $start|60 i32)
+  (local $decExp|61 i32)
+  (local $hasLastDigit|62 i32)
+  (local $hasExtraDigit|63 i32)
+  (local $p|64 i32)
+  (local $ascii|65 i64)
+  (local $off|66 i32)
+  (local $base|67 i32)
+  (local $lastDigitChar i64)
+  (local $numDigits i32)
+  (local $dHi i64)
+  (local $p|71 i32)
+  (local $ascii|72 i64)
+  (local $off|73 i32)
+  (local $base|74 i32)
+  (local $sig i32)
+  (local $endByte i32)
+  (local $z i32)
+  (local $p|78 i32)
+  (local $ascii|79 i64)
+  (local $off|80 i32)
+  (local $base|81 i32)
+  (local $n i32)
+  (local $endPos i32)
+  (local $startPos i32)
+  (local $p|85 i32)
+  (local $ascii|86 i64)
+  (local $off|87 i32)
+  (local $base|88 i32)
+  (local $k|89 i32)
+  (local $d16 i64)
+  (local $s i32)
+  (local $fHi i64)
+  (local $p|93 i32)
+  (local $ascii|94 i64)
+  (local $off|95 i32)
+  (local $base|96 i32)
+  (local $buf|97 i32)
+  (local $start|98 i32)
+  (local $decExp|99 i32)
+  (local $hasLastDigit|100 i32)
+  (local $hasExtraDigit|101 i32)
+  (local $p|102 i32)
+  (local $ascii|103 i64)
+  (local $off|104 i32)
+  (local $base|105 i32)
+  (local $lead i32)
+  (local $buf|107 i32)
+  (local $decExp|108 i32)
+  (local $m i32)
+  (local $e i32)
+  (local $pair i32)
+  local.get $value
+  i32.reinterpret_f32
+  local.set $bits
+  local.get $bits
+  i32.const 1
+  i32.shl
+  i32.const 24
+  i32.shr_u
+  local.set $binExp
+  local.get $bits
+  i32.const 1
+  i32.const 23
+  i32.shl
+  i32.const 1
+  i32.sub
+  i32.and
+  i64.extend_i32_u
+  local.set $binSig
+  block $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buf
+   local.get $bits
+   local.set $bits|6
+   local.get $binExp
+   local.set $binExp|7
+   local.get $binSig
+   local.set $binSig|8
+   local.get $bits|6
+   i32.const 31
+   i32.shr_u
    i32.const 0
-   i32.gt_s
+   i32.ne
+   local.set $neg
+   local.get $binExp|7
+   i32.const 1
+   i32.sub
+   i32.const 254
+   i32.lt_u
+   local.set $isNormal
+   local.get $isNormal
+   i32.eqz
    if
-    block $break|1
-     block $case10|1
-      block $case9|1
-       block $case8|1
-        block $case7|1
-         block $case6|1
-          block $case5|1
-           block $case4|1
-            block $case3|1
-             block $case2|1
-              block $case1|1
-               block $case0|1
-                local.get $kappa
-                local.set $16
-                local.get $16
-                i32.const 10
-                i32.eq
-                br_if $case0|1
-                local.get $16
-                i32.const 9
-                i32.eq
-                br_if $case1|1
-                local.get $16
-                i32.const 8
-                i32.eq
-                br_if $case2|1
-                local.get $16
-                i32.const 7
-                i32.eq
-                br_if $case3|1
-                local.get $16
-                i32.const 6
-                i32.eq
-                br_if $case4|1
-                local.get $16
-                i32.const 5
-                i32.eq
-                br_if $case5|1
-                local.get $16
-                i32.const 4
-                i32.eq
-                br_if $case6|1
-                local.get $16
-                i32.const 3
-                i32.eq
-                br_if $case7|1
-                local.get $16
-                i32.const 2
-                i32.eq
-                br_if $case8|1
-                local.get $16
-                i32.const 1
-                i32.eq
-                br_if $case9|1
-                br $case10|1
-               end
-               local.get $p1
-               i32.const 1000000000
-               i32.div_u
-               local.set $d
-               local.get $p1
-               i32.const 1000000000
-               i32.rem_u
-               local.set $p1
-               br $break|1
-              end
-              local.get $p1
-              i32.const 100000000
-              i32.div_u
-              local.set $d
-              local.get $p1
-              i32.const 100000000
-              i32.rem_u
-              local.set $p1
-              br $break|1
-             end
-             local.get $p1
-             i32.const 10000000
-             i32.div_u
-             local.set $d
-             local.get $p1
-             i32.const 10000000
-             i32.rem_u
-             local.set $p1
-             br $break|1
-            end
-            local.get $p1
-            i32.const 1000000
-            i32.div_u
-            local.set $d
-            local.get $p1
-            i32.const 1000000
-            i32.rem_u
-            local.set $p1
-            br $break|1
-           end
-           local.get $p1
-           i32.const 100000
-           i32.div_u
-           local.set $d
-           local.get $p1
-           i32.const 100000
-           i32.rem_u
-           local.set $p1
-           br $break|1
-          end
-          local.get $p1
-          i32.const 10000
-          i32.div_u
-          local.set $d
-          local.get $p1
-          i32.const 10000
-          i32.rem_u
-          local.set $p1
-          br $break|1
-         end
-         local.get $p1
-         i32.const 1000
-         i32.div_u
-         local.set $d
-         local.get $p1
-         i32.const 1000
-         i32.rem_u
-         local.set $p1
-         br $break|1
-        end
-        local.get $p1
-        i32.const 100
-        i32.div_u
-        local.set $d
-        local.get $p1
-        i32.const 100
-        i32.rem_u
-        local.set $p1
-        br $break|1
-       end
-       local.get $p1
-       i32.const 10
-       i32.div_u
-       local.set $d
-       local.get $p1
-       i32.const 10
-       i32.rem_u
-       local.set $p1
-       br $break|1
-      end
-      local.get $p1
-      local.set $d
-      i32.const 0
-      local.set $p1
-      br $break|1
-     end
-     i32.const 0
-     local.set $d
-     br $break|1
-    end
-    local.get $d
-    local.get $len
-    i32.or
+    local.get $binExp|7
+    i32.const 0
+    i32.ne
     if
-     local.get $buffer
-     local.get $len
-     local.tee $17
-     i32.const 1
-     i32.add
-     local.set $len
-     local.get $17
-     i32.const 1
-     i32.shl
-     i32.add
-     i32.const 48
-     local.get $d
-     i32.const 65535
-     i32.and
-     i32.add
-     i32.store16
+     local.get $binSig|8
+     i64.const 0
+     i64.ne
+     if
+      block $~lib/util/xjb/ftoa/writeNaN|inlined.0 (result i32)
+       local.get $buf
+       local.set $buf|11
+       local.get $buf|11
+       i32.const 78
+       i32.store16
+       local.get $buf|11
+       i32.const 97
+       i32.store16 offset=2
+       local.get $buf|11
+       i32.const 78
+       i32.store16 offset=4
+       local.get $buf|11
+       i32.const 6
+       i32.add
+       br $~lib/util/xjb/ftoa/writeNaN|inlined.0
+      end
+      br $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0
+     end
+     block $~lib/util/xjb/ftoa/writeInfinity|inlined.0 (result i32)
+      local.get $buf
+      local.set $buf|12
+      local.get $neg
+      local.set $neg|13
+      local.get $neg|13
+      if
+       local.get $buf|12
+       i32.const 45
+       i32.store16
+       local.get $buf|12
+       i32.const 2
+       i32.add
+       local.set $buf|12
+      end
+      local.get $buf|12
+      local.set $p
+      i64.const 8751735898823355977
+      local.set $ascii
+      i32.const 0
+      local.set $off
+      local.get $p
+      local.get $off
+      i32.add
+      local.set $base
+      global.get $~lib/util/xjb/ftoa/HAS_SIMD
+      drop
+      local.get $base
+      local.get $ascii
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16
+      local.get $base
+      local.get $ascii
+      i64.const 8
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=2
+      local.get $base
+      local.get $ascii
+      i64.const 16
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=4
+      local.get $base
+      local.get $ascii
+      i64.const 24
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=6
+      local.get $base
+      local.get $ascii
+      i64.const 32
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=8
+      local.get $base
+      local.get $ascii
+      i64.const 40
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=10
+      local.get $base
+      local.get $ascii
+      i64.const 48
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=12
+      local.get $base
+      local.get $ascii
+      i64.const 56
+      i64.shr_u
+      i32.wrap_i64
+      i32.store16 offset=14
+      local.get $buf|12
+      i32.const 16
+      i32.add
+      br $~lib/util/xjb/ftoa/writeInfinity|inlined.0
+     end
+     br $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0
     end
-    local.get $kappa
+    local.get $binSig|8
+    i64.const 0
+    i64.eq
+    if
+     local.get $buf
+     i32.const 48
+     i32.store16
+     local.get $buf
+     i32.const 2
+     i32.add
+     br $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0
+    end
+    local.get $neg
+    if
+     local.get $buf
+     i32.const 45
+     i32.store16
+     local.get $buf
+     i32.const 2
+     i32.add
+     local.set $buf
+    end
+    local.get $binSig|8
+    local.set $binSig|18
     i32.const 1
+    local.set $rawExp
+    i32.const 1
+    local.set $regular
+    local.get $rawExp
+    global.get $~lib/util/xjb/ftoa/FLOAT_EXP_OFFSET
     i32.sub
-    local.set $kappa
-    local.get $p1
-    i64.extend_i32_u
-    local.get $one_exp
+    local.set $expBin
+    local.get $regular
+    if
+     local.get $expBin
+     i32.const 1233
+     i32.mul
+     i32.const 12
+     i32.shr_s
+     local.set $k
+     global.get $~lib/util/xjb/ftoa/H37
+     local.get $rawExp
+     i32.add
+     i32.load8_u
+     local.set $h
+    else
+     local.get $expBin
+     i32.const 1233
+     i32.mul
+     i32.const 512
+     i32.sub
+     i32.const 12
+     i32.shr_s
+     local.set $k
+     i32.const 37
+     local.get $expBin
+     i32.add
+     local.get $k
+     i32.const -1701
+     i32.mul
+     i32.const -1701
+     i32.add
+     i32.const 9
+     i32.shr_s
+     i32.add
+     local.set $h
+    end
+    global.get $~lib/util/xjb/ftoa/POW10_FLOAT_HI
+    i32.const 45
+    local.get $k
+    i32.add
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load
+    local.set $pow10Hi
+    local.get $pow10Hi
+    i64.const 4294967295
+    i64.and
+    local.get $binSig|18
+    i64.mul
+    local.set $t0
+    local.get $pow10Hi
+    i64.const 32
+    i64.shr_u
+    local.get $binSig|18
+    i64.mul
+    local.get $t0
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $t1
+    local.get $t1
+    i64.const 8
+    i64.shl
+    local.get $t0
+    i64.const 4294967295
+    i64.and
+    i64.const 24
+    i64.shr_u
+    i64.or
+    local.set $mid
+    local.get $mid
+    i64.const 40
+    local.get $h
+    i64.extend_i32_s
+    i64.sub
+    i64.shr_u
+    local.set $hi64
+    local.get $pow10Hi
+    i64.const 65
+    local.get $h
+    i64.extend_i32_s
+    i64.sub
+    i64.shr_u
+    i64.const 1
+    local.get $binSig|18
+    i64.const 1
+    i64.and
+    i64.sub
+    i64.add
+    local.set $halfUlp
+    local.get $hi64
+    i64.const 1
+    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
     i64.extend_i32_s
     i64.shl
-    local.get $p2
+    i64.const 1
+    i64.sub
+    i64.and
+    local.set $dotOne
+    local.get $hi64
+    local.get $halfUlp
     i64.add
-    local.set $tmp
-    local.get $tmp
-    local.get $delta
-    i64.le_u
-    if
-     global.get $~lib/util/number/_K
-     local.get $kappa
-     i32.add
-     global.set $~lib/util/number/_K
-     local.get $buffer
-     local.set $buffer|19
-     local.get $len
-     local.set $len|20
-     local.get $delta
-     local.set $delta|21
-     local.get $tmp
-     local.set $rest
-     i32.const 1104
-     local.get $kappa
-     i32.const 2
-     i32.shl
-     i32.add
-     i64.load32_u
-     local.get $one_exp
-     i64.extend_i32_s
-     i64.shl
-     local.set $ten_kappa
-     local.get $wp_w_frc
-     local.set $wp_w
-     local.get $buffer|19
-     local.get $len|20
-     i32.const 1
-     i32.sub
-     i32.const 1
-     i32.shl
-     i32.add
-     local.set $lastp
-     local.get $lastp
-     i32.load16_u
-     local.set $digit
-     loop $while-continue|3
-      local.get $rest
-      local.get $wp_w
-      i64.lt_u
-      if (result i32)
-       local.get $delta|21
-       local.get $rest
-       i64.sub
-       local.get $ten_kappa
-       i64.ge_u
-      else
-       i32.const 0
-      end
-      if (result i32)
-       local.get $rest
-       local.get $ten_kappa
-       i64.add
-       local.get $wp_w
-       i64.lt_u
-       if (result i32)
-        i32.const 1
-       else
-        local.get $wp_w
-        local.get $rest
-        i64.sub
-        local.get $rest
-        local.get $ten_kappa
-        i64.add
-        local.get $wp_w
-        i64.sub
-        i64.gt_u
-       end
-      else
-       i32.const 0
-      end
-      if
-       local.get $digit
-       i32.const 1
-       i32.sub
-       local.set $digit
-       local.get $rest
-       local.get $ten_kappa
-       i64.add
-       local.set $rest
-       br $while-continue|3
-      end
-     end
-     local.get $lastp
-     local.get $digit
-     i32.store16
-     local.get $len
-     return
-    end
-    br $while-continue|0
-   end
-  end
-  loop $while-continue|4
-   i32.const 1
-   if
-    local.get $p2
-    i64.const 10
-    i64.mul
-    local.set $p2
-    local.get $delta
-    i64.const 10
-    i64.mul
-    local.set $delta
-    local.get $p2
-    local.get $one_exp
+    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
     i64.extend_i32_s
     i64.shr_u
-    local.set $d|27
-    local.get $d|27
-    local.get $len
-    i64.extend_i32_s
-    i64.or
-    i64.const 0
-    i64.ne
-    if
-     local.get $buffer
-     local.get $len
-     local.tee $28
-     i32.const 1
-     i32.add
-     local.set $len
-     local.get $28
-     i32.const 1
-     i32.shl
-     i32.add
-     i32.const 48
-     local.get $d|27
-     i32.wrap_i64
-     i32.const 65535
-     i32.and
-     i32.add
-     i32.store16
-    end
-    local.get $p2
-    local.get $mask
-    i64.and
-    local.set $p2
-    local.get $kappa
-    i32.const 1
-    i32.sub
-    local.set $kappa
-    local.get $p2
-    local.get $delta
-    i64.lt_u
-    if
-     global.get $~lib/util/number/_K
-     local.get $kappa
-     i32.add
-     global.set $~lib/util/number/_K
-     local.get $wp_w_frc
-     i32.const 1104
-     i32.const 0
-     local.get $kappa
-     i32.sub
-     i32.const 2
-     i32.shl
-     i32.add
-     i64.load32_u
-     i64.mul
-     local.set $wp_w_frc
-     local.get $buffer
-     local.set $buffer|29
-     local.get $len
-     local.set $len|30
-     local.get $delta
-     local.set $delta|31
-     local.get $p2
-     local.set $rest|32
-     local.get $one_frc
-     local.set $ten_kappa|33
-     local.get $wp_w_frc
-     local.set $wp_w|34
-     local.get $buffer|29
-     local.get $len|30
-     i32.const 1
-     i32.sub
-     i32.const 1
-     i32.shl
-     i32.add
-     local.set $lastp|35
-     local.get $lastp|35
-     i32.load16_u
-     local.set $digit|36
-     loop $while-continue|6
-      local.get $rest|32
-      local.get $wp_w|34
-      i64.lt_u
-      if (result i32)
-       local.get $delta|31
-       local.get $rest|32
-       i64.sub
-       local.get $ten_kappa|33
-       i64.ge_u
-      else
-       i32.const 0
-      end
-      if (result i32)
-       local.get $rest|32
-       local.get $ten_kappa|33
-       i64.add
-       local.get $wp_w|34
-       i64.lt_u
-       if (result i32)
-        i32.const 1
-       else
-        local.get $wp_w|34
-        local.get $rest|32
-        i64.sub
-        local.get $rest|32
-        local.get $ten_kappa|33
-        i64.add
-        local.get $wp_w|34
-        i64.sub
-        i64.gt_u
-       end
-      else
-       i32.const 0
-      end
-      if
-       local.get $digit|36
-       i32.const 1
-       i32.sub
-       local.set $digit|36
-       local.get $rest|32
-       local.get $ten_kappa|33
-       i64.add
-       local.set $rest|32
-       br $while-continue|6
-      end
-     end
-     local.get $lastp|35
-     local.get $digit|36
-     i32.store16
-     local.get $len
-     return
-    end
-    br $while-continue|4
-   end
-  end
-  unreachable
- )
- (func $~lib/util/number/utoa32_dec_lut (param $buffer i32) (param $num i32) (param $offset i32)
-  (local $t i32)
-  (local $r i32)
-  (local $d1 i32)
-  (local $d2 i32)
-  (local $digits1 i64)
-  (local $digits2 i64)
-  (local $t|9 i32)
-  (local $d1|10 i32)
-  (local $digits i32)
-  (local $digits|12 i32)
-  (local $digit i32)
-  loop $while-continue|0
-   local.get $num
-   i32.const 10000
-   i32.ge_u
-   if
-    local.get $num
-    i32.const 10000
-    i32.div_u
-    local.set $t
-    local.get $num
-    i32.const 10000
-    i32.rem_u
-    local.set $r
-    local.get $t
-    local.set $num
-    local.get $r
-    i32.const 100
-    i32.div_u
-    local.set $d1
-    local.get $r
-    i32.const 100
-    i32.rem_u
-    local.set $d2
-    i32.const 1144
-    local.get $d1
-    i32.const 2
-    i32.shl
-    i32.add
-    i64.load32_u
-    local.set $digits1
-    i32.const 1144
-    local.get $d2
-    i32.const 2
-    i32.shl
-    i32.add
-    i64.load32_u
-    local.set $digits2
-    local.get $offset
-    i32.const 4
-    i32.sub
-    local.set $offset
-    local.get $buffer
-    local.get $offset
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $digits1
-    local.get $digits2
+    local.set $mUp
+    local.get $dotOne
+    i64.const 5
+    i64.mul
+    global.get $~lib/util/xjb/ftoa/FLOAT_ONE_BIAS
+    i64.add
+    local.get $dotOne
     i64.const 32
+    i64.shr_u
+    i64.add
+    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+    i32.const 1
+    i32.sub
+    i64.extend_i32_s
+    i64.shr_u
+    i32.wrap_i64
+    local.set $one
+    local.get $regular
+    if
+     local.get $mUp
+     local.get $hi64
+     local.get $halfUlp
+     i64.sub
+     global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+     i64.extend_i32_s
+     i64.shr_u
+     i64.gt_u
+     local.set $upDown
+    else
+     local.get $expBin
+     i32.const -119
+     i32.eq
+     if (result i32)
+      i32.const 1
+     else
+      local.get $expBin
+      i32.const 64
+      i32.eq
+     end
+     if (result i32)
+      i32.const 1
+     else
+      local.get $expBin
+      i32.const 67
+      i32.eq
+     end
+     if
+      local.get $one
+      i32.const 1
+      i32.add
+      local.set $one
+     end
+     local.get $mUp
+     local.get $hi64
+     local.get $halfUlp
+     i64.const 1
+     i64.shr_u
+     i64.sub
+     global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+     i64.extend_i32_s
+     i64.shr_u
+     i64.gt_u
+     local.set $upDown
+    end
+    local.get $mUp
+    global.set $~lib/util/xjb/ftoa/gSig
+    local.get $k
+    global.set $~lib/util/xjb/ftoa/gExp
+    local.get $one
+    global.set $~lib/util/xjb/ftoa/gLastDigit
+    local.get $upDown
+    i32.eqz
+    global.set $~lib/util/xjb/ftoa/gHasLastDigit
+    global.get $~lib/util/xjb/ftoa/gSig
+    i64.const 10
+    i64.mul
+    global.get $~lib/util/xjb/ftoa/gHasLastDigit
+    if (result i64)
+     global.get $~lib/util/xjb/ftoa/gLastDigit
+     i64.extend_i32_s
+    else
+     i64.const 0
+    end
+    i64.add
+    local.set $decSig
+    global.get $~lib/util/xjb/ftoa/gExp
+    local.set $decExp
+    loop $while-continue|0
+     local.get $decSig
+     i64.const 10000000
+     i64.lt_u
+     if
+      local.get $decSig
+      i64.const 10
+      i64.mul
+      local.set $decSig
+      local.get $decExp
+      i32.const 1
+      i32.sub
+      local.set $decExp
+      br $while-continue|0
+     end
+    end
+    local.get $decSig
+    i64.const 10
+    i64.div_u
+    local.set $q
+    local.get $decSig
+    local.get $q
+    i64.const 10
+    i64.mul
+    i64.sub
+    i32.wrap_i64
+    local.set $last
+    local.get $q
+    global.set $~lib/util/xjb/ftoa/gSig
+    local.get $decExp
+    global.set $~lib/util/xjb/ftoa/gExp
+    local.get $last
+    global.set $~lib/util/xjb/ftoa/gLastDigit
+    local.get $last
+    i32.const 0
+    i32.ne
+    global.set $~lib/util/xjb/ftoa/gHasLastDigit
+   else
+    local.get $neg
+    if
+     local.get $buf
+     i32.const 45
+     i32.store16
+     local.get $buf
+     i32.const 2
+     i32.add
+     local.set $buf
+    end
+    local.get $binSig|8
+    i64.const 1
+    i64.const 23
     i64.shl
     i64.or
-    i64.store
-    br $while-continue|0
-   end
-  end
-  local.get $num
-  i32.const 100
-  i32.ge_u
-  if
-   local.get $num
-   i32.const 100
-   i32.div_u
-   local.set $t|9
-   local.get $num
-   i32.const 100
-   i32.rem_u
-   local.set $d1|10
-   local.get $t|9
-   local.set $num
-   local.get $offset
-   i32.const 2
-   i32.sub
-   local.set $offset
-   i32.const 1144
-   local.get $d1|10
-   i32.const 2
-   i32.shl
-   i32.add
-   i32.load
-   local.set $digits
-   local.get $buffer
-   local.get $offset
-   i32.const 1
-   i32.shl
-   i32.add
-   local.get $digits
-   i32.store
-  end
-  local.get $num
-  i32.const 10
-  i32.ge_u
-  if
-   local.get $offset
-   i32.const 2
-   i32.sub
-   local.set $offset
-   i32.const 1144
-   local.get $num
-   i32.const 2
-   i32.shl
-   i32.add
-   i32.load
-   local.set $digits|12
-   local.get $buffer
-   local.get $offset
-   i32.const 1
-   i32.shl
-   i32.add
-   local.get $digits|12
-   i32.store
-  else
-   local.get $offset
-   i32.const 1
-   i32.sub
-   local.set $offset
-   i32.const 48
-   local.get $num
-   i32.add
-   local.set $digit
-   local.get $buffer
-   local.get $offset
-   i32.const 1
-   i32.shl
-   i32.add
-   local.get $digit
-   i32.store16
-  end
- )
- (func $~lib/util/number/prettify (param $buffer i32) (param $length i32) (param $k i32) (result i32)
-  (local $kk i32)
-  (local $i i32)
-  (local $ptr i32)
-  (local $offset i32)
-  (local $i|7 i32)
-  (local $buffer|8 i32)
-  (local $k|9 i32)
-  (local $sign i32)
-  (local $decimals i32)
-  (local $buffer|12 i32)
-  (local $num i32)
-  (local $offset|14 i32)
-  (local $len i32)
-  (local $buffer|16 i32)
-  (local $k|17 i32)
-  (local $sign|18 i32)
-  (local $decimals|19 i32)
-  (local $buffer|20 i32)
-  (local $num|21 i32)
-  (local $offset|22 i32)
-  local.get $k
-  i32.eqz
-  if
-   local.get $buffer
-   local.get $length
-   i32.const 1
-   i32.shl
-   i32.add
-   i32.const 46
-   i32.const 48
-   i32.const 16
-   i32.shl
-   i32.or
-   i32.store
-   local.get $length
-   i32.const 2
-   i32.add
-   return
-  end
-  local.get $length
-  local.get $k
-  i32.add
-  local.set $kk
-  local.get $length
-  local.get $kk
-  i32.le_s
-  if (result i32)
-   local.get $kk
-   i32.const 21
-   i32.le_s
-  else
-   i32.const 0
-  end
-  if
-   local.get $length
-   local.set $i
-   loop $for-loop|0
-    local.get $i
-    local.get $kk
-    i32.lt_s
+    local.set $binSig|38
+    local.get $binExp|7
+    local.set $rawExp|39
+    local.get $binSig|8
+    i64.const 0
+    i64.ne
+    local.set $regular|40
+    local.get $rawExp|39
+    global.get $~lib/util/xjb/ftoa/FLOAT_EXP_OFFSET
+    i32.sub
+    local.set $expBin|41
+    local.get $regular|40
     if
-     local.get $buffer
-     local.get $i
-     i32.const 1
-     i32.shl
+     local.get $expBin|41
+     i32.const 1233
+     i32.mul
+     i32.const 12
+     i32.shr_s
+     local.set $k|42
+     global.get $~lib/util/xjb/ftoa/H37
+     local.get $rawExp|39
      i32.add
-     i32.const 48
-     i32.store16
-     local.get $i
-     i32.const 1
+     i32.load8_u
+     local.set $h|43
+    else
+     local.get $expBin|41
+     i32.const 1233
+     i32.mul
+     i32.const 512
+     i32.sub
+     i32.const 12
+     i32.shr_s
+     local.set $k|42
+     i32.const 37
+     local.get $expBin|41
      i32.add
-     local.set $i
-     br $for-loop|0
+     local.get $k|42
+     i32.const -1701
+     i32.mul
+     i32.const -1701
+     i32.add
+     i32.const 9
+     i32.shr_s
+     i32.add
+     local.set $h|43
     end
+    global.get $~lib/util/xjb/ftoa/POW10_FLOAT_HI
+    i32.const 45
+    local.get $k|42
+    i32.add
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load
+    local.set $pow10Hi|44
+    local.get $pow10Hi|44
+    i64.const 4294967295
+    i64.and
+    local.get $binSig|38
+    i64.mul
+    local.set $t0|45
+    local.get $pow10Hi|44
+    i64.const 32
+    i64.shr_u
+    local.get $binSig|38
+    i64.mul
+    local.get $t0|45
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $t1|46
+    local.get $t1|46
+    i64.const 8
+    i64.shl
+    local.get $t0|45
+    i64.const 4294967295
+    i64.and
+    i64.const 24
+    i64.shr_u
+    i64.or
+    local.set $mid|47
+    local.get $mid|47
+    i64.const 40
+    local.get $h|43
+    i64.extend_i32_s
+    i64.sub
+    i64.shr_u
+    local.set $hi64|48
+    local.get $pow10Hi|44
+    i64.const 65
+    local.get $h|43
+    i64.extend_i32_s
+    i64.sub
+    i64.shr_u
+    i64.const 1
+    local.get $binSig|38
+    i64.const 1
+    i64.and
+    i64.sub
+    i64.add
+    local.set $halfUlp|49
+    local.get $hi64|48
+    i64.const 1
+    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+    i64.extend_i32_s
+    i64.shl
+    i64.const 1
+    i64.sub
+    i64.and
+    local.set $dotOne|50
+    local.get $hi64|48
+    local.get $halfUlp|49
+    i64.add
+    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+    i64.extend_i32_s
+    i64.shr_u
+    local.set $mUp|51
+    local.get $dotOne|50
+    i64.const 5
+    i64.mul
+    global.get $~lib/util/xjb/ftoa/FLOAT_ONE_BIAS
+    i64.add
+    local.get $dotOne|50
+    i64.const 32
+    i64.shr_u
+    i64.add
+    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+    i32.const 1
+    i32.sub
+    i64.extend_i32_s
+    i64.shr_u
+    i32.wrap_i64
+    local.set $one|52
+    local.get $regular|40
+    if
+     local.get $mUp|51
+     local.get $hi64|48
+     local.get $halfUlp|49
+     i64.sub
+     global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+     i64.extend_i32_s
+     i64.shr_u
+     i64.gt_u
+     local.set $upDown|53
+    else
+     local.get $expBin|41
+     i32.const -119
+     i32.eq
+     if (result i32)
+      i32.const 1
+     else
+      local.get $expBin|41
+      i32.const 64
+      i32.eq
+     end
+     if (result i32)
+      i32.const 1
+     else
+      local.get $expBin|41
+      i32.const 67
+      i32.eq
+     end
+     if
+      local.get $one|52
+      i32.const 1
+      i32.add
+      local.set $one|52
+     end
+     local.get $mUp|51
+     local.get $hi64|48
+     local.get $halfUlp|49
+     i64.const 1
+     i64.shr_u
+     i64.sub
+     global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+     i64.extend_i32_s
+     i64.shr_u
+     i64.gt_u
+     local.set $upDown|53
+    end
+    local.get $mUp|51
+    global.set $~lib/util/xjb/ftoa/gSig
+    local.get $k|42
+    global.set $~lib/util/xjb/ftoa/gExp
+    local.get $one|52
+    global.set $~lib/util/xjb/ftoa/gLastDigit
+    local.get $upDown|53
+    i32.eqz
+    global.set $~lib/util/xjb/ftoa/gHasLastDigit
    end
-   local.get $buffer
-   local.get $kk
-   i32.const 1
-   i32.shl
+   global.get $~lib/util/xjb/ftoa/gHasLastDigit
+   local.set $hasLastDigit
+   global.get $~lib/util/xjb/ftoa/gSig
+   i64.const 10000000
+   i64.ge_u
+   local.set $hasExtraDigit
+   global.get $~lib/util/xjb/ftoa/gExp
+   global.get $~lib/util/xjb/ftoa/FLOAT_MAX_DIGITS10
    i32.add
-   i32.const 46
-   i32.const 48
-   i32.const 16
-   i32.shl
-   i32.or
-   i32.store
-   local.get $kk
    i32.const 2
+   i32.sub
+   local.get $hasExtraDigit
    i32.add
-   return
-  else
-   local.get $kk
-   i32.const 0
-   i32.gt_s
+   local.set $decExp|56
+   global.get $~lib/util/xjb/ftoa/gSig
+   i64.const 1000000
+   i64.lt_u
+   if
+    i64.const 10
+    global.get $~lib/util/xjb/ftoa/gSig
+    i64.mul
+    local.get $hasLastDigit
+    if (result i64)
+     global.get $~lib/util/xjb/ftoa/gLastDigit
+     i64.extend_i32_s
+    else
+     i64.const 0
+    end
+    i64.add
+    global.set $~lib/util/xjb/ftoa/gSig
+    i32.const 0
+    local.set $hasLastDigit
+    local.get $decExp|56
+    i32.const 1
+    i32.sub
+    local.set $decExp|56
+   end
+   local.get $buf
+   local.set $start
+   global.get $~lib/util/xjb/ftoa/gSig
+   local.set $value|58
+   global.get $~lib/util/xjb/ftoa/HAS_SIMD
+   drop
+   local.get $value|58
+   call $~lib/util/xjb/ftoa/toBcd8
+   global.get $~lib/util/xjb/ftoa/gBcd
+   global.get $~lib/util/xjb/ftoa/ZEROS
+   i64.add
+   global.set $~lib/util/xjb/ftoa/gDigHi
+   global.get $~lib/util/xjb/ftoa/gBcdLen
+   global.set $~lib/util/xjb/ftoa/gDigNum
+   local.get $decExp|56
+   global.get $~lib/util/xjb/ftoa/MIN_FIXED_DEC_EXP
+   i32.ge_s
    if (result i32)
-    local.get $kk
-    i32.const 21
+    local.get $decExp|56
+    global.get $~lib/util/xjb/ftoa/MAX_FIXED_DEC_EXP
     i32.le_s
    else
     i32.const 0
    end
    if
-    local.get $buffer
-    local.get $kk
-    i32.const 1
-    i32.shl
-    i32.add
-    local.set $ptr
-    local.get $ptr
-    i32.const 2
-    i32.add
-    local.get $ptr
-    i32.const 0
-    local.get $k
-    i32.sub
-    i32.const 1
-    i32.shl
-    memory.copy
-    local.get $buffer
-    local.get $kk
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.const 46
-    i32.store16
-    local.get $length
-    i32.const 1
-    i32.add
-    return
-   else
-    i32.const -6
-    local.get $kk
-    i32.lt_s
-    if (result i32)
-     local.get $kk
+    block $~lib/util/xjb/ftoa/writeFixed|inlined.0 (result i32)
+     local.get $buf
+     local.set $buf|59
+     local.get $start
+     local.set $start|60
+     local.get $decExp|56
+     local.set $decExp|61
+     local.get $hasLastDigit
+     local.set $hasLastDigit|62
+     local.get $hasExtraDigit
+     local.set $hasExtraDigit|63
+     local.get $decExp|61
      i32.const 0
-     i32.le_s
-    else
-     i32.const 0
-    end
-    if
-     i32.const 2
-     local.get $kk
-     i32.sub
-     local.set $offset
-     local.get $buffer
-     local.get $offset
-     i32.const 1
-     i32.shl
-     i32.add
-     local.get $buffer
-     local.get $length
-     i32.const 1
-     i32.shl
-     memory.copy
-     local.get $buffer
-     i32.const 48
-     i32.const 46
-     i32.const 16
-     i32.shl
-     i32.or
-     i32.store
-     i32.const 2
-     local.set $i|7
-     loop $for-loop|1
-      local.get $i|7
-      local.get $offset
-      i32.lt_s
-      if
-       local.get $buffer
-       local.get $i|7
-       i32.const 1
-       i32.shl
-       i32.add
-       i32.const 48
-       i32.store16
-       local.get $i|7
-       i32.const 1
-       i32.add
-       local.set $i|7
-       br $for-loop|1
-      end
-     end
-     local.get $length
-     local.get $offset
-     i32.add
-     return
-    else
-     local.get $length
-     i32.const 1
-     i32.eq
+     i32.lt_s
      if
-      local.get $buffer
-      i32.const 101
-      i32.store16 offset=2
-      block $~lib/util/number/genExponent|inlined.0 (result i32)
-       local.get $buffer
-       i32.const 4
-       i32.add
-       local.set $buffer|8
-       local.get $kk
-       i32.const 1
-       i32.sub
-       local.set $k|9
-       local.get $k|9
-       i32.const 0
-       i32.lt_s
-       local.set $sign
-       local.get $sign
-       if
-        i32.const 0
-        local.get $k|9
-        i32.sub
-        local.set $k|9
-       end
-       local.get $k|9
-       call $~lib/util/number/decimalCount32
-       i32.const 1
-       i32.add
-       local.set $decimals
-       local.get $buffer|8
-       local.set $buffer|12
-       local.get $k|9
-       local.set $num
-       local.get $decimals
-       local.set $offset|14
-       i32.const 0
-       i32.const 1
-       i32.ge_s
-       drop
-       local.get $buffer|12
-       local.get $num
-       local.get $offset|14
-       call $~lib/util/number/utoa32_dec_lut
-       local.get $buffer|8
-       i32.const 45
-       i32.const 43
-       local.get $sign
-       select
-       i32.store16
-       local.get $decimals
-       br $~lib/util/number/genExponent|inlined.0
-      end
-      local.set $length
-      local.get $length
-      i32.const 2
+      local.get $start|60
+      local.set $p|64
+      global.get $~lib/util/xjb/ftoa/ZEROS
+      local.set $ascii|65
+      i32.const 0
+      local.set $off|66
+      local.get $p|64
+      local.get $off|66
       i32.add
-      return
+      local.set $base|67
+      global.get $~lib/util/xjb/ftoa/HAS_SIMD
+      drop
+      local.get $base|67
+      local.get $ascii|65
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16
+      local.get $base|67
+      local.get $ascii|65
+      i64.const 8
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=2
+      local.get $base|67
+      local.get $ascii|65
+      i64.const 16
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=4
+      local.get $base|67
+      local.get $ascii|65
+      i64.const 24
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=6
+      local.get $base|67
+      local.get $ascii|65
+      i64.const 32
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=8
+      local.get $base|67
+      local.get $ascii|65
+      i64.const 40
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=10
+      local.get $base|67
+      local.get $ascii|65
+      i64.const 48
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=12
+      local.get $base|67
+      local.get $ascii|65
+      i64.const 56
+      i64.shr_u
+      i32.wrap_i64
+      i32.store16 offset=14
+     end
+     i64.const 48
+     local.get $hasLastDigit|62
+     if (result i64)
+      global.get $~lib/util/xjb/ftoa/gLastDigit
+      i64.extend_i32_s
      else
-      local.get $length
+      i64.const 0
+     end
+     i64.add
+     local.set $lastDigitChar
+     local.get $hasLastDigit|62
+     if (result i32)
+      i32.const 8
+     else
+      global.get $~lib/util/xjb/ftoa/gDigNum
+      i32.const 1
+      i32.sub
+     end
+     local.set $numDigits
+     global.get $~lib/util/xjb/ftoa/gDigHi
+     local.set $dHi
+     local.get $hasExtraDigit|63
+     i32.eqz
+     if
+      local.get $dHi
+      i64.const 8
+      i64.shr_u
+      local.get $lastDigitChar
+      i64.const 56
+      i64.shl
+      i64.or
+      local.set $dHi
+     end
+     local.get $decExp|61
+     i32.const 8
+     i32.ge_s
+     if
+      local.get $buf|59
+      local.set $p|71
+      local.get $dHi
+      local.set $ascii|72
+      i32.const 0
+      local.set $off|73
+      local.get $p|71
+      local.get $off|73
+      i32.add
+      local.set $base|74
+      global.get $~lib/util/xjb/ftoa/HAS_SIMD
+      drop
+      local.get $base|74
+      local.get $ascii|72
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16
+      local.get $base|74
+      local.get $ascii|72
+      i64.const 8
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=2
+      local.get $base|74
+      local.get $ascii|72
+      i64.const 16
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=4
+      local.get $base|74
+      local.get $ascii|72
+      i64.const 24
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=6
+      local.get $base|74
+      local.get $ascii|72
+      i64.const 32
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=8
+      local.get $base|74
+      local.get $ascii|72
+      i64.const 40
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=10
+      local.get $base|74
+      local.get $ascii|72
+      i64.const 48
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=12
+      local.get $base|74
+      local.get $ascii|72
+      i64.const 56
+      i64.shr_u
+      i32.wrap_i64
+      i32.store16 offset=14
+      local.get $hasExtraDigit|63
+      if
+       local.get $buf|59
+       i32.const 16
+       i32.add
+       local.get $lastDigitChar
+       i32.wrap_i64
+       i32.store16
+      end
+      i32.const 8
+      local.get $hasExtraDigit|63
+      i32.add
+      local.set $sig
+      local.get $buf|59
+      local.get $decExp|61
+      i32.const 1
+      i32.add
       i32.const 1
       i32.shl
-      local.set $len
-      local.get $buffer
-      i32.const 4
       i32.add
-      local.get $buffer
-      i32.const 2
+      local.set $endByte
+      local.get $buf|59
+      local.get $sig
+      i32.const 1
+      i32.shl
       i32.add
-      local.get $len
-      i32.const 2
-      i32.sub
-      memory.copy
-      local.get $buffer
+      local.set $z
+      loop $for-loop|1
+       local.get $z
+       local.get $endByte
+       i32.lt_u
+       if
+        local.get $z
+        local.set $p|78
+        global.get $~lib/util/xjb/ftoa/ZEROS
+        local.set $ascii|79
+        i32.const 0
+        local.set $off|80
+        local.get $p|78
+        local.get $off|80
+        i32.add
+        local.set $base|81
+        global.get $~lib/util/xjb/ftoa/HAS_SIMD
+        drop
+        local.get $base|81
+        local.get $ascii|79
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16
+        local.get $base|81
+        local.get $ascii|79
+        i64.const 8
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=2
+        local.get $base|81
+        local.get $ascii|79
+        i64.const 16
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=4
+        local.get $base|81
+        local.get $ascii|79
+        i64.const 24
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=6
+        local.get $base|81
+        local.get $ascii|79
+        i64.const 32
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=8
+        local.get $base|81
+        local.get $ascii|79
+        i64.const 40
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=10
+        local.get $base|81
+        local.get $ascii|79
+        i64.const 48
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=12
+        local.get $base|81
+        local.get $ascii|79
+        i64.const 56
+        i64.shr_u
+        i32.wrap_i64
+        i32.store16 offset=14
+        local.get $z
+        i32.const 16
+        i32.add
+        local.set $z
+        br $for-loop|1
+       end
+      end
+      local.get $endByte
+      br $~lib/util/xjb/ftoa/writeFixed|inlined.0
+     end
+     local.get $numDigits
+     local.get $hasExtraDigit|63
+     i32.add
+     local.set $n
+     local.get $decExp|61
+     i32.const 0
+     i32.ge_s
+     if (result i32)
+      local.get $n
+      local.get $decExp|61
+      i32.const 1
+      i32.add
+      i32.gt_s
+      if (result i32)
+       local.get $n
+       i32.const 1
+       i32.add
+      else
+       local.get $decExp|61
+       i32.const 1
+       i32.add
+      end
+     else
+      local.get $n
+     end
+     local.set $endPos
+     i32.const 1
+     local.get $decExp|61
+     i32.sub
+     local.get $decExp|61
+     i32.const 31
+     i32.shr_s
+     i32.and
+     local.set $startPos
+     local.get $buf|59
+     local.get $startPos
+     i32.const 1
+     i32.shl
+     i32.add
+     local.set $buf|59
+     local.get $buf|59
+     local.set $p|85
+     local.get $dHi
+     local.set $ascii|86
+     i32.const 0
+     local.set $off|87
+     local.get $p|85
+     local.get $off|87
+     i32.add
+     local.set $base|88
+     global.get $~lib/util/xjb/ftoa/HAS_SIMD
+     drop
+     local.get $base|88
+     local.get $ascii|86
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16
+     local.get $base|88
+     local.get $ascii|86
+     i64.const 8
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=2
+     local.get $base|88
+     local.get $ascii|86
+     i64.const 16
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=4
+     local.get $base|88
+     local.get $ascii|86
+     i64.const 24
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=6
+     local.get $base|88
+     local.get $ascii|86
+     i64.const 32
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=8
+     local.get $base|88
+     local.get $ascii|86
+     i64.const 40
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=10
+     local.get $base|88
+     local.get $ascii|86
+     i64.const 48
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=12
+     local.get $base|88
+     local.get $ascii|86
+     i64.const 56
+     i64.shr_u
+     i32.wrap_i64
+     i32.store16 offset=14
+     local.get $hasExtraDigit|63
+     if
+      local.get $buf|59
+      i32.const 16
+      i32.add
+      local.get $lastDigitChar
+      i32.wrap_i64
+      i32.store16
+     end
+     local.get $decExp|61
+     i32.const 0
+     i32.ge_s
+     if
+      local.get $decExp|61
+      i32.const 1
+      i32.add
+      local.set $k|89
+      local.get $hasExtraDigit|63
+      if (result i64)
+       local.get $lastDigitChar
+      else
+       i64.const 0
+      end
+      local.set $d16
+      local.get $k|89
+      i32.const 3
+      i32.shl
+      local.set $s
+      local.get $s
+      i32.const 64
+      i32.lt_s
+      if (result i64)
+       local.get $dHi
+       local.get $s
+       i64.extend_i32_s
+       i64.shr_u
+       local.get $d16
+       i64.const 64
+       local.get $s
+       i64.extend_i32_s
+       i64.sub
+       i64.shl
+       i64.or
+      else
+       local.get $d16
+      end
+      local.set $fHi
+      local.get $buf|59
+      local.get $k|89
+      i32.const 1
+      i32.add
+      i32.const 1
+      i32.shl
+      i32.add
+      local.set $p|93
+      local.get $fHi
+      local.set $ascii|94
+      i32.const 0
+      local.set $off|95
+      local.get $p|93
+      local.get $off|95
+      i32.add
+      local.set $base|96
+      global.get $~lib/util/xjb/ftoa/HAS_SIMD
+      drop
+      local.get $base|96
+      local.get $ascii|94
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16
+      local.get $base|96
+      local.get $ascii|94
+      i64.const 8
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=2
+      local.get $base|96
+      local.get $ascii|94
+      i64.const 16
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=4
+      local.get $base|96
+      local.get $ascii|94
+      i64.const 24
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=6
+      local.get $base|96
+      local.get $ascii|94
+      i64.const 32
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=8
+      local.get $base|96
+      local.get $ascii|94
+      i64.const 40
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=10
+      local.get $base|96
+      local.get $ascii|94
+      i64.const 48
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=12
+      local.get $base|96
+      local.get $ascii|94
+      i64.const 56
+      i64.shr_u
+      i32.wrap_i64
+      i32.store16 offset=14
+      local.get $buf|59
+      local.get $k|89
+      i32.const 1
+      i32.shl
+      i32.add
+      i32.const 46
+      i32.store16
+     else
+      local.get $start|60
       i32.const 46
       i32.store16 offset=2
-      local.get $buffer
-      local.get $len
-      i32.add
-      i32.const 101
-      i32.store16 offset=2
-      local.get $length
-      block $~lib/util/number/genExponent|inlined.1 (result i32)
-       local.get $buffer
-       local.get $len
-       i32.add
-       i32.const 4
-       i32.add
-       local.set $buffer|16
-       local.get $kk
-       i32.const 1
-       i32.sub
-       local.set $k|17
-       local.get $k|17
-       i32.const 0
-       i32.lt_s
-       local.set $sign|18
-       local.get $sign|18
-       if
-        i32.const 0
-        local.get $k|17
-        i32.sub
-        local.set $k|17
-       end
-       local.get $k|17
-       call $~lib/util/number/decimalCount32
-       i32.const 1
-       i32.add
-       local.set $decimals|19
-       local.get $buffer|16
-       local.set $buffer|20
-       local.get $k|17
-       local.set $num|21
-       local.get $decimals|19
-       local.set $offset|22
-       i32.const 0
-       i32.const 1
-       i32.ge_s
-       drop
-       local.get $buffer|20
-       local.get $num|21
-       local.get $offset|22
-       call $~lib/util/number/utoa32_dec_lut
-       local.get $buffer|16
-       i32.const 45
-       i32.const 43
-       local.get $sign|18
-       select
-       i32.store16
-       local.get $decimals|19
-       br $~lib/util/number/genExponent|inlined.1
-      end
-      i32.add
-      local.set $length
-      local.get $length
-      i32.const 2
-      i32.add
-      return
      end
-     unreachable
-    end
-    unreachable
-   end
-   unreachable
-  end
-  unreachable
- )
- (func $~lib/util/number/dtoa_core (param $buffer i32) (param $value f64) (param $isSingle i32) (result i32)
-  (local $sign i32)
-  (local $value|4 f64)
-  (local $buffer|5 i32)
-  (local $sign|6 i32)
-  (local $isSingle|7 i32)
-  (local $frc i64)
-  (local $exp i32)
-  (local $uv i32)
-  (local $sid i32)
-  (local $uv|12 i64)
-  (local $sid|13 i64)
-  (local $f i64)
-  (local $e i32)
-  (local $isSingle|16 i32)
-  (local $frc|17 i64)
-  (local $exp|18 i32)
-  (local $off i32)
-  (local $m i32)
-  (local $minExp i32)
-  (local $dk f64)
-  (local $k i32)
-  (local $index i32)
-  (local $off|25 i32)
-  (local $frc_pow i64)
-  (local $exp_pow i32)
-  (local $u i64)
-  (local $v i64)
-  (local $u0 i64)
-  (local $v0 i64)
-  (local $u1 i64)
-  (local $v1 i64)
-  (local $l i64)
-  (local $t i64)
-  (local $w i64)
-  (local $w_frc i64)
-  (local $e1 i32)
-  (local $e2 i32)
-  (local $w_exp i32)
-  (local $u|41 i64)
-  (local $v|42 i64)
-  (local $u0|43 i64)
-  (local $v0|44 i64)
-  (local $u1|45 i64)
-  (local $v1|46 i64)
-  (local $l|47 i64)
-  (local $t|48 i64)
-  (local $w|49 i64)
-  (local $wp_frc i64)
-  (local $e1|51 i32)
-  (local $e2|52 i32)
-  (local $wp_exp i32)
-  (local $u|54 i64)
-  (local $v|55 i64)
-  (local $u0|56 i64)
-  (local $v0|57 i64)
-  (local $u1|58 i64)
-  (local $v1|59 i64)
-  (local $l|60 i64)
-  (local $t|61 i64)
-  (local $w|62 i64)
-  (local $wm_frc i64)
-  (local $delta i64)
-  (local $len i32)
-  local.get $value
-  f64.const 0
-  f64.lt
-  local.set $sign
-  local.get $sign
-  if
-   local.get $value
-   f64.neg
-   local.set $value
-   local.get $buffer
-   i32.const 45
-   i32.store16
-  end
-  block $~lib/util/number/grisu2|inlined.0 (result i32)
-   local.get $value
-   local.set $value|4
-   local.get $buffer
-   local.set $buffer|5
-   local.get $sign
-   local.set $sign|6
-   local.get $isSingle
-   local.set $isSingle|7
-   local.get $isSingle|7
-   if
-    local.get $value|4
-    f32.demote_f64
-    i32.reinterpret_f32
-    local.set $uv
-    local.get $uv
-    i32.const 2139095040
-    i32.and
-    i32.const 23
-    i32.shr_u
-    local.set $exp
-    local.get $uv
-    i32.const 8388607
-    i32.and
-    local.set $sid
-    local.get $exp
-    i32.const 0
-    i32.ne
-    i64.extend_i32_u
-    i64.const 23
-    i64.shl
-    local.get $sid
-    i64.extend_i32_u
-    i64.add
-    local.set $frc
-    local.get $exp
-    if (result i32)
-     local.get $exp
-    else
+     local.get $buf|59
+     local.get $endPos
      i32.const 1
+     i32.shl
+     i32.add
+     br $~lib/util/xjb/ftoa/writeFixed|inlined.0
     end
-    i32.const 127
-    i32.const 23
+    br $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0
+   end
+   block $~lib/util/xjb/ftoa/writeExpNotation|inlined.0 (result i32)
+    local.get $buf
+    local.set $buf|97
+    local.get $start
+    local.set $start|98
+    local.get $decExp|56
+    local.set $decExp|99
+    local.get $hasLastDigit
+    local.set $hasLastDigit|100
+    local.get $hasExtraDigit
+    local.set $hasExtraDigit|101
+    local.get $buf|97
+    local.get $hasExtraDigit|101
+    i32.const 1
+    i32.shl
     i32.add
-    i32.sub
-    local.set $exp
-   else
-    local.get $value|4
-    i64.reinterpret_f64
-    local.set $uv|12
-    local.get $uv|12
-    i64.const 9218868437227405312
+    local.set $buf|97
+    local.get $buf|97
+    local.set $p|102
+    global.get $~lib/util/xjb/ftoa/gDigHi
+    local.set $ascii|103
+    i32.const 0
+    local.set $off|104
+    local.get $p|102
+    local.get $off|104
+    i32.add
+    local.set $base|105
+    global.get $~lib/util/xjb/ftoa/HAS_SIMD
+    drop
+    local.get $base|105
+    local.get $ascii|103
+    i64.const 255
     i64.and
-    i64.const 52
+    i32.wrap_i64
+    i32.store16
+    local.get $base|105
+    local.get $ascii|103
+    i64.const 8
+    i64.shr_u
+    i64.const 255
+    i64.and
+    i32.wrap_i64
+    i32.store16 offset=2
+    local.get $base|105
+    local.get $ascii|103
+    i64.const 16
+    i64.shr_u
+    i64.const 255
+    i64.and
+    i32.wrap_i64
+    i32.store16 offset=4
+    local.get $base|105
+    local.get $ascii|103
+    i64.const 24
+    i64.shr_u
+    i64.const 255
+    i64.and
+    i32.wrap_i64
+    i32.store16 offset=6
+    local.get $base|105
+    local.get $ascii|103
+    i64.const 32
+    i64.shr_u
+    i64.const 255
+    i64.and
+    i32.wrap_i64
+    i32.store16 offset=8
+    local.get $base|105
+    local.get $ascii|103
+    i64.const 40
+    i64.shr_u
+    i64.const 255
+    i64.and
+    i32.wrap_i64
+    i32.store16 offset=10
+    local.get $base|105
+    local.get $ascii|103
+    i64.const 48
+    i64.shr_u
+    i64.const 255
+    i64.and
+    i32.wrap_i64
+    i32.store16 offset=12
+    local.get $base|105
+    local.get $ascii|103
+    i64.const 56
     i64.shr_u
     i32.wrap_i64
-    local.set $exp
-    local.get $uv|12
-    i64.const 4503599627370495
-    i64.and
-    local.set $sid|13
-    local.get $exp
-    i32.const 0
-    i32.ne
-    i64.extend_i32_u
-    i64.const 52
-    i64.shl
-    local.get $sid|13
-    i64.add
-    local.set $frc
-    local.get $exp
+    i32.store16 offset=14
+    local.get $buf|97
+    i32.const 16
+    i32.add
+    i32.const 48
+    global.get $~lib/util/xjb/ftoa/gLastDigit
+    i32.add
+    i32.store16
+    local.get $buf|97
+    local.get $hasLastDigit|100
     if (result i32)
-     local.get $exp
+     i32.const 9
     else
-     i32.const 1
+     global.get $~lib/util/xjb/ftoa/gDigNum
     end
-    i32.const 1023
-    i32.const 52
+    i32.const 1
+    i32.shl
     i32.add
+    local.set $buf|97
+    local.get $start|98
+    i32.load16_u offset=2
+    local.set $lead
+    local.get $start|98
+    local.get $lead
+    i32.store16
+    local.get $start|98
+    i32.const 46
+    i32.store16 offset=2
+    local.get $buf|97
+    local.get $buf|97
+    i32.const 2
     i32.sub
-    local.set $exp
-   end
-   local.get $frc
-   local.set $f
-   local.get $exp
-   local.set $e
-   local.get $isSingle|7
-   local.set $isSingle|16
-   local.get $f
-   i64.const 1
-   i64.shl
-   i64.const 1
-   i64.add
-   local.set $frc|17
-   local.get $e
-   i32.const 1
-   i32.sub
-   local.set $exp|18
-   local.get $frc|17
-   i64.clz
-   i32.wrap_i64
-   local.set $off
-   local.get $frc|17
-   local.get $off
-   i64.extend_i32_s
-   i64.shl
-   local.set $frc|17
-   local.get $exp|18
-   local.get $off
-   i32.sub
-   local.set $exp|18
-   i32.const 1
-   local.get $f
-   local.get $isSingle|16
-   if (result i64)
-    i64.const 8388608
-   else
-    i64.const 4503599627370496
-   end
-   i64.eq
-   i32.add
-   local.set $m
-   local.get $frc|17
-   global.set $~lib/util/number/_frc_plus
-   local.get $f
-   local.get $m
-   i64.extend_i32_s
-   i64.shl
-   i64.const 1
-   i64.sub
-   local.get $e
-   local.get $m
-   i32.sub
-   local.get $exp|18
-   i32.sub
-   i64.extend_i32_s
-   i64.shl
-   global.set $~lib/util/number/_frc_minus
-   local.get $exp|18
-   global.set $~lib/util/number/_exp
-   global.get $~lib/util/number/_exp
-   local.set $minExp
-   i32.const -61
-   local.get $minExp
-   i32.sub
-   f64.convert_i32_s
-   f64.const 0.30102999566398114
-   f64.mul
-   f64.const 347
-   f64.add
-   local.set $dk
-   local.get $dk
-   i32.trunc_sat_f64_s
-   local.set $k
-   local.get $k
-   local.get $k
-   f64.convert_i32_s
-   local.get $dk
-   f64.ne
-   i32.add
-   local.set $k
-   local.get $k
-   i32.const 3
-   i32.shr_s
-   i32.const 1
-   i32.add
-   local.set $index
-   i32.const 348
-   local.get $index
-   i32.const 3
-   i32.shl
-   i32.sub
-   global.set $~lib/util/number/_K
-   i32.const 232
-   local.get $index
-   i32.const 3
-   i32.shl
-   i32.add
-   i64.load
-   global.set $~lib/util/number/_frc_pow
-   i32.const 928
-   local.get $index
-   i32.const 1
-   i32.shl
-   i32.add
-   i32.load16_s
-   global.set $~lib/util/number/_exp_pow
-   local.get $frc
-   i64.clz
-   i32.wrap_i64
-   local.set $off|25
-   local.get $frc
-   local.get $off|25
-   i64.extend_i32_s
-   i64.shl
-   local.set $frc
-   local.get $exp
-   local.get $off|25
-   i32.sub
-   local.set $exp
-   global.get $~lib/util/number/_frc_pow
-   local.set $frc_pow
-   global.get $~lib/util/number/_exp_pow
-   local.set $exp_pow
-   block $~lib/util/number/umul64f|inlined.0 (result i64)
-    local.get $frc
-    local.set $u
-    local.get $frc_pow
-    local.set $v
-    local.get $u
-    i64.const 4294967295
-    i64.and
-    local.set $u0
-    local.get $v
-    i64.const 4294967295
-    i64.and
-    local.set $v0
-    local.get $u
-    i64.const 32
-    i64.shr_u
-    local.set $u1
-    local.get $v
-    i64.const 32
-    i64.shr_u
-    local.set $v1
-    local.get $u0
-    local.get $v0
-    i64.mul
-    local.set $l
-    local.get $u1
-    local.get $v0
-    i64.mul
-    local.get $l
-    i64.const 32
-    i64.shr_u
-    i64.add
-    local.set $t
-    local.get $u0
-    local.get $v1
-    i64.mul
-    local.get $t
-    i64.const 4294967295
-    i64.and
-    i64.add
-    local.set $w
-    local.get $w
-    i64.const 2147483647
-    i64.add
-    local.set $w
-    local.get $t
-    i64.const 32
-    i64.shr_u
-    local.set $t
-    local.get $w
-    i64.const 32
-    i64.shr_u
-    local.set $w
-    local.get $u1
-    local.get $v1
-    i64.mul
-    local.get $t
-    i64.add
-    local.get $w
-    i64.add
-    br $~lib/util/number/umul64f|inlined.0
-   end
-   local.set $w_frc
-   block $~lib/util/number/umul64e|inlined.0 (result i32)
-    local.get $exp
-    local.set $e1
-    local.get $exp_pow
-    local.set $e2
-    local.get $e1
-    local.get $e2
+    local.get $start|98
+    i32.const 2
     i32.add
-    i32.const 64
-    i32.add
-    br $~lib/util/number/umul64e|inlined.0
+    i32.eq
+    i32.const 1
+    i32.shl
+    i32.sub
+    local.set $buf|97
+    block $~lib/util/xjb/ftoa/writeExponent|inlined.0 (result i32)
+     local.get $buf|97
+     local.set $buf|107
+     local.get $decExp|99
+     local.set $decExp|108
+     local.get $decExp|108
+     i32.const 31
+     i32.shr_s
+     local.set $m
+     local.get $buf|107
+     i32.const 101
+     i32.store16
+     local.get $buf|107
+     i32.const 43
+     local.get $m
+     i32.const 2
+     i32.and
+     i32.add
+     i32.store16 offset=2
+     local.get $buf|107
+     i32.const 4
+     i32.add
+     local.set $buf|107
+     local.get $decExp|108
+     local.get $m
+     i32.xor
+     local.get $m
+     i32.sub
+     local.set $e
+     local.get $e
+     i32.const 10
+     i32.ge_s
+     if
+      global.get $~lib/util/xjb/ftoa/DIGIT_PAIRS
+      local.get $e
+      i32.const 1
+      i32.shl
+      i32.add
+      i32.load16_u
+      local.set $pair
+      local.get $buf|107
+      local.get $pair
+      i32.const 255
+      i32.and
+      i32.store16
+      local.get $buf|107
+      local.get $pair
+      i32.const 8
+      i32.shr_u
+      i32.store16 offset=2
+      local.get $buf|107
+      i32.const 4
+      i32.add
+      br $~lib/util/xjb/ftoa/writeExponent|inlined.0
+     end
+     local.get $buf|107
+     i32.const 48
+     local.get $e
+     i32.add
+     i32.store16
+     local.get $buf|107
+     i32.const 2
+     i32.add
+     br $~lib/util/xjb/ftoa/writeExponent|inlined.0
+    end
+    br $~lib/util/xjb/ftoa/writeExpNotation|inlined.0
    end
-   local.set $w_exp
-   block $~lib/util/number/umul64f|inlined.1 (result i64)
-    global.get $~lib/util/number/_frc_plus
-    local.set $u|41
-    local.get $frc_pow
-    local.set $v|42
-    local.get $u|41
-    i64.const 4294967295
-    i64.and
-    local.set $u0|43
-    local.get $v|42
-    i64.const 4294967295
-    i64.and
-    local.set $v0|44
-    local.get $u|41
-    i64.const 32
-    i64.shr_u
-    local.set $u1|45
-    local.get $v|42
-    i64.const 32
-    i64.shr_u
-    local.set $v1|46
-    local.get $u0|43
-    local.get $v0|44
-    i64.mul
-    local.set $l|47
-    local.get $u1|45
-    local.get $v0|44
-    i64.mul
-    local.get $l|47
-    i64.const 32
-    i64.shr_u
-    i64.add
-    local.set $t|48
-    local.get $u0|43
-    local.get $v1|46
-    i64.mul
-    local.get $t|48
-    i64.const 4294967295
-    i64.and
-    i64.add
-    local.set $w|49
-    local.get $w|49
-    i64.const 2147483647
-    i64.add
-    local.set $w|49
-    local.get $t|48
-    i64.const 32
-    i64.shr_u
-    local.set $t|48
-    local.get $w|49
-    i64.const 32
-    i64.shr_u
-    local.set $w|49
-    local.get $u1|45
-    local.get $v1|46
-    i64.mul
-    local.get $t|48
-    i64.add
-    local.get $w|49
-    i64.add
-    br $~lib/util/number/umul64f|inlined.1
-   end
-   i64.const 1
-   i64.sub
-   local.set $wp_frc
-   block $~lib/util/number/umul64e|inlined.1 (result i32)
-    global.get $~lib/util/number/_exp
-    local.set $e1|51
-    local.get $exp_pow
-    local.set $e2|52
-    local.get $e1|51
-    local.get $e2|52
-    i32.add
-    i32.const 64
-    i32.add
-    br $~lib/util/number/umul64e|inlined.1
-   end
-   local.set $wp_exp
-   block $~lib/util/number/umul64f|inlined.2 (result i64)
-    global.get $~lib/util/number/_frc_minus
-    local.set $u|54
-    local.get $frc_pow
-    local.set $v|55
-    local.get $u|54
-    i64.const 4294967295
-    i64.and
-    local.set $u0|56
-    local.get $v|55
-    i64.const 4294967295
-    i64.and
-    local.set $v0|57
-    local.get $u|54
-    i64.const 32
-    i64.shr_u
-    local.set $u1|58
-    local.get $v|55
-    i64.const 32
-    i64.shr_u
-    local.set $v1|59
-    local.get $u0|56
-    local.get $v0|57
-    i64.mul
-    local.set $l|60
-    local.get $u1|58
-    local.get $v0|57
-    i64.mul
-    local.get $l|60
-    i64.const 32
-    i64.shr_u
-    i64.add
-    local.set $t|61
-    local.get $u0|56
-    local.get $v1|59
-    i64.mul
-    local.get $t|61
-    i64.const 4294967295
-    i64.and
-    i64.add
-    local.set $w|62
-    local.get $w|62
-    i64.const 2147483647
-    i64.add
-    local.set $w|62
-    local.get $t|61
-    i64.const 32
-    i64.shr_u
-    local.set $t|61
-    local.get $w|62
-    i64.const 32
-    i64.shr_u
-    local.set $w|62
-    local.get $u1|58
-    local.get $v1|59
-    i64.mul
-    local.get $t|61
-    i64.add
-    local.get $w|62
-    i64.add
-    br $~lib/util/number/umul64f|inlined.2
-   end
-   i64.const 1
-   i64.add
-   local.set $wm_frc
-   local.get $wp_frc
-   local.get $wm_frc
-   i64.sub
-   local.set $delta
-   local.get $buffer|5
-   local.get $w_frc
-   local.get $w_exp
-   local.get $wp_frc
-   local.get $wp_exp
-   local.get $delta
-   local.get $sign|6
-   call $~lib/util/number/genDigits
-   br $~lib/util/number/grisu2|inlined.0
+   br $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0
   end
-  local.set $len
   local.get $buffer
-  local.get $sign
-  i32.const 1
-  i32.shl
-  i32.add
-  local.get $len
-  local.get $sign
   i32.sub
-  global.get $~lib/util/number/_K
-  call $~lib/util/number/prettify
-  local.set $len
-  local.get $len
-  local.get $sign
-  i32.add
+  i32.const 1
+  i32.shr_u
   return
  )
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $this i32) (param $nextWithColor i32)
@@ -1707,7 +1891,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1632
+     i32.const 1888
      i32.const 160
      i32.const 16
      call $~lib/builtins/abort
@@ -1777,7 +1961,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1632
+    i32.const 1888
     i32.const 128
     i32.const 18
     call $~lib/builtins/abort
@@ -1794,7 +1978,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1632
+   i32.const 1888
    i32.const 132
    i32.const 16
    call $~lib/builtins/abort
@@ -1824,8 +2008,8 @@
   i32.load
   i32.gt_u
   if
-   i32.const 1760
-   i32.const 1824
+   i32.const 2016
+   i32.const 2080
    i32.const 21
    i32.const 28
    call $~lib/builtins/abort
@@ -1893,7 +2077,7 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 1632
+    i32.const 1888
     i32.const 148
     i32.const 30
     call $~lib/builtins/abort
@@ -2045,7 +2229,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 268
    i32.const 14
    call $~lib/builtins/abort
@@ -2065,7 +2249,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 270
    i32.const 14
    call $~lib/builtins/abort
@@ -2128,7 +2312,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 284
    i32.const 14
    call $~lib/builtins/abort
@@ -2281,7 +2465,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 201
    i32.const 14
    call $~lib/builtins/abort
@@ -2298,7 +2482,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 203
    i32.const 14
    call $~lib/builtins/abort
@@ -2387,7 +2571,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1904
+    i32.const 2160
     i32.const 221
     i32.const 16
     call $~lib/builtins/abort
@@ -2430,7 +2614,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 233
    i32.const 14
    call $~lib/builtins/abort
@@ -2448,7 +2632,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 234
    i32.const 14
    call $~lib/builtins/abort
@@ -2516,7 +2700,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 251
    i32.const 14
    call $~lib/builtins/abort
@@ -2633,7 +2817,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 382
    i32.const 14
    call $~lib/builtins/abort
@@ -2679,7 +2863,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1904
+    i32.const 2160
     i32.const 389
     i32.const 16
     call $~lib/builtins/abort
@@ -2711,7 +2895,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1904
+    i32.const 2160
     i32.const 402
     i32.const 5
     call $~lib/builtins/abort
@@ -2955,7 +3139,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 562
    i32.const 3
    call $~lib/builtins/abort
@@ -3175,7 +3359,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1632
+     i32.const 1888
      i32.const 229
      i32.const 20
      call $~lib/builtins/abort
@@ -3286,8 +3470,8 @@
   i32.const 1073741820
   i32.gt_u
   if
-   i32.const 1568
-   i32.const 1904
+   i32.const 1824
+   i32.const 2160
    i32.const 461
    i32.const 29
    call $~lib/builtins/abort
@@ -3389,7 +3573,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 334
    i32.const 14
    call $~lib/builtins/abort
@@ -3460,7 +3644,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1904
+     i32.const 2160
      i32.const 347
      i32.const 18
      call $~lib/builtins/abort
@@ -3617,7 +3801,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 361
    i32.const 14
    call $~lib/builtins/abort
@@ -3732,7 +3916,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1904
+    i32.const 2160
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -3752,7 +3936,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 2160
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -3800,8 +3984,8 @@
   i32.const 1073741804
   i32.ge_u
   if
-   i32.const 1568
-   i32.const 1632
+   i32.const 1824
+   i32.const 1888
    i32.const 261
    i32.const 31
    call $~lib/builtins/abort
@@ -3968,6 +4152,3805 @@
   i32.const 0
   return
  )
+ (func $~lib/util/xjb/xjb/toBcd8 (param $abcdefgh i64)
+  (local $abcd_efgh i64)
+  (local $ab_cd_ef_gh i64)
+  (local $a_b_c_d_e_f_g_h i64)
+  (local $bcd i64)
+  local.get $abcdefgh
+  global.get $~lib/util/xjb/xjb/NEG10K
+  local.get $abcdefgh
+  global.get $~lib/util/xjb/xjb/DIV10K_SIG
+  i64.mul
+  global.get $~lib/util/xjb/xjb/DIV10K_EXP
+  i64.extend_i32_s
+  i64.shr_u
+  i64.mul
+  i64.add
+  local.set $abcd_efgh
+  local.get $abcd_efgh
+  global.get $~lib/util/xjb/xjb/NEG100
+  local.get $abcd_efgh
+  global.get $~lib/util/xjb/xjb/DIV100_SIG
+  i64.mul
+  global.get $~lib/util/xjb/xjb/DIV100_EXP
+  i64.extend_i32_s
+  i64.shr_u
+  i64.const 545460846719
+  i64.and
+  i64.mul
+  i64.add
+  local.set $ab_cd_ef_gh
+  local.get $ab_cd_ef_gh
+  global.get $~lib/util/xjb/xjb/NEG10
+  local.get $ab_cd_ef_gh
+  global.get $~lib/util/xjb/xjb/DIV10_SIG
+  i64.mul
+  global.get $~lib/util/xjb/xjb/DIV10_EXP
+  i64.extend_i32_s
+  i64.shr_u
+  i64.const 4222189076152335
+  i64.and
+  i64.mul
+  i64.add
+  local.set $a_b_c_d_e_f_g_h
+  local.get $a_b_c_d_e_f_g_h
+  call $~lib/polyfills/bswap<u64>
+  local.set $bcd
+  local.get $bcd
+  global.set $~lib/util/xjb/xjb/gBcd
+  i32.const 70
+  i64.extend_i32_s
+  local.get $bcd
+  i64.const 1
+  i64.shl
+  i64.const 1
+  i64.or
+  i64.clz
+  i64.sub
+  i64.const 8
+  i64.div_u
+  i32.wrap_i64
+  global.set $~lib/util/xjb/xjb/gBcdLen
+ )
+ (func $~lib/util/xjb/dtoa/dtoa_buffered (param $buffer i32) (param $value f64) (result i32)
+  (local $buf i32)
+  (local $value|3 f64)
+  (local $bits i64)
+  (local $binExp i32)
+  (local $binSig i64)
+  (local $buf|7 i32)
+  (local $bits|8 i64)
+  (local $binExp|9 i32)
+  (local $binSig|10 i64)
+  (local $neg i32)
+  (local $isNormal i32)
+  (local $buf|13 i32)
+  (local $buf|14 i32)
+  (local $neg|15 i32)
+  (local $p i32)
+  (local $ascii i64)
+  (local $off i32)
+  (local $base i32)
+  (local $q i32)
+  (local $c i64)
+  (local $intValue i64)
+  (local $shift i32)
+  (local $mask i64)
+  (local $buf|25 i32)
+  (local $value|26 i64)
+  (local $v i64)
+  (local $v|28 i64)
+  (local $len i32)
+  (local $p|30 i32)
+  (local $v|31 i64)
+  (local $q|32 i64)
+  (local $pair i32)
+  (local $pair|34 i32)
+  (local $binSig|35 i64)
+  (local $rawExp i32)
+  (local $regular i32)
+  (local $c|38 i64)
+  (local $q|39 i32)
+  (local $decExp i32)
+  (local $powExp i32)
+  (local $h i32)
+  (local $power i32)
+  (local $pow10Hi i64)
+  (local $integral i64)
+  (local $halfUlp i64)
+  (local $dotOne i64)
+  (local $one i64)
+  (local $integral|49 i64)
+  (local $one|50 i64)
+  (local $decExp|51 i32)
+  (local $decExp|52 i32)
+  (local $powExp|53 i32)
+  (local $h|54 i32)
+  (local $shift|55 i32)
+  (local $power|56 i32)
+  (local $off|57 i32)
+  (local $pHi i64)
+  (local $pLo i64)
+  (local $y i64)
+  (local $a i64)
+  (local $b i64)
+  (local $a0 i64)
+  (local $a1 i64)
+  (local $b0 i64)
+  (local $b1 i64)
+  (local $w0 i64)
+  (local $t i64)
+  (local $w1 i64)
+  (local $w2 i64)
+  (local $a|71 i64)
+  (local $plo64 i64)
+  (local $a|73 i64)
+  (local $b|74 i64)
+  (local $a0|75 i64)
+  (local $a1|76 i64)
+  (local $b0|77 i64)
+  (local $b1|78 i64)
+  (local $w0|79 i64)
+  (local $t|80 i64)
+  (local $w1|81 i64)
+  (local $w2|82 i64)
+  (local $lo i64)
+  (local $p_hi i64)
+  (local $integral|85 i64)
+  (local $dotOne|86 i64)
+  (local $halfUlp|87 i64)
+  (local $x i64)
+  (local $y|89 i64)
+  (local $c|90 i64)
+  (local $lo|91 i64)
+  (local $a|92 i64)
+  (local $b|93 i64)
+  (local $a0|94 i64)
+  (local $a1|95 i64)
+  (local $b0|96 i64)
+  (local $b1|97 i64)
+  (local $w0|98 i64)
+  (local $t|99 i64)
+  (local $w1|100 i64)
+  (local $w2|101 i64)
+  (local $hi i64)
+  (local $one|103 i64)
+  (local $integral|104 i64)
+  (local $one|105 i64)
+  (local $decExp|106 i32)
+  (local $binSig|107 i64)
+  (local $rawExp|108 i32)
+  (local $regular|109 i32)
+  (local $binSig|110 i64)
+  (local $rawExp|111 i32)
+  (local $regular|112 i32)
+  (local $c|113 i64)
+  (local $q|114 i32)
+  (local $decExp|115 i32)
+  (local $powExp|116 i32)
+  (local $h|117 i32)
+  (local $power|118 i32)
+  (local $pow10Hi|119 i64)
+  (local $integral|120 i64)
+  (local $halfUlp|121 i64)
+  (local $dotOne|122 i64)
+  (local $one|123 i64)
+  (local $integral|124 i64)
+  (local $one|125 i64)
+  (local $decExp|126 i32)
+  (local $decExp|127 i32)
+  (local $powExp|128 i32)
+  (local $h|129 i32)
+  (local $shift|130 i32)
+  (local $power|131 i32)
+  (local $off|132 i32)
+  (local $pHi|133 i64)
+  (local $pLo|134 i64)
+  (local $y|135 i64)
+  (local $a|136 i64)
+  (local $b|137 i64)
+  (local $a0|138 i64)
+  (local $a1|139 i64)
+  (local $b0|140 i64)
+  (local $b1|141 i64)
+  (local $w0|142 i64)
+  (local $t|143 i64)
+  (local $w1|144 i64)
+  (local $w2|145 i64)
+  (local $a|146 i64)
+  (local $plo64|147 i64)
+  (local $a|148 i64)
+  (local $b|149 i64)
+  (local $a0|150 i64)
+  (local $a1|151 i64)
+  (local $b0|152 i64)
+  (local $b1|153 i64)
+  (local $w0|154 i64)
+  (local $t|155 i64)
+  (local $w1|156 i64)
+  (local $w2|157 i64)
+  (local $lo|158 i64)
+  (local $p_hi|159 i64)
+  (local $integral|160 i64)
+  (local $dotOne|161 i64)
+  (local $halfUlp|162 i64)
+  (local $x|163 i64)
+  (local $y|164 i64)
+  (local $c|165 i64)
+  (local $lo|166 i64)
+  (local $a|167 i64)
+  (local $b|168 i64)
+  (local $a0|169 i64)
+  (local $a1|170 i64)
+  (local $b0|171 i64)
+  (local $b1|172 i64)
+  (local $w0|173 i64)
+  (local $t|174 i64)
+  (local $w1|175 i64)
+  (local $w2|176 i64)
+  (local $hi|177 i64)
+  (local $one|178 i64)
+  (local $integral|179 i64)
+  (local $one|180 i64)
+  (local $decExp|181 i32)
+  (local $binExp|182 i32)
+  (local $decExp|183 i32)
+  (local $binExp|184 i32)
+  (local $decExp|185 i32)
+  (local $pow10BinExp i32)
+  (local $shift|187 i32)
+  (local $power|188 i32)
+  (local $off|189 i32)
+  (local $pHi|190 i64)
+  (local $pLo|191 i64)
+  (local $y|192 i64)
+  (local $a|193 i64)
+  (local $b|194 i64)
+  (local $a0|195 i64)
+  (local $a1|196 i64)
+  (local $b0|197 i64)
+  (local $b1|198 i64)
+  (local $w0|199 i64)
+  (local $t|200 i64)
+  (local $w1|201 i64)
+  (local $w2|202 i64)
+  (local $a|203 i64)
+  (local $plo64|204 i64)
+  (local $a|205 i64)
+  (local $b|206 i64)
+  (local $a0|207 i64)
+  (local $a1|208 i64)
+  (local $b0|209 i64)
+  (local $b1|210 i64)
+  (local $w0|211 i64)
+  (local $t|212 i64)
+  (local $w1|213 i64)
+  (local $w2|214 i64)
+  (local $lo|215 i64)
+  (local $p_hi|216 i64)
+  (local $integral|217 i64)
+  (local $dotOne|218 i64)
+  (local $halfUlp|219 i64)
+  (local $x|220 i64)
+  (local $y|221 i64)
+  (local $c|222 i64)
+  (local $lo|223 i64)
+  (local $a|224 i64)
+  (local $b|225 i64)
+  (local $a0|226 i64)
+  (local $a1|227 i64)
+  (local $b0|228 i64)
+  (local $b1|229 i64)
+  (local $w0|230 i64)
+  (local $t|231 i64)
+  (local $w1|232 i64)
+  (local $w2|233 i64)
+  (local $hi|234 i64)
+  (local $one|235 i64)
+  (local $integral|236 i64)
+  (local $one|237 i64)
+  (local $decExp|238 i32)
+  (local $full i64)
+  (local $v|240 i64)
+  (local $scale i32)
+  (local $mul i64)
+  (local $hasLastDigit i32)
+  (local $hasExtraDigit i32)
+  (local $decExp|245 i32)
+  (local $start i32)
+  (local $value|247 i64)
+  (local $value|248 i64)
+  (local $hi|249 i64)
+  (local $lo|250 i64)
+  (local $hiBcd i64)
+  (local $hiLen i32)
+  (local $buf|253 i32)
+  (local $start|254 i32)
+  (local $decExp|255 i32)
+  (local $hasLastDigit|256 i32)
+  (local $p|257 i32)
+  (local $ascii|258 i64)
+  (local $off|259 i32)
+  (local $base|260 i32)
+  (local $lastDigitChar i64)
+  (local $numDigits i32)
+  (local $dHi i64)
+  (local $dLo i64)
+  (local $p|265 i32)
+  (local $ascii|266 i64)
+  (local $off|267 i32)
+  (local $base|268 i32)
+  (local $p|269 i32)
+  (local $ascii|270 i64)
+  (local $off|271 i32)
+  (local $base|272 i32)
+  (local $endByte i32)
+  (local $z i32)
+  (local $p|275 i32)
+  (local $ascii|276 i64)
+  (local $off|277 i32)
+  (local $base|278 i32)
+  (local $n i32)
+  (local $endPos i32)
+  (local $startPos i32)
+  (local $p|282 i32)
+  (local $ascii|283 i64)
+  (local $off|284 i32)
+  (local $base|285 i32)
+  (local $p|286 i32)
+  (local $ascii|287 i64)
+  (local $off|288 i32)
+  (local $base|289 i32)
+  (local $k i32)
+  (local $d16 i64)
+  (local $s i32)
+  (local $fHi i64)
+  (local $fLo i64)
+  (local $s2 i32)
+  (local $p|296 i32)
+  (local $ascii|297 i64)
+  (local $off|298 i32)
+  (local $base|299 i32)
+  (local $p|300 i32)
+  (local $ascii|301 i64)
+  (local $off|302 i32)
+  (local $base|303 i32)
+  (local $buf|304 i32)
+  (local $start|305 i32)
+  (local $decExp|306 i32)
+  (local $hasLastDigit|307 i32)
+  (local $hasExtraDigit|308 i32)
+  (local $bcdSize i32)
+  (local $p|310 i32)
+  (local $ascii|311 i64)
+  (local $off|312 i32)
+  (local $base|313 i32)
+  (local $p|314 i32)
+  (local $ascii|315 i64)
+  (local $off|316 i32)
+  (local $base|317 i32)
+  (local $lead i32)
+  (local $buf|319 i32)
+  (local $decExp|320 i32)
+  (local $m i32)
+  (local $e i32)
+  (local $d i32)
+  (local $pair|324 i32)
+  (local $pair|325 i32)
+  block $~lib/util/xjb/dtoa/formatDouble|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buf
+   local.get $value
+   local.set $value|3
+   local.get $value|3
+   i64.reinterpret_f64
+   local.set $bits
+   local.get $bits
+   i64.const 1
+   i64.shl
+   i64.const 53
+   i64.shr_u
+   i32.wrap_i64
+   local.set $binExp
+   local.get $bits
+   i64.const 1
+   i64.const 52
+   i64.shl
+   i64.const 1
+   i64.sub
+   i64.and
+   local.set $binSig
+   block $~lib/util/xjb/dtoa/formatDecodedDouble|inlined.0 (result i32)
+    local.get $buf
+    local.set $buf|7
+    local.get $bits
+    local.set $bits|8
+    local.get $binExp
+    local.set $binExp|9
+    local.get $binSig
+    local.set $binSig|10
+    local.get $bits|8
+    i64.const 63
+    i64.shr_u
+    i64.const 0
+    i64.ne
+    local.set $neg
+    local.get $binExp|9
+    i32.const 1
+    i32.sub
+    i32.const 2046
+    i32.lt_u
+    local.set $isNormal
+    local.get $isNormal
+    i32.eqz
+    if
+     local.get $binExp|9
+     i32.const 0
+     i32.ne
+     if
+      local.get $binSig|10
+      i64.const 0
+      i64.ne
+      if
+       block $~lib/util/xjb/xjb/writeNaN|inlined.0 (result i32)
+        local.get $buf|7
+        local.set $buf|13
+        local.get $buf|13
+        i32.const 78
+        i32.store16
+        local.get $buf|13
+        i32.const 97
+        i32.store16 offset=2
+        local.get $buf|13
+        i32.const 78
+        i32.store16 offset=4
+        local.get $buf|13
+        i32.const 6
+        i32.add
+        br $~lib/util/xjb/xjb/writeNaN|inlined.0
+       end
+       br $~lib/util/xjb/dtoa/formatDecodedDouble|inlined.0
+      end
+      block $~lib/util/xjb/xjb/writeInfinity|inlined.0 (result i32)
+       local.get $buf|7
+       local.set $buf|14
+       local.get $neg
+       local.set $neg|15
+       local.get $neg|15
+       if
+        local.get $buf|14
+        i32.const 45
+        i32.store16
+        local.get $buf|14
+        i32.const 2
+        i32.add
+        local.set $buf|14
+       end
+       local.get $buf|14
+       local.set $p
+       i64.const 8751735898823355977
+       local.set $ascii
+       i32.const 0
+       local.set $off
+       local.get $p
+       local.get $off
+       i32.add
+       local.set $base
+       global.get $~lib/util/xjb/xjb/HAS_SIMD
+       drop
+       local.get $base
+       local.get $ascii
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16
+       local.get $base
+       local.get $ascii
+       i64.const 8
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=2
+       local.get $base
+       local.get $ascii
+       i64.const 16
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=4
+       local.get $base
+       local.get $ascii
+       i64.const 24
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=6
+       local.get $base
+       local.get $ascii
+       i64.const 32
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=8
+       local.get $base
+       local.get $ascii
+       i64.const 40
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=10
+       local.get $base
+       local.get $ascii
+       i64.const 48
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=12
+       local.get $base
+       local.get $ascii
+       i64.const 56
+       i64.shr_u
+       i32.wrap_i64
+       i32.store16 offset=14
+       local.get $buf|14
+       i32.const 16
+       i32.add
+       br $~lib/util/xjb/xjb/writeInfinity|inlined.0
+      end
+      br $~lib/util/xjb/dtoa/formatDecodedDouble|inlined.0
+     end
+     local.get $binSig|10
+     i64.const 0
+     i64.eq
+     if
+      local.get $buf|7
+      i32.const 48
+      i32.store16
+      local.get $buf|7
+      i32.const 2
+      i32.add
+      br $~lib/util/xjb/dtoa/formatDecodedDouble|inlined.0
+     end
+    end
+    local.get $neg
+    if
+     local.get $buf|7
+     i32.const 45
+     i32.store16
+     local.get $buf|7
+     i32.const 2
+     i32.add
+     local.set $buf|7
+    end
+    local.get $isNormal
+    if
+     local.get $binExp|9
+     global.get $~lib/util/xjb/xjb/DOUBLE_EXP_OFFSET
+     i32.sub
+     local.set $q
+     local.get $binSig|10
+     i64.const 1
+     i64.const 52
+     i64.shl
+     i64.or
+     local.set $c
+     i64.const 0
+     local.set $intValue
+     local.get $q
+     i32.const 0
+     i32.lt_s
+     if
+      i32.const 0
+      local.get $q
+      i32.sub
+      local.set $shift
+      local.get $shift
+      i32.const 52
+      i32.le_s
+      if
+       i64.const 1
+       local.get $shift
+       i64.extend_i32_s
+       i64.shl
+       i64.const 1
+       i64.sub
+       local.set $mask
+       local.get $c
+       local.get $mask
+       i64.and
+       i64.const 0
+       i64.eq
+       if
+        local.get $c
+        local.get $shift
+        i64.extend_i32_s
+        i64.shr_u
+        local.set $intValue
+       end
+      end
+     else
+      local.get $q
+      i32.const 11
+      i32.lt_s
+      if
+       local.get $c
+       local.get $q
+       i64.extend_i32_s
+       i64.shl
+       local.set $intValue
+       local.get $intValue
+       i64.const 10000000000000000
+       i64.ge_u
+       if
+        i64.const 0
+        local.set $intValue
+       end
+      end
+     end
+     local.get $intValue
+     i64.const 0
+     i64.ne
+     if
+      block $~lib/util/xjb/dtoa/writeUInt16|inlined.0 (result i32)
+       local.get $buf|7
+       local.set $buf|25
+       local.get $intValue
+       local.set $value|26
+       block $~lib/util/xjb/dtoa/decimalLen16|inlined.0 (result i32)
+        local.get $value|26
+        local.set $v
+        local.get $v
+        i64.const 1000000000000000
+        i64.lt_u
+        if (result i32)
+         block $~lib/util/xjb/dtoa/decimalLen15|inlined.0 (result i32)
+          local.get $v
+          local.set $v|28
+          local.get $v|28
+          i64.const 100000000
+          i64.lt_u
+          if
+           local.get $v|28
+           i64.const 10000
+           i64.lt_u
+           if
+            local.get $v|28
+            i64.const 100
+            i64.lt_u
+            if
+             local.get $v|28
+             i64.const 10
+             i64.lt_u
+             if (result i32)
+              i32.const 1
+             else
+              i32.const 2
+             end
+             br $~lib/util/xjb/dtoa/decimalLen15|inlined.0
+            end
+            local.get $v|28
+            i64.const 1000
+            i64.lt_u
+            if (result i32)
+             i32.const 3
+            else
+             i32.const 4
+            end
+            br $~lib/util/xjb/dtoa/decimalLen15|inlined.0
+           end
+           local.get $v|28
+           i64.const 1000000
+           i64.lt_u
+           if
+            local.get $v|28
+            i64.const 100000
+            i64.lt_u
+            if (result i32)
+             i32.const 5
+            else
+             i32.const 6
+            end
+            br $~lib/util/xjb/dtoa/decimalLen15|inlined.0
+           end
+           local.get $v|28
+           i64.const 10000000
+           i64.lt_u
+           if (result i32)
+            i32.const 7
+           else
+            i32.const 8
+           end
+           br $~lib/util/xjb/dtoa/decimalLen15|inlined.0
+          end
+          local.get $v|28
+          i64.const 1000000000000
+          i64.lt_u
+          if
+           local.get $v|28
+           i64.const 10000000000
+           i64.lt_u
+           if
+            local.get $v|28
+            i64.const 1000000000
+            i64.lt_u
+            if (result i32)
+             i32.const 9
+            else
+             i32.const 10
+            end
+            br $~lib/util/xjb/dtoa/decimalLen15|inlined.0
+           end
+           local.get $v|28
+           i64.const 100000000000
+           i64.lt_u
+           if (result i32)
+            i32.const 11
+           else
+            i32.const 12
+           end
+           br $~lib/util/xjb/dtoa/decimalLen15|inlined.0
+          end
+          local.get $v|28
+          i64.const 100000000000000
+          i64.lt_u
+          if
+           local.get $v|28
+           i64.const 10000000000000
+           i64.lt_u
+           if (result i32)
+            i32.const 13
+           else
+            i32.const 14
+           end
+           br $~lib/util/xjb/dtoa/decimalLen15|inlined.0
+          end
+          i32.const 15
+          br $~lib/util/xjb/dtoa/decimalLen15|inlined.0
+         end
+        else
+         i32.const 16
+        end
+        br $~lib/util/xjb/dtoa/decimalLen16|inlined.0
+       end
+       local.set $len
+       local.get $buf|25
+       local.get $len
+       i32.const 1
+       i32.shl
+       i32.add
+       local.set $p|30
+       local.get $value|26
+       local.set $v|31
+       loop $while-continue|0
+        local.get $v|31
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|31
+         i64.const 100
+         i64.div_u
+         local.set $q|32
+         global.get $~lib/util/xjb/xjb/DIGIT_PAIRS
+         local.get $v|31
+         local.get $q|32
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 1
+         i32.shl
+         i32.add
+         i32.load16_u
+         local.set $pair
+         local.get $p|30
+         i32.const 4
+         i32.sub
+         local.set $p|30
+         local.get $p|30
+         local.get $pair
+         i32.const 255
+         i32.and
+         i32.store16
+         local.get $p|30
+         local.get $pair
+         i32.const 8
+         i32.shr_u
+         i32.store16 offset=2
+         local.get $q|32
+         local.set $v|31
+         br $while-continue|0
+        end
+       end
+       local.get $v|31
+       i64.const 10
+       i64.ge_u
+       if
+        global.get $~lib/util/xjb/xjb/DIGIT_PAIRS
+        local.get $v|31
+        i32.wrap_i64
+        i32.const 1
+        i32.shl
+        i32.add
+        i32.load16_u
+        local.set $pair|34
+        local.get $buf|25
+        local.get $pair|34
+        i32.const 255
+        i32.and
+        i32.store16
+        local.get $buf|25
+        local.get $pair|34
+        i32.const 8
+        i32.shr_u
+        i32.store16 offset=2
+       else
+        local.get $buf|25
+        i32.const 48
+        local.get $v|31
+        i32.wrap_i64
+        i32.add
+        i32.store16
+       end
+       local.get $buf|25
+       local.get $len
+       i32.const 1
+       i32.shl
+       i32.add
+       br $~lib/util/xjb/dtoa/writeUInt16|inlined.0
+      end
+      br $~lib/util/xjb/dtoa/formatDecodedDouble|inlined.0
+     end
+    end
+    local.get $isNormal
+    if
+     block $~lib/util/xjb/dtoa/toDecimalDoubleNormal|inlined.0
+      local.get $binSig|10
+      local.set $binSig|35
+      local.get $binExp|9
+      local.set $rawExp
+      local.get $binSig|10
+      i64.const 0
+      i64.ne
+      local.set $regular
+      local.get $binSig|35
+      i64.const 1
+      i64.const 52
+      i64.shl
+      i64.or
+      local.set $c|38
+      local.get $rawExp
+      global.get $~lib/util/xjb/xjb/DOUBLE_EXP_OFFSET
+      i32.sub
+      local.set $q|39
+      local.get $regular
+      i32.eqz
+      if
+       local.get $q|39
+       i32.const 315653
+       i32.mul
+       i32.const 131072
+       i32.sub
+       i32.const 20
+       i32.shr_s
+       local.set $decExp
+       i32.const 0
+       local.get $decExp
+       i32.sub
+       i32.const 1
+       i32.sub
+       local.set $powExp
+       local.get $q|39
+       local.get $powExp
+       i32.const 217707
+       i32.mul
+       i32.const 16
+       i32.shr_s
+       i32.add
+       local.set $h
+       block $~lib/util/xjb/xjb/loadPow10HiXjb64|inlined.0 (result i64)
+        local.get $powExp
+        local.set $power
+        global.get $~lib/util/xjb/xjb/TABLE_COMPRESSED
+        drop
+        i32.const 2288
+        local.get $power
+        i32.const 293
+        i32.add
+        i32.const 4
+        i32.shl
+        i32.add
+        i64.load
+        br $~lib/util/xjb/xjb/loadPow10HiXjb64|inlined.0
+       end
+       local.set $pow10Hi
+       local.get $pow10Hi
+       i64.const 11
+       local.get $h
+       i64.extend_i32_s
+       i64.sub
+       i64.shr_u
+       local.set $integral
+       local.get $pow10Hi
+       i32.const 0
+       local.get $h
+       i32.sub
+       i64.extend_i32_s
+       i64.shr_u
+       local.set $halfUlp
+       local.get $pow10Hi
+       i64.const 53
+       local.get $h
+       i64.extend_i32_s
+       i64.add
+       i64.shl
+       local.set $dotOne
+       local.get $dotOne
+       i64.const 53
+       local.get $h
+       i64.extend_i32_s
+       i64.add
+       i64.shr_u
+       i64.const 5
+       i64.mul
+       i64.const 1
+       i64.const 9
+       local.get $h
+       i64.extend_i32_s
+       i64.sub
+       i64.shl
+       i64.add
+       i64.const 10
+       local.get $h
+       i64.extend_i32_s
+       i64.sub
+       i64.shr_u
+       local.set $one
+       local.get $dotOne
+       i64.const 54
+       i64.shr_u
+       i64.const 5
+       i64.mul
+       i64.const 511
+       i64.and
+       local.get $halfUlp
+       i64.const 55
+       i64.shr_u
+       i64.const 5
+       i64.mul
+       i64.gt_u
+       if (result i64)
+        local.get $dotOne
+        i64.const 54
+        i64.shr_u
+        i64.const 5
+        i64.mul
+        i64.const 9
+        i64.shr_u
+        i64.const 1
+        i64.add
+       else
+        local.get $one
+       end
+       local.set $one
+       local.get $dotOne
+       i64.const 1
+       i64.const 62
+       i64.shl
+       i64.eq
+       if (result i64)
+        i64.const 2
+       else
+        local.get $one
+       end
+       local.set $one
+       local.get $halfUlp
+       i64.const 1
+       i64.shr_u
+       local.get $dotOne
+       i64.gt_u
+       if (result i64)
+        i64.const 0
+       else
+        local.get $one
+       end
+       local.set $one
+       local.get $halfUlp
+       i64.const 0
+       i64.const -1
+       i64.xor
+       local.get $dotOne
+       i64.sub
+       i64.gt_u
+       if (result i64)
+        i64.const 10
+       else
+        local.get $one
+       end
+       local.set $one
+       local.get $integral
+       local.set $integral|49
+       local.get $one
+       local.set $one|50
+       local.get $decExp
+       local.set $decExp|51
+       local.get $one|50
+       i64.const 10
+       i64.eq
+       if
+        local.get $integral|49
+        i64.const 1
+        i64.add
+        global.set $~lib/util/xjb/xjb/gSig
+        i32.const 0
+        global.set $~lib/util/xjb/xjb/gLastDigit
+        i32.const 0
+        global.set $~lib/util/xjb/xjb/gHasLastDigit
+       else
+        local.get $one|50
+        i64.const 0
+        i64.eq
+        if
+         local.get $integral|49
+         global.set $~lib/util/xjb/xjb/gSig
+         i32.const 0
+         global.set $~lib/util/xjb/xjb/gLastDigit
+         i32.const 0
+         global.set $~lib/util/xjb/xjb/gHasLastDigit
+        else
+         local.get $integral|49
+         global.set $~lib/util/xjb/xjb/gSig
+         local.get $one|50
+         i32.wrap_i64
+         global.set $~lib/util/xjb/xjb/gLastDigit
+         i32.const 1
+         global.set $~lib/util/xjb/xjb/gHasLastDigit
+        end
+       end
+       local.get $decExp|51
+       global.set $~lib/util/xjb/xjb/gExp
+       br $~lib/util/xjb/dtoa/toDecimalDoubleNormal|inlined.0
+      end
+      local.get $rawExp
+      global.get $~lib/util/xjb/xjb/DOUBLE_EXP_OFFSET
+      i32.sub
+      i32.const 78913
+      i32.mul
+      i32.const 18
+      i32.shr_s
+      local.set $decExp|52
+      i32.const 0
+      local.get $decExp|52
+      i32.sub
+      i32.const 1
+      i32.sub
+      local.set $powExp|53
+      local.get $q|39
+      local.get $powExp|53
+      i32.const 217707
+      i32.mul
+      i32.const 16
+      i32.shr_s
+      i32.add
+      local.set $h|54
+      local.get $h|54
+      i32.const 1
+      i32.add
+      global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+      i32.add
+      local.set $shift|55
+      local.get $powExp|53
+      local.set $power|56
+      global.get $~lib/util/xjb/xjb/TABLE_COMPRESSED
+      drop
+      i32.const 2288
+      local.get $power|56
+      i32.const 293
+      i32.add
+      i32.const 4
+      i32.shl
+      i32.add
+      local.set $off|57
+      local.get $off|57
+      i64.load
+      global.set $~lib/util/xjb/xjb/gPow10Hi
+      local.get $off|57
+      i64.load offset=8
+      local.get $power|56
+      i32.const 0
+      i32.lt_s
+      i64.extend_i32_u
+      i64.add
+      global.set $~lib/util/xjb/xjb/gPow10Lo
+      global.get $~lib/util/xjb/xjb/gPow10Hi
+      local.set $pHi
+      global.get $~lib/util/xjb/xjb/gPow10Lo
+      local.set $pLo
+      local.get $c|38
+      local.get $shift|55
+      i64.extend_i32_s
+      i64.shl
+      local.set $y
+      block $~lib/util/xjb/xjb/mulhi64|inlined.0 (result i64)
+       local.get $pHi
+       local.set $a
+       local.get $y
+       local.set $b
+       local.get $a
+       i64.const 4294967295
+       i64.and
+       local.set $a0
+       local.get $a
+       i64.const 32
+       i64.shr_u
+       local.set $a1
+       local.get $b
+       i64.const 4294967295
+       i64.and
+       local.set $b0
+       local.get $b
+       i64.const 32
+       i64.shr_u
+       local.set $b1
+       local.get $a0
+       local.get $b0
+       i64.mul
+       local.set $w0
+       local.get $a1
+       local.get $b0
+       i64.mul
+       local.get $w0
+       i64.const 32
+       i64.shr_u
+       i64.add
+       local.set $t
+       local.get $t
+       i64.const 4294967295
+       i64.and
+       local.set $w1
+       local.get $t
+       i64.const 32
+       i64.shr_u
+       local.set $w2
+       local.get $a0
+       local.get $b1
+       i64.mul
+       local.get $w1
+       i64.add
+       local.set $w1
+       local.get $a1
+       local.get $b1
+       i64.mul
+       local.get $w2
+       i64.add
+       local.get $w1
+       i64.const 32
+       i64.shr_u
+       i64.add
+       br $~lib/util/xjb/xjb/mulhi64|inlined.0
+      end
+      local.set $a|71
+      local.get $pHi
+      local.get $y
+      i64.mul
+      local.set $plo64
+      local.get $plo64
+      block $~lib/util/xjb/xjb/mulhi64|inlined.1 (result i64)
+       local.get $pLo
+       local.set $a|73
+       local.get $y
+       local.set $b|74
+       local.get $a|73
+       i64.const 4294967295
+       i64.and
+       local.set $a0|75
+       local.get $a|73
+       i64.const 32
+       i64.shr_u
+       local.set $a1|76
+       local.get $b|74
+       i64.const 4294967295
+       i64.and
+       local.set $b0|77
+       local.get $b|74
+       i64.const 32
+       i64.shr_u
+       local.set $b1|78
+       local.get $a0|75
+       local.get $b0|77
+       i64.mul
+       local.set $w0|79
+       local.get $a1|76
+       local.get $b0|77
+       i64.mul
+       local.get $w0|79
+       i64.const 32
+       i64.shr_u
+       i64.add
+       local.set $t|80
+       local.get $t|80
+       i64.const 4294967295
+       i64.and
+       local.set $w1|81
+       local.get $t|80
+       i64.const 32
+       i64.shr_u
+       local.set $w2|82
+       local.get $a0|75
+       local.get $b1|78
+       i64.mul
+       local.get $w1|81
+       i64.add
+       local.set $w1|81
+       local.get $a1|76
+       local.get $b1|78
+       i64.mul
+       local.get $w2|82
+       i64.add
+       local.get $w1|81
+       i64.const 32
+       i64.shr_u
+       i64.add
+       br $~lib/util/xjb/xjb/mulhi64|inlined.1
+      end
+      i64.add
+      local.set $lo
+      local.get $a|71
+      local.get $lo
+      local.get $plo64
+      i64.lt_u
+      i64.extend_i32_u
+      i64.add
+      local.set $p_hi
+      local.get $p_hi
+      global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+      i64.extend_i32_s
+      i64.shr_u
+      local.set $integral|85
+      local.get $p_hi
+      i64.const 64
+      global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+      i64.extend_i32_s
+      i64.sub
+      i64.shl
+      local.get $lo
+      global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+      i64.extend_i32_s
+      i64.shr_u
+      i64.or
+      local.set $dotOne|86
+      local.get $pHi
+      i32.const 0
+      local.get $h|54
+      i32.sub
+      i64.extend_i32_s
+      i64.shr_u
+      i64.const 1
+      local.get $c|38
+      i64.const 1
+      i64.and
+      i64.sub
+      i64.add
+      local.set $halfUlp|87
+      block $~lib/util/xjb/xjb/umul128AddHi64|inlined.0 (result i64)
+       local.get $dotOne|86
+       local.set $x
+       i64.const 10
+       local.set $y|89
+       local.get $dotOne|86
+       i64.const 1
+       i64.const 62
+       i64.shl
+       i64.eq
+       if (result i64)
+        i64.const 0
+       else
+        global.get $~lib/util/xjb/xjb/BIASED_HALF
+       end
+       local.set $c|90
+       local.get $x
+       local.get $y|89
+       i64.mul
+       local.set $lo|91
+       block $~lib/util/xjb/xjb/mulhi64|inlined.2 (result i64)
+        local.get $x
+        local.set $a|92
+        local.get $y|89
+        local.set $b|93
+        local.get $a|92
+        i64.const 4294967295
+        i64.and
+        local.set $a0|94
+        local.get $a|92
+        i64.const 32
+        i64.shr_u
+        local.set $a1|95
+        local.get $b|93
+        i64.const 4294967295
+        i64.and
+        local.set $b0|96
+        local.get $b|93
+        i64.const 32
+        i64.shr_u
+        local.set $b1|97
+        local.get $a0|94
+        local.get $b0|96
+        i64.mul
+        local.set $w0|98
+        local.get $a1|95
+        local.get $b0|96
+        i64.mul
+        local.get $w0|98
+        i64.const 32
+        i64.shr_u
+        i64.add
+        local.set $t|99
+        local.get $t|99
+        i64.const 4294967295
+        i64.and
+        local.set $w1|100
+        local.get $t|99
+        i64.const 32
+        i64.shr_u
+        local.set $w2|101
+        local.get $a0|94
+        local.get $b1|97
+        i64.mul
+        local.get $w1|100
+        i64.add
+        local.set $w1|100
+        local.get $a1|95
+        local.get $b1|97
+        i64.mul
+        local.get $w2|101
+        i64.add
+        local.get $w1|100
+        i64.const 32
+        i64.shr_u
+        i64.add
+        br $~lib/util/xjb/xjb/mulhi64|inlined.2
+       end
+       local.set $hi
+       local.get $hi
+       local.get $lo|91
+       local.get $c|90
+       i64.add
+       local.get $lo|91
+       i64.lt_u
+       i64.extend_i32_u
+       i64.add
+       br $~lib/util/xjb/xjb/umul128AddHi64|inlined.0
+      end
+      local.set $one|103
+      local.get $dotOne|86
+      local.get $halfUlp|87
+      i64.lt_u
+      if (result i64)
+       i64.const 0
+      else
+       local.get $one|103
+      end
+      local.set $one|103
+      i64.const 0
+      i64.const -1
+      i64.xor
+      local.get $dotOne|86
+      i64.sub
+      local.get $halfUlp|87
+      i64.lt_u
+      if (result i64)
+       i64.const 10
+      else
+       local.get $one|103
+      end
+      local.set $one|103
+      local.get $integral|85
+      local.set $integral|104
+      local.get $one|103
+      local.set $one|105
+      local.get $decExp|52
+      local.set $decExp|106
+      local.get $one|105
+      i64.const 10
+      i64.eq
+      if
+       local.get $integral|104
+       i64.const 1
+       i64.add
+       global.set $~lib/util/xjb/xjb/gSig
+       i32.const 0
+       global.set $~lib/util/xjb/xjb/gLastDigit
+       i32.const 0
+       global.set $~lib/util/xjb/xjb/gHasLastDigit
+      else
+       local.get $one|105
+       i64.const 0
+       i64.eq
+       if
+        local.get $integral|104
+        global.set $~lib/util/xjb/xjb/gSig
+        i32.const 0
+        global.set $~lib/util/xjb/xjb/gLastDigit
+        i32.const 0
+        global.set $~lib/util/xjb/xjb/gHasLastDigit
+       else
+        local.get $integral|104
+        global.set $~lib/util/xjb/xjb/gSig
+        local.get $one|105
+        i32.wrap_i64
+        global.set $~lib/util/xjb/xjb/gLastDigit
+        i32.const 1
+        global.set $~lib/util/xjb/xjb/gHasLastDigit
+       end
+      end
+      local.get $decExp|106
+      global.set $~lib/util/xjb/xjb/gExp
+     end
+    else
+     block $~lib/util/xjb/dtoa/toDecimalDouble|inlined.0
+      local.get $binSig|10
+      local.set $binSig|107
+      i32.const 0
+      local.set $rawExp|108
+      i32.const 1
+      local.set $regular|109
+      local.get $rawExp|108
+      i32.const 0
+      i32.ne
+      if
+       block $~lib/util/xjb/dtoa/toDecimalDoubleNormal|inlined.1
+        local.get $binSig|107
+        local.set $binSig|110
+        local.get $rawExp|108
+        local.set $rawExp|111
+        local.get $regular|109
+        local.set $regular|112
+        local.get $binSig|110
+        i64.const 1
+        i64.const 52
+        i64.shl
+        i64.or
+        local.set $c|113
+        local.get $rawExp|111
+        global.get $~lib/util/xjb/xjb/DOUBLE_EXP_OFFSET
+        i32.sub
+        local.set $q|114
+        local.get $regular|112
+        i32.eqz
+        if
+         local.get $q|114
+         i32.const 315653
+         i32.mul
+         i32.const 131072
+         i32.sub
+         i32.const 20
+         i32.shr_s
+         local.set $decExp|115
+         i32.const 0
+         local.get $decExp|115
+         i32.sub
+         i32.const 1
+         i32.sub
+         local.set $powExp|116
+         local.get $q|114
+         local.get $powExp|116
+         i32.const 217707
+         i32.mul
+         i32.const 16
+         i32.shr_s
+         i32.add
+         local.set $h|117
+         block $~lib/util/xjb/xjb/loadPow10HiXjb64|inlined.1 (result i64)
+          local.get $powExp|116
+          local.set $power|118
+          global.get $~lib/util/xjb/xjb/TABLE_COMPRESSED
+          drop
+          i32.const 2288
+          local.get $power|118
+          i32.const 293
+          i32.add
+          i32.const 4
+          i32.shl
+          i32.add
+          i64.load
+          br $~lib/util/xjb/xjb/loadPow10HiXjb64|inlined.1
+         end
+         local.set $pow10Hi|119
+         local.get $pow10Hi|119
+         i64.const 11
+         local.get $h|117
+         i64.extend_i32_s
+         i64.sub
+         i64.shr_u
+         local.set $integral|120
+         local.get $pow10Hi|119
+         i32.const 0
+         local.get $h|117
+         i32.sub
+         i64.extend_i32_s
+         i64.shr_u
+         local.set $halfUlp|121
+         local.get $pow10Hi|119
+         i64.const 53
+         local.get $h|117
+         i64.extend_i32_s
+         i64.add
+         i64.shl
+         local.set $dotOne|122
+         local.get $dotOne|122
+         i64.const 53
+         local.get $h|117
+         i64.extend_i32_s
+         i64.add
+         i64.shr_u
+         i64.const 5
+         i64.mul
+         i64.const 1
+         i64.const 9
+         local.get $h|117
+         i64.extend_i32_s
+         i64.sub
+         i64.shl
+         i64.add
+         i64.const 10
+         local.get $h|117
+         i64.extend_i32_s
+         i64.sub
+         i64.shr_u
+         local.set $one|123
+         local.get $dotOne|122
+         i64.const 54
+         i64.shr_u
+         i64.const 5
+         i64.mul
+         i64.const 511
+         i64.and
+         local.get $halfUlp|121
+         i64.const 55
+         i64.shr_u
+         i64.const 5
+         i64.mul
+         i64.gt_u
+         if (result i64)
+          local.get $dotOne|122
+          i64.const 54
+          i64.shr_u
+          i64.const 5
+          i64.mul
+          i64.const 9
+          i64.shr_u
+          i64.const 1
+          i64.add
+         else
+          local.get $one|123
+         end
+         local.set $one|123
+         local.get $dotOne|122
+         i64.const 1
+         i64.const 62
+         i64.shl
+         i64.eq
+         if (result i64)
+          i64.const 2
+         else
+          local.get $one|123
+         end
+         local.set $one|123
+         local.get $halfUlp|121
+         i64.const 1
+         i64.shr_u
+         local.get $dotOne|122
+         i64.gt_u
+         if (result i64)
+          i64.const 0
+         else
+          local.get $one|123
+         end
+         local.set $one|123
+         local.get $halfUlp|121
+         i64.const 0
+         i64.const -1
+         i64.xor
+         local.get $dotOne|122
+         i64.sub
+         i64.gt_u
+         if (result i64)
+          i64.const 10
+         else
+          local.get $one|123
+         end
+         local.set $one|123
+         local.get $integral|120
+         local.set $integral|124
+         local.get $one|123
+         local.set $one|125
+         local.get $decExp|115
+         local.set $decExp|126
+         local.get $one|125
+         i64.const 10
+         i64.eq
+         if
+          local.get $integral|124
+          i64.const 1
+          i64.add
+          global.set $~lib/util/xjb/xjb/gSig
+          i32.const 0
+          global.set $~lib/util/xjb/xjb/gLastDigit
+          i32.const 0
+          global.set $~lib/util/xjb/xjb/gHasLastDigit
+         else
+          local.get $one|125
+          i64.const 0
+          i64.eq
+          if
+           local.get $integral|124
+           global.set $~lib/util/xjb/xjb/gSig
+           i32.const 0
+           global.set $~lib/util/xjb/xjb/gLastDigit
+           i32.const 0
+           global.set $~lib/util/xjb/xjb/gHasLastDigit
+          else
+           local.get $integral|124
+           global.set $~lib/util/xjb/xjb/gSig
+           local.get $one|125
+           i32.wrap_i64
+           global.set $~lib/util/xjb/xjb/gLastDigit
+           i32.const 1
+           global.set $~lib/util/xjb/xjb/gHasLastDigit
+          end
+         end
+         local.get $decExp|126
+         global.set $~lib/util/xjb/xjb/gExp
+         br $~lib/util/xjb/dtoa/toDecimalDoubleNormal|inlined.1
+        end
+        local.get $rawExp|111
+        global.get $~lib/util/xjb/xjb/DOUBLE_EXP_OFFSET
+        i32.sub
+        i32.const 78913
+        i32.mul
+        i32.const 18
+        i32.shr_s
+        local.set $decExp|127
+        i32.const 0
+        local.get $decExp|127
+        i32.sub
+        i32.const 1
+        i32.sub
+        local.set $powExp|128
+        local.get $q|114
+        local.get $powExp|128
+        i32.const 217707
+        i32.mul
+        i32.const 16
+        i32.shr_s
+        i32.add
+        local.set $h|129
+        local.get $h|129
+        i32.const 1
+        i32.add
+        global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+        i32.add
+        local.set $shift|130
+        local.get $powExp|128
+        local.set $power|131
+        global.get $~lib/util/xjb/xjb/TABLE_COMPRESSED
+        drop
+        i32.const 2288
+        local.get $power|131
+        i32.const 293
+        i32.add
+        i32.const 4
+        i32.shl
+        i32.add
+        local.set $off|132
+        local.get $off|132
+        i64.load
+        global.set $~lib/util/xjb/xjb/gPow10Hi
+        local.get $off|132
+        i64.load offset=8
+        local.get $power|131
+        i32.const 0
+        i32.lt_s
+        i64.extend_i32_u
+        i64.add
+        global.set $~lib/util/xjb/xjb/gPow10Lo
+        global.get $~lib/util/xjb/xjb/gPow10Hi
+        local.set $pHi|133
+        global.get $~lib/util/xjb/xjb/gPow10Lo
+        local.set $pLo|134
+        local.get $c|113
+        local.get $shift|130
+        i64.extend_i32_s
+        i64.shl
+        local.set $y|135
+        block $~lib/util/xjb/xjb/mulhi64|inlined.3 (result i64)
+         local.get $pHi|133
+         local.set $a|136
+         local.get $y|135
+         local.set $b|137
+         local.get $a|136
+         i64.const 4294967295
+         i64.and
+         local.set $a0|138
+         local.get $a|136
+         i64.const 32
+         i64.shr_u
+         local.set $a1|139
+         local.get $b|137
+         i64.const 4294967295
+         i64.and
+         local.set $b0|140
+         local.get $b|137
+         i64.const 32
+         i64.shr_u
+         local.set $b1|141
+         local.get $a0|138
+         local.get $b0|140
+         i64.mul
+         local.set $w0|142
+         local.get $a1|139
+         local.get $b0|140
+         i64.mul
+         local.get $w0|142
+         i64.const 32
+         i64.shr_u
+         i64.add
+         local.set $t|143
+         local.get $t|143
+         i64.const 4294967295
+         i64.and
+         local.set $w1|144
+         local.get $t|143
+         i64.const 32
+         i64.shr_u
+         local.set $w2|145
+         local.get $a0|138
+         local.get $b1|141
+         i64.mul
+         local.get $w1|144
+         i64.add
+         local.set $w1|144
+         local.get $a1|139
+         local.get $b1|141
+         i64.mul
+         local.get $w2|145
+         i64.add
+         local.get $w1|144
+         i64.const 32
+         i64.shr_u
+         i64.add
+         br $~lib/util/xjb/xjb/mulhi64|inlined.3
+        end
+        local.set $a|146
+        local.get $pHi|133
+        local.get $y|135
+        i64.mul
+        local.set $plo64|147
+        local.get $plo64|147
+        block $~lib/util/xjb/xjb/mulhi64|inlined.4 (result i64)
+         local.get $pLo|134
+         local.set $a|148
+         local.get $y|135
+         local.set $b|149
+         local.get $a|148
+         i64.const 4294967295
+         i64.and
+         local.set $a0|150
+         local.get $a|148
+         i64.const 32
+         i64.shr_u
+         local.set $a1|151
+         local.get $b|149
+         i64.const 4294967295
+         i64.and
+         local.set $b0|152
+         local.get $b|149
+         i64.const 32
+         i64.shr_u
+         local.set $b1|153
+         local.get $a0|150
+         local.get $b0|152
+         i64.mul
+         local.set $w0|154
+         local.get $a1|151
+         local.get $b0|152
+         i64.mul
+         local.get $w0|154
+         i64.const 32
+         i64.shr_u
+         i64.add
+         local.set $t|155
+         local.get $t|155
+         i64.const 4294967295
+         i64.and
+         local.set $w1|156
+         local.get $t|155
+         i64.const 32
+         i64.shr_u
+         local.set $w2|157
+         local.get $a0|150
+         local.get $b1|153
+         i64.mul
+         local.get $w1|156
+         i64.add
+         local.set $w1|156
+         local.get $a1|151
+         local.get $b1|153
+         i64.mul
+         local.get $w2|157
+         i64.add
+         local.get $w1|156
+         i64.const 32
+         i64.shr_u
+         i64.add
+         br $~lib/util/xjb/xjb/mulhi64|inlined.4
+        end
+        i64.add
+        local.set $lo|158
+        local.get $a|146
+        local.get $lo|158
+        local.get $plo64|147
+        i64.lt_u
+        i64.extend_i32_u
+        i64.add
+        local.set $p_hi|159
+        local.get $p_hi|159
+        global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+        i64.extend_i32_s
+        i64.shr_u
+        local.set $integral|160
+        local.get $p_hi|159
+        i64.const 64
+        global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+        i64.extend_i32_s
+        i64.sub
+        i64.shl
+        local.get $lo|158
+        global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+        i64.extend_i32_s
+        i64.shr_u
+        i64.or
+        local.set $dotOne|161
+        local.get $pHi|133
+        i32.const 0
+        local.get $h|129
+        i32.sub
+        i64.extend_i32_s
+        i64.shr_u
+        i64.const 1
+        local.get $c|113
+        i64.const 1
+        i64.and
+        i64.sub
+        i64.add
+        local.set $halfUlp|162
+        block $~lib/util/xjb/xjb/umul128AddHi64|inlined.1 (result i64)
+         local.get $dotOne|161
+         local.set $x|163
+         i64.const 10
+         local.set $y|164
+         local.get $dotOne|161
+         i64.const 1
+         i64.const 62
+         i64.shl
+         i64.eq
+         if (result i64)
+          i64.const 0
+         else
+          global.get $~lib/util/xjb/xjb/BIASED_HALF
+         end
+         local.set $c|165
+         local.get $x|163
+         local.get $y|164
+         i64.mul
+         local.set $lo|166
+         block $~lib/util/xjb/xjb/mulhi64|inlined.5 (result i64)
+          local.get $x|163
+          local.set $a|167
+          local.get $y|164
+          local.set $b|168
+          local.get $a|167
+          i64.const 4294967295
+          i64.and
+          local.set $a0|169
+          local.get $a|167
+          i64.const 32
+          i64.shr_u
+          local.set $a1|170
+          local.get $b|168
+          i64.const 4294967295
+          i64.and
+          local.set $b0|171
+          local.get $b|168
+          i64.const 32
+          i64.shr_u
+          local.set $b1|172
+          local.get $a0|169
+          local.get $b0|171
+          i64.mul
+          local.set $w0|173
+          local.get $a1|170
+          local.get $b0|171
+          i64.mul
+          local.get $w0|173
+          i64.const 32
+          i64.shr_u
+          i64.add
+          local.set $t|174
+          local.get $t|174
+          i64.const 4294967295
+          i64.and
+          local.set $w1|175
+          local.get $t|174
+          i64.const 32
+          i64.shr_u
+          local.set $w2|176
+          local.get $a0|169
+          local.get $b1|172
+          i64.mul
+          local.get $w1|175
+          i64.add
+          local.set $w1|175
+          local.get $a1|170
+          local.get $b1|172
+          i64.mul
+          local.get $w2|176
+          i64.add
+          local.get $w1|175
+          i64.const 32
+          i64.shr_u
+          i64.add
+          br $~lib/util/xjb/xjb/mulhi64|inlined.5
+         end
+         local.set $hi|177
+         local.get $hi|177
+         local.get $lo|166
+         local.get $c|165
+         i64.add
+         local.get $lo|166
+         i64.lt_u
+         i64.extend_i32_u
+         i64.add
+         br $~lib/util/xjb/xjb/umul128AddHi64|inlined.1
+        end
+        local.set $one|178
+        local.get $dotOne|161
+        local.get $halfUlp|162
+        i64.lt_u
+        if (result i64)
+         i64.const 0
+        else
+         local.get $one|178
+        end
+        local.set $one|178
+        i64.const 0
+        i64.const -1
+        i64.xor
+        local.get $dotOne|161
+        i64.sub
+        local.get $halfUlp|162
+        i64.lt_u
+        if (result i64)
+         i64.const 10
+        else
+         local.get $one|178
+        end
+        local.set $one|178
+        local.get $integral|160
+        local.set $integral|179
+        local.get $one|178
+        local.set $one|180
+        local.get $decExp|127
+        local.set $decExp|181
+        local.get $one|180
+        i64.const 10
+        i64.eq
+        if
+         local.get $integral|179
+         i64.const 1
+         i64.add
+         global.set $~lib/util/xjb/xjb/gSig
+         i32.const 0
+         global.set $~lib/util/xjb/xjb/gLastDigit
+         i32.const 0
+         global.set $~lib/util/xjb/xjb/gHasLastDigit
+        else
+         local.get $one|180
+         i64.const 0
+         i64.eq
+         if
+          local.get $integral|179
+          global.set $~lib/util/xjb/xjb/gSig
+          i32.const 0
+          global.set $~lib/util/xjb/xjb/gLastDigit
+          i32.const 0
+          global.set $~lib/util/xjb/xjb/gHasLastDigit
+         else
+          local.get $integral|179
+          global.set $~lib/util/xjb/xjb/gSig
+          local.get $one|180
+          i32.wrap_i64
+          global.set $~lib/util/xjb/xjb/gLastDigit
+          i32.const 1
+          global.set $~lib/util/xjb/xjb/gHasLastDigit
+         end
+        end
+        local.get $decExp|181
+        global.set $~lib/util/xjb/xjb/gExp
+       end
+       br $~lib/util/xjb/dtoa/toDecimalDouble|inlined.0
+      end
+      block $~lib/util/xjb/xjb/computeDecExp|inlined.0 (result i32)
+       i32.const -1074
+       local.set $binExp|182
+       local.get $binExp|182
+       i32.const 315653
+       i32.mul
+       i32.const 20
+       i32.shr_s
+       br $~lib/util/xjb/xjb/computeDecExp|inlined.0
+      end
+      local.set $decExp|183
+      block $~lib/util/xjb/xjb/computeExpShift|inlined.0 (result i32)
+       i32.const -1074
+       local.set $binExp|184
+       local.get $decExp|183
+       i32.const 1
+       i32.add
+       local.set $decExp|185
+       i32.const 0
+       local.get $decExp|185
+       i32.sub
+       i32.const 217707
+       i32.mul
+       i32.const 16
+       i32.shr_s
+       local.set $pow10BinExp
+       local.get $binExp|184
+       local.get $pow10BinExp
+       i32.add
+       i32.const 1
+       i32.add
+       br $~lib/util/xjb/xjb/computeExpShift|inlined.0
+      end
+      global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+      i32.add
+      local.set $shift|187
+      i32.const 0
+      local.get $decExp|183
+      i32.sub
+      i32.const 1
+      i32.sub
+      local.set $power|188
+      global.get $~lib/util/xjb/xjb/TABLE_COMPRESSED
+      drop
+      i32.const 2288
+      local.get $power|188
+      i32.const 293
+      i32.add
+      i32.const 4
+      i32.shl
+      i32.add
+      local.set $off|189
+      local.get $off|189
+      i64.load
+      global.set $~lib/util/xjb/xjb/gPow10Hi
+      local.get $off|189
+      i64.load offset=8
+      local.get $power|188
+      i32.const 0
+      i32.lt_s
+      i64.extend_i32_u
+      i64.add
+      global.set $~lib/util/xjb/xjb/gPow10Lo
+      global.get $~lib/util/xjb/xjb/gPow10Hi
+      local.set $pHi|190
+      global.get $~lib/util/xjb/xjb/gPow10Lo
+      local.set $pLo|191
+      local.get $binSig|107
+      local.get $shift|187
+      i64.extend_i32_s
+      i64.shl
+      local.set $y|192
+      block $~lib/util/xjb/xjb/mulhi64|inlined.6 (result i64)
+       local.get $pHi|190
+       local.set $a|193
+       local.get $y|192
+       local.set $b|194
+       local.get $a|193
+       i64.const 4294967295
+       i64.and
+       local.set $a0|195
+       local.get $a|193
+       i64.const 32
+       i64.shr_u
+       local.set $a1|196
+       local.get $b|194
+       i64.const 4294967295
+       i64.and
+       local.set $b0|197
+       local.get $b|194
+       i64.const 32
+       i64.shr_u
+       local.set $b1|198
+       local.get $a0|195
+       local.get $b0|197
+       i64.mul
+       local.set $w0|199
+       local.get $a1|196
+       local.get $b0|197
+       i64.mul
+       local.get $w0|199
+       i64.const 32
+       i64.shr_u
+       i64.add
+       local.set $t|200
+       local.get $t|200
+       i64.const 4294967295
+       i64.and
+       local.set $w1|201
+       local.get $t|200
+       i64.const 32
+       i64.shr_u
+       local.set $w2|202
+       local.get $a0|195
+       local.get $b1|198
+       i64.mul
+       local.get $w1|201
+       i64.add
+       local.set $w1|201
+       local.get $a1|196
+       local.get $b1|198
+       i64.mul
+       local.get $w2|202
+       i64.add
+       local.get $w1|201
+       i64.const 32
+       i64.shr_u
+       i64.add
+       br $~lib/util/xjb/xjb/mulhi64|inlined.6
+      end
+      local.set $a|203
+      local.get $pHi|190
+      local.get $y|192
+      i64.mul
+      local.set $plo64|204
+      local.get $plo64|204
+      block $~lib/util/xjb/xjb/mulhi64|inlined.7 (result i64)
+       local.get $pLo|191
+       local.set $a|205
+       local.get $y|192
+       local.set $b|206
+       local.get $a|205
+       i64.const 4294967295
+       i64.and
+       local.set $a0|207
+       local.get $a|205
+       i64.const 32
+       i64.shr_u
+       local.set $a1|208
+       local.get $b|206
+       i64.const 4294967295
+       i64.and
+       local.set $b0|209
+       local.get $b|206
+       i64.const 32
+       i64.shr_u
+       local.set $b1|210
+       local.get $a0|207
+       local.get $b0|209
+       i64.mul
+       local.set $w0|211
+       local.get $a1|208
+       local.get $b0|209
+       i64.mul
+       local.get $w0|211
+       i64.const 32
+       i64.shr_u
+       i64.add
+       local.set $t|212
+       local.get $t|212
+       i64.const 4294967295
+       i64.and
+       local.set $w1|213
+       local.get $t|212
+       i64.const 32
+       i64.shr_u
+       local.set $w2|214
+       local.get $a0|207
+       local.get $b1|210
+       i64.mul
+       local.get $w1|213
+       i64.add
+       local.set $w1|213
+       local.get $a1|208
+       local.get $b1|210
+       i64.mul
+       local.get $w2|214
+       i64.add
+       local.get $w1|213
+       i64.const 32
+       i64.shr_u
+       i64.add
+       br $~lib/util/xjb/xjb/mulhi64|inlined.7
+      end
+      i64.add
+      local.set $lo|215
+      local.get $a|203
+      local.get $lo|215
+      local.get $plo64|204
+      i64.lt_u
+      i64.extend_i32_u
+      i64.add
+      local.set $p_hi|216
+      local.get $p_hi|216
+      global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+      i64.extend_i32_s
+      i64.shr_u
+      local.set $integral|217
+      local.get $p_hi|216
+      i64.const 64
+      global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+      i64.extend_i32_s
+      i64.sub
+      i64.shl
+      local.get $lo|215
+      global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+      i64.extend_i32_s
+      i64.shr_u
+      i64.or
+      local.set $dotOne|218
+      local.get $pHi|190
+      global.get $~lib/util/xjb/xjb/EXTRA_SHIFT
+      i32.const 1
+      i32.add
+      local.get $shift|187
+      i32.sub
+      i64.extend_i32_s
+      i64.shr_u
+      i64.const 1
+      local.get $binSig|107
+      i64.const 1
+      i64.and
+      i64.sub
+      i64.add
+      local.set $halfUlp|219
+      block $~lib/util/xjb/xjb/umul128AddHi64|inlined.2 (result i64)
+       local.get $dotOne|218
+       local.set $x|220
+       i64.const 10
+       local.set $y|221
+       global.get $~lib/util/xjb/xjb/BIASED_HALF
+       local.set $c|222
+       local.get $x|220
+       local.get $y|221
+       i64.mul
+       local.set $lo|223
+       block $~lib/util/xjb/xjb/mulhi64|inlined.8 (result i64)
+        local.get $x|220
+        local.set $a|224
+        local.get $y|221
+        local.set $b|225
+        local.get $a|224
+        i64.const 4294967295
+        i64.and
+        local.set $a0|226
+        local.get $a|224
+        i64.const 32
+        i64.shr_u
+        local.set $a1|227
+        local.get $b|225
+        i64.const 4294967295
+        i64.and
+        local.set $b0|228
+        local.get $b|225
+        i64.const 32
+        i64.shr_u
+        local.set $b1|229
+        local.get $a0|226
+        local.get $b0|228
+        i64.mul
+        local.set $w0|230
+        local.get $a1|227
+        local.get $b0|228
+        i64.mul
+        local.get $w0|230
+        i64.const 32
+        i64.shr_u
+        i64.add
+        local.set $t|231
+        local.get $t|231
+        i64.const 4294967295
+        i64.and
+        local.set $w1|232
+        local.get $t|231
+        i64.const 32
+        i64.shr_u
+        local.set $w2|233
+        local.get $a0|226
+        local.get $b1|229
+        i64.mul
+        local.get $w1|232
+        i64.add
+        local.set $w1|232
+        local.get $a1|227
+        local.get $b1|229
+        i64.mul
+        local.get $w2|233
+        i64.add
+        local.get $w1|232
+        i64.const 32
+        i64.shr_u
+        i64.add
+        br $~lib/util/xjb/xjb/mulhi64|inlined.8
+       end
+       local.set $hi|234
+       local.get $hi|234
+       local.get $lo|223
+       local.get $c|222
+       i64.add
+       local.get $lo|223
+       i64.lt_u
+       i64.extend_i32_u
+       i64.add
+       br $~lib/util/xjb/xjb/umul128AddHi64|inlined.2
+      end
+      local.set $one|235
+      local.get $dotOne|218
+      local.get $halfUlp|219
+      i64.lt_u
+      if (result i64)
+       i64.const 0
+      else
+       local.get $one|235
+      end
+      local.set $one|235
+      i64.const 0
+      i64.const -1
+      i64.xor
+      local.get $dotOne|218
+      i64.sub
+      local.get $halfUlp|219
+      i64.lt_u
+      if (result i64)
+       i64.const 10
+      else
+       local.get $one|235
+      end
+      local.set $one|235
+      local.get $integral|217
+      local.set $integral|236
+      local.get $one|235
+      local.set $one|237
+      local.get $decExp|183
+      local.set $decExp|238
+      local.get $one|237
+      i64.const 10
+      i64.eq
+      if
+       local.get $integral|236
+       i64.const 1
+       i64.add
+       global.set $~lib/util/xjb/xjb/gSig
+       i32.const 0
+       global.set $~lib/util/xjb/xjb/gLastDigit
+       i32.const 0
+       global.set $~lib/util/xjb/xjb/gHasLastDigit
+      else
+       local.get $one|237
+       i64.const 0
+       i64.eq
+       if
+        local.get $integral|236
+        global.set $~lib/util/xjb/xjb/gSig
+        i32.const 0
+        global.set $~lib/util/xjb/xjb/gLastDigit
+        i32.const 0
+        global.set $~lib/util/xjb/xjb/gHasLastDigit
+       else
+        local.get $integral|236
+        global.set $~lib/util/xjb/xjb/gSig
+        local.get $one|237
+        i32.wrap_i64
+        global.set $~lib/util/xjb/xjb/gLastDigit
+        i32.const 1
+        global.set $~lib/util/xjb/xjb/gHasLastDigit
+       end
+      end
+      local.get $decExp|238
+      global.set $~lib/util/xjb/xjb/gExp
+     end
+    end
+    global.get $~lib/util/xjb/xjb/gSig
+    i64.const 1000000000000000
+    i64.lt_u
+    if
+     block $~lib/util/xjb/dtoa/normalizeDoubleShortest|inlined.0
+      global.get $~lib/util/xjb/xjb/gSig
+      i64.const 10
+      i64.mul
+      global.get $~lib/util/xjb/xjb/gHasLastDigit
+      if (result i64)
+       global.get $~lib/util/xjb/xjb/gLastDigit
+       i64.extend_i32_s
+      else
+       i64.const 0
+      end
+      i64.add
+      local.set $full
+      local.get $full
+      i64.const 1000000000000000
+      i64.ge_u
+      if
+       local.get $full
+       global.set $~lib/util/xjb/xjb/gSig
+       global.get $~lib/util/xjb/xjb/gExp
+       i32.const 1
+       i32.sub
+       global.set $~lib/util/xjb/xjb/gExp
+       i32.const 0
+       global.set $~lib/util/xjb/xjb/gLastDigit
+       i32.const 0
+       global.set $~lib/util/xjb/xjb/gHasLastDigit
+       br $~lib/util/xjb/dtoa/normalizeDoubleShortest|inlined.0
+      end
+      i32.const 16
+      block $~lib/util/xjb/dtoa/decimalLen15|inlined.1 (result i32)
+       local.get $full
+       local.set $v|240
+       local.get $v|240
+       i64.const 100000000
+       i64.lt_u
+       if
+        local.get $v|240
+        i64.const 10000
+        i64.lt_u
+        if
+         local.get $v|240
+         i64.const 100
+         i64.lt_u
+         if
+          local.get $v|240
+          i64.const 10
+          i64.lt_u
+          if (result i32)
+           i32.const 1
+          else
+           i32.const 2
+          end
+          br $~lib/util/xjb/dtoa/decimalLen15|inlined.1
+         end
+         local.get $v|240
+         i64.const 1000
+         i64.lt_u
+         if (result i32)
+          i32.const 3
+         else
+          i32.const 4
+         end
+         br $~lib/util/xjb/dtoa/decimalLen15|inlined.1
+        end
+        local.get $v|240
+        i64.const 1000000
+        i64.lt_u
+        if
+         local.get $v|240
+         i64.const 100000
+         i64.lt_u
+         if (result i32)
+          i32.const 5
+         else
+          i32.const 6
+         end
+         br $~lib/util/xjb/dtoa/decimalLen15|inlined.1
+        end
+        local.get $v|240
+        i64.const 10000000
+        i64.lt_u
+        if (result i32)
+         i32.const 7
+        else
+         i32.const 8
+        end
+        br $~lib/util/xjb/dtoa/decimalLen15|inlined.1
+       end
+       local.get $v|240
+       i64.const 1000000000000
+       i64.lt_u
+       if
+        local.get $v|240
+        i64.const 10000000000
+        i64.lt_u
+        if
+         local.get $v|240
+         i64.const 1000000000
+         i64.lt_u
+         if (result i32)
+          i32.const 9
+         else
+          i32.const 10
+         end
+         br $~lib/util/xjb/dtoa/decimalLen15|inlined.1
+        end
+        local.get $v|240
+        i64.const 100000000000
+        i64.lt_u
+        if (result i32)
+         i32.const 11
+        else
+         i32.const 12
+        end
+        br $~lib/util/xjb/dtoa/decimalLen15|inlined.1
+       end
+       local.get $v|240
+       i64.const 100000000000000
+       i64.lt_u
+       if
+        local.get $v|240
+        i64.const 10000000000000
+        i64.lt_u
+        if (result i32)
+         i32.const 13
+        else
+         i32.const 14
+        end
+        br $~lib/util/xjb/dtoa/decimalLen15|inlined.1
+       end
+       i32.const 15
+       br $~lib/util/xjb/dtoa/decimalLen15|inlined.1
+      end
+      i32.sub
+      local.set $scale
+      global.get $~lib/util/xjb/xjb/POW10_SMALL
+      local.get $scale
+      i32.const 3
+      i32.shl
+      i32.add
+      i64.load
+      local.set $mul
+      local.get $full
+      local.get $mul
+      i64.mul
+      global.set $~lib/util/xjb/xjb/gSig
+      global.get $~lib/util/xjb/xjb/gExp
+      local.get $scale
+      i32.const 1
+      i32.add
+      i32.sub
+      global.set $~lib/util/xjb/xjb/gExp
+      i32.const 0
+      global.set $~lib/util/xjb/xjb/gLastDigit
+      i32.const 0
+      global.set $~lib/util/xjb/xjb/gHasLastDigit
+     end
+    end
+    global.get $~lib/util/xjb/xjb/gHasLastDigit
+    local.set $hasLastDigit
+    global.get $~lib/util/xjb/xjb/gSig
+    i64.const 1000000000000000
+    i64.ge_u
+    local.set $hasExtraDigit
+    global.get $~lib/util/xjb/xjb/gExp
+    global.get $~lib/util/xjb/xjb/DOUBLE_MAX_DIGITS10
+    i32.add
+    i32.const 2
+    i32.sub
+    local.get $hasExtraDigit
+    i32.add
+    local.set $decExp|245
+    local.get $buf|7
+    local.set $start
+    global.get $~lib/util/xjb/xjb/gSig
+    local.set $value|247
+    global.get $~lib/util/xjb/xjb/HAS_SIMD
+    drop
+    block $~lib/util/xjb/xjb/toDigits64Swar|inlined.0
+     local.get $value|247
+     local.set $value|248
+     local.get $value|248
+     i64.const 100000000
+     i64.div_u
+     local.set $hi|249
+     local.get $value|248
+     local.get $hi|249
+     i64.const 100000000
+     i64.mul
+     i64.sub
+     local.set $lo|250
+     local.get $hi|249
+     call $~lib/util/xjb/xjb/toBcd8
+     global.get $~lib/util/xjb/xjb/gBcd
+     local.set $hiBcd
+     global.get $~lib/util/xjb/xjb/gBcdLen
+     local.set $hiLen
+     local.get $lo|250
+     i64.const 0
+     i64.eq
+     if
+      local.get $hiBcd
+      global.get $~lib/util/xjb/xjb/ZEROS
+      i64.add
+      global.set $~lib/util/xjb/xjb/gDigHi
+      global.get $~lib/util/xjb/xjb/ZEROS
+      global.set $~lib/util/xjb/xjb/gDigLo
+      local.get $hiLen
+      global.set $~lib/util/xjb/xjb/gDigNum
+      br $~lib/util/xjb/xjb/toDigits64Swar|inlined.0
+     end
+     local.get $lo|250
+     call $~lib/util/xjb/xjb/toBcd8
+     local.get $hiBcd
+     global.get $~lib/util/xjb/xjb/ZEROS
+     i64.add
+     global.set $~lib/util/xjb/xjb/gDigHi
+     global.get $~lib/util/xjb/xjb/gBcd
+     global.get $~lib/util/xjb/xjb/ZEROS
+     i64.add
+     global.set $~lib/util/xjb/xjb/gDigLo
+     i32.const 8
+     global.get $~lib/util/xjb/xjb/gBcdLen
+     i32.add
+     global.set $~lib/util/xjb/xjb/gDigNum
+    end
+    local.get $decExp|245
+    global.get $~lib/util/xjb/xjb/MIN_FIXED_DEC_EXP
+    i32.ge_s
+    if (result i32)
+     local.get $decExp|245
+     global.get $~lib/util/xjb/xjb/MAX_FIXED_DEC_EXP
+     i32.le_s
+    else
+     i32.const 0
+    end
+    if
+     block $~lib/util/xjb/xjb/writeFixed|inlined.0 (result i32)
+      local.get $buf|7
+      local.set $buf|253
+      local.get $start
+      local.set $start|254
+      local.get $decExp|245
+      local.set $decExp|255
+      local.get $hasLastDigit
+      local.set $hasLastDigit|256
+      local.get $decExp|255
+      i32.const 0
+      i32.lt_s
+      if
+       local.get $start|254
+       local.set $p|257
+       global.get $~lib/util/xjb/xjb/ZEROS
+       local.set $ascii|258
+       i32.const 0
+       local.set $off|259
+       local.get $p|257
+       local.get $off|259
+       i32.add
+       local.set $base|260
+       global.get $~lib/util/xjb/xjb/HAS_SIMD
+       drop
+       local.get $base|260
+       local.get $ascii|258
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16
+       local.get $base|260
+       local.get $ascii|258
+       i64.const 8
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=2
+       local.get $base|260
+       local.get $ascii|258
+       i64.const 16
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=4
+       local.get $base|260
+       local.get $ascii|258
+       i64.const 24
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=6
+       local.get $base|260
+       local.get $ascii|258
+       i64.const 32
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=8
+       local.get $base|260
+       local.get $ascii|258
+       i64.const 40
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=10
+       local.get $base|260
+       local.get $ascii|258
+       i64.const 48
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=12
+       local.get $base|260
+       local.get $ascii|258
+       i64.const 56
+       i64.shr_u
+       i32.wrap_i64
+       i32.store16 offset=14
+      end
+      i64.const 48
+      local.get $hasLastDigit|256
+      if (result i64)
+       global.get $~lib/util/xjb/xjb/gLastDigit
+       i64.extend_i32_s
+      else
+       i64.const 0
+      end
+      i64.add
+      local.set $lastDigitChar
+      local.get $hasLastDigit|256
+      if (result i32)
+       i32.const 16
+      else
+       global.get $~lib/util/xjb/xjb/gDigNum
+       i32.const 1
+       i32.sub
+      end
+      local.set $numDigits
+      global.get $~lib/util/xjb/xjb/gDigHi
+      local.set $dHi
+      global.get $~lib/util/xjb/xjb/gDigLo
+      local.set $dLo
+      local.get $decExp|255
+      i32.const 16
+      i32.ge_s
+      if
+       local.get $buf|253
+       local.set $p|265
+       local.get $dHi
+       local.set $ascii|266
+       i32.const 0
+       local.set $off|267
+       local.get $p|265
+       local.get $off|267
+       i32.add
+       local.set $base|268
+       global.get $~lib/util/xjb/xjb/HAS_SIMD
+       drop
+       local.get $base|268
+       local.get $ascii|266
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16
+       local.get $base|268
+       local.get $ascii|266
+       i64.const 8
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=2
+       local.get $base|268
+       local.get $ascii|266
+       i64.const 16
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=4
+       local.get $base|268
+       local.get $ascii|266
+       i64.const 24
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=6
+       local.get $base|268
+       local.get $ascii|266
+       i64.const 32
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=8
+       local.get $base|268
+       local.get $ascii|266
+       i64.const 40
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=10
+       local.get $base|268
+       local.get $ascii|266
+       i64.const 48
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=12
+       local.get $base|268
+       local.get $ascii|266
+       i64.const 56
+       i64.shr_u
+       i32.wrap_i64
+       i32.store16 offset=14
+       local.get $buf|253
+       local.set $p|269
+       local.get $dLo
+       local.set $ascii|270
+       i32.const 16
+       local.set $off|271
+       local.get $p|269
+       local.get $off|271
+       i32.add
+       local.set $base|272
+       global.get $~lib/util/xjb/xjb/HAS_SIMD
+       drop
+       local.get $base|272
+       local.get $ascii|270
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16
+       local.get $base|272
+       local.get $ascii|270
+       i64.const 8
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=2
+       local.get $base|272
+       local.get $ascii|270
+       i64.const 16
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=4
+       local.get $base|272
+       local.get $ascii|270
+       i64.const 24
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=6
+       local.get $base|272
+       local.get $ascii|270
+       i64.const 32
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=8
+       local.get $base|272
+       local.get $ascii|270
+       i64.const 40
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=10
+       local.get $base|272
+       local.get $ascii|270
+       i64.const 48
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=12
+       local.get $base|272
+       local.get $ascii|270
+       i64.const 56
+       i64.shr_u
+       i32.wrap_i64
+       i32.store16 offset=14
+       local.get $buf|253
+       i32.const 32
+       i32.add
+       local.get $lastDigitChar
+       i32.wrap_i64
+       i32.store16
+       local.get $buf|253
+       local.get $decExp|255
+       i32.const 1
+       i32.add
+       i32.const 1
+       i32.shl
+       i32.add
+       local.set $endByte
+       local.get $buf|253
+       i32.const 17
+       i32.const 1
+       i32.shl
+       i32.add
+       local.set $z
+       loop $for-loop|1
+        local.get $z
+        local.get $endByte
+        i32.lt_u
+        if
+         local.get $z
+         local.set $p|275
+         global.get $~lib/util/xjb/xjb/ZEROS
+         local.set $ascii|276
+         i32.const 0
+         local.set $off|277
+         local.get $p|275
+         local.get $off|277
+         i32.add
+         local.set $base|278
+         global.get $~lib/util/xjb/xjb/HAS_SIMD
+         drop
+         local.get $base|278
+         local.get $ascii|276
+         i64.const 255
+         i64.and
+         i32.wrap_i64
+         i32.store16
+         local.get $base|278
+         local.get $ascii|276
+         i64.const 8
+         i64.shr_u
+         i64.const 255
+         i64.and
+         i32.wrap_i64
+         i32.store16 offset=2
+         local.get $base|278
+         local.get $ascii|276
+         i64.const 16
+         i64.shr_u
+         i64.const 255
+         i64.and
+         i32.wrap_i64
+         i32.store16 offset=4
+         local.get $base|278
+         local.get $ascii|276
+         i64.const 24
+         i64.shr_u
+         i64.const 255
+         i64.and
+         i32.wrap_i64
+         i32.store16 offset=6
+         local.get $base|278
+         local.get $ascii|276
+         i64.const 32
+         i64.shr_u
+         i64.const 255
+         i64.and
+         i32.wrap_i64
+         i32.store16 offset=8
+         local.get $base|278
+         local.get $ascii|276
+         i64.const 40
+         i64.shr_u
+         i64.const 255
+         i64.and
+         i32.wrap_i64
+         i32.store16 offset=10
+         local.get $base|278
+         local.get $ascii|276
+         i64.const 48
+         i64.shr_u
+         i64.const 255
+         i64.and
+         i32.wrap_i64
+         i32.store16 offset=12
+         local.get $base|278
+         local.get $ascii|276
+         i64.const 56
+         i64.shr_u
+         i32.wrap_i64
+         i32.store16 offset=14
+         local.get $z
+         i32.const 16
+         i32.add
+         local.set $z
+         br $for-loop|1
+        end
+       end
+       local.get $endByte
+       br $~lib/util/xjb/xjb/writeFixed|inlined.0
+      end
+      local.get $numDigits
+      i32.const 1
+      i32.add
+      local.set $n
+      local.get $decExp|255
+      i32.const 0
+      i32.ge_s
+      if (result i32)
+       local.get $n
+       i32.const 1
+       i32.add
+      else
+       local.get $n
+      end
+      local.set $endPos
+      i32.const 1
+      local.get $decExp|255
+      i32.sub
+      local.get $decExp|255
+      i32.const 31
+      i32.shr_s
+      i32.and
+      local.set $startPos
+      local.get $buf|253
+      local.get $startPos
+      i32.const 1
+      i32.shl
+      i32.add
+      local.set $buf|253
+      local.get $buf|253
+      local.set $p|282
+      local.get $dHi
+      local.set $ascii|283
+      i32.const 0
+      local.set $off|284
+      local.get $p|282
+      local.get $off|284
+      i32.add
+      local.set $base|285
+      global.get $~lib/util/xjb/xjb/HAS_SIMD
+      drop
+      local.get $base|285
+      local.get $ascii|283
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16
+      local.get $base|285
+      local.get $ascii|283
+      i64.const 8
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=2
+      local.get $base|285
+      local.get $ascii|283
+      i64.const 16
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=4
+      local.get $base|285
+      local.get $ascii|283
+      i64.const 24
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=6
+      local.get $base|285
+      local.get $ascii|283
+      i64.const 32
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=8
+      local.get $base|285
+      local.get $ascii|283
+      i64.const 40
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=10
+      local.get $base|285
+      local.get $ascii|283
+      i64.const 48
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=12
+      local.get $base|285
+      local.get $ascii|283
+      i64.const 56
+      i64.shr_u
+      i32.wrap_i64
+      i32.store16 offset=14
+      local.get $buf|253
+      local.set $p|286
+      local.get $dLo
+      local.set $ascii|287
+      i32.const 16
+      local.set $off|288
+      local.get $p|286
+      local.get $off|288
+      i32.add
+      local.set $base|289
+      global.get $~lib/util/xjb/xjb/HAS_SIMD
+      drop
+      local.get $base|289
+      local.get $ascii|287
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16
+      local.get $base|289
+      local.get $ascii|287
+      i64.const 8
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=2
+      local.get $base|289
+      local.get $ascii|287
+      i64.const 16
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=4
+      local.get $base|289
+      local.get $ascii|287
+      i64.const 24
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=6
+      local.get $base|289
+      local.get $ascii|287
+      i64.const 32
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=8
+      local.get $base|289
+      local.get $ascii|287
+      i64.const 40
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=10
+      local.get $base|289
+      local.get $ascii|287
+      i64.const 48
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=12
+      local.get $base|289
+      local.get $ascii|287
+      i64.const 56
+      i64.shr_u
+      i32.wrap_i64
+      i32.store16 offset=14
+      local.get $buf|253
+      i32.const 32
+      i32.add
+      local.get $lastDigitChar
+      i32.wrap_i64
+      i32.store16
+      local.get $decExp|255
+      i32.const 0
+      i32.ge_s
+      if
+       local.get $decExp|255
+       i32.const 1
+       i32.add
+       local.set $k
+       local.get $lastDigitChar
+       local.set $d16
+       local.get $k
+       i32.const 3
+       i32.shl
+       local.set $s
+       local.get $s
+       i32.const 64
+       i32.lt_s
+       if
+        local.get $dHi
+        local.get $s
+        i64.extend_i32_s
+        i64.shr_u
+        local.get $dLo
+        i64.const 64
+        local.get $s
+        i64.extend_i32_s
+        i64.sub
+        i64.shl
+        i64.or
+        local.set $fHi
+        local.get $dLo
+        local.get $s
+        i64.extend_i32_s
+        i64.shr_u
+        local.get $d16
+        i64.const 64
+        local.get $s
+        i64.extend_i32_s
+        i64.sub
+        i64.shl
+        i64.or
+        local.set $fLo
+       else
+        local.get $s
+        i32.const 64
+        i32.eq
+        if
+         local.get $dLo
+         local.set $fHi
+         local.get $d16
+         local.set $fLo
+        else
+         local.get $s
+         i32.const 128
+         i32.lt_s
+         if
+          local.get $s
+          i32.const 64
+          i32.sub
+          local.set $s2
+          local.get $dLo
+          local.get $s2
+          i64.extend_i32_s
+          i64.shr_u
+          local.get $d16
+          i64.const 64
+          local.get $s2
+          i64.extend_i32_s
+          i64.sub
+          i64.shl
+          i64.or
+          local.set $fHi
+          local.get $d16
+          local.get $s2
+          i64.extend_i32_s
+          i64.shr_u
+          local.set $fLo
+         else
+          local.get $d16
+          local.set $fHi
+          i64.const 0
+          local.set $fLo
+         end
+        end
+       end
+       local.get $buf|253
+       local.get $k
+       i32.const 1
+       i32.add
+       i32.const 1
+       i32.shl
+       i32.add
+       local.set $p|296
+       local.get $fHi
+       local.set $ascii|297
+       i32.const 0
+       local.set $off|298
+       local.get $p|296
+       local.get $off|298
+       i32.add
+       local.set $base|299
+       global.get $~lib/util/xjb/xjb/HAS_SIMD
+       drop
+       local.get $base|299
+       local.get $ascii|297
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16
+       local.get $base|299
+       local.get $ascii|297
+       i64.const 8
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=2
+       local.get $base|299
+       local.get $ascii|297
+       i64.const 16
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=4
+       local.get $base|299
+       local.get $ascii|297
+       i64.const 24
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=6
+       local.get $base|299
+       local.get $ascii|297
+       i64.const 32
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=8
+       local.get $base|299
+       local.get $ascii|297
+       i64.const 40
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=10
+       local.get $base|299
+       local.get $ascii|297
+       i64.const 48
+       i64.shr_u
+       i64.const 255
+       i64.and
+       i32.wrap_i64
+       i32.store16 offset=12
+       local.get $base|299
+       local.get $ascii|297
+       i64.const 56
+       i64.shr_u
+       i32.wrap_i64
+       i32.store16 offset=14
+       local.get $endPos
+       local.get $k
+       i32.const 9
+       i32.add
+       i32.gt_s
+       if
+        local.get $buf|253
+        local.get $k
+        i32.const 9
+        i32.add
+        i32.const 1
+        i32.shl
+        i32.add
+        local.set $p|300
+        local.get $fLo
+        local.set $ascii|301
+        i32.const 0
+        local.set $off|302
+        local.get $p|300
+        local.get $off|302
+        i32.add
+        local.set $base|303
+        global.get $~lib/util/xjb/xjb/HAS_SIMD
+        drop
+        local.get $base|303
+        local.get $ascii|301
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16
+        local.get $base|303
+        local.get $ascii|301
+        i64.const 8
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=2
+        local.get $base|303
+        local.get $ascii|301
+        i64.const 16
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=4
+        local.get $base|303
+        local.get $ascii|301
+        i64.const 24
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=6
+        local.get $base|303
+        local.get $ascii|301
+        i64.const 32
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=8
+        local.get $base|303
+        local.get $ascii|301
+        i64.const 40
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=10
+        local.get $base|303
+        local.get $ascii|301
+        i64.const 48
+        i64.shr_u
+        i64.const 255
+        i64.and
+        i32.wrap_i64
+        i32.store16 offset=12
+        local.get $base|303
+        local.get $ascii|301
+        i64.const 56
+        i64.shr_u
+        i32.wrap_i64
+        i32.store16 offset=14
+       end
+       local.get $buf|253
+       local.get $k
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.const 46
+       i32.store16
+      else
+       local.get $start|254
+       i32.const 46
+       i32.store16 offset=2
+      end
+      local.get $buf|253
+      local.get $endPos
+      i32.const 1
+      i32.shl
+      i32.add
+      br $~lib/util/xjb/xjb/writeFixed|inlined.0
+     end
+     br $~lib/util/xjb/dtoa/formatDecodedDouble|inlined.0
+    end
+    block $~lib/util/xjb/xjb/writeExpNotation|inlined.0 (result i32)
+     local.get $buf|7
+     local.set $buf|304
+     local.get $start
+     local.set $start|305
+     local.get $decExp|245
+     local.set $decExp|306
+     local.get $hasLastDigit
+     local.set $hasLastDigit|307
+     local.get $hasExtraDigit
+     local.set $hasExtraDigit|308
+     i32.const 16
+     local.set $bcdSize
+     local.get $buf|304
+     local.get $hasExtraDigit|308
+     i32.const 1
+     i32.shl
+     i32.add
+     local.set $buf|304
+     local.get $buf|304
+     local.set $p|310
+     global.get $~lib/util/xjb/xjb/gDigHi
+     local.set $ascii|311
+     i32.const 0
+     local.set $off|312
+     local.get $p|310
+     local.get $off|312
+     i32.add
+     local.set $base|313
+     global.get $~lib/util/xjb/xjb/HAS_SIMD
+     drop
+     local.get $base|313
+     local.get $ascii|311
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16
+     local.get $base|313
+     local.get $ascii|311
+     i64.const 8
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=2
+     local.get $base|313
+     local.get $ascii|311
+     i64.const 16
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=4
+     local.get $base|313
+     local.get $ascii|311
+     i64.const 24
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=6
+     local.get $base|313
+     local.get $ascii|311
+     i64.const 32
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=8
+     local.get $base|313
+     local.get $ascii|311
+     i64.const 40
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=10
+     local.get $base|313
+     local.get $ascii|311
+     i64.const 48
+     i64.shr_u
+     i64.const 255
+     i64.and
+     i32.wrap_i64
+     i32.store16 offset=12
+     local.get $base|313
+     local.get $ascii|311
+     i64.const 56
+     i64.shr_u
+     i32.wrap_i64
+     i32.store16 offset=14
+     local.get $bcdSize
+     i32.const 16
+     i32.eq
+     if
+      local.get $buf|304
+      local.set $p|314
+      global.get $~lib/util/xjb/xjb/gDigLo
+      local.set $ascii|315
+      i32.const 16
+      local.set $off|316
+      local.get $p|314
+      local.get $off|316
+      i32.add
+      local.set $base|317
+      global.get $~lib/util/xjb/xjb/HAS_SIMD
+      drop
+      local.get $base|317
+      local.get $ascii|315
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16
+      local.get $base|317
+      local.get $ascii|315
+      i64.const 8
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=2
+      local.get $base|317
+      local.get $ascii|315
+      i64.const 16
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=4
+      local.get $base|317
+      local.get $ascii|315
+      i64.const 24
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=6
+      local.get $base|317
+      local.get $ascii|315
+      i64.const 32
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=8
+      local.get $base|317
+      local.get $ascii|315
+      i64.const 40
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=10
+      local.get $base|317
+      local.get $ascii|315
+      i64.const 48
+      i64.shr_u
+      i64.const 255
+      i64.and
+      i32.wrap_i64
+      i32.store16 offset=12
+      local.get $base|317
+      local.get $ascii|315
+      i64.const 56
+      i64.shr_u
+      i32.wrap_i64
+      i32.store16 offset=14
+     end
+     local.get $buf|304
+     local.get $bcdSize
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.const 48
+     global.get $~lib/util/xjb/xjb/gLastDigit
+     i32.add
+     i32.store16
+     local.get $buf|304
+     local.get $hasLastDigit|307
+     if (result i32)
+      local.get $bcdSize
+      i32.const 1
+      i32.add
+     else
+      global.get $~lib/util/xjb/xjb/gDigNum
+     end
+     i32.const 1
+     i32.shl
+     i32.add
+     local.set $buf|304
+     local.get $start|305
+     i32.load16_u offset=2
+     local.set $lead
+     local.get $start|305
+     local.get $lead
+     i32.store16
+     local.get $start|305
+     i32.const 46
+     i32.store16 offset=2
+     local.get $buf|304
+     local.get $buf|304
+     i32.const 2
+     i32.sub
+     local.get $start|305
+     i32.const 2
+     i32.add
+     i32.eq
+     i32.const 1
+     i32.shl
+     i32.sub
+     local.set $buf|304
+     block $~lib/util/xjb/xjb/writeExponent|inlined.0 (result i32)
+      local.get $buf|304
+      local.set $buf|319
+      local.get $decExp|306
+      local.set $decExp|320
+      local.get $decExp|320
+      i32.const 31
+      i32.shr_s
+      local.set $m
+      local.get $buf|319
+      i32.const 101
+      i32.store16
+      local.get $buf|319
+      i32.const 43
+      local.get $m
+      i32.const 2
+      i32.and
+      i32.add
+      i32.store16 offset=2
+      local.get $buf|319
+      i32.const 4
+      i32.add
+      local.set $buf|319
+      local.get $decExp|320
+      local.get $m
+      i32.xor
+      local.get $m
+      i32.sub
+      local.set $e
+      local.get $e
+      i32.const 100
+      i32.ge_s
+      if
+       local.get $e
+       global.get $~lib/util/xjb/xjb/DIV100_SIG
+       i32.wrap_i64
+       i32.mul
+       global.get $~lib/util/xjb/xjb/DIV100_EXP
+       i32.shr_u
+       local.set $d
+       global.get $~lib/util/xjb/xjb/DIGIT_PAIRS
+       local.get $e
+       local.get $d
+       i32.const 100
+       i32.mul
+       i32.sub
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.load16_u
+       local.set $pair|324
+       local.get $buf|319
+       i32.const 48
+       local.get $d
+       i32.add
+       i32.store16
+       local.get $buf|319
+       local.get $pair|324
+       i32.const 255
+       i32.and
+       i32.store16 offset=2
+       local.get $buf|319
+       local.get $pair|324
+       i32.const 8
+       i32.shr_u
+       i32.store16 offset=4
+       local.get $buf|319
+       i32.const 6
+       i32.add
+       br $~lib/util/xjb/xjb/writeExponent|inlined.0
+      end
+      local.get $e
+      i32.const 10
+      i32.ge_s
+      if
+       global.get $~lib/util/xjb/xjb/DIGIT_PAIRS
+       local.get $e
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.load16_u
+       local.set $pair|325
+       local.get $buf|319
+       local.get $pair|325
+       i32.const 255
+       i32.and
+       i32.store16
+       local.get $buf|319
+       local.get $pair|325
+       i32.const 8
+       i32.shr_u
+       i32.store16 offset=2
+       local.get $buf|319
+       i32.const 4
+       i32.add
+       br $~lib/util/xjb/xjb/writeExponent|inlined.0
+      end
+      local.get $buf|319
+      i32.const 48
+      local.get $e
+      i32.add
+      i32.store16
+      local.get $buf|319
+      i32.const 2
+      i32.add
+      br $~lib/util/xjb/xjb/writeExponent|inlined.0
+     end
+     br $~lib/util/xjb/xjb/writeExpNotation|inlined.0
+    end
+    br $~lib/util/xjb/dtoa/formatDecodedDouble|inlined.0
+   end
+   br $~lib/util/xjb/dtoa/formatDouble|inlined.0
+  end
+  local.get $buffer
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  return
+ )
  (func $~lib/number/F64#toString (param $this f64) (param $radix i32) (result i32)
   local.get $this
   call $~lib/util/number/dtoa<f64>
@@ -3982,89 +7965,79 @@
   i32.load offset=12
  )
  (func $~lib/util/number/dtoa_buffered<f32> (param $buffer i32) (param $value f32) (result i32)
-  (local $buffer|2 i32)
-  (local $value|3 f64)
-  (local $isSingle i32)
-  (local $sign i32)
-  block $~lib/util/number/dtoa_buffered_impl|inlined.0 (result i32)
+  (local $len i32)
+  (local $buffer|3 i32)
+  (local $len|4 i32)
+  (local $p i32)
+  (local $end i32)
+  (local $c i32)
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  local.get $buffer
+  local.get $value
+  call $~lib/util/xjb/ftoa/ftoa_buffered
+  local.set $len
+  block $~lib/util/number/dtoa_dotZero|inlined.2 (result i32)
    local.get $buffer
-   local.set $buffer|2
-   local.get $value
-   f64.promote_f32
-   local.set $value|3
+   local.set $buffer|3
+   local.get $len
+   local.set $len|4
+   local.get $buffer|3
+   local.set $p
+   local.get $buffer|3
+   local.get $len|4
    i32.const 1
-   local.set $isSingle
-   local.get $value|3
-   f64.const 0
-   f64.eq
-   if
-    local.get $buffer|2
-    i32.const 48
-    i32.store16
-    local.get $buffer|2
-    i32.const 46
-    i32.store16 offset=2
-    local.get $buffer|2
-    i32.const 48
-    i32.store16 offset=4
-    i32.const 3
-    br $~lib/util/number/dtoa_buffered_impl|inlined.0
-   end
-   local.get $value|3
-   local.get $value|3
-   f64.sub
-   f64.const 0
-   f64.eq
-   i32.eqz
-   if
-    local.get $value|3
-    local.get $value|3
-    f64.ne
+   i32.shl
+   i32.add
+   local.set $end
+   loop $while-continue|0
+    local.get $p
+    local.get $end
+    i32.lt_u
     if
-     local.get $buffer|2
-     i32.const 78
-     i32.store16
-     local.get $buffer|2
-     i32.const 97
-     i32.store16 offset=2
-     local.get $buffer|2
-     i32.const 78
-     i32.store16 offset=4
-     i32.const 3
-     br $~lib/util/number/dtoa_buffered_impl|inlined.0
-    else
-     local.get $value|3
-     f64.const 0
-     f64.lt
-     local.set $sign
-     local.get $sign
-     if
-      local.get $buffer|2
-      i32.const 45
-      i32.store16
-      local.get $buffer|2
-      i32.const 2
-      i32.add
-      local.set $buffer|2
+     local.get $p
+     i32.load16_u
+     local.set $c
+     local.get $c
+     i32.const 48
+     i32.lt_s
+     if (result i32)
+      i32.const 1
+     else
+      local.get $c
+      i32.const 57
+      i32.gt_s
      end
-     local.get $buffer|2
-     i64.const 29555310648492105
-     i64.store
-     local.get $buffer|2
-     i64.const 34058970405077102
-     i64.store offset=8
-     i32.const 8
-     local.get $sign
+     if (result i32)
+      local.get $c
+      i32.const 45
+      i32.ne
+     else
+      i32.const 0
+     end
+     if
+      local.get $len|4
+      br $~lib/util/number/dtoa_dotZero|inlined.2
+     end
+     local.get $p
+     i32.const 2
      i32.add
-     br $~lib/util/number/dtoa_buffered_impl|inlined.0
+     local.set $p
+     br $while-continue|0
     end
-    unreachable
    end
-   local.get $buffer|2
-   local.get $value|3
-   local.get $isSingle
-   call $~lib/util/number/dtoa_core
-   br $~lib/util/number/dtoa_buffered_impl|inlined.0
+   local.get $end
+   i32.const 46
+   i32.store16
+   local.get $end
+   i32.const 48
+   i32.store16 offset=2
+   local.get $len|4
+   i32.const 2
+   i32.add
+   br $~lib/util/number/dtoa_dotZero|inlined.2
   end
   return
  )
@@ -4077,88 +8050,79 @@
   i32.load offset=12
  )
  (func $~lib/util/number/dtoa_buffered<f64> (param $buffer i32) (param $value f64) (result i32)
-  (local $buffer|2 i32)
-  (local $value|3 f64)
-  (local $isSingle i32)
-  (local $sign i32)
-  block $~lib/util/number/dtoa_buffered_impl|inlined.1 (result i32)
+  (local $len i32)
+  (local $buffer|3 i32)
+  (local $len|4 i32)
+  (local $p i32)
+  (local $end i32)
+  (local $c i32)
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  local.get $buffer
+  local.get $value
+  call $~lib/util/xjb/dtoa/dtoa_buffered
+  local.set $len
+  block $~lib/util/number/dtoa_dotZero|inlined.3 (result i32)
    local.get $buffer
-   local.set $buffer|2
-   local.get $value
-   local.set $value|3
-   i32.const 0
-   local.set $isSingle
-   local.get $value|3
-   f64.const 0
-   f64.eq
-   if
-    local.get $buffer|2
-    i32.const 48
-    i32.store16
-    local.get $buffer|2
-    i32.const 46
-    i32.store16 offset=2
-    local.get $buffer|2
-    i32.const 48
-    i32.store16 offset=4
-    i32.const 3
-    br $~lib/util/number/dtoa_buffered_impl|inlined.1
-   end
-   local.get $value|3
-   local.get $value|3
-   f64.sub
-   f64.const 0
-   f64.eq
-   i32.eqz
-   if
-    local.get $value|3
-    local.get $value|3
-    f64.ne
+   local.set $buffer|3
+   local.get $len
+   local.set $len|4
+   local.get $buffer|3
+   local.set $p
+   local.get $buffer|3
+   local.get $len|4
+   i32.const 1
+   i32.shl
+   i32.add
+   local.set $end
+   loop $while-continue|0
+    local.get $p
+    local.get $end
+    i32.lt_u
     if
-     local.get $buffer|2
-     i32.const 78
-     i32.store16
-     local.get $buffer|2
-     i32.const 97
-     i32.store16 offset=2
-     local.get $buffer|2
-     i32.const 78
-     i32.store16 offset=4
-     i32.const 3
-     br $~lib/util/number/dtoa_buffered_impl|inlined.1
-    else
-     local.get $value|3
-     f64.const 0
-     f64.lt
-     local.set $sign
-     local.get $sign
-     if
-      local.get $buffer|2
-      i32.const 45
-      i32.store16
-      local.get $buffer|2
-      i32.const 2
-      i32.add
-      local.set $buffer|2
+     local.get $p
+     i32.load16_u
+     local.set $c
+     local.get $c
+     i32.const 48
+     i32.lt_s
+     if (result i32)
+      i32.const 1
+     else
+      local.get $c
+      i32.const 57
+      i32.gt_s
      end
-     local.get $buffer|2
-     i64.const 29555310648492105
-     i64.store
-     local.get $buffer|2
-     i64.const 34058970405077102
-     i64.store offset=8
-     i32.const 8
-     local.get $sign
+     if (result i32)
+      local.get $c
+      i32.const 45
+      i32.ne
+     else
+      i32.const 0
+     end
+     if
+      local.get $len|4
+      br $~lib/util/number/dtoa_dotZero|inlined.3
+     end
+     local.get $p
+     i32.const 2
      i32.add
-     br $~lib/util/number/dtoa_buffered_impl|inlined.1
+     local.set $p
+     br $while-continue|0
     end
-    unreachable
    end
-   local.get $buffer|2
-   local.get $value|3
-   local.get $isSingle
-   call $~lib/util/number/dtoa_core
-   br $~lib/util/number/dtoa_buffered_impl|inlined.1
+   local.get $end
+   i32.const 46
+   i32.store16
+   local.get $end
+   i32.const 48
+   i32.store16 offset=2
+   local.get $len|4
+   i32.const 2
+   i32.add
+   br $~lib/util/number/dtoa_dotZero|inlined.3
   end
   return
  )
@@ -4178,10 +8142,10 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
-  i32.const 1760
+  i32.const 2016
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 1568
+  i32.const 1824
   local.get $0
   call $~lib/rt/itcms/__visit
  )
@@ -4266,8 +8230,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 35136
-   i32.const 35184
+   i32.const 45296
+   i32.const 45344
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -4468,7 +8432,7 @@
   local.get $size
   i32.eqz
   if
-   i32.const 2128
+   i32.const 12288
    local.set $22
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -4544,7 +8508,7 @@
   i32.const 0
   i32.lt_s
   if
-   i32.const 2128
+   i32.const 12288
    local.set $10
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -4575,12 +8539,12 @@
   local.get $10
   call $~lib/string/String#get:length
   local.set $sepLen
-  i32.const 28
+  i32.const 32
   local.get $sepLen
   i32.add
   local.get $lastIndex
   i32.mul
-  i32.const 28
+  i32.const 32
   i32.add
   local.set $estLen
   global.get $~lib/memory/__stack_pointer
@@ -4764,7 +8728,7 @@
   i32.const 0
   i32.lt_s
   if
-   i32.const 2128
+   i32.const 12288
    local.set $10
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -4795,12 +8759,12 @@
   local.get $10
   call $~lib/string/String#get:length
   local.set $sepLen
-  i32.const 28
+  i32.const 32
   local.get $sepLen
   i32.add
   local.get $lastIndex
   i32.mul
-  i32.const 28
+  i32.const 32
   i32.add
   local.set $estLen
   global.get $~lib/memory/__stack_pointer
@@ -4979,13 +8943,13 @@
   i32.const 1
   i32.shr_u
   global.set $~lib/rt/itcms/threshold
-  i32.const 1680
+  i32.const 1936
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
-  i32.const 1712
+  i32.const 1968
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/toSpace
-  i32.const 1856
+  i32.const 2112
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   f32.const 1.100000023841858
@@ -4996,12 +8960,12 @@
   local.get $2
   i32.store
   local.get $2
-  i32.const 1968
+  i32.const 2224
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2000
+   i32.const 2256
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -5015,12 +8979,12 @@
   local.get $2
   i32.store
   local.get $2
-  i32.const 1968
+  i32.const 2224
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2000
+   i32.const 2256
    i32.const 2
    i32.const 1
    call $~lib/builtins/abort
@@ -5032,19 +8996,19 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 2160
+  i32.const 12320
   call $~lib/array/Array<f32>#join
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
   i32.store
   local.get $2
-  i32.const 2192
+  i32.const 12352
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2000
+   i32.const 2256
    i32.const 5
    i32.const 1
    call $~lib/builtins/abort
@@ -5056,19 +9020,19 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 2160
+  i32.const 12320
   call $~lib/array/Array<f64>#join
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
   i32.store
   local.get $2
-  i32.const 2192
+  i32.const 12352
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2000
+   i32.const 2256
    i32.const 8
    i32.const 1
    call $~lib/builtins/abort
@@ -5132,11 +9096,15 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/util/number/dtoa<f32> (param $value f32) (result i32)
-  (local $value|1 f64)
-  (local $isSingle i32)
+  (local $len i32)
+  (local $buffer i32)
+  (local $len|3 i32)
+  (local $p i32)
+  (local $end i32)
+  (local $c i32)
   (local $size i32)
   (local $result i32)
-  (local $5 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -5145,75 +9113,108 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  block $~lib/util/number/dtoa_impl|inlined.0 (result i32)
-   local.get $value
-   f64.promote_f32
-   local.set $value|1
-   i32.const 1
-   local.set $isSingle
-   local.get $value|1
-   f64.const 0
-   f64.eq
-   if
-    i32.const 32
-    br $~lib/util/number/dtoa_impl|inlined.0
-   end
-   local.get $value|1
-   local.get $value|1
-   f64.sub
-   f64.const 0
-   f64.eq
-   i32.eqz
-   if
-    local.get $value|1
-    local.get $value|1
-    f64.ne
-    if
-     i32.const 64
-     br $~lib/util/number/dtoa_impl|inlined.0
-    end
-    i32.const 96
-    i32.const 144
-    local.get $value|1
-    f64.const 0
-    f64.lt
-    select
-    br $~lib/util/number/dtoa_impl|inlined.0
-   end
-   i32.const 176
-   local.get $value|1
-   local.get $isSingle
-   call $~lib/util/number/dtoa_core
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 1664
+  local.get $value
+  call $~lib/util/xjb/ftoa/ftoa_buffered
+  local.set $len
+  block $~lib/util/number/dtoa_dotZero|inlined.0 (result i32)
+   i32.const 1664
+   local.set $buffer
+   local.get $len
+   local.set $len|3
+   local.get $buffer
+   local.set $p
+   local.get $buffer
+   local.get $len|3
    i32.const 1
    i32.shl
-   local.set $size
-   global.get $~lib/memory/__stack_pointer
-   local.get $size
+   i32.add
+   local.set $end
+   loop $while-continue|0
+    local.get $p
+    local.get $end
+    i32.lt_u
+    if
+     local.get $p
+     i32.load16_u
+     local.set $c
+     local.get $c
+     i32.const 48
+     i32.lt_s
+     if (result i32)
+      i32.const 1
+     else
+      local.get $c
+      i32.const 57
+      i32.gt_s
+     end
+     if (result i32)
+      local.get $c
+      i32.const 45
+      i32.ne
+     else
+      i32.const 0
+     end
+     if
+      local.get $len|3
+      br $~lib/util/number/dtoa_dotZero|inlined.0
+     end
+     local.get $p
+     i32.const 2
+     i32.add
+     local.set $p
+     br $while-continue|0
+    end
+   end
+   local.get $end
+   i32.const 46
+   i32.store16
+   local.get $end
+   i32.const 48
+   i32.store16 offset=2
+   local.get $len|3
    i32.const 2
-   call $~lib/rt/itcms/__new
-   local.tee $result
-   i32.store
-   local.get $result
-   i32.const 176
-   local.get $size
-   memory.copy
-   local.get $result
-   br $~lib/util/number/dtoa_impl|inlined.0
+   i32.add
+   br $~lib/util/number/dtoa_dotZero|inlined.0
   end
-  local.set $5
+  local.set $len
+  local.get $len
+  i32.const 1
+  i32.shl
+  local.set $size
+  global.get $~lib/memory/__stack_pointer
+  local.get $size
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $result
+  i32.store
+  local.get $result
+  i32.const 1664
+  local.get $size
+  memory.copy
+  local.get $result
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $9
   return
  )
  (func $~lib/util/number/dtoa<f64> (param $value f64) (result i32)
-  (local $value|1 f64)
-  (local $isSingle i32)
+  (local $len i32)
+  (local $buffer i32)
+  (local $len|3 i32)
+  (local $p i32)
+  (local $end i32)
+  (local $c i32)
   (local $size i32)
   (local $result i32)
-  (local $5 i32)
+  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -5222,66 +9223,96 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  block $~lib/util/number/dtoa_impl|inlined.1 (result i32)
-   local.get $value
-   local.set $value|1
-   i32.const 0
-   local.set $isSingle
-   local.get $value|1
-   f64.const 0
-   f64.eq
-   if
-    i32.const 32
-    br $~lib/util/number/dtoa_impl|inlined.1
-   end
-   local.get $value|1
-   local.get $value|1
-   f64.sub
-   f64.const 0
-   f64.eq
-   i32.eqz
-   if
-    local.get $value|1
-    local.get $value|1
-    f64.ne
-    if
-     i32.const 64
-     br $~lib/util/number/dtoa_impl|inlined.1
-    end
-    i32.const 96
-    i32.const 144
-    local.get $value|1
-    f64.const 0
-    f64.lt
-    select
-    br $~lib/util/number/dtoa_impl|inlined.1
-   end
-   i32.const 176
-   local.get $value|1
-   local.get $isSingle
-   call $~lib/util/number/dtoa_core
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 1664
+  local.get $value
+  call $~lib/util/xjb/dtoa/dtoa_buffered
+  local.set $len
+  block $~lib/util/number/dtoa_dotZero|inlined.1 (result i32)
+   i32.const 1664
+   local.set $buffer
+   local.get $len
+   local.set $len|3
+   local.get $buffer
+   local.set $p
+   local.get $buffer
+   local.get $len|3
    i32.const 1
    i32.shl
-   local.set $size
-   global.get $~lib/memory/__stack_pointer
-   local.get $size
+   i32.add
+   local.set $end
+   loop $while-continue|0
+    local.get $p
+    local.get $end
+    i32.lt_u
+    if
+     local.get $p
+     i32.load16_u
+     local.set $c
+     local.get $c
+     i32.const 48
+     i32.lt_s
+     if (result i32)
+      i32.const 1
+     else
+      local.get $c
+      i32.const 57
+      i32.gt_s
+     end
+     if (result i32)
+      local.get $c
+      i32.const 45
+      i32.ne
+     else
+      i32.const 0
+     end
+     if
+      local.get $len|3
+      br $~lib/util/number/dtoa_dotZero|inlined.1
+     end
+     local.get $p
+     i32.const 2
+     i32.add
+     local.set $p
+     br $while-continue|0
+    end
+   end
+   local.get $end
+   i32.const 46
+   i32.store16
+   local.get $end
+   i32.const 48
+   i32.store16 offset=2
+   local.get $len|3
    i32.const 2
-   call $~lib/rt/itcms/__new
-   local.tee $result
-   i32.store
-   local.get $result
-   i32.const 176
-   local.get $size
-   memory.copy
-   local.get $result
-   br $~lib/util/number/dtoa_impl|inlined.1
+   i32.add
+   br $~lib/util/number/dtoa_dotZero|inlined.1
   end
-  local.set $5
+  local.set $len
+  local.get $len
+  i32.const 1
+  i32.shl
+  local.set $size
+  global.get $~lib/memory/__stack_pointer
+  local.get $size
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $result
+  i32.store
+  local.get $result
+  i32.const 1664
+  local.get $size
+  memory.copy
+  local.get $result
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $9
   return
  )
 )
