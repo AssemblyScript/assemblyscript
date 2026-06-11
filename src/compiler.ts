@@ -881,7 +881,8 @@ export class Compiler extends DiagnosticEmitter {
     let options = this.options;
     let module = this.module;
 
-    // import and/or export table if requested (default table is named '0' by Binaryen)
+    // import and/or export table if requested (default table is named '0' by Binaryen).
+    // non-imported tables are declared lazily on first indirect call, see ensureFunctionTable
     if (options.importTable) {
       module.addTableImport(
         CommonNames.DefaultTable,
@@ -2152,7 +2153,11 @@ export class Compiler extends DiagnosticEmitter {
     let memorySegment = instance.memorySegment;
     if (!memorySegment) {
 
-      // Add to the function table
+      // Add to the function table, declaring it on first use so effect analysis works
+      if (!this.options.importTable) {
+        this.module.ensureFunctionTable(CommonNames.DefaultTable);
+      }
+
       let functionTable = this.functionTable;
       let tableBase = this.options.tableBase;
       if (!tableBase) tableBase = 1; // leave first elem blank
@@ -7128,13 +7133,11 @@ export class Compiler extends DiagnosticEmitter {
     // provided, so we must set `argumentsLength` in any case. Inject setting it
     // into the index argument, which becomes executed last after any operands.
     let argumentsLength = this.ensureArgumentsLength();
-    
-   
     let functionArgWithVararg = module.block(null, [
       module.global_set(argumentsLength, module.i32(numArguments)),
       functionArg
     ], sizeTypeRef);
-    
+
     if (operands) this.operandsTostack(signature, operands);
     let expr = module.call_indirect(
       null, // TODO: handle multiple tables
