@@ -413,21 +413,84 @@ function readOne(typeName: string): string {
   return typeName + ".decodeFrom(r)";
 }
 
-/** TS expression coercing one parsed-JSON value to its `@data` field type. */
+/**
+ * TS expression coercing one parsed-JSON value to its `@data` field type. 128/256-bit
+ * values cross the JSON wire as little-endian arrays of 64-bit limbs (matching the
+ * ToilScript side: u128/i128 = 2 limbs, u256/i256 = 4), so they revive via
+ * `__toilUnlimb`, not `BigInt()` (which throws on an array).
+ */
 function jsonReviveScalar(typeName: string, access: string, dataNames: Set<string>): string {
   switch (typeName) {
     case "u8": case "u16": case "u32":
     case "i8": case "i16": case "i32":
     case "f32": case "f64": return "Number(" + access + " ?? 0)";
-    case "u64": case "i64":
-    case "u128": case "i128":
-    case "u256": case "i256": return "BigInt(" + access + " ?? 0)";
+    case "u64": case "i64": return "BigInt(" + access + " ?? 0)";
+    case "u128": return "__toilUnlimb(" + access + ", 2, false)";
+    case "i128": return "__toilUnlimb(" + access + ", 2, true)";
+    case "u256": return "__toilUnlimb(" + access + ", 4, false)";
+    case "i256": return "__toilUnlimb(" + access + ", 4, true)";
     case "bool": case "boolean": return "Boolean(" + access + ")";
     case "string": return "String(" + access + " ?? \"\")";
     default:
       if (dataNames.has(typeName)) return typeName + ".fromJSONValue(" + access + ")";
       throw new Error("@data: unsupported type '" + typeName + "'");
   }
+}
+
+/**
+ * TS expression converting one field value to its JSON-wire shape for sending:
+ * 128/256-bit bigints become limb arrays whose per-limb signedness mirrors what the
+ * server reads back (u128 `[u64,u64]`, i128 `[u64,i64]`, u256 all u64, i256 all i64);
+ * nested `@data` recurses via `toJSONValue()`; everything else passes through
+ * (`__toilJson` renders bigint limbs as raw number tokens, full precision).
+ */
+function jsonSendScalar(typeName: string, access: string, dataNames: Set<string>): string {
+  switch (typeName) {
+    case "u128": return "__toilLimbsU(" + access + ", 2)";
+    case "u256": return "__toilLimbsU(" + access + ", 4)";
+    case "i128": return "__toilLimbsI(" + access + ", 2)";
+    case "i256": return "__toilLimbsI(" + access + ", 4)";
+    default:
+      if (dataNames.has(typeName)) return access + ".toJSONValue()";
+      return access;
+  }
+}
+
+/** Whether sending this type needs a transform (vs passing the value straight through). */
+function jsonSendNeedsTransform(typeName: string, dataNames: Set<string>): bool {
+  switch (typeName) {
+    case "u128": case "i128":
+    case "u256": case "i256": return true;
+    default: return dataNames.has(typeName);
+  }
+}
+
+/** The bignum limb helpers, emitted once into the generated module. */
+function emitLimbHelpers(): string {
+  let out = "// 128/256-bit values cross the JSON wire as little-endian arrays of 64-bit limbs,\n";
+  out += "// mirroring the ToilScript codec (u128/i128 = 2 limbs, u256/i256 = 4).\n";
+  out += "function __toilUnlimb(v: any, n: number, signedTop: boolean): bigint {\n";
+  out += "    if (!Array.isArray(v)) { try { return BigInt(v ?? 0); } catch { return 0n; } }\n";
+  out += "    let r = 0n;\n";
+  out += "    for (let i = 0; i < n; i++) {\n";
+  out += "        let limb = 0n; try { limb = BigInt(v[i] ?? 0); } catch {}\n";
+  out += "        r += (i === n - 1 && signedTop ? BigInt.asIntN(64, limb) : BigInt.asUintN(64, limb)) << BigInt(64 * i);\n";
+  out += "    }\n";
+  out += "    return r;\n";
+  out += "}\n";
+  out += "function __toilLimbsU(v: bigint, n: number): bigint[] {\n";
+  out += "    const out: bigint[] = [];\n";
+  out += "    for (let i = 0; i < n; i++) out.push(BigInt.asUintN(64, v >> BigInt(64 * i)));\n";
+  out += "    return out;\n";
+  out += "}\n";
+  out += "function __toilLimbsI(v: bigint, n: number): bigint[] {\n";
+  out += "    const out = __toilLimbsU(v, n);\n";
+  // i128 renders only its top limb signed; i256 renders every limb signed.
+  out += "    if (n === 2) out[1] = BigInt.asIntN(64, out[1]);\n";
+  out += "    else for (let i = 0; i < n; i++) out[i] = BigInt.asIntN(64, out[i]);\n";
+  out += "    return out;\n";
+  out += "}\n";
+  return out;
 }
 
 /** Default initializer for a field, so `new X()` is valid with no arguments. */
@@ -551,6 +614,26 @@ function emitDataClass(d: RpcData, dataNames: Set<string>): string {
   let jargs = new Array<string>();
   for (let f = 0, fk = d.fields.length; f < fk; ++f) jargs.push(d.fields[f].name);
   out += "        return new " + d.name + "(" + jargs.join(", ") + ");\n";
+  out += "    }\n\n";
+
+  // JSON-wire shape for sending (the inverse of `fromJSONValue`): 128/256-bit fields
+  // become limb arrays, nested @data recurses. `__toilJson` calls this on @data bodies.
+  out += "    public toJSONValue(): any {\n";
+  let jfields = new Array<string>();
+  for (let f = 0, fk = d.fields.length; f < fk; ++f) {
+    let field = d.fields[f];
+    let access = "this." + field.name;
+    let expr: string;
+    if (field.ref.array) {
+      expr = jsonSendNeedsTransform(field.ref.type, dataNames)
+        ? access + ".map((x) => " + jsonSendScalar(field.ref.type, "x", dataNames) + ")"
+        : access;
+    } else {
+      expr = jsonSendScalar(field.ref.type, access, dataNames);
+    }
+    jfields.push(field.name + ": " + expr);
+  }
+  out += "        return { " + jfields.join(", ") + " };\n";
   out += "    }\n";
 
   out += "}\n";
@@ -627,6 +710,7 @@ function emitRestClient(surface: RpcSurface, dataNames: Set<string>): string {
   out += "    if (t === \"boolean\") return v ? \"true\" : \"false\";\n";
   out += "    if (t === \"string\") return JSON.stringify(v);\n";
   out += "    if (Array.isArray(v)) return \"[\" + v.map((x: any) => __toilJson(x)).join(\",\") + \"]\";\n";
+  out += "    if (typeof v.toJSONValue === \"function\") return __toilJson(v.toJSONValue());\n";
   out += "    let s = \"{\", first = true;\n";
   out += "    for (const k in v) {\n";
   out += "        if (!Object.prototype.hasOwnProperty.call(v, k)) continue;\n";
@@ -735,6 +819,8 @@ export function buildServerModule(program: Program, runtime: string): string | n
 
   if (surface.data.length) {
     out += "import { DataWriter, DataReader } from \"" + runtime + "\";\n\n";
+    out += emitLimbHelpers();
+    out += "\n";
   }
 
   for (let i = 0, k = surface.data.length; i < k; ++i) {
