@@ -1,4 +1,21 @@
-import * as asc from "../dist/asc.js";
+import fs from "node:fs";
+
+const ascSource = fs.readFileSync(new URL("../dist/asc.js", import.meta.url), "utf8");
+if (/\bfrom\s*["']binaryen["']/.test(ascSource)) {
+  throw Error("dist/asc.js must not statically import binaryen");
+}
+
+const wasmCompile = WebAssembly.compile;
+const wasmCompileStreaming = WebAssembly.compileStreaming;
+
+WebAssembly.compile = () => {
+  throw Error("unexpected WebAssembly.compile");
+};
+WebAssembly.compileStreaming = () => {
+  throw Error("unexpected WebAssembly.compileStreaming");
+};
+
+const asc = await import("../dist/asc.js");
 
 if (typeof asc.definitionFiles.assembly !== "string") throw Error("missing bundled assembly.d.ts");
 if (typeof asc.definitionFiles.portable !== "string") throw Error("missing bundled portable.d.ts");
@@ -14,6 +31,9 @@ console.log("# asc --version");
   console.log(">>> STDERR >>>");
   process.stdout.write(stderr.toString());
 }
+
+WebAssembly.compile = wasmCompile;
+WebAssembly.compileStreaming = wasmCompileStreaming;
 
 console.log("\n# asc --help");
 {
