@@ -2,6 +2,11 @@
 
 ## [v0.1.22] - 2026-06-13
 
+- No changes
+
+
+## [v0.1.22] - 2026-06-13
+
 - feat(parser): @auth / @user decorators + typed AuthService.getUser()
 - feat(parser): @cache(ttl) decorator for route responses
 
