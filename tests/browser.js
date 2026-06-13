@@ -45,6 +45,27 @@ console.log("\n# asc --help");
   process.stdout.write(stderr.toString());
 }
 
+console.log("\n# asc.compileString with broken instantiateStreaming");
+{
+  const wasmInstantiateStreaming = WebAssembly.instantiateStreaming;
+  WebAssembly.instantiateStreaming = () => {
+    throw Error("unexpected WebAssembly.instantiateStreaming");
+  };
+  try {
+    const { error, stdout, stderr, text, binary } = await asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, exportTable: true, stats: true });
+    if (error) throw error;
+    console.log(">>> .stdout >>>");
+    process.stdout.write(stdout.toString());
+    console.log(">>> .stderr >>>");
+    process.stdout.write(stderr.toString());
+    console.log(">>> .text >>>");
+    process.stdout.write(text);
+    console.log(">>> .binary >>> " + binary.length + " bytes");
+  } finally {
+    WebAssembly.instantiateStreaming = wasmInstantiateStreaming;
+  }
+}
+
 console.log("\n# asc index.ts --textFile");
 {
   const { error, stdout, stderr } = await asc.main([ "index.ts", "--textFile" ], {

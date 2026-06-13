@@ -40,13 +40,47 @@ let binaryenModule = "../lib/binaryen.js";
 async function loadAssemblyScript(wasmPath) {
   if (assemblyscript) return assemblyscript;
   return assemblyscript = wasmPath == null
-    ? await import("assemblyscript")
-    : await import(new URL(wasmPath, url.pathToFileURL(process.cwd() + "/")));
+    ? await importWithInstantiateStreamingFallback("assemblyscript")
+    : await importWithInstantiateStreamingFallback(new URL(wasmPath, url.pathToFileURL(process.cwd() + "/")));
 }
 
 async function loadBinaryen() {
   if (binaryen) return binaryen;
-  return binaryen = (await import(binaryenModule)).default;
+  return binaryen = (await importWithInstantiateStreamingFallback(binaryenModule)).default;
+}
+
+async function importWithInstantiateStreamingFallback(specifier) {
+  const restoreInstantiateStreaming = installInstantiateStreamingFallback();
+  try {
+    return await import(specifier);
+  } finally {
+    if (restoreInstantiateStreaming) restoreInstantiateStreaming();
+  }
+}
+
+function installInstantiateStreamingFallback() {
+  const instantiateStreaming = WebAssembly.instantiateStreaming;
+  if (typeof instantiateStreaming !== "function") return null;
+  async function instantiateStreamingFallback(source, imports) {
+    const response = await source;
+    try {
+      const streamingSource = response && typeof response.clone === "function"
+        ? response.clone()
+        : response;
+      return await instantiateStreaming.call(WebAssembly, streamingSource, imports);
+    } catch (error) {
+      if (response && typeof response.arrayBuffer === "function") {
+        return WebAssembly.instantiate(await response.arrayBuffer(), imports);
+      }
+      throw error;
+    }
+  }
+  WebAssembly.instantiateStreaming = instantiateStreamingFallback;
+  return () => {
+    if (WebAssembly.instantiateStreaming === instantiateStreamingFallback) {
+      WebAssembly.instantiateStreaming = instantiateStreaming;
+    }
+  };
 }
 
 const require = module.createRequire(import.meta.url);
