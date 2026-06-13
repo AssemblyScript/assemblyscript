@@ -1047,7 +1047,9 @@ export enum DecoratorKind {
   Patch,
   Head,
   Options,
-  Cache
+  Cache,
+  Auth,
+  User
 }
 
 export namespace DecoratorKind {
@@ -1058,6 +1060,10 @@ export namespace DecoratorKind {
       let nameStr = (<IdentifierExpression>nameNode).text;
       assert(nameStr.length);
       switch (nameStr.charCodeAt(0)) {
+        case CharCode.a: {
+          if (nameStr == "auth") return DecoratorKind.Auth;
+          break;
+        }
         case CharCode.b: {
           if (nameStr == "builtin") return DecoratorKind.Builtin;
           break;
@@ -1124,6 +1130,7 @@ export namespace DecoratorKind {
         case CharCode.u: {
           if (nameStr == "unmanaged") return DecoratorKind.Unmanaged;
           if (nameStr == "unsafe") return DecoratorKind.Unsafe;
+          if (nameStr == "user") return DecoratorKind.User;
           break;
         }
       }

@@ -1956,6 +1956,11 @@ export class Parser extends DiagnosticEmitter {
         let dk = decorators[i].decoratorKind;
         if (dk == DecoratorKind.Data) {
           this.injectDataCodec(declaration);
+        } else if (dk == DecoratorKind.User) {
+          // `@user` IS a `@data` class (same binary codec) plus the typed
+          // `AuthService.getUser()` bridge.
+          this.injectDataCodec(declaration);
+          this.injectUserBinding(declaration);
         } else if (dk == DecoratorKind.Rest) {
           this.injectRestController(declaration, decorators[i]);
         }
@@ -2058,6 +2063,8 @@ export class Parser extends DiagnosticEmitter {
     let members = declaration.members;
     let prefix = this.restPrefixOf(restDecorator);
     let classStream = this.restStreamOf(restDecorator);
+    // `@auth` on the controller class guards EVERY route in it.
+    let classAuth = this.hasDecoratorKind(declaration.decorators, DecoratorKind.Auth);
 
     let blocks = "";
     for (let i = 0, k = members.length; i < k; ++i) {
@@ -2066,7 +2073,7 @@ export class Parser extends DiagnosticEmitter {
       let method = <MethodDeclaration>member;
       let routeDeco = this.routeDecoratorOf(method);
       if (routeDeco == null) continue;
-      let block = this.buildRouteBlock(prefix, classStream, method, routeDeco);
+      let block = this.buildRouteBlock(prefix, classStream, method, routeDeco, classAuth);
       if (block != null) blocks += block;
     }
     if (blocks.length == 0) return; // no routes -> nothing to wire
@@ -2087,6 +2094,33 @@ export class Parser extends DiagnosticEmitter {
     }
     this.injectTopLevelStatements(declaration,
       "__toilRest.register((__q: __toilReq): __toilResp | null => new " + className + "().__tryRoute(__q));\n");
+  }
+
+  /**
+   * Bind a `@user` class to `AuthService.getUser()` typing. The lib declares
+   * `getUser(): AuthUser | null`; here we inject a `@global` `AuthUser` that
+   * extends the user's class, so `AuthService.getUser()` is auto-typed with the
+   * user's fields and NO type argument. `AuthUser` is a no-field subclass, so
+   * the decode bridge's `changetype` is an identity. There is exactly one
+   * authenticated-user type per program; a second `@user` produces a duplicate
+   * `AuthUser` (a natural compile error).
+   */
+  private injectUserBinding(declaration: ClassDeclaration): void {
+    let className = declaration.name.text;
+    this.injectTopLevelStatements(declaration,
+      "// @ts-ignore: injected\n@global class AuthUser extends " + className + " {}\n");
+    this.injectTopLevelStatements(declaration,
+      "// @ts-ignore: injected\n@global function __toilDecodeAuthUser(__b: Uint8Array): AuthUser { return changetype<AuthUser>(" +
+      className + ".decode(__b)); }\n");
+  }
+
+  /** True if `decorators` carries a decorator of `kind` (e.g. `@auth`). */
+  private hasDecoratorKind(decorators: DecoratorNode[] | null, kind: DecoratorKind): bool {
+    if (decorators == null) return false;
+    for (let i = 0, k = decorators.length; i < k; ++i) {
+      if (decorators[i].decoratorKind == kind) return true;
+    }
+    return false;
   }
 
   /** The mount prefix from `@rest("api")` -> "/api"; "" for the bare/object form (root). */
@@ -2136,7 +2170,7 @@ export class Parser extends DiagnosticEmitter {
   }
 
   /** Generate one `if (method && path-match) { decode; call; encode }` route block. */
-  private buildRouteBlock(prefix: string, classStream: string, method: MethodDeclaration, deco: DecoratorNode): string | null {
+  private buildRouteBlock(prefix: string, classStream: string, method: MethodDeclaration, deco: DecoratorNode, classAuth: bool): string | null {
     let dk = deco.decoratorKind;
     let httpMethod: string;
     let routePath: string;
@@ -2198,6 +2232,13 @@ export class Parser extends DiagnosticEmitter {
     let s = "if(__req.method==" + methodValue.toString() + "){";
     s += "const __ctx=__toilMatch(" + JSON.stringify(fullPath) + ",__req);";
     s += "if(__ctx!=null){";
+    // `@auth` (on the route or the controller): reject before the handler runs
+    // when there is no valid session. `AuthService` is an ambient global; it
+    // reads the current request's session cookie. The handler then calls
+    // `AuthService.getUser()` for the typed user.
+    if (classAuth || this.hasDecoratorKind(method.decorators, DecoratorKind.Auth)) {
+      s += "if(!AuthService.hasSession()){return __toilResp.text(\"unauthorized\\n\",401);}";
+    }
     if (bodyType != null) {
       if (stream == "Binary") {
         s += "const __body=" + bodyType + ".decode(__req.body);";

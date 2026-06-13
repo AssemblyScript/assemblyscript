@@ -80,6 +80,9 @@ interface RpcSurface {
   services: RpcService[];
   remotes: RpcCallable[];
   rest: RestController[];
+  /** The `@user` class name (the authenticated-user type), or null if none.
+   *  At most one per program; drives the typed client `getUser()`. */
+  userType: string | null;
 }
 
 /** Stable per-`@data` typeId (FNV-1a over the class name); mirrors the parser. */
@@ -271,7 +274,11 @@ function describeCallable(fn: FunctionDeclaration): RpcCallable {
 function collectClass(cls: ClassDeclaration, surface: RpcSurface): void {
   let decorators = cls.decorators;
   let members = cls.members;
-  if (hasDecorator(decorators, DecoratorKind.Data)) {
+  // `@user` is a `@data` class (same binary codec on the client) that also names
+  // the authenticated-user type for the generated `getUser()`. Collect either as
+  // a client codec.
+  let isUser = hasDecorator(decorators, DecoratorKind.User);
+  if (hasDecorator(decorators, DecoratorKind.Data) || isUser) {
     let fields = new Array<RpcMember>();
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
@@ -281,6 +288,7 @@ function collectClass(cls: ClassDeclaration, surface: RpcSurface): void {
       fields.push({ name: field.name.text, ref: describeType(field.type), vis: fieldVis(field), ro: field.is(CommonFlags.Readonly) });
     }
     surface.data.push({ name: cls.name.text, typeId: dataTypeId(cls.name.text), fields });
+    if (isUser) surface.userType = cls.name.text;
   }
   if (hasDecorator(decorators, DecoratorKind.Service)) {
     let methods = new Array<RpcCallable>();
@@ -313,7 +321,7 @@ function collectClass(cls: ClassDeclaration, surface: RpcSurface): void {
 
 /** Walks the user (non-library) sources of `program` for the client-visible surface. */
 function collectSurface(program: Program): RpcSurface {
-  let surface: RpcSurface = { data: [], services: [], remotes: [], rest: [] };
+  let surface: RpcSurface = { data: [], services: [], remotes: [], rest: [], userType: null };
   let sources = program.sources;
   for (let i = 0, k = sources.length; i < k; ++i) {
     let source = sources[i];
@@ -787,6 +795,53 @@ function emitServerSurface(surface: RpcSurface, dataNames: Set<string>): string 
 }
 
 /**
+ * Emits the client-side `getUser()` for the `@user` type: it reads the readable
+ * `__Secure-toil_user` companion cookie the server set at login, base64url-decodes
+ * it, and runs the generated `@user` codec. Fully typed (returns the `@user`
+ * class) with NO type argument. Display-only: the server re-verifies the HttpOnly
+ * signed session on every `@auth` request, so this is never an authorization
+ * source. Emitted only when the program declares a `@user` class.
+ */
+function emitAuthClient(userType: string): string {
+  let out = "// ---- @user session client (reads the readable companion cookie) ----\n";
+  out += "const __TOIL_USER_COOKIE = \"__Secure-toil_user\";\n\n";
+  out += "function __toilReadCookie(name: string): string | null {\n";
+  out += "    if (typeof document === \"undefined\" || !document.cookie) return null;\n";
+  out += "    const pairs = document.cookie.split(\"; \");\n";
+  out += "    for (let i = 0; i < pairs.length; i++) {\n";
+  out += "        const eq = pairs[i].indexOf(\"=\");\n";
+  out += "        if (eq > 0 && pairs[i].slice(0, eq) === name) return pairs[i].slice(eq + 1);\n";
+  out += "    }\n";
+  out += "    return null;\n";
+  out += "}\n\n";
+  out += "function __toilB64UrlDecode(s: string): Uint8Array | null {\n";
+  out += "    try {\n";
+  out += "        let b = s.replace(/-/g, \"+\").replace(/_/g, \"/\");\n";
+  out += "        while (b.length % 4) b += \"=\";\n";
+  out += "        const bin = atob(b);\n";
+  out += "        const out = new Uint8Array(bin.length);\n";
+  out += "        for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);\n";
+  out += "        return out;\n";
+  out += "    } catch { return null; }\n";
+  out += "}\n\n";
+  out += "/**\n";
+  out += " * The signed-in user, decoded from the readable `__Secure-toil_user` companion\n";
+  out += " * cookie the server set at login, or `null`. Auto-typed to your `@user` class\n";
+  out += " * (`" + userType + "`) with no type argument. DISPLAY-ONLY: the server re-verifies\n";
+  out += " * the HttpOnly signed session on every `@auth` request; never trust this for\n";
+  out += " * authorization (a client can forge it, fooling only its own UI).\n";
+  out += " */\n";
+  out += "export function getUser(): " + userType + " | null {\n";
+  out += "    const raw = __toilReadCookie(__TOIL_USER_COOKIE);\n";
+  out += "    if (raw === null) return null;\n";
+  out += "    const bytes = __toilB64UrlDecode(raw);\n";
+  out += "    if (bytes === null) return null;\n";
+  out += "    try { return " + userType + ".decode(bytes); } catch { return null; }\n";
+  out += "}\n";
+  return out;
+}
+
+/**
  * Builds the `server.ts` working module for `program`, or `null` when nothing is
  * exposed (no `@data`/`@remote`/`@service`). `runtime` is the import specifier for
  * the DataWriter/DataReader codec (e.g. `toiljs/io`).
@@ -818,6 +873,8 @@ export function buildServerModule(program: Program, runtime: string): string | n
 
   let restClient = emitRestClient(surface, dataNames);
   if (restClient.length) out += restClient + "\n";
+
+  if (surface.userType != null) out += emitAuthClient(<string>surface.userType) + "\n";
 
   out += emitServerSurface(surface, dataNames);
   // Guarantee module scope (so `declare global` is valid) even with no @data exports.
