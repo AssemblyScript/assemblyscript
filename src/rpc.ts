@@ -438,14 +438,14 @@ function jsonReviveScalar(typeName: string, access: string, dataNames: Set<strin
 }
 
 /**
- * TS expression converting one field value to its JSON-wire shape for sending:
- * 128/256-bit bigints become decimal strings (exact at any size; the server parses them
- * via `fromString`); nested `@data` recurses via `toJSONValue()`; everything else passes
- * through (`__toilJson` renders 64-bit bigints as raw number tokens, which stay exact
- * because they are text until the server parses them).
+ * TS expression converting one field value to its JSON-wire shape for sending: every
+ * integer 64 bits and up becomes a decimal string (exact at any size, symmetric with the
+ * server's `toJSON`, and safe to `JSON.stringify` since a bare `bigint` cannot be);
+ * nested `@data` recurses via `toJSONValue()`; everything else passes through.
  */
 function jsonSendScalar(typeName: string, access: string, dataNames: Set<string>): string {
   switch (typeName) {
+    case "u64": case "i64":
     case "u128": case "i128":
     case "u256": case "i256": return access + ".toString()";
     default:
@@ -457,6 +457,7 @@ function jsonSendScalar(typeName: string, access: string, dataNames: Set<string>
 /** Whether sending this type needs a transform (vs passing the value straight through). */
 function jsonSendNeedsTransform(typeName: string, dataNames: Set<string>): bool {
   switch (typeName) {
+    case "u64": case "i64":
     case "u128": case "i128":
     case "u256": case "i256": return true;
     default: return dataNames.has(typeName);
@@ -685,10 +686,9 @@ function emitRestClient(surface: RpcSurface, dataNames: Set<string>): string {
     }
   }
 
-  // JSON body serializer. `JSON.stringify` throws on a `bigint`, and `@data` fields map
-  // 64-bit/bignum types to `bigint`; a 64-bit bigint is emitted as a raw JSON number
-  // token (exact, since it stays text until the server parses it), and 128/256-bit
-  // fields were already turned into decimal strings by `toJSONValue`.
+  // JSON body serializer. `toJSONValue` has already turned every 64-bit-and-up integer
+  // into a decimal string, so a @data body carries no bare `bigint`; the `bigint` branch
+  // below is a defensive fallback (e.g. a hand-built value) that emits a raw number token.
   if (needsJson) {
   out += "function __toilJson(v: any): string {\n";
   out += "    if (v === null || v === undefined) return \"null\";\n";
