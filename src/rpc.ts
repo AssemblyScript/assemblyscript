@@ -414,10 +414,10 @@ function readOne(typeName: string): string {
 }
 
 /**
- * TS expression coercing one parsed-JSON value to its `@data` field type. 128/256-bit
- * values cross the JSON wire as little-endian arrays of 64-bit limbs (matching the
- * ToilScript side: u128/i128 = 2 limbs, u256/i256 = 4), so they revive via
- * `__toilUnlimb`, not `BigInt()` (which throws on an array).
+ * TS expression coercing one parsed-JSON value to its `@data` field type. 64-bit-and-up
+ * integers arrive as decimal strings (exact at any size; `BigInt("...")` revives them).
+ * 128/256-bit values go through `__toilUnlimb`, which also accepts the legacy
+ * limb-array shape older servers emitted (`BigInt()` alone throws on an array).
  */
 function jsonReviveScalar(typeName: string, access: string, dataNames: Set<string>): string {
   switch (typeName) {
@@ -439,17 +439,15 @@ function jsonReviveScalar(typeName: string, access: string, dataNames: Set<strin
 
 /**
  * TS expression converting one field value to its JSON-wire shape for sending:
- * 128/256-bit bigints become limb arrays whose per-limb signedness mirrors what the
- * server reads back (u128 `[u64,u64]`, i128 `[u64,i64]`, u256 all u64, i256 all i64);
- * nested `@data` recurses via `toJSONValue()`; everything else passes through
- * (`__toilJson` renders bigint limbs as raw number tokens, full precision).
+ * 128/256-bit bigints become decimal strings (exact at any size; the server parses them
+ * via `fromString`); nested `@data` recurses via `toJSONValue()`; everything else passes
+ * through (`__toilJson` renders 64-bit bigints as raw number tokens, which stay exact
+ * because they are text until the server parses them).
  */
 function jsonSendScalar(typeName: string, access: string, dataNames: Set<string>): string {
   switch (typeName) {
-    case "u128": return "__toilLimbsU(" + access + ", 2)";
-    case "u256": return "__toilLimbsU(" + access + ", 4)";
-    case "i128": return "__toilLimbsI(" + access + ", 2)";
-    case "i256": return "__toilLimbsI(" + access + ", 4)";
+    case "u128": case "i128":
+    case "u256": case "i256": return access + ".toString()";
     default:
       if (dataNames.has(typeName)) return access + ".toJSONValue()";
       return access;
@@ -465,10 +463,11 @@ function jsonSendNeedsTransform(typeName: string, dataNames: Set<string>): bool 
   }
 }
 
-/** The bignum limb helpers, emitted once into the generated module. */
+/** The bignum revive helper, emitted once into the generated module. */
 function emitLimbHelpers(): string {
-  let out = "// 128/256-bit values cross the JSON wire as little-endian arrays of 64-bit limbs,\n";
-  out += "// mirroring the ToilScript codec (u128/i128 = 2 limbs, u256/i256 = 4).\n";
+  let out = "// 64-bit-and-up integers cross the JSON wire as decimal strings (exact through\n";
+  out += "// JSON.parse at any size). Older servers emitted 128/256-bit values as little-endian\n";
+  out += "// arrays of 64-bit limbs instead; the array branch revives those.\n";
   out += "function __toilUnlimb(v: any, n: number, signedTop: boolean): bigint {\n";
   out += "    if (!Array.isArray(v)) { try { return BigInt(v ?? 0); } catch { return 0n; } }\n";
   out += "    let r = 0n;\n";
@@ -477,18 +476,6 @@ function emitLimbHelpers(): string {
   out += "        r += (i === n - 1 && signedTop ? BigInt.asIntN(64, limb) : BigInt.asUintN(64, limb)) << BigInt(64 * i);\n";
   out += "    }\n";
   out += "    return r;\n";
-  out += "}\n";
-  out += "function __toilLimbsU(v: bigint, n: number): bigint[] {\n";
-  out += "    const out: bigint[] = [];\n";
-  out += "    for (let i = 0; i < n; i++) out.push(BigInt.asUintN(64, v >> BigInt(64 * i)));\n";
-  out += "    return out;\n";
-  out += "}\n";
-  out += "function __toilLimbsI(v: bigint, n: number): bigint[] {\n";
-  out += "    const out = __toilLimbsU(v, n);\n";
-  // i128 renders only its top limb signed; i256 renders every limb signed.
-  out += "    if (n === 2) out[1] = BigInt.asIntN(64, out[1]);\n";
-  out += "    else for (let i = 0; i < n; i++) out[i] = BigInt.asIntN(64, out[i]);\n";
-  out += "    return out;\n";
   out += "}\n";
   return out;
 }
@@ -699,8 +686,9 @@ function emitRestClient(surface: RpcSurface, dataNames: Set<string>): string {
   }
 
   // JSON body serializer. `JSON.stringify` throws on a `bigint`, and `@data` fields map
-  // 64-bit/bignum types to `bigint`; emit those as raw JSON number tokens (no quotes) so
-  // the server's JSON reader (`asU64`/`asI64`, which ignore string tokens) reads them back.
+  // 64-bit/bignum types to `bigint`; a 64-bit bigint is emitted as a raw JSON number
+  // token (exact, since it stays text until the server parses it), and 128/256-bit
+  // fields were already turned into decimal strings by `toJSONValue`.
   if (needsJson) {
   out += "function __toilJson(v: any): string {\n";
   out += "    if (v === null || v === undefined) return \"null\";\n";

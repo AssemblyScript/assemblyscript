@@ -126,6 +126,9 @@ export class JSON {
     }
 
     asI64(): i64 {
+        // 64-bit integers cross JSON as decimal strings (JS numbers lose precision past
+        // 2^53), so a string token reads as its integer value, not 0.
+        if (this.kind == JSON.STR) return this.str.length ? i64.parse(this.str) : 0;
         if (this.kind != JSON.NUM) return 0;
         if (this.numKind == JSON.N_I64) return this.inum;
         if (this.numKind == JSON.N_U64) return <i64>this.unum;
@@ -133,6 +136,8 @@ export class JSON {
     }
 
     asU64(): u64 {
+        // See asI64: decimal-string tokens are first-class for 64-bit integers.
+        if (this.kind == JSON.STR) return this.str.length ? u64.parse(this.str) : 0;
         if (this.kind != JSON.NUM) return 0;
         if (this.numKind == JSON.N_U64) return this.unum;
         if (this.numKind == JSON.N_I64) return <u64>this.inum;

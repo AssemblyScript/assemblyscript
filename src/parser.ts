@@ -146,29 +146,34 @@ function dataTypeId(name: string): u32 {
   return hash >>> 0;
 }
 
-/** JSON value expression for a @data value (scalar, bignum as string, or nested @data). */
+/**
+ * JSON value expression for a @data value (scalar, or nested @data). Integers of 64 bits
+ * and up are emitted as DECIMAL STRINGS: JSON numbers ride through JavaScript's
+ * `JSON.parse` as IEEE doubles, which silently corrupt anything past 2^53, so a string
+ * is the only representation a browser client can revive exactly (`BigInt("...")`).
+ */
 function jsonOfExpr(typeName: string, valueExpr: string): string {
   switch (typeName) {
     case "bool": case "boolean":
-    case "u8": case "u16": case "u32": case "u64":
-    case "i8": case "i16": case "i32": case "i64":
+    case "u8": case "u16": case "u32":
+    case "i8": case "i16": case "i32":
     case "f32": case "f64":
     case "string":
       return "JSON.of<" + typeName + ">(" + valueExpr + ")";
-    case "u128":
-      return "JSON.arr().push(JSON.of<u64>(" + valueExpr + ".lo)).push(JSON.of<u64>(" + valueExpr + ".hi))";
-    case "i128":
-      return "JSON.arr().push(JSON.of<u64>(" + valueExpr + ".lo)).push(JSON.of<i64>(" + valueExpr + ".hi))";
-    case "u256":
-      return "JSON.arr().push(JSON.of<u64>(" + valueExpr + ".lo1)).push(JSON.of<u64>(" + valueExpr + ".lo2)).push(JSON.of<u64>(" + valueExpr + ".hi1)).push(JSON.of<u64>(" + valueExpr + ".hi2))";
-    case "i256":
-      return "JSON.arr().push(JSON.of<i64>(" + valueExpr + ".lo1)).push(JSON.of<i64>(" + valueExpr + ".lo2)).push(JSON.of<i64>(" + valueExpr + ".hi1)).push(JSON.of<i64>(" + valueExpr + ".hi2))";
+    case "u64": case "i64":
+    case "u128": case "i128":
+    case "u256": case "i256":
+      return "JSON.of<string>(" + valueExpr + ".toString())";
     default:
       return valueExpr + ".toJSON()";
   }
 }
 
-/** Value read from a JSON node for a @data field. */
+/**
+ * Value read from a JSON node for a @data field. 64-bit reads are string-lenient inside
+ * the JSON lib itself; the 128/256-bit reads accept the decimal string plus the legacy
+ * limb-array shape (little-endian 64-bit limbs) older writers emitted.
+ */
 function jsonReadExpr(typeName: string, jsonExpr: string): string {
   switch (typeName) {
     case "bool": case "boolean": return jsonExpr + ".asBool()";
@@ -176,10 +181,10 @@ function jsonReadExpr(typeName: string, jsonExpr: string): string {
     case "i8": case "i16": case "i32": case "i64": return "<" + typeName + ">" + jsonExpr + ".asI64()";
     case "f32": case "f64": return "<" + typeName + ">" + jsonExpr + ".asF64()";
     case "string": return jsonExpr + ".asString()";
-    case "u128": return "new u128(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asU64())";
-    case "i128": return "new i128(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asI64())";
-    case "u256": return "new u256(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asU64()," + jsonExpr + ".at(2).asU64()," + jsonExpr + ".at(3).asU64())";
-    case "i256": return "new i256(" + jsonExpr + ".at(0).asI64()," + jsonExpr + ".at(1).asI64()," + jsonExpr + ".at(2).asI64()," + jsonExpr + ".at(3).asI64())";
+    case "u128": return "(" + jsonExpr + ".isArray() ? new u128(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asU64()) : u128.fromString(" + jsonExpr + ".asString()))";
+    case "i128": return "(" + jsonExpr + ".isArray() ? new i128(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asI64()) : i128.fromString(" + jsonExpr + ".asString()))";
+    case "u256": return "(" + jsonExpr + ".isArray() ? new u256(" + jsonExpr + ".at(0).asU64()," + jsonExpr + ".at(1).asU64()," + jsonExpr + ".at(2).asU64()," + jsonExpr + ".at(3).asU64()) : u256.fromString(" + jsonExpr + ".asString()))";
+    case "i256": return "(" + jsonExpr + ".isArray() ? new i256(" + jsonExpr + ".at(0).asI64()," + jsonExpr + ".at(1).asI64()," + jsonExpr + ".at(2).asI64()," + jsonExpr + ".at(3).asI64()) : i256.fromString(" + jsonExpr + ".asString()))";
     default: return typeName + ".fromJSON(" + jsonExpr + ")";
   }
 }

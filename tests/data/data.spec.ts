@@ -108,6 +108,14 @@ function testScalars(): void {
   const j = AllScalars.fromJSON(JSON.parse(m.toJSON().toString()));
   assert(j.a == 200 && j.d == 0xFFFFFFFFFFFFFFFF && j.h == -9000000000000000000);
   assert(j.q == -1.25 && j.r && j.s == "scalars");
+
+  // 64-bit fields are decimal strings on the wire (exact past 2^53 in JS clients),
+  // and number tokens stay readable (legacy writers, hand-written JSON).
+  const text = m.toJSON().toString();
+  assert(text.includes("\"d\":\"18446744073709551615\""));
+  assert(text.includes("\"h\":\"-9000000000000000000\""));
+  const lenient = AllScalars.fromJSON(JSON.parse("{\"d\":12345,\"h\":-7}"));
+  assert(lenient.d == 12345 && lenient.h == -7);
 }
 
 function testBig(): void {
@@ -123,10 +131,31 @@ function testBig(): void {
   assert(d.c == u256.fromU64(987654321));
 
   // JSON: bignum serializes as a decimal string
-  const j = AllBig.fromJSON(JSON.parse(m.toJSON().toString()));
+  const text = m.toJSON().toString();
+  assert(text.includes("\"a\":\"340282366920938463463374607431768211455\""));
+  assert(text.includes("\"b\":\"-12345\""));
+  assert(text.includes("\"c\":\"987654321\""));
+  assert(text.includes("\"d\":\"1\""));
+  const j = AllBig.fromJSON(JSON.parse(text));
   assert(j.a == u128.fromString("340282366920938463463374607431768211455"));
   assert(j.b == i128.fromI64(-12345));
   assert(j.c == u256.fromU64(987654321));
+  assert(j.d.lo1 == 1 && !j.d.lo2 && !j.d.hi1 && !j.d.hi2);
+
+  // i256 sign handling round-trips, including i256.Min (whose negation is itself)
+  const neg = new AllBig();
+  neg.d = i256.fromString("-57896044618658097711785492504343953926634992332820282019728792003956564819968");
+  const negText = neg.toJSON().toString();
+  assert(negText.includes("\"d\":\"-57896044618658097711785492504343953926634992332820282019728792003956564819968\""));
+  const nj = AllBig.fromJSON(JSON.parse(negText));
+  assert(!nj.d.lo1 && !nj.d.lo2 && !nj.d.hi1 && <u64>nj.d.hi2 == 0x8000000000000000);
+
+  // legacy limb-array shape (older writers) still reads back
+  const legacy = AllBig.fromJSON(JSON.parse("{\"a\":[5,1],\"b\":[12345,0],\"c\":[1,2,3,4],\"d\":[9,0,0,0]}"));
+  assert(legacy.a == new u128(5, 1));
+  assert(legacy.b == new i128(12345, 0));
+  assert(legacy.c == new u256(1, 2, 3, 4));
+  assert(legacy.d.lo1 == 9 && !legacy.d.lo2 && !legacy.d.hi1 && !legacy.d.hi2);
 }
 
 function testNested(): void {
@@ -181,7 +210,7 @@ function testTypeId(): void {
 function testJsonShape(): void {
   const m = new Nested();
   m.id = 5; m.inner.v = 9; m.inner.s = "t"; m.tail = false;
-  assert(m.toJSON().toString() == "{\"id\":5,\"inner\":{\"v\":9,\"s\":\"t\"},\"tail\":false}");
+  assert(m.toJSON().toString() == "{\"id\":5,\"inner\":{\"v\":\"9\",\"s\":\"t\"},\"tail\":false}");
 }
 
 export function runAll(): void {

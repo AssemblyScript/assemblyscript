@@ -356,6 +356,16 @@ export class i128 {
   }
 
   /**
+   * Decimal (or `radix`) string. Sign + unsigned magnitude: negate (two's complement)
+   * and reinterpret as u128, which is layout-identical. i128.Min survives because
+   * neg(Min) == Min and its bit pattern reinterpreted unsigned is exactly 2^127.
+   */
+  toString(radix: i32 = 10): string {
+    if (!this.isNeg()) return changetype<u128>(this).toString(radix);
+    return '-' + changetype<u128>(this.neg()).toString(radix);
+  }
+
+  /**
    * Convert to a normal array of bytes (16 bytes for 128 bits).
    * @param bigEndian If true, the highest bytes come first.
    */
