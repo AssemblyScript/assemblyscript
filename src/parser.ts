@@ -54,6 +54,7 @@ import {
   IdentifierExpression,
   StringLiteralExpression,
   ObjectLiteralExpression,
+  IntegerLiteralExpression,
   PropertyAccessExpression,
   MethodDeclaration,
 
@@ -2189,6 +2190,11 @@ export class Parser extends DiagnosticEmitter {
     let retName = (rt instanceof NamedTypeNode) ? (<NamedTypeNode>rt).name.identifier.text : "";
     let call = "this." + method.name.text + "(" + callArgs + ")";
 
+    // `@cache(edgeMinutes[, browserSeconds[, privateScope[, allowAuth]]])`
+    // -> a `.cache(...)` suffix on whatever `Response` this route returns.
+    // `.cache()` returns the same Response, so it composes with every shape.
+    let cacheSuffix = this.cacheSuffixOf(method);
+
     let s = "if(__req.method==" + methodValue.toString() + "){";
     s += "const __ctx=__toilMatch(" + JSON.stringify(fullPath) + ",__req);";
     s += "if(__ctx!=null){";
@@ -2200,16 +2206,47 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     if (retName == "Response" || retName == "__toilResp") {
-      s += "return " + call + ";";
+      s += "return " + call + cacheSuffix + ";";
     } else if (retName == "void") {
-      s += call + ";return __toilResp.empty(204);";
+      s += call + ";return __toilResp.empty(204)" + cacheSuffix + ";";
     } else if (stream == "Binary") {
-      s += "const __res=" + call + ";return __toilResp.bytes(__res.encode());";
+      s += "const __res=" + call + ";return __toilResp.bytes(__res.encode())" + cacheSuffix + ";";
     } else {
-      s += "const __res=" + call + ";return __toilResp.json(__res.toJSON().toString());";
+      s += "const __res=" + call + ";return __toilResp.json(__res.toJSON().toString())" + cacheSuffix + ";";
     }
     s += "}}";
     return s;
+  }
+
+  /**
+   * The `.cache(...)` suffix to append to a route's `Response` when the
+   * handler method carries `@cache(...)`, else `""`. Only integer and
+   * boolean literal arguments are accepted (the parameters of
+   * `Response.cache(edgeTtlMinutes, browserTtlSeconds?, privateScope?,
+   * allowAuth?)`); any other argument shape yields `""` so a malformed
+   * decorator degrades to "not cached" rather than miscompiling. Each arg
+   * is emitted from its verbatim source text.
+   */
+  private cacheSuffixOf(method: MethodDeclaration): string {
+    let decos = method.decorators;
+    if (decos == null) return "";
+    for (let i = 0, k = decos.length; i < k; ++i) {
+      if (decos[i].decoratorKind != DecoratorKind.Cache) continue;
+      let args = decos[i].args;
+      if (args == null || args.length == 0) return "";
+      let parts = "";
+      for (let j = 0, n = args.length; j < n; ++j) {
+        let a = args[j];
+        let ok = (a instanceof IntegerLiteralExpression)
+          || a.kind == NodeKind.True
+          || a.kind == NodeKind.False;
+        if (!ok) return ""; // non-literal arg -> fail safe (no cache)
+        if (j > 0) parts += ",";
+        parts += a.range.toString();
+      }
+      return ".cache(" + parts + ")";
+    }
+    return "";
   }
 
   /** Find an object-literal field value by name, or null. */

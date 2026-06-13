@@ -1046,7 +1046,8 @@ export enum DecoratorKind {
   Delete,
   Patch,
   Head,
-  Options
+  Options,
+  Cache
 }
 
 export namespace DecoratorKind {
@@ -1059,6 +1060,10 @@ export namespace DecoratorKind {
       switch (nameStr.charCodeAt(0)) {
         case CharCode.b: {
           if (nameStr == "builtin") return DecoratorKind.Builtin;
+          break;
+        }
+        case CharCode.c: {
+          if (nameStr == "cache") return DecoratorKind.Cache;
           break;
         }
         case CharCode.d: {
