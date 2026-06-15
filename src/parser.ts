@@ -215,6 +215,10 @@ export class Parser extends DiagnosticEmitter {
   dependees: Map<string, Dependee> = new Map();
   /** Normalized paths whose `@rest` runtime import has already been injected. */
   restImportedSources: Set<string> = new Set();
+  /** Monotonic id handed to each `@ratelimit` route so the edge can key one
+   *  shared limiter per route. Program-wide (one Parser per program), assigned
+   *  deterministically in route declaration order. */
+  ratelimitRouteCounter: i32 = 0;
   /** An array of parsed sources. */
   sources: Source[];
   /** Current overridden module name. */
@@ -2232,6 +2236,11 @@ export class Parser extends DiagnosticEmitter {
     let s = "if(__req.method==" + methodValue.toString() + "){";
     s += "const __ctx=__toilMatch(" + JSON.stringify(fullPath) + ",__req);";
     s += "if(__ctx!=null){";
+    // `@ratelimit(strategy, limit, window)`: reject (429 + Retry-After) before
+    // any other work, so it shields the auth/body path from a flood and rate-
+    // limits unauthenticated brute-force too. Keyed host-side by the unspoofable
+    // peer IP. Runs before the `@auth` guard.
+    s += this.ratelimitGuardOf(method);
     // `@auth` (on the route or the controller): reject before the handler runs
     // when there is no valid session. `AuthService` is an ambient global; it
     // reads the current request's session cookie. The handler then calls
@@ -2286,6 +2295,54 @@ export class Parser extends DiagnosticEmitter {
         parts += a.range.toString();
       }
       return ".cache(" + parts + ")";
+    }
+    return "";
+  }
+
+  /**
+   * The rate-limit guard to prepend to a route block when the handler carries
+   * `@ratelimit(strategy, limit, window)`, else `""`. `strategy` is a member of
+   * the `RateLimit` enum (`FixedWindow`/`SlidingWindow`/`TokenBucket`) or a bare
+   * integer tag; `limit` and `window` must be integer literals (mirrors
+   * `@cache`). Lowers to a single ambient `RateLimitService.guard(...)` call that
+   * returns a `429` `Response` when over the limit, or `null` to proceed. A
+   * malformed decorator yields `""` (no guard) rather than miscompiling.
+   */
+  private ratelimitGuardOf(method: MethodDeclaration): string {
+    let decos = method.decorators;
+    if (decos == null) return "";
+    for (let i = 0, k = decos.length; i < k; ++i) {
+      if (decos[i].decoratorKind != DecoratorKind.Ratelimit) continue;
+      let args = decos[i].args;
+      if (args == null || args.length < 3) return ""; // need (strategy, limit, window)
+      let tag = this.ratelimitStrategyTag(args[0]);
+      if (tag.length == 0) return ""; // unrecognized strategy -> no guard
+      let limit = args[1];
+      let window = args[2];
+      if (!(limit instanceof IntegerLiteralExpression) || !(window instanceof IntegerLiteralExpression)) {
+        return ""; // non-literal limit/window -> fail safe (no guard)
+      }
+      let routeId = this.ratelimitRouteCounter++;
+      return "{const __rl=RateLimitService.guard(" + routeId.toString() + "," + tag + "," +
+        limit.range.toString() + "," + window.range.toString() + ");if(__rl!=null){return __rl;}}";
+    }
+    return "";
+  }
+
+  /**
+   * The integer strategy tag to emit for a `@ratelimit` strategy argument:
+   * `RateLimit.SlidingWindow` -> "1", `RateLimit.TokenBucket` -> "2", any other
+   * member (incl. `FixedWindow`) -> "0", an explicit integer literal passes
+   * through verbatim (the host clamps an unknown tag to FixedWindow). Returns
+   * "" when the argument is neither, so the caller emits no guard.
+   */
+  private ratelimitStrategyTag(arg: Expression): string {
+    if (arg instanceof IntegerLiteralExpression) return arg.range.toString();
+    if (arg instanceof PropertyAccessExpression) {
+      let p = (<PropertyAccessExpression>arg).property.text;
+      if (p == "SlidingWindow") return "1";
+      if (p == "TokenBucket") return "2";
+      return "0"; // FixedWindow or any unknown member -> cheapest always-on default
     }
     return "";
   }

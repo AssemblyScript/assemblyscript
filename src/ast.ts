@@ -1049,7 +1049,8 @@ export enum DecoratorKind {
   Options,
   Cache,
   Auth,
-  User
+  User,
+  Ratelimit
 }
 
 export namespace DecoratorKind {
@@ -1118,6 +1119,7 @@ export namespace DecoratorKind {
           break;
         }
         case CharCode.r: {
+          if (nameStr == "ratelimit") return DecoratorKind.Ratelimit;
           if (nameStr == "remote") return DecoratorKind.Remote;
           if (nameStr == "rest") return DecoratorKind.Rest;
           if (nameStr == "route") return DecoratorKind.Route;
