@@ -33,6 +33,13 @@ const DATA_MEMBERS = new Set([
   'dataId',
 ]);
 
+/**
+ * Decorators whose class carries the compiler-injected `@data` binary codec.
+ * `@user` is `@data` plus the auth-user registration (it also types
+ * `AuthService.getUser()`); both get the same codec members.
+ */
+const CODEC_DECORATORS = new Set(['data', 'user']);
+
 /** Toil-native decorators whose presence means the compiler uses the declaration. */
 const TOIL_DECORATORS = new Set([
   'data',
@@ -48,6 +55,10 @@ const TOIL_DECORATORS = new Set([
   'head',
   'options',
   'main',
+  'user',
+  'auth',
+  'cache',
+  'ratelimit',
   'global',
   'inline',
   'external',
@@ -90,7 +101,7 @@ function init(modules) {
   function declsAreDataClass(declarations) {
     return (
       !!declarations &&
-      declarations.some((d) => ts.isClassDeclaration(d) && declHasDecorator(d, 'data'))
+      declarations.some((d) => ts.isClassDeclaration(d) && declHasDecorator(d, CODEC_DECORATORS))
     );
   }
 
@@ -114,28 +125,59 @@ function init(modules) {
     );
   }
 
+  /** True when the parsed file is an ES module (has a top-level import/export), so
+   *  a global augmentation must be wrapped in `declare global { ... }`. */
+  function isModuleFile(sf) {
+    const modsOf = (n) =>
+      (ts.getModifiers && ts.canHaveModifiers && ts.canHaveModifiers(n)
+        ? ts.getModifiers(n)
+        : n.modifiers) || [];
+    return sf.statements.some(
+      (s) =>
+        ts.isImportDeclaration(s) ||
+        ts.isImportEqualsDeclaration(s) ||
+        ts.isExportDeclaration(s) ||
+        ts.isExportAssignment(s) ||
+        modsOf(s).some((m) => m.kind === ts.SyntaxKind.ExportKeyword),
+    );
+  }
+
   /**
-   * Ambient declarations to append so the editor types each `@data` class's injected
-   * codec members. Returns "" when the file declares no `@data` class. Uses only
+   * Ambient declarations to append so the editor types each `@data`/`@user` class's
+   * injected codec members, plus the project-wide type of `AuthService.getUser()`
+   * (the single `@user` class). Returns "" when the file declares neither. Uses only
    * editor-visible globals (`Uint8Array`, `JSON`, `u32`), so the appended block is
    * itself error-free; any diagnostics there are filtered anyway.
    */
   function dataAugmentation(text) {
-    if (text.indexOf('@data') < 0) return '';
+    if (text.indexOf('@data') < 0 && text.indexOf('@user') < 0) return '';
     let sf;
     try {
       sf = ts.createSourceFile('__toil_aug__.ts', text, ts.ScriptTarget.Latest, true);
     } catch {
       return '';
     }
+    const moduleScoped = isModuleFile(sf);
     let out = '';
     sf.forEachChild((node) => {
-      if (ts.isClassDeclaration(node) && node.name && declHasDecorator(node, 'data')) {
-        const n = node.name.text;
+      if (!ts.isClassDeclaration(node) || !node.name) return;
+      const isUser = declHasDecorator(node, 'user');
+      if (!declHasDecorator(node, 'data') && !isUser) return;
+      const n = node.name.text;
+      // Both `@data` and `@user` classes get the compiler-injected binary codec.
+      out +=
+        `\n// toilscript: editor types for the compiler-injected ${isUser ? '@user' : '@data'} ${n} codec\n` +
+        `interface ${n} { encode(): Uint8Array; toJSON(): JSON; }\n` +
+        `declare namespace ${n} { function decode(buf: Uint8Array): ${n}; function fromJSON(v: JSON): ${n}; function dataId(): u32; }\n`;
+      // The single `@user` class is also the type of `AuthService.getUser()`
+      // everywhere: merge it into the global `__ToilAuthUser` interface that the
+      // generated env d.ts returns from `getUser()`. `declare global` when the
+      // file is a module (else a bare interface, already global in a script).
+      if (isUser) {
+        const merge = `interface __ToilAuthUser extends ${n} {}`;
         out +=
-          `\n// toilscript: editor types for the compiler-injected @data ${n} codec\n` +
-          `interface ${n} { encode(): Uint8Array; toJSON(): JSON; }\n` +
-          `declare namespace ${n} { function decode(buf: Uint8Array): ${n}; function fromJSON(v: JSON): ${n}; function dataId(): u32; }\n`;
+          `// toilscript: editor type for AuthService.getUser() (the @user ${n})\n` +
+          (moduleScoped ? `declare global { ${merge} }\n` : `${merge}\n`);
       }
     });
     return out;
