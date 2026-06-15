@@ -67,6 +67,21 @@ declare function patch(path: string): ToilRouteDecorator;
 declare function head(path: string): ToilRouteDecorator;
 declare function options(path: string): ToilRouteDecorator;
 
+// --- route response/security decorators, handled natively by the compiler ---
+
+/** Cache a route's response: `@cache(edgeMinutes, browserSeconds?, privateScope?, allowAuth?)`. */
+declare function cache(edgeMinutes: i32, browserSeconds?: i32, privateScope?: bool, allowAuth?: bool): ToilRouteDecorator;
+
+/** Rate-limit a route: `@ratelimit(strategy, limit, window)` (strategy = a `RateLimit` member). */
+declare function ratelimit(strategy: i32, limit: i32, window: i32): ToilRouteDecorator;
+
+/** Require a valid session for a `@rest` class or route method (`@auth`). 401 otherwise. */
+declare function auth(target: Function): void;
+declare function auth(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void;
+
+/** Declare the authenticated-user type (`@user class User { ... }`); enables `AuthService.getUser()`. */
+declare function user(target: Function): void;
+
 // Big integers, native globals implemented in std/assembly/bignum. The
 // arithmetic/bitwise/comparison operators
 // (+ - * / % & | ^ << >> == != < > <= >=) are operator overloads resolved by
