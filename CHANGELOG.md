@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.1.23] - 2026-06-15
+
+- feat(parser): @ratelimit(strategy, limit, window) route decorator ([#8](https://github.com/dacely-cloud/toilscript/pull/8))
+
+
 ## [v0.1.22] - 2026-06-13
 
 - No changes
