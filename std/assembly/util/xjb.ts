@@ -148,7 +148,6 @@ export const ZEROS: u64 = 0x3030303030303030;
 // of this module. Read as u64 for the small-power integer rescale; only 1e1..1e15
 // (well within the exact range) are ever indexed.
 
-// to_bcd8 result.
 let gBcd: u64 = 0;
 let gBcdLen: i32 = 0;
 
@@ -246,7 +245,6 @@ export let gDigNum: i32 = 0;
   toDigits64Swar(value);
 }
 
-// to_decimal_result
 export let gSig: i64 = 0;
 export let gExp: i32 = 0;
 export let gLastDigit: i32 = 0;

@@ -5,10 +5,9 @@ import { CharCode } from "./string";
 import { dtoa_buffered as dtoa_buffered_double } from "./xjb";
 import { ftoa_buffered as ftoa_buffered_single } from "./xjb";
 
+// >= 32 code units (64 bytes) per value: xjb writers can overshoot by one block.
 // @ts-ignore: decorator
 @inline
-// xjb-as buffered writers may overshoot the logical end by up to one 8-char
-// block, so reserve >= 32 code units (>= 64 bytes) of headroom per value.
 export const MAX_DOUBLE_LENGTH = 32;
 
 /*
@@ -411,17 +410,13 @@ export function itoa64(value: i64, radix: i32): String {
 }
 
 
-// Scratch buffer for the String path. Sized well above any rendered length so
-// xjb's in-register block stores (which can overshoot the logical end) stay
-// contained, matching xjb's own internal 128-byte SCRATCH.
+// Scratch buffer for the String path (128 bytes: matches xjb's SCRATCH headroom).
 // @ts-ignore: decorator
 @lazy @inline const dtoa_buf = memory.data(128);
 
-// xjb produces ECMAScript-exact output. AssemblyScript renders integer-valued
-// floats with a trailing ".0" (e.g. "1" -> "1.0", "0" -> "0.0"); fractional
-// ("." present) and exponential ("e" present) forms, plus NaN/Infinity (which
-// contain letters), are left untouched. So append ".0" iff the rendered value
-// is a bare "[-]?digits" integer.
+// xjb emits ECMAScript-exact output; AssemblyScript appends ".0" to bare-integer
+// results ("1" -> "1.0", "0" -> "0.0"). Fraction/exponent forms and NaN/Infinity
+// already contain a non-digit, so they're left untouched.
 // @ts-ignore: decorator
 @inline
 function dtoa_dotZero(buffer: usize, len: u32): u32 {
