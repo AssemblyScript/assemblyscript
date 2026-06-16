@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.1.27] - 2026-06-16
+
+### Other Changes
+
+- feat(types): type @ratelimit strategy as the RateLimit enum ([#10](https://github.com/dacely-cloud/toilscript/pull/10)) by @BlobMaster41
+
+
+
+
 ## [v0.1.26] - 2026-06-16
 
 ### Other Changes
