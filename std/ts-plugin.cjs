@@ -125,6 +125,18 @@ function init(modules) {
     );
   }
 
+  /** True when a declaration carries an `export` modifier. The appended codec
+   *  augmentation must match the class's export-ness, else merging the class with
+   *  the synthesized `interface`/`namespace` trips TS2395 ("must be all exported
+   *  or all local"). */
+  function hasExportModifier(node) {
+    const mods =
+      (ts.getModifiers && ts.canHaveModifiers && ts.canHaveModifiers(node)
+        ? ts.getModifiers(node)
+        : node.modifiers) || [];
+    return mods.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
+  }
+
   /** True when the parsed file is an ES module (has a top-level import/export), so
    *  a global augmentation must be wrapped in `declare global { ... }`. */
   function isModuleFile(sf) {
@@ -164,11 +176,14 @@ function init(modules) {
       const isUser = declHasDecorator(node, 'user');
       if (!declHasDecorator(node, 'data') && !isUser) return;
       const n = node.name.text;
+      // Match the class's export-ness so the class/interface/namespace merge is all
+      // exported or all local (an exported class + local augmentation -> TS2395).
+      const exp = hasExportModifier(node) ? 'export ' : '';
       // Both `@data` and `@user` classes get the compiler-injected binary codec.
       out +=
         `\n// toilscript: editor types for the compiler-injected ${isUser ? '@user' : '@data'} ${n} codec\n` +
-        `interface ${n} { encode(): Uint8Array; toJSON(): JSON; }\n` +
-        `declare namespace ${n} { function decode(buf: Uint8Array): ${n}; function fromJSON(v: JSON): ${n}; function dataId(): u32; }\n`;
+        `${exp}interface ${n} { encode(): Uint8Array; toJSON(): JSON; }\n` +
+        `${exp}declare namespace ${n} { function decode(buf: Uint8Array): ${n}; function fromJSON(v: JSON): ${n}; function dataId(): u32; }\n`;
       // The single `@user` class is also the type of `AuthService.getUser()`
       // everywhere: merge it into the global `__ToilAuthUser` interface that the
       // generated env d.ts returns from `getUser()`. `declare global` when the
