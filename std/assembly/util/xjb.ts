@@ -1,9 +1,3 @@
-// xjb64 number -> string engine for the std lib: the f64 (dtoa) and f32 (ftoa)
-// shortest-decimal cores plus their shared 128-bit math, compact pow10 anchor
-// tables (Dougall Johnson reconstruction), SIMD/SWAR digit kernels, and UTF-16
-// writers, all folded into one module. number.ts calls dtoa_buffered /
-// ftoa_buffered. The small-power f64 table is shared with util/string.ts, and
-// the two-digit DIGITS table with util/number.ts.
 import { POWERS10 } from "./string";
 import { DIGITS } from "./number";
 
@@ -143,10 +137,6 @@ const DIV10_EXP = 10;
 const DIV10_SIG: u64 = (1 << DIV10_EXP) / 10 + 1;
 const NEG10: u64 = (1 << 8) - 10;
 export const ZEROS: u64 = 0x3030303030303030;
-
-// POWERS10 (f64, 1e0..1e22) is shared with util/string.ts and imported at the top
-// of this module. Read as u64 for the small-power integer rescale; only 1e1..1e15
-// (well within the exact range) are ever indexed.
 
 let gBcd: u64 = 0;
 let gBcdLen: i32 = 0;
@@ -404,11 +394,6 @@ export const MAX_FIXED_DEC_EXP = 20;
   return buf + 2;
 }
 
-// Scratch buffer for the allocating dtoa/ftoa path: format UTF-16 here, then
-// copy the exact byte length into a freshly allocated String. Max output is
-// ~24 code units (48 bytes); the block writers can overshoot the logical end by
-// up to one 8-char block plus a 16-byte SIMD store, so 128 bytes is ample. Only
-// the logical length is copied out - the overshoot stays in SCRATCH.
 export const SCRATCH = memory.data(128);
 
 // @ts-expect-error: decorator
@@ -417,10 +402,6 @@ export const SCRATCH = memory.data(128);
   memory.copy(changetype<usize>(str), SCRATCH, byteLen);
   return str;
 }
-
-// ===========================================================================
-// f64 decimal core (folded in from dtoa.ts). Uses the shared helpers above.
-// ===========================================================================
 
 // @ts-expect-error: decorator
 @inline function setDecimalResult(integral: u64, one: u64, decExp: i32): void {
@@ -657,12 +638,6 @@ export function dtoa(value: f64): string {
 export function dtoa_buffered(buffer: usize, value: f64): u32 {
   return <u32>((formatDouble(buffer, value) - buffer) >> 1);
 }
-
-// ===========================================================================
-// f32 decimal core (folded in from ftoa.ts). Self-contained xjb hi-only-multiply
-// path; reuses the shared BCD/writer/scratch helpers above, with its two
-// width-specific writers renamed writeFixedFloat / writeExpNotationFloat.
-// ===========================================================================
 
 // hi-only significand of 10**i, 77 entries (index = 45 + k, k in [-45,31]) with
 // the xjb64 +1 low-limb rounding folded in. One hi-only multiply covers both the
