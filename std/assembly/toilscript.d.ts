@@ -72,8 +72,11 @@ declare function options(path: string): ToilRouteDecorator;
 /** Cache a route's response: `@cache(edgeMinutes, browserSeconds?, privateScope?, allowAuth?)`. */
 declare function cache(edgeMinutes: i32, browserSeconds?: i32, privateScope?: bool, allowAuth?: bool): ToilRouteDecorator;
 
-/** Rate-limit a route: `@ratelimit(strategy, limit, window)` (strategy = a `RateLimit` member). */
-declare function ratelimit(strategy: i32, limit: i32, window: i32): ToilRouteDecorator;
+/** Rate-limiting strategy for `@ratelimit`. Values match the runtime `RateLimit` enum. */
+declare enum RateLimit { FixedWindow, SlidingWindow, TokenBucket }
+
+/** Rate-limit a route: `@ratelimit(strategy, limit, window)`. */
+declare function ratelimit(strategy: RateLimit, limit: i32, window: i32): ToilRouteDecorator;
 
 /** Require a valid session for a `@rest` class or route method (`@auth`). 401 otherwise. */
 declare function auth(target: Function): void;
