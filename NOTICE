@@ -95,11 +95,10 @@ the following terms:
 * xjb-as: https://github.com/JairusSW/xjb-as
 
   The ECMAScript-compatible f64/f32 -> string (dtoa/ftoa) implementation in
-  std/assembly/util/xjb/ is vendored from xjb-as.
+  std/assembly/util/xjb.ts is vendored from xjb-as.
 
   Copyright (c) Jairus Tanaka
-  Licensed under (MIT AND Apache-2.0)
-  The MIT License (https://opensource.org/licenses/MIT)
+  Apache License, Version 2.0 (https://opensource.org/licenses/Apache-2.0)
 
   xjb-as is itself derived from xjb (https://github.com/xjb714/xjb) and the
   Zmij shortest-decimal core (https://github.com/vitaut/zmij).
