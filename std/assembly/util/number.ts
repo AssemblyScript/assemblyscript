@@ -2,8 +2,8 @@
 
 import { idof } from "../builtins";
 import { CharCode } from "./string";
-import { dtoa_buffered as dtoa_buffered_double } from "./xjb/dtoa";
-import { ftoa_buffered as ftoa_buffered_single } from "./xjb/ftoa";
+import { dtoa_buffered as dtoa_buffered_double } from "./xjb";
+import { ftoa_buffered as ftoa_buffered_single } from "./xjb";
 
 // @ts-ignore: decorator
 @inline
