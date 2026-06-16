@@ -26,7 +26,7 @@ export const MAX_DOUBLE_LENGTH = 32;
   "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"
 */
 // @ts-ignore: decorator
-@lazy @inline const DIGITS = memory.data<u32>([
+@lazy @inline export const DIGITS = memory.data<u32>([
   0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030,
   0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
   0x00300031, 0x00310031, 0x00320031, 0x00330031, 0x00340031,

@@ -25,68 +25,44 @@
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/native/ASC_FEATURE_SIMD i32 (i32.const 0))
- (global $~lib/util/xjb/xjb/HAS_SIMD i32 (i32.const 0))
- (global $~lib/util/xjb/xjb/gPow10Hi (mut i64) (i64.const 0))
- (global $~lib/util/xjb/xjb/gPow10Lo (mut i64) (i64.const 0))
- (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/util/xjb/xjb/TABLE_COMPRESSED i32 (i32.const 0))
- (global $~lib/util/xjb/xjb/DIV10K_EXP i32 (i32.const 40))
- (global $~lib/util/xjb/xjb/DIV10K_SIG i64 (i64.const 109951163))
- (global $~lib/util/xjb/xjb/NEG10K i64 (i64.const 4294957296))
- (global $~lib/util/xjb/xjb/DIV100_EXP i32 (i32.const 19))
- (global $~lib/util/xjb/xjb/DIV100_SIG i64 (i64.const 5243))
- (global $~lib/util/xjb/xjb/NEG100 i64 (i64.const 65436))
- (global $~lib/util/xjb/xjb/DIV10_EXP i32 (i32.const 10))
- (global $~lib/util/xjb/xjb/DIV10_SIG i64 (i64.const 103))
- (global $~lib/util/xjb/xjb/NEG10 i64 (i64.const 246))
- (global $~lib/util/xjb/xjb/ZEROS i64 (i64.const 3472328296227680304))
- (global $~lib/util/xjb/xjb/POW10_SMALL i32 (i32.const 8))
- (global $~lib/util/xjb/xjb/DIGIT_PAIRS i32 (i32.const 136))
- (global $~lib/util/xjb/xjb/gBcd (mut i64) (i64.const 0))
- (global $~lib/util/xjb/xjb/gBcdLen (mut i32) (i32.const 0))
- (global $~lib/util/xjb/xjb/gDigHi (mut i64) (i64.const 0))
- (global $~lib/util/xjb/xjb/gDigLo (mut i64) (i64.const 0))
- (global $~lib/util/xjb/xjb/gDigNum (mut i32) (i32.const 0))
- (global $~lib/util/xjb/xjb/gSig (mut i64) (i64.const 0))
- (global $~lib/util/xjb/xjb/gExp (mut i32) (i32.const 0))
- (global $~lib/util/xjb/xjb/gLastDigit (mut i32) (i32.const 0))
- (global $~lib/util/xjb/xjb/gHasLastDigit (mut i32) (i32.const 0))
- (global $~lib/util/xjb/xjb/DOUBLE_EXP_OFFSET i32 (i32.const 1075))
- (global $~lib/util/xjb/xjb/EXTRA_SHIFT i32 (i32.const 6))
- (global $~lib/util/xjb/xjb/BIASED_HALF i64 (i64.const -9223372036854775802))
- (global $~lib/util/xjb/xjb/DOUBLE_MAX_DIGITS10 i32 (i32.const 17))
- (global $~lib/util/xjb/xjb/MIN_FIXED_DEC_EXP i32 (i32.const -6))
- (global $~lib/util/xjb/xjb/MAX_FIXED_DEC_EXP i32 (i32.const 20))
- (global $~lib/util/xjb/xjb/SCRATCH i32 (i32.const 336))
- (global $~lib/util/xjb/ftoa/HAS_SIMD i32 (i32.const 0))
- (global $~lib/util/xjb/ftoa/POW10_FLOAT_HI i32 (i32.const 464))
- (global $~lib/util/xjb/ftoa/H37 i32 (i32.const 1080))
- (global $~lib/util/xjb/ftoa/DIV10K_EXP i32 (i32.const 40))
- (global $~lib/util/xjb/ftoa/DIV10K_SIG i64 (i64.const 109951163))
- (global $~lib/util/xjb/ftoa/NEG10K i64 (i64.const 4294957296))
- (global $~lib/util/xjb/ftoa/DIV100_EXP i32 (i32.const 19))
- (global $~lib/util/xjb/ftoa/DIV100_SIG i64 (i64.const 5243))
- (global $~lib/util/xjb/ftoa/NEG100 i64 (i64.const 65436))
- (global $~lib/util/xjb/ftoa/DIV10_EXP i32 (i32.const 10))
- (global $~lib/util/xjb/ftoa/DIV10_SIG i64 (i64.const 103))
- (global $~lib/util/xjb/ftoa/NEG10 i64 (i64.const 246))
- (global $~lib/util/xjb/ftoa/ZEROS i64 (i64.const 3472328296227680304))
- (global $~lib/util/xjb/ftoa/DIGIT_PAIRS i32 (i32.const 1336))
- (global $~lib/util/xjb/ftoa/gBcd (mut i64) (i64.const 0))
- (global $~lib/util/xjb/ftoa/gBcdLen (mut i32) (i32.const 0))
- (global $~lib/util/xjb/ftoa/gDigHi (mut i64) (i64.const 0))
- (global $~lib/util/xjb/ftoa/gDigNum (mut i32) (i32.const 0))
- (global $~lib/util/xjb/ftoa/gSig (mut i64) (i64.const 0))
- (global $~lib/util/xjb/ftoa/gExp (mut i32) (i32.const 0))
- (global $~lib/util/xjb/ftoa/gLastDigit (mut i32) (i32.const 0))
- (global $~lib/util/xjb/ftoa/gHasLastDigit (mut i32) (i32.const 0))
- (global $~lib/util/xjb/ftoa/FLOAT_EXP_OFFSET i32 (i32.const 150))
- (global $~lib/util/xjb/ftoa/FLOAT_BIT i32 (i32.const 36))
- (global $~lib/util/xjb/ftoa/FLOAT_ONE_BIAS i64 (i64.const 17179869177))
- (global $~lib/util/xjb/ftoa/MIN_FIXED_DEC_EXP i32 (i32.const -6))
- (global $~lib/util/xjb/ftoa/MAX_FIXED_DEC_EXP i32 (i32.const 20))
- (global $~lib/util/xjb/ftoa/FLOAT_MAX_DIGITS10 i32 (i32.const 9))
- (global $~lib/util/xjb/ftoa/SCRATCH i32 (i32.const 1536))
+ (global $~lib/util/xjb/HAS_SIMD i32 (i32.const 0))
+ (global $~lib/util/xjb/gPow10Hi (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/gPow10Lo (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/POW10_MINOR i32 (i32.const 8))
+ (global $~lib/util/xjb/POW10_MAJOR i32 (i32.const 232))
+ (global $~lib/util/xjb/POW10_FIXUPS i32 (i32.const 600))
+ (global $~lib/util/xjb/DIV10K_EXP i32 (i32.const 40))
+ (global $~lib/util/xjb/DIV10K_SIG i64 (i64.const 109951163))
+ (global $~lib/util/xjb/NEG10K i64 (i64.const 4294957296))
+ (global $~lib/util/xjb/DIV100_EXP i32 (i32.const 19))
+ (global $~lib/util/xjb/DIV100_SIG i64 (i64.const 5243))
+ (global $~lib/util/xjb/NEG100 i64 (i64.const 65436))
+ (global $~lib/util/xjb/DIV10_EXP i32 (i32.const 10))
+ (global $~lib/util/xjb/DIV10_SIG i64 (i64.const 103))
+ (global $~lib/util/xjb/NEG10 i64 (i64.const 246))
+ (global $~lib/util/xjb/ZEROS i64 (i64.const 3472328296227680304))
+ (global $~lib/util/xjb/gBcd (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/gBcdLen (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/gDigHi (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/gDigLo (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/gDigNum (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/gSig (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/gExp (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/gLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/gHasLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/DOUBLE_EXP_OFFSET i32 (i32.const 1075))
+ (global $~lib/util/xjb/EXTRA_SHIFT i32 (i32.const 6))
+ (global $~lib/util/xjb/BIASED_HALF i64 (i64.const -9223372036854775802))
+ (global $~lib/util/xjb/DOUBLE_MAX_DIGITS10 i32 (i32.const 17))
+ (global $~lib/util/xjb/MIN_FIXED_DEC_EXP i32 (i32.const -6))
+ (global $~lib/util/xjb/MAX_FIXED_DEC_EXP i32 (i32.const 20))
+ (global $~lib/util/xjb/SCRATCH i32 (i32.const 688))
+ (global $~lib/util/xjb/POW10_FLOAT_HI i32 (i32.const 816))
+ (global $~lib/util/xjb/H37 i32 (i32.const 1432))
+ (global $~lib/util/xjb/FLOAT_EXP_OFFSET i32 (i32.const 150))
+ (global $~lib/util/xjb/FLOAT_BIT i32 (i32.const 36))
+ (global $~lib/util/xjb/FLOAT_ONE_BIAS i64 (i64.const 17179869177))
+ (global $~lib/util/xjb/FLOAT_MAX_DIGITS10 i32 (i32.const 9))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -100,45 +76,45 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $resolve-elementaccess/arr (mut i32) (i32.const 0))
+ (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $resolve-elementaccess/buf (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 4448))
- (global $~lib/memory/__data_end i32 (i32.const 4480))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 37248))
- (global $~lib/memory/__heap_base i32 (i32.const 37248))
+ (global $~lib/rt/__rtti_base i32 (i32.const 4464))
+ (global $~lib/memory/__data_end i32 (i32.const 4496))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 37264))
+ (global $~lib/memory/__heap_base i32 (i32.const 37264))
  (memory $0 1)
- (data $0 (i32.const 8) "\01\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00d\00\00\00\00\00\00\00\e8\03\00\00\00\00\00\00\10\'\00\00\00\00\00\00\a0\86\01\00\00\00\00\00@B\0f\00\00\00\00\00\80\96\98\00\00\00\00\00\00\e1\f5\05\00\00\00\00\00\ca\9a;\00\00\00\00\00\e4\0bT\02\00\00\00\00\e8vH\17\00\00\00\00\10\a5\d4\e8\00\00\00\00\a0rN\18\t\00\00\00@z\10\f3Z\00\00\00\80\c6\a4~\8d\03\00")
- (data $1 (i32.const 136) "00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899")
- (data $2 (i32.const 336) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $3 (i32.const 464) "p\\\ea{\ce2~\8f\1a\c7C\c6\b0\b7\96\e5\ae\05\03\05\'\c6\ab\b7\bf7\cf\d0\b8\d1\ef\92\fe%\e5\1a\8eO\19\eb2\ebP\e2\a4?\14\bc\f5\88\r\b5P\99v\96!\dbH\bb\1a\c2\bd\f0\b4\15\07\c9{\ce\97\c0]\11l:\96\0b\13\9a\c7\1b\e0\c3V\df\84\f6\06\e3L6\12\197\c5\9e\b5p+\a8\ad\c5\9d\97\"\81E@|o\fc\dfNg\04\cd\c9\f2\c9\e6\0b\b96\d7\07\8f\a1\85\t\94\f8x9?\81:\0f \f4\'\8f\cb\ce\c8\a5\19\90\b9\a5o\a5\a0\84\14@aQY\84\00\a1\ed\cc\ce\1b\c2\d3\00\b4W\n?\16h\a9\00\90\acn2x\86\87\00\80z\17\b7&\d7\d8\00\00b\ac\c5\ebx\ad\00\00\e8\89\04#\c7\8a\00\00@v:k\0b\de\00\00\00\c5.\bc\a2\b1\00\00\00\04\bf\c9\1b\8e\00\00\00\a01\a9_\e3\00\00\00\80\f4 \e6\b5\00\00\00\00*\e7\84\91\00\00\00\00\10\a5\d4\e8\00\00\00\00@\b7C\ba\00\00\00\00\00\f9\02\95\00\00\00\00\00(k\ee\00\00\00\00\00 \bc\be\00\00\00\00\00\80\96\98\00\00\00\00\00\00$\f4\00\00\00\00\00\00P\c3\00\00\00\00\00\00@\9c\00\00\00\00\00\00\00\fa\00\00\00\00\00\00\00\c8\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00\80\cd\cc\cc\cc\cc\cc\cc\cc\0b\d7\a3p=\n\d7\a3<\dfO\8d\97n\12\83,e\19\e2X\17\b7\d1$\84G\1bG\ac\c5\a7\b6il\af\05\bd7\86\bdBz\e5\d5\94\bf\d6\fd\cea\84\11w\cc\ab\98\a5\b46A_p\89\bf\d5\ed\bd\ce\fe\e6\db\ff\aa$\cb\0b\ff\eb\af\cc\88Po\t\cc\bc\8c\14\0e\b4KB\13.\e1\10\d8\\\t5\dc$\b4\da\ac\b0:\f7|\1d\90\\\e1M\c4\be\94\95\e6J\b4\a462\aaw\b8\08]\1d\92\8e\ee\92\93\a6a\95\b6}J\1e\ec\eb\1a\11\92d\08\e5\bc\ef{\datP\a0\1d\97\b2,\f7\ba\80\00\c9\f1(\8a\92\95\00\9am\c1S;uD\cd\14\be\9aR\c5\ee\d3\ae\87\96\f7\db\9dXv%\06\12\c6I~\e0\91\b7\d1t\9e\0e\ca\00\83\f2\b5\87\fd?;\9a5\f5\f7\d2\ca2\fc\14^\f7_B\a2\f5\fcCK,\b3\ce\81\bb\949E\ad\1e\b1\cf")
- (data $4 (i32.const 1080) "\"\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#")
- (data $5 (i32.const 1336) "00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899")
- (data $6 (i32.const 1536) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $7 (i32.const 1676) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
- (data $8 (i32.const 1724) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
- (data $9 (i32.const 1788) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data $10 (i32.const 1852) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $11 (i32.const 1920) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $12 (i32.const 1952) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $13 (i32.const 1980) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
- (data $14 (i32.const 2044) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data $15 (i32.const 2096) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $16 (i32.const 2124) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $17 (i32.const 2188) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data $18 (i32.const 2256) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $19 (i32.const 2396) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\001\00.\000\00\00\00\00\00\00\00")
- (data $20 (i32.const 2428) "L\00\00\00\00\00\00\00\00\00\00\00\02\00\00\000\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00e\00l\00e\00m\00e\00n\00t\00a\00c\00c\00e\00s\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $21 (i32.const 2508) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\002\00.\000\00\00\00\00\00\00\00")
- (data $22 (i32.const 2540) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\08\00\00\001\001\00.\000\00\00\00\00\00")
- (data $23 (i32.const 2572) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006\00\00\00\00\00\00\00\00\00")
- (data $24 (i32.const 2700) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
- (data $25 (i32.const 2764) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\000\00\00\00\00\00\00\00\00\00\00\00")
- (data $26 (i32.const 2796) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
- (data $27 (i32.const 3196) "\1c\04\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\04\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\000\00a\000\00b\000\00c\000\00d\000\00e\000\00f\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\001\00a\001\00b\001\00c\001\00d\001\00e\001\00f\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\002\00a\002\00b\002\00c\002\00d\002\00e\002\00f\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\003\00a\003\00b\003\00c\003\00d\003\00e\003\00f\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\004\00a\004\00b\004\00c\004\00d\004\00e\004\00f\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\005\00a\005\00b\005\00c\005\00d\005\00e\005\00f\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\006\00a\006\00b\006\00c\006\00d\006\00e\006\00f\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\007\00a\007\00b\007\00c\007\00d\007\00e\007\00f\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\008\00a\008\00b\008\00c\008\00d\008\00e\008\00f\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\009\00a\009\00b\009\00c\009\00d\009\00e\009\00f\00a\000\00a\001\00a\002\00a\003\00a\004\00a\005\00a\006\00a\007\00a\008\00a\009\00a\00a\00a\00b\00a\00c\00a\00d\00a\00e\00a\00f\00b\000\00b\001\00b\002\00b\003\00b\004\00b\005\00b\006\00b\007\00b\008\00b\009\00b\00a\00b\00b\00b\00c\00b\00d\00b\00e\00b\00f\00c\000\00c\001\00c\002\00c\003\00c\004\00c\005\00c\006\00c\007\00c\008\00c\009\00c\00a\00c\00b\00c\00c\00c\00d\00c\00e\00c\00f\00d\000\00d\001\00d\002\00d\003\00d\004\00d\005\00d\006\00d\007\00d\008\00d\009\00d\00a\00d\00b\00d\00c\00d\00d\00d\00e\00d\00f\00e\000\00e\001\00e\002\00e\003\00e\004\00e\005\00e\006\00e\007\00e\008\00e\009\00e\00a\00e\00b\00e\00c\00e\00d\00e\00e\00e\00f\00f\000\00f\001\00f\002\00f\003\00f\004\00f\005\00f\006\00f\007\00f\008\00f\009\00f\00a\00f\00b\00f\00c\00f\00d\00f\00e\00f\00f\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $28 (i32.const 4252) "\\\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00\00\00\00\00")
- (data $29 (i32.const 4348) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\001\00\00\00\00\00\00\00\00\00\00\00")
- (data $30 (i32.const 4380) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\002\00\00\00\00\00\00\00\00\00\00\00")
- (data $31 (i32.const 4412) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\04\00\00\001\001\00\00\00\00\00\00\00\00\00")
- (data $32 (i32.const 4448) "\07\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\01\19\00\00A\00\00\00A\00\00\00")
+ (data $0 (i32.const 8) "\00\00\00\00\00\00\00\80\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00\c8\00\00\00\00\00\00\00\fa\00\00\00\00\00\00@\9c\00\00\00\00\00\00P\c3\00\00\00\00\00\00$\f4\00\00\00\00\00\80\96\98\00\00\00\00\00 \bc\be\00\00\00\00\00(k\ee\00\00\00\00\00\f9\02\95\00\00\00\00@\b7C\ba\00\00\00\00\10\a5\d4\e8\00\00\00\00*\e7\84\91\00\00\00\80\f4 \e6\b5\00\00\00\a01\a9_\e3\00\00\00\04\bf\c9\1b\8e\00\00\00\c5.\bc\a2\b1\00\00@v:k\0b\de\00\00\e8\89\04#\c7\8a\00\00b\ac\c5\ebx\ad\00\80z\17\b7&\d7\d8\00\90\acn2x\86\87\00\b4W\n?\16h\a9\00\a1\ed\cc\ce\1b\c2\d3\a0\84\14@aQY\84\c8\a5\19\90\b9\a5o\a5:\0f \f4\'\8f\cb\ce")
+ (data $1 (i32.const 232) "o\1b\8e(\10T\8e\af\daM\e4^\ae\f0\ec\07J\fb\9f\f4\98\'D\b1\9dwA\df\cf\11\cd\99\07\ef\99\85\0b?\fe\b2\15\aa\b4\dc\e6\a7\1f\86c\beZ\06\0b\a5\bc\b4\aaSkuz\07\ed\0f\08\bf,)Ud\7f\b6C\d5\b1\17L\c8;\1a\fb;\efi\c2\87F\b8B\a7\ee@OQ]=\eb\dd\e4PF\1a\12\ba\13\e4labM\f3\92\ea\af(\b6\ef&\e2\bb\8c6U\n\f7\89\04\89\0f`\cb\05\e9\b8\b6\bd!\c9\c1\bb\87\e9\00T\96_\9a\84x\db\8f\bf4\d0\bdr\04R\98\de\'\8a\92\95\00\9am\c1\94\82\17\0f<\05\b7u\00\00\00\00\00\00P\c3\00\00\00\00\00\00\00\00\05\e3L6\12\197\c5\00\00\00\00\00\00(l\d6\aa\80\9d\ef\f0\"\c7\f6~\b9\b7\d2:MBL\c8q\d5m\93\13\c9\ea8\1e\cd\19:\bc\03\1cU\ab\01\80\0c\t\cb\c6,\07\d3\bf\f5\ad\\\a1\90\08\137h\03\cd\10\8cz\c3\87\a8\db6.\ef\07\12\c2\b2\02\cf\bc\f4\03^\e4g\f9\94\c7\85\d7in\f8\06\d1R\ba\be\01\d763\e1|\a0\1c4\a8E\10\d3Q\a0\t\12\11H\de\1e1Vx\85\fa\a6\1e\d5f\a5>\7f\"t*U3\f1\ca\ba\0f)2\d7\96@\adGy\17|\a9t\088\c7\b1\d8J\d9\bc\"x\ae\81R7\18")
+ (data $2 (i32.const 600) "?6N\n@\18\00\00\00d\00\00@\00 $\00\00\00\00\00\00\00\0c\80\13\c8\82\1f\e0L^\0f\f60\d7\1b\00\00\00\00\00\00\00\fc\ff\f7\cd\d8\01\82n\d1?\cd@\01%d\db\r\r\00\00\00$\04\14@8qS\b4\1dx\11\00\00\00\00")
+ (data $3 (i32.const 688) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $4 (i32.const 816) "p\\\ea{\ce2~\8f\1a\c7C\c6\b0\b7\96\e5\ae\05\03\05\'\c6\ab\b7\bf7\cf\d0\b8\d1\ef\92\fe%\e5\1a\8eO\19\eb2\ebP\e2\a4?\14\bc\f5\88\r\b5P\99v\96!\dbH\bb\1a\c2\bd\f0\b4\15\07\c9{\ce\97\c0]\11l:\96\0b\13\9a\c7\1b\e0\c3V\df\84\f6\06\e3L6\12\197\c5\9e\b5p+\a8\ad\c5\9d\97\"\81E@|o\fc\dfNg\04\cd\c9\f2\c9\e6\0b\b96\d7\07\8f\a1\85\t\94\f8x9?\81:\0f \f4\'\8f\cb\ce\c8\a5\19\90\b9\a5o\a5\a0\84\14@aQY\84\00\a1\ed\cc\ce\1b\c2\d3\00\b4W\n?\16h\a9\00\90\acn2x\86\87\00\80z\17\b7&\d7\d8\00\00b\ac\c5\ebx\ad\00\00\e8\89\04#\c7\8a\00\00@v:k\0b\de\00\00\00\c5.\bc\a2\b1\00\00\00\04\bf\c9\1b\8e\00\00\00\a01\a9_\e3\00\00\00\80\f4 \e6\b5\00\00\00\00*\e7\84\91\00\00\00\00\10\a5\d4\e8\00\00\00\00@\b7C\ba\00\00\00\00\00\f9\02\95\00\00\00\00\00(k\ee\00\00\00\00\00 \bc\be\00\00\00\00\00\80\96\98\00\00\00\00\00\00$\f4\00\00\00\00\00\00P\c3\00\00\00\00\00\00@\9c\00\00\00\00\00\00\00\fa\00\00\00\00\00\00\00\c8\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00\80\cd\cc\cc\cc\cc\cc\cc\cc\0b\d7\a3p=\n\d7\a3<\dfO\8d\97n\12\83,e\19\e2X\17\b7\d1$\84G\1bG\ac\c5\a7\b6il\af\05\bd7\86\bdBz\e5\d5\94\bf\d6\fd\cea\84\11w\cc\ab\98\a5\b46A_p\89\bf\d5\ed\bd\ce\fe\e6\db\ff\aa$\cb\0b\ff\eb\af\cc\88Po\t\cc\bc\8c\14\0e\b4KB\13.\e1\10\d8\\\t5\dc$\b4\da\ac\b0:\f7|\1d\90\\\e1M\c4\be\94\95\e6J\b4\a462\aaw\b8\08]\1d\92\8e\ee\92\93\a6a\95\b6}J\1e\ec\eb\1a\11\92d\08\e5\bc\ef{\datP\a0\1d\97\b2,\f7\ba\80\00\c9\f1(\8a\92\95\00\9am\c1S;uD\cd\14\be\9aR\c5\ee\d3\ae\87\96\f7\db\9dXv%\06\12\c6I~\e0\91\b7\d1t\9e\0e\ca\00\83\f2\b5\87\fd?;\9a5\f5\f7\d2\ca2\fc\14^\f7_B\a2\f5\fcCK,\b3\ce\81\bb\949E\ad\1e\b1\cf")
+ (data $5 (i32.const 1432) "\"\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#")
+ (data $6 (i32.const 1692) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
+ (data $7 (i32.const 1740) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
+ (data $8 (i32.const 1804) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data $9 (i32.const 1868) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $10 (i32.const 1936) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $11 (i32.const 1968) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $12 (i32.const 1996) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
+ (data $13 (i32.const 2060) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data $14 (i32.const 2112) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $15 (i32.const 2140) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $16 (i32.const 2204) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data $17 (i32.const 2272) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $18 (i32.const 2400) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
+ (data $19 (i32.const 2812) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\001\00.\000\00\00\00\00\00\00\00")
+ (data $20 (i32.const 2844) "L\00\00\00\00\00\00\00\00\00\00\00\02\00\00\000\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00e\00l\00e\00m\00e\00n\00t\00a\00c\00c\00e\00s\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $21 (i32.const 2924) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\002\00.\000\00\00\00\00\00\00\00")
+ (data $22 (i32.const 2956) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\08\00\00\001\001\00.\000\00\00\00\00\00")
+ (data $23 (i32.const 2988) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006\00\00\00\00\00\00\00\00\00")
+ (data $24 (i32.const 3116) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
+ (data $25 (i32.const 3180) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\000\00\00\00\00\00\00\00\00\00\00\00")
+ (data $26 (i32.const 3212) "\1c\04\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\04\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\000\00a\000\00b\000\00c\000\00d\000\00e\000\00f\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\001\00a\001\00b\001\00c\001\00d\001\00e\001\00f\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\002\00a\002\00b\002\00c\002\00d\002\00e\002\00f\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\003\00a\003\00b\003\00c\003\00d\003\00e\003\00f\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\004\00a\004\00b\004\00c\004\00d\004\00e\004\00f\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\005\00a\005\00b\005\00c\005\00d\005\00e\005\00f\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\006\00a\006\00b\006\00c\006\00d\006\00e\006\00f\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\007\00a\007\00b\007\00c\007\00d\007\00e\007\00f\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\008\00a\008\00b\008\00c\008\00d\008\00e\008\00f\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\009\00a\009\00b\009\00c\009\00d\009\00e\009\00f\00a\000\00a\001\00a\002\00a\003\00a\004\00a\005\00a\006\00a\007\00a\008\00a\009\00a\00a\00a\00b\00a\00c\00a\00d\00a\00e\00a\00f\00b\000\00b\001\00b\002\00b\003\00b\004\00b\005\00b\006\00b\007\00b\008\00b\009\00b\00a\00b\00b\00b\00c\00b\00d\00b\00e\00b\00f\00c\000\00c\001\00c\002\00c\003\00c\004\00c\005\00c\006\00c\007\00c\008\00c\009\00c\00a\00c\00b\00c\00c\00c\00d\00c\00e\00c\00f\00d\000\00d\001\00d\002\00d\003\00d\004\00d\005\00d\006\00d\007\00d\008\00d\009\00d\00a\00d\00b\00d\00c\00d\00d\00d\00e\00d\00f\00e\000\00e\001\00e\002\00e\003\00e\004\00e\005\00e\006\00e\007\00e\008\00e\009\00e\00a\00e\00b\00e\00c\00e\00d\00e\00e\00e\00f\00f\000\00f\001\00f\002\00f\003\00f\004\00f\005\00f\006\00f\007\00f\008\00f\009\00f\00a\00f\00b\00f\00c\00f\00d\00f\00e\00f\00f\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $27 (i32.const 4268) "\\\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00\00\00\00\00")
+ (data $28 (i32.const 4364) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\001\00\00\00\00\00\00\00\00\00\00\00")
+ (data $29 (i32.const 4396) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\002\00\00\00\00\00\00\00\00\00\00\00")
+ (data $30 (i32.const 4428) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\04\00\00\001\001\00\00\00\00\00\00\00\00\00")
+ (data $31 (i32.const 4464) "\07\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\01\19\00\00A\00\00\00A\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -207,7 +183,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1872
+     i32.const 1888
      i32.const 160
      i32.const 16
      call $~lib/builtins/abort
@@ -277,7 +253,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1872
+    i32.const 1888
     i32.const 128
     i32.const 18
     call $~lib/builtins/abort
@@ -294,7 +270,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1872
+   i32.const 1888
    i32.const 132
    i32.const 16
    call $~lib/builtins/abort
@@ -324,8 +300,8 @@
   i32.load
   i32.gt_u
   if
-   i32.const 2000
-   i32.const 2064
+   i32.const 2016
+   i32.const 2080
    i32.const 21
    i32.const 28
    call $~lib/builtins/abort
@@ -393,7 +369,7 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 1872
+    i32.const 1888
     i32.const 148
     i32.const 30
     call $~lib/builtins/abort
@@ -545,7 +521,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 268
    i32.const 14
    call $~lib/builtins/abort
@@ -565,7 +541,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 270
    i32.const 14
    call $~lib/builtins/abort
@@ -628,7 +604,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 284
    i32.const 14
    call $~lib/builtins/abort
@@ -781,7 +757,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 201
    i32.const 14
    call $~lib/builtins/abort
@@ -798,7 +774,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 203
    i32.const 14
    call $~lib/builtins/abort
@@ -887,7 +863,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2144
+    i32.const 2160
     i32.const 221
     i32.const 16
     call $~lib/builtins/abort
@@ -930,7 +906,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 233
    i32.const 14
    call $~lib/builtins/abort
@@ -948,7 +924,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 234
    i32.const 14
    call $~lib/builtins/abort
@@ -1016,7 +992,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 251
    i32.const 14
    call $~lib/builtins/abort
@@ -1133,7 +1109,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 382
    i32.const 14
    call $~lib/builtins/abort
@@ -1179,7 +1155,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2144
+    i32.const 2160
     i32.const 389
     i32.const 16
     call $~lib/builtins/abort
@@ -1211,7 +1187,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2144
+    i32.const 2160
     i32.const 402
     i32.const 5
     call $~lib/builtins/abort
@@ -1455,7 +1431,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 562
    i32.const 3
    call $~lib/builtins/abort
@@ -1675,7 +1651,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1872
+     i32.const 1888
      i32.const 229
      i32.const 20
      call $~lib/builtins/abort
@@ -1786,8 +1762,8 @@
   i32.const 1073741820
   i32.gt_u
   if
-   i32.const 1808
-   i32.const 2144
+   i32.const 1824
+   i32.const 2160
    i32.const 461
    i32.const 29
    call $~lib/builtins/abort
@@ -1889,7 +1865,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 334
    i32.const 14
    call $~lib/builtins/abort
@@ -1960,7 +1936,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 2144
+     i32.const 2160
      i32.const 347
      i32.const 18
      call $~lib/builtins/abort
@@ -2117,7 +2093,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 361
    i32.const 14
    call $~lib/builtins/abort
@@ -2232,7 +2208,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2144
+    i32.const 2160
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -2252,7 +2228,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -2300,8 +2276,8 @@
   i32.const 1073741804
   i32.ge_u
   if
-   i32.const 1808
-   i32.const 1872
+   i32.const 1824
+   i32.const 1888
    i32.const 261
    i32.const 31
    call $~lib/builtins/abort
@@ -2361,7 +2337,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1872
+   i32.const 1888
    i32.const 295
    i32.const 14
    call $~lib/builtins/abort
@@ -2498,28 +2474,28 @@
   i64.rotr
   return
  )
- (func $~lib/util/xjb/ftoa/toBcd8 (param $abcdefgh i64)
+ (func $~lib/util/xjb/toBcd8 (param $abcdefgh i64)
   (local $abcd_efgh i64)
   (local $ab_cd_ef_gh i64)
   (local $a_b_c_d_e_f_g_h i64)
   (local $bcd i64)
   local.get $abcdefgh
-  global.get $~lib/util/xjb/ftoa/NEG10K
+  global.get $~lib/util/xjb/NEG10K
   local.get $abcdefgh
-  global.get $~lib/util/xjb/ftoa/DIV10K_SIG
+  global.get $~lib/util/xjb/DIV10K_SIG
   i64.mul
-  global.get $~lib/util/xjb/ftoa/DIV10K_EXP
+  global.get $~lib/util/xjb/DIV10K_EXP
   i64.extend_i32_s
   i64.shr_u
   i64.mul
   i64.add
   local.set $abcd_efgh
   local.get $abcd_efgh
-  global.get $~lib/util/xjb/ftoa/NEG100
+  global.get $~lib/util/xjb/NEG100
   local.get $abcd_efgh
-  global.get $~lib/util/xjb/ftoa/DIV100_SIG
+  global.get $~lib/util/xjb/DIV100_SIG
   i64.mul
-  global.get $~lib/util/xjb/ftoa/DIV100_EXP
+  global.get $~lib/util/xjb/DIV100_EXP
   i64.extend_i32_s
   i64.shr_u
   i64.const 545460846719
@@ -2528,11 +2504,11 @@
   i64.add
   local.set $ab_cd_ef_gh
   local.get $ab_cd_ef_gh
-  global.get $~lib/util/xjb/ftoa/NEG10
+  global.get $~lib/util/xjb/NEG10
   local.get $ab_cd_ef_gh
-  global.get $~lib/util/xjb/ftoa/DIV10_SIG
+  global.get $~lib/util/xjb/DIV10_SIG
   i64.mul
-  global.get $~lib/util/xjb/ftoa/DIV10_EXP
+  global.get $~lib/util/xjb/DIV10_EXP
   i64.extend_i32_s
   i64.shr_u
   i64.const 4222189076152335
@@ -2544,7 +2520,7 @@
   call $~lib/polyfills/bswap<u64>
   local.set $bcd
   local.get $bcd
-  global.set $~lib/util/xjb/ftoa/gBcd
+  global.set $~lib/util/xjb/gBcd
   i32.const 70
   i64.extend_i32_s
   local.get $bcd
@@ -2557,9 +2533,9 @@
   i64.const 8
   i64.div_u
   i32.wrap_i64
-  global.set $~lib/util/xjb/ftoa/gBcdLen
+  global.set $~lib/util/xjb/gBcdLen
  )
- (func $~lib/util/xjb/ftoa/ftoa_buffered (param $buffer i32) (param $value f32) (result i32)
+ (func $~lib/util/xjb/ftoa_buffered (param $buffer i32) (param $value f32) (result i32)
   (local $bits i32)
   (local $binExp i32)
   (local $binSig i64)
@@ -2669,7 +2645,7 @@
   (local $decExp|108 i32)
   (local $m i32)
   (local $e i32)
-  (local $pair i32)
+  (local $d i32)
   local.get $value
   i32.reinterpret_f32
   local.set $bits
@@ -2688,7 +2664,7 @@
   i32.and
   i64.extend_i32_u
   local.set $binSig
-  block $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0 (result i32)
+  block $~lib/util/xjb/formatDecodedFloat|inlined.0 (result i32)
    local.get $buffer
    local.set $buf
    local.get $bits
@@ -2720,7 +2696,7 @@
      i64.const 0
      i64.ne
      if
-      block $~lib/util/xjb/ftoa/writeNaN|inlined.0 (result i32)
+      block $~lib/util/xjb/writeNaN|inlined.0 (result i32)
        local.get $buf
        local.set $buf|11
        local.get $buf|11
@@ -2735,11 +2711,11 @@
        local.get $buf|11
        i32.const 6
        i32.add
-       br $~lib/util/xjb/ftoa/writeNaN|inlined.0
+       br $~lib/util/xjb/writeNaN|inlined.0
       end
-      br $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0
+      br $~lib/util/xjb/formatDecodedFloat|inlined.0
      end
-     block $~lib/util/xjb/ftoa/writeInfinity|inlined.0 (result i32)
+     block $~lib/util/xjb/writeInfinity|inlined.0 (result i32)
       local.get $buf
       local.set $buf|12
       local.get $neg
@@ -2764,7 +2740,7 @@
       local.get $off
       i32.add
       local.set $base
-      global.get $~lib/util/xjb/ftoa/HAS_SIMD
+      global.get $~lib/util/xjb/HAS_SIMD
       drop
       local.get $base
       local.get $ascii
@@ -2829,9 +2805,9 @@
       local.get $buf|12
       i32.const 16
       i32.add
-      br $~lib/util/xjb/ftoa/writeInfinity|inlined.0
+      br $~lib/util/xjb/writeInfinity|inlined.0
      end
-     br $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0
+     br $~lib/util/xjb/formatDecodedFloat|inlined.0
     end
     local.get $binSig|8
     i64.const 0
@@ -2843,7 +2819,7 @@
      local.get $buf
      i32.const 2
      i32.add
-     br $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0
+     br $~lib/util/xjb/formatDecodedFloat|inlined.0
     end
     local.get $neg
     if
@@ -2862,7 +2838,7 @@
     i32.const 1
     local.set $regular
     local.get $rawExp
-    global.get $~lib/util/xjb/ftoa/FLOAT_EXP_OFFSET
+    global.get $~lib/util/xjb/FLOAT_EXP_OFFSET
     i32.sub
     local.set $expBin
     local.get $regular
@@ -2873,7 +2849,7 @@
      i32.const 12
      i32.shr_s
      local.set $k
-     global.get $~lib/util/xjb/ftoa/H37
+     global.get $~lib/util/xjb/H37
      local.get $rawExp
      i32.add
      i32.load8_u
@@ -2900,7 +2876,7 @@
      i32.add
      local.set $h
     end
-    global.get $~lib/util/xjb/ftoa/POW10_FLOAT_HI
+    global.get $~lib/util/xjb/POW10_FLOAT_HI
     i32.const 45
     local.get $k
     i32.add
@@ -2957,7 +2933,7 @@
     local.set $halfUlp
     local.get $hi64
     i64.const 1
-    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+    global.get $~lib/util/xjb/FLOAT_BIT
     i64.extend_i32_s
     i64.shl
     i64.const 1
@@ -2967,20 +2943,20 @@
     local.get $hi64
     local.get $halfUlp
     i64.add
-    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+    global.get $~lib/util/xjb/FLOAT_BIT
     i64.extend_i32_s
     i64.shr_u
     local.set $mUp
     local.get $dotOne
     i64.const 5
     i64.mul
-    global.get $~lib/util/xjb/ftoa/FLOAT_ONE_BIAS
+    global.get $~lib/util/xjb/FLOAT_ONE_BIAS
     i64.add
     local.get $dotOne
     i64.const 32
     i64.shr_u
     i64.add
-    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+    global.get $~lib/util/xjb/FLOAT_BIT
     i32.const 1
     i32.sub
     i64.extend_i32_s
@@ -2993,7 +2969,7 @@
      local.get $hi64
      local.get $halfUlp
      i64.sub
-     global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+     global.get $~lib/util/xjb/FLOAT_BIT
      i64.extend_i32_s
      i64.shr_u
      i64.gt_u
@@ -3028,34 +3004,34 @@
      i64.const 1
      i64.shr_u
      i64.sub
-     global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+     global.get $~lib/util/xjb/FLOAT_BIT
      i64.extend_i32_s
      i64.shr_u
      i64.gt_u
      local.set $upDown
     end
     local.get $mUp
-    global.set $~lib/util/xjb/ftoa/gSig
+    global.set $~lib/util/xjb/gSig
     local.get $k
-    global.set $~lib/util/xjb/ftoa/gExp
+    global.set $~lib/util/xjb/gExp
     local.get $one
-    global.set $~lib/util/xjb/ftoa/gLastDigit
+    global.set $~lib/util/xjb/gLastDigit
     local.get $upDown
     i32.eqz
-    global.set $~lib/util/xjb/ftoa/gHasLastDigit
-    global.get $~lib/util/xjb/ftoa/gSig
+    global.set $~lib/util/xjb/gHasLastDigit
+    global.get $~lib/util/xjb/gSig
     i64.const 10
     i64.mul
-    global.get $~lib/util/xjb/ftoa/gHasLastDigit
+    global.get $~lib/util/xjb/gHasLastDigit
     if (result i64)
-     global.get $~lib/util/xjb/ftoa/gLastDigit
+     global.get $~lib/util/xjb/gLastDigit
      i64.extend_i32_s
     else
      i64.const 0
     end
     i64.add
     local.set $decSig
-    global.get $~lib/util/xjb/ftoa/gExp
+    global.get $~lib/util/xjb/gExp
     local.set $decExp
     loop $while-continue|0
      local.get $decSig
@@ -3085,15 +3061,15 @@
     i32.wrap_i64
     local.set $last
     local.get $q
-    global.set $~lib/util/xjb/ftoa/gSig
+    global.set $~lib/util/xjb/gSig
     local.get $decExp
-    global.set $~lib/util/xjb/ftoa/gExp
+    global.set $~lib/util/xjb/gExp
     local.get $last
-    global.set $~lib/util/xjb/ftoa/gLastDigit
+    global.set $~lib/util/xjb/gLastDigit
     local.get $last
     i32.const 0
     i32.ne
-    global.set $~lib/util/xjb/ftoa/gHasLastDigit
+    global.set $~lib/util/xjb/gHasLastDigit
    else
     local.get $neg
     if
@@ -3118,7 +3094,7 @@
     i64.ne
     local.set $regular|40
     local.get $rawExp|39
-    global.get $~lib/util/xjb/ftoa/FLOAT_EXP_OFFSET
+    global.get $~lib/util/xjb/FLOAT_EXP_OFFSET
     i32.sub
     local.set $expBin|41
     local.get $regular|40
@@ -3129,7 +3105,7 @@
      i32.const 12
      i32.shr_s
      local.set $k|42
-     global.get $~lib/util/xjb/ftoa/H37
+     global.get $~lib/util/xjb/H37
      local.get $rawExp|39
      i32.add
      i32.load8_u
@@ -3156,7 +3132,7 @@
      i32.add
      local.set $h|43
     end
-    global.get $~lib/util/xjb/ftoa/POW10_FLOAT_HI
+    global.get $~lib/util/xjb/POW10_FLOAT_HI
     i32.const 45
     local.get $k|42
     i32.add
@@ -3213,7 +3189,7 @@
     local.set $halfUlp|49
     local.get $hi64|48
     i64.const 1
-    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+    global.get $~lib/util/xjb/FLOAT_BIT
     i64.extend_i32_s
     i64.shl
     i64.const 1
@@ -3223,20 +3199,20 @@
     local.get $hi64|48
     local.get $halfUlp|49
     i64.add
-    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+    global.get $~lib/util/xjb/FLOAT_BIT
     i64.extend_i32_s
     i64.shr_u
     local.set $mUp|51
     local.get $dotOne|50
     i64.const 5
     i64.mul
-    global.get $~lib/util/xjb/ftoa/FLOAT_ONE_BIAS
+    global.get $~lib/util/xjb/FLOAT_ONE_BIAS
     i64.add
     local.get $dotOne|50
     i64.const 32
     i64.shr_u
     i64.add
-    global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+    global.get $~lib/util/xjb/FLOAT_BIT
     i32.const 1
     i32.sub
     i64.extend_i32_s
@@ -3249,7 +3225,7 @@
      local.get $hi64|48
      local.get $halfUlp|49
      i64.sub
-     global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+     global.get $~lib/util/xjb/FLOAT_BIT
      i64.extend_i32_s
      i64.shr_u
      i64.gt_u
@@ -3284,52 +3260,52 @@
      i64.const 1
      i64.shr_u
      i64.sub
-     global.get $~lib/util/xjb/ftoa/FLOAT_BIT
+     global.get $~lib/util/xjb/FLOAT_BIT
      i64.extend_i32_s
      i64.shr_u
      i64.gt_u
      local.set $upDown|53
     end
     local.get $mUp|51
-    global.set $~lib/util/xjb/ftoa/gSig
+    global.set $~lib/util/xjb/gSig
     local.get $k|42
-    global.set $~lib/util/xjb/ftoa/gExp
+    global.set $~lib/util/xjb/gExp
     local.get $one|52
-    global.set $~lib/util/xjb/ftoa/gLastDigit
+    global.set $~lib/util/xjb/gLastDigit
     local.get $upDown|53
     i32.eqz
-    global.set $~lib/util/xjb/ftoa/gHasLastDigit
+    global.set $~lib/util/xjb/gHasLastDigit
    end
-   global.get $~lib/util/xjb/ftoa/gHasLastDigit
+   global.get $~lib/util/xjb/gHasLastDigit
    local.set $hasLastDigit
-   global.get $~lib/util/xjb/ftoa/gSig
+   global.get $~lib/util/xjb/gSig
    i64.const 10000000
    i64.ge_u
    local.set $hasExtraDigit
-   global.get $~lib/util/xjb/ftoa/gExp
-   global.get $~lib/util/xjb/ftoa/FLOAT_MAX_DIGITS10
+   global.get $~lib/util/xjb/gExp
+   global.get $~lib/util/xjb/FLOAT_MAX_DIGITS10
    i32.add
    i32.const 2
    i32.sub
    local.get $hasExtraDigit
    i32.add
    local.set $decExp|56
-   global.get $~lib/util/xjb/ftoa/gSig
+   global.get $~lib/util/xjb/gSig
    i64.const 1000000
    i64.lt_u
    if
     i64.const 10
-    global.get $~lib/util/xjb/ftoa/gSig
+    global.get $~lib/util/xjb/gSig
     i64.mul
     local.get $hasLastDigit
     if (result i64)
-     global.get $~lib/util/xjb/ftoa/gLastDigit
+     global.get $~lib/util/xjb/gLastDigit
      i64.extend_i32_s
     else
      i64.const 0
     end
     i64.add
-    global.set $~lib/util/xjb/ftoa/gSig
+    global.set $~lib/util/xjb/gSig
     i32.const 0
     local.set $hasLastDigit
     local.get $decExp|56
@@ -3339,30 +3315,30 @@
    end
    local.get $buf
    local.set $start
-   global.get $~lib/util/xjb/ftoa/gSig
+   global.get $~lib/util/xjb/gSig
    local.set $value|58
-   global.get $~lib/util/xjb/ftoa/HAS_SIMD
+   global.get $~lib/util/xjb/HAS_SIMD
    drop
    local.get $value|58
-   call $~lib/util/xjb/ftoa/toBcd8
-   global.get $~lib/util/xjb/ftoa/gBcd
-   global.get $~lib/util/xjb/ftoa/ZEROS
+   call $~lib/util/xjb/toBcd8
+   global.get $~lib/util/xjb/gBcd
+   global.get $~lib/util/xjb/ZEROS
    i64.add
-   global.set $~lib/util/xjb/ftoa/gDigHi
-   global.get $~lib/util/xjb/ftoa/gBcdLen
-   global.set $~lib/util/xjb/ftoa/gDigNum
+   global.set $~lib/util/xjb/gDigHi
+   global.get $~lib/util/xjb/gBcdLen
+   global.set $~lib/util/xjb/gDigNum
    local.get $decExp|56
-   global.get $~lib/util/xjb/ftoa/MIN_FIXED_DEC_EXP
+   global.get $~lib/util/xjb/MIN_FIXED_DEC_EXP
    i32.ge_s
    if (result i32)
     local.get $decExp|56
-    global.get $~lib/util/xjb/ftoa/MAX_FIXED_DEC_EXP
+    global.get $~lib/util/xjb/MAX_FIXED_DEC_EXP
     i32.le_s
    else
     i32.const 0
    end
    if
-    block $~lib/util/xjb/ftoa/writeFixed|inlined.0 (result i32)
+    block $~lib/util/xjb/writeFixedFloat|inlined.0 (result i32)
      local.get $buf
      local.set $buf|59
      local.get $start
@@ -3379,7 +3355,7 @@
      if
       local.get $start|60
       local.set $p|64
-      global.get $~lib/util/xjb/ftoa/ZEROS
+      global.get $~lib/util/xjb/ZEROS
       local.set $ascii|65
       i32.const 0
       local.set $off|66
@@ -3387,7 +3363,7 @@
       local.get $off|66
       i32.add
       local.set $base|67
-      global.get $~lib/util/xjb/ftoa/HAS_SIMD
+      global.get $~lib/util/xjb/HAS_SIMD
       drop
       local.get $base|67
       local.get $ascii|65
@@ -3453,7 +3429,7 @@
      i64.const 48
      local.get $hasLastDigit|62
      if (result i64)
-      global.get $~lib/util/xjb/ftoa/gLastDigit
+      global.get $~lib/util/xjb/gLastDigit
       i64.extend_i32_s
      else
       i64.const 0
@@ -3464,12 +3440,12 @@
      if (result i32)
       i32.const 8
      else
-      global.get $~lib/util/xjb/ftoa/gDigNum
+      global.get $~lib/util/xjb/gDigNum
       i32.const 1
       i32.sub
      end
      local.set $numDigits
-     global.get $~lib/util/xjb/ftoa/gDigHi
+     global.get $~lib/util/xjb/gDigHi
      local.set $dHi
      local.get $hasExtraDigit|63
      i32.eqz
@@ -3497,7 +3473,7 @@
       local.get $off|73
       i32.add
       local.set $base|74
-      global.get $~lib/util/xjb/ftoa/HAS_SIMD
+      global.get $~lib/util/xjb/HAS_SIMD
       drop
       local.get $base|74
       local.get $ascii|72
@@ -3593,7 +3569,7 @@
        if
         local.get $z
         local.set $p|78
-        global.get $~lib/util/xjb/ftoa/ZEROS
+        global.get $~lib/util/xjb/ZEROS
         local.set $ascii|79
         i32.const 0
         local.set $off|80
@@ -3601,7 +3577,7 @@
         local.get $off|80
         i32.add
         local.set $base|81
-        global.get $~lib/util/xjb/ftoa/HAS_SIMD
+        global.get $~lib/util/xjb/HAS_SIMD
         drop
         local.get $base|81
         local.get $ascii|79
@@ -3671,7 +3647,7 @@
        end
       end
       local.get $endByte
-      br $~lib/util/xjb/ftoa/writeFixed|inlined.0
+      br $~lib/util/xjb/writeFixedFloat|inlined.0
      end
      local.get $numDigits
      local.get $hasExtraDigit|63
@@ -3723,7 +3699,7 @@
      local.get $off|87
      i32.add
      local.set $base|88
-     global.get $~lib/util/xjb/ftoa/HAS_SIMD
+     global.get $~lib/util/xjb/HAS_SIMD
      drop
      local.get $base|88
      local.get $ascii|86
@@ -3848,7 +3824,7 @@
       local.get $off|95
       i32.add
       local.set $base|96
-      global.get $~lib/util/xjb/ftoa/HAS_SIMD
+      global.get $~lib/util/xjb/HAS_SIMD
       drop
       local.get $base|96
       local.get $ascii|94
@@ -3927,11 +3903,11 @@
      i32.const 1
      i32.shl
      i32.add
-     br $~lib/util/xjb/ftoa/writeFixed|inlined.0
+     br $~lib/util/xjb/writeFixedFloat|inlined.0
     end
-    br $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0
+    br $~lib/util/xjb/formatDecodedFloat|inlined.0
    end
-   block $~lib/util/xjb/ftoa/writeExpNotation|inlined.0 (result i32)
+   block $~lib/util/xjb/writeExpNotationFloat|inlined.0 (result i32)
     local.get $buf
     local.set $buf|97
     local.get $start
@@ -3950,7 +3926,7 @@
     local.set $buf|97
     local.get $buf|97
     local.set $p|102
-    global.get $~lib/util/xjb/ftoa/gDigHi
+    global.get $~lib/util/xjb/gDigHi
     local.set $ascii|103
     i32.const 0
     local.set $off|104
@@ -3958,7 +3934,7 @@
     local.get $off|104
     i32.add
     local.set $base|105
-    global.get $~lib/util/xjb/ftoa/HAS_SIMD
+    global.get $~lib/util/xjb/HAS_SIMD
     drop
     local.get $base|105
     local.get $ascii|103
@@ -4024,7 +4000,7 @@
     i32.const 16
     i32.add
     i32.const 48
-    global.get $~lib/util/xjb/ftoa/gLastDigit
+    global.get $~lib/util/xjb/gLastDigit
     i32.add
     i32.store16
     local.get $buf|97
@@ -4032,7 +4008,7 @@
     if (result i32)
      i32.const 9
     else
-     global.get $~lib/util/xjb/ftoa/gDigNum
+     global.get $~lib/util/xjb/gDigNum
     end
     i32.const 1
     i32.shl
@@ -4059,7 +4035,7 @@
     i32.shl
     i32.sub
     local.set $buf|97
-    block $~lib/util/xjb/ftoa/writeExponent|inlined.0 (result i32)
+    block $~lib/util/xjb/writeExponent|inlined.0 (result i32)
      local.get $buf|97
      local.set $buf|107
      local.get $decExp|99
@@ -4089,30 +4065,54 @@
      i32.sub
      local.set $e
      local.get $e
+     i32.const 100
+     i32.ge_s
+     if
+      local.get $e
+      global.get $~lib/util/xjb/DIV100_SIG
+      i32.wrap_i64
+      i32.mul
+      global.get $~lib/util/xjb/DIV100_EXP
+      i32.shr_u
+      local.set $d
+      local.get $buf|107
+      i32.const 48
+      local.get $d
+      i32.add
+      i32.store16
+      local.get $buf|107
+      i32.const 2400
+      local.get $e
+      local.get $d
+      i32.const 100
+      i32.mul
+      i32.sub
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.load
+      i32.store offset=2
+      local.get $buf|107
+      i32.const 6
+      i32.add
+      br $~lib/util/xjb/writeExponent|inlined.0
+     end
+     local.get $e
      i32.const 10
      i32.ge_s
      if
-      global.get $~lib/util/xjb/ftoa/DIGIT_PAIRS
+      local.get $buf|107
+      i32.const 2400
       local.get $e
-      i32.const 1
+      i32.const 2
       i32.shl
       i32.add
-      i32.load16_u
-      local.set $pair
-      local.get $buf|107
-      local.get $pair
-      i32.const 255
-      i32.and
-      i32.store16
-      local.get $buf|107
-      local.get $pair
-      i32.const 8
-      i32.shr_u
-      i32.store16 offset=2
+      i32.load
+      i32.store
       local.get $buf|107
       i32.const 4
       i32.add
-      br $~lib/util/xjb/ftoa/writeExponent|inlined.0
+      br $~lib/util/xjb/writeExponent|inlined.0
      end
      local.get $buf|107
      i32.const 48
@@ -4122,11 +4122,11 @@
      local.get $buf|107
      i32.const 2
      i32.add
-     br $~lib/util/xjb/ftoa/writeExponent|inlined.0
+     br $~lib/util/xjb/writeExponent|inlined.0
     end
-    br $~lib/util/xjb/ftoa/writeExpNotation|inlined.0
+    br $~lib/util/xjb/writeExpNotationFloat|inlined.0
    end
-   br $~lib/util/xjb/ftoa/formatDecodedFloat|inlined.0
+   br $~lib/util/xjb/formatDecodedFloat|inlined.0
   end
   local.get $buffer
   i32.sub
@@ -4346,14 +4346,14 @@
     i32.const 100
     i32.rem_u
     local.set $d2
-    i32.const 2796
+    i32.const 2400
     local.get $d1
     i32.const 2
     i32.shl
     i32.add
     i64.load32_u
     local.set $digits1
-    i32.const 2796
+    i32.const 2400
     local.get $d2
     i32.const 2
     i32.shl
@@ -4396,7 +4396,7 @@
    i32.const 2
    i32.sub
    local.set $offset
-   i32.const 2796
+   i32.const 2400
    local.get $d1|10
    i32.const 2
    i32.shl
@@ -4419,7 +4419,7 @@
    i32.const 2
    i32.sub
    local.set $offset
-   i32.const 2796
+   i32.const 2400
    local.get $num
    i32.const 2
    i32.shl
@@ -4466,7 +4466,7 @@
     i32.const 1
     i32.shl
     i32.add
-    i32.const 3216
+    i32.const 3232
     local.get $num
     i32.wrap_i64
     i32.const 255
@@ -4488,7 +4488,7 @@
   i32.and
   if
    local.get $buffer
-   i32.const 3216
+   i32.const 3232
    local.get $num
    i32.wrap_i64
    i32.const 6
@@ -4611,7 +4611,7 @@
     i32.const 1
     i32.shl
     i32.add
-    i32.const 4272
+    i32.const 4288
     local.get $num
     local.get $mask
     i64.and
@@ -4645,7 +4645,7 @@
     i32.const 1
     i32.shl
     i32.add
-    i32.const 4272
+    i32.const 4288
     local.get $num
     local.get $q
     local.get $base
@@ -4690,19 +4690,19 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
-  i32.const 2000
+  i32.const 2016
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 1696
+  i32.const 1712
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 1808
+  i32.const 1824
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 3216
+  i32.const 3232
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 4272
+  i32.const 4288
   local.get $0
   call $~lib/rt/itcms/__visit
  )
@@ -4784,8 +4784,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 37280
-   i32.const 37328
+   i32.const 37296
+   i32.const 37344
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -4846,8 +4846,8 @@
   i32.shr_u
   i32.gt_u
   if
-   i32.const 1696
-   i32.const 1744
+   i32.const 1712
+   i32.const 1760
    i32.const 19
    i32.const 57
    call $~lib/builtins/abort
@@ -4965,8 +4965,8 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 2000
-   i32.const 2208
+   i32.const 2016
+   i32.const 2224
    i32.const 1315
    i32.const 64
    call $~lib/builtins/abort
@@ -5013,8 +5013,8 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 2000
-   i32.const 2208
+   i32.const 2016
+   i32.const 2224
    i32.const 1304
    i32.const 64
    call $~lib/builtins/abort
@@ -5235,8 +5235,8 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.ge_u
   if
-   i32.const 2000
-   i32.const 2208
+   i32.const 2016
+   i32.const 2224
    i32.const 178
    i32.const 45
    call $~lib/builtins/abort
@@ -5278,8 +5278,8 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.ge_u
   if
-   i32.const 2000
-   i32.const 2208
+   i32.const 2016
+   i32.const 2224
    i32.const 167
    i32.const 45
    call $~lib/builtins/abort
@@ -5326,13 +5326,13 @@
   i32.const 1
   i32.shr_u
   global.set $~lib/rt/itcms/threshold
-  i32.const 1920
+  i32.const 1936
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
-  i32.const 1952
+  i32.const 1968
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/toSpace
-  i32.const 2096
+  i32.const 2112
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   i32.const 0
@@ -5372,12 +5372,12 @@
   local.get $4
   i32.store
   local.get $4
-  i32.const 2416
+  i32.const 2832
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2448
+   i32.const 2864
    i32.const 5
    i32.const 1
    call $~lib/builtins/abort
@@ -5398,12 +5398,12 @@
   local.get $4
   i32.store
   local.get $4
-  i32.const 2528
+  i32.const 2944
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2448
+   i32.const 2864
    i32.const 10
    i32.const 1
    call $~lib/builtins/abort
@@ -5447,12 +5447,12 @@
   local.get $4
   i32.store
   local.get $4
-  i32.const 2560
+  i32.const 2976
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2448
+   i32.const 2864
    i32.const 15
    i32.const 1
    call $~lib/builtins/abort
@@ -5489,7 +5489,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2448
+   i32.const 2864
    i32.const 21
    i32.const 1
    call $~lib/builtins/abort
@@ -5532,12 +5532,12 @@
   local.get $4
   i32.store
   local.get $4
-  i32.const 4368
+  i32.const 4384
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2448
+   i32.const 2864
    i32.const 28
    i32.const 1
    call $~lib/builtins/abort
@@ -5558,12 +5558,12 @@
   local.get $4
   i32.store
   local.get $4
-  i32.const 4400
+  i32.const 4416
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2448
+   i32.const 2864
    i32.const 33
    i32.const 1
    call $~lib/builtins/abort
@@ -5607,12 +5607,12 @@
   local.get $4
   i32.store
   local.get $4
-  i32.const 4432
+  i32.const 4448
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2448
+   i32.const 2864
    i32.const 38
    i32.const 1
    call $~lib/builtins/abort
@@ -5649,7 +5649,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2448
+   i32.const 2864
    i32.const 44
    i32.const 1
    call $~lib/builtins/abort
@@ -5682,12 +5682,12 @@
   i32.const 4
   i32.eq
   drop
-  i32.const 2256
+  i32.const 2272
   local.get $value
-  call $~lib/util/xjb/ftoa/ftoa_buffered
+  call $~lib/util/xjb/ftoa_buffered
   local.set $len
   block $~lib/util/number/dtoa_dotZero|inlined.0 (result i32)
-   i32.const 2256
+   i32.const 2272
    local.set $buffer
    local.get $len
    local.set $len|3
@@ -5758,7 +5758,7 @@
   local.tee $result
   i32.store
   local.get $result
-  i32.const 2256
+  i32.const 2272
   local.get $size
   memory.copy
   local.get $result
@@ -5801,8 +5801,8 @@
    i32.gt_s
   end
   if
-   i32.const 2592
-   i32.const 2720
+   i32.const 3008
+   i32.const 3136
    i32.const 300
    i32.const 5
    call $~lib/builtins/abort
@@ -5811,7 +5811,7 @@
   local.get $value
   i32.eqz
   if
-   i32.const 2784
+   i32.const 3200
    local.set $12
    global.get $~lib/memory/__stack_pointer
    i32.const 4

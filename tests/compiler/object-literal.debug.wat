@@ -24,68 +24,44 @@
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/native/ASC_FEATURE_SIMD i32 (i32.const 0))
- (global $~lib/util/xjb/xjb/HAS_SIMD i32 (i32.const 0))
- (global $~lib/util/xjb/xjb/gPow10Hi (mut i64) (i64.const 0))
- (global $~lib/util/xjb/xjb/gPow10Lo (mut i64) (i64.const 0))
- (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/util/xjb/xjb/TABLE_COMPRESSED i32 (i32.const 0))
- (global $~lib/util/xjb/xjb/DIV10K_EXP i32 (i32.const 40))
- (global $~lib/util/xjb/xjb/DIV10K_SIG i64 (i64.const 109951163))
- (global $~lib/util/xjb/xjb/NEG10K i64 (i64.const 4294957296))
- (global $~lib/util/xjb/xjb/DIV100_EXP i32 (i32.const 19))
- (global $~lib/util/xjb/xjb/DIV100_SIG i64 (i64.const 5243))
- (global $~lib/util/xjb/xjb/NEG100 i64 (i64.const 65436))
- (global $~lib/util/xjb/xjb/DIV10_EXP i32 (i32.const 10))
- (global $~lib/util/xjb/xjb/DIV10_SIG i64 (i64.const 103))
- (global $~lib/util/xjb/xjb/NEG10 i64 (i64.const 246))
- (global $~lib/util/xjb/xjb/ZEROS i64 (i64.const 3472328296227680304))
- (global $~lib/util/xjb/xjb/POW10_SMALL i32 (i32.const 152))
- (global $~lib/util/xjb/xjb/DIGIT_PAIRS i32 (i32.const 280))
- (global $~lib/util/xjb/xjb/gBcd (mut i64) (i64.const 0))
- (global $~lib/util/xjb/xjb/gBcdLen (mut i32) (i32.const 0))
- (global $~lib/util/xjb/xjb/gDigHi (mut i64) (i64.const 0))
- (global $~lib/util/xjb/xjb/gDigLo (mut i64) (i64.const 0))
- (global $~lib/util/xjb/xjb/gDigNum (mut i32) (i32.const 0))
- (global $~lib/util/xjb/xjb/gSig (mut i64) (i64.const 0))
- (global $~lib/util/xjb/xjb/gExp (mut i32) (i32.const 0))
- (global $~lib/util/xjb/xjb/gLastDigit (mut i32) (i32.const 0))
- (global $~lib/util/xjb/xjb/gHasLastDigit (mut i32) (i32.const 0))
- (global $~lib/util/xjb/xjb/DOUBLE_EXP_OFFSET i32 (i32.const 1075))
- (global $~lib/util/xjb/xjb/EXTRA_SHIFT i32 (i32.const 6))
- (global $~lib/util/xjb/xjb/BIASED_HALF i64 (i64.const -9223372036854775802))
- (global $~lib/util/xjb/xjb/DOUBLE_MAX_DIGITS10 i32 (i32.const 17))
- (global $~lib/util/xjb/xjb/MIN_FIXED_DEC_EXP i32 (i32.const -6))
- (global $~lib/util/xjb/xjb/MAX_FIXED_DEC_EXP i32 (i32.const 20))
- (global $~lib/util/xjb/xjb/SCRATCH i32 (i32.const 480))
- (global $~lib/util/xjb/ftoa/HAS_SIMD i32 (i32.const 0))
- (global $~lib/util/xjb/ftoa/POW10_FLOAT_HI i32 (i32.const 608))
- (global $~lib/util/xjb/ftoa/H37 i32 (i32.const 1224))
- (global $~lib/util/xjb/ftoa/DIV10K_EXP i32 (i32.const 40))
- (global $~lib/util/xjb/ftoa/DIV10K_SIG i64 (i64.const 109951163))
- (global $~lib/util/xjb/ftoa/NEG10K i64 (i64.const 4294957296))
- (global $~lib/util/xjb/ftoa/DIV100_EXP i32 (i32.const 19))
- (global $~lib/util/xjb/ftoa/DIV100_SIG i64 (i64.const 5243))
- (global $~lib/util/xjb/ftoa/NEG100 i64 (i64.const 65436))
- (global $~lib/util/xjb/ftoa/DIV10_EXP i32 (i32.const 10))
- (global $~lib/util/xjb/ftoa/DIV10_SIG i64 (i64.const 103))
- (global $~lib/util/xjb/ftoa/NEG10 i64 (i64.const 246))
- (global $~lib/util/xjb/ftoa/ZEROS i64 (i64.const 3472328296227680304))
- (global $~lib/util/xjb/ftoa/DIGIT_PAIRS i32 (i32.const 1480))
- (global $~lib/util/xjb/ftoa/gBcd (mut i64) (i64.const 0))
- (global $~lib/util/xjb/ftoa/gBcdLen (mut i32) (i32.const 0))
- (global $~lib/util/xjb/ftoa/gDigHi (mut i64) (i64.const 0))
- (global $~lib/util/xjb/ftoa/gDigNum (mut i32) (i32.const 0))
- (global $~lib/util/xjb/ftoa/gSig (mut i64) (i64.const 0))
- (global $~lib/util/xjb/ftoa/gExp (mut i32) (i32.const 0))
- (global $~lib/util/xjb/ftoa/gLastDigit (mut i32) (i32.const 0))
- (global $~lib/util/xjb/ftoa/gHasLastDigit (mut i32) (i32.const 0))
- (global $~lib/util/xjb/ftoa/FLOAT_EXP_OFFSET i32 (i32.const 150))
- (global $~lib/util/xjb/ftoa/FLOAT_BIT i32 (i32.const 36))
- (global $~lib/util/xjb/ftoa/FLOAT_ONE_BIAS i64 (i64.const 17179869177))
- (global $~lib/util/xjb/ftoa/MIN_FIXED_DEC_EXP i32 (i32.const -6))
- (global $~lib/util/xjb/ftoa/MAX_FIXED_DEC_EXP i32 (i32.const 20))
- (global $~lib/util/xjb/ftoa/FLOAT_MAX_DIGITS10 i32 (i32.const 9))
- (global $~lib/util/xjb/ftoa/SCRATCH i32 (i32.const 1680))
+ (global $~lib/util/xjb/HAS_SIMD i32 (i32.const 0))
+ (global $~lib/util/xjb/gPow10Hi (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/gPow10Lo (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/POW10_MINOR i32 (i32.const 152))
+ (global $~lib/util/xjb/POW10_MAJOR i32 (i32.const 376))
+ (global $~lib/util/xjb/POW10_FIXUPS i32 (i32.const 744))
+ (global $~lib/util/xjb/DIV10K_EXP i32 (i32.const 40))
+ (global $~lib/util/xjb/DIV10K_SIG i64 (i64.const 109951163))
+ (global $~lib/util/xjb/NEG10K i64 (i64.const 4294957296))
+ (global $~lib/util/xjb/DIV100_EXP i32 (i32.const 19))
+ (global $~lib/util/xjb/DIV100_SIG i64 (i64.const 5243))
+ (global $~lib/util/xjb/NEG100 i64 (i64.const 65436))
+ (global $~lib/util/xjb/DIV10_EXP i32 (i32.const 10))
+ (global $~lib/util/xjb/DIV10_SIG i64 (i64.const 103))
+ (global $~lib/util/xjb/NEG10 i64 (i64.const 246))
+ (global $~lib/util/xjb/ZEROS i64 (i64.const 3472328296227680304))
+ (global $~lib/util/xjb/gBcd (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/gBcdLen (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/gDigHi (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/gDigLo (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/gDigNum (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/gSig (mut i64) (i64.const 0))
+ (global $~lib/util/xjb/gExp (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/gLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/gHasLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/xjb/DOUBLE_EXP_OFFSET i32 (i32.const 1075))
+ (global $~lib/util/xjb/EXTRA_SHIFT i32 (i32.const 6))
+ (global $~lib/util/xjb/BIASED_HALF i64 (i64.const -9223372036854775802))
+ (global $~lib/util/xjb/DOUBLE_MAX_DIGITS10 i32 (i32.const 17))
+ (global $~lib/util/xjb/MIN_FIXED_DEC_EXP i32 (i32.const -6))
+ (global $~lib/util/xjb/MAX_FIXED_DEC_EXP i32 (i32.const 20))
+ (global $~lib/util/xjb/SCRATCH i32 (i32.const 832))
+ (global $~lib/util/xjb/POW10_FLOAT_HI i32 (i32.const 960))
+ (global $~lib/util/xjb/H37 i32 (i32.const 1576))
+ (global $~lib/util/xjb/FLOAT_EXP_OFFSET i32 (i32.const 150))
+ (global $~lib/util/xjb/FLOAT_BIT i32 (i32.const 36))
+ (global $~lib/util/xjb/FLOAT_ONE_BIAS i64 (i64.const 17179869177))
+ (global $~lib/util/xjb/FLOAT_MAX_DIGITS10 i32 (i32.const 9))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -94,34 +70,34 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 2352))
- (global $~lib/memory/__data_end i32 (i32.const 2388))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 35156))
- (global $~lib/memory/__heap_base i32 (i32.const 35156))
+ (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/rt/__rtti_base i32 (i32.const 2368))
+ (global $~lib/memory/__data_end i32 (i32.const 2404))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 35172))
+ (global $~lib/memory/__heap_base i32 (i32.const 35172))
  (memory $0 1)
  (data $0 (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d\00\00\00\00\00\00\00")
  (data $1 (i32.const 60) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data $2 (i32.const 128) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $3 (i32.const 152) "\01\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00d\00\00\00\00\00\00\00\e8\03\00\00\00\00\00\00\10\'\00\00\00\00\00\00\a0\86\01\00\00\00\00\00@B\0f\00\00\00\00\00\80\96\98\00\00\00\00\00\00\e1\f5\05\00\00\00\00\00\ca\9a;\00\00\00\00\00\e4\0bT\02\00\00\00\00\e8vH\17\00\00\00\00\10\a5\d4\e8\00\00\00\00\a0rN\18\t\00\00\00@z\10\f3Z\00\00\00\80\c6\a4~\8d\03\00")
- (data $4 (i32.const 280) "00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899")
- (data $5 (i32.const 480) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $6 (i32.const 608) "p\\\ea{\ce2~\8f\1a\c7C\c6\b0\b7\96\e5\ae\05\03\05\'\c6\ab\b7\bf7\cf\d0\b8\d1\ef\92\fe%\e5\1a\8eO\19\eb2\ebP\e2\a4?\14\bc\f5\88\r\b5P\99v\96!\dbH\bb\1a\c2\bd\f0\b4\15\07\c9{\ce\97\c0]\11l:\96\0b\13\9a\c7\1b\e0\c3V\df\84\f6\06\e3L6\12\197\c5\9e\b5p+\a8\ad\c5\9d\97\"\81E@|o\fc\dfNg\04\cd\c9\f2\c9\e6\0b\b96\d7\07\8f\a1\85\t\94\f8x9?\81:\0f \f4\'\8f\cb\ce\c8\a5\19\90\b9\a5o\a5\a0\84\14@aQY\84\00\a1\ed\cc\ce\1b\c2\d3\00\b4W\n?\16h\a9\00\90\acn2x\86\87\00\80z\17\b7&\d7\d8\00\00b\ac\c5\ebx\ad\00\00\e8\89\04#\c7\8a\00\00@v:k\0b\de\00\00\00\c5.\bc\a2\b1\00\00\00\04\bf\c9\1b\8e\00\00\00\a01\a9_\e3\00\00\00\80\f4 \e6\b5\00\00\00\00*\e7\84\91\00\00\00\00\10\a5\d4\e8\00\00\00\00@\b7C\ba\00\00\00\00\00\f9\02\95\00\00\00\00\00(k\ee\00\00\00\00\00 \bc\be\00\00\00\00\00\80\96\98\00\00\00\00\00\00$\f4\00\00\00\00\00\00P\c3\00\00\00\00\00\00@\9c\00\00\00\00\00\00\00\fa\00\00\00\00\00\00\00\c8\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00\80\cd\cc\cc\cc\cc\cc\cc\cc\0b\d7\a3p=\n\d7\a3<\dfO\8d\97n\12\83,e\19\e2X\17\b7\d1$\84G\1bG\ac\c5\a7\b6il\af\05\bd7\86\bdBz\e5\d5\94\bf\d6\fd\cea\84\11w\cc\ab\98\a5\b46A_p\89\bf\d5\ed\bd\ce\fe\e6\db\ff\aa$\cb\0b\ff\eb\af\cc\88Po\t\cc\bc\8c\14\0e\b4KB\13.\e1\10\d8\\\t5\dc$\b4\da\ac\b0:\f7|\1d\90\\\e1M\c4\be\94\95\e6J\b4\a462\aaw\b8\08]\1d\92\8e\ee\92\93\a6a\95\b6}J\1e\ec\eb\1a\11\92d\08\e5\bc\ef{\datP\a0\1d\97\b2,\f7\ba\80\00\c9\f1(\8a\92\95\00\9am\c1S;uD\cd\14\be\9aR\c5\ee\d3\ae\87\96\f7\db\9dXv%\06\12\c6I~\e0\91\b7\d1t\9e\0e\ca\00\83\f2\b5\87\fd?;\9a5\f5\f7\d2\ca2\fc\14^\f7_B\a2\f5\fcCK,\b3\ce\81\bb\949E\ad\1e\b1\cf")
- (data $7 (i32.const 1224) "\"\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#")
- (data $8 (i32.const 1480) "00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899")
- (data $9 (i32.const 1680) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $10 (i32.const 1820) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
- (data $11 (i32.const 1884) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data $12 (i32.const 1932) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data $13 (i32.const 2000) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $14 (i32.const 2032) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $15 (i32.const 2060) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $16 (i32.const 2124) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
- (data $17 (i32.const 2188) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $18 (i32.const 2220) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\n\00\00\00h\00e\00l\00l\00o\00\00\00")
- (data $19 (i32.const 2252) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\08\00\00\00t\00e\00s\00t\00\00\00\00\00")
- (data $20 (i32.const 2284) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\00b\00a\00r\00\00\00\00\00\00\00")
- (data $21 (i32.const 2316) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\00b\00a\00z\00\00\00\00\00\00\00")
- (data $22 (i32.const 2352) "\08\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00")
+ (data $3 (i32.const 152) "\00\00\00\00\00\00\00\80\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00\c8\00\00\00\00\00\00\00\fa\00\00\00\00\00\00@\9c\00\00\00\00\00\00P\c3\00\00\00\00\00\00$\f4\00\00\00\00\00\80\96\98\00\00\00\00\00 \bc\be\00\00\00\00\00(k\ee\00\00\00\00\00\f9\02\95\00\00\00\00@\b7C\ba\00\00\00\00\10\a5\d4\e8\00\00\00\00*\e7\84\91\00\00\00\80\f4 \e6\b5\00\00\00\a01\a9_\e3\00\00\00\04\bf\c9\1b\8e\00\00\00\c5.\bc\a2\b1\00\00@v:k\0b\de\00\00\e8\89\04#\c7\8a\00\00b\ac\c5\ebx\ad\00\80z\17\b7&\d7\d8\00\90\acn2x\86\87\00\b4W\n?\16h\a9\00\a1\ed\cc\ce\1b\c2\d3\a0\84\14@aQY\84\c8\a5\19\90\b9\a5o\a5:\0f \f4\'\8f\cb\ce")
+ (data $4 (i32.const 376) "o\1b\8e(\10T\8e\af\daM\e4^\ae\f0\ec\07J\fb\9f\f4\98\'D\b1\9dwA\df\cf\11\cd\99\07\ef\99\85\0b?\fe\b2\15\aa\b4\dc\e6\a7\1f\86c\beZ\06\0b\a5\bc\b4\aaSkuz\07\ed\0f\08\bf,)Ud\7f\b6C\d5\b1\17L\c8;\1a\fb;\efi\c2\87F\b8B\a7\ee@OQ]=\eb\dd\e4PF\1a\12\ba\13\e4labM\f3\92\ea\af(\b6\ef&\e2\bb\8c6U\n\f7\89\04\89\0f`\cb\05\e9\b8\b6\bd!\c9\c1\bb\87\e9\00T\96_\9a\84x\db\8f\bf4\d0\bdr\04R\98\de\'\8a\92\95\00\9am\c1\94\82\17\0f<\05\b7u\00\00\00\00\00\00P\c3\00\00\00\00\00\00\00\00\05\e3L6\12\197\c5\00\00\00\00\00\00(l\d6\aa\80\9d\ef\f0\"\c7\f6~\b9\b7\d2:MBL\c8q\d5m\93\13\c9\ea8\1e\cd\19:\bc\03\1cU\ab\01\80\0c\t\cb\c6,\07\d3\bf\f5\ad\\\a1\90\08\137h\03\cd\10\8cz\c3\87\a8\db6.\ef\07\12\c2\b2\02\cf\bc\f4\03^\e4g\f9\94\c7\85\d7in\f8\06\d1R\ba\be\01\d763\e1|\a0\1c4\a8E\10\d3Q\a0\t\12\11H\de\1e1Vx\85\fa\a6\1e\d5f\a5>\7f\"t*U3\f1\ca\ba\0f)2\d7\96@\adGy\17|\a9t\088\c7\b1\d8J\d9\bc\"x\ae\81R7\18")
+ (data $5 (i32.const 744) "?6N\n@\18\00\00\00d\00\00@\00 $\00\00\00\00\00\00\00\0c\80\13\c8\82\1f\e0L^\0f\f60\d7\1b\00\00\00\00\00\00\00\fc\ff\f7\cd\d8\01\82n\d1?\cd@\01%d\db\r\r\00\00\00$\04\14@8qS\b4\1dx\11\00\00\00\00")
+ (data $6 (i32.const 832) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $7 (i32.const 960) "p\\\ea{\ce2~\8f\1a\c7C\c6\b0\b7\96\e5\ae\05\03\05\'\c6\ab\b7\bf7\cf\d0\b8\d1\ef\92\fe%\e5\1a\8eO\19\eb2\ebP\e2\a4?\14\bc\f5\88\r\b5P\99v\96!\dbH\bb\1a\c2\bd\f0\b4\15\07\c9{\ce\97\c0]\11l:\96\0b\13\9a\c7\1b\e0\c3V\df\84\f6\06\e3L6\12\197\c5\9e\b5p+\a8\ad\c5\9d\97\"\81E@|o\fc\dfNg\04\cd\c9\f2\c9\e6\0b\b96\d7\07\8f\a1\85\t\94\f8x9?\81:\0f \f4\'\8f\cb\ce\c8\a5\19\90\b9\a5o\a5\a0\84\14@aQY\84\00\a1\ed\cc\ce\1b\c2\d3\00\b4W\n?\16h\a9\00\90\acn2x\86\87\00\80z\17\b7&\d7\d8\00\00b\ac\c5\ebx\ad\00\00\e8\89\04#\c7\8a\00\00@v:k\0b\de\00\00\00\c5.\bc\a2\b1\00\00\00\04\bf\c9\1b\8e\00\00\00\a01\a9_\e3\00\00\00\80\f4 \e6\b5\00\00\00\00*\e7\84\91\00\00\00\00\10\a5\d4\e8\00\00\00\00@\b7C\ba\00\00\00\00\00\f9\02\95\00\00\00\00\00(k\ee\00\00\00\00\00 \bc\be\00\00\00\00\00\80\96\98\00\00\00\00\00\00$\f4\00\00\00\00\00\00P\c3\00\00\00\00\00\00@\9c\00\00\00\00\00\00\00\fa\00\00\00\00\00\00\00\c8\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00\80\cd\cc\cc\cc\cc\cc\cc\cc\0b\d7\a3p=\n\d7\a3<\dfO\8d\97n\12\83,e\19\e2X\17\b7\d1$\84G\1bG\ac\c5\a7\b6il\af\05\bd7\86\bdBz\e5\d5\94\bf\d6\fd\cea\84\11w\cc\ab\98\a5\b46A_p\89\bf\d5\ed\bd\ce\fe\e6\db\ff\aa$\cb\0b\ff\eb\af\cc\88Po\t\cc\bc\8c\14\0e\b4KB\13.\e1\10\d8\\\t5\dc$\b4\da\ac\b0:\f7|\1d\90\\\e1M\c4\be\94\95\e6J\b4\a462\aaw\b8\08]\1d\92\8e\ee\92\93\a6a\95\b6}J\1e\ec\eb\1a\11\92d\08\e5\bc\ef{\datP\a0\1d\97\b2,\f7\ba\80\00\c9\f1(\8a\92\95\00\9am\c1S;uD\cd\14\be\9aR\c5\ee\d3\ae\87\96\f7\db\9dXv%\06\12\c6I~\e0\91\b7\d1t\9e\0e\ca\00\83\f2\b5\87\fd?;\9a5\f5\f7\d2\ca2\fc\14^\f7_B\a2\f5\fcCK,\b3\ce\81\bb\949E\ad\1e\b1\cf")
+ (data $8 (i32.const 1576) "\"\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$!\"#$\"#$\"#$\"#$!\"#")
+ (data $9 (i32.const 1836) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
+ (data $10 (i32.const 1900) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data $11 (i32.const 1948) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data $12 (i32.const 2016) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $13 (i32.const 2048) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $14 (i32.const 2076) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $15 (i32.const 2140) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
+ (data $16 (i32.const 2204) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $17 (i32.const 2236) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\n\00\00\00h\00e\00l\00l\00o\00\00\00")
+ (data $18 (i32.const 2268) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\08\00\00\00t\00e\00s\00t\00\00\00\00\00")
+ (data $19 (i32.const 2300) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\00b\00a\00r\00\00\00\00\00\00\00")
+ (data $20 (i32.const 2332) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\00b\00a\00z\00\00\00\00\00\00\00")
+ (data $21 (i32.const 2368) "\08\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -258,8 +234,8 @@
   i32.load
   i32.gt_u
   if
-   i32.const 1840
-   i32.const 1904
+   i32.const 1856
+   i32.const 1920
    i32.const 21
    i32.const 28
    call $~lib/builtins/abort
@@ -610,7 +586,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 268
    i32.const 14
    call $~lib/builtins/abort
@@ -630,7 +606,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 270
    i32.const 14
    call $~lib/builtins/abort
@@ -693,7 +669,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 284
    i32.const 14
    call $~lib/builtins/abort
@@ -846,7 +822,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 201
    i32.const 14
    call $~lib/builtins/abort
@@ -863,7 +839,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 203
    i32.const 14
    call $~lib/builtins/abort
@@ -952,7 +928,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2080
+    i32.const 2096
     i32.const 221
     i32.const 16
     call $~lib/builtins/abort
@@ -995,7 +971,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 233
    i32.const 14
    call $~lib/builtins/abort
@@ -1013,7 +989,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 234
    i32.const 14
    call $~lib/builtins/abort
@@ -1081,7 +1057,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 251
    i32.const 14
    call $~lib/builtins/abort
@@ -1198,7 +1174,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 382
    i32.const 14
    call $~lib/builtins/abort
@@ -1244,7 +1220,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2080
+    i32.const 2096
     i32.const 389
     i32.const 16
     call $~lib/builtins/abort
@@ -1276,7 +1252,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2080
+    i32.const 2096
     i32.const 402
     i32.const 5
     call $~lib/builtins/abort
@@ -1520,7 +1496,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 562
    i32.const 3
    call $~lib/builtins/abort
@@ -1851,8 +1827,8 @@
   i32.const 1073741820
   i32.gt_u
   if
-   i32.const 1952
-   i32.const 2080
+   i32.const 1968
+   i32.const 2096
    i32.const 461
    i32.const 29
    call $~lib/builtins/abort
@@ -1954,7 +1930,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 334
    i32.const 14
    call $~lib/builtins/abort
@@ -2025,7 +2001,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 2080
+     i32.const 2096
      i32.const 347
      i32.const 18
      call $~lib/builtins/abort
@@ -2182,7 +2158,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 361
    i32.const 14
    call $~lib/builtins/abort
@@ -2297,7 +2273,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2080
+    i32.const 2096
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -2317,7 +2293,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2080
+   i32.const 2096
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -2365,7 +2341,7 @@
   i32.const 1073741804
   i32.ge_u
   if
-   i32.const 1952
+   i32.const 1968
    i32.const 80
    i32.const 261
    i32.const 31
@@ -2897,10 +2873,10 @@
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
-  i32.const 1840
+  i32.const 1856
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 1952
+  i32.const 1968
   local.get $0
   call $~lib/rt/itcms/__visit
  )
@@ -3028,8 +3004,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 35184
-   i32.const 35232
+   i32.const 35200
+   i32.const 35248
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3208,7 +3184,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 9
    i32.const 3
    call $~lib/builtins/abort
@@ -3231,7 +3207,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 10
    i32.const 3
    call $~lib/builtins/abort
@@ -3340,7 +3316,7 @@
   local.get $size
   i32.eqz
   if
-   i32.const 2208
+   i32.const 2224
    local.set $22
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -3408,7 +3384,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 27
    i32.const 3
    call $~lib/builtins/abort
@@ -3421,12 +3397,12 @@
   local.get $1
   i32.store
   local.get $1
-  i32.const 2240
+  i32.const 2256
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 28
    i32.const 3
    call $~lib/builtins/abort
@@ -3611,7 +3587,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 57
    i32.const 3
    call $~lib/builtins/abort
@@ -3629,7 +3605,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 58
    i32.const 3
    call $~lib/builtins/abort
@@ -3647,7 +3623,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 59
    i32.const 3
    call $~lib/builtins/abort
@@ -3665,7 +3641,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 60
    i32.const 3
    call $~lib/builtins/abort
@@ -3683,7 +3659,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 61
    i32.const 3
    call $~lib/builtins/abort
@@ -3701,7 +3677,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 62
    i32.const 3
    call $~lib/builtins/abort
@@ -3720,7 +3696,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 63
    i32.const 3
    call $~lib/builtins/abort
@@ -3740,7 +3716,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 64
    i32.const 3
    call $~lib/builtins/abort
@@ -3759,7 +3735,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 65
    i32.const 3
    call $~lib/builtins/abort
@@ -3779,7 +3755,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 66
    i32.const 3
    call $~lib/builtins/abort
@@ -3797,7 +3773,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 67
    i32.const 3
    call $~lib/builtins/abort
@@ -3815,7 +3791,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 68
    i32.const 3
    call $~lib/builtins/abort
@@ -3833,7 +3809,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 69
    i32.const 3
    call $~lib/builtins/abort
@@ -3853,7 +3829,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 70
    i32.const 3
    call $~lib/builtins/abort
@@ -3948,7 +3924,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 82
    i32.const 3
    call $~lib/builtins/abort
@@ -3966,12 +3942,12 @@
   local.get $1
   i32.store
   local.get $1
-  i32.const 2272
+  i32.const 2288
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 83
    i32.const 3
    call $~lib/builtins/abort
@@ -3989,7 +3965,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 84
    i32.const 3
    call $~lib/builtins/abort
@@ -4036,7 +4012,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 2304
+  i32.const 2320
   call $object-literal/OmittedFoo#set:bar
   local.get $this
   local.set $1
@@ -4044,7 +4020,7 @@
   local.get $1
   i32.store offset=4
   local.get $1
-  i32.const 2336
+  i32.const 2352
   call $object-literal/OmittedFoo#set:baz
   local.get $this
   local.set $1
@@ -4140,12 +4116,12 @@
   local.get $1
   i32.store
   local.get $1
-  i32.const 2304
+  i32.const 2320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 107
    i32.const 3
    call $~lib/builtins/abort
@@ -4163,12 +4139,12 @@
   local.get $1
   i32.store
   local.get $1
-  i32.const 2336
+  i32.const 2352
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 108
    i32.const 3
    call $~lib/builtins/abort
@@ -4191,7 +4167,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 109
    i32.const 3
    call $~lib/builtins/abort
@@ -4214,7 +4190,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 110
    i32.const 3
    call $~lib/builtins/abort
@@ -4237,7 +4213,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 111
    i32.const 3
    call $~lib/builtins/abort
@@ -4260,7 +4236,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 112
    i32.const 3
    call $~lib/builtins/abort
@@ -4283,7 +4259,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 113
    i32.const 3
    call $~lib/builtins/abort
@@ -4306,7 +4282,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 114
    i32.const 3
    call $~lib/builtins/abort
@@ -4324,7 +4300,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 115
    i32.const 3
    call $~lib/builtins/abort
@@ -4342,7 +4318,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 2144
+   i32.const 2160
    i32.const 116
    i32.const 3
    call $~lib/builtins/abort
@@ -4380,10 +4356,10 @@
   i32.const 1
   i32.shr_u
   global.set $~lib/rt/itcms/threshold
-  i32.const 2000
+  i32.const 2016
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
-  i32.const 2032
+  i32.const 2048
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   global.get $~lib/memory/__stack_pointer
@@ -4506,7 +4482,7 @@
   local.get $5
   i32.store offset=8
   local.get $5
-  i32.const 2272
+  i32.const 2288
   call $object-literal/MixedOmitted#set:complexType
   local.get $3
   f64.const 0

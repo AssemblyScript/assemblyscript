@@ -2,8 +2,10 @@
 // shortest-decimal cores plus their shared 128-bit math, compact pow10 anchor
 // tables (Dougall Johnson reconstruction), SIMD/SWAR digit kernels, and UTF-16
 // writers, all folded into one module. number.ts calls dtoa_buffered /
-// ftoa_buffered. The small-power f64 table is shared with util/string.ts.
+// ftoa_buffered. The small-power f64 table is shared with util/string.ts, and
+// the two-digit DIGITS table with util/number.ts.
 import { POWERS10 } from "./string";
+import { DIGITS } from "./number";
 
 // @ts-expect-error: may exist
 export const HAS_SIMD: bool = isDefined(XJB_SIMD) ? <bool>XJB_SIMD : (isDefined(ASC_FEATURE_SIMD) && ASC_FEATURE_SIMD);
@@ -145,19 +147,6 @@ export const ZEROS: u64 = 0x3030303030303030;
 // POWERS10 (f64, 1e0..1e22) is shared with util/string.ts and imported at the top
 // of this module. Read as u64 for the small-power integer rescale; only 1e1..1e15
 // (well within the exact range) are ever indexed.
-
-export const DIGIT_PAIRS = memory.data<u16>([
-  0x3030, 0x3130, 0x3230, 0x3330, 0x3430, 0x3530, 0x3630, 0x3730, 0x3830, 0x3930,
-  0x3031, 0x3131, 0x3231, 0x3331, 0x3431, 0x3531, 0x3631, 0x3731, 0x3831, 0x3931,
-  0x3032, 0x3132, 0x3232, 0x3332, 0x3432, 0x3532, 0x3632, 0x3732, 0x3832, 0x3932,
-  0x3033, 0x3133, 0x3233, 0x3333, 0x3433, 0x3533, 0x3633, 0x3733, 0x3833, 0x3933,
-  0x3034, 0x3134, 0x3234, 0x3334, 0x3434, 0x3534, 0x3634, 0x3734, 0x3834, 0x3934,
-  0x3035, 0x3135, 0x3235, 0x3335, 0x3435, 0x3535, 0x3635, 0x3735, 0x3835, 0x3935,
-  0x3036, 0x3136, 0x3236, 0x3336, 0x3436, 0x3536, 0x3636, 0x3736, 0x3836, 0x3936,
-  0x3037, 0x3137, 0x3237, 0x3337, 0x3437, 0x3537, 0x3637, 0x3737, 0x3837, 0x3937,
-  0x3038, 0x3138, 0x3238, 0x3338, 0x3438, 0x3538, 0x3638, 0x3738, 0x3838, 0x3938,
-  0x3039, 0x3139, 0x3239, 0x3339, 0x3439, 0x3539, 0x3639, 0x3739, 0x3839, 0x3939,
-]);
 
 // to_bcd8 result.
 let gBcd: u64 = 0;
@@ -405,16 +394,12 @@ export const MAX_FIXED_DEC_EXP = 20;
   const e = (decExp ^ m) - m; // abs(decExp)
   if (e >= 100) {
     const d = (<u32>e * <u32>DIV100_SIG) >> DIV100_EXP; // e / 100
-    const pair = <u32>load<u16>(DIGIT_PAIRS + (<usize>(e - <i32>d * 100) << 1));
     store<u16>(buf, 0x30 + d);
-    store<u16>(buf, pair & 0xff, 2);
-    store<u16>(buf, pair >> 8, 4);
+    store<u32>(buf, load<u32>(DIGITS + (<usize>(e - <i32>d * 100) << alignof<u32>())), 2);
     return buf + 6;
   }
   if (e >= 10) {
-    const pair = <u32>load<u16>(DIGIT_PAIRS + (<usize>e << 1));
-    store<u16>(buf, pair & 0xff);
-    store<u16>(buf, pair >> 8, 2);
+    store<u32>(buf, load<u32>(DIGITS + (<usize>e << alignof<u32>())));
     return buf + 4;
   }
   store<u16>(buf, 0x30 + e);
@@ -569,16 +554,12 @@ export const SCRATCH = memory.data(128);
   let v = value;
   while (v >= 100) {
     const q = v / 100;
-    const pair = <u32>load<u16>(DIGIT_PAIRS + (<usize>(v - q * 100) << 1));
     p -= 4;
-    store<u16>(p, pair & 0xff);
-    store<u16>(p, pair >> 8, 2);
+    store<u32>(p, load<u32>(DIGITS + (<usize>(v - q * 100) << alignof<u32>())));
     v = q;
   }
   if (v >= 10) {
-    const pair = <u32>load<u16>(DIGIT_PAIRS + (<usize>v << 1));
-    store<u16>(buf, pair & 0xff);
-    store<u16>(buf, pair >> 8, 2);
+    store<u32>(buf, load<u32>(DIGITS + (<usize>v << alignof<u32>())));
   } else {
     store<u16>(buf, 0x30 + <u32>v);
   }
