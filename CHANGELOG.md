@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.1.26] - 2026-06-16
+
+### Other Changes
+
+- fix(ts-plugin): export-match @data/@user codec augmentation (TS2395) ([#9](https://github.com/dacely-cloud/toilscript/pull/9)) by @BlobMaster41
+
+
+
+
 ## [v0.1.25] - 2026-06-15
 
 - No changes
