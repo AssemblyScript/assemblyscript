@@ -101,8 +101,8 @@ const POW10_FIXUPS = memory.data<u32>([
     hi = c2; 
     lo = c1;
   } else {
-    hi = (c2 << 1) | (c1 >> 63);
     lo = (c1 << 1) | (c0 >> 63);
+    hi = (c2 << 1) | (c1 >> 63);
   }
   lo -= <u64>((load<u32>(POW10_FIXUPS + (<usize>(i >> 5) << 2)) >> (i & 31)) & 1);
   gPow10Hi = hi;
