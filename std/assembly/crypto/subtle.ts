@@ -42,12 +42,12 @@ function isSymmetricAlg(alg: i32): bool {
 }
 
 export class SubtleCrypto {
-  // `algorithm` is a `crypto.HashAlgorithm.*` selector (an i32 ABI id).
+  // `algorithm` is a hash-id selector: an `ALG_SHA_*` const (NOT a magic string).
   digest(algorithm: i32, data: Uint8Array): Uint8Array {
     return drain(webcrypto.digest(algorithm, data.dataStart, data.byteLength));
   }
 
-  // `format` is a `crypto.KeyFormat.*` selector (an i32 ABI id).
+  // `format` is an `FMT_*` selector const (FMT_RAW / FMT_PKCS8 / FMT_SPKI).
   importKey(
     format: i32,
     keyData: Uint8Array,
@@ -77,7 +77,7 @@ export class SubtleCrypto {
     return new CryptoKey(handle, type, extractable, alg, usages);
   }
 
-  // `format` is a `crypto.KeyFormat.*` selector (an i32 ABI id).
+  // `format` is an `FMT_*` selector const (FMT_RAW / FMT_PKCS8 / FMT_SPKI).
   exportKey(format: i32, key: CryptoKey): Uint8Array {
     if (format == FMT_JWK) throw new Error("jwk key format is not supported");
     return drain(webcrypto.exportKey(format, key.handle));

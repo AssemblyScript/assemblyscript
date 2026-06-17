@@ -14,6 +14,7 @@
 // works). Value types must be default-constructible.
 
 import { toildbHost } from "bindings/toildb";
+import { DataWriter } from "data";
 
 /// Resolve a `"<db>/<collection>"` name to its numeric host handle. Called once
 /// per collection at module init by the generated `App` binding.
@@ -71,6 +72,39 @@ export class Record<V, K> {
     return v!;
   }
 
+  /// Bounded multi-get: one op, one result per key (in order), each the value
+  /// or `null` if absent. The key count is capped by the request budget.
+  getMany(keys: K[]): Array<V | null> {
+    const w = new DataWriter();
+    w.writeU32(<u32>keys.length);
+    for (let i = 0, n = keys.length; i < n; i++) {
+      w.writeBytes(keys[i].encode());
+    }
+    const blob = w.toBytes();
+    const status = toildbHost.getMany(this.__handle, blob.dataStart, blob.byteLength);
+    if (status < 0) unreachable();
+    const out = __toildbTake(status);
+    const results = new Array<V | null>();
+    let off: i32 = 0;
+    const count = load<u32>(out.dataStart + off);
+    off += 4;
+    for (let i: u32 = 0; i < count; i++) {
+      const present = load<u8>(out.dataStart + off);
+      off += 1;
+      if (present == 0) {
+        results.push(null);
+        continue;
+      }
+      const len = <i32>load<u32>(out.dataStart + off);
+      off += 4;
+      const v = instantiate<V>();
+      v.decodeInto(out.subarray(off, off + len));
+      off += len;
+      results.push(v);
+    }
+    return results;
+  }
+
   /// Whether the record exists.
   exists(key: K): bool {
     const kb = key.encode();
@@ -113,6 +147,45 @@ export class Record<V, K> {
     const v = instantiate<V>();
     v.decodeInto(__toildbTake(status));
     return v;
+  }
+}
+
+/// A precomputed, read-optimized projection (spec 7.2): home pages,
+/// leaderboards, rendered fragments. Read by any function kind; PUBLISHED only
+/// by a `@derive`/`@job` (the host kind gate enforces it). `V` is the `@data`
+/// value type, `K` the `@data` key type.
+export class View<V, K> {
+  private __handle: u32;
+
+  constructor(handle: u32) {
+    this.__handle = handle;
+  }
+
+  /// The published view for `key`, or `null` if none has been published.
+  get(key: K): V | null {
+    const kb = key.encode();
+    const status = toildbHost.viewGet(this.__handle, kb.dataStart, kb.byteLength);
+    if (status < 0) return null;
+    const v = instantiate<V>();
+    v.decodeInto(__toildbTake(status));
+    return v;
+  }
+
+  /// Like `get`, but traps if no view is published.
+  require(key: K): V {
+    const v = this.get(key);
+    if (v == null) unreachable();
+    return v!;
+  }
+
+  /// Publish (overwrite) the view for `key`. Derive/job only; the host assigns
+  /// the version so a later publish always supersedes an earlier one.
+  publish(key: K, value: V): void {
+    const kb = key.encode();
+    const vb = value.encode();
+    toildbHost.viewPublish(
+      this.__handle, kb.dataStart, kb.byteLength, vb.dataStart, vb.byteLength, 0
+    );
   }
 }
 

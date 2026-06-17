@@ -75,6 +75,17 @@ import {
   ExpressionStatement,
   FieldDeclaration,
   ForOfStatement,
+  ForStatement,
+  NewExpression,
+  ElementAccessExpression,
+  BinaryExpression,
+  UnaryPrefixExpression,
+  UnaryPostfixExpression,
+  ParenthesizedExpression,
+  AssertionExpression,
+  InstanceOfExpression,
+  TernaryExpression,
+  CommaExpression,
   FunctionDeclaration,
   IfStatement,
   ImportDeclaration,
@@ -196,6 +207,90 @@ class Dependee {
     public source: Source,
     public reportNode: Node
   ) {}
+}
+
+// ---- ToilDB function-kind permission helpers (used by Parser.checkToilDbKinds) ----
+
+/** Map a (handle-family, method-name) to the ToilDB op-kind tag, or "" if the
+ *  method is not a known data op (then the type checker, not this pass, owns it). */
+function dbOpOf(family: string, method: string): string {
+  switch (family) {
+    case "Record": {
+      if (method == "get" || method == "require") return "Get";
+      if (method == "getMany") return "GetMany";
+      if (method == "exists") return "Exists";
+      if (method == "create") return "Create";
+      if (method == "patch") return "Patch";
+      if (method == "delete") return "Delete";
+      if (method == "getDelete") return "GetDelete";
+      return "";
+    }
+    case "View": {
+      if (method == "get" || method == "require") return "ViewGet";
+      if (method == "getMany") return "GetMany";
+      if (method == "publish") return "ViewPublish";
+      return "";
+    }
+    case "Unique": {
+      if (method == "lookup") return "UniqueLookup";
+      if (method == "claim") return "UniqueClaim";
+      if (method == "release") return "UniqueRelease";
+      return "";
+    }
+    case "Counter": {
+      if (method == "get") return "CounterGet";
+      if (method == "add") return "CounterAdd";
+      return "";
+    }
+    case "Events": {
+      if (method == "append") return "Append";
+      if (method == "latest") return "Latest";
+      return "";
+    }
+    default: return "";
+  }
+}
+
+function isDbReadOp(op: string): bool {
+  return op == "Get" || op == "GetMany" || op == "Exists" || op == "ViewGet" ||
+    op == "CounterGet" || op == "UniqueLookup" || op == "Latest";
+}
+
+/** Static mirror of the edge `allowed_ops::kind_allows` (spec 6). */
+function dbKindAllows(kind: i32, op: string): bool {
+  switch (kind) {
+    case DecoratorKind.Query: return isDbReadOp(op);
+    case DecoratorKind.Action:
+      return isDbReadOp(op) || op == "Create" || op == "Patch" || op == "Delete" ||
+        op == "GetDelete" || op == "Append" || op == "CounterAdd" || op == "UniqueClaim" ||
+        op == "UniqueRelease";
+    case DecoratorKind.Derive:
+      return isDbReadOp(op) || op == "ViewPublish" || op == "Append" || op == "CounterAdd";
+    case DecoratorKind.Job: return true;
+    case DecoratorKind.Admin: return false;
+    default: return true;
+  }
+}
+
+function dbKindName(kind: i32): string {
+  switch (kind) {
+    case DecoratorKind.Query: return "query";
+    case DecoratorKind.Action: return "action";
+    case DecoratorKind.Job: return "job";
+    case DecoratorKind.Derive: return "derive";
+    case DecoratorKind.Admin: return "admin";
+    default: return "?";
+  }
+}
+
+function dbKindReason(kind: i32): string {
+  switch (kind) {
+    case DecoratorKind.Query: return "a query is read-only";
+    case DecoratorKind.Action: return "an action cannot publish views";
+    case DecoratorKind.Derive: return "a derive may only read, publish views, append events, or add to counters";
+    case DecoratorKind.Admin: return "an admin has no request-path data access";
+    default: return "not permitted in this kind";
+  }
 }
 
 /** Parser interface. */
@@ -568,11 +663,246 @@ export class Parser extends DiagnosticEmitter {
   /** Finishes parsing. */
   finish(): void {
     if (this.backlog.length) throw new Error("backlog is not empty");
+    // ToilDB: compile-time function-kind permission check (mirrors the edge
+    // runtime gate) over the now-complete program. Runs before the cleanup so
+    // every parsed source is still reachable.
+    this.checkToilDbKinds();
     this.backlog = [];
     this.seenlog.clear();
     this.donelog.clear();
     this.dependees.clear();
     this.restImportedSources.clear();
+  }
+
+  // ---- ToilDB @query/@action/... permission check (spec 6) ----
+  //
+  // A static mirror of the edge's `allowed_ops::kind_allows`: a `@query` is
+  // read-only, only `@derive`/`@job` publish views, etc. The runtime enforces
+  // this regardless; this turns the common violation into a clear compile error
+  // instead of a request-time TDL. Best-effort + conservative: it flags only
+  // direct `Db.collection.method(...)` calls (never an aliased handle) and never
+  // crashes on an unrecognized node (the runtime gate is the backstop).
+
+  private checkToilDbKinds(): void {
+    let dbs = new Map<string, Map<string, string>>();
+    for (let i = 0, k = this.sources.length; i < k; ++i) {
+      this.collectDbCollections(this.sources[i].statements, dbs);
+    }
+    if (!dbs.size) return;
+    for (let i = 0, k = this.sources.length; i < k; ++i) {
+      this.checkDbFunctions(this.sources[i].statements, dbs);
+    }
+  }
+
+  /** Map every `@database` class (incl. inside namespaces) to its
+   *  collection-name -> handle-family-name. */
+  private collectDbCollections(stmts: Statement[], dbs: Map<string, Map<string, string>>): void {
+    for (let i = 0, k = stmts.length; i < k; ++i) {
+      let s = stmts[i];
+      if (s.kind == NodeKind.ClassDeclaration) {
+        let cls = <ClassDeclaration>s;
+        if (this.hasDecoratorKind(cls.decorators, DecoratorKind.Database)) {
+          let colls = new Map<string, string>();
+          let members = cls.members;
+          for (let m = 0, mk = members.length; m < mk; ++m) {
+            let member = members[m];
+            if (member.kind != NodeKind.FieldDeclaration) continue;
+            let field = <FieldDeclaration>member;
+            if (!this.hasDecoratorKind(field.decorators, DecoratorKind.Collection)) continue;
+            let t = field.type;
+            if (t == null || !(t instanceof NamedTypeNode)) continue;
+            colls.set(field.name.text, (<NamedTypeNode>t).name.identifier.text);
+          }
+          if (colls.size) dbs.set(cls.name.text, colls);
+        }
+      } else if (s.kind == NodeKind.NamespaceDeclaration) {
+        this.collectDbCollections((<NamespaceDeclaration>s).members, dbs);
+      }
+    }
+  }
+
+  /** Check every kind-decorated function (top-level, namespaced, or a method). */
+  private checkDbFunctions(stmts: Statement[], dbs: Map<string, Map<string, string>>): void {
+    for (let i = 0, k = stmts.length; i < k; ++i) {
+      let s = stmts[i];
+      if (s.kind == NodeKind.FunctionDeclaration || s.kind == NodeKind.MethodDeclaration) {
+        let fn = <FunctionDeclaration>s;
+        let kind = this.dbFunctionKind(fn.decorators);
+        let body = fn.body;
+        if (kind != -1 && body != null) this.walkDbStmt(body, kind, dbs);
+      } else if (s.kind == NodeKind.NamespaceDeclaration) {
+        this.checkDbFunctions((<NamespaceDeclaration>s).members, dbs);
+      } else if (s.kind == NodeKind.ClassDeclaration) {
+        this.checkDbFunctions((<ClassDeclaration>s).members, dbs);
+      }
+    }
+  }
+
+  /** The ToilDB kind decorator on a function, or -1. */
+  private dbFunctionKind(decorators: DecoratorNode[] | null): i32 {
+    if (decorators == null) return -1;
+    for (let i = 0, k = decorators.length; i < k; ++i) {
+      let dk = decorators[i].decoratorKind;
+      if (
+        dk == DecoratorKind.Query || dk == DecoratorKind.Action || dk == DecoratorKind.Job ||
+        dk == DecoratorKind.Derive || dk == DecoratorKind.Admin
+      ) return dk;
+    }
+    return -1;
+  }
+
+  private walkDbStmt(s: Statement, kind: i32, dbs: Map<string, Map<string, string>>): void {
+    switch (s.kind) {
+      case NodeKind.Block: {
+        let stmts = (<BlockStatement>s).statements;
+        for (let i = 0, k = stmts.length; i < k; ++i) this.walkDbStmt(stmts[i], kind, dbs);
+        break;
+      }
+      case NodeKind.Expression: this.walkDbExpr((<ExpressionStatement>s).expression, kind, dbs); break;
+      case NodeKind.Return: { let v = (<ReturnStatement>s).value; if (v) this.walkDbExpr(v, kind, dbs); break; }
+      case NodeKind.Variable: {
+        let decls = (<VariableStatement>s).declarations;
+        for (let i = 0, k = decls.length; i < k; ++i) {
+          let init = decls[i].initializer;
+          if (init) this.walkDbExpr(init, kind, dbs);
+        }
+        break;
+      }
+      case NodeKind.If: {
+        let st = <IfStatement>s;
+        this.walkDbExpr(st.condition, kind, dbs);
+        this.walkDbStmt(st.ifTrue, kind, dbs);
+        if (st.ifFalse) this.walkDbStmt(st.ifFalse, kind, dbs);
+        break;
+      }
+      case NodeKind.For: {
+        let st = <ForStatement>s;
+        if (st.initializer) this.walkDbStmt(st.initializer, kind, dbs);
+        if (st.condition) this.walkDbExpr(st.condition, kind, dbs);
+        if (st.incrementor) this.walkDbExpr(st.incrementor, kind, dbs);
+        this.walkDbStmt(st.body, kind, dbs);
+        break;
+      }
+      case NodeKind.ForOf: {
+        let st = <ForOfStatement>s;
+        this.walkDbExpr(st.iterable, kind, dbs);
+        this.walkDbStmt(st.body, kind, dbs);
+        break;
+      }
+      case NodeKind.While: {
+        let st = <WhileStatement>s;
+        this.walkDbExpr(st.condition, kind, dbs);
+        this.walkDbStmt(st.body, kind, dbs);
+        break;
+      }
+      case NodeKind.Do: {
+        let st = <DoStatement>s;
+        this.walkDbStmt(st.body, kind, dbs);
+        this.walkDbExpr(st.condition, kind, dbs);
+        break;
+      }
+      case NodeKind.Switch: {
+        let st = <SwitchStatement>s;
+        this.walkDbExpr(st.condition, kind, dbs);
+        let cases = st.cases;
+        for (let i = 0, k = cases.length; i < k; ++i) {
+          let cs = cases[i].statements;
+          for (let j = 0, jk = cs.length; j < jk; ++j) this.walkDbStmt(cs[j], kind, dbs);
+        }
+        break;
+      }
+      case NodeKind.Throw: this.walkDbExpr((<ThrowStatement>s).value, kind, dbs); break;
+      case NodeKind.Try: {
+        let st = <TryStatement>s;
+        this.walkDbStmtList(st.bodyStatements, kind, dbs);
+        if (st.catchStatements) this.walkDbStmtList(st.catchStatements, kind, dbs);
+        if (st.finallyStatements) this.walkDbStmtList(st.finallyStatements, kind, dbs);
+        break;
+      }
+      default: break;
+    }
+  }
+
+  private walkDbStmtList(stmts: Statement[], kind: i32, dbs: Map<string, Map<string, string>>): void {
+    for (let i = 0, k = stmts.length; i < k; ++i) this.walkDbStmt(stmts[i], kind, dbs);
+  }
+
+  private walkDbExpr(e: Expression, kind: i32, dbs: Map<string, Map<string, string>>): void {
+    switch (e.kind) {
+      case NodeKind.Call: {
+        let call = <CallExpression>e;
+        this.checkDbCall(call, kind, dbs);
+        this.walkDbExpr(call.expression, kind, dbs);
+        let args = call.args;
+        for (let i = 0, k = args.length; i < k; ++i) this.walkDbExpr(args[i], kind, dbs);
+        break;
+      }
+      case NodeKind.New: {
+        let args = (<NewExpression>e).args;
+        for (let i = 0, k = args.length; i < k; ++i) this.walkDbExpr(args[i], kind, dbs);
+        break;
+      }
+      case NodeKind.PropertyAccess: this.walkDbExpr((<PropertyAccessExpression>e).expression, kind, dbs); break;
+      case NodeKind.ElementAccess: {
+        let ea = <ElementAccessExpression>e;
+        this.walkDbExpr(ea.expression, kind, dbs);
+        this.walkDbExpr(ea.elementExpression, kind, dbs);
+        break;
+      }
+      case NodeKind.Binary: {
+        let b = <BinaryExpression>e;
+        this.walkDbExpr(b.left, kind, dbs);
+        this.walkDbExpr(b.right, kind, dbs);
+        break;
+      }
+      case NodeKind.UnaryPrefix: this.walkDbExpr((<UnaryPrefixExpression>e).operand, kind, dbs); break;
+      case NodeKind.UnaryPostfix: this.walkDbExpr((<UnaryPostfixExpression>e).operand, kind, dbs); break;
+      case NodeKind.Parenthesized: this.walkDbExpr((<ParenthesizedExpression>e).expression, kind, dbs); break;
+      case NodeKind.Assertion: this.walkDbExpr((<AssertionExpression>e).expression, kind, dbs); break;
+      case NodeKind.InstanceOf: this.walkDbExpr((<InstanceOfExpression>e).expression, kind, dbs); break;
+      case NodeKind.Ternary: {
+        let t = <TernaryExpression>e;
+        this.walkDbExpr(t.condition, kind, dbs);
+        this.walkDbExpr(t.ifThen, kind, dbs);
+        this.walkDbExpr(t.ifElse, kind, dbs);
+        break;
+      }
+      case NodeKind.Comma: {
+        let exprs = (<CommaExpression>e).expressions;
+        for (let i = 0, k = exprs.length; i < k; ++i) this.walkDbExpr(exprs[i], kind, dbs);
+        break;
+      }
+      default: break;
+    }
+  }
+
+  /** If `call` is a direct `Db.collection.method(...)`, verify the kind permits
+   *  it. The receiver must be exactly `Identifier.Identifier` naming a known
+   *  `@database` + collection (an aliased handle is left to the runtime). */
+  private checkDbCall(call: CallExpression, kind: i32, dbs: Map<string, Map<string, string>>): void {
+    let callee = call.expression;
+    if (callee.kind != NodeKind.PropertyAccess) return;
+    let methodAccess = <PropertyAccessExpression>callee;
+    let recv = methodAccess.expression;
+    if (recv.kind != NodeKind.PropertyAccess) return;
+    let collAccess = <PropertyAccessExpression>recv;
+    let dbExpr = collAccess.expression;
+    if (dbExpr.kind != NodeKind.Identifier) return;
+    let colls = dbs.get((<IdentifierExpression>dbExpr).text);
+    if (colls == null) return;
+    let family = colls.get(collAccess.property.text);
+    if (family == null) return;
+    let method = methodAccess.property.text;
+    let op = dbOpOf(family, method);
+    if (op.length == 0) return; // unknown method: the type checker handles it
+    if (!dbKindAllows(kind, op)) {
+      this.error(
+        DiagnosticCode.User_defined_0,
+        methodAccess.property.range,
+        "ToilDB: a @" + dbKindName(kind) + " function may not call '." + method + "' on '" +
+          (<IdentifierExpression>dbExpr).text + "." + collAccess.property.text + "' (" + dbKindReason(kind) + ")"
+      );
+    }
   }
 
   // types

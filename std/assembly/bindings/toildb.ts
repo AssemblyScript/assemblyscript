@@ -34,6 +34,13 @@ export namespace toildbHost {
   @external("env", "data.get")
   export declare function get(handle: u32, keyPtr: usize, keyLen: i32): i32;
 
+  // record bounded multi-get. Input at keysPtr: u32 count + per key (u32 len +
+  // bytes). Result (stashed): u32 count + per item u8 present (+ u32 len + bytes
+  // when present), in request order. Returns the stashed length | negative error.
+  // @ts-ignore: decorator
+  @external("env", "data.get_many")
+  export declare function getMany(handle: u32, keysPtr: usize, keysLen: i32): i32;
+
   // record.exists -> 1 | 0 | negative error.
   // @ts-ignore: decorator
   @external("env", "data.exists")
@@ -94,6 +101,23 @@ export namespace toildbHost {
   // @ts-ignore: decorator
   @external("env", "data.unique_release")
   export declare function uniqueRelease(
+    handle: u32,
+    keyPtr: usize,
+    keyLen: i32,
+    valPtr: usize,
+    valLen: i32,
+    idemPtr: usize
+  ): i32;
+
+  // view.get -> view value length (stashed) | -2 absent | negative error.
+  // @ts-ignore: decorator
+  @external("env", "data.view_get")
+  export declare function viewGet(handle: u32, keyPtr: usize, keyLen: i32): i32;
+
+  // view.publish -> 0 ok | negative error (derive/job only; the host gate enforces).
+  // @ts-ignore: decorator
+  @external("env", "data.view_publish")
+  export declare function viewPublish(
     handle: u32,
     keyPtr: usize,
     keyLen: i32,
