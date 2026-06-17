@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.1.28] - 2026-06-17
+
+### Other Changes
+
+- feat(toildb): @database codegen + @data Uint8Array; type SubtleCrypto ABI ids ([#11](https://github.com/dacely-cloud/toilscript/pull/11)) by @BlobMaster41
+- feat: ToilDB view + getMany handles + @query/@action permission check ([#12](https://github.com/dacely-cloud/toilscript/pull/12)) by @BlobMaster41
+
+
+
+
 ## [v0.1.27] - 2026-06-16
 
 ### Other Changes
