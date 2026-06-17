@@ -2853,11 +2853,14 @@ declare class X25519ImportParams extends AlgorithmParams {}
 declare class EcdhParams extends AlgorithmParams {
   constructor(alg: i32, publicKeyHandle: i32);
 }
-/** Synchronous SubtleCrypto (no Promises). Returns values directly. */
+/** Synchronous SubtleCrypto (no Promises). Returns values directly. The hash and
+ *  key-format arguments are typed ABI ids (no magic strings): pass an `ALG_SHA_*`
+ *  const to `digest`, and an `FMT_*` const (`FMT_RAW` / `FMT_PKCS8` / `FMT_SPKI`)
+ *  to `importKey` / `exportKey`. */
 declare class SubtleCrypto {
-  digest(algorithm: string, data: Uint8Array): Uint8Array;
-  importKey(format: string, keyData: Uint8Array, algorithm: AlgorithmParams, extractable: bool, usages: i32): CryptoKey;
-  exportKey(format: string, key: CryptoKey): Uint8Array;
+  digest(algorithm: i32, data: Uint8Array): Uint8Array;
+  importKey(format: i32, keyData: Uint8Array, algorithm: AlgorithmParams, extractable: bool, usages: i32): CryptoKey;
+  exportKey(format: i32, key: CryptoKey): Uint8Array;
   encrypt(algorithm: AlgorithmParams, key: CryptoKey, data: Uint8Array): Uint8Array;
   decrypt(algorithm: AlgorithmParams, key: CryptoKey, data: Uint8Array): Uint8Array;
   sign(algorithm: AlgorithmParams, key: CryptoKey, data: Uint8Array): Uint8Array;
@@ -2868,6 +2871,8 @@ declare class SubtleCrypto {
 
 // Algorithm / format / curve / usage ids (the Web Crypto ABI contract).
 declare const ALG_SHA_1: i32, ALG_SHA_256: i32, ALG_SHA_384: i32, ALG_SHA_512: i32;
+declare const ALG_SHA3_256: i32, ALG_SHA3_384: i32, ALG_SHA3_512: i32;
+declare const FMT_RAW: i32, FMT_PKCS8: i32, FMT_SPKI: i32, FMT_JWK: i32;
 declare const ALG_AES_GCM: i32, ALG_AES_CBC: i32, ALG_AES_CTR: i32, ALG_AES_KW: i32;
 declare const ALG_HMAC: i32, ALG_ECDSA: i32, ALG_ED25519: i32, ALG_ECDH: i32, ALG_X25519: i32, ALG_HKDF: i32, ALG_PBKDF2: i32;
 declare const CURVE_P256: i32, CURVE_P384: i32;

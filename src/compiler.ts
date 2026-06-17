@@ -20,6 +20,10 @@ import {
 } from "./builtins";
 
 import {
+  buildToilDbCatalog
+} from "./dbcatalog";
+
+import {
   Range,
   DiagnosticCode,
   DiagnosticEmitter
@@ -798,6 +802,13 @@ export class Compiler extends DiagnosticEmitter {
 
     if (program.lookup("ASC_RTRACE") != null) {
       new RtraceMemory(this).walkModule();
+    }
+
+    // ToilDB: embed the collection catalog so the host can build the per-tenant
+    // catalog (correct family + schema) at module load. Absent if no `@database`.
+    let toildbCatalog = buildToilDbCatalog(program);
+    if (toildbCatalog != null) {
+      module.addCustomSection("toildb.catalog", toildbCatalog);
     }
 
     return module;

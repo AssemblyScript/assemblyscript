@@ -1050,7 +1050,17 @@ export enum DecoratorKind {
   Cache,
   Auth,
   User,
-  Ratelimit
+  Ratelimit,
+  // ToilDB (edge database). `@database` declares a logical database class whose
+  // `@collection`-decorated fields are typed collection handles; the function
+  // kinds gate which data operations are legal (spec 5/6).
+  Database,
+  Collection,
+  Query,
+  Action,
+  Job,
+  Derive,
+  Admin
 }
 
 export namespace DecoratorKind {
@@ -1063,6 +1073,8 @@ export namespace DecoratorKind {
       switch (nameStr.charCodeAt(0)) {
         case CharCode.a: {
           if (nameStr == "auth") return DecoratorKind.Auth;
+          if (nameStr == "action") return DecoratorKind.Action;
+          if (nameStr == "admin") return DecoratorKind.Admin;
           break;
         }
         case CharCode.b: {
@@ -1071,11 +1083,14 @@ export namespace DecoratorKind {
         }
         case CharCode.c: {
           if (nameStr == "cache") return DecoratorKind.Cache;
+          if (nameStr == "collection") return DecoratorKind.Collection;
           break;
         }
         case CharCode.d: {
           if (nameStr == "data") return DecoratorKind.Data;
           if (nameStr == "del") return DecoratorKind.Delete; // `@del` (not `@delete`, a reserved word)
+          if (nameStr == "database") return DecoratorKind.Database;
+          if (nameStr == "derive") return DecoratorKind.Derive;
           break;
         }
         case CharCode.e: {
@@ -1099,6 +1114,10 @@ export namespace DecoratorKind {
           if (nameStr == "inline") return DecoratorKind.Inline;
           break;
         }
+        case CharCode.j: {
+          if (nameStr == "job") return DecoratorKind.Job;
+          break;
+        }
         case CharCode.l: {
           if (nameStr == "lazy") return DecoratorKind.Lazy;
           break;
@@ -1116,6 +1135,10 @@ export namespace DecoratorKind {
           if (nameStr == "post") return DecoratorKind.Post;
           if (nameStr == "put") return DecoratorKind.Put;
           if (nameStr == "patch") return DecoratorKind.Patch;
+          break;
+        }
+        case CharCode.q: {
+          if (nameStr == "query") return DecoratorKind.Query;
           break;
         }
         case CharCode.r: {

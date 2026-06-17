@@ -1967,10 +1967,63 @@ export class Parser extends DiagnosticEmitter {
           this.injectUserBinding(declaration);
         } else if (dk == DecoratorKind.Rest) {
           this.injectRestController(declaration, decorators[i]);
+        } else if (dk == DecoratorKind.Database) {
+          this.injectDatabaseBinding(declaration);
         }
       }
     }
     return declaration;
+  }
+
+  /**
+   * Synthesize the ToilDB `@database` binding: for each `@collection` field
+   * (typed as a `Record<V,K>`/... handle), add a STATIC handle to the class
+   * initialized once at module init via `__toildbResolve("<Db>/<collection>")`.
+   * The class name is used as the value: `App.users.get(...)` reads the static
+   * handle. The instance field stays as the type carrier (vestigial).
+   */
+  private injectDatabaseBinding(declaration: ClassDeclaration): void {
+    let dbName = declaration.name.text;
+    let members = declaration.members;
+    for (let i = 0, k = members.length; i < k; ++i) {
+      let member = members[i];
+      if (member.kind != NodeKind.FieldDeclaration) continue;
+      let field = <FieldDeclaration>member;
+      if (!this.hasDecoratorKind(field.decorators, DecoratorKind.Collection)) continue;
+      let typeNode = field.type;
+      if (typeNode == null || !(typeNode instanceof NamedTypeNode)) continue;
+      let named = <NamedTypeNode>typeNode;
+      let handleName = named.name.identifier.text;
+      let collName = field.name.text;
+      let typeArgs = named.typeArguments;
+      let typeText = handleName;
+      if (typeArgs != null && typeArgs.length > 0) {
+        let parts = "";
+        for (let a = 0, n = typeArgs.length; a < n; ++a) {
+          if (a > 0) parts += ", ";
+          let ta = typeArgs[a];
+          if (ta instanceof NamedTypeNode) parts += (<NamedTypeNode>ta).name.identifier.text;
+        }
+        typeText = handleName + "<" + parts + ">";
+      }
+      let resKey = dbName + "/" + collName;
+      // Resolve the handle LAZILY on first access, not in a static initializer.
+      // A static initializer runs in the module `~start` (at instantiation),
+      // before the host has bound the request's linear memory, so calling the
+      // `resolve_collection` host import there traps. A cached static getter
+      // defers the one resolve to the first `Db.coll` use within a request (when
+      // memory is bound); pooled instances keep the resolved handle.
+      let slot = "__db_" + collName;
+      this.injectClassMember(declaration,
+        "private static " + slot + ": " + typeText + " | null = null;");
+      this.injectClassMember(declaration,
+        "static get " + collName + "(): " + typeText + " { if (" + dbName + "." + slot +
+        " == null) " + dbName + "." + slot + " = new " + typeText +
+        "(__toildbResolve(\"" + resKey + "\")); return " + dbName + "." + slot + "!; }");
+    }
+    // Make the resolve helper available to the synthesized getters.
+    this.injectTopLevelStatements(declaration,
+      "// @ts-ignore: injected\nimport { __toildbResolve } from \"toildb\";\n");
   }
 
   /** Synthesize and append the binary codec members to a `@data` class. */
@@ -2003,6 +2056,16 @@ export class Parser extends DiagnosticEmitter {
         reads += "{const " + c + "=__r.readU32();const " + a + "=new Array<" + elemName + ">();for(let " + j + ":u32=0;" + j + "<" + c + "&&__r.ok;++" + j + "){" + a + ".push(" + dataReadExpr(elemName) + ");}__o." + fieldName + "=" + a + ";}";
         jsonWrites += "{const " + a + "=this." + fieldName + ";const " + a + "j=JSON.arr();for(let " + j + "=0," + c + "=" + a + ".length;" + j + "<" + c + ";++" + j + "){" + a + "j.push(" + jsonOfExpr(elemName, a + "[" + j + "]") + ");}__j.set(" + key + "," + a + "j);}";
         jsonReads += "{const " + a + "v=__v.get(" + key + ");const " + a + "=new Array<" + elemName + ">();for(let " + j + "=0," + c + "=" + a + "v.length();" + j + "<" + c + ";++" + j + "){" + a + ".push(" + jsonReadExpr(elemName, a + "v.at(" + j + ")") + ");}__o." + fieldName + "=" + a + ";}";
+      } else if (typeName == "Uint8Array") {
+        // Raw bytes: length-prefixed in the binary codec (writeBytes/readBytes);
+        // a number array in the JSON view (exact round-trip, no encoding choice).
+        let a = "__a" + i.toString();
+        let c = "__c" + i.toString();
+        let j = "__j" + i.toString();
+        writes += "__w.writeBytes(this." + fieldName + ");";
+        reads += "__o." + fieldName + "=__r.readBytes();";
+        jsonWrites += "{const " + a + "=this." + fieldName + ";const " + a + "j=JSON.arr();for(let " + j + ":i32=0," + c + "=" + a + ".length;" + j + "<" + c + ";++" + j + "){" + a + "j.push(JSON.of<u8>(" + a + "[" + j + "]));}__j.set(" + key + "," + a + "j);}";
+        jsonReads += "{const " + a + "v=__v.get(" + key + ");const " + a + "=new Uint8Array(" + a + "v.length());for(let " + j + ":i32=0," + c + "=" + a + "v.length();" + j + "<" + c + ";++" + j + "){" + a + "[" + j + "]=<u8>" + a + "v.at(" + j + ").asU64();}__o." + fieldName + "=" + a + ";}";
       } else {
         // Scalar, string, bignum, or a nested @data type.
         writes += dataWriteStmt(typeName, "this." + fieldName);
@@ -2018,6 +2081,11 @@ export class Parser extends DiagnosticEmitter {
     this.injectClassMember(declaration, "encode(): Uint8Array{const __w=new DataWriter();__w.writeU32(" + typeId + ");this.encodeInto(__w);return __w.toBytes();}");
     this.injectClassMember(declaration, "static decodeFrom(__r: DataReader): " + className + "{const __o=new " + className + "();" + reads + "return __o;}");
     this.injectClassMember(declaration, "static decode(__buf: Uint8Array): " + className + "{const __r=new DataReader(__buf);__r.readU32();return " + className + ".decodeFrom(__r);}");
+    // Instance decode, the mirror of `encode()`: reads a full message into `this`.
+    // Needed because AssemblyScript can't call a static (`V.decode`) through a
+    // type parameter, but an instance method (`v.decodeInto`) resolves fine; the
+    // ToilDB generic handles (`std/assembly/toildb.ts`) use it via `instantiate<V>()`.
+    this.injectClassMember(declaration, "decodeInto(__buf: Uint8Array): void{const __r=new DataReader(__buf);__r.readU32();" + reads.replace(/__o\./g, "this.") + "}");
     this.injectClassMember(declaration, "static dataId(): u32{return " + typeId + ";}");
     // JSON view, independent of the binary path.
     this.injectClassMember(declaration, "toJSON(): JSON{const __j=JSON.obj();" + jsonWrites + "return __j;}");

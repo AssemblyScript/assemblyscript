@@ -372,10 +372,11 @@ function mapName(name: string, dataNames: Set<string>): string {
     case "u256": case "i256": return "bigint";
     case "bool": case "boolean": return "boolean";
     case "string": return "string";
+    case "Uint8Array": return "Uint8Array";
     case "void": return "void";
     default:
       if (dataNames.has(name)) return name;
-      throw new Error("@data: unsupported type '" + name + "' (use a scalar, string, bool, native bignum, a nested @data class, or T[])");
+      throw new Error("@data: unsupported type '" + name + "' (use a scalar, string, bool, native bignum, Uint8Array, a nested @data class, or T[])");
   }
 }
 
@@ -402,6 +403,7 @@ function methodSuffix(name: string): string {
     case "f32": return "F32"; case "f64": return "F64";
     case "bool": case "boolean": return "Bool";
     case "string": return "String";
+    case "Uint8Array": return "Bytes";
     case "u128": return "U128"; case "i128": return "I128"; case "u256": return "U256"; case "i256": return "I256";
     default: return "";
   }
@@ -439,6 +441,7 @@ function jsonReviveScalar(typeName: string, access: string, dataNames: Set<strin
     case "i256": return "__toilUnlimb(" + access + ", 4, true)";
     case "bool": case "boolean": return "Boolean(" + access + ")";
     case "string": return "String(" + access + " ?? \"\")";
+    case "Uint8Array": return "Uint8Array.from(Array.isArray(" + access + ") ? " + access + " : [])";
     default:
       if (dataNames.has(typeName)) return typeName + ".fromJSONValue(" + access + ")";
       throw new Error("@data: unsupported type '" + typeName + "'");
@@ -456,6 +459,7 @@ function jsonSendScalar(typeName: string, access: string, dataNames: Set<string>
     case "u64": case "i64":
     case "u128": case "i128":
     case "u256": case "i256": return access + ".toString()";
+    case "Uint8Array": return "Array.from(" + access + ")";
     default:
       if (dataNames.has(typeName)) return access + ".toJSONValue()";
       return access;
@@ -467,7 +471,8 @@ function jsonSendNeedsTransform(typeName: string, dataNames: Set<string>): bool 
   switch (typeName) {
     case "u64": case "i64":
     case "u128": case "i128":
-    case "u256": case "i256": return true;
+    case "u256": case "i256":
+    case "Uint8Array": return true;
     default: return dataNames.has(typeName);
   }
 }
@@ -501,6 +506,7 @@ function defaultValue(ref: TypeRef, dataNames: Set<string>): string {
     case "u256": case "i256": return "0n";
     case "bool": case "boolean": return "false";
     case "string": return "\"\"";
+    case "Uint8Array": return "new Uint8Array()";
     default:
       if (dataNames.has(ref.type)) return "new " + ref.type + "()";
       throw new Error("@data: unsupported field type '" + ref.type + "'");

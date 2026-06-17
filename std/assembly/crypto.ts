@@ -11,7 +11,16 @@
 
 import { webcrypto } from "bindings/webcrypto";
 import { SubtleCrypto } from "crypto/subtle";
-import { HmacImportParams, HmacParams, ALG_SHA_256, USAGE_SIGN } from "crypto/algorithms";
+import {
+  HmacImportParams,
+  HmacParams,
+  ALG_SHA_1,
+  ALG_SHA_256,
+  ALG_SHA_384,
+  ALG_SHA_512,
+  FMT_RAW,
+  USAGE_SIGN,
+} from "crypto/algorithms";
 import { Encoding } from "encoding";
 
 // Re-export the public surface so guests can import everything from "crypto".
@@ -51,6 +60,13 @@ export {
   ALG_X25519,
   ALG_HKDF,
   ALG_PBKDF2,
+  ALG_SHA3_256,
+  ALG_SHA3_384,
+  ALG_SHA3_512,
+  FMT_RAW,
+  FMT_PKCS8,
+  FMT_SPKI,
+  FMT_JWK,
   CURVE_P256,
   CURVE_P384,
   USAGE_ENCRYPT,
@@ -101,16 +117,16 @@ export namespace crypto {
 
   // --- Ergonomic digest helpers (thin wrappers over subtle.digest) ----------
   export function sha1(data: Uint8Array): Uint8Array {
-    return subtle.digest("SHA-1", data);
+    return subtle.digest(ALG_SHA_1, data);
   }
   export function sha256(data: Uint8Array): Uint8Array {
-    return subtle.digest("SHA-256", data);
+    return subtle.digest(ALG_SHA_256, data);
   }
   export function sha384(data: Uint8Array): Uint8Array {
-    return subtle.digest("SHA-384", data);
+    return subtle.digest(ALG_SHA_384, data);
   }
   export function sha512(data: Uint8Array): Uint8Array {
-    return subtle.digest("SHA-512", data);
+    return subtle.digest(ALG_SHA_512, data);
   }
 
   // String-input variants (UTF-8 encode, then hash).
@@ -129,7 +145,7 @@ export namespace crypto {
 
   /// One-shot HMAC-SHA-256 over raw key + message bytes.
   export function hmacSha256(key: Uint8Array, msg: Uint8Array): Uint8Array {
-    let k = subtle.importKey("raw", key, new HmacImportParams(ALG_SHA_256), false, USAGE_SIGN);
+    let k = subtle.importKey(FMT_RAW, key, new HmacImportParams(ALG_SHA_256), false, USAGE_SIGN);
     return subtle.sign(new HmacParams(), k, msg);
   }
   export function hmacSha256Text(key: Uint8Array, msg: string): Uint8Array {

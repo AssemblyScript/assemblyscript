@@ -2071,7 +2071,8 @@ export class Program extends DiagnosticEmitter {
         DecoratorFlags.Unmanaged |
         DecoratorFlags.Data |
         DecoratorFlags.Service |
-        DecoratorFlags.Rest
+        DecoratorFlags.Rest |
+        DecoratorFlags.Database
       )
     );
     if (!parent.add(name, element)) return null;
@@ -2152,6 +2153,8 @@ export class Program extends DiagnosticEmitter {
     let decorators = declaration.decorators;
     let element: DeclaredElement;
     let acceptedFlags: DecoratorFlags = DecoratorFlags.Unsafe;
+    // `@collection` marks a ToilDB collection field in a `@database` class.
+    acceptedFlags |= DecoratorFlags.Collection;
     if (parent.is(CommonFlags.Ambient)) {
       acceptedFlags |= DecoratorFlags.External;
     }
@@ -2635,6 +2638,9 @@ export class Program extends DiagnosticEmitter {
   ): FunctionPrototype | null {
     let name = declaration.name.text;
     let validDecorators = DecoratorFlags.Unsafe;
+    // ToilDB function kinds (`@query`/`@action`/`@job`/`@derive`/`@admin`) gate
+    // which data operations are legal (enforced by the dbKindCheck pass).
+    validDecorators |= DecoratorFlags.DbFunction;
     if (declaration.is(CommonFlags.Ambient)) {
       validDecorators |= DecoratorFlags.External | DecoratorFlags.ExternalJs;
     } else {
@@ -3013,7 +3019,13 @@ export enum DecoratorFlags {
   /** Is a `@rest` HTTP controller class. */
   Rest = 1 << 16,
   /** Is a `@route`/`@get`/`@post`/... HTTP route method. */
-  Route = 1 << 17
+  Route = 1 << 17,
+  /** Is a `@database` logical-database class (ToilDB). */
+  Database = 1 << 18,
+  /** Is a `@collection` field within a `@database` class. */
+  Collection = 1 << 19,
+  /** Is a `@query`/`@action`/`@job`/`@derive`/`@admin` function (ToilDB kind). */
+  DbFunction = 1 << 20
 }
 
 export namespace DecoratorFlags {
@@ -3047,6 +3059,13 @@ export namespace DecoratorFlags {
       case DecoratorKind.Patch:
       case DecoratorKind.Head:
       case DecoratorKind.Options: return DecoratorFlags.Route;
+      case DecoratorKind.Database: return DecoratorFlags.Database;
+      case DecoratorKind.Collection: return DecoratorFlags.Collection;
+      case DecoratorKind.Query:
+      case DecoratorKind.Action:
+      case DecoratorKind.Job:
+      case DecoratorKind.Derive:
+      case DecoratorKind.Admin: return DecoratorFlags.DbFunction;
       default: return DecoratorFlags.None;
     }
   }

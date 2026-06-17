@@ -7,12 +7,11 @@ import { webcrypto } from "bindings/webcrypto";
 import { CryptoKey } from "crypto/key";
 import {
   AlgorithmParams,
-  algId,
-  formatId,
   cryptoError,
-  FMT_JWK,
+  FMT_RAW,
   FMT_PKCS8,
   FMT_SPKI,
+  FMT_JWK,
   ALG_AES_GCM,
   ALG_AES_CBC,
   ALG_AES_CTR,
@@ -43,26 +42,24 @@ function isSymmetricAlg(alg: i32): bool {
 }
 
 export class SubtleCrypto {
-  digest(algorithm: string, data: Uint8Array): Uint8Array {
-    let id = algId(algorithm);
-    if (id == 0) throw new Error("Unrecognized algorithm: " + algorithm);
-    return drain(webcrypto.digest(id, data.dataStart, data.byteLength));
+  // `algorithm` is a `crypto.HashAlgorithm.*` selector (an i32 ABI id).
+  digest(algorithm: i32, data: Uint8Array): Uint8Array {
+    return drain(webcrypto.digest(algorithm, data.dataStart, data.byteLength));
   }
 
+  // `format` is a `crypto.KeyFormat.*` selector (an i32 ABI id).
   importKey(
-    format: string,
+    format: i32,
     keyData: Uint8Array,
     algorithm: AlgorithmParams,
     extractable: bool,
     usages: i32
   ): CryptoKey {
-    let fmt = formatId(format);
-    if (fmt < 0) throw new Error("Unknown key format: " + format);
-    if (fmt == FMT_JWK) throw new Error("jwk key format is not supported");
+    if (format == FMT_JWK) throw new Error("jwk key format is not supported");
     let p = algorithm.pack();
     let alg = load<i32>(p.dataStart); // first packed field is the alg id
     let handle = webcrypto.importKey(
-      fmt,
+      format,
       keyData.dataStart,
       keyData.byteLength,
       p.dataStart,
@@ -73,18 +70,17 @@ export class SubtleCrypto {
     if (handle < 0) throw new Error(cryptoError(handle));
 
     let type: string;
-    if (fmt == FMT_PKCS8) type = "private";
-    else if (fmt == FMT_SPKI) type = "public";
+    if (format == FMT_PKCS8) type = "private";
+    else if (format == FMT_SPKI) type = "public";
     else type = isSymmetricAlg(alg) ? "secret" : "public";
 
     return new CryptoKey(handle, type, extractable, alg, usages);
   }
 
-  exportKey(format: string, key: CryptoKey): Uint8Array {
-    let fmt = formatId(format);
-    if (fmt < 0) throw new Error("Unknown key format: " + format);
-    if (fmt == FMT_JWK) throw new Error("jwk key format is not supported");
-    return drain(webcrypto.exportKey(fmt, key.handle));
+  // `format` is a `crypto.KeyFormat.*` selector (an i32 ABI id).
+  exportKey(format: i32, key: CryptoKey): Uint8Array {
+    if (format == FMT_JWK) throw new Error("jwk key format is not supported");
+    return drain(webcrypto.exportKey(format, key.handle));
   }
 
   encrypt(algorithm: AlgorithmParams, key: CryptoKey, data: Uint8Array): Uint8Array {
@@ -146,6 +142,6 @@ export class SubtleCrypto {
     usages: i32
   ): CryptoKey {
     let bits = this.deriveBits(algorithm, baseKey, lengthBits);
-    return this.importKey("raw", bits, derivedKeyAlgorithm, extractable, usages);
+    return this.importKey(FMT_RAW, bits, derivedKeyAlgorithm, extractable, usages);
   }
 }
