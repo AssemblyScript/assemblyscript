@@ -180,7 +180,10 @@ export let gDigNum: i32 = 0;
 // rest), so a single-input swizzle replaces a two-input shuffle.
 // @ts-expect-error: decorator
 @inline function packLo32(v: v128): v128 {
-  return v128.swizzle(v, i8x16(0, 1, 2, 3, 8, 9, 10, 11, -128, -128, -128, -128, -128, -128, -128, -128));
+  return v128.swizzle(v, i8x16(
+    0, 1, 2, 3, 8, 9, 10, 11, 
+    -128, -128, -128, -128, -128, -128, -128, -128
+  ));
 }
 
 // SIMD version of toDigits64: builds all 16 ASCII digits in one pass.
