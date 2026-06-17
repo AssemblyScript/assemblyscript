@@ -122,15 +122,18 @@ const POW10_FIXUPS = memory.data<u32>([
   return gPow10Hi;
 }
 
-const DIV10K_EXP = 40;
-const DIV10K_SIG: u64 = ((<u64>1) << DIV10K_EXP) / 10000 + 1;
-const NEG10K: u64 = ((<u64>1) << 32) - 10000;
-const DIV100_EXP = 19;
-const DIV100_SIG: u64 = (1 << DIV100_EXP) / 100 + 1;
-const NEG100: u64 = (1 << 16) - 100;
 const DIV10_EXP = 10;
 const DIV10_SIG: u64 = (1 << DIV10_EXP) / 10 + 1;
 const NEG10: u64 = (1 << 8) - 10;
+
+const DIV100_EXP = 19;
+const DIV100_SIG: u64 = (1 << DIV100_EXP) / 100 + 1;
+const NEG100: u64 = (1 << 16) - 100;
+
+const DIV10K_EXP = 40;
+const DIV10K_SIG: u64 = ((<u64>1) << DIV10K_EXP) / 10000 + 1;
+const NEG10K: u64 = ((<u64>1) << 32) - 10000;
+
 export const ZEROS: u64 = 0x3030303030303030;
 
 let gBcd: u64 = 0;
