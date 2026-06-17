@@ -98,7 +98,8 @@ const POW10_FIXUPS = memory.data<u32>([
 
   let hi: u64, lo: u64;
   if ((c2 >> 63) != 0) {
-    hi = c2; lo = c1;
+    hi = c2; 
+    lo = c1;
   } else {
     hi = (c2 << 1) | (c1 >> 63);
     lo = (c1 << 1) | (c0 >> 63);
