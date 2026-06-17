@@ -12,14 +12,14 @@
  (type $10 (func (param i32 i32 i64)))
  (type $11 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/util/xjb/gBcd (mut i64) (i64.const 0))
- (global $~lib/util/xjb/gBcdLen (mut i32) (i32.const 0))
- (global $~lib/util/xjb/gDigHi (mut i64) (i64.const 0))
- (global $~lib/util/xjb/gDigNum (mut i32) (i32.const 0))
- (global $~lib/util/xjb/gSig (mut i64) (i64.const 0))
- (global $~lib/util/xjb/gExp (mut i32) (i32.const 0))
- (global $~lib/util/xjb/gLastDigit (mut i32) (i32.const 0))
- (global $~lib/util/xjb/gHasLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/gBcd (mut i64) (i64.const 0))
+ (global $~lib/util/dtoa/gBcdLen (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/gDigHi (mut i64) (i64.const 0))
+ (global $~lib/util/dtoa/gDigNum (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/gSig (mut i64) (i64.const 0))
+ (global $~lib/util/dtoa/gExp (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/gLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/gHasLastDigit (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -1546,7 +1546,7 @@
   i32.const 3280
   local.set $1
   local.get $0
-  call $~lib/util/xjb/ftoa_buffered
+  call $~lib/util/dtoa/ftoa_buffered
   local.tee $2
   i32.const 1
   i32.shl
@@ -2153,7 +2153,7 @@
  (func $~start
   call $start:resolve-elementaccess
  )
- (func $~lib/util/xjb/ftoa_buffered (param $0 f32) (result i32)
+ (func $~lib/util/dtoa/ftoa_buffered (param $0 f32) (result i32)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
@@ -2181,7 +2181,7 @@
   i32.const 31
   i32.shr_u
   local.set $1
-  block $~lib/util/xjb/formatDecodedFloat|inlined.0
+  block $~lib/util/dtoa/formatDecodedFloat|inlined.0
    local.get $5
    i32.const 1
    i32.sub
@@ -2349,13 +2349,13 @@
      i64.gt_u
     end
     local.get $3
-    global.set $~lib/util/xjb/gSig
+    global.set $~lib/util/dtoa/gSig
     local.get $1
-    global.set $~lib/util/xjb/gExp
+    global.set $~lib/util/dtoa/gExp
     local.get $5
-    global.set $~lib/util/xjb/gLastDigit
+    global.set $~lib/util/dtoa/gLastDigit
     i32.eqz
-    global.set $~lib/util/xjb/gHasLastDigit
+    global.set $~lib/util/dtoa/gHasLastDigit
    else
     local.get $5
     if
@@ -2374,7 +2374,7 @@
       i32.store16
       i32.const 3286
       local.set $1
-      br $~lib/util/xjb/formatDecodedFloat|inlined.0
+      br $~lib/util/dtoa/formatDecodedFloat|inlined.0
      end
      local.get $1
      if (result i32)
@@ -2413,7 +2413,7 @@
      i32.const 16
      i32.add
      local.set $1
-     br $~lib/util/xjb/formatDecodedFloat|inlined.0
+     br $~lib/util/dtoa/formatDecodedFloat|inlined.0
     end
     local.get $2
     i64.eqz
@@ -2423,7 +2423,7 @@
      i32.store16
      i32.const 3282
      local.set $1
-     br $~lib/util/xjb/formatDecodedFloat|inlined.0
+     br $~lib/util/dtoa/formatDecodedFloat|inlined.0
     end
     local.get $1
     if (result i32)
@@ -2487,9 +2487,9 @@
     i64.const 36
     i64.shr_u
     local.tee $3
-    global.set $~lib/util/xjb/gSig
+    global.set $~lib/util/dtoa/gSig
     i32.const -45
-    global.set $~lib/util/xjb/gExp
+    global.set $~lib/util/dtoa/gExp
     local.get $10
     i64.const 5
     i64.mul
@@ -2502,7 +2502,7 @@
     i64.const 35
     i64.shr_u
     i32.wrap_i64
-    global.set $~lib/util/xjb/gLastDigit
+    global.set $~lib/util/dtoa/gLastDigit
     local.get $9
     local.get $2
     i64.sub
@@ -2510,14 +2510,14 @@
     i64.shr_u
     local.get $3
     i64.ge_u
-    global.set $~lib/util/xjb/gHasLastDigit
-    global.get $~lib/util/xjb/gSig
+    global.set $~lib/util/dtoa/gHasLastDigit
+    global.get $~lib/util/dtoa/gSig
     i64.const 10
     i64.mul
-    global.get $~lib/util/xjb/gLastDigit
+    global.get $~lib/util/dtoa/gLastDigit
     i64.extend_i32_s
     i64.const 0
-    global.get $~lib/util/xjb/gHasLastDigit
+    global.get $~lib/util/dtoa/gHasLastDigit
     select
     i64.add
     local.set $2
@@ -2550,41 +2550,41 @@
     i32.wrap_i64
     local.set $1
     local.get $2
-    global.set $~lib/util/xjb/gSig
+    global.set $~lib/util/dtoa/gSig
     local.get $5
-    global.set $~lib/util/xjb/gExp
+    global.set $~lib/util/dtoa/gExp
     local.get $1
-    global.set $~lib/util/xjb/gLastDigit
+    global.set $~lib/util/dtoa/gLastDigit
     local.get $1
     i32.const 0
     i32.ne
-    global.set $~lib/util/xjb/gHasLastDigit
+    global.set $~lib/util/dtoa/gHasLastDigit
    end
-   global.get $~lib/util/xjb/gHasLastDigit
+   global.get $~lib/util/dtoa/gHasLastDigit
    local.set $1
-   global.get $~lib/util/xjb/gSig
+   global.get $~lib/util/dtoa/gSig
    i64.const 10000000
    i64.ge_u
    local.tee $6
-   global.get $~lib/util/xjb/gExp
+   global.get $~lib/util/dtoa/gExp
    i32.const 7
    i32.add
    i32.add
    local.set $5
-   global.get $~lib/util/xjb/gSig
+   global.get $~lib/util/dtoa/gSig
    i64.const 1000000
    i64.lt_u
    if
-    global.get $~lib/util/xjb/gSig
+    global.get $~lib/util/dtoa/gSig
     i64.const 10
     i64.mul
-    global.get $~lib/util/xjb/gLastDigit
+    global.get $~lib/util/dtoa/gLastDigit
     i64.extend_i32_s
     i64.const 0
     local.get $1
     select
     i64.add
-    global.set $~lib/util/xjb/gSig
+    global.set $~lib/util/dtoa/gSig
     local.get $5
     i32.const 1
     i32.sub
@@ -2592,7 +2592,7 @@
     i32.const 0
     local.set $1
    end
-   global.get $~lib/util/xjb/gSig
+   global.get $~lib/util/dtoa/gSig
    local.tee $2
    i64.const 109951163
    i64.mul
@@ -2649,7 +2649,7 @@
    i64.const 32
    i64.rotr
    local.tee $2
-   global.set $~lib/util/xjb/gBcd
+   global.set $~lib/util/dtoa/gBcd
    i64.const 70
    local.get $2
    i64.const 1
@@ -2661,13 +2661,13 @@
    i64.const 3
    i64.shr_u
    i32.wrap_i64
-   global.set $~lib/util/xjb/gBcdLen
-   global.get $~lib/util/xjb/gBcd
+   global.set $~lib/util/dtoa/gBcdLen
+   global.get $~lib/util/dtoa/gBcd
    i64.const 3472328296227680304
    i64.add
-   global.set $~lib/util/xjb/gDigHi
-   global.get $~lib/util/xjb/gBcdLen
-   global.set $~lib/util/xjb/gDigNum
+   global.set $~lib/util/dtoa/gDigHi
+   global.get $~lib/util/dtoa/gBcdLen
+   global.set $~lib/util/dtoa/gDigNum
    local.get $5
    i32.const 20
    i32.le_s
@@ -2705,7 +2705,7 @@
      i64.const 48
      i64.store16 offset=14
     end
-    global.get $~lib/util/xjb/gLastDigit
+    global.get $~lib/util/dtoa/gLastDigit
     i64.extend_i32_s
     i64.const 0
     local.get $1
@@ -2713,7 +2713,7 @@
     i64.const 48
     i64.add
     local.set $3
-    global.get $~lib/util/xjb/gDigHi
+    global.get $~lib/util/dtoa/gDigHi
     local.set $2
     local.get $6
     i32.eqz
@@ -2728,13 +2728,13 @@
      local.set $2
     end
     i32.const 8
-    global.get $~lib/util/xjb/gDigNum
+    global.get $~lib/util/dtoa/gDigNum
     i32.const 1
     i32.sub
     local.get $1
     select
     local.set $1
-    block $~lib/util/xjb/writeFixedFloat|inlined.0
+    block $~lib/util/dtoa/writeFixedFloat|inlined.0
      local.get $5
      i32.const 8
      i32.ge_s
@@ -2849,7 +2849,7 @@
         br $for-loop|1
        end
       end
-      br $~lib/util/xjb/writeFixedFloat|inlined.0
+      br $~lib/util/dtoa/writeFixedFloat|inlined.0
      end
      local.get $1
      local.get $6
@@ -3051,7 +3051,7 @@
      i32.add
      local.set $1
     end
-    br $~lib/util/xjb/formatDecodedFloat|inlined.0
+    br $~lib/util/dtoa/formatDecodedFloat|inlined.0
    end
    local.get $4
    local.get $6
@@ -3059,7 +3059,7 @@
    i32.shl
    i32.add
    local.tee $6
-   global.get $~lib/util/xjb/gDigHi
+   global.get $~lib/util/dtoa/gDigHi
    local.tee $2
    i64.const 255
    i64.and
@@ -3112,7 +3112,7 @@
    i64.shr_u
    i64.store16 offset=14
    local.get $6
-   global.get $~lib/util/xjb/gLastDigit
+   global.get $~lib/util/dtoa/gLastDigit
    i32.const 48
    i32.add
    i32.store16 offset=16
@@ -3125,7 +3125,7 @@
    i32.store16 offset=2
    local.get $6
    i32.const 9
-   global.get $~lib/util/xjb/gDigNum
+   global.get $~lib/util/dtoa/gDigNum
    local.get $1
    select
    i32.const 1
@@ -3157,7 +3157,7 @@
    i32.const 4
    i32.add
    local.set $1
-   block $~lib/util/xjb/writeExponent|inlined.0 (result i32)
+   block $~lib/util/dtoa/writeExponent|inlined.0 (result i32)
     local.get $4
     local.get $5
     i32.xor
@@ -3192,7 +3192,7 @@
      local.get $1
      i32.const 6
      i32.add
-     br $~lib/util/xjb/writeExponent|inlined.0
+     br $~lib/util/dtoa/writeExponent|inlined.0
     end
     local.get $4
     i32.const 10
@@ -3209,7 +3209,7 @@
      local.get $1
      i32.const 4
      i32.add
-     br $~lib/util/xjb/writeExponent|inlined.0
+     br $~lib/util/dtoa/writeExponent|inlined.0
     end
     local.get $1
     local.get $4

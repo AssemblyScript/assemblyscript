@@ -2,10 +2,10 @@
 
 import { idof } from "../builtins";
 import { CharCode } from "./string";
-import { dtoa_buffered as dtoa_buffered_double } from "./xjb";
-import { ftoa_buffered as ftoa_buffered_single } from "./xjb";
+import { dtoa_buffered as dtoa_buffered_double } from "./dtoa";
+import { ftoa_buffered as ftoa_buffered_single } from "./dtoa";
 
-// >= 32 code units (64 bytes) per value: xjb writers can overshoot by one block.
+// >= 32 code units (64 bytes) per value
 // @ts-ignore: decorator
 @inline
 export const MAX_DOUBLE_LENGTH = 32;
@@ -410,13 +410,10 @@ export function itoa64(value: i64, radix: i32): String {
 }
 
 
-// Scratch buffer for the String path (128 bytes: matches xjb's SCRATCH headroom).
 // @ts-ignore: decorator
 @lazy @inline const dtoa_buf = memory.data(128);
 
-// xjb emits ECMAScript-exact output; AssemblyScript appends ".0" to bare-integer
-// results ("1" -> "1.0", "0" -> "0.0"). Fraction/exponent forms and NaN/Infinity
-// already contain a non-digit, so they're left untouched.
+// dtoa emits ECMAScript-exact output, but we add a .0 suffix to easily distinguish between integers and floats.
 // @ts-ignore: decorator
 @inline
 function dtoa_dotZero(buffer: usize, len: u32): u32 {
