@@ -204,9 +204,11 @@ export let gDigNum: i32 = 0;
   const mask = i8x16.bitmask(i8x16.gt_s(bcd, i8x16.splat(0)));
   gDigNum = 16 - ctz(mask); // mask is never 0 (significand >= 1)
 
+  const REV_ORDER = i8x16(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
   const ascii = v128.or(
-    v128.swizzle(bcd, i8x16(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)),
-    i8x16.splat(0x30));
+    v128.swizzle(bcd, REV_ORDER),
+    i8x16.splat(0x30)
+  );
   gDigHi = i64x2.extract_lane(ascii, 0);
   gDigLo = i64x2.extract_lane(ascii, 1);
 }
