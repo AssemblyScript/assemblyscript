@@ -234,8 +234,11 @@ export let gDigNum: i32 = 0;
 
 // @ts-expect-error: decorator
 @inline export function toDigits64(value: u64): void {
-  if (ASC_FEATURE_SIMD) return toDigits64Simd(value);
-  toDigits64Swar(value);
+  if (ASC_FEATURE_SIMD) {
+    toDigits64Simd(value);
+  } else {
+    toDigits64Swar(value);
+  }
 }
 
 export let gSig: i64 = 0;
