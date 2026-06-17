@@ -284,7 +284,10 @@ export const MAX_FIXED_DEC_EXP = 20;
 
 // @ts-expect-error: decorator
 @inline export function writeInfinity(buf: usize, neg: bool): usize {
-  if (neg) { store<u16>(buf, 0x2d); buf += 2; }
+  if (neg) { 
+    store<u16>(buf, 0x2d); 
+    buf += 2; 
+  }
   putBlock8(buf, 0x7974696e69666e49); // "Infinity" little-endian
   return buf + 16;
 }
