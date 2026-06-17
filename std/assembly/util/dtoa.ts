@@ -1,9 +1,6 @@
 import { POWERS10 } from "./string";
 import { DIGITS } from "./number";
 
-// @ts-expect-error: may exist
-export const HAS_SIMD: bool = isDefined(XJB_SIMD) ? <bool>XJB_SIMD : (isDefined(ASC_FEATURE_SIMD) && ASC_FEATURE_SIMD);
-
 // High 64 bits of the 128-bit product x * y. Matches umul128.
 // @ts-expect-error: decorator
 @inline export function mulhi64(a: u64, b: u64): u64 {
@@ -44,11 +41,8 @@ export const HAS_SIMD: bool = isDefined(XJB_SIMD) ? <bool>XJB_SIMD : (isDefined(
 export let gPow10Hi: u64 = 0;
 export let gPow10Lo: u64 = 0;
 
-// Compact pow10 (Dougall Johnson's method, ported from vitaut/zmij): rather than a
-// 9888-byte table of 128-bit significands, store two small anchor sets and rebuild
-// any of the 618 powers on load. 10**i = top-128-bits(major[(i+10)/28] * minor[(i+10)%28])
-// minus a per-power round-down bit. ~672 bytes, bit-identical to the full table,
-// one 128x64 multiply per load - the size/speed point xjb's *_comp variant targets.
+// Compact pow10 (Dougall Johnson's method, ported from vitaut/zmij)
+// 10**i = top-128-bits(major[(i+10)/28] * minor[(i+10)%28]) minus a per-power round-down bit.
 
 // 28 normalized exact powers 10**0..10**27 - the within-stride minor factors.
 const POW10_MINOR = memory.data<u64>([
@@ -231,7 +225,7 @@ export let gDigNum: i32 = 0;
 
 // @ts-expect-error: decorator
 @inline export function toDigits64(value: u64): void {
-  if (HAS_SIMD) return toDigits64Simd(value);
+  if (ASC_FEATURE_SIMD) return toDigits64Simd(value);
   toDigits64Swar(value);
 }
 
@@ -253,7 +247,7 @@ export const MAX_FIXED_DEC_EXP = 20;
 // @ts-expect-error: decorator
 @inline export function putBlock8(p: usize, ascii: u64, off: usize = 0): void {
   const base = p + off;
-  if (HAS_SIMD) {
+  if (ASC_FEATURE_SIMD) {
     v128.store(base, i16x8.extend_low_i8x16_u(i64x2.splat(ascii)));
   } else {
     store<u16>(base, <u16>(ascii & 0xff));
@@ -706,7 +700,7 @@ export const FLOAT_MAX_DIGITS10 = 9;
 // to_digits<32>: a single u64 of 8 ASCII digits (value < 1e8).
 // @ts-expect-error: decorator
 @inline export function toDigits32(value: u64): void {
-  if (HAS_SIMD) return toDigits32Simd(value);
+  if (ASC_FEATURE_SIMD) return toDigits32Simd(value);
   toBcd8(value);
   gDigHi = gBcd + ZEROS;
   gDigNum = gBcdLen;
