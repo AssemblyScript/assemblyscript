@@ -278,7 +278,9 @@ export const MAX_FIXED_DEC_EXP = 20;
 // ECMAScript spellings for the non-finite cases.
 // @ts-expect-error: decorator
 @inline export function writeNaN(buf: usize): usize {
-  store<u16>(buf, 0x4e); store<u16>(buf, 0x61, 2); store<u16>(buf, 0x4e, 4); // "NaN"
+  store<u16>(buf, 0x4e, 0); // 'N'
+  store<u16>(buf, 0x61, 2); // 'a'
+  store<u16>(buf, 0x4e, 4); // 'N'
   return buf + 6;
 }
 
