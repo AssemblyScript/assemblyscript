@@ -343,7 +343,9 @@ export const MAX_FIXED_DEC_EXP = 20;
     putBlock8(buf, dLo, 16);
     store<u16>(buf + 32, <u32>lastDigitChar);
     let endByte = buf + ((decExp + 1) << 1);
-    for (let z = buf + (17 << 1); z < endByte; z += 16) putBlock8(z, ZEROS);
+    for (let z = buf + (17 << 1); z < endByte; z += 16) {
+      putBlock8(z, ZEROS);
+    }
     return endByte;
   }
 
@@ -618,10 +620,17 @@ export const MAX_FIXED_DEC_EXP = 20;
       if (binSig != 0) return writeNaN(buf);
       return writeInfinity(buf, neg);
     }
-    if (binSig == 0) { store<u16>(buf, 0x30); return buf + 2; } // +/-0 -> "0"
+    // +/-0 -> "0"
+    if (binSig == 0) {
+      store<u16>(buf, 0x30);
+      return buf + 2;
+    }
   }
 
-  if (neg) { store<u16>(buf, 0x2d); buf += 2; }
+  if (neg) {
+    store<u16>(buf, 0x2d);
+    buf += 2;
+  }
   if (isNormal) {
     let q = binExp - DOUBLE_EXP_OFFSET;
     let c = binSig | DOUBLE_HIDDEN_BIT;
@@ -785,7 +794,9 @@ export const FLOAT_MAX_DIGITS10 = 9;
     if (hasExtraDigit) store<u16>(buf + 16, <u32>lastDigitChar);
     let sig = 8 + i32(hasExtraDigit);
     let endByte = buf + ((decExp + 1) << 1);
-    for (let z = buf + (sig << 1); z < endByte; z += 16) putBlock8(z, ZEROS);
+    for (let z = buf + (sig << 1); z < endByte; z += 16) {
+      putBlock8(z, ZEROS);
+    }
     return endByte;
   }
 
@@ -893,8 +904,14 @@ export const FLOAT_MAX_DIGITS10 = 9;
       if (binSig != 0) return writeNaN(buf);
       return writeInfinity(buf, neg);
     }
-    if (binSig == 0) { store<u16>(buf, 0x30); return buf + 2; }
-    if (neg) { store<u16>(buf, 0x2d); buf += 2; }
+    if (binSig == 0) {
+      store<u16>(buf, 0x30);
+      return buf + 2;
+    }
+    if (neg) {
+      store<u16>(buf, 0x2d);
+      buf += 2;
+    }
     toDecimalFloat(binSig, 1, true);
     let decSig = gSig * 10 + (gHasLastDigit ? gLastDigit : 0);
     let decExp = gExp;
@@ -909,7 +926,10 @@ export const FLOAT_MAX_DIGITS10 = 9;
     gLastDigit = last;
     gHasLastDigit = last != 0;
   } else {
-    if (neg) { store<u16>(buf, 0x2d); buf += 2; }
+    if (neg) {
+      store<u16>(buf, 0x2d);
+      buf += 2;
+    }
     toDecimalFloat(binSig | ((<u64>1) << 23), binExp, binSig != 0);
   }
 
