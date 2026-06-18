@@ -36,7 +36,7 @@ import { DIGITS, MAX_DOUBLE_LENGTH } from "./number";
 @inline export function computeExpShift(binExp: i32, decExp: i32): i32 {
   const LOG2_POW10_SIG = 217707;
   const LOG2_POW10_EXP = 16;
-  const pow10BinExp = (-decExp * LOG2_POW10_SIG) >> LOG2_POW10_EXP;
+  let pow10BinExp = (-decExp * LOG2_POW10_SIG) >> LOG2_POW10_EXP;
   return binExp + pow10BinExp + 1;
 }
 
