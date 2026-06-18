@@ -54,6 +54,13 @@ const TOIL_DECORATORS = new Set([
   'patch',
   'head',
   'options',
+  'database',
+  'collection',
+  'query',
+  'action',
+  'job',
+  'derive',
+  'admin',
   'main',
   'user',
   'auth',
@@ -198,6 +205,47 @@ function init(modules) {
     return out;
   }
 
+  /**
+   * Ambient declarations so the editor types each `@database` class's STATIC
+   * collection handles. The compiler injects a lazy static getter per
+   * `@collection` field (`AuthDb.users`), but the source only declares an
+   * instance type-carrier field, so stock TS reports `AuthDb.users` as
+   * TS2339. Merge a `namespace` onto the class (the standard way to add typed
+   * statics) with one `const` per collection, typed as the field's handle type
+   * (`Record<User, UserId>`, `Capacity<DropId>`, ...). Returns "" when the file
+   * declares no `@database`.
+   */
+  function databaseAugmentation(text) {
+    if (text.indexOf('@database') < 0) return '';
+    let sf;
+    try {
+      sf = ts.createSourceFile('__toil_db_aug__.ts', text, ts.ScriptTarget.Latest, true);
+    } catch {
+      return '';
+    }
+    let out = '';
+    sf.forEachChild((node) => {
+      if (!ts.isClassDeclaration(node) || !node.name) return;
+      if (!declHasDecorator(node, 'database')) return;
+      const dbName = node.name.text;
+      // Match export-ness so the class/namespace merge is all-exported or
+      // all-local (a mismatch trips TS2395).
+      const exp = hasExportModifier(node) ? 'export ' : '';
+      let consts = '';
+      node.members.forEach((m) => {
+        if (!ts.isPropertyDeclaration(m) || !declHasDecorator(m, 'collection')) return;
+        if (!m.type || !m.name || !ts.isIdentifier(m.name)) return;
+        consts += `  const ${m.name.text}: ${m.type.getText(sf)};\n`;
+      });
+      if (consts) {
+        out +=
+          `\n// toilscript: editor types for the @database ${dbName} static collection handles\n` +
+          `${exp}declare namespace ${dbName} {\n${consts}}\n`;
+      }
+    });
+    return out;
+  }
+
   return {
     create(info) {
       const ls = info.languageService;
@@ -215,7 +263,8 @@ function init(modules) {
           if (!snap) return snap;
           let aug = '';
           try {
-            aug = dataAugmentation(snap.getText(0, snap.getLength()));
+            const t = snap.getText(0, snap.getLength());
+            aug = dataAugmentation(t) + databaseAugmentation(t);
           } catch {
             aug = '';
           }
