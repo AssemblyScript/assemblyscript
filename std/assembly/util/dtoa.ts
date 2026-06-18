@@ -109,8 +109,8 @@ export let gPow10Lo: u64 = 0;
 
   let hi: u64, lo: u64;
   if ((c2 >> 63) != 0) {
-    hi = c2;
     lo = c1;
+    hi = c2;
   } else {
     lo = (c1 << 1) | (c0 >> 63);
     hi = (c2 << 1) | (c1 >> 63);
