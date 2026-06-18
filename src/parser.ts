@@ -254,6 +254,14 @@ function dbOpOf(family: string, method: string): string {
       if (method == "remove") return "MembershipRemove";
       return "";
     }
+    case "Capacity": {
+      if (method == "available") return "CapacityAvailable";
+      if (method == "reserve") return "CapacityReserve";
+      if (method == "confirm") return "CapacityConfirm";
+      if (method == "cancel") return "CapacityCancel";
+      if (method == "setTotal") return "CapacitySetTotal";
+      return "";
+    }
     default: return "";
   }
 }
@@ -261,7 +269,7 @@ function dbOpOf(family: string, method: string): string {
 function isDbReadOp(op: string): bool {
   return op == "Get" || op == "GetMany" || op == "Exists" || op == "ViewGet" ||
     op == "CounterGet" || op == "UniqueLookup" || op == "Latest" ||
-    op == "MembershipContains" || op == "MembershipList";
+    op == "MembershipContains" || op == "MembershipList" || op == "CapacityAvailable";
 }
 
 /** Static mirror of the edge `allowed_ops::kind_allows` (spec 6). */
@@ -271,7 +279,8 @@ function dbKindAllows(kind: i32, op: string): bool {
     case DecoratorKind.Action:
       return isDbReadOp(op) || op == "Create" || op == "Patch" || op == "Delete" ||
         op == "GetDelete" || op == "Append" || op == "CounterAdd" || op == "UniqueClaim" ||
-        op == "UniqueRelease" || op == "MembershipAdd" || op == "MembershipRemove";
+        op == "UniqueRelease" || op == "MembershipAdd" || op == "MembershipRemove" ||
+        op == "CapacityReserve" || op == "CapacityConfirm" || op == "CapacityCancel";
     case DecoratorKind.Derive:
       return isDbReadOp(op) || op == "ViewPublish" || op == "Append" || op == "CounterAdd";
     case DecoratorKind.Job: return true;

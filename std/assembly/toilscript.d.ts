@@ -85,6 +85,102 @@ declare function auth(target: Object, propertyKey: string | symbol, descriptor: 
 /** Declare the authenticated-user type (`@user class User { ... }`); enables `AuthService.getUser()`. */
 declare function user(target: Function): void;
 
+// --- ToilDB (@database / @collection + the @query/@action/... function kinds),
+//     handled natively by the compiler; typed here so editors accept the bare forms ---
+
+/** Marks a class as a ToilDB database: each `@collection` field becomes a typed,
+ *  lazily-resolved collection handle (`App.users.get(...)`). */
+declare function database(target: Function): void;
+
+/** Declares a `@database` field as a collection - a `Record`/`View`/`Unique`/
+ *  `Counter`/`Events`/`Membership`/`Capacity` handle. */
+declare function collection(target: Object, propertyKey: string | symbol): void;
+
+/** ToilDB function kinds (spec 6) - the data ops a function may issue. `@query`
+ *  is read-only; `@action` adds bounded writes/claims; `@derive` publishes
+ *  views/rollups; `@job` is background work; `@admin` is control-plane only. The
+ *  compiler enforces the family x kind matrix (a `@query` calling `.patch` is a
+ *  compile error). */
+declare function query(target: Function): void;
+declare function action(target: Function): void;
+declare function job(target: Function): void;
+declare function derive(target: Function): void;
+declare function admin(target: Function): void;
+
+// The ToilDB collection HANDLES are ambient globals (no import) - the compiler
+// provides them (`std/assembly/toildb`, `@global`); these typings let editors
+// recognize `@collection users!: Record<User, UserId>` and `App.users.get(...)`.
+// `K`/`V`/`M` are `@data` types (the binary codec the host marshals).
+
+/** A mutable keyed-entity collection (spec 7.1): user profiles, items, sessions. */
+declare class Record<V, K> {
+  get(key: K): V | null;
+  require(key: K): V;
+  exists(key: K): bool;
+  getMany(keys: K[]): (V | null)[];
+  create(key: K, value: V): bool;
+  patch(key: K, value: V): V;
+  delete(key: K): void;
+  getDelete(key: K): V | null;
+}
+
+/** A precomputed, read-optimized projection (spec 7.2): pages, leaderboards. */
+declare class View<V, K> {
+  get(key: K): V | null;
+  require(key: K): V;
+  publish(key: K, value: V): void;
+}
+
+/** The result of a `unique.claim` (spec 8.6). */
+declare class ClaimResult<V> {
+  claimed: bool;
+  owner: V | null;
+  constructor(claimed: bool, owner: V | null);
+}
+
+/** A globally-unique claim collection (spec 7.6): usernames, emails, slugs. */
+declare class Unique<V, K> {
+  lookup(key: K): V | null;
+  claim(key: K, value: V): ClaimResult<V>;
+  release(key: K, value: V): void;
+}
+
+/** An unordered set (spec 7.3): followers, tags, ACLs, room members. */
+declare class Membership<M, K> {
+  contains(key: K, member: M): bool;
+  add(key: K, member: M): void;
+  remove(key: K, member: M): void;
+  list(key: K, limit: i32): M[];
+}
+
+/** A finite, strongly-consistent resource via escrow (spec 7.7): stock, seats. */
+declare class Capacity<K> {
+  available(key: K): i64;
+  reserve(key: K, amount: i64, ttlMs: i64): u64;
+  confirm(key: K, reservationId: u64): bool;
+  cancel(key: K, reservationId: u64): bool;
+  setTotal(key: K, total: i64): void;
+}
+
+/** A commutative integer counter (spec 7.4): likes, view counts, inventory. */
+declare class Counter<K> {
+  get(key: K): i64;
+  add(key: K, delta: i64): void;
+}
+
+/** An append-only event log (spec 7.5): activity feeds, audit trails. */
+declare class Events<V, K> {
+  append(key: K, event: V): void;
+  latest(key: K, limit: i32): V[];
+}
+
+// The handles are ambient (no import needed), but `import { Counter } from
+// 'toildb'` is also accepted for editors that prefer explicit imports - it just
+// re-exports the same globals.
+declare module 'toildb' {
+  export { Record, View, Unique, ClaimResult, Membership, Capacity, Counter, Events };
+}
+
 // Big integers, native globals implemented in std/assembly/bignum. The
 // arithmetic/bitwise/comparison operators
 // (+ - * / % & | ^ << >> == != < > <= >=) are operator overloads resolved by

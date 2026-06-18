@@ -153,6 +153,40 @@ export namespace toildbHost {
   @external("env", "data.membership_list")
   export declare function membershipList(handle: u32, setPtr: usize, setLen: i32, limit: i32): i32;
 
+  // capacity.set_total(total: i64) -> 0 ok | negative error (job/derive only).
+  // @ts-ignore: decorator
+  @external("env", "data.capacity_set_total")
+  export declare function capacitySetTotal(
+    handle: u32, keyPtr: usize, keyLen: i32, total: i64, idemPtr: usize
+  ): i32;
+
+  // capacity.available -> 8 (the i64 available stashed as 8 LE bytes) | neg.
+  // @ts-ignore: decorator
+  @external("env", "data.capacity_available")
+  export declare function capacityAvailable(handle: u32, keyPtr: usize, keyLen: i32): i32;
+
+  // capacity.reserve(amount: i64, ttl_ms: i64) -> 8 (the u64 reservation id
+  // stashed) | -2 insufficient | negative error.
+  // @ts-ignore: decorator
+  @external("env", "data.capacity_reserve")
+  export declare function capacityReserve(
+    handle: u32, keyPtr: usize, keyLen: i32, amount: i64, ttlMs: i64, idemPtr: usize
+  ): i32;
+
+  // capacity.confirm(reservationId: i64) -> 1 confirmed | 0 unknown | neg.
+  // @ts-ignore: decorator
+  @external("env", "data.capacity_confirm")
+  export declare function capacityConfirm(
+    handle: u32, keyPtr: usize, keyLen: i32, reservationId: i64, idemPtr: usize
+  ): i32;
+
+  // capacity.cancel(reservationId: i64) -> 1 cancelled | 0 unknown/confirmed | neg.
+  // @ts-ignore: decorator
+  @external("env", "data.capacity_cancel")
+  export declare function capacityCancel(
+    handle: u32, keyPtr: usize, keyLen: i32, reservationId: i64, idemPtr: usize
+  ): i32;
+
   // counter.get -> 8 (the i64 sum stashed as 8 LE bytes) | negative error.
   // @ts-ignore: decorator
   @external("env", "data.counter_get")

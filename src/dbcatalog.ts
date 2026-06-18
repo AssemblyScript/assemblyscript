@@ -131,8 +131,9 @@ export function buildToilDbCatalog(program: Program): Uint8Array | null {
         let entry = new CollEntry();
         entry.name = field.name.text;
         entry.family = family;
-        if (family == 3) {
-          // Counter<K>: a single key type; the value is a fixed i64 rollup.
+        if (family == 3 || family == 6) {
+          // Counter<K> / Capacity<K>: a single key type; the value is host-owned
+          // (an i64 rollup / the escrow ledger).
           entry.keyType = namedArg(named, 0);
           entry.valueType = "i64";
         } else {

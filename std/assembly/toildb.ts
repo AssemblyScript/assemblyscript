@@ -48,6 +48,7 @@ function __toildbTakeGrow(): Uint8Array {
 
 /// A mutable keyed-entity collection (spec 7.1). `V` is the `@data` value type,
 /// `K` the `@data` key type.
+@global
 export class Record<V, K> {
   private __handle: u32;
 
@@ -154,6 +155,7 @@ export class Record<V, K> {
 /// leaderboards, rendered fragments. Read by any function kind; PUBLISHED only
 /// by a `@derive`/`@job` (the host kind gate enforces it). `V` is the `@data`
 /// value type, `K` the `@data` key type.
+@global
 export class View<V, K> {
   private __handle: u32;
 
@@ -192,12 +194,14 @@ export class View<V, K> {
 /// The result of a `unique.claim` (spec 8.6). `claimed` is true when the caller
 /// owns the key (a fresh claim or an idempotent re-claim of its own); when
 /// false, `owner` is the value that currently holds the key.
+@global
 export class ClaimResult<V> {
   constructor(public claimed: bool, public owner: V | null) {}
 }
 
 /// A globally-unique claim collection (spec 7.6): username, email, slug, ...
 /// `V` is the `@data` OWNER value type, `K` the `@data` claim-key type.
+@global
 export class Unique<V, K> {
   private __handle: u32;
 
@@ -246,6 +250,7 @@ export class Unique<V, K> {
 
 /// An unordered set (spec 7.3): followers, tags, ACLs, room members. `M` is the
 /// `@data` member type, `K` the `@data` set-key type.
+@global
 export class Membership<M, K> {
   private __handle: u32;
 
@@ -302,9 +307,66 @@ export class Membership<M, K> {
   }
 }
 
+/// A finite, strongly-consistent resource (spec 7.7): limited stock, seats,
+/// rate grants. Reserve/confirm/cancel two-phase holds prevent oversell. `K` is
+/// the `@data` key type (the value is the host-owned escrow ledger).
+@global
+export class Capacity<K> {
+  private __handle: u32;
+
+  constructor(handle: u32) {
+    this.__handle = handle;
+  }
+
+  /// Units available to reserve right now.
+  available(key: K): i64 {
+    const kb = key.encode();
+    const status = toildbHost.capacityAvailable(this.__handle, kb.dataStart, kb.byteLength);
+    if (status < 0) unreachable();
+    return load<i64>(__toildbTake(status).dataStart);
+  }
+
+  /// Hold `amount` for `ttlMs` (it auto-releases if not confirmed in time).
+  /// Returns the reservation id (> 0), or 0 if there was not enough available
+  /// (no oversell).
+  reserve(key: K, amount: i64, ttlMs: i64): u64 {
+    const kb = key.encode();
+    const status = toildbHost.capacityReserve(
+      this.__handle, kb.dataStart, kb.byteLength, amount, ttlMs, 0
+    );
+    if (status == -2) return 0; // insufficient
+    if (status < 0) unreachable();
+    return load<u64>(__toildbTake(status).dataStart);
+  }
+
+  /// Finalize a hold into a permanent consume. Returns whether the id was valid.
+  confirm(key: K, reservationId: u64): bool {
+    const kb = key.encode();
+    return toildbHost.capacityConfirm(
+      this.__handle, kb.dataStart, kb.byteLength, reservationId as i64, 0
+    ) == 1;
+  }
+
+  /// Release a hold back to available (a confirmed sale cannot be cancelled).
+  cancel(key: K, reservationId: u64): bool {
+    const kb = key.encode();
+    return toildbHost.capacityCancel(
+      this.__handle, kb.dataStart, kb.byteLength, reservationId as i64, 0
+    ) == 1;
+  }
+
+  /// Set the ceiling (restock / reduce). `@job`/`@derive` only; the kind gate
+  /// (compile + runtime) enforces it.
+  setTotal(key: K, total: i64): void {
+    const kb = key.encode();
+    toildbHost.capacitySetTotal(this.__handle, kb.dataStart, kb.byteLength, total, 0);
+  }
+}
+
 /// A commutative integer counter (spec 7.4): likes, view counts, inventory.
 /// `K` is the `@data` key type; the value is a host-aggregated i64 rollup (there
 /// is no `set`, only `add` and `get`, so concurrent deltas never lose writes).
+@global
 export class Counter<K> {
   private __handle: u32;
 
@@ -331,6 +393,7 @@ export class Counter<K> {
 /// An append-only event log (spec 7.5): activity feeds, audit trails, the
 /// fact stream a `@derive` consumes. `V` is the `@data` event type, `K` the
 /// `@data` stream-key type.
+@global
 export class Events<V, K> {
   private __handle: u32;
 
