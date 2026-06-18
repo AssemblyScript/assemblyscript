@@ -212,7 +212,7 @@ function init(modules) {
    * instance type-carrier field, so stock TS reports `AuthDb.users` as
    * TS2339. Merge a `namespace` onto the class (the standard way to add typed
    * statics) with one `const` per collection, typed as the field's handle type
-   * (`Record<User, UserId>`, `Capacity<DropId>`, ...). Returns "" when the file
+   * (`Documents<UserId, User>`, `Capacity<DropId>`, ...). Returns "" when the file
    * declares no `@database`.
    */
   function databaseAugmentation(text) {

@@ -92,7 +92,7 @@ declare function user(target: Function): void;
  *  lazily-resolved collection handle (`App.users.get(...)`). */
 declare function database(target: Function): void;
 
-/** Declares a `@database` field as a collection - a `Record`/`View`/`Unique`/
+/** Declares a `@database` field as a collection - a `Documents`/`View`/`Unique`/
  *  `Counter`/`Events`/`Membership`/`Capacity` handle. */
 declare function collection(target: Object, propertyKey: string | symbol): void;
 
@@ -107,13 +107,14 @@ declare function job(target: Function): void;
 declare function derive(target: Function): void;
 declare function admin(target: Function): void;
 
-// The ToilDB collection HANDLES are ambient globals (no import) - the compiler
-// provides them (`std/assembly/toildb`, `@global`); these typings let editors
-// recognize `@collection users!: Record<User, UserId>` and `App.users.get(...)`.
-// `K`/`V`/`M` are `@data` types (the binary codec the host marshals).
+// The ToilDB collection HANDLES are ambient globals (NO import, like the bignum
+// natives below) - the compiler provides them (`std/assembly/toildb`, `@global`);
+// these typings let editors recognize `@collection users!: Documents<UserId,
+// User>` and `App.users.get(...)`. Every handle is KEY-FIRST (`<K, V>`, matching
+// `Map`/`Record`). `K`/`V`/`M` are `@data` types (the codec the host marshals).
 
 /** A mutable keyed-entity collection (spec 7.1): user profiles, items, sessions. */
-declare class Record<V, K> {
+declare class Documents<K, V> {
   get(key: K): V | null;
   require(key: K): V;
   exists(key: K): bool;
@@ -125,7 +126,7 @@ declare class Record<V, K> {
 }
 
 /** A precomputed, read-optimized projection (spec 7.2): pages, leaderboards. */
-declare class View<V, K> {
+declare class View<K, V> {
   get(key: K): V | null;
   require(key: K): V;
   publish(key: K, value: V): void;
@@ -139,14 +140,14 @@ declare class ClaimResult<V> {
 }
 
 /** A globally-unique claim collection (spec 7.6): usernames, emails, slugs. */
-declare class Unique<V, K> {
+declare class Unique<K, V> {
   lookup(key: K): V | null;
   claim(key: K, value: V): ClaimResult<V>;
   release(key: K, value: V): void;
 }
 
 /** An unordered set (spec 7.3): followers, tags, ACLs, room members. */
-declare class Membership<M, K> {
+declare class Membership<K, M> {
   contains(key: K, member: M): bool;
   add(key: K, member: M): void;
   remove(key: K, member: M): void;
@@ -169,16 +170,9 @@ declare class Counter<K> {
 }
 
 /** An append-only event log (spec 7.5): activity feeds, audit trails. */
-declare class Events<V, K> {
+declare class Events<K, V> {
   append(key: K, event: V): void;
   latest(key: K, limit: i32): V[];
-}
-
-// The handles are ambient (no import needed), but `import { Counter } from
-// 'toildb'` is also accepted for editors that prefer explicit imports - it just
-// re-exports the same globals.
-declare module 'toildb' {
-  export { Record, View, Unique, ClaimResult, Membership, Capacity, Counter, Events };
 }
 
 // Big integers, native globals implemented in std/assembly/bignum. The

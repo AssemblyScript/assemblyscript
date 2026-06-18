@@ -1,7 +1,7 @@
 // ToilDB catalog: emit the `toildb.catalog` custom WASM section.
 //
 // For every `@database` class, the compiler records each `@collection` field's
-// family (from the handle type, `Record`/`View`/...), key/value type names,
+// family (from the handle type, `Documents`/`View`/...), key/value type names,
 // value data id (FNV-1a of the value class), schema version, generation, and
 // replication/placement policy. The host (`toildb::decode_catalog_section`)
 // decodes this once at module load to build the per-tenant collection catalog
@@ -37,7 +37,7 @@ function fnv1a(name: string): u32 {
 /** Map a handle class name to its collection-family wire byte, or -1. */
 function familyByte(handleName: string): i32 {
   switch (handleName) {
-    case "Record": return 0;
+    case "Documents": return 0;
     case "View": return 1;
     case "Events": return 2;
     case "Counter": return 3;
@@ -137,9 +137,9 @@ export function buildToilDbCatalog(program: Program): Uint8Array | null {
           entry.keyType = namedArg(named, 0);
           entry.valueType = "i64";
         } else {
-          // Record/View/Events/Unique<V,K>: value=arg0, key=arg1.
-          entry.valueType = namedArg(named, 0);
-          entry.keyType = namedArg(named, 1);
+          // Documents/View/Events/Unique/Membership<K,V>: key=arg0, value=arg1.
+          entry.keyType = namedArg(named, 0);
+          entry.valueType = namedArg(named, 1);
         }
         db.collections.push(entry);
       }

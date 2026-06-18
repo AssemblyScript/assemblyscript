@@ -215,7 +215,7 @@ class Dependee {
  *  method is not a known data op (then the type checker, not this pass, owns it). */
 function dbOpOf(family: string, method: string): string {
   switch (family) {
-    case "Record": {
+    case "Documents": {
       if (method == "get" || method == "require") return "Get";
       if (method == "getMany") return "GetMany";
       if (method == "exists") return "Exists";
@@ -2324,7 +2324,7 @@ export class Parser extends DiagnosticEmitter {
 
   /**
    * Synthesize the ToilDB `@database` binding: for each `@collection` field
-   * (typed as a `Record<V,K>`/... handle), add a STATIC handle to the class
+   * (typed as a `Documents<K,V>`/... handle), add a STATIC handle to the class
    * initialized once at module init via `__toildbResolve("<Db>/<collection>")`.
    * The class name is used as the value: `App.users.get(...)` reads the static
    * handle. The instance field stays as the type carrier (vestigial).

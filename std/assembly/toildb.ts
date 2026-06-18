@@ -1,6 +1,6 @@
 // ToilDB: the developer-facing edge-database API.
 //
-// `@database class App { @collection(...) users!: Record<User, UserId>; ... }`
+// `@database class App { @collection(...) users!: Documents<UserId, User>; ... }`
 // declares logical collections; the compiler (see parser `injectDatabaseBinding`)
 // synthesizes a `@global App` singleton whose fields are these typed handles,
 // resolved to numeric host handles once at module init.
@@ -49,7 +49,7 @@ function __toildbTakeGrow(): Uint8Array {
 /// A mutable keyed-entity collection (spec 7.1). `V` is the `@data` value type,
 /// `K` the `@data` key type.
 @global
-export class Record<V, K> {
+export class Documents<K, V> {
   private __handle: u32;
 
   constructor(handle: u32) {
@@ -156,7 +156,7 @@ export class Record<V, K> {
 /// by a `@derive`/`@job` (the host kind gate enforces it). `V` is the `@data`
 /// value type, `K` the `@data` key type.
 @global
-export class View<V, K> {
+export class View<K, V> {
   private __handle: u32;
 
   constructor(handle: u32) {
@@ -202,7 +202,7 @@ export class ClaimResult<V> {
 /// A globally-unique claim collection (spec 7.6): username, email, slug, ...
 /// `V` is the `@data` OWNER value type, `K` the `@data` claim-key type.
 @global
-export class Unique<V, K> {
+export class Unique<K, V> {
   private __handle: u32;
 
   constructor(handle: u32) {
@@ -251,7 +251,7 @@ export class Unique<V, K> {
 /// An unordered set (spec 7.3): followers, tags, ACLs, room members. `M` is the
 /// `@data` member type, `K` the `@data` set-key type.
 @global
-export class Membership<M, K> {
+export class Membership<K, M> {
   private __handle: u32;
 
   constructor(handle: u32) {
@@ -394,7 +394,7 @@ export class Counter<K> {
 /// fact stream a `@derive` consumes. `V` is the `@data` event type, `K` the
 /// `@data` stream-key type.
 @global
-export class Events<V, K> {
+export class Events<K, V> {
   private __handle: u32;
 
   constructor(handle: u32) {
