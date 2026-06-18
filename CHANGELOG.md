@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.1.30] - 2026-06-18
+
+### Other Changes
+
+- fix: type @database static collection handles in the editor ([#15](https://github.com/dacely-cloud/toilscript/pull/15)) by @BlobMaster41
+
+
+
+
 ## [v0.1.29] - 2026-06-18
 
 ### Other Changes
