@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.1.29] - 2026-06-18
+
+### Other Changes
+
+- feat: ToilDB membership family (Membership handle + dbKindCheck) ([#13](https://github.com/dacely-cloud/toilscript/pull/13)) by @BlobMaster41
+- feat: ToilDB capacity family + ambient handles/decorators (no import) ([#14](https://github.com/dacely-cloud/toilscript/pull/14)) by @BlobMaster41
+
+
+
+
 ## [v0.1.28] - 2026-06-17
 
 ### Other Changes
