@@ -28,21 +28,23 @@ import { DIGITS, MAX_DOUBLE_LENGTH } from "./number";
   return hi + u64(lo + c < lo);
 }
 
+// Fixed-point log significands shared by the dec-exp / binary-exp estimates below.
+const LOG10_2_SIGNIFICAND = 0x4D105; // ~(log10(2) * 2**20)
+const LOG10_2_EXP = 20;
+const LOG2_POW10_SIGNIFICAND = 0x3526B; // ~(log2(10) * 2**16)
+const LOG2_POW10_EXP = 16;
+
 // floor(log10(2**bin_exp)). (The f64 path only ever needs the regular form; the
 // irregular 3/4 variant lives in ftoa.ts's own copy.)
 // @ts-ignore: decorator
 @inline export function computeDecExp(binExp: i32): i32 {
-  const LOG10_2_SIGNIFICAND = 0x4D105; // ~(log10(2) * 2**20)
-  const LOG_10_2_EXP = 20;
-  return (binExp * LOG10_2_SIGNIFICAND) >> LOG_10_2_EXP;
+  return (binExp * LOG10_2_SIGNIFICAND) >> LOG10_2_EXP;
 }
 
 // Shift that keeps a fixed 128-bit fractional part after scaling by 10**dec_exp.
 // @ts-ignore: decorator
 @inline export function computeExpShift(binExp: i32, decExp: i32): i32 {
-  const LOG2_POW10_SIGNIFICAND = 0x3526B; // ~(log2(10) * 2**16)
-  const LOG2_POW10_EXP = 16;
-  const pow10BinExp = (-decExp * LOG2_POW10_SIGNIFICAND) >> LOG2_POW10_EXP;
+  let pow10BinExp = (-decExp * LOG2_POW10_SIGNIFICAND) >> LOG2_POW10_EXP;
   return binExp + pow10BinExp + 1;
 }
 
@@ -469,9 +471,9 @@ export const MAX_FIXED_DEC_EXP = 20;
   let q = rawExp - DOUBLE_EXP_OFFSET;
 
   if (!regular) {
-    let decExp = (q * 315653 - 131072) >> 20;
+    let decExp = (q * LOG10_2_SIGNIFICAND - 131072) >> LOG10_2_EXP; // 131072 = 2**17 rounding bias
     let powExp = -decExp - 1;
-    let h = q + ((powExp * 217707) >> 16);
+    let h = q + ((powExp * LOG2_POW10_SIGNIFICAND) >> LOG2_POW10_EXP);
 
     let pow10Hi = loadPow10HiXjb64(powExp);
 
@@ -485,15 +487,15 @@ export const MAX_FIXED_DEC_EXP = 20;
       : one;
     one = dotOne == ((<u64>1) << 62) ? 2 : one;
     one = (halfUlp >> 1) > dotOne ? 0 : one;
-    one = halfUlp > ~(<u64>0) - dotOne ? 10 : one;
+    one = halfUlp > u64.MAX_VALUE - dotOne ? 10 : one;
 
     setDecimalResult(integral, one, decExp);
     return;
   }
 
-  let decExp = ((rawExp - DOUBLE_EXP_OFFSET) * 78913) >> 18;
+  let decExp = ((rawExp - DOUBLE_EXP_OFFSET) * 78913) >> 18; // 78913/2**18 ~= log10(2) (Q18)
   let powExp = -decExp - 1;
-  let h = q + ((powExp * 217707) >> 16);
+  let h = q + ((powExp * LOG2_POW10_SIGNIFICAND) >> LOG2_POW10_EXP);
   let shift = h + 1 + EXTRA_SHIFT;
 
   loadPow10Xjb64(powExp);
@@ -511,7 +513,7 @@ export const MAX_FIXED_DEC_EXP = 20;
 
   let one = umul128AddHi64(dotOne, 10, dotOne == ((<u64>1) << 62) ? 0 : BIASED_HALF);
   one = dotOne < halfUlp ? 0 : one;
-  one = ~(<u64>0) - dotOne < halfUlp ? 10 : one;
+  one = u64.MAX_VALUE - dotOne < halfUlp ? 10 : one;
 
   setDecimalResult(integral, one, decExp);
 }
@@ -539,7 +541,7 @@ export const MAX_FIXED_DEC_EXP = 20;
 
   let one = umul128AddHi64(dotOne, 10, BIASED_HALF);
   one = dotOne < halfUlp ? 0 : one;
-  one = ~(<u64>0) - dotOne < halfUlp ? 10 : one;
+  one = u64.MAX_VALUE - dotOne < halfUlp ? 10 : one;
 
   setDecimalResult(integral, one, decExp);
 }
