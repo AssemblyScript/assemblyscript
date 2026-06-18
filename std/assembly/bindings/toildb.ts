@@ -126,6 +126,33 @@ export namespace toildbHost {
     idemPtr: usize
   ): i32;
 
+  // membership.contains -> 1 present | 0 absent | negative error.
+  // @ts-ignore: decorator
+  @external("env", "data.membership_contains")
+  export declare function membershipContains(
+    handle: u32, setPtr: usize, setLen: i32, memberPtr: usize, memberLen: i32
+  ): i32;
+
+  // membership.add -> 0 ok | negative error.
+  // @ts-ignore: decorator
+  @external("env", "data.membership_add")
+  export declare function membershipAdd(
+    handle: u32, setPtr: usize, setLen: i32, memberPtr: usize, memberLen: i32, idemPtr: usize
+  ): i32;
+
+  // membership.remove -> 0 ok | negative error.
+  // @ts-ignore: decorator
+  @external("env", "data.membership_remove")
+  export declare function membershipRemove(
+    handle: u32, setPtr: usize, setLen: i32, memberPtr: usize, memberLen: i32, idemPtr: usize
+  ): i32;
+
+  // membership.list(limit) -> framed-list length (stashed) | negative error.
+  // The blob is `u32 count` then per member `u32 len + bytes`.
+  // @ts-ignore: decorator
+  @external("env", "data.membership_list")
+  export declare function membershipList(handle: u32, setPtr: usize, setLen: i32, limit: i32): i32;
+
   // counter.get -> 8 (the i64 sum stashed as 8 LE bytes) | negative error.
   // @ts-ignore: decorator
   @external("env", "data.counter_get")

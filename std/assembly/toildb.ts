@@ -244,6 +244,64 @@ export class Unique<V, K> {
   }
 }
 
+/// An unordered set (spec 7.3): followers, tags, ACLs, room members. `M` is the
+/// `@data` member type, `K` the `@data` set-key type.
+export class Membership<M, K> {
+  private __handle: u32;
+
+  constructor(handle: u32) {
+    this.__handle = handle;
+  }
+
+  /// Whether `member` is in the set keyed by `key`.
+  contains(key: K, member: M): bool {
+    const kb = key.encode();
+    const mb = member.encode();
+    return toildbHost.membershipContains(
+      this.__handle, kb.dataStart, kb.byteLength, mb.dataStart, mb.byteLength
+    ) == 1;
+  }
+
+  /// Add `member` to the set (idempotent).
+  add(key: K, member: M): void {
+    const kb = key.encode();
+    const mb = member.encode();
+    toildbHost.membershipAdd(
+      this.__handle, kb.dataStart, kb.byteLength, mb.dataStart, mb.byteLength, 0
+    );
+  }
+
+  /// Remove `member` from the set (idempotent).
+  remove(key: K, member: M): void {
+    const kb = key.encode();
+    const mb = member.encode();
+    toildbHost.membershipRemove(
+      this.__handle, kb.dataStart, kb.byteLength, mb.dataStart, mb.byteLength, 0
+    );
+  }
+
+  /// Up to `limit` members of the set. Decodes each framed member into an `M`.
+  list(key: K, limit: i32): M[] {
+    const kb = key.encode();
+    const status = toildbHost.membershipList(this.__handle, kb.dataStart, kb.byteLength, limit);
+    if (status < 0) unreachable();
+    const blob = __toildbTake(status);
+    const out = new Array<M>();
+    let off: i32 = 0;
+    const count = load<u32>(blob.dataStart + off);
+    off += 4;
+    for (let i: u32 = 0; i < count; i++) {
+      const len = <i32>load<u32>(blob.dataStart + off);
+      off += 4;
+      const m = instantiate<M>();
+      m.decodeInto(blob.subarray(off, off + len));
+      out.push(m);
+      off += len;
+    }
+    return out;
+  }
+}
+
 /// A commutative integer counter (spec 7.4): likes, view counts, inventory.
 /// `K` is the `@data` key type; the value is a host-aggregated i64 rollup (there
 /// is no `set`, only `add` and `get`, so concurrent deltas never lose writes).

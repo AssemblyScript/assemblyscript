@@ -247,13 +247,21 @@ function dbOpOf(family: string, method: string): string {
       if (method == "latest") return "Latest";
       return "";
     }
+    case "Membership": {
+      if (method == "contains") return "MembershipContains";
+      if (method == "list") return "MembershipList";
+      if (method == "add") return "MembershipAdd";
+      if (method == "remove") return "MembershipRemove";
+      return "";
+    }
     default: return "";
   }
 }
 
 function isDbReadOp(op: string): bool {
   return op == "Get" || op == "GetMany" || op == "Exists" || op == "ViewGet" ||
-    op == "CounterGet" || op == "UniqueLookup" || op == "Latest";
+    op == "CounterGet" || op == "UniqueLookup" || op == "Latest" ||
+    op == "MembershipContains" || op == "MembershipList";
 }
 
 /** Static mirror of the edge `allowed_ops::kind_allows` (spec 6). */
@@ -263,7 +271,7 @@ function dbKindAllows(kind: i32, op: string): bool {
     case DecoratorKind.Action:
       return isDbReadOp(op) || op == "Create" || op == "Patch" || op == "Delete" ||
         op == "GetDelete" || op == "Append" || op == "CounterAdd" || op == "UniqueClaim" ||
-        op == "UniqueRelease";
+        op == "UniqueRelease" || op == "MembershipAdd" || op == "MembershipRemove";
     case DecoratorKind.Derive:
       return isDbReadOp(op) || op == "ViewPublish" || op == "Append" || op == "CounterAdd";
     case DecoratorKind.Job: return true;
