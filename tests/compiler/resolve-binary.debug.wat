@@ -39,7 +39,7 @@
  (global $~lib/util/dtoa/gBcdLen (mut i32) (i32.const 0))
  (global $~lib/util/dtoa/gDigHi (mut i64) (i64.const 0))
  (global $~lib/util/dtoa/gDigLo (mut i64) (i64.const 0))
- (global $~lib/util/dtoa/gDigNum (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/gDigits (mut i32) (i32.const 0))
  (global $~lib/util/dtoa/gSig (mut i64) (i64.const 0))
  (global $~lib/util/dtoa/gExp (mut i32) (i32.const 0))
  (global $~lib/util/dtoa/gLastDigit (mut i32) (i32.const 0))
@@ -4176,7 +4176,7 @@
   (local $w1|129 i64)
   (local $w2|130 i64)
   (local $a|131 i64)
-  (local $plo64 i64)
+  (local $pLo64 i64)
   (local $a|133 i64)
   (local $b|134 i64)
   (local $a0|135 i64)
@@ -4188,7 +4188,7 @@
   (local $w1|141 i64)
   (local $w2|142 i64)
   (local $lo|143 i64)
-  (local $p_hi i64)
+  (local $pHi64 i64)
   (local $integral|145 i64)
   (local $dotOne|146 i64)
   (local $halfUlp|147 i64)
@@ -4312,7 +4312,7 @@
   (local $w1|265 i64)
   (local $w2|266 i64)
   (local $a|267 i64)
-  (local $plo64|268 i64)
+  (local $pLo64|268 i64)
   (local $a|269 i64)
   (local $b|270 i64)
   (local $a0|271 i64)
@@ -4324,7 +4324,7 @@
   (local $w1|277 i64)
   (local $w2|278 i64)
   (local $lo|279 i64)
-  (local $p_hi|280 i64)
+  (local $pHi64|280 i64)
   (local $integral|281 i64)
   (local $dotOne|282 i64)
   (local $halfUlp|283 i64)
@@ -4399,7 +4399,7 @@
   (local $w1|352 i64)
   (local $w2|353 i64)
   (local $a|354 i64)
-  (local $plo64|355 i64)
+  (local $pLo64|355 i64)
   (local $a|356 i64)
   (local $b|357 i64)
   (local $a0|358 i64)
@@ -4411,7 +4411,7 @@
   (local $w1|364 i64)
   (local $w2|365 i64)
   (local $lo|366 i64)
-  (local $p_hi|367 i64)
+  (local $pHi64|367 i64)
   (local $integral|368 i64)
   (local $dotOne|369 i64)
   (local $halfUlp|370 i64)
@@ -5699,8 +5699,8 @@
       local.get $pHi
       local.get $y
       i64.mul
-      local.set $plo64
-      local.get $plo64
+      local.set $pLo64
+      local.get $pLo64
       block $~lib/util/dtoa/mulhi64|inlined.5 (result i64)
        local.get $pLo
        local.set $a|133
@@ -5763,17 +5763,17 @@
       local.set $lo|143
       local.get $a|131
       local.get $lo|143
-      local.get $plo64
+      local.get $pLo64
       i64.lt_u
       i64.extend_i32_u
       i64.add
-      local.set $p_hi
-      local.get $p_hi
+      local.set $pHi64
+      local.get $pHi64
       global.get $~lib/util/dtoa/EXTRA_SHIFT
       i64.extend_i32_s
       i64.shr_u
       local.set $integral|145
-      local.get $p_hi
+      local.get $pHi64
       i64.const 64
       global.get $~lib/util/dtoa/EXTRA_SHIFT
       i64.extend_i32_s
@@ -6690,8 +6690,8 @@
         local.get $pHi|254
         local.get $y|256
         i64.mul
-        local.set $plo64|268
-        local.get $plo64|268
+        local.set $pLo64|268
+        local.get $pLo64|268
         block $~lib/util/dtoa/mulhi64|inlined.12 (result i64)
          local.get $pLo|255
          local.set $a|269
@@ -6754,17 +6754,17 @@
         local.set $lo|279
         local.get $a|267
         local.get $lo|279
-        local.get $plo64|268
+        local.get $pLo64|268
         i64.lt_u
         i64.extend_i32_u
         i64.add
-        local.set $p_hi|280
-        local.get $p_hi|280
+        local.set $pHi64|280
+        local.get $pHi64|280
         global.get $~lib/util/dtoa/EXTRA_SHIFT
         i64.extend_i32_s
         i64.shr_u
         local.set $integral|281
-        local.get $p_hi|280
+        local.get $pHi64|280
         i64.const 64
         global.get $~lib/util/dtoa/EXTRA_SHIFT
         i64.extend_i32_s
@@ -7277,8 +7277,8 @@
       local.get $pHi|341
       local.get $y|343
       i64.mul
-      local.set $plo64|355
-      local.get $plo64|355
+      local.set $pLo64|355
+      local.get $pLo64|355
       block $~lib/util/dtoa/mulhi64|inlined.17 (result i64)
        local.get $pLo|342
        local.set $a|356
@@ -7341,17 +7341,17 @@
       local.set $lo|366
       local.get $a|354
       local.get $lo|366
-      local.get $plo64|355
+      local.get $pLo64|355
       i64.lt_u
       i64.extend_i32_u
       i64.add
-      local.set $p_hi|367
-      local.get $p_hi|367
+      local.set $pHi64|367
+      local.get $pHi64|367
       global.get $~lib/util/dtoa/EXTRA_SHIFT
       i64.extend_i32_s
       i64.shr_u
       local.set $integral|368
-      local.get $p_hi|367
+      local.get $pHi64|367
       i64.const 64
       global.get $~lib/util/dtoa/EXTRA_SHIFT
       i64.extend_i32_s
@@ -7736,7 +7736,7 @@
       global.get $~lib/util/dtoa/ZEROS
       global.set $~lib/util/dtoa/gDigLo
       local.get $hiLen
-      global.set $~lib/util/dtoa/gDigNum
+      global.set $~lib/util/dtoa/gDigits
       br $~lib/util/dtoa/toDigits64Swar|inlined.0
      end
      local.get $lo|401
@@ -7752,7 +7752,7 @@
      i32.const 8
      global.get $~lib/util/dtoa/gBcdLen
      i32.add
-     global.set $~lib/util/dtoa/gDigNum
+     global.set $~lib/util/dtoa/gDigits
     end
     local.get $decExp|396
     global.get $~lib/util/dtoa/MIN_FIXED_DEC_EXP
@@ -7865,7 +7865,7 @@
       if (result i32)
        i32.const 16
       else
-       global.get $~lib/util/dtoa/gDigNum
+       global.get $~lib/util/dtoa/gDigits
        i32.const 1
        i32.sub
       end
@@ -8761,7 +8761,7 @@
       i32.const 1
       i32.add
      else
-      global.get $~lib/util/dtoa/gDigNum
+      global.get $~lib/util/dtoa/gDigits
      end
      i32.const 1
      i32.shl

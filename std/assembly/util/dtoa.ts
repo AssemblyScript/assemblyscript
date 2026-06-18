@@ -172,7 +172,7 @@ function toBcd8(value: u64): void {
 // to_digits<64> result: two u64 of ASCII digits + significant digit count.
 export let gDigHi: u64 = 0;
 export let gDigLo: u64 = 0;
-export let gDigNum: i32 = 0;
+export let gDigits: i32 = 0;
 
 // Unsigned 16-bit multiply-high across all 8 lanes (= _mm_mulhi_epu16).
 // @ts-ignore: decorator
@@ -225,7 +225,7 @@ export let gDigNum: i32 = 0;
   let bcd = toBcd4x4(y);
 
   let mask = i8x16.bitmask(i8x16.gt_s(bcd, i8x16.splat(0)));
-  gDigNum = 16 - ctz(mask); // mask is never 0 (significand >= 1)
+  gDigits = 16 - ctz(mask); // mask is never 0 (significand >= 1)
 
   let ascii = v128.or(
     v128.swizzle(bcd, REV_ORDER),
@@ -249,7 +249,7 @@ export let gDigNum: i32 = 0;
   if (lo == 0) {
     gDigHi = hiBcd + ZEROS;
     gDigLo = ZEROS;
-    gDigNum = hiLen;
+    gDigits = hiLen;
     return;
   }
   
@@ -257,7 +257,7 @@ export let gDigNum: i32 = 0;
   
   gDigHi = hiBcd + ZEROS;
   gDigLo = gBcd + ZEROS;
-  gDigNum = 8 + gBcdLen;
+  gDigits = 8 + gBcdLen;
 }
 
 // @ts-ignore: decorator
@@ -334,7 +334,7 @@ export const MAX_FIXED_DEC_EXP = 20;
 ): usize {
   if (decExp < 0) putBlock8(start, ZEROS);
   let lastDigitChar = <u64>(0x30 + (hasLastDigit ? gLastDigit : 0));
-  let numDigits = hasLastDigit ? 16 : gDigNum - 1;
+  let numDigits = hasLastDigit ? 16 : gDigits - 1;
   let dHi = gDigHi, dLo = gDigLo;
 
   // decExp >= 16: integer rendered as significant digits then trailing zeros.
@@ -405,7 +405,7 @@ export const MAX_FIXED_DEC_EXP = 20;
   putBlock8(buf, gDigHi);
   if (bcdSize == 16) putBlock8(buf, gDigLo, 16);
   store<u16>(buf + (bcdSize << 1), <u32>(0x30 + gLastDigit));
-  buf += (hasLastDigit ? bcdSize + 1 : gDigNum) << 1;
+  buf += (hasLastDigit ? bcdSize + 1 : gDigits) << 1;
   // Move the lead digit to pos 0, drop '.' at pos 1.
   let lead: u32 = <u32>load<u16>(start, 2);
   store<u16>(start, lead);
@@ -503,12 +503,12 @@ export const MAX_FIXED_DEC_EXP = 20;
   let y = c << shift;
 
   let a = mulhi64(pHi, y);
-  let plo64 = pHi * y;
-  let lo = plo64 + mulhi64(pLo, y);
-  let p_hi = a + u64(lo < plo64);
+  let pLo64 = pHi * y;
+  let lo = pLo64 + mulhi64(pLo, y);
+  let pHi64 = a + u64(lo < pLo64);
 
-  let integral = p_hi >> EXTRA_SHIFT;
-  let dotOne = (p_hi << (64 - EXTRA_SHIFT)) | (lo >> EXTRA_SHIFT);
+  let integral = pHi64 >> EXTRA_SHIFT;
+  let dotOne = (pHi64 << (64 - EXTRA_SHIFT)) | (lo >> EXTRA_SHIFT);
   let halfUlp = (pHi >> (-h)) + <u64>(1 - (c & 1));
 
   let one = umul128AddHi64(dotOne, 10, dotOne == ((<u64>1) << 62) ? 0 : BIASED_HALF);
@@ -531,12 +531,12 @@ export const MAX_FIXED_DEC_EXP = 20;
   let y = binSig << shift;
 
   let a = mulhi64(pHi, y);
-  let plo64 = pHi * y;
-  let lo = plo64 + mulhi64(pLo, y);
-  let p_hi = a + u64(lo < plo64);
+  let pLo64 = pHi * y;
+  let lo = pLo64 + mulhi64(pLo, y);
+  let pHi64 = a + u64(lo < pLo64);
 
-  let integral = p_hi >> EXTRA_SHIFT;
-  let dotOne = (p_hi << (64 - EXTRA_SHIFT)) | (lo >> EXTRA_SHIFT);
+  let integral = pHi64 >> EXTRA_SHIFT;
+  let dotOne = (pHi64 << (64 - EXTRA_SHIFT)) | (lo >> EXTRA_SHIFT);
   let halfUlp = (pHi >> (EXTRA_SHIFT + 1 - shift)) + <u64>(1 - (binSig & 1));
 
   let one = umul128AddHi64(dotOne, 10, BIASED_HALF);
@@ -746,7 +746,7 @@ export const FLOAT_MAX_DIGITS10 = 9;
   let bcd = toBcd4x4(x); // bytes 0-7 = 10**0..10**7 digits
   let low = i64x2.extract_lane(bcd, 0);
   gDigHi = bswap<u64>(low) + ZEROS;
-  gDigNum = 8 - <i32>(ctz(low) >> 3); // low is never 0 (significand >= 1)
+  gDigits = 8 - <i32>(ctz(low) >> 3); // low is never 0 (significand >= 1)
 }
 
 // to_digits<32>: a single u64 of 8 ASCII digits (value < 1e8).
@@ -755,7 +755,7 @@ export const FLOAT_MAX_DIGITS10 = 9;
   if (ASC_FEATURE_SIMD) return toDigits32Simd(value);
   toBcd8(value);
   gDigHi = gBcd + ZEROS;
-  gDigNum = gBcdLen;
+  gDigits = gBcdLen;
 }
 
 // Fixed-notation tail: 8-digit significand block (gDigHi) plus an optional 9th
@@ -770,7 +770,7 @@ export const FLOAT_MAX_DIGITS10 = 9;
 ): usize {
   if (decExp < 0) putBlock8(start, ZEROS);
   let lastDigitChar = <u64>(0x30 + (hasLastDigit ? gLastDigit : 0));
-  let numDigits = hasLastDigit ? 8 : gDigNum - 1;
+  let numDigits = hasLastDigit ? 8 : gDigits - 1;
 
   // !hasExtraDigit: gSig has a leading '0'; shift it out and fold the last digit
   // into the freed low slot, so the block is exactly 8 chars (no memmove).
@@ -828,7 +828,7 @@ export const FLOAT_MAX_DIGITS10 = 9;
   buf += usize(hasExtraDigit) << 1;
   putBlock8(buf, gDigHi);
   store<u16>(buf + 16, <u32>(0x30 + gLastDigit));
-  buf += (hasLastDigit ? 9 : gDigNum) << 1;
+  buf += (hasLastDigit ? 9 : gDigits) << 1;
   // Move the lead digit to pos 0, drop '.' at pos 1.
   let lead: u32 = <u32>load<u16>(start, 2);
   store<u16>(start, lead);

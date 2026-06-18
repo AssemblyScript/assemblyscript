@@ -44,7 +44,7 @@
  (global $~lib/util/dtoa/gBcdLen (mut i32) (i32.const 0))
  (global $~lib/util/dtoa/gDigHi (mut i64) (i64.const 0))
  (global $~lib/util/dtoa/gDigLo (mut i64) (i64.const 0))
- (global $~lib/util/dtoa/gDigNum (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/gDigits (mut i32) (i32.const 0))
  (global $~lib/util/dtoa/gSig (mut i64) (i64.const 0))
  (global $~lib/util/dtoa/gExp (mut i32) (i32.const 0))
  (global $~lib/util/dtoa/gLastDigit (mut i32) (i32.const 0))
@@ -3322,7 +3322,7 @@
    i64.add
    global.set $~lib/util/dtoa/gDigHi
    global.get $~lib/util/dtoa/gBcdLen
-   global.set $~lib/util/dtoa/gDigNum
+   global.set $~lib/util/dtoa/gDigits
    local.get $decExp|56
    global.get $~lib/util/dtoa/MIN_FIXED_DEC_EXP
    i32.ge_s
@@ -3436,7 +3436,7 @@
      if (result i32)
       i32.const 8
      else
-      global.get $~lib/util/dtoa/gDigNum
+      global.get $~lib/util/dtoa/gDigits
       i32.const 1
       i32.sub
      end
@@ -4004,7 +4004,7 @@
     if (result i32)
      i32.const 9
     else
-     global.get $~lib/util/dtoa/gDigNum
+     global.get $~lib/util/dtoa/gDigits
     end
     i32.const 1
     i32.shl

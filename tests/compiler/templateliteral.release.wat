@@ -16,7 +16,7 @@
  (global $~lib/util/dtoa/gBcdLen (mut i32) (i32.const 0))
  (global $~lib/util/dtoa/gDigHi (mut i64) (i64.const 0))
  (global $~lib/util/dtoa/gDigLo (mut i64) (i64.const 0))
- (global $~lib/util/dtoa/gDigNum (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/gDigits (mut i32) (i32.const 0))
  (global $~lib/util/dtoa/gSig (mut i64) (i64.const 0))
  (global $~lib/util/dtoa/gExp (mut i32) (i32.const 0))
  (global $~lib/util/dtoa/gLastDigit (mut i32) (i32.const 0))
@@ -4126,7 +4126,7 @@
      i64.const 3472328296227680304
      global.set $~lib/util/dtoa/gDigLo
      local.get $8
-     global.set $~lib/util/dtoa/gDigNum
+     global.set $~lib/util/dtoa/gDigits
      br $~lib/util/dtoa/toDigits64Swar|inlined.0
     end
     local.get $1
@@ -4209,7 +4209,7 @@
     global.get $~lib/util/dtoa/gBcdLen
     i32.const 8
     i32.add
-    global.set $~lib/util/dtoa/gDigNum
+    global.set $~lib/util/dtoa/gDigits
    end
    local.get $7
    i32.const 20
@@ -4257,7 +4257,7 @@
     i64.add
     local.set $3
     i32.const 16
-    global.get $~lib/util/dtoa/gDigNum
+    global.get $~lib/util/dtoa/gDigits
     i32.const 1
     i32.sub
     local.get $5
@@ -4900,7 +4900,7 @@
    i32.store16 offset=2
    local.get $6
    i32.const 17
-   global.get $~lib/util/dtoa/gDigNum
+   global.get $~lib/util/dtoa/gDigits
    local.get $5
    select
    i32.const 1
