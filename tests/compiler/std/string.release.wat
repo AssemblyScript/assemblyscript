@@ -13167,9 +13167,10 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i64)
+  (local $8 i32)
   (local $9 i64)
   (local $10 i64)
+  (local $11 i64)
   local.get $0
   i32.reinterpret_f32
   local.tee $1
@@ -13177,7 +13178,7 @@
   i32.shl
   i32.const 24
   i32.shr_u
-  local.set $5
+  local.set $7
   local.get $1
   i32.const 8388607
   i32.and
@@ -13188,7 +13189,7 @@
   i32.shr_u
   local.set $1
   block $~lib/util/dtoa/formatDecodedFloat|inlined.0
-   local.get $5
+   local.get $7
    i32.const 1
    i32.sub
    i32.const 254
@@ -13208,37 +13209,37 @@
     i64.const 8388608
     i64.or
     local.set $3
-    local.get $5
+    local.get $7
     i32.const 150
     i32.sub
-    local.set $6
+    local.set $8
     local.get $2
     i64.const 0
     i64.ne
-    local.tee $7
+    local.tee $6
     if (result i32)
-     local.get $6
+     local.get $8
      i32.const 1233
      i32.mul
      i32.const 12
      i32.shr_s
-     local.set $1
-     local.get $5
+     local.set $5
+     local.get $7
      i32.const 1640
      i32.add
      i32.load8_u
     else
-     local.get $6
+     local.get $8
      i32.const 37
      i32.add
-     local.get $6
+     local.get $8
      i32.const 1233
      i32.mul
      i32.const 512
      i32.sub
      i32.const 12
      i32.shr_s
-     local.tee $1
+     local.tee $5
      i32.const -1701
      i32.mul
      i32.const 1701
@@ -13247,8 +13248,8 @@
      i32.shr_s
      i32.add
     end
-    local.set $5
-    local.get $1
+    local.set $1
+    local.get $5
     i32.const 3
     i32.shl
     i32.const 1384
@@ -13259,34 +13260,34 @@
     i64.and
     local.get $3
     i64.mul
-    local.set $8
+    local.set $9
     local.get $2
     i64.const 32
     i64.shr_u
     local.get $3
     i64.mul
-    local.get $8
+    local.get $9
     i64.const 32
     i64.shr_u
     i64.add
     i64.const 8
     i64.shl
-    local.get $8
+    local.get $9
     i64.const 4294967295
     i64.and
     i64.const 24
     i64.shr_u
     i64.or
     i64.const 40
-    local.get $5
+    local.get $1
     i64.extend_i32_s
-    local.tee $8
+    local.tee $9
     i64.sub
     i64.shr_u
-    local.tee $9
+    local.tee $10
     i64.const 68719476735
     i64.and
-    local.set $10
+    local.set $11
     i64.const 1
     local.get $3
     i64.const 1
@@ -13294,58 +13295,58 @@
     i64.sub
     local.get $2
     i64.const 65
-    local.get $8
+    local.get $9
     i64.sub
     i64.shr_u
     i64.add
     local.tee $2
-    local.get $9
+    local.get $10
     i64.add
     i64.const 36
     i64.shr_u
     local.set $3
-    local.get $10
+    local.get $11
     i64.const 5
     i64.mul
     i64.const 17179869177
     i64.add
-    local.get $10
+    local.get $11
     i64.const 32
     i64.shr_u
     i64.add
     i64.const 35
     i64.shr_u
     i32.wrap_i64
-    local.set $5
-    local.get $7
+    local.set $1
+    local.get $6
     if (result i32)
      local.get $3
-     local.get $9
+     local.get $10
      local.get $2
      i64.sub
      i64.const 36
      i64.shr_u
      i64.gt_u
     else
-     local.get $5
+     local.get $1
      i32.const 1
      i32.add
-     local.get $5
-     local.get $6
+     local.get $1
+     local.get $8
      i32.const 64
      i32.eq
-     local.get $6
+     local.get $8
      i32.const -119
      i32.eq
      i32.or
-     local.get $6
+     local.get $8
      i32.const 67
      i32.eq
      i32.or
      select
-     local.set $5
+     local.set $1
      local.get $3
-     local.get $9
+     local.get $10
      local.get $2
      i64.const 1
      i64.shr_u
@@ -13356,14 +13357,14 @@
     end
     local.get $3
     global.set $~lib/util/dtoa/gSig
-    local.get $1
-    global.set $~lib/util/dtoa/gExp
     local.get $5
+    global.set $~lib/util/dtoa/gExp
+    local.get $1
     global.set $~lib/util/dtoa/gLastDigit
     i32.eqz
     global.set $~lib/util/dtoa/gHasLastDigit
    else
-    local.get $5
+    local.get $7
     if
      local.get $2
      i64.const 0
@@ -13379,7 +13380,7 @@
       i32.const 78
       i32.store16
       i32.const 24134
-      local.set $1
+      local.set $5
       br $~lib/util/dtoa/formatDecodedFloat|inlined.0
      end
      local.get $1
@@ -13418,7 +13419,7 @@
      local.get $1
      i32.const 16
      i32.add
-     local.set $1
+     local.set $5
      br $~lib/util/dtoa/formatDecodedFloat|inlined.0
     end
     local.get $2
@@ -13428,7 +13429,7 @@
      i32.const 48
      i32.store16
      i32.const 24130
-     local.set $1
+     local.set $5
      br $~lib/util/dtoa/formatDecodedFloat|inlined.0
     end
     local.get $1
@@ -13448,19 +13449,19 @@
     i64.and
     local.get $2
     i64.mul
-    local.set $8
+    local.set $9
     local.get $3
     i64.const 32
     i64.shr_u
     local.get $2
     i64.mul
-    local.get $8
+    local.get $9
     i64.const 32
     i64.shr_u
     i64.add
     i64.const 8
     i64.shl
-    local.get $8
+    local.get $9
     i64.const 4294967295
     i64.and
     i64.const 24
@@ -13469,13 +13470,13 @@
     i64.const 40
     i32.const 1641
     i64.load8_u
-    local.tee $8
+    local.tee $9
     i64.sub
     i64.shr_u
-    local.tee $9
+    local.tee $10
     i64.const 68719476735
     i64.and
-    local.set $10
+    local.set $11
     i64.const 1
     local.get $2
     i64.const 1
@@ -13483,12 +13484,12 @@
     i64.sub
     local.get $3
     i64.const 65
-    local.get $8
+    local.get $9
     i64.sub
     i64.shr_u
     i64.add
     local.tee $2
-    local.get $9
+    local.get $10
     i64.add
     i64.const 36
     i64.shr_u
@@ -13496,12 +13497,12 @@
     global.set $~lib/util/dtoa/gSig
     i32.const -45
     global.set $~lib/util/dtoa/gExp
-    local.get $10
+    local.get $11
     i64.const 5
     i64.mul
     i64.const 17179869177
     i64.add
-    local.get $10
+    local.get $11
     i64.const 32
     i64.shr_u
     i64.add
@@ -13509,7 +13510,7 @@
     i64.shr_u
     i32.wrap_i64
     global.set $~lib/util/dtoa/gLastDigit
-    local.get $9
+    local.get $10
     local.get $2
     i64.sub
     i64.const 36
@@ -13528,7 +13529,7 @@
     i64.add
     local.set $2
     i32.const -45
-    local.set $5
+    local.set $1
     loop $while-continue|0
      local.get $2
      i64.const 10000000
@@ -13538,10 +13539,10 @@
       i64.const 10
       i64.mul
       local.set $2
-      local.get $5
+      local.get $1
       i32.const 1
       i32.sub
-      local.set $5
+      local.set $1
       br $while-continue|0
      end
     end
@@ -13554,14 +13555,14 @@
     i64.mul
     i64.sub
     i32.wrap_i64
-    local.set $1
+    local.set $5
     local.get $2
     global.set $~lib/util/dtoa/gSig
-    local.get $5
+    local.get $1
     global.set $~lib/util/dtoa/gExp
-    local.get $1
+    local.get $5
     global.set $~lib/util/dtoa/gLastDigit
-    local.get $1
+    local.get $5
     i32.const 0
     i32.ne
     global.set $~lib/util/dtoa/gHasLastDigit
@@ -13810,7 +13811,7 @@
       i32.const 1
       i32.shl
       i32.add
-      local.set $1
+      local.set $5
       local.get $4
       local.get $6
       i32.const 8
@@ -13818,40 +13819,40 @@
       i32.const 1
       i32.shl
       i32.add
-      local.set $5
+      local.set $1
       loop $for-loop|1
        local.get $1
        local.get $5
-       i32.gt_u
+       i32.lt_u
        if
-        local.get $5
+        local.get $1
         i64.const 48
         i64.store16
-        local.get $5
+        local.get $1
         i64.const 48
         i64.store16 offset=2
-        local.get $5
+        local.get $1
         i64.const 48
         i64.store16 offset=4
-        local.get $5
+        local.get $1
         i64.const 48
         i64.store16 offset=6
-        local.get $5
+        local.get $1
         i64.const 48
         i64.store16 offset=8
-        local.get $5
+        local.get $1
         i64.const 48
         i64.store16 offset=10
-        local.get $5
+        local.get $1
         i64.const 48
         i64.store16 offset=12
-        local.get $5
+        local.get $1
         i64.const 48
         i64.store16 offset=14
-        local.get $5
+        local.get $1
         i32.const 16
         i32.add
-        local.set $5
+        local.set $1
         br $for-loop|1
        end
       end
@@ -14055,7 +14056,7 @@
      i32.const 1
      i32.shl
      i32.add
-     local.set $1
+     local.set $5
     end
     br $~lib/util/dtoa/formatDecodedFloat|inlined.0
    end
@@ -14226,9 +14227,9 @@
     i32.const 2
     i32.add
    end
-   local.set $1
+   local.set $5
   end
-  local.get $1
+  local.get $5
   i32.const 24128
   i32.sub
   i32.const 1

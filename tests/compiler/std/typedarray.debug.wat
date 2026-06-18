@@ -7956,10 +7956,12 @@
      local.get $hasExtraDigit|63
      i32.add
      local.set $n
+     local.get $n
+     local.set $endPos
      local.get $decExp|61
      i32.const 0
      i32.ge_s
-     if (result i32)
+     if
       local.get $n
       local.get $decExp|61
       i32.const 1
@@ -7974,10 +7976,8 @@
        i32.const 1
        i32.add
       end
-     else
-      local.get $n
+      local.set $endPos
      end
-     local.set $endPos
      i32.const 1
      local.get $decExp|61
      i32.sub

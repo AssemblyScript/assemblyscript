@@ -801,7 +801,10 @@ export const FLOAT_MAX_DIGITS10 = 9;
   }
 
   let n = numDigits + i32(hasExtraDigit);
-  let endPos = decExp >= 0 ? (n > decExp + 1 ? n + 1 : decExp + 1) : n;
+  let endPos = n;
+  if (decExp >= 0) {
+    endPos = n > decExp + 1 ? n + 1 : decExp + 1;
+  }
 
   // Branchless `decExp < 0 ? 1 - decExp : 0` (decExp >> 31 is all-ones if < 0).
   let startPos = (1 - decExp) & (decExp >> 31);

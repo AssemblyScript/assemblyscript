@@ -16355,7 +16355,7 @@
   i32.shl
   i32.const 24
   i32.shr_u
-  local.set $3
+  local.set $5
   local.get $2
   i32.const 8388607
   i32.and
@@ -16366,7 +16366,7 @@
   i32.shr_u
   local.set $2
   block $~lib/util/dtoa/formatDecodedFloat|inlined.0
-   local.get $3
+   local.get $5
    i32.const 1
    i32.sub
    i32.const 254
@@ -16388,37 +16388,37 @@
     i64.const 8388608
     i64.or
     local.set $6
-    local.get $3
+    local.get $5
     i32.const 150
     i32.sub
-    local.set $8
+    local.set $7
     local.get $4
     i64.const 0
     i64.ne
-    local.tee $7
+    local.tee $8
     if (result i32)
-     local.get $8
+     local.get $7
      i32.const 1233
      i32.mul
      i32.const 12
      i32.shr_s
-     local.set $5
-     local.get $3
+     local.set $3
+     local.get $5
      i32.const 1640
      i32.add
      i32.load8_u
     else
-     local.get $8
+     local.get $7
      i32.const 37
      i32.add
-     local.get $8
+     local.get $7
      i32.const 1233
      i32.mul
      i32.const 512
      i32.sub
      i32.const 12
      i32.shr_s
-     local.tee $5
+     local.tee $3
      i32.const -1701
      i32.mul
      i32.const 1701
@@ -16427,8 +16427,8 @@
      i32.shr_s
      i32.add
     end
-    local.set $3
-    local.get $5
+    local.set $5
+    local.get $3
     i32.const 3
     i32.shl
     i32.const 1384
@@ -16458,7 +16458,7 @@
     i64.shr_u
     i64.or
     i64.const 40
-    local.get $3
+    local.get $5
     i64.extend_i32_s
     local.tee $9
     i64.sub
@@ -16496,8 +16496,8 @@
     i64.const 35
     i64.shr_u
     i32.wrap_i64
-    local.set $3
-    local.get $7
+    local.set $5
+    local.get $8
     if (result i32)
      local.get $6
      local.get $10
@@ -16507,23 +16507,23 @@
      i64.shr_u
      i64.gt_u
     else
-     local.get $3
+     local.get $5
      i32.const 1
      i32.add
-     local.get $3
-     local.get $8
+     local.get $5
+     local.get $7
      i32.const 64
      i32.eq
-     local.get $8
+     local.get $7
      i32.const -119
      i32.eq
      i32.or
-     local.get $8
+     local.get $7
      i32.const 67
      i32.eq
      i32.or
      select
-     local.set $3
+     local.set $5
      local.get $6
      local.get $10
      local.get $4
@@ -16536,14 +16536,14 @@
     end
     local.get $6
     global.set $~lib/util/dtoa/gSig
-    local.get $5
-    global.set $~lib/util/dtoa/gExp
     local.get $3
+    global.set $~lib/util/dtoa/gExp
+    local.get $5
     global.set $~lib/util/dtoa/gLastDigit
     i32.eqz
     global.set $~lib/util/dtoa/gHasLastDigit
    else
-    local.get $3
+    local.get $5
     if
      local.get $4
      i64.const 0
