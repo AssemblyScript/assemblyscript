@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.1.31] - 2026-06-18
+
+### Dependencies
+
+- chore(deps-dev): bump esbuild from 0.28.0 to 0.28.1 ([#7](https://github.com/dacely-cloud/toilscript/pull/7)) by @dependabot[bot]
+
+### Other Changes
+
+- breaking: rename Record handle to Documents, key-first generics, no import ([#16](https://github.com/dacely-cloud/toilscript/pull/16)) by @BlobMaster41
+
+
+
+
 ## [v0.1.30] - 2026-06-18
 
 ### Other Changes
