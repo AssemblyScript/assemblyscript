@@ -4,14 +4,20 @@ import { DIGITS, MAX_DOUBLE_LENGTH } from "./number";
 // High 64 bits of the 128-bit product x * y. Matches umul128.
 // @ts-ignore: decorator
 @inline export function mulhi64(a: u64, b: u64): u64 {
-  let a0 = a & 0xffffffff, a1 = a >> 32;
-  let b0 = b & 0xffffffff, b1 = b >> 32;
-  let w0 = a0 * b0;
-  let t = a1 * b0 + (w0 >> 32);
-  let w1 = t & 0xffffffff;
-  let w2 = t >> 32;
-  w1 = a0 * b1 + w1;
-  return a1 * b1 + w2 + (w1 >> 32);
+  let a0 = a & 0xffffffff
+  let a1 = a >> 32
+  
+  let b0 = b & 0xffffffff
+  let b1 = b >> 32
+  
+  let w0 = a0 * b0
+  let t = a1 * b0 + (w0 >> 32)
+  let w1 = t & 0xffffffff
+  let w2 = t >> 32
+  
+  w1 = a0 * b1 + w1
+  
+  return a1 * b1 + w2 + (w1 >> 32)
 }
 
 // Returns (x * y + c) >> 64.
@@ -26,17 +32,17 @@ import { DIGITS, MAX_DOUBLE_LENGTH } from "./number";
 // irregular 3/4 variant lives in ftoa.ts's own copy.)
 // @ts-ignore: decorator
 @inline export function computeDecExp(binExp: i32): i32 {
-  const LOG10_2_SIG = 315653;
+  const LOG10_2_SIGNIFICAND = 0x4D105; // ~(log10(2) * 2**20)
   const LOG_10_2_EXP = 20;
-  return (binExp * LOG10_2_SIG) >> LOG_10_2_EXP;
+  return (binExp * LOG10_2_SIGNIFICAND) >> LOG_10_2_EXP;
 }
 
 // Shift that keeps a fixed 128-bit fractional part after scaling by 10**dec_exp.
 // @ts-ignore: decorator
 @inline export function computeExpShift(binExp: i32, decExp: i32): i32 {
-  const LOG2_POW10_SIG = 217707;
+  const LOG2_POW10_SIGNIFICAND = 0x3526B; // ~(log2(10) * 2**16)
   const LOG2_POW10_EXP = 16;
-  const pow10BinExp = (-decExp * LOG2_POW10_SIG) >> LOG2_POW10_EXP;
+  const pow10BinExp = (-decExp * LOG2_POW10_SIGNIFICAND) >> LOG2_POW10_EXP;
   return binExp + pow10BinExp + 1;
 }
 
