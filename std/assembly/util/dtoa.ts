@@ -273,6 +273,9 @@ export let gLastDigit: i32 = 0;
 export let gHasLastDigit: bool = false;
 
 export const DOUBLE_EXP_OFFSET = 1075; // exp_bias(1023) + num_sig_bits(52)
+export const DOUBLE_SIGNIFICAND_SIZE = 52; // explicit mantissa bits
+export const DOUBLE_HIDDEN_BIT: u64 = (<u64>1) << DOUBLE_SIGNIFICAND_SIZE; // implicit leading 1
+export const DOUBLE_SIGNIFICAND_MASK: u64 = DOUBLE_HIDDEN_BIT - 1;
 export const EXTRA_SHIFT = 6;
 export const BIASED_HALF: u64 = ((<u64>1) << 63) + 6;
 export const DOUBLE_MAX_DIGITS10 = 17;
@@ -462,7 +465,7 @@ export const MAX_FIXED_DEC_EXP = 20;
 // Normal f64 -> shortest decimal.
 // @ts-ignore: decorator
 @inline function toDecimalDoubleNormal(binSig: u64, rawExp: i32, regular: bool): void {
-  let c = binSig | ((<u64>1) << 52);
+  let c = binSig | DOUBLE_HIDDEN_BIT;
   let q = rawExp - DOUBLE_EXP_OFFSET;
 
   if (!regular) {
@@ -619,7 +622,7 @@ export const MAX_FIXED_DEC_EXP = 20;
   if (neg) { store<u16>(buf, 0x2d); buf += 2; }
   if (isNormal) {
     let q = binExp - DOUBLE_EXP_OFFSET;
-    let c = binSig | ((<u64>1) << 52);
+    let c = binSig | DOUBLE_HIDDEN_BIT;
     let intValue: u64 = 0;
     if (q < 0) {
       let shift = -q;
@@ -655,14 +658,14 @@ export const MAX_FIXED_DEC_EXP = 20;
 @inline function formatDouble(buf: usize, value: f64): usize {
   let bits = reinterpret<u64>(value);
   let binExp = <i32>((bits << 1) >> 53);
-  let binSig = bits & (((<u64>1) << 52) - 1);
+  let binSig = bits & DOUBLE_SIGNIFICAND_MASK;
   return formatDecodedDouble(buf, bits, binExp, binSig);
 }
 
 export function dtoa(value: f64): string {
   let bits = reinterpret<u64>(value);
   let exp = <i32>((bits << 1) >> 53);
-  let sig = bits & (((<u64>1) << 52) - 1);
+  let sig = bits & DOUBLE_SIGNIFICAND_MASK;
 
   if (exp == 2047) {
     if (sig != 0) return "NaN";
