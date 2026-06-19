@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.1.32] - 2026-06-19
+
+- No changes
+
+
 ## [v0.1.31] - 2026-06-18
 
 ### Dependencies
