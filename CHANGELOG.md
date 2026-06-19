@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.1.33] - 2026-06-19
+
+### Other Changes
+
+- feat(database): support @collection static (plugin-free Db.coll typing) ([#17](https://github.com/dacely-cloud/toilscript/pull/17)) by @BlobMaster41
+
+
+
+
 ## [v0.1.32] - 2026-06-19
 
 - No changes
