@@ -93,7 +93,11 @@ declare function user(target: Function): void;
 declare function database(target: Function): void;
 
 /** Declares a `@database` field as a collection - a `Documents`/`View`/`Unique`/
- *  `Counter`/`Events`/`Membership`/`Capacity` handle. */
+ *  `Counter`/`Events`/`Membership`/`Capacity` handle. Prefer the `static` form,
+ *  `@collection static users!: Documents<UserId, User>`, so `App.users` type-checks
+ *  in any editor with no language-service plugin; the instance form
+ *  (`@collection users!: ...`) still works but needs the toilscript TS plugin to
+ *  type the static `App.users` access. */
 declare function collection(target: Object, propertyKey: string | symbol): void;
 
 /** ToilDB function kinds (spec 6) - the data ops a function may issue. `@query`

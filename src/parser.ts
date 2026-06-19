@@ -2340,6 +2340,15 @@ export class Parser extends DiagnosticEmitter {
       let typeNode = field.type;
       if (typeNode == null || !(typeNode instanceof NamedTypeNode)) continue;
       let named = <NamedTypeNode>typeNode;
+      // A `@collection static coll!: T` field type-checks as a STATIC member in
+      // stock TypeScript, so `Db.coll` resolves in editors with NO plugin (and
+      // `tsc` stays clean). But the static getter injected below would then
+      // collide with it (TS2718), and a static field needs an initializer (AS238).
+      // Demote it to an INSTANCE field: harmless and vestigial (the class is only
+      // ever used statically), exactly like the legacy `@collection coll!: T`
+      // form, and still seen by the `@collection` scanners (the catalog section +
+      // the function-kind checks), which do not care whether the field is static.
+      if (field.is(CommonFlags.Static)) field.flags &= ~CommonFlags.Static;
       let handleName = named.name.identifier.text;
       let collName = field.name.text;
       let typeArgs = named.typeArguments;
