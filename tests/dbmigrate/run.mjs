@@ -141,4 +141,13 @@ if (badRun.status === 0) fail("a @migrate that touches the database must be a co
 if (!String(badRun.stderr).includes("migrate"))
     fail(`expected a @migrate diagnostic, got: ${String(badRun.stderr).slice(0, 200)}`);
 
+// --- (e) the DELTA form `(old, into): void` compiles, emits, and weaves ---
+const dwasm = compile(join(here, "spec_delta.ts"));
+const dusers = decodeCatalog(findCatalog(dwasm)).find((c) => c.name === "users");
+if (!dusers) fail("delta: users collection missing");
+if (dusers.migratableFrom.length !== 1 || dusers.migratableFrom[0] !== oldVersion)
+    fail(`delta: migratableFrom ${JSON.stringify(dusers.migratableFrom)} != [${oldVersion}]`);
+if (!dwasm.toString("latin1").includes("result_schema_version"))
+    fail("delta: woven decode did not pull in data.result_schema_version");
+
 console.log("@migrate test suite: ALL PASS");

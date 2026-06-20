@@ -118,6 +118,11 @@ export class DataMigration {
   newType: string = "";
   fnName: string = "";
   oldVersion: u32 = 0;
+  /// `false`: `(old): New` - the function returns the whole new value.
+  /// `true`:  `(old, into): void` - the compiler pre-copies the fields the two
+  ///          layouts share (same name + type), and the function fills only the
+  ///          changed/new fields of `into`.
+  delta: bool = false;
 }
 
 function typeNameOf(t: TypeNode | null): string | null {
@@ -144,14 +149,27 @@ export function collectMigrations(
       let fn = <FunctionDeclaration>s;
       if (!hasDeco(fn.decorators, DecoratorKind.Migrate)) continue;
       let sig = fn.signature;
-      if (sig.parameters.length != 1) continue;
-      let oldType = typeNameOf(sig.parameters[0].type);
-      let newType = typeNameOf(sig.returnType);
+      // `(old): New` (full) or `(old, into): void` (delta - shared fields are
+      // copied for you; the body fills only the changed/new ones of `into`).
+      let oldType: string | null = null;
+      let newType: string | null = null;
+      let delta = false;
+      if (sig.parameters.length == 1) {
+        oldType = typeNameOf(sig.parameters[0].type);
+        newType = typeNameOf(sig.returnType);
+      } else if (sig.parameters.length == 2) {
+        oldType = typeNameOf(sig.parameters[0].type);
+        newType = typeNameOf(sig.parameters[1].type);
+        delta = true;
+      } else {
+        continue;
+      }
       if (oldType == null || newType == null) continue;
       let mig = new DataMigration();
       mig.oldType = oldType;
       mig.newType = newType;
       mig.fnName = fn.name.text;
+      mig.delta = delta;
       mig.oldVersion = layouts.has(oldType)
         ? layoutHash(<FieldLayout[]>layouts.get(oldType))
         : fnv1a(oldType);

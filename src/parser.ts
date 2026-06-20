@@ -756,33 +756,59 @@ export class Parser extends DiagnosticEmitter {
       (<DataMigration[]>byNew.get(m.newType)).push(m);
     }
     for (let i = 0, k = newTypes.length; i < k; ++i) {
-      this.weaveDecodeInto(newTypes[i], <DataMigration[]>byNew.get(newTypes[i]));
+      this.weaveDecodeInto(newTypes[i], <DataMigration[]>byNew.get(newTypes[i]), layouts);
     }
   }
 
   /** Replace `newType`'s generated `decodeInto` with a version-dispatching one. */
-  private weaveDecodeInto(newType: string, migs: DataMigration[]): void {
+  private weaveDecodeInto(
+    newType: string,
+    migs: DataMigration[],
+    layouts: Map<string, FieldLayout[]>
+  ): void {
     if (!this.toildbCodecClasses.has(newType)) return; // return type is not a @data value
     let decl = <ClassDeclaration>this.toildbCodecClasses.get(newType);
     let reads = <string>this.toildbCodecReads.get(newType);
-    // The copy of the transform's result fields into `this` (declaration order).
-    let copy = "";
     let members = decl.members;
+    // The names of `newType`'s instance fields, in declaration order (full-form
+    // copies every one from the returned value).
+    let newNames = new Array<string>();
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
       if (member.kind != NodeKind.FieldDeclaration) continue;
       let field = <FieldDeclaration>member;
       if (field.is(CommonFlags.Static)) continue;
-      let fname = field.name.text;
-      copy += "this." + fname + "=__m." + fname + ";";
+      newNames.push(field.name.text);
     }
+    let copy = "";
+    for (let i = 0, k = newNames.length; i < k; ++i) copy += "this." + newNames[i] + "=__m." + newNames[i] + ";";
+    let newFields = layouts.has(newType) ? <FieldLayout[]>layouts.get(newType) : new Array<FieldLayout>();
     let dispatch = "";
     for (let i = 0, k = migs.length; i < k; ++i) {
       let m = migs[i];
+      let decode = "const __old=" + m.oldType + ".decode(__buf);";
+      let body: string;
+      if (m.delta) {
+        // Carry over fields the two layouts SHARE (same name + type + array-ness),
+        // then let the body fill only the changed/new fields of `this`.
+        let oldFields = layouts.has(m.oldType) ? <FieldLayout[]>layouts.get(m.oldType) : new Array<FieldLayout>();
+        let carry = "";
+        for (let a = 0, an = newFields.length; a < an; ++a) {
+          let nf = newFields[a];
+          for (let b = 0, bn = oldFields.length; b < bn; ++b) {
+            let of = oldFields[b];
+            if (of.name == nf.name && of.typeName == nf.typeName && of.isArray == nf.isArray) {
+              carry += "this." + nf.name + "=__old." + nf.name + ";";
+              break;
+            }
+          }
+        }
+        body = carry + m.fnName + "(__old,this);";
+      } else {
+        body = "const __m=" + m.fnName + "(__old);" + copy;
+      }
       dispatch += "if(__toildbReadVersion()==<i64>" + m.oldVersion.toString() + "){" +
-        "const __old=" + m.oldType + ".decode(__buf);" +
-        "const __m=" + m.fnName + "(__old);" + copy +
-        "__toildbMarkMigrated();return;}";
+        decode + body + "__toildbMarkMigrated();return;}";
     }
     // Drop the existing decodeInto, then inject the dispatching replacement.
     for (let i = members.length - 1; i >= 0; --i) {
