@@ -16,6 +16,7 @@
 //                 u8 replication, u8 placement, u16 n_fields
 
 import { Program } from "./program";
+import { CommonFlags } from "./common";
 import {
   ClassDeclaration,
   DecoratorKind,
@@ -32,6 +33,76 @@ function fnv1a(name: string): u32 {
     hash = Math.imul(hash ^ name.charCodeAt(i), 0x01000193) >>> 0;
   }
   return hash >>> 0;
+}
+
+/** One field of a `@data` value type, in declaration order. */
+class FieldLayout {
+  name: string = "";
+  typeName: string = "";
+  isArray: bool = false;
+}
+
+function fnvByte(h: u32, b: i32): u32 {
+  return Math.imul(h ^ (b & 0xff), 0x01000193) >>> 0;
+}
+
+/** Length-prefixed (u32 LE) string fed into the running FNV-1a, so concatenation
+ *  is unambiguous (matches `ScopeId::hash`/`layout_hash` framing in toildb). */
+function fnvStr(h: u32, s: string): u32 {
+  let n = s.length;
+  h = fnvByte(h, n & 0xff);
+  h = fnvByte(h, (n >>> 8) & 0xff);
+  h = fnvByte(h, (n >>> 16) & 0xff);
+  h = fnvByte(h, (n >>> 24) & 0xff);
+  for (let i = 0; i < n; ++i) h = fnvByte(h, s.charCodeAt(i));
+  return h >>> 0;
+}
+
+/**
+ * `schema_version`: a hash over the ORDERED field layout (name, type, is_array),
+ * NOT the value-type name. Adding, removing, retyping, or REORDERING a field
+ * changes it - so the runtime can tell a compatible (append-only) change from a
+ * breaking one, instead of silently misreading old rows. (Flat, like toildb's
+ * `SchemaDescriptor::layout_hash`: a change to a NESTED `@data` type's own fields
+ * does not bump the parent - that lands with recursive layouts later.)
+ */
+function layoutHash(fields: FieldLayout[]): u32 {
+  let h: u32 = 0x811c9dc5;
+  for (let i = 0, k = fields.length; i < k; ++i) {
+    h = fnvStr(h, fields[i].name);
+    h = fnvStr(h, fields[i].typeName);
+    h = fnvByte(h, fields[i].isArray ? 1 : 0);
+  }
+  return h >>> 0;
+}
+
+/** Extract the encoded field layout of a `@data` class, in declaration order,
+ *  mirroring `injectDataCodec` (skip static; `Array<T>` -> element + array flag;
+ *  else scalar/string/`Uint8Array`/nested-`@data` by its type name). */
+function dataFields(cls: ClassDeclaration): FieldLayout[] {
+  let out = new Array<FieldLayout>();
+  let members = cls.members;
+  for (let i = 0, k = members.length; i < k; ++i) {
+    let member = members[i];
+    if (member.kind != NodeKind.FieldDeclaration) continue;
+    let field = <FieldDeclaration>member;
+    if (field.is(CommonFlags.Static)) continue;
+    let typeNode = field.type;
+    if (typeNode == null || !(typeNode instanceof NamedTypeNode)) continue;
+    let named = <NamedTypeNode>typeNode;
+    let typeName = named.name.identifier.text;
+    let fl = new FieldLayout();
+    fl.name = field.name.text;
+    let typeArgs = named.typeArguments;
+    if (typeName == "Array" && typeArgs != null && typeArgs.length == 1 && typeArgs[0] instanceof NamedTypeNode) {
+      fl.typeName = (<NamedTypeNode>typeArgs[0]).name.identifier.text;
+      fl.isArray = true;
+    } else {
+      fl.typeName = typeName;
+    }
+    out.push(fl);
+  }
+  return out;
 }
 
 /** Map a handle class name to its collection-family wire byte, or -1. */
@@ -105,6 +176,21 @@ function namedArg(named: NamedTypeNode, index: i32): string {
 export function buildToilDbCatalog(program: Program): Uint8Array | null {
   let databases = new Array<DbEntry>();
   let sources = program.sources;
+  // First pass: the field layout of every `@data` value type, keyed by name, so
+  // a collection's `schema_version` can be a hash of its value's layout.
+  let layouts = new Map<string, FieldLayout[]>();
+  for (let i = 0, k = sources.length; i < k; ++i) {
+    let source = sources[i];
+    if (source.isLibrary) continue;
+    let statements = source.statements;
+    for (let j = 0, l = statements.length; j < l; ++j) {
+      let statement = statements[j];
+      if (statement.kind != NodeKind.ClassDeclaration) continue;
+      let cls = <ClassDeclaration>statement;
+      if (!hasDeco(cls.decorators, DecoratorKind.Data)) continue;
+      layouts.set(cls.name.text, dataFields(cls));
+    }
+  }
   for (let i = 0, k = sources.length; i < k; ++i) {
     let source = sources[i];
     if (source.isLibrary) continue;
@@ -162,8 +248,15 @@ export function buildToilDbCatalog(program: Program): Uint8Array | null {
       w.str(coll.keyType);
       w.str(coll.valueType);
       let id = fnv1a(coll.valueType);
-      w.u32(id); // value_data_id
-      w.u32(id); // schema_version (M1: value-name hash; field-layout hash is M7)
+      // schema_version = hash of the value type's field LAYOUT (so a shape change
+      // is detectable), falling back to the value-name hash for a host-owned or
+      // scalar value type (Counter/Capacity `i64`, a non-`@data` value) that has
+      // no field layout to hash.
+      let schemaVersion = layouts.has(coll.valueType)
+        ? layoutHash(<FieldLayout[]>layouts.get(coll.valueType))
+        : id;
+      w.u32(id);            // value_data_id (the value type's message-boundary id)
+      w.u32(schemaVersion); // schema_version (field-layout hash)
       w.u32(0);  // collection_generation
       w.u8(0);   // replication = edgeCache
       w.u8(0);   // placement = hashKey
