@@ -37,8 +37,8 @@ export class Date {
     return ms;
   }
 
-  @inline static now(): i64 {
-    return <i64>Date_binding.now();
+  @inline static now(): u64 {
+    return Date_binding.now();
   }
 
   // It can parse only ISO 8601 inputs like YYYY-MM-DDTHH:MM:SS.000Z

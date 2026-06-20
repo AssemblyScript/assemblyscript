@@ -134,7 +134,7 @@ export declare namespace Object {
 
 export declare namespace Date {
   @external("env", "Date.now")
-  export function now(): f64;
+  export function now(): u64;
 }
 
 export declare namespace console {

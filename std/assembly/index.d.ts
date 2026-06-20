@@ -2231,7 +2231,7 @@ declare class Date {
     millisecond: i32
   ): i64;
   /** Returns the current UTC timestamp in milliseconds. */
-  static now(): i64;
+  static now(): u64;
   /** Parses a string representation of a date, and returns the number of milliseconds since January 1, 1970, 00:00:00 UTC. */
   static parse(dateString: string): Date;
   static fromString(dateString: string): Date;
