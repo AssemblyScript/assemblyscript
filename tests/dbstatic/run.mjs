@@ -82,8 +82,13 @@ function decodeCatalog(p) {
         for (let c = 0; c < nc; c++) {
             const name = str(), family = u8(), keyType = str(), valueType = str();
             const valueDataId = u32(), schemaVersion = u32(), generation = u32();
-            u8(); u8(); u16(); // replication, placement, n_fields
-            colls.push({ name, family, keyType, valueType, valueDataId, schemaVersion, generation });
+            u8(); u8(); // replication, placement
+            const nFields = u16();
+            const fields = [];
+            for (let f = 0; f < nFields; f++) {
+                fields.push({ name: str(), typeName: str(), isArray: u8() !== 0 });
+            }
+            colls.push({ name, family, keyType, valueType, valueDataId, schemaVersion, generation, fields });
         }
     }
     return colls;
@@ -119,5 +124,13 @@ if (items.schemaVersion === fnv1a("Item")) fail("schema_version is still the val
 if (items.valueDataId !== fnv1a("Item")) fail("value_data_id must remain the value-name hash");
 // items and legacy share the value type Item, so they share a schema_version.
 if (items.schemaVersion !== legacy.schemaVersion) fail("same value type must yield the same schema_version");
+// the field LAYOUT is emitted too (so the deploy gate can compare old vs new).
+// Item = { name: string }.
+if (items.fields.length !== 1) fail(`items should emit 1 field, got ${items.fields.length}`);
+if (items.fields[0].name !== "name" || items.fields[0].typeName !== "string" || items.fields[0].isArray)
+    fail(`items field layout wrong: ${JSON.stringify(items.fields)}`);
+// hits is Counter<Key> -> host-owned i64 value, no @data layout -> zero fields.
+const hits = colls.find((c) => c.name === "hits");
+if (!hits || hits.fields.length !== 0) fail("host-owned (Counter) value emits no field layout");
 
 console.log("@collection static test suite: ALL PASS");

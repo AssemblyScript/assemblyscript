@@ -248,19 +248,28 @@ export function buildToilDbCatalog(program: Program): Uint8Array | null {
       w.str(coll.keyType);
       w.str(coll.valueType);
       let id = fnv1a(coll.valueType);
-      // schema_version = hash of the value type's field LAYOUT (so a shape change
-      // is detectable), falling back to the value-name hash for a host-owned or
-      // scalar value type (Counter/Capacity `i64`, a non-`@data` value) that has
-      // no field layout to hash.
-      let schemaVersion = layouts.has(coll.valueType)
-        ? layoutHash(<FieldLayout[]>layouts.get(coll.valueType))
-        : id;
+      // The value type's field LAYOUT, if it is a `@data` type. `schema_version`
+      // hashes it (so a shape change is detectable); the fields are ALSO emitted
+      // so the deploy gate can compare old vs new layouts (append-only = additive,
+      // anything else = breaking). A host-owned/scalar value (Counter/Capacity
+      // `i64`, a non-`@data` value) has no layout: fall back to the name hash and
+      // emit zero fields.
+      let hasLayout = layouts.has(coll.valueType);
+      let fields = hasLayout
+        ? <FieldLayout[]>layouts.get(coll.valueType)
+        : new Array<FieldLayout>();
+      let schemaVersion = hasLayout ? layoutHash(fields) : id;
       w.u32(id);            // value_data_id (the value type's message-boundary id)
       w.u32(schemaVersion); // schema_version (field-layout hash)
       w.u32(0);  // collection_generation
       w.u8(0);   // replication = edgeCache
       w.u8(0);   // placement = hashKey
-      w.u16(0);  // n_fields (M1: omitted)
+      w.u16(fields.length); // n_fields
+      for (let f = 0, fn = fields.length; f < fn; ++f) {
+        w.str(fields[f].name);
+        w.str(fields[f].typeName);
+        w.u8(fields[f].isArray ? 1 : 0);
+      }
     }
   }
   return w.toBytes();
