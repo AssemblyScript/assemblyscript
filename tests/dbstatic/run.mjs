@@ -88,7 +88,10 @@ function decodeCatalog(p) {
             for (let f = 0; f < nFields; f++) {
                 fields.push({ name: str(), typeName: str(), isArray: u8() !== 0 });
             }
-            colls.push({ name, family, keyType, valueType, valueDataId, schemaVersion, generation, fields });
+            const nMig = u16();
+            const migratableFrom = [];
+            for (let mi = 0; mi < nMig; mi++) migratableFrom.push(u32());
+            colls.push({ name, family, keyType, valueType, valueDataId, schemaVersion, generation, fields, migratableFrom });
         }
     }
     return colls;

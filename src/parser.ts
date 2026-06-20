@@ -110,6 +110,12 @@ import {
   mangleInternalPath
 } from "./ast";
 import { Options } from "./compiler";
+import {
+  collectMigrations,
+  dataFields,
+  DataMigration,
+  FieldLayout
+} from "./dbcatalog";
 
 /** Maps a `@data` field type name to the DataWriter/DataReader method suffix, or "" if unsupported. */
 function dataMethodSuffix(typeName: string): string {
@@ -333,6 +339,15 @@ export class Parser extends DiagnosticEmitter {
   ratelimitRouteCounter: i32 = 0;
   /** An array of parsed sources. */
   sources: Source[];
+  /** A `@data` value type's generated field reads (the `decodeFrom` body, `__o.`
+   *  form) keyed by class name, captured so `finish()` can regenerate `decodeInto`
+   *  with a `@migrate` version-dispatch prefix. */
+  toildbCodecReads: Map<string, string> = new Map();
+  /** A `@data` value type's declaration, keyed by class name (to find/replace its
+   *  `decodeInto` member when weaving migrations). */
+  toildbCodecClasses: Map<string, ClassDeclaration> = new Map();
+  /** Guards `weaveDataMigrations` so it runs exactly once (before element creation). */
+  toildbWoven: bool = false;
   /** Current overridden module name. */
   currentModuleName: string | null = null;
   // TODO: Remove when multi-value feature will enable by default.
@@ -684,11 +699,96 @@ export class Parser extends DiagnosticEmitter {
     // runtime gate) over the now-complete program. Runs before the cleanup so
     // every parsed source is still reachable.
     this.checkToilDbKinds();
+    // Weave migrations here too, in case `initializeProgram` (which weaves before
+    // element creation) was skipped; idempotent, so the earlier call wins.
+    this.weaveDataMigrations();
     this.backlog = [];
     this.seenlog.clear();
     this.donelog.clear();
     this.dependees.clear();
     this.restImportedSources.clear();
+  }
+
+  // ---- ToilDB @migrate weaving (lazy, read-time schema migration; Phase 3b) ----
+  //
+  // For each value type that is the target of a `@migrate(old): New`, regenerate
+  // its top-level `decodeInto` with a version-dispatch prefix: a row whose stored
+  // schema_version matches an OLD layout is decoded as the old shape and run
+  // through the transform; otherwise the current shape decodes as before. A value
+  // type with no migration is untouched, so the hot read path takes no host call.
+
+  weaveDataMigrations(): void {
+    if (this.toildbWoven) return; // run once, before program element creation
+    this.toildbWoven = true;
+    if (this.toildbCodecClasses.size == 0) return;
+    // Field layouts of every @data value type, for the old-version hash.
+    let layouts = new Map<string, FieldLayout[]>();
+    for (let i = 0, k = this.sources.length; i < k; ++i) {
+      let source = this.sources[i];
+      if (source.isLibrary) continue;
+      let stmts = source.statements;
+      for (let j = 0, l = stmts.length; j < l; ++j) {
+        let s = stmts[j];
+        if (s.kind != NodeKind.ClassDeclaration) continue;
+        let cls = <ClassDeclaration>s;
+        if (this.hasDecoratorKind(cls.decorators, DecoratorKind.Data) ||
+            this.hasDecoratorKind(cls.decorators, DecoratorKind.User)) {
+          layouts.set(cls.name.text, dataFields(cls));
+        }
+      }
+    }
+    let migrations = collectMigrations(this.sources, layouts);
+    if (migrations.length == 0) return;
+    // Group by new value type: one decodeInto carries all its old-version branches.
+    let byNew = new Map<string, DataMigration[]>();
+    let newTypes = new Array<string>();
+    for (let i = 0, k = migrations.length; i < k; ++i) {
+      let m = migrations[i];
+      if (!byNew.has(m.newType)) {
+        byNew.set(m.newType, new Array<DataMigration>());
+        newTypes.push(m.newType);
+      }
+      (<DataMigration[]>byNew.get(m.newType)).push(m);
+    }
+    for (let i = 0, k = newTypes.length; i < k; ++i) {
+      this.weaveDecodeInto(newTypes[i], <DataMigration[]>byNew.get(newTypes[i]));
+    }
+  }
+
+  /** Replace `newType`'s generated `decodeInto` with a version-dispatching one. */
+  private weaveDecodeInto(newType: string, migs: DataMigration[]): void {
+    if (!this.toildbCodecClasses.has(newType)) return; // return type is not a @data value
+    let decl = <ClassDeclaration>this.toildbCodecClasses.get(newType);
+    let reads = <string>this.toildbCodecReads.get(newType);
+    // The copy of the transform's result fields into `this` (declaration order).
+    let copy = "";
+    let members = decl.members;
+    for (let i = 0, k = members.length; i < k; ++i) {
+      let member = members[i];
+      if (member.kind != NodeKind.FieldDeclaration) continue;
+      let field = <FieldDeclaration>member;
+      if (field.is(CommonFlags.Static)) continue;
+      let fname = field.name.text;
+      copy += "this." + fname + "=__m." + fname + ";";
+    }
+    let dispatch = "";
+    for (let i = 0, k = migs.length; i < k; ++i) {
+      let m = migs[i];
+      dispatch += "if(__toildbReadVersion()==<i64>" + m.oldVersion.toString() + "){" +
+        "const __old=" + m.oldType + ".decode(__buf);" +
+        "const __m=" + m.fnName + "(__old);" + copy + "return;}";
+    }
+    // Drop the existing decodeInto, then inject the dispatching replacement.
+    for (let i = members.length - 1; i >= 0; --i) {
+      let member = members[i];
+      if (member.kind == NodeKind.MethodDeclaration &&
+          (<MethodDeclaration>member).name.text == "decodeInto") {
+        members.splice(i, 1);
+      }
+    }
+    this.injectClassMember(decl,
+      "decodeInto(__buf: Uint8Array): void{" + dispatch +
+      "const __r=new DataReader(__buf);__r.readU32();" + reads.replace(/__o\./g, "this.") + "}");
   }
 
   // ---- ToilDB @query/@action/... permission check (spec 6) ----
@@ -2442,6 +2542,11 @@ export class Parser extends DiagnosticEmitter {
     // type parameter, but an instance method (`v.decodeInto`) resolves fine; the
     // ToilDB generic handles (`std/assembly/toildb.ts`) use it via `instantiate<V>()`.
     this.injectClassMember(declaration, "decodeInto(__buf: Uint8Array): void{const __r=new DataReader(__buf);__r.readU32();" + reads.replace(/__o\./g, "this.") + "}");
+    // Capture the field reads + the declaration so `finish()` can rebuild
+    // `decodeInto` with a `@migrate` version-dispatch prefix once the whole
+    // program (incl. later-parsed `@migrate` functions) is known.
+    this.toildbCodecReads.set(className, reads);
+    this.toildbCodecClasses.set(className, declaration);
     this.injectClassMember(declaration, "static dataId(): u32{return " + typeId + ";}");
     // JSON view, independent of the binary path.
     this.injectClassMember(declaration, "toJSON(): JSON{const __j=JSON.obj();" + jsonWrites + "return __j;}");

@@ -13,21 +13,26 @@
 //       per coll: u32 name_len,name, u8 family,
 //                 u32 key_len,key, u32 value_len,value,
 //                 u32 value_data_id, u32 schema_version, u32 generation,
-//                 u8 replication, u8 placement, u16 n_fields
+//                 u8 replication, u8 placement,
+//                 u16 n_fields, per field: u32 name_len,name u32 type_len,type u8 is_array,
+//                 u16 n_migrations, per migration: u32 old_schema_version
 
 import { Program } from "./program";
+import { Source } from "./ast";
 import { CommonFlags } from "./common";
 import {
   ClassDeclaration,
   DecoratorKind,
   DecoratorNode,
   FieldDeclaration,
+  FunctionDeclaration,
   NamedTypeNode,
-  NodeKind
+  NodeKind,
+  TypeNode
 } from "./ast";
 
 /** FNV-1a 32-bit hash, matching `dataTypeId` in the parser. */
-function fnv1a(name: string): u32 {
+export function fnv1a(name: string): u32 {
   let hash = 0x811c9dc5;
   for (let i = 0, k = name.length; i < k; ++i) {
     hash = Math.imul(hash ^ name.charCodeAt(i), 0x01000193) >>> 0;
@@ -36,7 +41,7 @@ function fnv1a(name: string): u32 {
 }
 
 /** One field of a `@data` value type, in declaration order. */
-class FieldLayout {
+export class FieldLayout {
   name: string = "";
   typeName: string = "";
   isArray: bool = false;
@@ -66,7 +71,7 @@ function fnvStr(h: u32, s: string): u32 {
  * `SchemaDescriptor::layout_hash`: a change to a NESTED `@data` type's own fields
  * does not bump the parent - that lands with recursive layouts later.)
  */
-function layoutHash(fields: FieldLayout[]): u32 {
+export function layoutHash(fields: FieldLayout[]): u32 {
   let h: u32 = 0x811c9dc5;
   for (let i = 0, k = fields.length; i < k; ++i) {
     h = fnvStr(h, fields[i].name);
@@ -79,7 +84,7 @@ function layoutHash(fields: FieldLayout[]): u32 {
 /** Extract the encoded field layout of a `@data` class, in declaration order,
  *  mirroring `injectDataCodec` (skip static; `Array<T>` -> element + array flag;
  *  else scalar/string/`Uint8Array`/nested-`@data` by its type name). */
-function dataFields(cls: ClassDeclaration): FieldLayout[] {
+export function dataFields(cls: ClassDeclaration): FieldLayout[] {
   let out = new Array<FieldLayout>();
   let members = cls.members;
   for (let i = 0, k = members.length; i < k; ++i) {
@@ -101,6 +106,57 @@ function dataFields(cls: ClassDeclaration): FieldLayout[] {
       fl.typeName = typeName;
     }
     out.push(fl);
+  }
+  return out;
+}
+
+/** A `@migrate` free function `fn(old: OldType): NewType`. `oldVersion` is the
+ *  layout hash of `OldType` - i.e. the `schema_version` the old rows were written
+ *  under - so a read can dispatch on it and run the transform (lazy migration). */
+export class DataMigration {
+  oldType: string = "";
+  newType: string = "";
+  fnName: string = "";
+  oldVersion: u32 = 0;
+}
+
+function typeNameOf(t: TypeNode | null): string | null {
+  if (t == null || !(t instanceof NamedTypeNode)) return null;
+  return (<NamedTypeNode>t).name.identifier.text;
+}
+
+/** Every `@migrate` function across the (non-library) sources. `layouts` maps a
+ *  `@data` class name to its field layout, for the old-version hash. A migration
+ *  whose param/return is not a single named type, or whose old type has no
+ *  layout, is skipped. */
+export function collectMigrations(
+  sources: Source[],
+  layouts: Map<string, FieldLayout[]>
+): DataMigration[] {
+  let out = new Array<DataMigration>();
+  for (let i = 0, k = sources.length; i < k; ++i) {
+    let source = sources[i];
+    if (source.isLibrary) continue;
+    let statements = source.statements;
+    for (let j = 0, l = statements.length; j < l; ++j) {
+      let s = statements[j];
+      if (s.kind != NodeKind.FunctionDeclaration) continue;
+      let fn = <FunctionDeclaration>s;
+      if (!hasDeco(fn.decorators, DecoratorKind.Migrate)) continue;
+      let sig = fn.signature;
+      if (sig.parameters.length != 1) continue;
+      let oldType = typeNameOf(sig.parameters[0].type);
+      let newType = typeNameOf(sig.returnType);
+      if (oldType == null || newType == null) continue;
+      let mig = new DataMigration();
+      mig.oldType = oldType;
+      mig.newType = newType;
+      mig.fnName = fn.name.text;
+      mig.oldVersion = layouts.has(oldType)
+        ? layoutHash(<FieldLayout[]>layouts.get(oldType))
+        : fnv1a(oldType);
+      out.push(mig);
+    }
   }
   return out;
 }
@@ -191,6 +247,16 @@ export function buildToilDbCatalog(program: Program): Uint8Array | null {
       layouts.set(cls.name.text, dataFields(cls));
     }
   }
+  // Migratable old versions per value type: the schema_versions a registered
+  // @migrate can decode. Emitted per collection so the deploy gate admits a
+  // breaking change whose deployed version is covered (instead of refusing it).
+  let migrations = collectMigrations(sources, layouts);
+  let migByValue = new Map<string, u32[]>();
+  for (let i = 0, k = migrations.length; i < k; ++i) {
+    let m = migrations[i];
+    if (!migByValue.has(m.newType)) migByValue.set(m.newType, new Array<u32>());
+    (<u32[]>migByValue.get(m.newType)).push(m.oldVersion);
+  }
   for (let i = 0, k = sources.length; i < k; ++i) {
     let source = sources[i];
     if (source.isLibrary) continue;
@@ -270,6 +336,11 @@ export function buildToilDbCatalog(program: Program): Uint8Array | null {
         w.str(fields[f].typeName);
         w.u8(fields[f].isArray ? 1 : 0);
       }
+      let migs = migByValue.has(coll.valueType)
+        ? <u32[]>migByValue.get(coll.valueType)
+        : new Array<u32>();
+      w.u16(migs.length); // n_migrations
+      for (let mi = 0, mn = migs.length; mi < mn; ++mi) w.u32(migs[mi]); // old_version
     }
   }
   return w.toBytes();

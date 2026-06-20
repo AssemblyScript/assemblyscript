@@ -353,6 +353,9 @@ export function getDependee(program: Program, file: string): string | null {
 
 /** Initializes the program pre-emptively for transform hooks. */
 export function initializeProgram(program: Program): void {
+  // Weave @migrate version-dispatch into @data decoders BEFORE element creation,
+  // so the modified `decodeInto` (not the original) becomes the compiled function.
+  program.parser.weaveDataMigrations();
   program.initialize();
 }
 

@@ -25,6 +25,14 @@ export function __toildbResolve(name: string): u32 {
   return load<u32>(out.dataStart);
 }
 
+/// The schema version of the last value-returning read's row (or -1). The
+/// generated `decodeInto` of a `@migrate`-d value type calls this to dispatch an
+/// old-layout row through its transform. Global so generated user-code reaches it
+/// (like `__toildbResolve`).
+export function __toildbReadVersion(): i64 {
+  return toildbHost.resultSchemaVersion();
+}
+
 /// Pull the last stashed variable-length result of `len` bytes into a buffer.
 function __toildbTake(len: i32): Uint8Array {
   const buf = new Uint8Array(len);
