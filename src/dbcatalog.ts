@@ -179,6 +179,54 @@ export function collectMigrations(
   return out;
 }
 
+/** A resolved chain that migrates a stored OLD value all the way to a target
+ *  type: decode `oldType`, then apply `steps` in order (each `@migrate`). For a
+ *  direct migration `steps` has one entry; a chain `V0 -> V1 -> V2` has two. */
+export class MigrationChain {
+  oldType: string = "";
+  oldVersion: u32 = 0;
+  steps: DataMigration[] = [];
+}
+
+/** Every old type that reaches `target` through a chain of `@migrate` edges, with
+ *  the ordered transforms to apply. A backward breadth-first walk of the migration
+ *  graph (edges OLD -> NEW), so the SHORTEST chain wins and cycles terminate; a
+ *  direct migration is just a one-step chain. This is what lets a row written under
+ *  version 0 reach the current version 2 via `0->1` then `1->2`. */
+export function chainsTo(target: string, migrations: DataMigration[]): MigrationChain[] {
+  let out = new Array<MigrationChain>();
+  let visited = new Set<string>();
+  visited.add(target);
+  // BFS frontier: a type we can reach `target` from, plus the chain FROM it TO target.
+  let frontierType = new Array<string>();
+  let frontierChain = new Array<DataMigration[]>();
+  frontierType.push(target);
+  frontierChain.push(new Array<DataMigration>());
+  let head = 0;
+  while (head < frontierType.length) {
+    let type = frontierType[head];
+    let chain = frontierChain[head];
+    head++;
+    for (let i = 0, k = migrations.length; i < k; ++i) {
+      let m = migrations[i];
+      if (m.newType != type || visited.has(m.oldType)) continue;
+      visited.add(m.oldType);
+      // `m` transforms oldType -> type; prepend it so `steps` runs oldType -> target.
+      let steps = new Array<DataMigration>();
+      steps.push(m);
+      for (let s = 0, sk = chain.length; s < sk; ++s) steps.push(chain[s]);
+      let mc = new MigrationChain();
+      mc.oldType = m.oldType;
+      mc.oldVersion = m.oldVersion;
+      mc.steps = steps;
+      out.push(mc);
+      frontierType.push(m.oldType);
+      frontierChain.push(steps);
+    }
+  }
+  return out;
+}
+
 /** Map a handle class name to its collection-family wire byte, or -1. */
 function familyByte(handleName: string): i32 {
   switch (handleName) {
@@ -269,11 +317,17 @@ export function buildToilDbCatalog(program: Program): Uint8Array | null {
   // @migrate can decode. Emitted per collection so the deploy gate admits a
   // breaking change whose deployed version is covered (instead of refusing it).
   let migrations = collectMigrations(sources, layouts);
+  // Per value type, the schema_versions it can decode - every old version that
+  // reaches it through a CHAIN of migrations (not just a direct one), so a deploy
+  // is admitted for any version a chain converges.
   let migByValue = new Map<string, u32[]>();
   for (let i = 0, k = migrations.length; i < k; ++i) {
-    let m = migrations[i];
-    if (!migByValue.has(m.newType)) migByValue.set(m.newType, new Array<u32>());
-    (<u32[]>migByValue.get(m.newType)).push(m.oldVersion);
+    let target = migrations[i].newType;
+    if (migByValue.has(target)) continue;
+    let versions = new Array<u32>();
+    let chains = chainsTo(target, migrations);
+    for (let c = 0, ck = chains.length; c < ck; ++c) versions.push(chains[c].oldVersion);
+    migByValue.set(target, versions);
   }
   for (let i = 0, k = sources.length; i < k; ++i) {
     let source = sources[i];

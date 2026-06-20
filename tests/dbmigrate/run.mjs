@@ -150,4 +150,25 @@ if (dusers.migratableFrom.length !== 1 || dusers.migratableFrom[0] !== oldVersio
 if (!dwasm.toString("latin1").includes("result_schema_version"))
     fail("delta: woven decode did not pull in data.result_schema_version");
 
+// --- (f) a migration CHAIN: both v0 and v1 reach the current User ---
+const cwasm = compile(join(here, "spec_chain.ts"));
+const cusers = decodeCatalog(findCatalog(cwasm)).find((c) => c.name === "users");
+if (!cusers) fail("chain: users collection missing");
+const v0 = layoutHash([{ name: "id", typeName: "u32", isArray: false }]);
+const v1 = layoutHash([
+    { name: "id", typeName: "u32", isArray: false },
+    { name: "name", typeName: "string", isArray: false },
+]);
+// migratableFrom must contain BOTH chain-reachable versions (order-independent).
+if (cusers.migratableFrom.length !== 2)
+    fail(`chain: expected 2 migratable versions, got ${JSON.stringify(cusers.migratableFrom)}`);
+for (const want of [v0, v1]) {
+    if (!cusers.migratableFrom.includes(want))
+        fail(`chain: migratableFrom ${JSON.stringify(cusers.migratableFrom)} missing ${want}`);
+}
+if (cusers.schemaVersion === v0 || cusers.schemaVersion === v1)
+    fail("chain: current version must differ from both old versions");
+if (!cwasm.toString("latin1").includes("result_schema_version"))
+    fail("chain: woven decode did not pull in data.result_schema_version");
+
 console.log("@migrate test suite: ALL PASS");

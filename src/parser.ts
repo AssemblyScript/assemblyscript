@@ -111,10 +111,11 @@ import {
 } from "./ast";
 import { Options } from "./compiler";
 import {
+  chainsTo,
   collectMigrations,
   dataFields,
-  DataMigration,
-  FieldLayout
+  FieldLayout,
+  MigrationChain
 } from "./dbcatalog";
 
 /** Maps a `@data` field type name to the DataWriter/DataReader method suffix, or "" if unsupported. */
@@ -744,71 +745,64 @@ export class Parser extends DiagnosticEmitter {
     }
     let migrations = collectMigrations(this.sources, layouts);
     if (migrations.length == 0) return;
-    // Group by new value type: one decodeInto carries all its old-version branches.
-    let byNew = new Map<string, DataMigration[]>();
-    let newTypes = new Array<string>();
+    // Each migration TARGET (a value type) gets a version-dispatching decode;
+    // chainsTo resolves every old version reaching it, direct OR via a chain.
+    let seen = new Set<string>();
     for (let i = 0, k = migrations.length; i < k; ++i) {
-      let m = migrations[i];
-      if (!byNew.has(m.newType)) {
-        byNew.set(m.newType, new Array<DataMigration>());
-        newTypes.push(m.newType);
-      }
-      (<DataMigration[]>byNew.get(m.newType)).push(m);
-    }
-    for (let i = 0, k = newTypes.length; i < k; ++i) {
-      this.weaveDecodeInto(newTypes[i], <DataMigration[]>byNew.get(newTypes[i]), layouts);
+      let target = migrations[i].newType;
+      if (seen.has(target)) continue;
+      seen.add(target);
+      this.weaveDecodeInto(target, chainsTo(target, migrations), layouts);
     }
   }
 
-  /** Replace `newType`'s generated `decodeInto` with a version-dispatching one. */
+  /** Replace `target`'s generated `decodeInto` with a version-dispatching one: a
+   *  row at any chain-reachable old version is decoded as its shape and run forward
+   *  through every transform until it reaches `target`. */
   private weaveDecodeInto(
-    newType: string,
-    migs: DataMigration[],
+    target: string,
+    chains: MigrationChain[],
     layouts: Map<string, FieldLayout[]>
   ): void {
-    if (!this.toildbCodecClasses.has(newType)) return; // return type is not a @data value
-    let decl = <ClassDeclaration>this.toildbCodecClasses.get(newType);
-    let reads = <string>this.toildbCodecReads.get(newType);
+    if (!this.toildbCodecClasses.has(target)) return; // not a @data value type
+    let decl = <ClassDeclaration>this.toildbCodecClasses.get(target);
+    let reads = <string>this.toildbCodecReads.get(target);
     let members = decl.members;
-    // The names of `newType`'s instance fields, in declaration order (full-form
-    // copies every one from the returned value).
-    let newNames = new Array<string>();
+    // `target`'s instance field names - the final converted value is copied here.
+    let targetNames = new Array<string>();
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
       if (member.kind != NodeKind.FieldDeclaration) continue;
       let field = <FieldDeclaration>member;
       if (field.is(CommonFlags.Static)) continue;
-      newNames.push(field.name.text);
+      targetNames.push(field.name.text);
     }
-    let copy = "";
-    for (let i = 0, k = newNames.length; i < k; ++i) copy += "this." + newNames[i] + "=__m." + newNames[i] + ";";
-    let newFields = layouts.has(newType) ? <FieldLayout[]>layouts.get(newType) : new Array<FieldLayout>();
     let dispatch = "";
-    for (let i = 0, k = migs.length; i < k; ++i) {
-      let m = migs[i];
-      let decode = "const __old=" + m.oldType + ".decode(__buf);";
-      let body: string;
-      if (m.delta) {
-        // Carry over fields the two layouts SHARE (same name + type + array-ness),
-        // then let the body fill only the changed/new fields of `this`.
-        let oldFields = layouts.has(m.oldType) ? <FieldLayout[]>layouts.get(m.oldType) : new Array<FieldLayout>();
-        let carry = "";
-        for (let a = 0, an = newFields.length; a < an; ++a) {
-          let nf = newFields[a];
-          for (let b = 0, bn = oldFields.length; b < bn; ++b) {
-            let of = oldFields[b];
-            if (of.name == nf.name && of.typeName == nf.typeName && of.isArray == nf.isArray) {
-              carry += "this." + nf.name + "=__old." + nf.name + ";";
-              break;
-            }
-          }
+    for (let c = 0, ck = chains.length; c < ck; ++c) {
+      let chain = chains[c];
+      // Decode the oldest shape (`__m0`), then apply each step to `__m1`, `__m2`...
+      let body = "const __m0=" + chain.oldType + ".decode(__buf);";
+      let n = chain.steps.length;
+      for (let s = 0; s < n; ++s) {
+        let step = chain.steps[s];
+        let prev = "__m" + s.toString();
+        let next = "__m" + (s + 1).toString();
+        if (step.delta) {
+          // shared fields carried for you; the body fills the changed/new ones.
+          body += "const " + next + "=new " + step.newType + "();" +
+            this.migrationCarry(step.oldType, step.newType, prev, next, layouts) +
+            step.fnName + "(" + prev + "," + next + ");";
+        } else {
+          body += "const " + next + "=" + step.fnName + "(" + prev + ");";
         }
-        body = carry + m.fnName + "(__old,this);";
-      } else {
-        body = "const __m=" + m.fnName + "(__old);" + copy;
       }
-      dispatch += "if(__toildbReadVersion()==<i64>" + m.oldVersion.toString() + "){" +
-        decode + body + "__toildbMarkMigrated();return;}";
+      let last = "__m" + n.toString();
+      let copy = "";
+      for (let i = 0, k = targetNames.length; i < k; ++i) {
+        copy += "this." + targetNames[i] + "=" + last + "." + targetNames[i] + ";";
+      }
+      dispatch += "if(__toildbReadVersion()==<i64>" + chain.oldVersion.toString() + "){" +
+        body + copy + "__toildbMarkMigrated();return;}";
     }
     // Drop the existing decodeInto, then inject the dispatching replacement.
     for (let i = members.length - 1; i >= 0; --i) {
@@ -821,6 +815,31 @@ export class Parser extends DiagnosticEmitter {
     this.injectClassMember(decl,
       "decodeInto(__buf: Uint8Array): void{" + dispatch +
       "const __r=new DataReader(__buf);__r.readU32();" + reads.replace(/__o\./g, "this.") + "}");
+  }
+
+  /** Copy the fields a delta-step's old and new layouts SHARE (same name + type +
+   *  array-ness) from `prevVar` into `nextVar`. */
+  private migrationCarry(
+    oldType: string,
+    newType: string,
+    prevVar: string,
+    nextVar: string,
+    layouts: Map<string, FieldLayout[]>
+  ): string {
+    let oldFields = layouts.has(oldType) ? <FieldLayout[]>layouts.get(oldType) : new Array<FieldLayout>();
+    let newFields = layouts.has(newType) ? <FieldLayout[]>layouts.get(newType) : new Array<FieldLayout>();
+    let carry = "";
+    for (let a = 0, an = newFields.length; a < an; ++a) {
+      let nf = newFields[a];
+      for (let b = 0, bn = oldFields.length; b < bn; ++b) {
+        let of = oldFields[b];
+        if (of.name == nf.name && of.typeName == nf.typeName && of.isArray == nf.isArray) {
+          carry += nextVar + "." + nf.name + "=" + prevVar + "." + nf.name + ";";
+          break;
+        }
+      }
+    }
+    return carry;
   }
 
   // ---- ToilDB @query/@action/... permission check (spec 6) ----
