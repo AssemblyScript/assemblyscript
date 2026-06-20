@@ -115,4 +115,30 @@ const plain = compile(join(here, "..", "dbstatic", "spec.ts")).toString("latin1"
 if (plain.includes("result_schema_version"))
     fail("a module with no @migrate must not import data.result_schema_version");
 
+// --- (d) a @migrate that touches the database must NOT compile ---
+import { writeFileSync } from "node:fs";
+const badDir = mkdtempSync(join(tmpdir(), "dbmigrate-bad-"));
+const badSpec = join(badDir, "bad.ts");
+writeFileSync(badSpec, `
+@data class UserId { id: u64 = 0; }
+@data class UserV1 { id: u32 = 0; }
+@data class User { id: u64 = 0; }
+@database class App { @collection users: Documents<UserId, User>; }
+@migrate
+function up(old: UserV1): User {
+  // ILLEGAL: a migration is a pure transform; it must not touch the database.
+  App.users.delete(new UserId());
+  const u = new User(); u.id = <u64>old.id; return u;
+}
+export function probe(): u64 { return App.users.require(new UserId()).id; }
+`);
+const badOut = join(badDir, "bad.wasm");
+const badRun = spawnSync("node", [join(root, "bin", "toilscript.js"), badSpec, "-o", badOut, "--runtime", "stub"], {
+    stdio: ["ignore", "ignore", "pipe"],
+});
+rmSync(badDir, { recursive: true, force: true });
+if (badRun.status === 0) fail("a @migrate that touches the database must be a compile error");
+if (!String(badRun.stderr).includes("migrate"))
+    fail(`expected a @migrate diagnostic, got: ${String(badRun.stderr).slice(0, 200)}`);
+
 console.log("@migrate test suite: ALL PASS");

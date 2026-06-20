@@ -291,6 +291,9 @@ function dbKindAllows(kind: i32, op: string): bool {
       return isDbReadOp(op) || op == "ViewPublish" || op == "Append" || op == "CounterAdd";
     case DecoratorKind.Job: return true;
     case DecoratorKind.Admin: return false;
+    // A @migrate is a PURE value transform run during decode (the read path); it
+    // must not touch the database at all.
+    case DecoratorKind.Migrate: return false;
     default: return true;
   }
 }
@@ -302,6 +305,7 @@ function dbKindName(kind: i32): string {
     case DecoratorKind.Job: return "job";
     case DecoratorKind.Derive: return "derive";
     case DecoratorKind.Admin: return "admin";
+    case DecoratorKind.Migrate: return "migrate";
     default: return "?";
   }
 }
@@ -312,6 +316,7 @@ function dbKindReason(kind: i32): string {
     case DecoratorKind.Action: return "an action cannot publish views";
     case DecoratorKind.Derive: return "a derive may only read, publish views, append events, or add to counters";
     case DecoratorKind.Admin: return "an admin has no request-path data access";
+    case DecoratorKind.Migrate: return "a migration is a pure value transform and cannot access the database";
     default: return "not permitted in this kind";
   }
 }
@@ -863,7 +868,7 @@ export class Parser extends DiagnosticEmitter {
       let dk = decorators[i].decoratorKind;
       if (
         dk == DecoratorKind.Query || dk == DecoratorKind.Action || dk == DecoratorKind.Job ||
-        dk == DecoratorKind.Derive || dk == DecoratorKind.Admin
+        dk == DecoratorKind.Derive || dk == DecoratorKind.Admin || dk == DecoratorKind.Migrate
       ) return dk;
     }
     return -1;
