@@ -1060,6 +1060,11 @@ export enum DecoratorKind {
   Action,
   Job,
   Derive,
+  // `@migrate` marks a free function `(old: OldShape): NewShape` whose body
+  // transforms a row written under a prior schema version into the current value
+  // type. The compiler weaves it into the value type's version-dispatching
+  // decoder (lazy, read-time migration); see SCHEMA_MIGRATION_PLAN Phase 3.
+  Migrate,
   Admin
 }
 
@@ -1124,6 +1129,7 @@ export namespace DecoratorKind {
         }
         case CharCode.m: {
           if (nameStr == "main") return DecoratorKind.Main;
+          if (nameStr == "migrate") return DecoratorKind.Migrate;
           break;
         }
         case CharCode.o: {
