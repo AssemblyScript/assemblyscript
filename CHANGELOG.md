@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.1.36] - 2026-06-20
+
+### Other Changes
+
+- fix(ts-plugin): skip static @collection fields (TS2300) ([#19](https://github.com/dacely-cloud/toilscript/pull/19)) by @BlobMaster41
+
+
+
+
 ## [v0.1.35] - 2026-06-20
 
 - No changes
