@@ -227,4 +227,13 @@ export namespace toildbHost {
   // @ts-ignore: decorator
   @external("env", "data.take_result")
   export declare function takeResult(outPtr: usize, outLen: i32): i32;
+
+  // The schema version the LAST value-returning read's row was written under, so
+  // the generated decoder can default fields added since / reject an unknown
+  // layout. A u32 version rides in the non-negative range; -1 means the last op
+  // returned no value (or the host does not track a version). Does not drain the
+  // result stash, so it may be read before or after `takeResult`.
+  // @ts-ignore: decorator
+  @external("env", "data.result_schema_version")
+  export declare function resultSchemaVersion(): i64;
 }
