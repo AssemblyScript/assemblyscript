@@ -235,6 +235,15 @@ function init(modules) {
       node.members.forEach((m) => {
         if (!ts.isPropertyDeclaration(m) || !declHasDecorator(m, 'collection')) return;
         if (!m.type || !m.name || !ts.isIdentifier(m.name)) return;
+        // A `static` @collection field is ALREADY a static member of the class, so
+        // synthesizing a namespace const for it duplicates the name (TS2300). Only
+        // the legacy instance (type-carrier) form needs the synthesized static
+        // handle; the static form type-checks `Db.coll` on its own (no plugin).
+        const mods =
+          ts.getModifiers && ts.canHaveModifiers && ts.canHaveModifiers(m)
+            ? ts.getModifiers(m)
+            : m.modifiers;
+        if (mods && mods.some((mod) => mod.kind === ts.SyntaxKind.StaticKeyword)) return;
         consts += `  const ${m.name.text}: ${m.type.getText(sf)};\n`;
       });
       if (consts) {
