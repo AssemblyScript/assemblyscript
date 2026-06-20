@@ -776,7 +776,8 @@ export class Parser extends DiagnosticEmitter {
       let m = migs[i];
       dispatch += "if(__toildbReadVersion()==<i64>" + m.oldVersion.toString() + "){" +
         "const __old=" + m.oldType + ".decode(__buf);" +
-        "const __m=" + m.fnName + "(__old);" + copy + "return;}";
+        "const __m=" + m.fnName + "(__old);" + copy +
+        "__toildbMarkMigrated();return;}";
     }
     // Drop the existing decodeInto, then inject the dispatching replacement.
     for (let i = members.length - 1; i >= 0; --i) {

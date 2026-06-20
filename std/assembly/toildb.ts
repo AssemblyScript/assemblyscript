@@ -33,6 +33,16 @@ export function __toildbReadVersion(): i64 {
   return toildbHost.resultSchemaVersion();
 }
 
+/// Set true by a woven `decodeInto` when it migrates an old-layout row, so the
+/// reading handle can converge the row (rewrite-on-read). The handle resets it
+/// before each decode and reads it after; the dispatch marks it AFTER the
+/// transform runs, so a transform that itself reads (resetting the flag) does not
+/// clear the outer migration.
+let __toildbMigratedFlag: bool = false;
+export function __toildbResetMigrated(): void { __toildbMigratedFlag = false; }
+export function __toildbMarkMigrated(): void { __toildbMigratedFlag = true; }
+export function __toildbWasMigrated(): bool { return __toildbMigratedFlag; }
+
 /// Pull the last stashed variable-length result of `len` bytes into a buffer.
 function __toildbTake(len: i32): Uint8Array {
   const buf = new Uint8Array(len);
@@ -69,8 +79,17 @@ export class Documents<K, V> {
     const kb = key.encode();
     const status = toildbHost.get(this.__handle, kb.dataStart, kb.byteLength);
     if (status < 0) return null;
+    __toildbResetMigrated();
     const v = instantiate<V>();
     v.decodeInto(__toildbTake(status));
+    // Rewrite-on-read convergence: if this row was lazily migrated from an older
+    // layout AND the current call may write, persist the migrated value so it
+    // stops being re-migrated. Best-effort: a read-only kind skips it, and a
+    // failed patch is ignored (the in-memory value is already correct).
+    if (__toildbWasMigrated() && toildbHost.writeAllowed() == 1) {
+      const nb = v.encode();
+      toildbHost.patch(this.__handle, kb.dataStart, kb.byteLength, nb.dataStart, nb.byteLength, 0);
+    }
     return v;
   }
 

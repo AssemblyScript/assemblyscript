@@ -236,4 +236,11 @@ export namespace toildbHost {
   // @ts-ignore: decorator
   @external("env", "data.result_schema_version")
   export declare function resultSchemaVersion(): i64;
+
+  // 1 if the current call's kind may issue a record write, else 0. The generated
+  // reader uses it to skip the rewrite-on-read convergence write in a read-only
+  // `@query` (where it would be rejected) rather than attempt a doomed write.
+  // @ts-ignore: decorator
+  @external("env", "data.write_allowed")
+  export declare function writeAllowed(): i32;
 }
