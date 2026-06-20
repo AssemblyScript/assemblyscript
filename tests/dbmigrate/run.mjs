@@ -36,7 +36,7 @@ function leb(buf, pos) {
     for (;;) { const b = buf[p++]; result |= (b & 0x7f) << shift; if ((b & 0x80) === 0) break; shift += 7; }
     return [result >>> 0, p];
 }
-function findCatalog(buf) {
+function findSection(buf, want) {
     let pos = 8;
     while (pos < buf.length) {
         const id = buf[pos++];
@@ -44,11 +44,29 @@ function findCatalog(buf) {
         const end = pos + size;
         if (id === 0) {
             let nameLen, np; [nameLen, np] = leb(buf, pos);
-            if (buf.toString("latin1", np, np + nameLen) === "toildb.catalog") return buf.subarray(np + nameLen, end);
+            if (buf.toString("latin1", np, np + nameLen) === want) return buf.subarray(np + nameLen, end);
         }
         pos = end;
     }
     return null;
+}
+function findCatalog(buf) { return findSection(buf, "toildb.catalog"); }
+function decodeTypes(p) {
+    let pos = 0;
+    const u16 = () => { const v = p[pos] | (p[pos + 1] << 8); pos += 2; return v; };
+    const u32 = () => { const v = (p[pos] | (p[pos + 1] << 8) | (p[pos + 2] << 16) | (p[pos + 3] << 24)) >>> 0; pos += 4; return v; };
+    const u8 = () => p[pos++];
+    const str = () => { const n = u32(); const s = p.toString("latin1", pos, pos + n); pos += n; return s; };
+    const types = {};
+    const nt = u16();
+    for (let t = 0; t < nt; t++) {
+        const name = str();
+        const nf = u16();
+        const fields = [];
+        for (let f = 0; f < nf; f++) fields.push({ name: str(), typeName: str(), isArray: u8() !== 0 });
+        types[name] = fields;
+    }
+    return types;
 }
 function decodeCatalog(p) {
     let pos = 0;
@@ -170,5 +188,16 @@ if (cusers.schemaVersion === v0 || cusers.schemaVersion === v1)
     fail("chain: current version must differ from both old versions");
 if (!cwasm.toString("latin1").includes("result_schema_version"))
     fail("chain: woven decode did not pull in data.result_schema_version");
+
+// --- (g) a NESTED @data type emits a toildb.types registry with its layout ---
+const nwasm = compile(join(here, "spec_nested.ts"));
+const typesSec = findSection(nwasm, "toildb.types");
+if (typesSec === null) fail("nested: toildb.types section not emitted");
+const types = decodeTypes(typesSec);
+if (!types["Address"]) fail(`nested: Address missing from type registry (${Object.keys(types)})`);
+const addr = types["Address"];
+if (addr.length !== 2 || addr[0].name !== "street" || addr[0].typeName !== "string" || addr[1].name !== "zip")
+    fail(`nested: Address layout wrong: ${JSON.stringify(addr)}`);
+if (!types["User"]) fail("nested: User missing from type registry");
 
 console.log("@migrate test suite: ALL PASS");

@@ -417,3 +417,45 @@ export function buildToilDbCatalog(program: Program): Uint8Array | null {
   }
   return w.toBytes();
 }
+
+// `toildb.types` custom section: the field layout of EVERY `@data` type, so the
+// deploy gate can resolve a NESTED `@data` field (e.g. `addr: Address`) and
+// compare its layout recursively - a flat catalog hash alone misses a change to a
+// nested type. Wire format (little-endian):
+//   u16 n_types, per type: u32 name_len,name,
+//     u16 n_fields, per field: u32 name_len,name u32 type_len,type u8 is_array
+export function buildToilDbTypes(program: Program): Uint8Array | null {
+  let sources = program.sources;
+  let names = new Array<string>();
+  let fieldsByName = new Map<string, FieldLayout[]>();
+  for (let i = 0, k = sources.length; i < k; ++i) {
+    let source = sources[i];
+    if (source.isLibrary) continue;
+    let statements = source.statements;
+    for (let j = 0, l = statements.length; j < l; ++j) {
+      let statement = statements[j];
+      if (statement.kind != NodeKind.ClassDeclaration) continue;
+      let cls = <ClassDeclaration>statement;
+      if (!hasDeco(cls.decorators, DecoratorKind.Data)) continue;
+      let name = cls.name.text;
+      if (fieldsByName.has(name)) continue;
+      names.push(name);
+      fieldsByName.set(name, dataFields(cls));
+    }
+  }
+  if (names.length == 0) return null;
+  let w = new CatWriter();
+  w.u16(names.length);
+  for (let i = 0, k = names.length; i < k; ++i) {
+    let name = names[i];
+    w.str(name);
+    let fields = <FieldLayout[]>fieldsByName.get(name);
+    w.u16(fields.length);
+    for (let f = 0, fn = fields.length; f < fn; ++f) {
+      w.str(fields[f].name);
+      w.str(fields[f].typeName);
+      w.u8(fields[f].isArray ? 1 : 0);
+    }
+  }
+  return w.toBytes();
+}

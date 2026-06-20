@@ -20,7 +20,8 @@ import {
 } from "./builtins";
 
 import {
-  buildToilDbCatalog
+  buildToilDbCatalog,
+  buildToilDbTypes
 } from "./dbcatalog";
 
 import {
@@ -809,6 +810,12 @@ export class Compiler extends DiagnosticEmitter {
     let toildbCatalog = buildToilDbCatalog(program);
     if (toildbCatalog != null) {
       module.addCustomSection("toildb.catalog", toildbCatalog);
+      // The layout of every @data type, so the deploy gate can recurse into a
+      // nested @data field and catch a change a flat compare would miss.
+      let toildbTypes = buildToilDbTypes(program);
+      if (toildbTypes != null) {
+        module.addCustomSection("toildb.types", toildbTypes);
+      }
     }
 
     return module;
