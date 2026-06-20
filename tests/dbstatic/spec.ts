@@ -28,8 +28,8 @@ class Item {
 
 @database
 class DB {
-    @collection static items!: Documents<Key, Item>; // new STATIC form (plugin-free editor)
-    @collection static hits!: Counter<Key>; // new STATIC form
+    @collection static items: Documents<Key, Item>; // new STATIC form (no `!`; plugin-free editor)
+    @collection static hits: Counter<Key>; // new STATIC form (no `!`)
     @collection legacy!: Events<Key, Item>; // legacy INSTANCE form, still supported
 }
 
