@@ -726,6 +726,7 @@ export class Parser extends DiagnosticEmitter {
   weaveDataMigrations(): void {
     if (this.toildbWoven) return; // run once, before program element creation
     this.toildbWoven = true;
+    this.checkMigrationLocations();
     if (this.toildbCodecClasses.size == 0) return;
     // Field layouts of every @data value type, for the old-version hash.
     let layouts = new Map<string, FieldLayout[]>();
@@ -753,6 +754,39 @@ export class Parser extends DiagnosticEmitter {
       if (seen.has(target)) continue;
       seen.add(target);
       this.weaveDecodeInto(target, chainsTo(target, migrations), layouts);
+    }
+  }
+
+  /** Enforce the migration-file convention (folder AND extension): every `@migrate`
+   *  must live in a `*.migration.ts` file under a `migrations/` directory. Keeping
+   *  migrations in one discoverable place is what lets the build auto-parse them and
+   *  the weave inject the cross-file imports; a stray `@migrate` elsewhere would not
+   *  be discovered (silently never run), so it is a hard error. */
+  private checkMigrationLocations(): void {
+    for (let i = 0, k = this.sources.length; i < k; ++i) {
+      let source = this.sources[i];
+      if (source.isLibrary) continue;
+      let parts = source.internalPath.split("/");
+      let last = parts[parts.length - 1];
+      let isMigrationFile = last.endsWith(".migration");
+      let inMigrationsDir = false;
+      for (let q = 0, qk = parts.length - 1; q < qk; ++q) {
+        if (parts[q] == "migrations") { inMigrationsDir = true; break; }
+      }
+      if (isMigrationFile && inMigrationsDir) continue; // correctly placed
+      let stmts = source.statements;
+      for (let j = 0, l = stmts.length; j < l; ++j) {
+        let s = stmts[j];
+        if (s.kind != NodeKind.FunctionDeclaration) continue;
+        let fn = <FunctionDeclaration>s;
+        if (!this.hasDecoratorKind(fn.decorators, DecoratorKind.Migrate)) continue;
+        this.error(
+          DiagnosticCode.User_defined_0,
+          fn.name.range,
+          "ToilDB: @migrate must live in a 'migrations/<Type>.migration.ts' file (a *.migration.ts " +
+            "under a migrations/ folder), so the build can discover it. Found in '" + source.internalPath + ".ts'."
+        );
+      }
     }
   }
 
@@ -801,20 +835,101 @@ export class Parser extends DiagnosticEmitter {
       for (let i = 0, k = targetNames.length; i < k; ++i) {
         copy += "this." + targetNames[i] + "=" + last + "." + targetNames[i] + ";";
       }
-      dispatch += "if(__toildbReadVersion()==<i64>" + chain.oldVersion.toString() + "){" +
+      // Dispatch on `__v` - the per-value version passed in (the single-value path
+      // passes the host's `__toildbReadVersion()`, the multi-value paths pass each
+      // item's framed version), so a migration fires on EVERY read path, not only get.
+      dispatch += "if(__v==<i64>" + chain.oldVersion.toString() + "){" +
         body + copy + "__toildbMarkMigrated();return;}";
     }
-    // Drop the existing decodeInto, then inject the dispatching replacement.
+    // Replace BOTH generated decoders: decodeIntoVersioned carries the dispatch,
+    // decodeInto delegates to it with the host stash version.
     for (let i = members.length - 1; i >= 0; --i) {
       let member = members[i];
-      if (member.kind == NodeKind.MethodDeclaration &&
-          (<MethodDeclaration>member).name.text == "decodeInto") {
-        members.splice(i, 1);
-      }
+      if (member.kind != NodeKind.MethodDeclaration) continue;
+      let name = (<MethodDeclaration>member).name.text;
+      if (name == "decodeInto" || name == "decodeIntoVersioned") members.splice(i, 1);
     }
     this.injectClassMember(decl,
-      "decodeInto(__buf: Uint8Array): void{" + dispatch +
+      "decodeIntoVersioned(__buf: Uint8Array, __v: i64): void{" + dispatch +
       "const __r=new DataReader(__buf);__r.readU32();" + reads.replace(/__o\./g, "this.") + "}");
+    this.injectClassMember(decl,
+      "decodeInto(__buf: Uint8Array): void{this.decodeIntoVersioned(__buf, __toildbReadVersion());}");
+
+    // Cross-file: the convention puts every `@migrate` (and its old `@data` shapes)
+    // in a separate `migrations/<Type>.migration.ts`, so the woven dispatch above
+    // references symbols that live in another module. Inject the imports the value
+    // type's source needs, grouped by migration file, with a computed relative path.
+    // A same-file symbol (legacy layout) has srcPath == valuePath and is skipped.
+    let valuePath = decl.range.source.internalPath;
+    // Parallel arrays (NOT Map.keys(), which is a non-indexable iterator once the
+    // compiler is bundled to JS): `importSrcs[i]` holds the symbols `importSyms[i]`.
+    let importSrcs = new Array<string>();
+    let importSyms = new Array<Array<string>>();
+    for (let c = 0, ck = chains.length; c < ck; ++c) {
+      let chain = chains[c];
+      this.addMigrationImport(importSrcs, importSyms, chain.oldType, this.typeSourcePath(chain.oldType), valuePath);
+      for (let s = 0, sk = chain.steps.length; s < sk; ++s) {
+        let step = chain.steps[s];
+        this.addMigrationImport(importSrcs, importSyms, step.fnName, step.sourceInternalPath, valuePath);
+        if (step.newType != target) {
+          this.addMigrationImport(importSrcs, importSyms, step.newType, this.typeSourcePath(step.newType), valuePath);
+        }
+      }
+    }
+    for (let p = 0, pk = importSrcs.length; p < pk; ++p) {
+      let syms = importSyms[p];
+      let names = "";
+      for (let n = 0, nk = syms.length; n < nk; ++n) {
+        names += syms[n];
+        if (n + 1 < nk) names += ", ";
+      }
+      this.injectTopLevelStatements(decl,
+        "// @ts-ignore: injected migration import\nimport { " + names +
+        " } from \"" + this.relativeModulePath(valuePath, importSrcs[p]) + "\";\n");
+    }
+  }
+
+  /** Record that `sym` (an old `@data` shape or a transform fn) must be imported
+   *  into the value type's source from `srcPath`. A blank or same-file source is a
+   *  no-op (the symbol is already in scope). Deduped per source via parallel arrays. */
+  private addMigrationImport(
+    srcs: Array<string>,
+    syms: Array<Array<string>>,
+    sym: string,
+    srcPath: string,
+    valuePath: string
+  ): void {
+    if (srcPath.length == 0 || srcPath == valuePath) return;
+    let idx = srcs.indexOf(srcPath);
+    if (idx < 0) { srcs.push(srcPath); syms.push(new Array<string>()); idx = srcs.length - 1; }
+    let arr = syms[idx];
+    if (arr.indexOf(sym) < 0) arr.push(sym);
+  }
+
+  /** Internal path of the source declaring the `@data` class `name`, or "" if it
+   *  isn't a known `@data` type (then there is nothing to import). */
+  private typeSourcePath(name: string): string {
+    if (!this.toildbCodecClasses.has(name)) return "";
+    return (<ClassDeclaration>this.toildbCodecClasses.get(name)).range.source.internalPath;
+  }
+
+  /** A `"./.."`-style module specifier from importing file `fromInternal` to target
+   *  module `toInternal` (both extension-less internal paths), e.g.
+   *  `("models/User","migrations/User.migration") -> "../migrations/User.migration"`. */
+  private relativeModulePath(fromInternal: string, toInternal: string): string {
+    let fromParts = fromInternal.split("/");
+    fromParts.pop(); // drop the importing file's name, leaving its directory parts
+    let toParts = toInternal.split("/");
+    let i = 0;
+    while (i < fromParts.length && i + 1 < toParts.length && fromParts[i] == toParts[i]) i++;
+    let rel = "";
+    for (let u = i, uk = fromParts.length; u < uk; ++u) rel += "../";
+    if (rel.length == 0) rel = "./";
+    for (let t = i, tk = toParts.length; t < tk; ++t) {
+      rel += toParts[t];
+      if (t + 1 < tk) rel += "/";
+    }
+    return rel;
   }
 
   /** Copy the fields a delta-step's old and new layouts SHARE (same name + type +
@@ -2590,9 +2705,16 @@ export class Parser extends DiagnosticEmitter {
     this.injectClassMember(declaration, "static decode(__buf: Uint8Array): " + className + "{const __r=new DataReader(__buf);__r.readU32();return " + className + ".decodeFrom(__r);}");
     // Instance decode, the mirror of `encode()`: reads a full message into `this`.
     // Needed because AssemblyScript can't call a static (`V.decode`) through a
-    // type parameter, but an instance method (`v.decodeInto`) resolves fine; the
-    // ToilDB generic handles (`std/assembly/toildb.ts`) use it via `instantiate<V>()`.
-    this.injectClassMember(declaration, "decodeInto(__buf: Uint8Array): void{const __r=new DataReader(__buf);__r.readU32();" + reads.replace(/__o\./g, "this.") + "}");
+    // type parameter, but an instance method resolves fine; the ToilDB generic
+    // handles (`std/assembly/toildb.ts`) use it via `instantiate<V>()`.
+    // `decodeIntoVersioned(buf, version)` is the one the multi-value reads (getMany
+    // /latest/membershipList) call with the PER-ITEM stored schema_version so a
+    // `@migrate` dispatch fires for each item; `decodeInto(buf)` is the single-value
+    // path (get/view_get) and passes -1 (no migration) by default. A `@migrate`d
+    // type's weave overrides both (see weaveDecodeInto).
+    let decodeBody = "const __r=new DataReader(__buf);__r.readU32();" + reads.replace(/__o\./g, "this.");
+    this.injectClassMember(declaration, "decodeIntoVersioned(__buf: Uint8Array, __v: i64): void{" + decodeBody + "}");
+    this.injectClassMember(declaration, "decodeInto(__buf: Uint8Array): void{this.decodeIntoVersioned(__buf, -1);}");
     // Capture the field reads + the declaration so `finish()` can rebuild
     // `decodeInto` with a `@migrate` version-dispatch prefix once the whole
     // program (incl. later-parsed `@migrate` functions) is known.

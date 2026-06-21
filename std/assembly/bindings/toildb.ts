@@ -221,6 +221,33 @@ export namespace toildbHost {
   @external("env", "data.latest")
   export declare function latest(handle: u32, keyPtr: usize, keyLen: i32, limit: i32): i32;
 
+  // events.append_once -> 1 appended | 0 duplicate (deduped on eventId) | <0 error.
+  // Idempotent append: a retried call with the same eventId never doubles the event.
+  // @ts-ignore: decorator
+  @external("env", "data.append_once")
+  export declare function appendOnce(
+    handle: u32,
+    keyPtr: usize,
+    keyLen: i32,
+    evidPtr: usize,
+    evidLen: i32,
+    evPtr: usize,
+    evLen: i32
+  ): i32;
+
+  // records.enqueue -> 0 ok | <0 error (Conflict if a concurrent write won, NotFound
+  // if absent). A version-checked replace of an existing record's value.
+  // @ts-ignore: decorator
+  @external("env", "data.enqueue")
+  export declare function enqueue(
+    handle: u32,
+    keyPtr: usize,
+    keyLen: i32,
+    valPtr: usize,
+    valLen: i32,
+    idemPtr: usize
+  ): i32;
+
   // Copy the last stashed variable-length result into outPtr (outLen must equal
   // the length the producing op returned). Returns bytes written, or -1 if the
   // buffer is too small.

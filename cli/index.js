@@ -689,6 +689,37 @@ export async function main(argv, options) {
     stats.parseTime += stats.end(begin);
   }
 
+  // Auto-discover ToilDB migration files (the `migrations/<Type>.migration.ts`
+  // convention): parse every `*.migration.ts` under baseDir so its `@migrate`
+  // transforms + kept old `@data` shapes are in the program even though nothing
+  // imports them. The value type's woven decoder gets the cross-file import
+  // injected (see weaveDecodeInto); a project with no migrations scans to nothing.
+  if (fs.promises && fs.promises.readdir) {
+    const migrationFiles = [];
+    const scanMigrations = async (absDir, relDir) => {
+      let entries;
+      try { entries = await fs.promises.readdir(absDir, { withFileTypes: true }); }
+      catch { return; }
+      for (const ent of entries) {
+        const name = ent.name;
+        if (ent.isDirectory()) {
+          if (name === "node_modules" || name === "build" || name === "dist" || name.charAt(0) === ".") continue;
+          await scanMigrations(path.join(absDir, name), relDir ? relDir + "/" + name : name);
+        } else if (name.endsWith(".migration" + extension)) {
+          migrationFiles.push(relDir ? relDir + "/" + name : name);
+        }
+      }
+    };
+    await scanMigrations(path.resolve(baseDir), "");
+    for (const relPath of migrationFiles) {
+      const sourcePath = relPath.replace(/\\/g, "/");
+      const sourceText = await readFile(sourcePath, baseDir);
+      if (sourceText == null) continue;
+      stats.parseCount++;
+      assemblyscript.parse(program, sourceText, sourcePath, false); // non-entry: not a wasm export
+    }
+  }
+
   // Parse entry files
   {
     let code = await parseBacklog();

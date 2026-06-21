@@ -123,6 +123,11 @@ export class DataMigration {
   ///          layouts share (same name + type), and the function fills only the
   ///          changed/new fields of `into`.
   delta: bool = false;
+  /// Internal path of the source file the `@migrate` fn (and its old `@data`
+  /// shapes) live in - the convention requires a `migrations/…*.migration.ts`
+  /// file, so this is BOTH the enforcement target and, since that file is
+  /// separate from the value type, the module the woven decoder imports from.
+  sourceInternalPath: string = "";
 }
 
 function typeNameOf(t: TypeNode | null): string | null {
@@ -173,6 +178,7 @@ export function collectMigrations(
       mig.oldVersion = layouts.has(oldType)
         ? layoutHash(<FieldLayout[]>layouts.get(oldType))
         : fnv1a(oldType);
+      mig.sourceInternalPath = source.internalPath;
       out.push(mig);
     }
   }

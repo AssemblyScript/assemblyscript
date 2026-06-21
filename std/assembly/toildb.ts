@@ -38,7 +38,14 @@ export function __toildbReadVersion(): i64 {
 /// before each decode and reads it after; the dispatch marks it AFTER the
 /// transform runs, so a transform that itself reads (resetting the flag) does not
 /// clear the outer migration.
-let __toildbMigratedFlag: bool = false;
+// `@lazy`: initialized on first access rather than in module-init order. A value
+// type's woven `decodeInto` (which, under the cross-file `@migrate` convention,
+// lives in a DIFFERENT module than this one) compiles these exported accessors on
+// demand; @lazy breaks the init-order dependency so that never trips a
+// use-before-declaration that a plain global would in that circular import graph.
+// @ts-ignore: decorator
+@lazy
+var __toildbMigratedFlag: bool = false;
 export function __toildbResetMigrated(): void { __toildbMigratedFlag = false; }
 export function __toildbMarkMigrated(): void { __toildbMigratedFlag = true; }
 export function __toildbWasMigrated(): bool { return __toildbMigratedFlag; }
@@ -123,10 +130,12 @@ export class Documents<K, V> {
         results.push(null);
         continue;
       }
+      const ver = <i64>load<u32>(out.dataStart + off);
+      off += 4;
       const len = <i32>load<u32>(out.dataStart + off);
       off += 4;
       const v = instantiate<V>();
-      v.decodeInto(out.subarray(off, off + len));
+      v.decodeIntoVersioned(out.subarray(off, off + len), ver);
       off += len;
       results.push(v);
     }
@@ -159,6 +168,15 @@ export class Documents<K, V> {
     const v = instantiate<V>();
     v.decodeInto(__toildbTake(status));
     return v;
+  }
+
+  /// Atomically replace an EXISTING record's value, version-checked: returns true
+  /// if applied, false if a concurrent write changed the record first (optimistic
+  /// concurrency - re-read and retry) or the record is absent.
+  enqueue(key: K, value: V): bool {
+    const kb = key.encode();
+    const vb = value.encode();
+    return toildbHost.enqueue(this.__handle, kb.dataStart, kb.byteLength, vb.dataStart, vb.byteLength, 0) == 0;
   }
 
   /// Delete the record (idempotent).
@@ -323,10 +341,12 @@ export class Membership<K, M> {
     const count = load<u32>(blob.dataStart + off);
     off += 4;
     for (let i: u32 = 0; i < count; i++) {
+      const ver = <i64>load<u32>(blob.dataStart + off);
+      off += 4;
       const len = <i32>load<u32>(blob.dataStart + off);
       off += 4;
       const m = instantiate<M>();
-      m.decodeInto(blob.subarray(off, off + len));
+      m.decodeIntoVersioned(blob.subarray(off, off + len), ver);
       out.push(m);
       off += len;
     }
@@ -435,6 +455,20 @@ export class Events<K, V> {
     toildbHost.append(this.__handle, kb.dataStart, kb.byteLength, eb.dataStart, eb.byteLength, 0);
   }
 
+  /// Append `event` exactly once per `eventId`: a retried call with the same id is
+  /// a no-op and returns false; the first call appends and returns true. Idempotent
+  /// under at-least-once delivery / client retries (dedup on the caller-chosen id).
+  appendOnce(key: K, eventId: string, event: V): bool {
+    const kb = key.encode();
+    const idb = Uint8Array.wrap(String.UTF8.encode(eventId));
+    const eb = event.encode();
+    const status = toildbHost.appendOnce(
+      this.__handle, kb.dataStart, kb.byteLength,
+      idb.dataStart, idb.byteLength, eb.dataStart, eb.byteLength);
+    if (status < 0) unreachable();
+    return status == 1;
+  }
+
   /// The newest `limit` events, newest first. Decodes each framed event into a
   /// `V`. The host frames them as `u32 count` then per event `u32 len + bytes`.
   latest(key: K, limit: i32): V[] {
@@ -447,10 +481,12 @@ export class Events<K, V> {
     const count = load<u32>(blob.dataStart + off);
     off += 4;
     for (let i: u32 = 0; i < count; i++) {
+      const ver = <i64>load<u32>(blob.dataStart + off);
+      off += 4;
       const len = <i32>load<u32>(blob.dataStart + off);
       off += 4;
       const ev = instantiate<V>();
-      ev.decodeInto(blob.subarray(off, off + len));
+      ev.decodeIntoVersioned(blob.subarray(off, off + len), ver);
       out.push(ev);
       off += len;
     }

@@ -1,10 +1,15 @@
-// Compile tests/dbmigrate/spec.ts and assert the @migrate machinery (Phase 3):
-//  (a) EMIT - the `users` collection carries the OLD layout version in its
+// Compile @migrate fixtures and assert the machinery (Phase 3 + the migrations
+// convention):
+//  (a) EMIT  - the `users` collection carries the OLD layout version(s) in its
 //      `migratableFrom` list, so the deploy gate can admit the breaking change.
 //  (b) WEAVE - the module imports `data.result_schema_version`; only the woven
-//      version-dispatch in `User.decodeInto` references it, so its presence proves
-//      the dispatch was generated (and a non-@migrate module must NOT import it).
-import { readFileSync, mkdtempSync, rmSync } from "node:fs";
+//      version-dispatch references it, so its presence proves the dispatch ran.
+//  (CONVENTION) - every `@migrate` lives in a `migrations/<Type>.migration.ts`
+//      file (folder + extension, enforced); the build DISCOVERS those files
+//      (nothing imports them) and the weave INJECTS the cross-file imports into
+//      the value type's module. So each spec here is a value-type `app.ts` plus a
+//      separate `migrations/*.migration.ts`, compiled in an isolated dir.
+import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -12,23 +17,48 @@ import { spawnSync } from "node:child_process";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..", "..");
+const bin = join(root, "bin", "toilscript.js");
 
 function fail(msg) {
     console.error(`@migrate test suite: ${msg}`);
     process.exit(1);
 }
 
-function compile(specPath) {
-    const tmp = mkdtempSync(join(tmpdir(), "dbmigrate-"));
-    const out = join(tmp, "spec.wasm");
-    const r = spawnSync("node", [join(root, "bin", "toilscript.js"), specPath, "-o", out, "--runtime", "stub"], {
-        stdio: ["ignore", "ignore", "inherit"],
+// Write `files` into an isolated temp dir and compile `app.ts` with cwd=that dir,
+// so migration auto-discovery is scoped to exactly this spec. Returns the run +
+// (on success) the wasm bytes.
+function build(files, { expectFail = false } = {}) {
+    const tmp = mkdtempSync(join(tmpdir(), "dbmig-"));
+    for (const rel of Object.keys(files)) {
+        const fp = join(tmp, rel);
+        mkdirSync(dirname(fp), { recursive: true });
+        writeFileSync(fp, files[rel]);
+    }
+    const out = join(tmp, "out.wasm");
+    const r = spawnSync("node", [bin, "app.ts", "-o", out, "--runtime", "stub"], {
+        cwd: tmp,
+        stdio: ["ignore", "ignore", expectFail ? "pipe" : "inherit"],
     });
-    if (r.status !== 0) fail(`COMPILE FAILED for ${specPath}`);
-    const buf = readFileSync(out);
+    let buf = null;
+    if (!expectFail) {
+        if (r.status !== 0) { rmSync(tmp, { recursive: true, force: true }); fail("COMPILE FAILED"); }
+        buf = readFileSync(out);
+    }
     rmSync(tmp, { recursive: true, force: true });
-    return buf;
+    return { status: r.status, stderr: String(r.stderr || ""), buf };
 }
+
+// The value-type module shared by the migrating specs: current `User` (exported so
+// a migration file can import it) + the @database that retains its read path.
+const APP = `
+@data
+class UserId { id: u64 = 0; }
+@data
+export class User { id: u64 = 0; name: string = ""; email: string = ""; }
+@database
+class App { @collection users: Documents<UserId, User>; }
+export function probe(): u64 { return App.users.require(new UserId()).id; }
+`;
 
 // --- catalog decode (mirrors the wire format) ---
 function leb(buf, pos) {
@@ -105,79 +135,130 @@ function layoutHash(fields) {
     for (const f of fields) { h = fnvStr(h, f.name); h = fnvStr(h, f.typeName); h = fnvByte(h, f.isArray ? 1 : 0); }
     return h >>> 0;
 }
+const usersOf = (buf) => decodeCatalog(findCatalog(buf)).find((c) => c.name === "users");
 
-// --- (a) the migration spec ---
-const wasm = compile(join(here, "spec.ts"));
-const cat = findCatalog(wasm);
-if (cat === null) fail("toildb.catalog section not found");
-const users = decodeCatalog(cat).find((c) => c.name === "users");
-if (!users) fail("users collection missing");
-
-// UserV1 = { id: u32, name: string } is the old layout the migration covers.
 const oldVersion = layoutHash([
     { name: "id", typeName: "u32", isArray: false },
     { name: "name", typeName: "string", isArray: false },
 ]);
+
+// --- (a) the basic migration, @migrate in migrations/User.migration.ts ---
+const basic = build({
+    "app.ts": APP,
+    "migrations/User.migration.ts": `
+import { User } from "../app";
+@data
+export class UserV1 { id: u32 = 0; name: string = ""; }
+@migrate
+export function up(old: UserV1): User {
+  const u = new User();
+  u.id = <u64>old.id; u.name = old.name; u.email = "";
+  return u;
+}
+`,
+}).buf;
+const users = usersOf(basic);
+if (!users) fail("users collection missing");
 if (users.migratableFrom.length !== 1) fail(`expected 1 migratable version, got ${users.migratableFrom.length}`);
 if (users.migratableFrom[0] !== oldVersion) fail(`migratableFrom ${users.migratableFrom[0]} != UserV1 layout ${oldVersion}`);
-// The current User layout (id:u64) must differ from the old one (the change is breaking).
 if (users.schemaVersion === oldVersion) fail("current schema_version must differ from the migratable old version");
 
 // (b) the weave pulled in the version import (only the dispatch references it).
-const wasmStr = wasm.toString("latin1");
-if (!wasmStr.includes("result_schema_version"))
-    fail("woven decodeInto did not pull in data.result_schema_version");
+if (!basic.toString("latin1").includes("result_schema_version"))
+    fail("woven decodeInto did not pull in data.result_schema_version (cross-file)");
 
 // --- (c) a NON-@migrate module must NOT import the version (no hot-path cost) ---
-const plain = compile(join(here, "..", "dbstatic", "spec.ts")).toString("latin1");
-if (plain.includes("result_schema_version"))
+const plain = build({ "app.ts": readFileSync(join(here, "..", "dbstatic", "spec.ts"), "utf8") }).buf;
+if (plain.toString("latin1").includes("result_schema_version"))
     fail("a module with no @migrate must not import data.result_schema_version");
 
-// --- (d) a @migrate that touches the database must NOT compile ---
-import { writeFileSync } from "node:fs";
-const badDir = mkdtempSync(join(tmpdir(), "dbmigrate-bad-"));
-const badSpec = join(badDir, "bad.ts");
-writeFileSync(badSpec, `
-@data class UserId { id: u64 = 0; }
-@data class UserV1 { id: u32 = 0; }
-@data class User { id: u64 = 0; }
-@database class App { @collection users: Documents<UserId, User>; }
+// --- (d) a @migrate that touches the database must NOT compile (even when correctly placed) ---
+const bad = build({
+    "app.ts": `
+@data
+export class UserId { id: u64 = 0; }
+@data
+export class User { id: u64 = 0; }
+@database
+class App { @collection users: Documents<UserId, User>; }
+export function probe(): u64 { return App.users.require(new UserId()).id; }
+`,
+    "migrations/User.migration.ts": `
+import { User, UserId } from "../app";
+@data
+export class UserV1 { id: u32 = 0; }
 @migrate
-function up(old: UserV1): User {
+export function up(old: UserV1): User {
   // ILLEGAL: a migration is a pure transform; it must not touch the database.
   App.users.delete(new UserId());
   const u = new User(); u.id = <u64>old.id; return u;
 }
+`,
+}, { expectFail: true });
+if (bad.status === 0) fail("a @migrate that touches the database must be a compile error");
+if (!bad.stderr.includes("migrate"))
+    fail(`expected a @migrate diagnostic, got: ${bad.stderr.slice(0, 200)}`);
+
+// --- (d2) a @migrate OUTSIDE a migrations/*.migration.ts file must NOT compile ---
+const misplaced = build({
+    "app.ts": `
+@data
+class UserId { id: u64 = 0; }
+@data
+export class User { id: u64 = 0; name: string = ""; email: string = ""; }
+@data
+export class UserV1 { id: u32 = 0; name: string = ""; }
+@migrate
+export function up(old: UserV1): User { const u = new User(); u.id = <u64>old.id; u.name = old.name; u.email = ""; return u; }
+@database
+class App { @collection users: Documents<UserId, User>; }
 export function probe(): u64 { return App.users.require(new UserId()).id; }
-`);
-const badOut = join(badDir, "bad.wasm");
-const badRun = spawnSync("node", [join(root, "bin", "toilscript.js"), badSpec, "-o", badOut, "--runtime", "stub"], {
-    stdio: ["ignore", "ignore", "pipe"],
-});
-rmSync(badDir, { recursive: true, force: true });
-if (badRun.status === 0) fail("a @migrate that touches the database must be a compile error");
-if (!String(badRun.stderr).includes("migrate"))
-    fail(`expected a @migrate diagnostic, got: ${String(badRun.stderr).slice(0, 200)}`);
+`,
+}, { expectFail: true });
+if (misplaced.status === 0) fail("a @migrate outside migrations/*.migration.ts must be a compile error");
+if (!misplaced.stderr.includes("migrations/"))
+    fail(`expected a migration-location diagnostic, got: ${misplaced.stderr.slice(0, 200)}`);
 
 // --- (e) the DELTA form `(old, into): void` compiles, emits, and weaves ---
-const dwasm = compile(join(here, "spec_delta.ts"));
-const dusers = decodeCatalog(findCatalog(dwasm)).find((c) => c.name === "users");
+const delta = build({
+    "app.ts": APP,
+    "migrations/User.migration.ts": `
+import { User } from "../app";
+@data
+export class UserV1 { id: u32 = 0; name: string = ""; }
+@migrate
+export function up(old: UserV1, u: User): void {
+  // name is carried over automatically (shared field); email defaults to "".
+  u.id = <u64>old.id;
+}
+`,
+}).buf;
+const dusers = usersOf(delta);
 if (!dusers) fail("delta: users collection missing");
 if (dusers.migratableFrom.length !== 1 || dusers.migratableFrom[0] !== oldVersion)
     fail(`delta: migratableFrom ${JSON.stringify(dusers.migratableFrom)} != [${oldVersion}]`);
-if (!dwasm.toString("latin1").includes("result_schema_version"))
+if (!delta.toString("latin1").includes("result_schema_version"))
     fail("delta: woven decode did not pull in data.result_schema_version");
 
 // --- (f) a migration CHAIN: both v0 and v1 reach the current User ---
-const cwasm = compile(join(here, "spec_chain.ts"));
-const cusers = decodeCatalog(findCatalog(cwasm)).find((c) => c.name === "users");
+const chain = build({
+    "app.ts": APP,
+    "migrations/User.migration.ts": `
+import { User } from "../app";
+@data
+export class UserV0 { id: u32 = 0; }
+@data
+export class UserV1 { id: u32 = 0; name: string = ""; }
+@migrate
+export function up01(old: UserV0): UserV1 { const u = new UserV1(); u.id = old.id; u.name = ""; return u; }
+@migrate
+export function up12(old: UserV1): User { const u = new User(); u.id = <u64>old.id; u.name = old.name; u.email = ""; return u; }
+`,
+}).buf;
+const cusers = usersOf(chain);
 if (!cusers) fail("chain: users collection missing");
 const v0 = layoutHash([{ name: "id", typeName: "u32", isArray: false }]);
-const v1 = layoutHash([
-    { name: "id", typeName: "u32", isArray: false },
-    { name: "name", typeName: "string", isArray: false },
-]);
-// migratableFrom must contain BOTH chain-reachable versions (order-independent).
+const v1 = oldVersion;
 if (cusers.migratableFrom.length !== 2)
     fail(`chain: expected 2 migratable versions, got ${JSON.stringify(cusers.migratableFrom)}`);
 for (const want of [v0, v1]) {
@@ -186,12 +267,12 @@ for (const want of [v0, v1]) {
 }
 if (cusers.schemaVersion === v0 || cusers.schemaVersion === v1)
     fail("chain: current version must differ from both old versions");
-if (!cwasm.toString("latin1").includes("result_schema_version"))
+if (!chain.toString("latin1").includes("result_schema_version"))
     fail("chain: woven decode did not pull in data.result_schema_version");
 
 // --- (g) a NESTED @data type emits a toildb.types registry with its layout ---
-const nwasm = compile(join(here, "spec_nested.ts"));
-const typesSec = findSection(nwasm, "toildb.types");
+const nested = build({ "app.ts": readFileSync(join(here, "spec_nested.ts"), "utf8") }).buf;
+const typesSec = findSection(nested, "toildb.types");
 if (typesSec === null) fail("nested: toildb.types section not emitted");
 const types = decodeTypes(typesSec);
 if (!types["Address"]) fail(`nested: Address missing from type registry (${Object.keys(types)})`);
