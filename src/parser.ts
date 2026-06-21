@@ -115,7 +115,8 @@ import {
   collectMigrations,
   dataFields,
   FieldLayout,
-  MigrationChain
+  MigrationChain,
+  recursionTypeMap
 } from "./dbcatalog";
 
 /** Maps a `@data` field type name to the DataWriter/DataReader method suffix, or "" if unsupported. */
@@ -744,7 +745,14 @@ export class Parser extends DiagnosticEmitter {
         }
       }
     }
-    let migrations = collectMigrations(this.sources, layouts);
+    // The recursion type map for the (now RECURSIVE) old-version hash: the same
+    // `@data` set the runtime `toildb.types` registry holds (excludes
+    // `*.migration.ts` shapes). The woven dispatch matches a stored row's
+    // schema_version against `oldVersion`, so it MUST hash with the same recursion
+    // `buildToilDbCatalog` emits into `migratableFrom` - or no old row ever
+    // dispatches.
+    let typeMap = recursionTypeMap(this.sources);
+    let migrations = collectMigrations(this.sources, layouts, typeMap);
     if (migrations.length == 0) return;
     // Each migration TARGET (a value type) gets a version-dispatching decode;
     // chainsTo resolves every old version reaching it, direct OR via a chain.

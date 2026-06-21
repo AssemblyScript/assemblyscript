@@ -281,4 +281,103 @@ if (addr.length !== 2 || addr[0].name !== "street" || addr[0].typeName !== "stri
     fail(`nested: Address layout wrong: ${JSON.stringify(addr)}`);
 if (!types["User"]) fail("nested: User missing from type registry");
 
+// --- (h) the RECURSIVE schema_version: the `users` collection's emitted version
+//      hashes THROUGH the nested Address type, and is the pinned cross-repo
+//      vector also asserted in the backend (toildb schema_descriptor.rs:
+//      `matches_the_toilscript_compiler_nested_layout_hash`). If either repo's
+//      recursion diverges, this number drifts and every nested-row read mismatches.
+// The recursion type map mirrors the runtime `toildb.types` registry (collection
+// value types + their nested types). User { id:u64, addr:Address }; Address is a
+// known @data type so the hash continues over its fields after the `addr` triple.
+function layoutHashRec(fields, typeMap, seen) {
+    let h = 0x811c9dc5;
+    const walk = (h, fields, seen) => {
+        for (const f of fields) {
+            h = fnvStr(h, f.name);
+            h = fnvStr(h, f.typeName);
+            h = fnvByte(h, f.isArray ? 1 : 0);
+            if (typeMap.has(f.typeName) && !seen.has(f.typeName)) {
+                seen.add(f.typeName);
+                h = walk(h, typeMap.get(f.typeName), seen);
+                seen.delete(f.typeName);
+            }
+        }
+        return h >>> 0;
+    };
+    return walk(h, fields, seen || new Set());
+}
+const F = (name, typeName, isArray = false) => ({ name, typeName, isArray });
+const recMap = new Map();
+recMap.set("Address", [F("street", "string"), F("zip", "string")]);
+recMap.set("UserId", [F("id", "u64")]);
+recMap.set("User", [F("id", "u64"), F("addr", "Address")]);
+const expectedNested = layoutHashRec([F("id", "u64"), F("addr", "Address")], recMap);
+// PINNED cross-repo vector (recomputed once; identical in the backend).
+if (expectedNested !== 1089707667)
+    fail(`nested layoutHash drifted from the pinned cross-repo vector: ${expectedNested}`);
+const nestedUsers = usersOf(nested);
+if (!nestedUsers) fail("nested: users collection missing from catalog");
+if (nestedUsers.schemaVersion !== expectedNested)
+    fail(`nested: users.schema_version ${nestedUsers.schemaVersion} != recursive layoutHash ${expectedNested}`);
+// A FLAT hash of the same outer fields (ignoring Address) must DIFFER, proving the
+// emitted version actually recursed into the nested type.
+const flatUser = layoutHash([F("id", "u64"), F("addr", "Address")]);
+if (nestedUsers.schemaVersion === flatUser)
+    fail("nested: schema_version did not recurse into the nested @data type (flat == recursive)");
+
+// --- (i) a @migrate whose OLD type contains a NESTED @data field: the emitted
+//      `migratableFrom` is the RECURSIVE hash of the old type (through the live
+//      nested type), so it matches the recursive schema_version the old layout was
+//      deployed under. This is what makes a nested-type change @migrate-able rather
+//      than refuse-only.
+const APP_NESTED = `
+@data
+export class Tag { key: string = ""; val: string = ""; }
+@data
+class UserId { id: u64 = 0; }
+@data
+export class User { id: u64 = 0; tag: Tag = new Tag(); extra: string = ""; }
+@database
+class App { @collection users: Documents<UserId, User>; }
+export function probe(): u64 { return App.users.require(new UserId()).id; }
+`;
+const nestedMig = build({
+    "app.ts": APP_NESTED,
+    "migrations/User.migration.ts": `
+import { User, Tag } from "../app";
+// The old shape: same nested Tag, but no extra field yet (an append since).
+@data
+export class UserOld { id: u64 = 0; tag: Tag = new Tag(); }
+@migrate
+export function up(old: UserOld): User {
+  const u = new User(); u.id = old.id; u.tag = old.tag; u.extra = ""; return u;
+}
+`,
+}).buf;
+const nmUsers = usersOf(nestedMig);
+if (!nmUsers) fail("nested-migrate: users collection missing");
+// `Tag` is a LIVE @data type (not a *.migration shape), so it is in the recursion
+// map; `UserOld { id:u64, tag:Tag }` hashes recursively through Tag.
+const recMap2 = new Map();
+recMap2.set("Tag", [F("key", "string"), F("val", "string")]);
+recMap2.set("UserId", [F("id", "u64")]);
+recMap2.set("User", [F("id", "u64"), F("tag", "Tag"), F("extra", "string")]);
+const oldUserVersion = layoutHashRec([F("id", "u64"), F("tag", "Tag")], recMap2);
+if (nmUsers.migratableFrom.length !== 1)
+    fail(`nested-migrate: expected 1 migratable version, got ${JSON.stringify(nmUsers.migratableFrom)}`);
+if (nmUsers.migratableFrom[0] !== oldUserVersion)
+    fail(`nested-migrate: migratableFrom ${nmUsers.migratableFrom[0]} != recursive old-version ${oldUserVersion}`);
+// And it must DIFFER from a flat hash of the old fields (proving the old-version
+// hash recursed into Tag too).
+const oldUserFlat = layoutHash([F("id", "u64"), F("tag", "Tag")]);
+if (nmUsers.migratableFrom[0] === oldUserFlat)
+    fail("nested-migrate: old-version hash did not recurse into the nested @data type");
+// The current schema_version (with the appended `extra`) recurses through Tag too,
+// and differs from the migratable old version.
+const curUserVersion = layoutHashRec([F("id", "u64"), F("tag", "Tag"), F("extra", "string")], recMap2);
+if (nmUsers.schemaVersion !== curUserVersion)
+    fail(`nested-migrate: current schema_version ${nmUsers.schemaVersion} != recursive ${curUserVersion}`);
+if (nmUsers.schemaVersion === oldUserVersion)
+    fail("nested-migrate: current and old versions must differ");
+
 console.log("@migrate test suite: ALL PASS");

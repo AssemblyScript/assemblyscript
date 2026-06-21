@@ -67,18 +67,87 @@ function fnvStr(h: u32, s: string): u32 {
  * `schema_version`: a hash over the ORDERED field layout (name, type, is_array),
  * NOT the value-type name. Adding, removing, retyping, or REORDERING a field
  * changes it - so the runtime can tell a compatible (append-only) change from a
- * breaking one, instead of silently misreading old rows. (Flat, like toildb's
- * `SchemaDescriptor::layout_hash`: a change to a NESTED `@data` type's own fields
- * does not bump the parent - that lands with recursive layouts later.)
+ * breaking one, instead of silently misreading old rows.
+ *
+ * RECURSIVE into nested `@data` types: when a field's `typeName` is a KNOWN
+ * `@data` type (a key of `typeMap`) and not already on the `seen` set (cycle
+ * guard), the SAME running hash continues over that nested type's fields - so a
+ * breaking change to a NESTED type bumps the OUTER `schema_version` and can be
+ * `@migrate`d (instead of being refuse-only). This MUST stay byte-identical to
+ * toildb's `SchemaDescriptor::layout_hash` (the runtime side): the algorithm,
+ * the `seen` add/remove, and the declaration-order traversal are pinned in lock
+ * step. A FLAT type (no field whose type is in `typeMap`) hashes to the SAME
+ * value as the old flat hash, so existing pinned vectors stay green; an absent
+ * `typeMap` (undefined) is flat/back-compatible.
+ *
+ * `typeMap` MUST contain the SAME set of `@data` types as the runtime's
+ * `toildb.types` registry (collection value types + their nested types, EXCLUDING
+ * old `*.migration.ts` shapes), or the two hashes diverge: a nested field whose
+ * type is absent from the map on either side is treated as a LEAF on both sides.
  */
-export function layoutHash(fields: FieldLayout[]): u32 {
+export function layoutHash(
+  fields: FieldLayout[],
+  typeMap: Map<string, FieldLayout[]> | null = null,
+  seen: Set<string> | null = null
+): u32 {
   let h: u32 = 0x811c9dc5;
+  return hashFields(h, fields, typeMap, seen);
+}
+
+/** Continue the running FNV-1a hash `h` over `fields` (declaration order),
+ *  recursing into any field whose `typeName` is a known `@data` type in
+ *  `typeMap` and not yet on `seen`. Factored out so both the top-level hash and
+ *  each nested level share ONE traversal, keeping the byte stream identical to
+ *  the runtime. */
+function hashFields(
+  h: u32,
+  fields: FieldLayout[],
+  typeMap: Map<string, FieldLayout[]> | null,
+  seen: Set<string> | null
+): u32 {
   for (let i = 0, k = fields.length; i < k; ++i) {
-    h = fnvStr(h, fields[i].name);
-    h = fnvStr(h, fields[i].typeName);
-    h = fnvByte(h, fields[i].isArray ? 1 : 0);
+    let f = fields[i];
+    h = fnvStr(h, f.name);
+    h = fnvStr(h, f.typeName);
+    h = fnvByte(h, f.isArray ? 1 : 0);
+    if (typeMap != null && typeMap.has(f.typeName)) {
+      let s = seen != null ? seen : new Set<string>();
+      if (!s.has(f.typeName)) {
+        s.add(f.typeName);
+        h = hashFields(h, <FieldLayout[]>typeMap.get(f.typeName), typeMap, s);
+        s.delete(f.typeName);
+      }
+    }
   }
   return h >>> 0;
+}
+
+/** The recursion type map for `layoutHash`: every `@data` type the runtime's
+ *  `toildb.types` registry also contains (collection value types + their nested
+ *  types), EXCLUDING old `*.migration.ts` shapes (which the runtime registry
+ *  excludes by design). Both sides must recurse through the SAME set, so a
+ *  nested field whose type is NOT here is a leaf on both sides. */
+export function recursionTypeMap(sources: Source[]): Map<string, FieldLayout[]> {
+  let map = new Map<string, FieldLayout[]>();
+  for (let i = 0, k = sources.length; i < k; ++i) {
+    let source = sources[i];
+    if (source.isLibrary) continue;
+    // Old `@data` shapes in a `*.migration.ts` file are internal to the decoder,
+    // not live value types; the runtime `toildb.types` registry omits them, so the
+    // compiler's recursion map must omit them too (or the hashes diverge).
+    if (source.internalPath.endsWith(".migration")) continue;
+    let statements = source.statements;
+    for (let j = 0, l = statements.length; j < l; ++j) {
+      let statement = statements[j];
+      if (statement.kind != NodeKind.ClassDeclaration) continue;
+      let cls = <ClassDeclaration>statement;
+      if (!hasDeco(cls.decorators, DecoratorKind.Data)) continue;
+      let name = cls.name.text;
+      if (map.has(name)) continue;
+      map.set(name, dataFields(cls));
+    }
+  }
+  return map;
 }
 
 /** Extract the encoded field layout of a `@data` class, in declaration order,
@@ -136,12 +205,17 @@ function typeNameOf(t: TypeNode | null): string | null {
 }
 
 /** Every `@migrate` function across the (non-library) sources. `layouts` maps a
- *  `@data` class name to its field layout, for the old-version hash. A migration
- *  whose param/return is not a single named type, or whose old type has no
- *  layout, is skipped. */
+ *  `@data` class name to its field layout, for the old-version hash. `typeMap`
+ *  (optional) is the recursion type map (see [`recursionTypeMap`]) so the old
+ *  version hashes RECURSIVELY through its nested `@data` fields - matching the
+ *  `schema_version` that old layout was deployed under (or the migratable old
+ *  version would never match a deployed recursive hash). Absent = flat. A
+ *  migration whose param/return is not a single named type, or whose old type
+ *  has no layout, is skipped. */
 export function collectMigrations(
   sources: Source[],
-  layouts: Map<string, FieldLayout[]>
+  layouts: Map<string, FieldLayout[]>,
+  typeMap: Map<string, FieldLayout[]> | null = null
 ): DataMigration[] {
   let out = new Array<DataMigration>();
   for (let i = 0, k = sources.length; i < k; ++i) {
@@ -176,7 +250,7 @@ export function collectMigrations(
       mig.fnName = fn.name.text;
       mig.delta = delta;
       mig.oldVersion = layouts.has(oldType)
-        ? layoutHash(<FieldLayout[]>layouts.get(oldType))
+        ? layoutHash(<FieldLayout[]>layouts.get(oldType), typeMap)
         : fnv1a(oldType);
       mig.sourceInternalPath = source.internalPath;
       out.push(mig);
@@ -319,10 +393,17 @@ export function buildToilDbCatalog(program: Program): Uint8Array | null {
       layouts.set(cls.name.text, dataFields(cls));
     }
   }
+  // The recursion type map for the (now RECURSIVE) schema_version hash: exactly
+  // the `@data` types the runtime's `toildb.types` registry contains (excludes
+  // old `*.migration.ts` shapes). A nested `@data` field whose type is here is
+  // recursed into; otherwise it is a leaf - on BOTH sides, in lock step.
+  let typeMap = recursionTypeMap(sources);
   // Migratable old versions per value type: the schema_versions a registered
   // @migrate can decode. Emitted per collection so the deploy gate admits a
   // breaking change whose deployed version is covered (instead of refusing it).
-  let migrations = collectMigrations(sources, layouts);
+  // The old-version hash is recursive too (same `typeMap`), so it matches the
+  // recursive schema_version the old layout was deployed under.
+  let migrations = collectMigrations(sources, layouts, typeMap);
   // Per value type, the schema_versions it can decode - every old version that
   // reaches it through a CHAIN of migrations (not just a direct one), so a deploy
   // is admitted for any version a chain converges.
@@ -402,7 +483,7 @@ export function buildToilDbCatalog(program: Program): Uint8Array | null {
       let fields = hasLayout
         ? <FieldLayout[]>layouts.get(coll.valueType)
         : new Array<FieldLayout>();
-      let schemaVersion = hasLayout ? layoutHash(fields) : id;
+      let schemaVersion = hasLayout ? layoutHash(fields, typeMap) : id;
       w.u32(id);            // value_data_id (the value type's message-boundary id)
       w.u32(schemaVersion); // schema_version (field-layout hash)
       w.u32(0);  // collection_generation
