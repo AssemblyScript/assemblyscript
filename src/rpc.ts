@@ -326,6 +326,10 @@ function collectSurface(program: Program): RpcSurface {
   for (let i = 0, k = sources.length; i < k; ++i) {
     let source = sources[i];
     if (source.isLibrary) continue;
+    // A `migrations/*.migration.ts` file holds only the KEPT old `@data` shapes +
+    // `@migrate` transforms; those are internal to the decoder and must not become
+    // client-facing RPC types. Skip the whole migration source.
+    if (source.internalPath.endsWith(".migration")) continue;
     let statements = source.statements;
     for (let j = 0, l = statements.length; j < l; ++j) {
       let statement = statements[j];

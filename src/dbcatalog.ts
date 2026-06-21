@@ -437,6 +437,9 @@ export function buildToilDbTypes(program: Program): Uint8Array | null {
   for (let i = 0, k = sources.length; i < k; ++i) {
     let source = sources[i];
     if (source.isLibrary) continue;
+    // Old `@data` shapes in a `*.migration.ts` file are internal to the decoder, not
+    // live collection value types; keep them out of the emitted type registry.
+    if (source.internalPath.endsWith(".migration")) continue;
     let statements = source.statements;
     for (let j = 0, l = statements.length; j < l; ++j) {
       let statement = statements[j];
