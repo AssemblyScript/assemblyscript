@@ -242,6 +242,9 @@ export class Options {
 
   /** WebAssembly target. Defaults to {@link Target.Wasm32}. */
   target: Target = Target.Wasm32;
+  /** Toil compile surface mode. null = legacy single-artifact build (all surfaces allowed,
+   *  matching pre-split behavior). "hot" = request + stream surface. "cold" = daemon surface. */
+  targetMode: string | null = null;   // "hot" | "cold" | null
   /** Runtime type. Defaults to Incremental GC. */
   runtime: Runtime = Runtime.Incremental;
   /** If true, indicates that debug information will be emitted by Binaryen. */

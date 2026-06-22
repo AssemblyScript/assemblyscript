@@ -1065,7 +1065,15 @@ export enum DecoratorKind {
   // type. The compiler weaves it into the value type's version-dispatching
   // decoder (lazy, read-time migration); see SCHEMA_MIGRATION_PLAN Phase 3.
   Migrate,
-  Admin
+  Admin,
+  // --- streams + daemon (spec 03) ---
+  Daemon,       // @daemon       class decorator (L4 entry; at most one per project)
+  Scheduled,    // @scheduled(spec)  method decorator inside a @daemon class
+  Stream,       // @stream       class decorator (L2/L3 stream protocol handler)
+  Connect,      // @connect      method in a @stream class (lifecycle hook)
+  Message,      // @message      method in a @stream class (lifecycle hook)
+  Close,        // @close        method in a @stream class (lifecycle hook)
+  Disconnect    // @disconnect   method in a @stream class (lifecycle hook)
 }
 
 export namespace DecoratorKind {
@@ -1089,6 +1097,8 @@ export namespace DecoratorKind {
         case CharCode.c: {
           if (nameStr == "cache") return DecoratorKind.Cache;
           if (nameStr == "collection") return DecoratorKind.Collection;
+          if (nameStr == "connect") return DecoratorKind.Connect;
+          if (nameStr == "close") return DecoratorKind.Close;
           break;
         }
         case CharCode.d: {
@@ -1096,6 +1106,8 @@ export namespace DecoratorKind {
           if (nameStr == "del") return DecoratorKind.Delete; // `@del` (not `@delete`, a reserved word)
           if (nameStr == "database") return DecoratorKind.Database;
           if (nameStr == "derive") return DecoratorKind.Derive;
+          if (nameStr == "daemon") return DecoratorKind.Daemon;
+          if (nameStr == "disconnect") return DecoratorKind.Disconnect;
           break;
         }
         case CharCode.e: {
@@ -1130,6 +1142,7 @@ export namespace DecoratorKind {
         case CharCode.m: {
           if (nameStr == "main") return DecoratorKind.Main;
           if (nameStr == "migrate") return DecoratorKind.Migrate;
+          if (nameStr == "message") return DecoratorKind.Message;
           break;
         }
         case CharCode.o: {
@@ -1156,6 +1169,8 @@ export namespace DecoratorKind {
         }
         case CharCode.s: {
           if (nameStr == "service") return DecoratorKind.Service;
+          if (nameStr == "stream") return DecoratorKind.Stream;
+          if (nameStr == "scheduled") return DecoratorKind.Scheduled;
           break;
         }
         case CharCode.u: {

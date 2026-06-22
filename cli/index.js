@@ -310,6 +310,16 @@ export async function main(argv, options) {
     case "never": uncheckedBehavior = 1; break;
     case "always": uncheckedBehavior = 2; break;
   }
+  // Resolve the Toil compile surface mode. Absent => null (legacy single artifact);
+  // an explicit value must be "hot" or "cold", else this is a CLI-level error before compile.
+  let targetMode = null;
+  if (opts.targetMode != null && String(opts.targetMode).length > 0) {
+    targetMode = String(opts.targetMode);
+    if (targetMode !== "hot" && targetMode !== "cold") {
+      return prepareResult(Error(`Target mode '${targetMode}' is invalid; expected 'hot' or 'cold'.`));
+    }
+  }
+  assemblyscript.setTargetMode(compilerOptions, targetMode);
   assemblyscript.setTarget(compilerOptions, 0);
   assemblyscript.setDebugInfo(compilerOptions, !!opts.debug);
   assemblyscript.setRuntime(compilerOptions, runtime);

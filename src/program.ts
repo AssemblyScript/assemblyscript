@@ -79,6 +79,7 @@ import {
   SourceKind,
   DecoratorNode,
   DecoratorKind,
+  findDecorator,
   TypeParameterNode,
   TypeNode,
   NamedTypeNode,
@@ -478,6 +479,8 @@ export class Program extends DiagnosticEmitter {
   instancesByName: Map<string,Element> = new Map();
   /** Function decorated with `@main` (toil module entry point), if any. */
   mainFunction: FunctionPrototype | null = null;
+  /** Class decorated with `@daemon` (cold L4 entry), if any. At most one per project. */
+  daemonClass: ClassPrototype | null = null;
   /** Classes wrapping basic types like `i32`. */
   wrapperClasses: Map<Type,Class> = new Map();
   /** Managed classes contained in the program, by id. */
@@ -1514,6 +1517,59 @@ export class Program extends DiagnosticEmitter {
         this.markModuleExports(file);
       }
     }
+
+    // Project-wide: a unit using `@stream` may not declare `@service`/`@remote` anywhere
+    // (spec 03 section 4.4 / 00 Appendix B1). Runs once after every source is initialized.
+    this.enforceStreamServiceExclusion();
+  }
+
+  /**
+   * Enforces the project-wide rule that a compilation unit using `@stream` cannot also
+   * declare `@service` or `@remote` anywhere (spec 03 section 4.4). The host loads one
+   * `hot.wasm` whose surface is either a stream node or an RPC service node, never both,
+   * so mixing them is a deploy-time ambiguity caught fail-closed at compile time. Reported
+   * at the offending `@service`/`@remote` site. Skipped in cold mode (neither flag is
+   * admitted there anyway).
+   */
+  private enforceStreamServiceExclusion(): void {
+    if (this.options.targetMode == "cold") return;
+    let hasStream = false;
+    let firstServiceOrRemote: DecoratorNode | null = null;
+    for (let si = 0, sk = this.sources.length; si < sk; ++si) {
+      let source = this.sources[si];
+      if (source.sourceKind != SourceKind.UserEntry && source.sourceKind != SourceKind.User) continue;
+      let statements = source.statements;
+      for (let j = 0, l = statements.length; j < l; ++j) {
+        let statement = statements[j];
+        if (statement.kind == NodeKind.ClassDeclaration) {
+          let classDeclaration = <ClassDeclaration>statement;
+          if (findDecorator(DecoratorKind.Stream, classDeclaration.decorators)) hasStream = true;
+          if (!firstServiceOrRemote) {
+            let serviceDecorator = findDecorator(DecoratorKind.Service, classDeclaration.decorators);
+            if (serviceDecorator) firstServiceOrRemote = serviceDecorator;
+          }
+          let members = classDeclaration.members;
+          for (let m = 0, mk = members.length; m < mk; ++m) {
+            let member = members[m];
+            if (member.kind == NodeKind.MethodDeclaration && !firstServiceOrRemote) {
+              let remoteDecorator = findDecorator(DecoratorKind.Remote, (<MethodDeclaration>member).decorators);
+              if (remoteDecorator) firstServiceOrRemote = remoteDecorator;
+            }
+          }
+        } else if (statement.kind == NodeKind.FunctionDeclaration) {
+          if (!firstServiceOrRemote) {
+            let remoteDecorator = findDecorator(DecoratorKind.Remote, (<FunctionDeclaration>statement).decorators);
+            if (remoteDecorator) firstServiceOrRemote = remoteDecorator;
+          }
+        }
+      }
+    }
+    if (hasStream && firstServiceOrRemote != null) {
+      this.error(
+        DiagnosticCode.A_project_using_stream_cannot_declare_service_or_remote,
+        firstServiceOrRemote.range
+      );
+    }
   }
 
   /** Processes overridden members by this class in a base class. */
@@ -1957,10 +2013,30 @@ export class Program extends DiagnosticEmitter {
         let flag = DecoratorFlags.fromKind(kind);
         if (flag) {
           if (!(acceptedFlags & flag)) {
-            this.error(
-              DiagnosticCode.Decorator_0_is_not_valid_here,
-              decorator.range, decorator.name.range.toString()
-            );
+            // Prefer a target-mode-specific message when the rejection is because the
+            // flag is forbidden in the active hot/cold artifact (spec 03 section 4.2),
+            // falling back to the generic "not valid here" for a structural misplacement.
+            let targetMode = this.options.targetMode;
+            if (targetMode == "hot" && (flag == DecoratorFlags.Daemon || flag == DecoratorFlags.Scheduled)) {
+              this.error(
+                DiagnosticCode.Decorator_0_is_not_valid_in_the_hot_request_artifact,
+                decorator.range, decorator.name.range.toString()
+              );
+            } else if (targetMode == "cold" && (
+              flag == DecoratorFlags.Rest || flag == DecoratorFlags.Route ||
+              flag == DecoratorFlags.Stream || flag == DecoratorFlags.StreamHook ||
+              flag == DecoratorFlags.Service || flag == DecoratorFlags.Remote
+            )) {
+              this.error(
+                DiagnosticCode.Decorator_0_is_not_valid_in_the_cold_daemon_artifact,
+                decorator.range, decorator.name.range.toString()
+              );
+            } else {
+              this.error(
+                DiagnosticCode.Decorator_0_is_not_valid_here,
+                decorator.range, decorator.name.range.toString()
+              );
+            }
           } else if (flags & flag) {
             this.error(
               DiagnosticCode.Duplicate_decorator,
@@ -2061,21 +2137,42 @@ export class Program extends DiagnosticEmitter {
     queuedImplements: ClassPrototype[]
   ): ClassPrototype | null {
     let name = declaration.name.text;
+    // Class-decorator gating is target-mode-conditioned (spec 03 section 4.2):
+    // hot/legacy admit @service/@rest/@stream; cold admits @daemon. @daemon is
+    // never admitted outside cold, so legacy (targetMode == null) rejects it too.
+    let targetMode = this.options.targetMode;
+    let classFlags =
+      DecoratorFlags.Global |
+      DecoratorFlags.Final |
+      DecoratorFlags.Unmanaged |
+      DecoratorFlags.Data |
+      DecoratorFlags.Database;
+    if (targetMode != "cold") {
+      classFlags |= DecoratorFlags.Service | DecoratorFlags.Rest | DecoratorFlags.Stream;
+    }
+    if (targetMode == "cold") {
+      classFlags |= DecoratorFlags.Daemon;
+    }
     let element = new ClassPrototype(
       name,
       parent,
       declaration,
-      this.checkDecorators(declaration.decorators,
-        DecoratorFlags.Global |
-        DecoratorFlags.Final |
-        DecoratorFlags.Unmanaged |
-        DecoratorFlags.Data |
-        DecoratorFlags.Service |
-        DecoratorFlags.Rest |
-        DecoratorFlags.Database
-      )
+      this.checkDecorators(declaration.decorators, classFlags)
     );
     if (!parent.add(name, element)) return null;
+
+    // At most one `@daemon` class per project (spec 03 section 4.3), mirroring the
+    // single-`@main` rule. `@daemon` is cold-only, so this only fires in a cold build.
+    if (element.hasDecorator(DecoratorFlags.Daemon)) {
+      if (this.daemonClass) {
+        this.error(
+          DiagnosticCode.Only_one_daemon_class_is_allowed_per_project,
+          declaration.range
+        );
+      } else {
+        this.daemonClass = element;
+      }
+    }
 
     // remember classes that implement interfaces
     let implementsTypes = declaration.implementsTypes;
@@ -2192,13 +2289,22 @@ export class Program extends DiagnosticEmitter {
   ): FunctionPrototype | null {
     let name = declaration.name.text;
     let isStatic = declaration.is(CommonFlags.Static);
+    let methodTargetMode = this.options.targetMode;
     let acceptedFlags = DecoratorFlags.Inline | DecoratorFlags.Unsafe;
     if (!declaration.is(CommonFlags.Generic)) {
       acceptedFlags |= DecoratorFlags.OperatorBinary
                     |  DecoratorFlags.OperatorPrefix
-                    |  DecoratorFlags.OperatorPostfix
-                    |  DecoratorFlags.Remote   // `@remote` exposes a `@service` method as an RPC endpoint
-                    |  DecoratorFlags.Route;    // `@route`/`@get`/... exposes a `@rest` method as an HTTP route
+                    |  DecoratorFlags.OperatorPostfix;
+      // `@remote`/`@route` are hot/legacy method decorators (cold rejects them, spec 03 4.2).
+      if (methodTargetMode != "cold") {
+        acceptedFlags |= DecoratorFlags.Remote   // `@remote` exposes a `@service` method as an RPC endpoint
+                      |  DecoratorFlags.Route    // `@route`/`@get`/... exposes a `@rest` method as an HTTP route
+                      |  DecoratorFlags.StreamHook; // `@connect`/`@message`/`@close`/`@disconnect` stream hooks
+      }
+      // `@scheduled` is a cold-only method decorator inside a `@daemon` class (spec 03 4.2/4.5).
+      if (methodTargetMode == "cold") {
+        acceptedFlags |= DecoratorFlags.Scheduled;
+      }
     }
     if (parent.is(CommonFlags.Ambient)) {
       acceptedFlags |= DecoratorFlags.External;
@@ -2216,6 +2322,16 @@ export class Program extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Not_implemented_0,
         declaration.range, `Builtin '${element.internalName}'`
+      );
+    }
+    // `@scheduled` is only valid on a method inside a `@daemon` class (spec 03 section 4.5).
+    // The flag is only admitted in cold mode, so this fires only when a cold-build class is
+    // not a `@daemon`; the dedicated message is clearer than a generic "not valid here".
+    if (element.hasDecorator(DecoratorFlags.Scheduled) && !parent.hasDecorator(DecoratorFlags.Daemon)) {
+      let scheduledDecorator = findDecorator(DecoratorKind.Scheduled, declaration.decorators);
+      this.error(
+        DiagnosticCode.Scheduled_is_only_valid_inside_a_daemon_class,
+        scheduledDecorator ? scheduledDecorator.range : declaration.range
       );
     }
     if (isStatic) { // global function
@@ -3025,7 +3141,15 @@ export enum DecoratorFlags {
   /** Is a `@collection` field within a `@database` class. */
   Collection = 1 << 19,
   /** Is a `@query`/`@action`/`@job`/`@derive`/`@admin` function (ToilDB kind). */
-  DbFunction = 1 << 20
+  DbFunction = 1 << 20,
+  /** Is a `@stream` protocol-handler class (L2/L3, hot artifact). */
+  Stream     = 1 << 21,
+  /** Is a `@daemon` L4 always-on entry class (cold artifact, at most one). */
+  Daemon     = 1 << 22,
+  /** Is a `@scheduled(spec)` task method inside a `@daemon` class. */
+  Scheduled  = 1 << 23,
+  /** Is a `@connect`/`@message`/`@close`/`@disconnect` stream lifecycle hook. */
+  StreamHook = 1 << 24
 }
 
 export namespace DecoratorFlags {
@@ -3066,6 +3190,13 @@ export namespace DecoratorFlags {
       case DecoratorKind.Job:
       case DecoratorKind.Derive:
       case DecoratorKind.Admin: return DecoratorFlags.DbFunction;
+      case DecoratorKind.Stream:     return DecoratorFlags.Stream;
+      case DecoratorKind.Daemon:     return DecoratorFlags.Daemon;
+      case DecoratorKind.Scheduled:  return DecoratorFlags.Scheduled;
+      case DecoratorKind.Connect:
+      case DecoratorKind.Message:
+      case DecoratorKind.Close:
+      case DecoratorKind.Disconnect: return DecoratorFlags.StreamHook;
       default: return DecoratorFlags.None;
     }
   }

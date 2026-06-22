@@ -212,5 +212,20 @@
   "Multiple consecutive numeric separators are not permitted.": 6189,
   "This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?": 6234,
   "'super' must be called before accessing 'this' in the constructor of a derived class.": 17009,
-  "'super' must be called before accessing a property of 'super' in the constructor of a derived class.": 17011
+  "'super' must be called before accessing a property of 'super' in the constructor of a derived class.": 17011,
+
+  "Decorator '{0}' is not valid in the hot request artifact.": 9000,
+  "Decorator '{0}' is not valid in the cold daemon artifact.": 9001,
+  "Only one '@daemon' class is allowed per project.": 9002,
+  "A project using '@stream' cannot declare '@service' or '@remote'.": 9003,
+  "Scheduled is only valid inside a '@daemon' class.": 9004,
+  "Stream hook '{0}' is only valid inside a '@stream' class.": 9005,
+  "Duplicate stream hook '{0}'.": 9006,
+  "Stream class '{0}' declares no lifecycle hooks.": 9007,
+  "Daemon class '{0}' declares no scheduled tasks.": 9008,
+  "Decorator '{0}' does not accept arguments.": 9009,
+  "Scheduled requires a single string schedule argument.": 9010,
+  "Scheduled spec '{0}' is not a valid interval or cron expression.": 9011,
+  "Scheduled handler '{0}' must take no arguments and return void.": 9012,
+  "Stream scope must be a StreamScope enum member.": 9013
 }

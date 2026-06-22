@@ -23,6 +23,11 @@
     "type": "s",
     "cliOnly": true
   },
+  "targetMode": {
+    "category": "General",
+    "description": "Toil compile surface mode: 'hot' (request/stream) or 'cold' (daemon). Omit for the legacy single-artifact build.",
+    "type": "s"
+  },
 
   "optimize": {
     "category": "Optimization",

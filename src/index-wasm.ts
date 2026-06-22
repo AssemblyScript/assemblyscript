@@ -142,6 +142,11 @@ export function setNoUnsafe(options: Options, noUnsafe: bool): void {
   options.noUnsafe = noUnsafe;
 }
 
+/** Sets the `targetMode` option ("hot", "cold", or null for legacy single-artifact). */
+export function setTargetMode(options: Options, targetMode: string | null): void {
+  options.targetMode = targetMode;
+}
+
 /** Sets the `lowMemoryLimit` option. */
 export function setLowMemoryLimit(options: Options, lowMemoryLimit: i32): void {
   options.lowMemoryLimit = lowMemoryLimit;
