@@ -2590,6 +2590,8 @@ export class Parser extends DiagnosticEmitter {
           this.injectRestController(declaration, decorators[i]);
         } else if (dk == DecoratorKind.Database) {
           this.injectDatabaseBinding(declaration);
+        } else if (dk == DecoratorKind.Daemon) {
+          this.injectDaemonHandler(declaration);
         }
       }
     }
@@ -2808,6 +2810,122 @@ export class Parser extends DiagnosticEmitter {
     }
     this.injectTopLevelStatements(declaration,
       "__toilRest.register((__q: __toilReq): __toilResp | null => new " + className + "().__tryRoute(__q));\n");
+  }
+
+  /**
+   * Synthesize the cold-artifact daemon entry for a `@daemon` class (spec 03
+   * sections 5.2 / 5.6 / 5.7, Reconciliation Part 2 cold exports). Mirrors
+   * `injectRestController`: it scans the class methods once (same source-order
+   * walk the `toildaemon.catalog` builder uses, so `task_index` <-> dispatch
+   * index stay in lockstep), synthesizes a `__tick(task)` dispatcher onto the
+   * class, and emits the two canonical cold module-level exports:
+   *
+   *   `daemon_start(): i32`     - runs once at cold-box boot; instantiates the
+   *                               `@daemon` class, holds the single box-lifetime
+   *                               instance, runs the optional `onStart()`, and
+   *                               returns 0 (negative = Part 3 error bridge).
+   *   `scheduled_tick(task_id: i32): i64` - dispatches `instance.__tick(task_id)`
+   *                               by switching on the catalog `task_index`;
+   *                               returns 0 (negative = Part 3 error bridge).
+   *
+   * Unlike `injectRestController`, the exports are self-contained (they do NOT
+   * route through an external runtime `Daemon` registry import). The injected
+   * `register(...)` in `injectRestController` is pruned when nothing reachable
+   * references it, but a top-level EXPORT that referenced an unresolved runtime
+   * import would be a hard compile error (TS6054), so the host-called exports
+   * are synthesized as plain top-level `export function`s and keep the one
+   * box-lifetime instance in a module-level singleton (doc 03 D1 / section 2:
+   * per-domain state lives in instance fields for the box lifetime).
+   *
+   * Fires diagnostic 9012 for a `@scheduled` method with a non-empty parameter
+   * list or a non-void return type, and the 9008 warning for a `@daemon` class
+   * with zero `@scheduled` tasks (a daemon may legitimately run only `onStart`).
+   */
+  private injectDaemonHandler(declaration: ClassDeclaration): void {
+    let className = declaration.name.text;
+    let members = declaration.members;
+
+    // Collect the `@scheduled` task method names in SOURCE DECLARATION ORDER,
+    // applying exactly the same filter the `toildaemon.catalog` builder uses
+    // (method member that carries `@scheduled`), so the i-th task here gets the
+    // same `task_index = i` the catalog emits. The catalog additionally skips a
+    // task whose spec is missing/unparseable, but those are HARD ERRORS (9010 /
+    // 9011) so no artifact is produced when they diverge; on any successful
+    // compile the two filters select the identical set in the identical order.
+    let dispatchArms = "";
+    let scheduledCount = 0;
+    let hasOnStart = false;
+    for (let i = 0, k = members.length; i < k; ++i) {
+      let member = members[i];
+      if (member.kind != NodeKind.MethodDeclaration) continue;
+      let method = <MethodDeclaration>member;
+      let methodName = method.name.text;
+      if (methodName == "onStart" && !this.hasDecoratorKind(method.decorators, DecoratorKind.Scheduled)) {
+        hasOnStart = true;
+      }
+      if (!this.hasDecoratorKind(method.decorators, DecoratorKind.Scheduled)) continue;
+      // 9012: a `@scheduled` handler takes no arguments and returns void (spec
+      // 03 section 3.5 / 4.5). A non-empty parameter list or a non-`void` return
+      // is rejected; the method is still added to the dispatcher so a single
+      // diagnostic per offending handler is emitted (the compile fails anyway).
+      if (!this.isVoidNoArgSignature(method.signature)) {
+        this.error(
+          DiagnosticCode.Scheduled_handler_0_must_take_no_arguments_and_return_void,
+          method.signature.range, methodName
+        );
+      }
+      let taskIndex = scheduledCount;
+      dispatchArms += (taskIndex == 0 ? "if" : "else if") +
+        " (__task == " + taskIndex.toString() + ") this." + methodName + "();";
+      ++scheduledCount;
+    }
+
+    // 9008: a `@daemon` with zero `@scheduled` tasks is a WARNING, not an error
+    // (a daemon may run only a long-lived `onStart` loop; spec 03 section 4.5).
+    if (scheduledCount == 0) {
+      this.warning(
+        DiagnosticCode.Daemon_class_0_declares_no_scheduled_tasks,
+        declaration.name.range, className
+      );
+    }
+
+    // Synthesize the per-task tick dispatcher onto the class. `task` indices are
+    // assigned in `@scheduled` source-declaration order and MUST equal the
+    // per-task `task_index` of `toildaemon.catalog` (section 7), so the host's
+    // `scheduled_tick(task_id)` maps the catalog index 1:1 onto `__tick`.
+    this.injectClassMember(declaration,
+      "__tick(__task: i32): void{" + dispatchArms + "}");
+
+    // The two canonical cold module-level exports (Reconciliation Part 2). They
+    // are self-contained (no external runtime import) and share the one
+    // box-lifetime instance via a module-level singleton. `onStart()` is invoked
+    // only when the class declares it (it is a convention method, not decorated).
+    let instVar = "__toilDaemonInstance";
+    let onStartCall = hasOnStart ? "__inst.onStart();" : "";
+    this.injectTopLevelStatements(declaration,
+      "// @ts-ignore: injected daemon entry (spec 03 section 5.2)\n" +
+      "let " + instVar + ": " + className + " | null = null;\n");
+    this.injectTopLevelStatements(declaration,
+      "export function daemon_start(): i32{" +
+      "let __inst = new " + className + "();" + instVar + " = __inst;" +
+      onStartCall + "return 0;}\n");
+    this.injectTopLevelStatements(declaration,
+      "export function scheduled_tick(__task_id: i32): i64{" +
+      "let __inst = " + instVar + ";" +
+      "if (__inst == null){__inst = new " + className + "();" + instVar + " = __inst;}" +
+      "__inst.__tick(__task_id);return 0;}\n");
+  }
+
+  /** True if a function signature takes no parameters and returns `void` (the
+   *  required `@scheduled` handler shape, spec 03 section 3.5). A missing or
+   *  non-`void`-named return type, or any parameter, is false. */
+  private isVoidNoArgSignature(signature: FunctionTypeNode): bool {
+    if (signature.parameters.length != 0) return false;
+    let returnType = signature.returnType;
+    if (!(returnType instanceof NamedTypeNode)) return false;
+    let named = <NamedTypeNode>returnType;
+    if (named.isNullable) return false;
+    return named.name.identifier.text == "void";
   }
 
   /**
