@@ -21,7 +21,10 @@ import {
 
 import {
   buildToilDbCatalog,
-  buildToilDbTypes
+  buildToilDbTypes,
+  buildToilSurface,
+  buildToilStreamCatalog,
+  buildToilDaemonCatalog
 } from "./dbcatalog";
 
 import {
@@ -819,6 +822,26 @@ export class Compiler extends DiagnosticEmitter {
       if (toildbTypes != null) {
         module.addCustomSection("toildb.types", toildbTypes);
       }
+    }
+
+    // Streams + daemon surface sections (spec 03 sections 6/7/8, Part 5 order:
+    // toildb.catalog -> toildb.types -> toil.surface -> stream|daemon catalog).
+    // `toil.surface` is emitted in EVERY mode INCLUDING legacy (targetMode null,
+    // stamped as a hot artifact, Part 5 / doc 02 AN-2), so the host has the
+    // target mode + surface flags + the hot/cold coherence hash.
+    let targetMode = this.options.targetMode;
+    let surface = buildToilSurface(program, targetMode);
+    if (surface != null) module.addCustomSection("toil.surface", surface);
+    if (targetMode != "cold") {
+      // hot or legacy: any @stream class -> toilstream.catalog.
+      let streamCat = buildToilStreamCatalog(program);
+      if (streamCat != null) module.addCustomSection("toilstream.catalog", streamCat);
+    }
+    if (targetMode == "cold") {
+      // cold: a @daemon class -> toildaemon.catalog (parses @scheduled specs,
+      // may fire diagnostics 9010/9011).
+      let daemonCat = buildToilDaemonCatalog(program);
+      if (daemonCat != null) module.addCustomSection("toildaemon.catalog", daemonCat);
     }
 
     return module;
