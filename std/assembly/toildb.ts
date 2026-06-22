@@ -21,7 +21,8 @@ import { DataWriter } from "data";
 export function __toildbResolve(name: string): u32 {
   const nb = Uint8Array.wrap(String.UTF8.encode(name));
   const out = new Uint8Array(4);
-  toildbHost.resolveCollection(nb.dataStart, nb.byteLength, out.dataStart);
+  const status = toildbHost.resolveCollection(nb.dataStart, nb.byteLength, out.dataStart);
+  if (status < 0) abort("ToilDB collection resolve failed", "toildb", 0, 0);
   return load<u32>(out.dataStart);
 }
 

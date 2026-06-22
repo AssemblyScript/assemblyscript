@@ -9,7 +9,7 @@
 //      (nothing imports them) and the weave INJECTS the cross-file imports into
 //      the value type's module. So each spec here is a value-type `app.ts` plus a
 //      separate `migrations/*.migration.ts`, compiled in an isolated dir.
-import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, rmSync, openSync, closeSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -35,17 +35,30 @@ function build(files, { expectFail = false } = {}) {
         writeFileSync(fp, files[rel]);
     }
     const out = join(tmp, "out.wasm");
-    const r = spawnSync("node", [bin, "app.ts", "-o", out, "--runtime", "stub"], {
+    const log = join(tmp, "compile.log");
+    let logFd = -1;
+    const stdio = expectFail
+        ? (logFd = openSync(log, "w"), ["ignore", logFd, logFd])
+        : ["ignore", "ignore", "inherit"];
+    const r = spawnSync("node", ["--enable-source-maps", bin, "app.ts", "-o", out, "--runtime", "stub"], {
         cwd: tmp,
-        stdio: ["ignore", "ignore", expectFail ? "pipe" : "inherit"],
+        stdio,
     });
+    if (logFd >= 0) closeSync(logFd);
+    const output = expectFail ? readFileSync(log, "utf8") : "";
     let buf = null;
     if (!expectFail) {
         if (r.status !== 0) { rmSync(tmp, { recursive: true, force: true }); fail("COMPILE FAILED"); }
         buf = readFileSync(out);
     }
     rmSync(tmp, { recursive: true, force: true });
-    return { status: r.status, stderr: String(r.stderr || ""), buf };
+    return {
+        status: r.status,
+        stderr: output,
+        error: r.error,
+        signal: r.signal,
+        buf,
+    };
 }
 
 // The value-type module shared by the migrating specs: current `User` (exported so
@@ -180,11 +193,11 @@ export class UserId { id: u64 = 0; }
 @data
 export class User { id: u64 = 0; }
 @database
-class App { @collection users: Documents<UserId, User>; }
+export class App { @collection users: Documents<UserId, User>; }
 export function probe(): u64 { return App.users.require(new UserId()).id; }
 `,
     "migrations/User.migration.ts": `
-import { User, UserId } from "../app";
+import { App, User, UserId } from "../app";
 @data
 export class UserV1 { id: u32 = 0; }
 @migrate
@@ -197,7 +210,7 @@ export function up(old: UserV1): User {
 }, { expectFail: true });
 if (bad.status === 0) fail("a @migrate that touches the database must be a compile error");
 if (!bad.stderr.includes("migrate"))
-    fail(`expected a @migrate diagnostic, got: ${bad.stderr.slice(0, 200)}`);
+    fail(`expected a @migrate diagnostic, got: status=${bad.status} signal=${bad.signal} error=${bad.error ?? ""} output=${bad.stderr.slice(0, 200)}`);
 
 // --- (d2) a @migrate OUTSIDE a migrations/*.migration.ts file must NOT compile ---
 const misplaced = build({
