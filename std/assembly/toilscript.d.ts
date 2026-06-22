@@ -85,6 +85,101 @@ declare function auth(target: Object, propertyKey: string | symbol, descriptor: 
 /** Declare the authenticated-user type (`@user class User { ... }`); enables `AuthService.getUser()`. */
 declare function user(target: Function): void;
 
+// --- L4 daemon (@daemon / @scheduled) + streams (@stream + lifecycle hooks),
+//     handled natively by the compiler; typed here so editors accept the bare forms ---
+
+/** Marks the single L4 daemon class: instantiated once on the global cold box,
+ *  its instance fields preserved for the box lifetime. At most one `@daemon` per
+ *  project. May declare a zero-arg `onStart(): void`, run once at boot. Cold
+ *  artifact only (a `@daemon` is a compile error in the hot/request build). */
+declare function daemon(target: Function): void;
+
+/** Declares a `@daemon` method as a scheduled task fired on each due tick. `spec`
+ *  is an interval (`"30s"` / `"5m"` / `"1h"` / `"1d"`) or a 5-field cron string
+ *  (e.g. `"15 9 * * 1-5"`, weekdays 9:15). The handler must be `(): void` (no parameters, no return). */
+declare function scheduled(spec: string): (target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>) => void;
+
+/** Stream placement scope for `@stream({ scope })`: `Regional` (0, L2) or
+ *  `Continental` (1, L3). Values match the runtime stream codec. */
+declare enum StreamScope { Regional, Continental }
+
+/** Optional `@stream` config object. Set `message` to a `@data` class to receive
+ *  decoded packets; omit it for the raw-bytes default (`StreamPacket`). */
+interface StreamOptions {
+  scope?: StreamScope;
+  message?: Function;
+  maxFrameBytes?: i32;
+  ingressRingBytes?: i32;
+}
+
+/** Marks a class as a stream protocol handler (runs on L2/L3 nodes). Its
+ *  `@connect`/`@message`/`@close`/`@disconnect`/`@channel` methods are the
+ *  lifecycle hooks. A project that uses `@stream` may NOT declare any `@service`
+ *  or `@remote` anywhere (compiler-enforced). Hot/stream artifact only. */
+declare function stream(target: Function): void;
+declare function stream(options: StreamOptions): (target: Function) => void;
+
+/** Stream lifecycle-hook method decorators on a `@stream` class. `@connect` runs
+ *  on open (returns `StreamOutbound`); `@message` handles an inbound packet;
+ *  `@close` is a graceful close; `@disconnect` is an abrupt transport loss;
+ *  `@channel` receives an opt-in fanned-out channel message. */
+declare function connect(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void;
+declare function message(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void;
+declare function close(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void;
+declare function disconnect(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void;
+declare function channel(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void;
+
+// Stream handler argument/return types. Ambient (like the bignum natives below):
+// the compiler/runtime provides the real classes; declared here so `@stream`
+// handler signatures type-check in any editor.
+
+/** The connection-open context passed to `@connect`. Read-only. */
+declare class StreamInbound {
+  get connectionId(): u64;
+  get streamName(): string;
+  get remoteIp(): string;
+  get path(): string;
+  header(name: string): string;
+}
+
+/** The accept/reject + optional first-frame decision returned by
+ *  `@connect` / `@message`. */
+declare class StreamOutbound {
+  static accept(): StreamOutbound;
+  static reply(body: Uint8Array): StreamOutbound;
+  static reject(reason: u16): StreamOutbound;
+  static empty(): StreamOutbound;
+}
+
+/** The close context passed to `@close` (a graceful or host-initiated close,
+ *  distinct from `@disconnect`). */
+declare class StreamConnectionEvent {
+  get connectionId(): u64;
+  get reason(): u16;
+  get durationMs(): u64;
+}
+
+/** The default (raw-bytes) `@message` parameter: a thin view over the host
+ *  ingress ring. The ring slot is reused after the hook returns, so copy via
+ *  `bytes()` to retain. */
+declare class StreamPacket {
+  get connectionId(): u64;
+  get length(): i32;
+  bytes(): Uint8Array;
+  at(i: i32): u8;
+}
+
+/** The fanned-out channel message passed to `@channel`: the channel name plus
+ *  the raw published bytes (no decode). */
+declare class StreamChannelMessage {
+  get connectionId(): u64;
+  get channelHash(): u32;
+  get channelName(): string;
+  get length(): i32;
+  bytes(): Uint8Array;
+  at(i: i32): u8;
+}
+
 // --- ToilDB (@database / @collection + the @query/@action/... function kinds),
 //     handled natively by the compiler; typed here so editors accept the bare forms ---
 
