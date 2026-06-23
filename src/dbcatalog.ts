@@ -575,6 +575,178 @@ export function buildToilDbTypes(program: Program): Uint8Array | null {
   return w.toBytes();
 }
 
+class RouteKindEntry {
+  method: i32 = 0;
+  kind: i32 = 0;
+  path: string = "";
+}
+
+class RouteInfo {
+  method: i32 = -1;
+  path: string = "";
+}
+
+/** Build the `toildb.route_kinds` section bytes, or `null` when no route needs
+ *  an extra runtime DB-policy clamp. The edge already derives the default kind
+ *  from the trusted HTTP method. This section only carries the stricter source
+ *  signal that the method clamp cannot infer: mutating-method routes explicitly
+ *  declared `@query`.
+ *
+ *  Wire format (LE):
+ *    u16 format_version = 1
+ *    u16 n_routes
+ *    per route:
+ *      u8 method          (same values as runtime Methods / request envelope)
+ *      u8 function_kind   (0 = Query)
+ *      str route_pattern  (same normalized pattern emitted into __toilMatch)
+ */
+export function buildToilDbRouteKinds(program: Program): Uint8Array | null {
+  let routes = new Array<RouteKindEntry>();
+  let sources = program.sources;
+  for (let i = 0, k = sources.length; i < k; ++i) {
+    let source = sources[i];
+    if (source.isLibrary) continue;
+    let statements = source.statements;
+    for (let j = 0, l = statements.length; j < l; ++j) {
+      let statement = statements[j];
+      if (statement.kind != NodeKind.ClassDeclaration) continue;
+      let cls = <ClassDeclaration>statement;
+      let rest = decoOf(cls.decorators, DecoratorKind.Rest);
+      if (rest == null) continue;
+      let prefix = restPrefixOf(rest);
+      let members = cls.members;
+      for (let m = 0, mn = members.length; m < mn; ++m) {
+        let member = members[m];
+        if (member.kind != NodeKind.MethodDeclaration) continue;
+        let method = <MethodDeclaration>member;
+        let routeDeco = routeDecoratorOf(method);
+        if (routeDeco == null) continue;
+        let info = routeInfoOf(routeDeco);
+        if (info == null || isSafeMethod(info.method)) continue;
+        if (explicitRequestKind(method.decorators) != 0) continue;
+        let entry = new RouteKindEntry();
+        entry.method = info.method;
+        entry.kind = 0; // FunctionKind::Query
+        entry.path = joinRoutePath(prefix, info.path);
+        routes.push(entry);
+      }
+    }
+  }
+  if (routes.length == 0) return null;
+  let w = new CatWriter();
+  w.u16(1);
+  w.u16(routes.length);
+  for (let i = 0, k = routes.length; i < k; ++i) {
+    w.u8(routes[i].method);
+    w.u8(routes[i].kind);
+    w.str(routes[i].path);
+  }
+  return w.toBytes();
+}
+
+function explicitRequestKind(decorators: DecoratorNode[] | null): i32 {
+  if (decorators == null) return -1;
+  for (let i = 0, k = decorators.length; i < k; ++i) {
+    let dk = decorators[i].decoratorKind;
+    if (dk == DecoratorKind.Query) return 0;
+    if (dk == DecoratorKind.Action) return 1;
+  }
+  return -1;
+}
+
+function isSafeMethod(method: i32): bool {
+  return method == 0 || method == 5 || method == 6;
+}
+
+function restPrefixOf(deco: DecoratorNode): string {
+  let args = deco.args;
+  if (args == null || args.length == 0) return "";
+  let a = args[0];
+  if (a instanceof StringLiteralExpression) {
+    let s = (<StringLiteralExpression>a).value.trim();
+    if (s.length == 0 || s == "/") return "";
+    if (!s.startsWith("/")) s = "/" + s;
+    return s.replace(/\/+$/, "");
+  }
+  return "";
+}
+
+function routeDecoratorOf(method: MethodDeclaration): DecoratorNode | null {
+  let decos = method.decorators;
+  if (decos == null) return null;
+  for (let i = 0, k = decos.length; i < k; ++i) {
+    switch (decos[i].decoratorKind) {
+      case DecoratorKind.Route:
+      case DecoratorKind.Get:
+      case DecoratorKind.Post:
+      case DecoratorKind.Put:
+      case DecoratorKind.Delete:
+      case DecoratorKind.Patch:
+      case DecoratorKind.Head:
+      case DecoratorKind.Options: return decos[i];
+    }
+  }
+  return null;
+}
+
+function routeInfoOf(deco: DecoratorNode): RouteInfo | null {
+  let out = new RouteInfo();
+  let dk = deco.decoratorKind;
+  if (dk == DecoratorKind.Route) {
+    let args = deco.args;
+    if (args == null || args.length == 0 || !(args[0] instanceof ObjectLiteralExpression)) return null;
+    let obj = <ObjectLiteralExpression>args[0];
+    let mv = objectField(obj, "method");
+    let pv = objectField(obj, "path");
+    if (mv == null || pv == null || !(pv instanceof StringLiteralExpression)) return null;
+    let mName = enumMember(mv);
+    if (mName == null) return null;
+    out.method = methodCode(mName);
+    out.path = (<StringLiteralExpression>pv).value;
+  } else {
+    out.method = verbMethodCode(dk);
+    let args = deco.args;
+    if (args == null || args.length == 0 || !(args[0] instanceof StringLiteralExpression)) return null;
+    out.path = (<StringLiteralExpression>args[0]).value;
+  }
+  return out.method >= 0 ? out : null;
+}
+
+function verbMethodCode(dk: DecoratorKind): i32 {
+  switch (dk) {
+    case DecoratorKind.Post: return 1;
+    case DecoratorKind.Put: return 2;
+    case DecoratorKind.Delete: return 3;
+    case DecoratorKind.Patch: return 4;
+    case DecoratorKind.Head: return 5;
+    case DecoratorKind.Options: return 6;
+    default: return 0;
+  }
+}
+
+function methodCode(name: string): i32 {
+  switch (name) {
+    case "GET": return 0;
+    case "POST": return 1;
+    case "PUT": return 2;
+    case "DELETE": return 3;
+    case "PATCH": return 4;
+    case "HEAD": return 5;
+    case "OPTIONS": return 6;
+    default: return -1;
+  }
+}
+
+function joinRoutePath(prefix: string, routePath: string): string {
+  let r = routePath.trim();
+  if (r.length == 0) r = "/";
+  if (!r.startsWith("/")) r = "/" + r;
+  if (r == "/") return prefix.length > 0 ? prefix : "/";
+  if (r.length > 1) r = r.replace(/\/+$/, "");
+  let full = prefix + r;
+  return full.length == 0 ? "/" : full;
+}
+
 // ===========================================================================
 // Streams + daemon metadata sections (spec 03 sections 6/7/8, Part 5 layouts).
 //

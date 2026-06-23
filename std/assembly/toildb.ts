@@ -471,7 +471,7 @@ export class Events<K, V> {
   }
 
   /// The newest `limit` events, newest first. Decodes each framed event into a
-  /// `V`. The host frames them as `u32 count` then per event `u32 len + bytes`.
+  /// `V`. The host frames them as `u32 count` then per event `u32 schema_version + u32 len + bytes`.
   latest(key: K, limit: i32): V[] {
     const kb = key.encode();
     const status = toildbHost.latest(this.__handle, kb.dataStart, kb.byteLength, limit);

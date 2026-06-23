@@ -22,6 +22,7 @@ import {
 import {
   buildToilDbCatalog,
   buildToilDbTypes,
+  buildToilDbRouteKinds,
   buildToilSurface,
   buildToilStreamCatalog,
   buildToilDaemonCatalog
@@ -833,6 +834,10 @@ export class Compiler extends DiagnosticEmitter {
     let surface = buildToilSurface(program, targetMode);
     if (surface != null) module.addCustomSection("toil.surface", surface);
     if (targetMode != "cold") {
+      // Request-path DB policy metadata. The edge uses this only to tighten
+      // mutating HTTP methods that the source declared read-only with `@query`.
+      let routeKinds = buildToilDbRouteKinds(program);
+      if (routeKinds != null) module.addCustomSection("toildb.route_kinds", routeKinds);
       // hot or legacy: any @stream class -> toilstream.catalog.
       let streamCat = buildToilStreamCatalog(program);
       if (streamCat != null) module.addCustomSection("toilstream.catalog", streamCat);

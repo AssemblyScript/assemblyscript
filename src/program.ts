@@ -2291,6 +2291,9 @@ export class Program extends DiagnosticEmitter {
     let isStatic = declaration.is(CommonFlags.Static);
     let methodTargetMode = this.options.targetMode;
     let acceptedFlags = DecoratorFlags.Inline | DecoratorFlags.Unsafe;
+    // ToilDB function kinds also apply to methods, including @rest route
+    // handlers. The parser's DB checker already walks MethodDeclaration bodies.
+    acceptedFlags |= DecoratorFlags.DbFunction;
     if (!declaration.is(CommonFlags.Generic)) {
       acceptedFlags |= DecoratorFlags.OperatorBinary
                     |  DecoratorFlags.OperatorPrefix

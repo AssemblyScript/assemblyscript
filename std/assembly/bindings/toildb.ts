@@ -35,8 +35,8 @@ export namespace toildbHost {
   export declare function get(handle: u32, keyPtr: usize, keyLen: i32): i32;
 
   // record bounded multi-get. Input at keysPtr: u32 count + per key (u32 len +
-  // bytes). Result (stashed): u32 count + per item u8 present (+ u32 len + bytes
-  // when present), in request order. Returns the stashed length | negative error.
+  // bytes). Result (stashed): u32 count + per item u8 present
+  // (+ u32 schema_version + u32 len + bytes when present), in request order.
   // @ts-ignore: decorator
   @external("env", "data.get_many")
   export declare function getMany(handle: u32, keysPtr: usize, keysLen: i32): i32;
@@ -148,7 +148,7 @@ export namespace toildbHost {
   ): i32;
 
   // membership.list(limit) -> framed-list length (stashed) | negative error.
-  // The blob is `u32 count` then per member `u32 len + bytes`.
+  // The blob is `u32 count` then per member `u32 schema_version + u32 len + bytes`.
   // @ts-ignore: decorator
   @external("env", "data.membership_list")
   export declare function membershipList(handle: u32, setPtr: usize, setLen: i32, limit: i32): i32;
@@ -216,7 +216,7 @@ export namespace toildbHost {
   ): i32;
 
   // events.latest(limit) -> framed-list length (stashed) | negative error.
-  // The blob is `u32 count` then per event `u32 len + bytes`, newest first.
+  // The blob is `u32 count` then per event `u32 schema_version + u32 len + bytes`, newest first.
   // @ts-ignore: decorator
   @external("env", "data.latest")
   export declare function latest(handle: u32, keyPtr: usize, keyLen: i32, limit: i32): i32;
