@@ -59,6 +59,9 @@
  (global $~lib/util/dtoa/MIN_FIXED_DEC_EXP i32 (i32.const -6))
  (global $~lib/util/dtoa/MAX_FIXED_DEC_EXP i32 (i32.const 20))
  (global $~lib/util/dtoa/FLOAT_EXP_OFFSET i32 (i32.const 150))
+ (global $~lib/util/dtoa/FLOAT_SIGNIFICAND_SIZE i32 (i32.const 23))
+ (global $~lib/util/dtoa/FLOAT_HIDDEN_BIT i64 (i64.const 8388608))
+ (global $~lib/util/dtoa/FLOAT_SIGNIFICAND_MASK i32 (i32.const 8388607))
  (global $~lib/util/dtoa/FLOAT_BIT i32 (i32.const 36))
  (global $~lib/util/dtoa/FLOAT_ONE_BIAS i64 (i64.const 17179869177))
  (global $~lib/util/dtoa/FLOAT_MAX_DIGITS10 i32 (i32.const 9))
@@ -2652,11 +2655,7 @@
   i32.shr_u
   local.set $binExp
   local.get $bits
-  i32.const 1
-  i32.const 23
-  i32.shl
-  i32.const 1
-  i32.sub
+  global.get $~lib/util/dtoa/FLOAT_SIGNIFICAND_MASK
   i32.and
   i64.extend_i32_u
   local.set $binSig
@@ -3078,9 +3077,7 @@
      local.set $buf
     end
     local.get $binSig|8
-    i64.const 1
-    i64.const 23
-    i64.shl
+    global.get $~lib/util/dtoa/FLOAT_HIDDEN_BIT
     i64.or
     local.set $binSig|38
     local.get $binExp|7

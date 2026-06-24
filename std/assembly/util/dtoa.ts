@@ -741,6 +741,9 @@ export function dtoa_buffered(buffer: usize, value: f64): u32 {
 ]);
 
 const FLOAT_EXP_OFFSET = 150; // exp_bias(127) + num_sig_bits(23)
+const FLOAT_SIGNIFICAND_SIZE = 23; // explicit mantissa bits
+const FLOAT_HIDDEN_BIT: u64 = (<u64>1) << FLOAT_SIGNIFICAND_SIZE; // implicit leading 1
+const FLOAT_SIGNIFICAND_MASK: u32 = (<u32>1 << FLOAT_SIGNIFICAND_SIZE) - 1;
 const FLOAT_BIT = 36; // xjb's fixed-point split for the f32 core
 // xjb's c1, ASCII offset stripped so the `one` digit comes out numeric.
 const FLOAT_ONE_BIAS: u64 = ((<u64>1) << (FLOAT_BIT - 2)) - 7;
@@ -933,7 +936,7 @@ export const FLOAT_MAX_DIGITS10 = 9;
       store<u16>(buf, 0x2d);
       buf += 2;
     }
-    toDecimalFloat(binSig | ((<u64>1) << 23), binExp, binSig != 0);
+    toDecimalFloat(binSig | FLOAT_HIDDEN_BIT, binExp, binSig != 0);
   }
 
   let hasLastDigit = gHasLastDigit;
@@ -957,7 +960,7 @@ export const FLOAT_MAX_DIGITS10 = 9;
 export function ftoa(value: f32): string {
   let bits = reinterpret<u32>(value);
   let exp = <i32>((bits << 1) >> 24);
-  let sig = <u64>(bits & (((<u32>1) << 23) - 1));
+  let sig = <u64>(bits & FLOAT_SIGNIFICAND_MASK);
 
   if (exp == 255) {
     if (sig != 0) return "NaN";
@@ -971,6 +974,6 @@ export function ftoa(value: f32): string {
 export function ftoa_buffered(buffer: usize, value: f32): u32 {
   let bits = reinterpret<u32>(value);
   let binExp = <i32>((bits << 1) >> 24);
-  let binSig = <u64>(bits & (((<u32>1) << 23) - 1));
+  let binSig = <u64>(bits & FLOAT_SIGNIFICAND_MASK);
   return <u32>((formatDecodedFloat(buffer, bits, binExp, binSig) - buffer) >> 1);
 }
