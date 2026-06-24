@@ -216,8 +216,8 @@ export let gDigits: i32 = 0;
   let x = i64x2.replace_lane(i64x2.splat(lo), 1, hi);
 
   let q = i64x2.shr_u(
-    i64x2.extmul_low_i32x4_u(packLo32(x),
-    i32x4.splat(<i32>DIV10K_SIG)), DIV10K_EXP
+    i64x2.extmul_low_i32x4_u(packLo32(x), i32x4.splat(<i32>DIV10K_SIG)),
+    DIV10K_EXP
   );
   let sub = i64x2.extmul_low_i32x4_u(packLo32(q), i32x4.splat(-10000));
   let y = i64x2.add(x, sub);
