@@ -25,18 +25,18 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "binaryen": "130.0.0-nightly.20260609",
+    "binaryen": "130.0.0-nightly.20260702",
     "long": "^5.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^25.6.0",
+    "@types/node": "^26.1.0",
     "as-float": "^1.0.1",
     "diff": "^9.0.0",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "eslint": "^10.2.1",
     "glob": "^13.0.6",
-    "globals": "^17.5.0",
+    "globals": "^17.7.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.0"
   },
