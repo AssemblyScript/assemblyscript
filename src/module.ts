@@ -221,7 +221,8 @@ export const enum FeatureFlags {
   CustomPageSizes = 8388608 /* _BinaryenFeatureCustomPageSizes */,
   Multibyte = 16777216 /* _BinaryenFeatureMultibyte */,
   WideArithmetic = 33554432 /* _BinaryenFeatureWideArithmetic */,
-  All = 67108863 /* _BinaryenFeatureAll */
+  CompactImports = 67108864 /* _BinaryenFeatureCompactImports */,
+  All = 134217727 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. See wasm-delegations.def in Binaryen. */
