@@ -332,17 +332,15 @@ function invalidDate(millis: i64): bool {
 // Paper: https://arxiv.org/pdf/2102.06959.pdf
 function dateFromEpoch(ms: i64): i32 {
   let da = (<i32>floorDiv(ms, MILLIS_PER_DAY) * 4 + EPOCH_OFFSET * 4) | 3;
-  let q0 = floorDiv(da, DAYS_PER_EPOCH); // [0, 146096]
+  let q0 = floorDiv(da, DAYS_PER_EPOCH);  // [0, 146096]
   let r1 = <u32>da - q0 * DAYS_PER_EPOCH;
   let u1 = u64(r1 | 3) * 2939745;
   let dm1 = <u32>u1 / 11758980;
   let n1 = 2141 * dm1 + 197913;
   let year = 100 * q0 + i32(u1 >>> 32);
-  let mo = n1 >>> 16;
-  _day = (n1 & 0xFFFF) / 2141 + 1; // [1, 31]
-  if (dm1 >= 306) { mo -= 12; ++year; }
-  _month = mo; // [1, 12]
-  return year;
+  _day = (n1 & 0xFFFF) / 2141 + 1;              // [1, 31]
+  _month = (n1 >>> 16) - (dm1 >= 306 ? 12 : 0); // [1, 12]
+  return year + (dm1 >= 306 ?  1 : 0);
 }
 
 // http://howardhinnant.github.io/date_algorithms.html#days_from_civil

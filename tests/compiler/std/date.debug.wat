@@ -309,7 +309,6 @@
   (local $dm1 i32)
   (local $n1 i32)
   (local $year i32)
-  (local $mo i32)
   block $~lib/date/floorDiv<i64>|inlined.0 (result i64)
    local.get $ms
    local.set $a
@@ -398,10 +397,6 @@
   i32.add
   local.set $year
   local.get $n1
-  i32.const 16
-  i32.shr_u
-  local.set $mo
-  local.get $n1
   i32.const 65535
   i32.and
   i32.const 2141
@@ -409,22 +404,29 @@
   i32.const 1
   i32.add
   global.set $~lib/date/_day
+  local.get $n1
+  i32.const 16
+  i32.shr_u
   local.get $dm1
   i32.const 306
   i32.ge_u
-  if
-   local.get $mo
+  if (result i32)
    i32.const 12
-   i32.sub
-   local.set $mo
-   local.get $year
-   i32.const 1
-   i32.add
-   local.set $year
+  else
+   i32.const 0
   end
-  local.get $mo
+  i32.sub
   global.set $~lib/date/_month
   local.get $year
+  local.get $dm1
+  i32.const 306
+  i32.ge_u
+  if (result i32)
+   i32.const 1
+  else
+   i32.const 0
+  end
+  i32.add
   return
  )
  (func $~lib/date/Date#set:year (param $this i32) (param $year i32)
