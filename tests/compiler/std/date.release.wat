@@ -317,7 +317,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 131
+   i32.const 130
    i32.const 35
    call $~lib/builtins/abort
    unreachable
@@ -529,7 +529,7 @@
    if
     i32.const 1056
     i32.const 1104
-    i32.const 50
+    i32.const 49
     i32.const 33
     call $~lib/builtins/abort
     unreachable
@@ -666,7 +666,7 @@
         if
          i32.const 1056
          i32.const 1104
-         i32.const 74
+         i32.const 73
          i32.const 13
          call $~lib/builtins/abort
          unreachable
@@ -798,7 +798,7 @@
     if
      i32.const 1056
      i32.const 1104
-     i32.const 96
+     i32.const 95
      i32.const 21
      call $~lib/builtins/abort
      unreachable
@@ -2820,7 +2820,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 143
+   i32.const 142
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -4367,8 +4367,8 @@
   i32.load
   local.tee $6
   local.get $4
-  i32.const 3
-  i32.lt_s
+  i32.const 2
+  i32.le_s
   i32.sub
   local.tee $7
   i32.const 2
@@ -4696,8 +4696,8 @@
   i32.load
   local.tee $0
   local.get $1
-  i32.const 3
-  i32.lt_s
+  i32.const 2
+  i32.le_s
   i32.sub
   local.tee $6
   i32.const 2
@@ -8350,8 +8350,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -8424,8 +8424,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -8498,8 +8498,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -8572,8 +8572,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -8646,8 +8646,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -8720,8 +8720,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -8794,8 +8794,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -8868,8 +8868,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -8940,8 +8940,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -9014,8 +9014,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -9088,8 +9088,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -9162,8 +9162,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -9236,8 +9236,8 @@
    local.get $0
    i32.store offset=8
    local.get $3
-   i32.const 3
-   i32.lt_s
+   i32.const 2
+   i32.le_s
    i32.sub
    local.tee $2
    i32.const 2
@@ -10907,7 +10907,7 @@
   end
   i32.const 1056
   i32.const 1104
-  i32.const 36
+  i32.const 35
   i32.const 26
   call $~lib/builtins/abort
   unreachable

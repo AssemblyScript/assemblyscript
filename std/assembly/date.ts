@@ -3,15 +3,14 @@ import { Date as Date_binding } from "./bindings/dom";
 
 // @ts-ignore: decorator
 @inline const
+  MILLIS_LIMIT      = 8640000000000000,
   MILLIS_PER_DAY    = 1000 * 60 * 60 * 24,
   MILLIS_PER_HOUR   = 1000 * 60 * 60,
   MILLIS_PER_MINUTE = 1000 * 60,
   MILLIS_PER_SECOND = 1000,
-
-  YEARS_PER_EPOCH = 400,
-  DAYS_PER_EPOCH = 146097,
-  EPOCH_OFFSET = 719468, // Jan 1, 1970
-  MILLIS_LIMIT = 8640000000000000;
+  YEARS_PER_EPOCH   = 400,
+  DAYS_PER_EPOCH    = 146097, // 400 * 365 + 400 / 4 - 400 / 100 + 1
+  EPOCH_OFFSET      = 719468; // Jan 1, 1970
 
 // ymdFromEpochDays returns values via globals to avoid allocations
 // @ts-ignore: decorator
@@ -347,11 +346,11 @@ function dateFromEpoch(ms: i64): i32 {
 }
 
 // http://howardhinnant.github.io/date_algorithms.html#days_from_civil
-function daysSinceEpoch(y: i32, m: i32, d: i32): i64 {
-  y -= i32(m <= 2);
-  let era = <u32>floorDiv(y, YEARS_PER_EPOCH);
-  let yoe = <u32>y - era * YEARS_PER_EPOCH; // [0, 399]
-  let doy = <u32>(153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1; // [0, 365]
+function daysSinceEpoch(year: i32, month: i32, day: i32): i64 {
+  year -= i32(month <= 2);
+  let era = <u32>floorDiv(year, YEARS_PER_EPOCH);
+  let yoe = <u32>year - era * YEARS_PER_EPOCH; // [0, 399]
+  let doy = <u32>(153 * (month + (month > 2 ? -3 : 9)) + 2) / 5 + day - 1; // [0, 365]
   let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy; // [0, 146096]
   return <i64><i32>(era * 146097 + doe - EPOCH_OFFSET);
 }
@@ -360,9 +359,9 @@ function daysSinceEpoch(y: i32, m: i32, d: i32): i64 {
 function dayOfWeek(year: i32, month: i32, day: i32): i32 {
   const tab = memory.data<u8>([0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4]);
 
-  year -= i32(month < 3);
-  const century = floorDiv(year >> 2, 100 >> 2);
-  year += (year >> 2) - century + (century >> 2);
+  year -= i32(month <= 2);
+  const cent = floorDiv(year >> 2, 100 >> 2);
+  year += (year >> 2) - cent + (cent >> 2);
   month = <i32>load<u8>(tab + month - 1);
   return euclidRem(year + month + day, 7);
 }

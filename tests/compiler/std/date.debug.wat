@@ -171,21 +171,21 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $~lib/date/daysSinceEpoch (param $y i32) (param $m i32) (param $d i32) (result i64)
+ (func $~lib/date/daysSinceEpoch (param $year i32) (param $month i32) (param $day i32) (result i64)
   (local $a i32)
   (local $b i32)
   (local $era i32)
   (local $yoe i32)
   (local $doy i32)
   (local $doe i32)
-  local.get $y
-  local.get $m
+  local.get $year
+  local.get $month
   i32.const 2
   i32.le_s
   i32.sub
-  local.set $y
+  local.set $year
   block $~lib/date/floorDiv<i32>|inlined.0 (result i32)
-   local.get $y
+   local.get $year
    local.set $a
    i32.const 400
    local.set $b
@@ -206,15 +206,15 @@
    br $~lib/date/floorDiv<i32>|inlined.0
   end
   local.set $era
-  local.get $y
+  local.get $year
   local.get $era
   i32.const 400
   i32.mul
   i32.sub
   local.set $yoe
   i32.const 153
-  local.get $m
-  local.get $m
+  local.get $month
+  local.get $month
   i32.const 2
   i32.gt_s
   if (result i32)
@@ -228,7 +228,7 @@
   i32.add
   i32.const 5
   i32.div_u
-  local.get $d
+  local.get $day
   i32.add
   i32.const 1
   i32.sub
@@ -2705,14 +2705,14 @@
  (func $~lib/date/dayOfWeek (param $year i32) (param $month i32) (param $day i32) (result i32)
   (local $a i32)
   (local $b i32)
-  (local $century i32)
+  (local $cent i32)
   (local $a|6 i32)
   (local $b|7 i32)
   (local $m i32)
   local.get $year
   local.get $month
-  i32.const 3
-  i32.lt_s
+  i32.const 2
+  i32.le_s
   i32.sub
   local.set $year
   block $~lib/date/floorDiv<i32>|inlined.2 (result i32)
@@ -2740,14 +2740,14 @@
    i32.div_s
    br $~lib/date/floorDiv<i32>|inlined.2
   end
-  local.set $century
+  local.set $cent
   local.get $year
   local.get $year
   i32.const 2
   i32.shr_s
-  local.get $century
+  local.get $cent
   i32.sub
-  local.get $century
+  local.get $cent
   i32.const 2
   i32.shr_s
   i32.add
@@ -3853,7 +3853,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 131
+   i32.const 130
    i32.const 35
    call $~lib/builtins/abort
    unreachable
@@ -3907,7 +3907,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 143
+   i32.const 142
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -7971,7 +7971,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 50
+   i32.const 49
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -8100,7 +8100,7 @@
         if
          i32.const 32
          i32.const 80
-         i32.const 74
+         i32.const 73
          i32.const 13
          call $~lib/builtins/abort
          unreachable
@@ -8283,7 +8283,7 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 96
+    i32.const 95
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -8810,7 +8810,7 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 36
+    i32.const 35
     i32.const 26
     call $~lib/builtins/abort
     unreachable
@@ -8876,7 +8876,7 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 36
+    i32.const 35
     i32.const 26
     call $~lib/builtins/abort
     unreachable
@@ -8942,7 +8942,7 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 36
+    i32.const 35
     i32.const 26
     call $~lib/builtins/abort
     unreachable
@@ -9008,7 +9008,7 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 36
+    i32.const 35
     i32.const 26
     call $~lib/builtins/abort
     unreachable
@@ -9074,7 +9074,7 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 36
+    i32.const 35
     i32.const 26
     call $~lib/builtins/abort
     unreachable
@@ -9140,7 +9140,7 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 36
+    i32.const 35
     i32.const 26
     call $~lib/builtins/abort
     unreachable
@@ -9206,7 +9206,7 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 36
+    i32.const 35
     i32.const 26
     call $~lib/builtins/abort
     unreachable
