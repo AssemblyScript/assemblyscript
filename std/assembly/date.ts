@@ -362,7 +362,7 @@ function dayOfWeek(year: i32, month: i32, day: i32): i32 {
 
   year -= i32(month < 3);
   const century = floorDiv(year >> 2, 100 >> 2);
-  year += (year >> 2) + (century >> 2) - century;
+  year += (year >> 2) - century + (century >> 2);
   month = <i32>load<u8>(tab + month - 1);
   return euclidRem(year + month + day, 7);
 }

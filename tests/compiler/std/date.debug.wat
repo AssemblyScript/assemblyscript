@@ -2746,11 +2746,11 @@
   i32.const 2
   i32.shr_s
   local.get $century
+  i32.sub
+  local.get $century
   i32.const 2
   i32.shr_s
   i32.add
-  local.get $century
-  i32.sub
   i32.add
   local.set $year
   i32.const 556
