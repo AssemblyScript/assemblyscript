@@ -4,9 +4,9 @@
  (type $2 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memory/ptr (mut i32) (i32.const 80))
- (global $~lib/memory/__data_end i32 (i32.const 212))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32980))
- (global $~lib/memory/__heap_base i32 (i32.const 32980))
+ (global $~lib/memory/__data_end i32 (i32.const 220))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32988))
+ (global $~lib/memory/__heap_base i32 (i32.const 32988))
  (memory $0 1)
  (data $0 (i32.const 16) "\00\00\00\00")
  (data $1 (i32.const 28) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
@@ -33,6 +33,8 @@
  (data $22 (i32.const 206) "\01")
  (data $23 (i32.const 207) "\01")
  (data $24 (i32.const 208) "\01")
+ (data $25 (i32.const 209) ":)\00")
+ (data $26 (i32.const 212) "\f0\9f\90\8c\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -471,6 +473,126 @@
    i32.const 0
    i32.const 48
    i32.const 61
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 209
+  global.set $memory/ptr
+  global.get $memory/ptr
+  i32.load8_u
+  i32.const 58
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 66
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.const 1
+  i32.add
+  i32.load8_u
+  i32.const 41
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 67
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.const 2
+  i32.add
+  i32.load8_u
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 68
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 212
+  global.set $memory/ptr
+  global.get $memory/ptr
+  i32.load8_u
+  i32.const 240
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 71
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.const 1
+  i32.add
+  i32.load8_u
+  i32.const 159
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 72
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.const 2
+  i32.add
+  i32.load8_u
+  i32.const 144
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 73
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.const 3
+  i32.add
+  i32.load8_u
+  i32.const 140
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 74
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.const 4
+  i32.add
+  i32.load8_u
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 75
    i32.const 1
    call $~lib/builtins/abort
    unreachable

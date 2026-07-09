@@ -76,6 +76,11 @@ export namespace memory {
   // @ts-ignore: decorator
   @builtin
   export declare function data<T>(size: T, align?: i32): usize;
+
+  /** Gets a pointer to a null-terminated UTF8 constant in static memory. */
+  // @ts-ignore: decorator
+  @builtin
+  export declare function dataUTF8(str : string): usize;
 }
 
 // @ts-ignore: decorator
