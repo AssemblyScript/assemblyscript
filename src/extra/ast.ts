@@ -837,6 +837,7 @@ export class ASTBuilder {
     let sb = this.sb;
     let statements = node.statements;
     let numStatements = statements.length;
+    this.visitLabel(node.label);
     if (numStatements) {
       sb.push("{\n");
       let indentLevel = ++this.indentLevel;
@@ -849,6 +850,15 @@ export class ASTBuilder {
     } else {
       sb.push("{}");
     }
+  }
+
+  private visitLabel(label: IdentifierExpression | null) {
+    if (!label) return;
+
+    let sb = this.sb;
+    this.visitIdentifierExpression(label);
+    sb.push(":\n");
+    indent(sb, this.indentLevel);
   }
 
   visitBreakStatement(node: BreakStatement): void {
@@ -944,6 +954,7 @@ export class ASTBuilder {
 
   visitDoStatement(node: DoStatement): void {
     let sb = this.sb;
+    this.visitLabel(node.label);
     sb.push("do ");
     this.visitNode(node.body);
     if (node.body.kind == NodeKind.Block) {
@@ -1106,6 +1117,7 @@ export class ASTBuilder {
 
   visitForStatement(node: ForStatement): void {
     let sb = this.sb;
+    this.visitLabel(node.label);
     sb.push("for (");
     let initializer = node.initializer;
     if (initializer) {
@@ -1131,6 +1143,7 @@ export class ASTBuilder {
 
   visitForOfStatement(node: ForOfStatement): void {
     let sb = this.sb;
+    this.visitLabel(node.label);
     sb.push("for (");
     this.visitNode(node.variable);
     sb.push(" of ");
@@ -1241,6 +1254,7 @@ export class ASTBuilder {
 
   visitIfStatement(node: IfStatement): void {
     let sb = this.sb;
+    this.visitLabel(node.label);
     sb.push("if (");
     this.visitNode(node.condition);
     sb.push(") ");
@@ -1433,6 +1447,7 @@ export class ASTBuilder {
 
   visitSwitchStatement(node: SwitchStatement): void {
     let sb = this.sb;
+    this.visitLabel(node.label);
     sb.push("switch (");
     this.visitNode(node.condition);
     sb.push(") {\n");
@@ -1454,6 +1469,7 @@ export class ASTBuilder {
 
   visitTryStatement(node: TryStatement): void {
     let sb = this.sb;
+    this.visitLabel(node.label);
     sb.push("try {\n");
     let indentLevel = ++this.indentLevel;
     let bodyStatements = node.bodyStatements;
@@ -1564,6 +1580,7 @@ export class ASTBuilder {
 
   visitWhileStatement(node: WhileStatement): void {
     let sb = this.sb;
+    this.visitLabel(node.label);
     sb.push("while (");
     this.visitNode(node.condition);
     let body = node.body;
