@@ -3,7 +3,6 @@
     "--noUnsafe"
   ],
   "stderr": [
-    "AS212: Decorator '@unsafe' is not valid here.",
     "AS101: Operation is unsafe.", "f1();",
     "AS101: Operation is unsafe.", "f2();",
     "AS101: Operation is unsafe.", "= new Foo();",
