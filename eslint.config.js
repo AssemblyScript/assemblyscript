@@ -25,6 +25,10 @@ export default defineConfig([
 
     // FIXME: Tagged template literal tests with invalid escapes
     "tests/compiler/templateliteral.ts",
+
+    // Decorators on `this` are not allowed typically in TypeScript, but this
+    // fixture exercises that AS-only syntax and is validated by transform tests.
+    "tests/transform/parameter-decorators.ts",
   ]),
 
   js.configs.recommended,
