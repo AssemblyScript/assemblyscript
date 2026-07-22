@@ -33,18 +33,54 @@ import { utf8 } from "../util/text.js";
 import * as optionsUtil from "../util/options.js";
 import * as generated from "./index.generated.js";
 
-import binaryen from "../lib/binaryen.js";
-import * as assemblyscriptJS from "assemblyscript";
+let assemblyscript = null;
+let binaryen = null;
+let binaryenModule = "../lib/binaryen.js";
 
-// Use the TS->JS variant by default
-let assemblyscript = assemblyscriptJS;
+async function loadAssemblyScript(wasmPath) {
+  if (assemblyscript) return assemblyscript;
+  return assemblyscript = wasmPath == null
+    ? await importWithInstantiateStreamingFallback("assemblyscript")
+    : await importWithInstantiateStreamingFallback(new URL(wasmPath, url.pathToFileURL(process.cwd() + "/")));
+}
 
-// Use the AS->Wasm variant as an option (experimental)
-const wasmPos = process.argv.indexOf("--wasm");
-if (~wasmPos) {
-  const wasmPath = String(process.argv[wasmPos + 1]);
-  process.argv.splice(wasmPos, 2);
-  assemblyscript = await import(new URL(wasmPath, url.pathToFileURL(process.cwd() + "/")));
+async function loadBinaryen() {
+  if (binaryen) return binaryen;
+  return binaryen = (await importWithInstantiateStreamingFallback(binaryenModule)).default;
+}
+
+async function importWithInstantiateStreamingFallback(specifier) {
+  const restoreInstantiateStreaming = installInstantiateStreamingFallback();
+  try {
+    return await import(specifier);
+  } finally {
+    if (restoreInstantiateStreaming) restoreInstantiateStreaming();
+  }
+}
+
+function installInstantiateStreamingFallback() {
+  const instantiateStreaming = WebAssembly.instantiateStreaming;
+  if (typeof instantiateStreaming !== "function") return null;
+  async function instantiateStreamingFallback(source, imports) {
+    const response = await source;
+    try {
+      const streamingSource = response && typeof response.clone === "function"
+        ? response.clone()
+        : response;
+      return await instantiateStreaming.call(WebAssembly, streamingSource, imports);
+    } catch (error) {
+      if (response && typeof response.arrayBuffer === "function") {
+        return WebAssembly.instantiate(await response.arrayBuffer(), imports);
+      }
+      throw error;
+    }
+  }
+  WebAssembly.instantiateStreaming = instantiateStreamingFallback;
+  return () => {
+    if (WebAssembly.instantiateStreaming === instantiateStreamingFallback) {
+      WebAssembly.instantiateStreaming = instantiateStreaming;
+    }
+  };
 }
 
 const require = module.createRequire(import.meta.url);
@@ -133,6 +169,15 @@ export async function compileString(sources, config = {}) {
 export async function main(argv, options) {
   if (!Array.isArray(argv)) argv = configToArguments(argv);
   if (!options) options = {};
+
+  // Use the AS->Wasm compiler variant as an option (experimental)
+  let wasmPath = null;
+  const wasmPos = argv.indexOf("--wasm");
+  if (~wasmPos) {
+    wasmPath = String(argv[wasmPos + 1]);
+    argv = argv.slice();
+    argv.splice(wasmPos, 2);
+  }
 
   const stats = options.stats || new Stats();
   const statsBegin = stats.begin();
@@ -288,6 +333,8 @@ export async function main(argv, options) {
     }, null, 2));
     return prepareResult(null);
   }
+
+  const assemblyscript = await loadAssemblyScript(wasmPath);
 
   // create a unique set of values
   function unique(values) {
@@ -446,6 +493,7 @@ export async function main(argv, options) {
 
   // Fix up the prototype of the transforms’ constructors and instantiate them.
   try {
+    const binaryen = transforms.length ? await loadBinaryen() : null;
     transforms = transforms.map(transform => {
       if (typeof transform === "function") {
         Object.assign(transform.prototype, {
@@ -736,6 +784,7 @@ export async function main(argv, options) {
     stats.compileTime += stats.end(begin);
   }
   // From here on we are going to use Binaryen.js
+  const binaryen = await loadBinaryen();
   binaryenModule = binaryen.wrapModule(
     typeof module === "number" || module instanceof Number
       ? assemblyscript.getBinaryenModuleRef(module)

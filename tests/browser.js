@@ -1,4 +1,21 @@
-import * as asc from "../dist/asc.js";
+import fs from "node:fs";
+
+const ascSource = fs.readFileSync(new URL("../dist/asc.js", import.meta.url), "utf8");
+if (/\bfrom\s*["']binaryen["']/.test(ascSource)) {
+  throw Error("dist/asc.js must not statically import binaryen");
+}
+
+const wasmCompile = WebAssembly.compile;
+const wasmCompileStreaming = WebAssembly.compileStreaming;
+
+WebAssembly.compile = () => {
+  throw Error("unexpected WebAssembly.compile");
+};
+WebAssembly.compileStreaming = () => {
+  throw Error("unexpected WebAssembly.compileStreaming");
+};
+
+const asc = await import("../dist/asc.js");
 
 if (typeof asc.definitionFiles.assembly !== "string") throw Error("missing bundled assembly.d.ts");
 if (typeof asc.definitionFiles.portable !== "string") throw Error("missing bundled portable.d.ts");
@@ -15,6 +32,9 @@ console.log("# asc --version");
   process.stdout.write(stderr.toString());
 }
 
+WebAssembly.compile = wasmCompile;
+WebAssembly.compileStreaming = wasmCompileStreaming;
+
 console.log("\n# asc --help");
 {
   const { stdout, stderr } = await asc.main([ "--help" ]);
@@ -23,6 +43,27 @@ console.log("\n# asc --help");
   process.stdout.write(stdout.toString());
   console.log(">>> STDERR >>>");
   process.stdout.write(stderr.toString());
+}
+
+console.log("\n# asc.compileString with broken instantiateStreaming");
+{
+  const wasmInstantiateStreaming = WebAssembly.instantiateStreaming;
+  WebAssembly.instantiateStreaming = () => {
+    throw Error("unexpected WebAssembly.instantiateStreaming");
+  };
+  try {
+    const { error, stdout, stderr, text, binary } = await asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, exportTable: true, stats: true });
+    if (error) throw error;
+    console.log(">>> .stdout >>>");
+    process.stdout.write(stdout.toString());
+    console.log(">>> .stderr >>>");
+    process.stdout.write(stderr.toString());
+    console.log(">>> .text >>>");
+    process.stdout.write(text);
+    console.log(">>> .binary >>> " + binary.length + " bytes");
+  } finally {
+    WebAssembly.instantiateStreaming = wasmInstantiateStreaming;
+  }
 }
 
 console.log("\n# asc index.ts --textFile");
