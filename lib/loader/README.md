@@ -7,7 +7,7 @@ A tiny module loader that makes working with AssemblyScript modules as convenien
 ## Example
 
 ```ts
-import loader from "@assemblyscript/loader"; // or require
+import loader from "@assemblyscript/loader";
 loader.instantiate(
   // Binary to instantiate
   fetch("optimized.wasm"), // or fs.readFileSync
@@ -33,11 +33,16 @@ npm install --save @assemblyscript/loader
 On the web:
 
 ```html
-<!-- ESM -->
 <script type="module" src="https://cdn.jsdelivr.net/npm/@assemblyscript/loader/index.js"></script>
-<!-- UMD -->
-<script src="https://cdn.jsdelivr.net/npm/@assemblyscript/loader/umd/index.js"></script>
 ```
+
+The package is ESM-only. From CommonJS, load it with a dynamic import:
+
+```js
+const loader = (await import("@assemblyscript/loader")).default;
+```
+
+Node.js 20.19+ and 22.12+ also accept a plain `require` of an ES module.
 
 ## Usage
 

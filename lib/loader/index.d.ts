@@ -122,3 +122,12 @@ export declare function demangle<T extends Record<string,unknown>>(
   exports: Record<string,unknown>,
   extendedExports?: Record<string,unknown>
 ): T;
+
+declare const _default: {
+  instantiate: typeof instantiate,
+  instantiateSync: typeof instantiateSync,
+  instantiateStreaming: typeof instantiateStreaming,
+  demangle: typeof demangle
+};
+
+export default _default;
