@@ -8,6 +8,8 @@ Instructions
 Compile your module that uses the full or half runtime with `-use ASC_RTRACE=1 --exportStart _initialize` and include an instance of this module as the import named `rtrace`.
 
 ```js
+import { Rtrace } from "@assemblyscript/rtrace";
+
 const rtrace = new Rtrace({
   onerror(err, info) {
     // handle error

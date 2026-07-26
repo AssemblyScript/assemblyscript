@@ -38,11 +38,9 @@ jobs:
           npm test
           cd lib/loader
           npm version "$VERSION" --no-git-tag-version
-          npm run build
           npm test
           cd ../rtrace
           npm version "$VERSION" --no-git-tag-version
-          npm run build
           npm test
           cd ../..
         fi

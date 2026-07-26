@@ -1,43 +1,43 @@
-<script>var exports = {};</script>
-<script src="../index.js"></script>
-<script>
+<script type="module">
+import loader from "../index.js";
+
 function assert(c) {
   if (!c) throw Error("assertion failed");
 }
 (async () => {
   let module;
 
-  module = await exports.instantiate(fetch("./build/debug.wasm"));
+  module = await loader.instantiate(fetch("./build/default.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiate(await fetch("./build/debug.wasm"));
+  module = await loader.instantiate(await fetch("./build/default.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiate((await fetch("./build/debug.wasm")).arrayBuffer());
+  module = await loader.instantiate((await fetch("./build/default.wasm")).arrayBuffer());
   assert(module.memory);
 
-  module = await exports.instantiate(await (await fetch("./build/debug.wasm")).arrayBuffer());
+  module = await loader.instantiate(await (await fetch("./build/default.wasm")).arrayBuffer());
   assert(module.memory);
 
-  module = await exports.instantiateStreaming(fetch("./build/debug.wasm"));
+  module = await loader.instantiateStreaming(fetch("./build/default.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiateStreaming(await fetch("./build/debug.wasm"));
+  module = await loader.instantiateStreaming(await fetch("./build/default.wasm"));
   assert(module.memory);
 
   let instantiateStreaming = WebAssembly.instantiateStreaming;
   delete WebAssembly.instantiateStreaming;
 
-  module = await exports.instantiate(fetch("./build/debug.wasm"));
+  module = await loader.instantiate(fetch("./build/default.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiate(await fetch("./build/debug.wasm"));
+  module = await loader.instantiate(await fetch("./build/default.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiateStreaming(fetch("./build/debug.wasm"));
+  module = await loader.instantiateStreaming(fetch("./build/default.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiateStreaming(await fetch("./build/debug.wasm"));
+  module = await loader.instantiateStreaming(await fetch("./build/default.wasm"));
   assert(module.memory);
 
   WebAssembly.instantiateStreaming = instantiateStreaming;

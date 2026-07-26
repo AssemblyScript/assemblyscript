@@ -109,3 +109,9 @@ export declare class Rtrace  {
   /** Info message callback. */
   oninfo: InfoCallback;
 }
+
+declare const _default: {
+  Rtrace: typeof Rtrace
+};
+
+export default _default;

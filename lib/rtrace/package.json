@@ -22,15 +22,11 @@
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
-  "exports": {
-    "import": "./index.js",
-    "require": "./umd/index.js"
-  },
+  "exports": "./index.js",
   "bin": {
     "rtplot": "bin/rtplot.js"
   },
   "scripts": {
-    "build": "npx esm2umd rtrace index.js > umd/index.js",
     "test": "node tests"
   },
   "dependencies": {
@@ -41,9 +37,6 @@
     "index.d.ts",
     "index.js",
     "package.json",
-    "umd/index.d.ts",
-    "umd/index.js",
-    "umd/package.json",
     "bin/rtplot.js",
     "README.md"
   ]
