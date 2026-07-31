@@ -201,6 +201,15 @@ export const enum ConditionKind {
   False
 }
 
+class UserLabels {
+  constructor(
+    /** The label we break to when encountering a break statement. */
+    readonly breakLabel: string,
+    /** The label we break to when encountering a continue statement. */
+    readonly continueLabel: string | null
+  ) {}
+}
+
 /** A control flow evaluator. */
 export class Flow {
 
@@ -247,10 +256,12 @@ export class Flow {
   outer: Flow | null = null;
   /** Flow flags indicating specific conditions. */
   flags: FlowFlags = FlowFlags.None;
-  /** The label we break to when encountering a continue statement. */
+  /** The label we break to when encountering an unlabeled continue statement. */
   continueLabel: string | null = null;
-  /** The label we break to when encountering a break statement. */
+  /** The label we break to when encountering an unlabeled break statement. */
   breakLabel: string | null = null;
+  /** Map of user-declared statement label names to internal label names */
+  userLabelMap: Map<string,UserLabels> | null = null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
   /** Scoped type alias. */
@@ -353,6 +364,9 @@ export class Flow {
     } else {
       branch.continueLabel = this.continueLabel;
     }
+    let userLabelMap = this.userLabelMap;
+    if (userLabelMap) userLabelMap = cloneMap(userLabelMap);
+    branch.userLabelMap = userLabelMap;
     branch.localFlags = this.localFlags.slice();
     if (this.sourceFunction.is(CommonFlags.Constructor)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
@@ -447,6 +461,33 @@ export class Flow {
     let local = this.targetFunction.addLocal(type);
     this.unsetLocalFlag(local.index, ~0);
     return local;
+  }
+
+
+  /** Gets the internal labels associated with a user-declared label name. */
+  getUserLabel(name: string): UserLabels | null {
+    const userLabelMap = this.userLabelMap;
+    if (userLabelMap && userLabelMap.has(name)) return assert(userLabelMap.get(name));
+    return null;
+  }
+
+  /** Associates a user-declared label name with internal labels. */
+  addUserLabel(name: string, breakLabel: string, continueLabel: string | null, declarationNode: Node): void {
+    let userLabelMap = this.userLabelMap;
+    if (!userLabelMap) {
+      this.userLabelMap = userLabelMap = new Map();
+    } else if (userLabelMap.has(name)) {
+      this.program.error(DiagnosticCode.Duplicate_label_0, declarationNode.range, name);
+    }
+
+    userLabelMap.set(name, new UserLabels(breakLabel, continueLabel));
+  }
+
+  /** Remove a user-declared label name. */
+  removeUserLabel(name: string): void {
+    let userLabelMap = assert(this.userLabelMap);
+    assert(userLabelMap.has(name));
+    userLabelMap.delete(name);
   }
 
   /** Gets the scoped local of the specified name. */
