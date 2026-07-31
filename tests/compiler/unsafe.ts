@@ -1,7 +1,3 @@
-// Global
-
-@unsafe var g = 0; // not valid here
-
 // Function
 
 @unsafe function f1(): void {}

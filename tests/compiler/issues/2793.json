@@ -1,0 +1,13 @@
+{
+    "stderr": [
+        "Duplicate identifier 'bar'.",
+        "in issues/2793.ts(8,14)",
+        "in issues/2793.ts(2,10)",
+        "Duplicate identifier 'baz'.",
+        "in issues/2793.ts(9,7)",
+        "in issues/2793.ts(3,10)",
+        "Duplicate identifier 'qux'.",
+        "in issues/2793.ts(10,14)",
+        "in issues/2793.ts(4,18)"
+    ]
+}
