@@ -1,12 +1,11 @@
 (module
  (type $0 (func (param i32)))
- (type $1 (func))
- (type $2 (func (param i32 i32) (result i32)))
- (type $3 (func (param i32 i32)))
+ (type $1 (func (param i32 i32)))
+ (type $2 (func))
+ (type $3 (func (param i32 i32) (result i32)))
  (type $4 (func (param i32 i32 i32 i32)))
- (type $5 (func (param i32 i32 i32)))
- (type $6 (func (param i32 i32 i64)))
- (type $7 (func (result i32)))
+ (type $5 (func (param i32 i32 i64)))
+ (type $6 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -776,65 +775,6 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/itcms/__link (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  local.get $1
-  i32.eqz
-  if
-   return
-  end
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1280
-   i32.const 295
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/rt/itcms/white
-  local.get $1
-  i32.const 20
-  i32.sub
-  local.tee $1
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   local.get $0
-   i32.const 20
-   i32.sub
-   local.tee $0
-   i32.load offset=4
-   i32.const 3
-   i32.and
-   local.tee $3
-   global.get $~lib/rt/itcms/white
-   i32.eqz
-   i32.eq
-   if
-    local.get $0
-    local.get $1
-    local.get $2
-    select
-    call $~lib/rt/itcms/Object#makeGray
-   else
-    global.get $~lib/rt/itcms/state
-    i32.const 1
-    i32.eq
-    local.get $3
-    i32.const 3
-    i32.eq
-    i32.and
-    if
-     local.get $1
-     call $~lib/rt/itcms/Object#makeGray
-    end
-   end
-  end
- )
  (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -858,7 +798,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$142
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$139
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -882,7 +822,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$142
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$139
    end
    local.get $0
    i32.load offset=8
@@ -1386,6 +1326,52 @@
    end
   end
  )
+ (func $~lib/rt/itcms/__link (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.eqz
+  if
+   return
+  end
+  global.get $~lib/rt/itcms/white
+  local.get $0
+  i32.const 20
+  i32.sub
+  local.tee $0
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  i32.eq
+  if
+   i32.const 1152
+   i32.load
+   i32.const 3
+   i32.and
+   local.tee $2
+   global.get $~lib/rt/itcms/white
+   i32.eqz
+   i32.eq
+   if
+    i32.const 1148
+    local.get $0
+    local.get $1
+    select
+    call $~lib/rt/itcms/Object#makeGray
+   else
+    global.get $~lib/rt/itcms/state
+    i32.const 1
+    i32.eq
+    local.get $2
+    i32.const 3
+    i32.eq
+    i32.and
+    if
+     local.get $0
+     call $~lib/rt/itcms/Object#makeGray
+    end
+   end
+  end
+ )
  (func $~lib/array/Array<extends-baseaggregate/B1>~visit (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1583,28 +1569,6 @@
    local.get $6
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=4
-   local.get $6
-   f64.const 0
-   f64.store
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=4
-   local.get $6
-   f64.const 0
-   f64.store offset=8
-   global.get $~lib/memory/__stack_pointer
-   local.get $6
-   i32.store offset=4
-   local.get $6
-   i32.const 0
-   i32.store offset=16
-   local.get $6
-   i32.const 0
-   i32.const 0
-   call $~lib/rt/itcms/__link
-   global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
@@ -1674,7 +1638,7 @@
     global.get $~lib/memory/__stack_pointer
     i32.const 1168
     i32.store
-    block $__inlined_func$~lib/rt/itcms/__renew$141
+    block $__inlined_func$~lib/rt/itcms/__renew$138
      i32.const 1073741820
      local.get $0
      i32.const 1
@@ -1717,7 +1681,7 @@
       i32.store offset=16
       local.get $0
       local.set $1
-      br $__inlined_func$~lib/rt/itcms/__renew$141
+      br $__inlined_func$~lib/rt/itcms/__renew$138
      end
      local.get $3
      local.get $2
@@ -1745,7 +1709,6 @@
      i32.const 1172
      local.get $1
      i32.store
-     i32.const 1168
      local.get $1
      i32.const 0
      call $~lib/rt/itcms/__link
@@ -1769,7 +1732,6 @@
    i32.add
    local.get $6
    i32.store
-   i32.const 1168
    local.get $6
    i32.const 1
    call $~lib/rt/itcms/__link

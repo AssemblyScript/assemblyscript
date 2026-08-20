@@ -289,24 +289,6 @@
   local.get $1
   local.get $0
   i64.store offset=16
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  i32.store offset=8
   local.get $0
   i64.const -8640000000000000
   i64.lt_s
@@ -607,7 +589,7 @@
       global.get $~lib/memory/__stack_pointer
       local.get $2
       i32.store
-      block $__inlined_func$~lib/string/String#charCodeAt$401
+      block $__inlined_func$~lib/string/String#charCodeAt$398
        local.get $3
        local.get $2
        i32.const 20
@@ -623,7 +605,7 @@
         global.set $~lib/memory/__stack_pointer
         i32.const -1
         local.set $0
-        br $__inlined_func$~lib/string/String#charCodeAt$401
+        br $__inlined_func$~lib/string/String#charCodeAt$398
        end
        local.get $2
        local.get $3
@@ -895,7 +877,7 @@
       global.get $~lib/memory/__stack_pointer
       local.get $2
       i32.store
-      block $__inlined_func$~lib/string/String#substr$402 (result i32)
+      block $__inlined_func$~lib/string/String#substr$399 (result i32)
        i32.const 3
        local.get $2
        i32.const 20
@@ -937,7 +919,7 @@
         i32.add
         global.set $~lib/memory/__stack_pointer
         i32.const 3456
-        br $__inlined_func$~lib/string/String#substr$402
+        br $__inlined_func$~lib/string/String#substr$399
        end
        global.get $~lib/memory/__stack_pointer
        local.get $8
@@ -987,7 +969,7 @@
       global.get $~lib/memory/__stack_pointer
       i32.const 1872
       i32.store
-      block $__inlined_func$~lib/string/String#padEnd$403
+      block $__inlined_func$~lib/string/String#padEnd$400
        i32.const 1868
        i32.load
        i32.const -2
@@ -1003,7 +985,7 @@
         i32.const 8
         i32.add
         global.set $~lib/memory/__stack_pointer
-        br $__inlined_func$~lib/string/String#padEnd$403
+        br $__inlined_func$~lib/string/String#padEnd$400
        end
        global.get $~lib/memory/__stack_pointer
        i32.const 6
@@ -1562,7 +1544,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1872
    i32.store
-   block $__inlined_func$~lib/string/String#padStart$399
+   block $__inlined_func$~lib/string/String#padStart$396
     i32.const 1868
     i32.load
     i32.const -2
@@ -1581,7 +1563,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$~lib/string/String#padStart$399
+     br $__inlined_func$~lib/string/String#padStart$396
     end
     global.get $~lib/memory/__stack_pointer
     local.get $5
@@ -1761,7 +1743,7 @@
     global.get $~lib/memory/__stack_pointer
     local.get $4
     i32.store
-    block $__inlined_func$~lib/string/String#concat$400
+    block $__inlined_func$~lib/string/String#concat$397
      local.get $4
      i32.const 20
      i32.sub
@@ -1780,7 +1762,7 @@
       global.set $~lib/memory/__stack_pointer
       i32.const 3456
       local.set $1
-      br $__inlined_func$~lib/string/String#concat$400
+      br $__inlined_func$~lib/string/String#concat$397
      end
      global.get $~lib/memory/__stack_pointer
      local.get $1
@@ -2139,7 +2121,7 @@
    i32.load16_u
    local.set $0
    loop $while-continue|0
-    block $__inlined_func$~lib/util/string/isSpace$164 (result i32)
+    block $__inlined_func$~lib/util/string/isSpace$161 (result i32)
      local.get $0
      i32.const 128
      i32.or
@@ -2154,7 +2136,7 @@
      local.get $0
      i32.const 5760
      i32.lt_u
-     br_if $__inlined_func$~lib/util/string/isSpace$164
+     br_if $__inlined_func$~lib/util/string/isSpace$161
      drop
      i32.const 1
      local.get $0
@@ -2162,7 +2144,7 @@
      i32.add
      i32.const 10
      i32.le_u
-     br_if $__inlined_func$~lib/util/string/isSpace$164
+     br_if $__inlined_func$~lib/util/string/isSpace$161
      drop
      block $break|0
       block $case0|0
@@ -2197,7 +2179,7 @@
        br $break|0
       end
       i32.const 1
-      br $__inlined_func$~lib/util/string/isSpace$164
+      br $__inlined_func$~lib/util/string/isSpace$161
      end
      i32.const 0
     end
@@ -3975,7 +3957,7 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink$391
+  block $__inlined_func$~lib/rt/itcms/Object#unlink$388
    local.get $0
    i32.load offset=4
    i32.const -4
@@ -3999,7 +3981,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink$391
+    br $__inlined_func$~lib/rt/itcms/Object#unlink$388
    end
    local.get $0
    i32.load offset=8
@@ -5630,7 +5612,7 @@
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
-   block $__inlined_func$~lib/rt/itcms/__renew$378
+   block $__inlined_func$~lib/rt/itcms/__renew$375
     i32.const 1073741820
     local.get $2
     i32.const 1
@@ -5673,7 +5655,7 @@
      i32.store offset=16
      local.get $2
      local.set $1
-     br $__inlined_func$~lib/rt/itcms/__renew$378
+     br $__inlined_func$~lib/rt/itcms/__renew$375
     end
     local.get $3
     local.get $4

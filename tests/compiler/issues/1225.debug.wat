@@ -2480,22 +2480,6 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 0
-  call $issues/1225/X#set:normal
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  call $issues/1225/X#set:viaThis
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
   local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer

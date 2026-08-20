@@ -2372,16 +2372,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<i8,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<i8,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $~lib/util/hash/HASH<i8> (param $key i32) (result i32)
   (local $key|1 i32)
   (local $len i32)
@@ -2501,6 +2491,16 @@
   local.get $this
   local.get $taggedNext
   i32.store offset=8
+ )
+ (func $"~lib/map/Map<i8,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<i8,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
  )
  (func $~lib/array/Array<i8>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
@@ -2652,16 +2652,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<i8,i8>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<i8,i8>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $"~lib/map/Map<i32,i32>#set:buckets" (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
@@ -2689,16 +2679,6 @@
   local.get $this
   local.get $entriesCapacity
   i32.store offset=12
- )
- (func $"~lib/map/Map<i32,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<i32,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
  )
  (func $"~lib/map/Map<i8,i8>#get:buckets" (param $this i32) (result i32)
   local.get $this
@@ -2750,6 +2730,16 @@
   local.get $this
   local.get $taggedNext
   i32.store offset=4
+ )
+ (func $"~lib/map/Map<i8,i8>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<i8,i8>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
  )
  (func $~lib/util/hash/HASH<i32> (param $key i32) (result i32)
   (local $key|1 i32)
@@ -2870,6 +2860,16 @@
   local.get $taggedNext
   i32.store offset=8
  )
+ (func $"~lib/map/Map<i32,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<i32,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $"~lib/map/Map<u8,i32>#set:buckets" (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
@@ -2897,16 +2897,6 @@
   local.get $this
   local.get $entriesCapacity
   i32.store offset=12
- )
- (func $"~lib/map/Map<u8,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<u8,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
  )
  (func $~lib/util/hash/HASH<u8> (param $key i32) (result i32)
   (local $key|1 i32)
@@ -3029,6 +3019,16 @@
   local.get $taggedNext
   i32.store offset=8
  )
+ (func $"~lib/map/Map<u8,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<u8,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $~lib/array/Array<u8>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
@@ -3089,16 +3089,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<u8,u8>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<u8,u8>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $"~lib/map/Map<u8,u8>#get:buckets" (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -3150,6 +3140,16 @@
   local.get $taggedNext
   i32.store offset=4
  )
+ (func $"~lib/map/Map<u8,u8>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<u8,u8>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $"~lib/map/Map<i16,i32>#set:buckets" (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
@@ -3177,16 +3177,6 @@
   local.get $this
   local.get $entriesCapacity
   i32.store offset=12
- )
- (func $"~lib/map/Map<i16,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<i16,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
  )
  (func $~lib/util/hash/HASH<i16> (param $key i32) (result i32)
   (local $key|1 i32)
@@ -3308,6 +3298,16 @@
   local.get $taggedNext
   i32.store offset=8
  )
+ (func $"~lib/map/Map<i16,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<i16,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $~lib/array/Array<i16>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
@@ -3368,16 +3368,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<i16,i16>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<i16,i16>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $"~lib/map/Map<i16,i16>#get:buckets" (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -3429,6 +3419,16 @@
   local.get $taggedNext
   i32.store offset=4
  )
+ (func $"~lib/map/Map<i16,i16>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<i16,i16>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $"~lib/map/Map<u16,i32>#set:buckets" (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
@@ -3456,16 +3456,6 @@
   local.get $this
   local.get $entriesCapacity
   i32.store offset=12
- )
- (func $"~lib/map/Map<u16,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<u16,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
  )
  (func $~lib/util/hash/HASH<u16> (param $key i32) (result i32)
   (local $key|1 i32)
@@ -3588,6 +3578,16 @@
   local.get $taggedNext
   i32.store offset=8
  )
+ (func $"~lib/map/Map<u16,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<u16,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $~lib/array/Array<u16>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
@@ -3648,16 +3648,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<u16,u16>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<u16,u16>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $"~lib/map/Map<u16,u16>#get:buckets" (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -3709,6 +3699,16 @@
   local.get $taggedNext
   i32.store offset=4
  )
+ (func $"~lib/map/Map<u16,u16>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<u16,u16>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $"~lib/map/Map<u32,i32>#set:buckets" (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
@@ -3736,16 +3736,6 @@
   local.get $this
   local.get $entriesCapacity
   i32.store offset=12
- )
- (func $"~lib/map/Map<u32,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<u32,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
  )
  (func $~lib/util/hash/HASH<u32> (param $key i32) (result i32)
   (local $key|1 i32)
@@ -3866,6 +3856,16 @@
   local.get $taggedNext
   i32.store offset=8
  )
+ (func $"~lib/map/Map<u32,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<u32,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $~lib/array/Array<u32>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
@@ -3926,16 +3926,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<u32,u32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<u32,u32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $"~lib/map/Map<u32,u32>#get:buckets" (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -3987,6 +3977,16 @@
   local.get $taggedNext
   i32.store offset=8
  )
+ (func $"~lib/map/Map<u32,u32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<u32,u32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $"~lib/map/Map<i64,i32>#set:buckets" (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
@@ -4014,16 +4014,6 @@
   local.get $this
   local.get $entriesCapacity
   i32.store offset=12
- )
- (func $"~lib/map/Map<i64,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<i64,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
  )
  (func $~lib/util/hash/HASH<i64> (param $key i64) (result i32)
   (local $key|1 i64)
@@ -4161,6 +4151,16 @@
   local.get $taggedNext
   i32.store offset=12
  )
+ (func $"~lib/map/Map<i64,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<i64,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $~lib/array/Array<i64>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
@@ -4221,16 +4221,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<i64,i64>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<i64,i64>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $"~lib/map/Map<i64,i64>#get:buckets" (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -4282,6 +4272,16 @@
   local.get $taggedNext
   i32.store offset=16
  )
+ (func $"~lib/map/Map<i64,i64>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<i64,i64>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $"~lib/map/Map<u64,i32>#set:buckets" (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
@@ -4309,16 +4309,6 @@
   local.get $this
   local.get $entriesCapacity
   i32.store offset=12
- )
- (func $"~lib/map/Map<u64,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<u64,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
  )
  (func $~lib/util/hash/HASH<u64> (param $key i64) (result i32)
   (local $key|1 i64)
@@ -4456,6 +4446,16 @@
   local.get $taggedNext
   i32.store offset=12
  )
+ (func $"~lib/map/Map<u64,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<u64,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $~lib/array/Array<u64>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
@@ -4516,16 +4516,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<u64,u64>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<u64,u64>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $"~lib/map/Map<u64,u64>#get:buckets" (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -4577,6 +4567,16 @@
   local.get $taggedNext
   i32.store offset=16
  )
+ (func $"~lib/map/Map<u64,u64>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<u64,u64>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $"~lib/map/Map<f32,i32>#set:buckets" (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
@@ -4604,16 +4604,6 @@
   local.get $this
   local.get $entriesCapacity
   i32.store offset=12
- )
- (func $"~lib/map/Map<f32,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<f32,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
  )
  (func $~lib/util/hash/HASH<f32> (param $key f32) (result i32)
   (local $key|1 i32)
@@ -4735,6 +4725,16 @@
   local.get $taggedNext
   i32.store offset=8
  )
+ (func $"~lib/map/Map<f32,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<f32,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $~lib/array/Array<f32>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
@@ -4795,16 +4795,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<f32,f32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<f32,f32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $"~lib/map/Map<f32,f32>#get:buckets" (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -4856,6 +4846,16 @@
   local.get $taggedNext
   i32.store offset=8
  )
+ (func $"~lib/map/Map<f32,f32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<f32,f32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $"~lib/map/Map<f64,i32>#set:buckets" (param $this i32) (param $buckets i32)
   local.get $this
   local.get $buckets
@@ -4883,16 +4883,6 @@
   local.get $this
   local.get $entriesCapacity
   i32.store offset=12
- )
- (func $"~lib/map/Map<f64,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<f64,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
  )
  (func $~lib/util/hash/HASH<f64> (param $key f64) (result i32)
   (local $key|1 i64)
@@ -5031,6 +5021,16 @@
   local.get $taggedNext
   i32.store offset=12
  )
+ (func $"~lib/map/Map<f64,i32>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<f64,i32>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
+ )
  (func $~lib/array/Array<f64>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
@@ -5091,16 +5091,6 @@
   local.get $entriesCapacity
   i32.store offset=12
  )
- (func $"~lib/map/Map<f64,f64>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
-  local.get $this
-  local.get $entriesOffset
-  i32.store offset=16
- )
- (func $"~lib/map/Map<f64,f64>#set:entriesCount" (param $this i32) (param $entriesCount i32)
-  local.get $this
-  local.get $entriesCount
-  i32.store offset=20
- )
  (func $"~lib/map/Map<f64,f64>#get:buckets" (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -5151,6 +5141,16 @@
   local.get $this
   local.get $taggedNext
   i32.store offset=16
+ )
+ (func $"~lib/map/Map<f64,f64>#set:entriesOffset" (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store offset=16
+ )
+ (func $"~lib/map/Map<f64,f64>#set:entriesCount" (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store offset=20
  )
  (func $~lib/rt/itcms/__collect
   i32.const 0
@@ -5823,22 +5823,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i8,i32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i8,i32>#set:entriesCount"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -6452,38 +6436,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i8>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i8>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i8>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i8>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 0
@@ -6513,7 +6465,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -6522,7 +6474,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -6535,7 +6487,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<i8>#set:dataStart
@@ -6543,7 +6495,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<i8>#set:byteLength
@@ -6551,7 +6503,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<i8>#set:length_
@@ -6909,38 +6861,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i32>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 2
@@ -6970,7 +6890,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -6979,7 +6899,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -6992,7 +6912,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<i32>#set:dataStart
@@ -7000,7 +6920,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<i32>#set:byteLength
@@ -7008,7 +6928,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<i32>#set:length_
@@ -7301,22 +7221,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i8,i8>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i8,i8>#set:entriesCount"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -7400,22 +7304,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<i32,i32>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i32,i32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i32,i32>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -9510,22 +9398,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u8,i32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u8,i32>#set:entriesCount"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -10141,38 +10013,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u8>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u8>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u8>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u8>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 0
@@ -10202,7 +10042,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -10211,7 +10051,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -10224,7 +10064,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<u8>#set:dataStart
@@ -10232,7 +10072,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<u8>#set:byteLength
@@ -10240,7 +10080,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<u8>#set:length_
@@ -10633,22 +10473,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<u8,u8>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u8,u8>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u8,u8>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -12186,22 +12010,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i16,i32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i16,i32>#set:entriesCount"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -12815,38 +12623,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i16>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i16>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i16>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i16>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 1
@@ -12876,7 +12652,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -12885,7 +12661,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -12898,7 +12674,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<i16>#set:dataStart
@@ -12906,7 +12682,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<i16>#set:byteLength
@@ -12914,7 +12690,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<i16>#set:length_
@@ -13307,22 +13083,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<i16,i16>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i16,i16>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i16,i16>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -14858,22 +14618,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u16,i32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u16,i32>#set:entriesCount"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -15489,38 +15233,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u16>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u16>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u16>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u16>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 1
@@ -15550,7 +15262,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -15559,7 +15271,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -15572,7 +15284,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<u16>#set:dataStart
@@ -15580,7 +15292,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<u16>#set:byteLength
@@ -15588,7 +15300,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<u16>#set:length_
@@ -15981,22 +15693,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<u16,u16>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u16,u16>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u16,u16>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -18697,22 +18393,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u32,i32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u32,i32>#set:entriesCount"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -19324,38 +19004,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u32>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u32>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u32>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u32>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 2
@@ -19385,7 +19033,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -19394,7 +19042,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -19407,7 +19055,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<u32>#set:dataStart
@@ -19415,7 +19063,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<u32>#set:byteLength
@@ -19423,7 +19071,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<u32>#set:length_
@@ -19816,22 +19464,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<u32,u32>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u32,u32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u32,u32>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -21365,22 +20997,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i64,i32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i64,i32>#set:entriesCount"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -21992,38 +21608,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i64>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i64>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i64>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<i64>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 3
@@ -22053,7 +21637,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -22062,7 +21646,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -22075,7 +21659,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<i64>#set:dataStart
@@ -22083,7 +21667,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<i64>#set:byteLength
@@ -22091,7 +21675,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<i64>#set:length_
@@ -22484,22 +22068,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<i64,i64>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i64,i64>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<i64,i64>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -24042,22 +23610,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u64,i32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u64,i32>#set:entriesCount"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -24669,38 +24221,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u64>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u64>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u64>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<u64>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 3
@@ -24730,7 +24250,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -24739,7 +24259,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -24752,7 +24272,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<u64>#set:dataStart
@@ -24760,7 +24280,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<u64>#set:byteLength
@@ -24768,7 +24288,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<u64>#set:length_
@@ -25161,22 +24681,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<u64,u64>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u64,u64>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<u64,u64>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -26719,22 +26223,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<f32,i32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<f32,i32>#set:entriesCount"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -27346,38 +26834,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<f32>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<f32>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<f32>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<f32>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 2
@@ -27407,7 +26863,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -27416,7 +26872,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -27429,7 +26885,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<f32>#set:dataStart
@@ -27437,7 +26893,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<f32>#set:byteLength
@@ -27445,7 +26901,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<f32>#set:length_
@@ -27838,22 +27294,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<f32,f32>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<f32,f32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<f32,f32>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -29396,22 +28836,6 @@
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<f64,i32>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<f64,i32>#set:entriesCount"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -30023,38 +29447,6 @@
    local.tee $this
    i32.store
   end
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<f64>#set:buffer
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<f64>#set:dataStart
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<f64>#set:byteLength
-  local.get $this
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  i32.const 0
-  call $~lib/array/Array<f64>#set:length_
   local.get $length
   i32.const 1073741820
   i32.const 3
@@ -30084,7 +29476,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $buffer
-  i32.store offset=8
+  i32.store offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -30093,7 +29485,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   local.set $6
@@ -30106,7 +29498,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $buffer
   call $~lib/array/Array<f64>#set:dataStart
@@ -30114,7 +29506,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $bufferSize
   call $~lib/array/Array<f64>#set:byteLength
@@ -30122,7 +29514,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store offset=8
   local.get $6
   local.get $length
   call $~lib/array/Array<f64>#set:length_
@@ -30515,22 +29907,6 @@
   local.get $1
   i32.const 4
   call $"~lib/map/Map<f64,f64>#set:entriesCapacity"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<f64,f64>#set:entriesOffset"
-  local.get $this
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  call $"~lib/map/Map<f64,f64>#set:entriesCount"
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
