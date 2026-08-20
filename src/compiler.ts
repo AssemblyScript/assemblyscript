@@ -8230,39 +8230,55 @@ export class Compiler extends DiagnosticEmitter {
       let arrayInstance = assert(this.resolver.resolveClass(this.program.staticArrayPrototype, [ stringType ]));
       let segment = this.addStaticBuffer(stringType, values, arrayInstance.id);
       this.program.OBJECTInstance.writeField("gcInfo", 3, segment.buffer, 0); // use transparent gcinfo
-      let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
+      let arrayOffset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
       let joinInstance = assert(arrayInstance.getMethod("join"));
       let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.IndexedSet, true));
-      let stmts = new Array<ExpressionRef>(2 * numExpressions + 1);
-      // Use one local per toString'ed subexpression, since otherwise recursion on the same
-      // static array would overwrite already prepared parts. Avoids a temporary array.
-      let temps = new Array<Local>(numExpressions);
       let flow = this.currentFlow;
+
+      // Store the static array address in a tmp local so the shadow stack
+      // keeps it reachable. GC will visit it and all dynamic children.
+      let arrayLocal = flow.getTempLocal(arrayInstance.type);
+      let stmts = new Array<ExpressionRef>();
+      stmts.push(module.local_set(arrayLocal.index, module.usize(arrayOffset), true));
+
+      // Evaluate each expression into a temp local.
+      // One local per expression prevents recursion on the same static array
+      // from overwriting already prepared parts.
+      let temps = new Array<Local>(numExpressions);
       for (let i = 0; i < numExpressions; ++i) {
-        let expression = expressions[i];
+        let subExpression = expressions[i];
         let temp = flow.getTempLocal(stringType);
         temps[i] = temp;
-        stmts[i] = module.local_set(temp.index,
-          this.makeToString(
-            this.compileExpression(expression, stringType),
-            this.currentType, expression
-          ),
-          true
+        stmts.push(
+          module.local_set(
+            temp.index,
+            this.makeToString(this.compileExpression(subExpression, stringType), this.currentType, subExpression),
+            true
+          )
         );
       }
-      // Populate the static array with the toString'ed subexpressions and call .join("")
+
+      // Populate the static array slots with the temp locals
       for (let i = 0; i < numExpressions; ++i) {
-        stmts[numExpressions + i] = this.makeCallDirect(indexedSetInstance, [
-          module.usize(offset),
-          module.i32(expressionPositions[i]),
-          module.local_get(temps[i].index, stringType.toRef())
-        ], expression);
+        stmts.push(
+          this.makeCallDirect(
+            indexedSetInstance,
+            [
+              module.local_get(arrayLocal.index, stringType.toRef()),
+              module.i32(expressionPositions[i]),
+              module.local_get(temps[i].index, stringType.toRef()),
+            ],
+            expression
+          ));
       }
-      stmts[2 * numExpressions] = this.makeCallDirect(joinInstance, [
-        module.usize(offset),
-        this.ensureStaticString("")
-      ], expression);
-      return module.flatten(stmts, stringType.toRef());
+      // Call join("") and return the result
+      stmts.push(
+        this.makeCallDirect(
+          joinInstance,
+          [module.local_get(arrayLocal.index, stringType.toRef()), this.ensureStaticString("")],
+          expression
+        ));
+      return module.block(null, stmts, stringType.toRef());
     }
 
     // Try to find out whether the template function takes a full-blown TemplateStringsArray or if
