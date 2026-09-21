@@ -4,28 +4,22 @@
  (type $2 (func (param i32)))
  (type $3 (func (param i32 i32) (result i32)))
  (type $4 (func))
- (type $5 (func (param i32 i32 i32) (result i32)))
- (type $6 (func (param i32 i32 i32)))
- (type $7 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
- (type $8 (func (param i32 f64 i32) (result i32)))
+ (type $5 (func (param i32 i32 i32)))
+ (type $6 (func (param i32 i32 i32) (result i32)))
+ (type $7 (func (param i32 f32) (result i32)))
+ (type $8 (func (param i32 f64) (result i32)))
  (type $9 (func (param i32 i32 i32 i32)))
  (type $10 (func (param i32 i32 i64) (result i32)))
  (type $11 (func (result i32)))
- (type $12 (func (param f32 i32) (result i32)))
- (type $13 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $14 (func (param f64 i32) (result i32)))
- (type $15 (func (param i32 f32) (result i32)))
- (type $16 (func (param i32 f64) (result i32)))
- (type $17 (func (param f32) (result i32)))
- (type $18 (func (param f64) (result i32)))
+ (type $12 (func (param i32) (result i64)))
+ (type $13 (func (param i64) (result i64)))
+ (type $14 (func (param i64) (result i32)))
+ (type $15 (func (param f32 i32) (result i32)))
+ (type $16 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $17 (func (param f64 i32) (result i32)))
+ (type $18 (func (param f32) (result i32)))
+ (type $19 (func (param f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
- (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
- (global $~lib/util/number/_exp (mut i32) (i32.const 0))
- (global $~lib/util/number/_K (mut i32) (i32.const 0))
- (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
- (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -40,40 +34,64 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $issues/2873/f32arr i32 (i32.const 2080))
- (global $issues/2873/f64arr i32 (i32.const 2288))
- (global $~lib/rt/__rtti_base i32 (i32.const 2320))
- (global $~lib/memory/__data_end i32 (i32.const 2348))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 35116))
- (global $~lib/memory/__heap_base i32 (i32.const 35116))
+ (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/util/dtoa/FLOAT_SIGNIFICAND_SIZE i32 (i32.const 23))
+ (global $~lib/util/dtoa/FLOAT_SIGNIFICAND_MASK i32 (i32.const 8388607))
+ (global $~lib/native/ASC_FEATURE_SIMD i32 (i32.const 0))
+ (global $~lib/util/dtoa/gPow10Hi (mut i64) (i64.const 0))
+ (global $~lib/util/dtoa/gSig (mut i64) (i64.const 0))
+ (global $~lib/util/dtoa/gExp (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/gLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/gHasLastDigit (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/DIV10K_SIG i64 (i64.const 109951163))
+ (global $~lib/util/dtoa/DIV100_SIG i64 (i64.const 5243))
+ (global $~lib/util/dtoa/DIV10_SIG i64 (i64.const 103))
+ (global $~lib/util/dtoa/gBcdValue (mut i64) (i64.const 0))
+ (global $~lib/util/dtoa/gDigHi (mut i64) (i64.const 0))
+ (global $~lib/util/dtoa/gDigits (mut i32) (i32.const 0))
+ (global $~lib/util/dtoa/MAX_FIXED_DEC_EXP i32 (i32.const 20))
+ (global $~lib/util/dtoa/DOUBLE_SIGNIFICAND_SIZE i32 (i32.const 52))
+ (global $~lib/util/dtoa/DOUBLE_SIGNIFICAND_MASK i64 (i64.const 4503599627370495))
+ (global $~lib/util/dtoa/LOG10_2_EXP i32 (i32.const 20))
+ (global $~lib/util/dtoa/LOG2_POW10_EXP i32 (i32.const 16))
+ (global $~lib/builtins/u64.MAX_VALUE i64 (i64.const -1))
+ (global $~lib/util/dtoa/BIASED_HALF i64 (i64.const -9223372036854775802))
+ (global $~lib/util/dtoa/gDigLo (mut i64) (i64.const 0))
+ (global $issues/2873/f32arr i32 (i32.const 2304))
+ (global $issues/2873/f64arr i32 (i32.const 2512))
+ (global $~lib/rt/__rtti_base i32 (i32.const 2544))
+ (global $~lib/memory/__data_end i32 (i32.const 2572))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 35340))
+ (global $~lib/memory/__heap_base i32 (i32.const 35340))
  (memory $0 1)
  (data $0 (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\000\00.\000\00\00\00\00\00\00\00")
  (data $1 (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\00N\00a\00N\00\00\00\00\00\00\00")
  (data $2 (i32.const 76) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\12\00\00\00-\00I\00n\00f\00i\00n\00i\00t\00y\00\00\00\00\00\00\00\00\00\00\00")
  (data $3 (i32.const 124) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\10\00\00\00I\00n\00f\00i\00n\00i\00t\00y\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $4 (i32.const 176) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $5 (i32.const 232) "\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\rXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
- (data $6 (i32.const 928) "<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\r\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
- (data $7 (i32.const 1104) "\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
- (data $8 (i32.const 1144) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
- (data $9 (i32.const 1548) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data $10 (i32.const 1612) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $11 (i32.const 1680) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $12 (i32.const 1712) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $13 (i32.const 1740) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
- (data $14 (i32.const 1804) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data $15 (i32.const 1856) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $16 (i32.const 1884) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $17 (i32.const 1948) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\001\00.\001\00\00\00\00\00\00\00")
- (data $18 (i32.const 1980) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\002\008\007\003\00.\00t\00s\00")
- (data $19 (i32.const 2028) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00\cd\cc\8c?\cd\cc\0c@33S@")
- (data $20 (i32.const 2060) ",\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\10\00\00\00\00\08\00\00\00\08\00\00\0c\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $21 (i32.const 2108) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $22 (i32.const 2140) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\00,\00\00\00\00\00\00\00\00\00\00\00")
- (data $23 (i32.const 2172) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\16\00\00\001\00.\001\00,\002\00.\002\00,\003\00.\003\00\00\00\00\00\00\00")
- (data $24 (i32.const 2220) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00\9a\99\99\99\99\99\f1?\9a\99\99\99\99\99\01@ffffff\n@\00\00\00\00")
- (data $25 (i32.const 2268) ",\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\10\00\00\00\c0\08\00\00\c0\08\00\00\18\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $26 (i32.const 2320) "\06\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\02\19\00\00\02\1a\00\00")
+ (data $4 (i32.const 172) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data $5 (i32.const 236) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $6 (i32.const 304) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $7 (i32.const 336) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $8 (i32.const 364) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
+ (data $9 (i32.const 428) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data $10 (i32.const 480) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $11 (i32.const 508) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $12 (i32.const 572) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
+ (data $13 (i32.const 976) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $14 (i32.const 1104) ":\0f \f4\'\8f\cb\ce\c8\a5\19\90\b9\a5o\a5\a0\84\14@aQY\84\00\a1\ed\cc\ce\1b\c2\d3\00\b4W\n?\16h\a9\00\90\acn2x\86\87\00\80z\17\b7&\d7\d8\00\00b\ac\c5\ebx\ad\00\00\e8\89\04#\c7\8a\00\00@v:k\0b\de\00\00\00\c5.\bc\a2\b1\00\00\00\04\bf\c9\1b\8e\00\00\00\a01\a9_\e3\00\00\00\80\f4 \e6\b5\00\00\00\00*\e7\84\91\00\00\00\00\10\a5\d4\e8\00\00\00\00@\b7C\ba\00\00\00\00\00\f9\02\95\00\00\00\00\00(k\ee\00\00\00\00\00 \bc\be\00\00\00\00\00\80\96\98\00\00\00\00\00\00$\f4\00\00\00\00\00\00P\c3\00\00\00\00\00\00@\9c\00\00\00\00\00\00\00\fa\00\00\00\00\00\00\00\c8\00\00\00\00\00\00\00\a0\00\00\00\00\00\00\00\80\cd\cc\cc\cc\cc\cc\cc\cc\0b\d7\a3p=\n\d7\a3<\dfO\8d\97n\12\83,e\19\e2X\17\b7\d1$\84G\1bG\ac\c5\a7\b6il\af\05\bd7\86\bdBz\e5\d5\94\bf\d6\fd\cea\84\11w\cc\ab\98\a5\b46A_p\89\bf\d5\ed\bd\ce\fe\e6\db\ff\aa$\cb\0b\ff\eb\af\cc\88Po\t\cc\bc\8c\14\0e\b4KB\13.\e1\10\d8\\\t5\dc$\b4\da\ac\b0:\f7|\1d\90\\\e1M\c4\be\94\95\e6J\b4\a462\aaw\b8\cc\cc\cc\cc\cc\cc\cc\cc\a3p=\n\d7\a3p=\e9&1\08\ac\1cZd\a8\a4N@\13a\c3\d3S\1dr3\dc\80\cf\0f\0f\b1\c1\c2I\9a?\a6L\1bi\04v\902==|\ba6+\r\c2\fd")
+ (data $15 (i32.const 1528) "o\1b\8e(\10T\8e\af\daM\e4^\ae\f0\ec\07J\fb\9f\f4\98\'D\b1\9dwA\df\cf\11\cd\99\07\ef\99\85\0b?\fe\b2\15\aa\b4\dc\e6\a7\1f\86c\beZ\06\0b\a5\bc\b4\aaSkuz\07\ed\0f\08\bf,)Ud\7f\b6C\d5\b1\17L\c8;\1a\fb;\efi\c2\87F\b8B\a7\ee@OQ]=\eb\dd\e4PF\1a\12\ba\13\e4labM\f3\92\ea\af(\b6\ef&\e2\bb\8c6U\n\f7\89\04\89\0f`\cb\05\e9\b8\b6\bd!\c9\c1\bb\87\e9\00T\96_\9a\84x\db\8f\bf4\d0\bdr\04R\98\de\'\8a\92\95\00\9am\c1\94\82\17\0f<\05\b7u\00\00\00\00\00\00P\c3\00\00\00\00\00\00\00\00\05\e3L6\12\197\c5\00\00\00\00\00\00(l\d6\aa\80\9d\ef\f0\"\c7\f6~\b9\b7\d2:MBL\c8q\d5m\93\13\c9\ea8\1e\cd\19:\bc\03\1cU\ab\01\80\0c\t\cb\c6,\07\d3\bf\f5\ad\\\a1\90\08\137h\03\cd\10\8cz\c3\87\a8\db6.\ef\07\12\c2\b2\02\cf\bc\f4\03^\e4g\f9\94\c7\85\d7in\f8\06\d1R\ba\be\01\d763\e1|\a0\1c4\a8E\10\d3Q\a0\t\12\11H\de\1e1Vx\85\fa\a6\1e\d5f\a5>\7f\"t*U3\f1\ca\ba\0f)2\d7\96@\adGy\17|\a9t\088\c7\b1\d8J\d9\bc\"x\ae\81R7\18")
+ (data $16 (i32.const 1896) "?6N\n@\18\00\00\00d\00\00@\00 $\00\00\00\00\00\00\00\0c\80\13\c8\82\1f\e0L^\0f\f60\d7\1b\00\00\00\00\00\00\00\fc\ff\f7\cd\d8\01\82n\d1?\cd@\01%d\db\r\r\00\00\00$\04\14@8qS\b4\1dx\11\00\00\00\00")
+ (data $17 (i32.const 1980) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\06\00\00\001\00.\001\00\00\00\00\00\00\00")
+ (data $18 (i32.const 2012) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\002\008\007\003\00.\00t\00s\00")
+ (data $19 (i32.const 2064) "\00\00\00\00\00\00\f0?\00\00\00\00\00\00$@\00\00\00\00\00\00Y@\00\00\00\00\00@\8f@\00\00\00\00\00\88\c3@\00\00\00\00\00j\f8@\00\00\00\00\80\84.A\00\00\00\00\d0\12cA\00\00\00\00\84\d7\97A\00\00\00\00e\cd\cdA\00\00\00 _\a0\02B\00\00\00\e8vH7B\00\00\00\a2\94\1amB\00\00@\e5\9c0\a2B\00\00\90\1e\c4\bc\d6B\00\004&\f5k\0cC\00\80\e07y\c3AC\00\a0\d8\85W4vC\00\c8Ngm\c1\abC\00=\91`\e4X\e1C@\8c\b5x\1d\af\15DP\ef\e2\d6\e4\1aKD\92\d5M\06\cf\f0\80D")
+ (data $20 (i32.const 2252) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00\cd\cc\8c?\cd\cc\0c@33S@")
+ (data $21 (i32.const 2284) ",\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\10\00\00\00\e0\08\00\00\e0\08\00\00\0c\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $22 (i32.const 2332) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $23 (i32.const 2364) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\00,\00\00\00\00\00\00\00\00\00\00\00")
+ (data $24 (i32.const 2396) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\16\00\00\001\00.\001\00,\002\00.\002\00,\003\00.\003\00\00\00\00\00\00\00")
+ (data $25 (i32.const 2444) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00\9a\99\99\99\99\99\f1?\9a\99\99\99\99\99\01@ffffff\n@\00\00\00\00")
+ (data $26 (i32.const 2492) ",\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\10\00\00\00\a0\t\00\00\a0\t\00\00\18\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $27 (i32.const 2544) "\06\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\02\19\00\00\02\1a\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -132,1516 +150,6 @@
    unreachable
   end
   unreachable
- )
- (func $~lib/util/number/genDigits (param $buffer i32) (param $w_frc i64) (param $w_exp i32) (param $mp_frc i64) (param $mp_exp i32) (param $delta i64) (param $sign i32) (result i32)
-  (local $one_exp i32)
-  (local $one_frc i64)
-  (local $mask i64)
-  (local $wp_w_frc i64)
-  (local $p1 i32)
-  (local $p2 i64)
-  (local $kappa i32)
-  (local $len i32)
-  (local $d i32)
-  (local $16 i32)
-  (local $17 i32)
-  (local $tmp i64)
-  (local $buffer|19 i32)
-  (local $len|20 i32)
-  (local $delta|21 i64)
-  (local $rest i64)
-  (local $ten_kappa i64)
-  (local $wp_w i64)
-  (local $lastp i32)
-  (local $digit i32)
-  (local $d|27 i64)
-  (local $28 i32)
-  (local $buffer|29 i32)
-  (local $len|30 i32)
-  (local $delta|31 i64)
-  (local $rest|32 i64)
-  (local $ten_kappa|33 i64)
-  (local $wp_w|34 i64)
-  (local $lastp|35 i32)
-  (local $digit|36 i32)
-  i32.const 0
-  local.get $mp_exp
-  i32.sub
-  local.set $one_exp
-  i64.const 1
-  local.get $one_exp
-  i64.extend_i32_s
-  i64.shl
-  local.set $one_frc
-  local.get $one_frc
-  i64.const 1
-  i64.sub
-  local.set $mask
-  local.get $mp_frc
-  local.get $w_frc
-  i64.sub
-  local.set $wp_w_frc
-  local.get $mp_frc
-  local.get $one_exp
-  i64.extend_i32_s
-  i64.shr_u
-  i32.wrap_i64
-  local.set $p1
-  local.get $mp_frc
-  local.get $mask
-  i64.and
-  local.set $p2
-  local.get $p1
-  call $~lib/util/number/decimalCount32
-  local.set $kappa
-  local.get $sign
-  local.set $len
-  loop $while-continue|0
-   local.get $kappa
-   i32.const 0
-   i32.gt_s
-   if
-    block $break|1
-     block $case10|1
-      block $case9|1
-       block $case8|1
-        block $case7|1
-         block $case6|1
-          block $case5|1
-           block $case4|1
-            block $case3|1
-             block $case2|1
-              block $case1|1
-               block $case0|1
-                local.get $kappa
-                local.set $16
-                local.get $16
-                i32.const 10
-                i32.eq
-                br_if $case0|1
-                local.get $16
-                i32.const 9
-                i32.eq
-                br_if $case1|1
-                local.get $16
-                i32.const 8
-                i32.eq
-                br_if $case2|1
-                local.get $16
-                i32.const 7
-                i32.eq
-                br_if $case3|1
-                local.get $16
-                i32.const 6
-                i32.eq
-                br_if $case4|1
-                local.get $16
-                i32.const 5
-                i32.eq
-                br_if $case5|1
-                local.get $16
-                i32.const 4
-                i32.eq
-                br_if $case6|1
-                local.get $16
-                i32.const 3
-                i32.eq
-                br_if $case7|1
-                local.get $16
-                i32.const 2
-                i32.eq
-                br_if $case8|1
-                local.get $16
-                i32.const 1
-                i32.eq
-                br_if $case9|1
-                br $case10|1
-               end
-               local.get $p1
-               i32.const 1000000000
-               i32.div_u
-               local.set $d
-               local.get $p1
-               i32.const 1000000000
-               i32.rem_u
-               local.set $p1
-               br $break|1
-              end
-              local.get $p1
-              i32.const 100000000
-              i32.div_u
-              local.set $d
-              local.get $p1
-              i32.const 100000000
-              i32.rem_u
-              local.set $p1
-              br $break|1
-             end
-             local.get $p1
-             i32.const 10000000
-             i32.div_u
-             local.set $d
-             local.get $p1
-             i32.const 10000000
-             i32.rem_u
-             local.set $p1
-             br $break|1
-            end
-            local.get $p1
-            i32.const 1000000
-            i32.div_u
-            local.set $d
-            local.get $p1
-            i32.const 1000000
-            i32.rem_u
-            local.set $p1
-            br $break|1
-           end
-           local.get $p1
-           i32.const 100000
-           i32.div_u
-           local.set $d
-           local.get $p1
-           i32.const 100000
-           i32.rem_u
-           local.set $p1
-           br $break|1
-          end
-          local.get $p1
-          i32.const 10000
-          i32.div_u
-          local.set $d
-          local.get $p1
-          i32.const 10000
-          i32.rem_u
-          local.set $p1
-          br $break|1
-         end
-         local.get $p1
-         i32.const 1000
-         i32.div_u
-         local.set $d
-         local.get $p1
-         i32.const 1000
-         i32.rem_u
-         local.set $p1
-         br $break|1
-        end
-        local.get $p1
-        i32.const 100
-        i32.div_u
-        local.set $d
-        local.get $p1
-        i32.const 100
-        i32.rem_u
-        local.set $p1
-        br $break|1
-       end
-       local.get $p1
-       i32.const 10
-       i32.div_u
-       local.set $d
-       local.get $p1
-       i32.const 10
-       i32.rem_u
-       local.set $p1
-       br $break|1
-      end
-      local.get $p1
-      local.set $d
-      i32.const 0
-      local.set $p1
-      br $break|1
-     end
-     i32.const 0
-     local.set $d
-     br $break|1
-    end
-    local.get $d
-    local.get $len
-    i32.or
-    if
-     local.get $buffer
-     local.get $len
-     local.tee $17
-     i32.const 1
-     i32.add
-     local.set $len
-     local.get $17
-     i32.const 1
-     i32.shl
-     i32.add
-     i32.const 48
-     local.get $d
-     i32.const 65535
-     i32.and
-     i32.add
-     i32.store16
-    end
-    local.get $kappa
-    i32.const 1
-    i32.sub
-    local.set $kappa
-    local.get $p1
-    i64.extend_i32_u
-    local.get $one_exp
-    i64.extend_i32_s
-    i64.shl
-    local.get $p2
-    i64.add
-    local.set $tmp
-    local.get $tmp
-    local.get $delta
-    i64.le_u
-    if
-     global.get $~lib/util/number/_K
-     local.get $kappa
-     i32.add
-     global.set $~lib/util/number/_K
-     local.get $buffer
-     local.set $buffer|19
-     local.get $len
-     local.set $len|20
-     local.get $delta
-     local.set $delta|21
-     local.get $tmp
-     local.set $rest
-     i32.const 1104
-     local.get $kappa
-     i32.const 2
-     i32.shl
-     i32.add
-     i64.load32_u
-     local.get $one_exp
-     i64.extend_i32_s
-     i64.shl
-     local.set $ten_kappa
-     local.get $wp_w_frc
-     local.set $wp_w
-     local.get $buffer|19
-     local.get $len|20
-     i32.const 1
-     i32.sub
-     i32.const 1
-     i32.shl
-     i32.add
-     local.set $lastp
-     local.get $lastp
-     i32.load16_u
-     local.set $digit
-     loop $while-continue|3
-      local.get $rest
-      local.get $wp_w
-      i64.lt_u
-      if (result i32)
-       local.get $delta|21
-       local.get $rest
-       i64.sub
-       local.get $ten_kappa
-       i64.ge_u
-      else
-       i32.const 0
-      end
-      if (result i32)
-       local.get $rest
-       local.get $ten_kappa
-       i64.add
-       local.get $wp_w
-       i64.lt_u
-       if (result i32)
-        i32.const 1
-       else
-        local.get $wp_w
-        local.get $rest
-        i64.sub
-        local.get $rest
-        local.get $ten_kappa
-        i64.add
-        local.get $wp_w
-        i64.sub
-        i64.gt_u
-       end
-      else
-       i32.const 0
-      end
-      if
-       local.get $digit
-       i32.const 1
-       i32.sub
-       local.set $digit
-       local.get $rest
-       local.get $ten_kappa
-       i64.add
-       local.set $rest
-       br $while-continue|3
-      end
-     end
-     local.get $lastp
-     local.get $digit
-     i32.store16
-     local.get $len
-     return
-    end
-    br $while-continue|0
-   end
-  end
-  loop $while-continue|4
-   i32.const 1
-   if
-    local.get $p2
-    i64.const 10
-    i64.mul
-    local.set $p2
-    local.get $delta
-    i64.const 10
-    i64.mul
-    local.set $delta
-    local.get $p2
-    local.get $one_exp
-    i64.extend_i32_s
-    i64.shr_u
-    local.set $d|27
-    local.get $d|27
-    local.get $len
-    i64.extend_i32_s
-    i64.or
-    i64.const 0
-    i64.ne
-    if
-     local.get $buffer
-     local.get $len
-     local.tee $28
-     i32.const 1
-     i32.add
-     local.set $len
-     local.get $28
-     i32.const 1
-     i32.shl
-     i32.add
-     i32.const 48
-     local.get $d|27
-     i32.wrap_i64
-     i32.const 65535
-     i32.and
-     i32.add
-     i32.store16
-    end
-    local.get $p2
-    local.get $mask
-    i64.and
-    local.set $p2
-    local.get $kappa
-    i32.const 1
-    i32.sub
-    local.set $kappa
-    local.get $p2
-    local.get $delta
-    i64.lt_u
-    if
-     global.get $~lib/util/number/_K
-     local.get $kappa
-     i32.add
-     global.set $~lib/util/number/_K
-     local.get $wp_w_frc
-     i32.const 1104
-     i32.const 0
-     local.get $kappa
-     i32.sub
-     i32.const 2
-     i32.shl
-     i32.add
-     i64.load32_u
-     i64.mul
-     local.set $wp_w_frc
-     local.get $buffer
-     local.set $buffer|29
-     local.get $len
-     local.set $len|30
-     local.get $delta
-     local.set $delta|31
-     local.get $p2
-     local.set $rest|32
-     local.get $one_frc
-     local.set $ten_kappa|33
-     local.get $wp_w_frc
-     local.set $wp_w|34
-     local.get $buffer|29
-     local.get $len|30
-     i32.const 1
-     i32.sub
-     i32.const 1
-     i32.shl
-     i32.add
-     local.set $lastp|35
-     local.get $lastp|35
-     i32.load16_u
-     local.set $digit|36
-     loop $while-continue|6
-      local.get $rest|32
-      local.get $wp_w|34
-      i64.lt_u
-      if (result i32)
-       local.get $delta|31
-       local.get $rest|32
-       i64.sub
-       local.get $ten_kappa|33
-       i64.ge_u
-      else
-       i32.const 0
-      end
-      if (result i32)
-       local.get $rest|32
-       local.get $ten_kappa|33
-       i64.add
-       local.get $wp_w|34
-       i64.lt_u
-       if (result i32)
-        i32.const 1
-       else
-        local.get $wp_w|34
-        local.get $rest|32
-        i64.sub
-        local.get $rest|32
-        local.get $ten_kappa|33
-        i64.add
-        local.get $wp_w|34
-        i64.sub
-        i64.gt_u
-       end
-      else
-       i32.const 0
-      end
-      if
-       local.get $digit|36
-       i32.const 1
-       i32.sub
-       local.set $digit|36
-       local.get $rest|32
-       local.get $ten_kappa|33
-       i64.add
-       local.set $rest|32
-       br $while-continue|6
-      end
-     end
-     local.get $lastp|35
-     local.get $digit|36
-     i32.store16
-     local.get $len
-     return
-    end
-    br $while-continue|4
-   end
-  end
-  unreachable
- )
- (func $~lib/util/number/utoa32_dec_lut (param $buffer i32) (param $num i32) (param $offset i32)
-  (local $t i32)
-  (local $r i32)
-  (local $d1 i32)
-  (local $d2 i32)
-  (local $digits1 i64)
-  (local $digits2 i64)
-  (local $t|9 i32)
-  (local $d1|10 i32)
-  (local $digits i32)
-  (local $digits|12 i32)
-  (local $digit i32)
-  loop $while-continue|0
-   local.get $num
-   i32.const 10000
-   i32.ge_u
-   if
-    local.get $num
-    i32.const 10000
-    i32.div_u
-    local.set $t
-    local.get $num
-    i32.const 10000
-    i32.rem_u
-    local.set $r
-    local.get $t
-    local.set $num
-    local.get $r
-    i32.const 100
-    i32.div_u
-    local.set $d1
-    local.get $r
-    i32.const 100
-    i32.rem_u
-    local.set $d2
-    i32.const 1144
-    local.get $d1
-    i32.const 2
-    i32.shl
-    i32.add
-    i64.load32_u
-    local.set $digits1
-    i32.const 1144
-    local.get $d2
-    i32.const 2
-    i32.shl
-    i32.add
-    i64.load32_u
-    local.set $digits2
-    local.get $offset
-    i32.const 4
-    i32.sub
-    local.set $offset
-    local.get $buffer
-    local.get $offset
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $digits1
-    local.get $digits2
-    i64.const 32
-    i64.shl
-    i64.or
-    i64.store
-    br $while-continue|0
-   end
-  end
-  local.get $num
-  i32.const 100
-  i32.ge_u
-  if
-   local.get $num
-   i32.const 100
-   i32.div_u
-   local.set $t|9
-   local.get $num
-   i32.const 100
-   i32.rem_u
-   local.set $d1|10
-   local.get $t|9
-   local.set $num
-   local.get $offset
-   i32.const 2
-   i32.sub
-   local.set $offset
-   i32.const 1144
-   local.get $d1|10
-   i32.const 2
-   i32.shl
-   i32.add
-   i32.load
-   local.set $digits
-   local.get $buffer
-   local.get $offset
-   i32.const 1
-   i32.shl
-   i32.add
-   local.get $digits
-   i32.store
-  end
-  local.get $num
-  i32.const 10
-  i32.ge_u
-  if
-   local.get $offset
-   i32.const 2
-   i32.sub
-   local.set $offset
-   i32.const 1144
-   local.get $num
-   i32.const 2
-   i32.shl
-   i32.add
-   i32.load
-   local.set $digits|12
-   local.get $buffer
-   local.get $offset
-   i32.const 1
-   i32.shl
-   i32.add
-   local.get $digits|12
-   i32.store
-  else
-   local.get $offset
-   i32.const 1
-   i32.sub
-   local.set $offset
-   i32.const 48
-   local.get $num
-   i32.add
-   local.set $digit
-   local.get $buffer
-   local.get $offset
-   i32.const 1
-   i32.shl
-   i32.add
-   local.get $digit
-   i32.store16
-  end
- )
- (func $~lib/util/number/prettify (param $buffer i32) (param $length i32) (param $k i32) (result i32)
-  (local $kk i32)
-  (local $i i32)
-  (local $ptr i32)
-  (local $offset i32)
-  (local $i|7 i32)
-  (local $buffer|8 i32)
-  (local $k|9 i32)
-  (local $sign i32)
-  (local $decimals i32)
-  (local $buffer|12 i32)
-  (local $num i32)
-  (local $offset|14 i32)
-  (local $len i32)
-  (local $buffer|16 i32)
-  (local $k|17 i32)
-  (local $sign|18 i32)
-  (local $decimals|19 i32)
-  (local $buffer|20 i32)
-  (local $num|21 i32)
-  (local $offset|22 i32)
-  local.get $k
-  i32.eqz
-  if
-   local.get $buffer
-   local.get $length
-   i32.const 1
-   i32.shl
-   i32.add
-   i32.const 46
-   i32.const 48
-   i32.const 16
-   i32.shl
-   i32.or
-   i32.store
-   local.get $length
-   i32.const 2
-   i32.add
-   return
-  end
-  local.get $length
-  local.get $k
-  i32.add
-  local.set $kk
-  local.get $length
-  local.get $kk
-  i32.le_s
-  if (result i32)
-   local.get $kk
-   i32.const 21
-   i32.le_s
-  else
-   i32.const 0
-  end
-  if
-   local.get $length
-   local.set $i
-   loop $for-loop|0
-    local.get $i
-    local.get $kk
-    i32.lt_s
-    if
-     local.get $buffer
-     local.get $i
-     i32.const 1
-     i32.shl
-     i32.add
-     i32.const 48
-     i32.store16
-     local.get $i
-     i32.const 1
-     i32.add
-     local.set $i
-     br $for-loop|0
-    end
-   end
-   local.get $buffer
-   local.get $kk
-   i32.const 1
-   i32.shl
-   i32.add
-   i32.const 46
-   i32.const 48
-   i32.const 16
-   i32.shl
-   i32.or
-   i32.store
-   local.get $kk
-   i32.const 2
-   i32.add
-   return
-  else
-   local.get $kk
-   i32.const 0
-   i32.gt_s
-   if (result i32)
-    local.get $kk
-    i32.const 21
-    i32.le_s
-   else
-    i32.const 0
-   end
-   if
-    local.get $buffer
-    local.get $kk
-    i32.const 1
-    i32.shl
-    i32.add
-    local.set $ptr
-    local.get $ptr
-    i32.const 2
-    i32.add
-    local.get $ptr
-    i32.const 0
-    local.get $k
-    i32.sub
-    i32.const 1
-    i32.shl
-    memory.copy
-    local.get $buffer
-    local.get $kk
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.const 46
-    i32.store16
-    local.get $length
-    i32.const 1
-    i32.add
-    return
-   else
-    i32.const -6
-    local.get $kk
-    i32.lt_s
-    if (result i32)
-     local.get $kk
-     i32.const 0
-     i32.le_s
-    else
-     i32.const 0
-    end
-    if
-     i32.const 2
-     local.get $kk
-     i32.sub
-     local.set $offset
-     local.get $buffer
-     local.get $offset
-     i32.const 1
-     i32.shl
-     i32.add
-     local.get $buffer
-     local.get $length
-     i32.const 1
-     i32.shl
-     memory.copy
-     local.get $buffer
-     i32.const 48
-     i32.const 46
-     i32.const 16
-     i32.shl
-     i32.or
-     i32.store
-     i32.const 2
-     local.set $i|7
-     loop $for-loop|1
-      local.get $i|7
-      local.get $offset
-      i32.lt_s
-      if
-       local.get $buffer
-       local.get $i|7
-       i32.const 1
-       i32.shl
-       i32.add
-       i32.const 48
-       i32.store16
-       local.get $i|7
-       i32.const 1
-       i32.add
-       local.set $i|7
-       br $for-loop|1
-      end
-     end
-     local.get $length
-     local.get $offset
-     i32.add
-     return
-    else
-     local.get $length
-     i32.const 1
-     i32.eq
-     if
-      local.get $buffer
-      i32.const 101
-      i32.store16 offset=2
-      block $~lib/util/number/genExponent|inlined.0 (result i32)
-       local.get $buffer
-       i32.const 4
-       i32.add
-       local.set $buffer|8
-       local.get $kk
-       i32.const 1
-       i32.sub
-       local.set $k|9
-       local.get $k|9
-       i32.const 0
-       i32.lt_s
-       local.set $sign
-       local.get $sign
-       if
-        i32.const 0
-        local.get $k|9
-        i32.sub
-        local.set $k|9
-       end
-       local.get $k|9
-       call $~lib/util/number/decimalCount32
-       i32.const 1
-       i32.add
-       local.set $decimals
-       local.get $buffer|8
-       local.set $buffer|12
-       local.get $k|9
-       local.set $num
-       local.get $decimals
-       local.set $offset|14
-       i32.const 0
-       i32.const 1
-       i32.ge_s
-       drop
-       local.get $buffer|12
-       local.get $num
-       local.get $offset|14
-       call $~lib/util/number/utoa32_dec_lut
-       local.get $buffer|8
-       i32.const 45
-       i32.const 43
-       local.get $sign
-       select
-       i32.store16
-       local.get $decimals
-       br $~lib/util/number/genExponent|inlined.0
-      end
-      local.set $length
-      local.get $length
-      i32.const 2
-      i32.add
-      return
-     else
-      local.get $length
-      i32.const 1
-      i32.shl
-      local.set $len
-      local.get $buffer
-      i32.const 4
-      i32.add
-      local.get $buffer
-      i32.const 2
-      i32.add
-      local.get $len
-      i32.const 2
-      i32.sub
-      memory.copy
-      local.get $buffer
-      i32.const 46
-      i32.store16 offset=2
-      local.get $buffer
-      local.get $len
-      i32.add
-      i32.const 101
-      i32.store16 offset=2
-      local.get $length
-      block $~lib/util/number/genExponent|inlined.1 (result i32)
-       local.get $buffer
-       local.get $len
-       i32.add
-       i32.const 4
-       i32.add
-       local.set $buffer|16
-       local.get $kk
-       i32.const 1
-       i32.sub
-       local.set $k|17
-       local.get $k|17
-       i32.const 0
-       i32.lt_s
-       local.set $sign|18
-       local.get $sign|18
-       if
-        i32.const 0
-        local.get $k|17
-        i32.sub
-        local.set $k|17
-       end
-       local.get $k|17
-       call $~lib/util/number/decimalCount32
-       i32.const 1
-       i32.add
-       local.set $decimals|19
-       local.get $buffer|16
-       local.set $buffer|20
-       local.get $k|17
-       local.set $num|21
-       local.get $decimals|19
-       local.set $offset|22
-       i32.const 0
-       i32.const 1
-       i32.ge_s
-       drop
-       local.get $buffer|20
-       local.get $num|21
-       local.get $offset|22
-       call $~lib/util/number/utoa32_dec_lut
-       local.get $buffer|16
-       i32.const 45
-       i32.const 43
-       local.get $sign|18
-       select
-       i32.store16
-       local.get $decimals|19
-       br $~lib/util/number/genExponent|inlined.1
-      end
-      i32.add
-      local.set $length
-      local.get $length
-      i32.const 2
-      i32.add
-      return
-     end
-     unreachable
-    end
-    unreachable
-   end
-   unreachable
-  end
-  unreachable
- )
- (func $~lib/util/number/dtoa_core (param $buffer i32) (param $value f64) (param $isSingle i32) (result i32)
-  (local $sign i32)
-  (local $value|4 f64)
-  (local $buffer|5 i32)
-  (local $sign|6 i32)
-  (local $isSingle|7 i32)
-  (local $frc i64)
-  (local $exp i32)
-  (local $uv i32)
-  (local $sid i32)
-  (local $uv|12 i64)
-  (local $sid|13 i64)
-  (local $f i64)
-  (local $e i32)
-  (local $isSingle|16 i32)
-  (local $frc|17 i64)
-  (local $exp|18 i32)
-  (local $off i32)
-  (local $m i32)
-  (local $minExp i32)
-  (local $dk f64)
-  (local $k i32)
-  (local $index i32)
-  (local $off|25 i32)
-  (local $frc_pow i64)
-  (local $exp_pow i32)
-  (local $u i64)
-  (local $v i64)
-  (local $u0 i64)
-  (local $v0 i64)
-  (local $u1 i64)
-  (local $v1 i64)
-  (local $l i64)
-  (local $t i64)
-  (local $w i64)
-  (local $w_frc i64)
-  (local $e1 i32)
-  (local $e2 i32)
-  (local $w_exp i32)
-  (local $u|41 i64)
-  (local $v|42 i64)
-  (local $u0|43 i64)
-  (local $v0|44 i64)
-  (local $u1|45 i64)
-  (local $v1|46 i64)
-  (local $l|47 i64)
-  (local $t|48 i64)
-  (local $w|49 i64)
-  (local $wp_frc i64)
-  (local $e1|51 i32)
-  (local $e2|52 i32)
-  (local $wp_exp i32)
-  (local $u|54 i64)
-  (local $v|55 i64)
-  (local $u0|56 i64)
-  (local $v0|57 i64)
-  (local $u1|58 i64)
-  (local $v1|59 i64)
-  (local $l|60 i64)
-  (local $t|61 i64)
-  (local $w|62 i64)
-  (local $wm_frc i64)
-  (local $delta i64)
-  (local $len i32)
-  local.get $value
-  f64.const 0
-  f64.lt
-  local.set $sign
-  local.get $sign
-  if
-   local.get $value
-   f64.neg
-   local.set $value
-   local.get $buffer
-   i32.const 45
-   i32.store16
-  end
-  block $~lib/util/number/grisu2|inlined.0 (result i32)
-   local.get $value
-   local.set $value|4
-   local.get $buffer
-   local.set $buffer|5
-   local.get $sign
-   local.set $sign|6
-   local.get $isSingle
-   local.set $isSingle|7
-   local.get $isSingle|7
-   if
-    local.get $value|4
-    f32.demote_f64
-    i32.reinterpret_f32
-    local.set $uv
-    local.get $uv
-    i32.const 2139095040
-    i32.and
-    i32.const 23
-    i32.shr_u
-    local.set $exp
-    local.get $uv
-    i32.const 8388607
-    i32.and
-    local.set $sid
-    local.get $exp
-    i32.const 0
-    i32.ne
-    i64.extend_i32_u
-    i64.const 23
-    i64.shl
-    local.get $sid
-    i64.extend_i32_u
-    i64.add
-    local.set $frc
-    local.get $exp
-    if (result i32)
-     local.get $exp
-    else
-     i32.const 1
-    end
-    i32.const 127
-    i32.const 23
-    i32.add
-    i32.sub
-    local.set $exp
-   else
-    local.get $value|4
-    i64.reinterpret_f64
-    local.set $uv|12
-    local.get $uv|12
-    i64.const 9218868437227405312
-    i64.and
-    i64.const 52
-    i64.shr_u
-    i32.wrap_i64
-    local.set $exp
-    local.get $uv|12
-    i64.const 4503599627370495
-    i64.and
-    local.set $sid|13
-    local.get $exp
-    i32.const 0
-    i32.ne
-    i64.extend_i32_u
-    i64.const 52
-    i64.shl
-    local.get $sid|13
-    i64.add
-    local.set $frc
-    local.get $exp
-    if (result i32)
-     local.get $exp
-    else
-     i32.const 1
-    end
-    i32.const 1023
-    i32.const 52
-    i32.add
-    i32.sub
-    local.set $exp
-   end
-   local.get $frc
-   local.set $f
-   local.get $exp
-   local.set $e
-   local.get $isSingle|7
-   local.set $isSingle|16
-   local.get $f
-   i64.const 1
-   i64.shl
-   i64.const 1
-   i64.add
-   local.set $frc|17
-   local.get $e
-   i32.const 1
-   i32.sub
-   local.set $exp|18
-   local.get $frc|17
-   i64.clz
-   i32.wrap_i64
-   local.set $off
-   local.get $frc|17
-   local.get $off
-   i64.extend_i32_s
-   i64.shl
-   local.set $frc|17
-   local.get $exp|18
-   local.get $off
-   i32.sub
-   local.set $exp|18
-   i32.const 1
-   local.get $f
-   local.get $isSingle|16
-   if (result i64)
-    i64.const 8388608
-   else
-    i64.const 4503599627370496
-   end
-   i64.eq
-   i32.add
-   local.set $m
-   local.get $frc|17
-   global.set $~lib/util/number/_frc_plus
-   local.get $f
-   local.get $m
-   i64.extend_i32_s
-   i64.shl
-   i64.const 1
-   i64.sub
-   local.get $e
-   local.get $m
-   i32.sub
-   local.get $exp|18
-   i32.sub
-   i64.extend_i32_s
-   i64.shl
-   global.set $~lib/util/number/_frc_minus
-   local.get $exp|18
-   global.set $~lib/util/number/_exp
-   global.get $~lib/util/number/_exp
-   local.set $minExp
-   i32.const -61
-   local.get $minExp
-   i32.sub
-   f64.convert_i32_s
-   f64.const 0.30102999566398114
-   f64.mul
-   f64.const 347
-   f64.add
-   local.set $dk
-   local.get $dk
-   i32.trunc_sat_f64_s
-   local.set $k
-   local.get $k
-   local.get $k
-   f64.convert_i32_s
-   local.get $dk
-   f64.ne
-   i32.add
-   local.set $k
-   local.get $k
-   i32.const 3
-   i32.shr_s
-   i32.const 1
-   i32.add
-   local.set $index
-   i32.const 348
-   local.get $index
-   i32.const 3
-   i32.shl
-   i32.sub
-   global.set $~lib/util/number/_K
-   i32.const 232
-   local.get $index
-   i32.const 3
-   i32.shl
-   i32.add
-   i64.load
-   global.set $~lib/util/number/_frc_pow
-   i32.const 928
-   local.get $index
-   i32.const 1
-   i32.shl
-   i32.add
-   i32.load16_s
-   global.set $~lib/util/number/_exp_pow
-   local.get $frc
-   i64.clz
-   i32.wrap_i64
-   local.set $off|25
-   local.get $frc
-   local.get $off|25
-   i64.extend_i32_s
-   i64.shl
-   local.set $frc
-   local.get $exp
-   local.get $off|25
-   i32.sub
-   local.set $exp
-   global.get $~lib/util/number/_frc_pow
-   local.set $frc_pow
-   global.get $~lib/util/number/_exp_pow
-   local.set $exp_pow
-   block $~lib/util/number/umul64f|inlined.0 (result i64)
-    local.get $frc
-    local.set $u
-    local.get $frc_pow
-    local.set $v
-    local.get $u
-    i64.const 4294967295
-    i64.and
-    local.set $u0
-    local.get $v
-    i64.const 4294967295
-    i64.and
-    local.set $v0
-    local.get $u
-    i64.const 32
-    i64.shr_u
-    local.set $u1
-    local.get $v
-    i64.const 32
-    i64.shr_u
-    local.set $v1
-    local.get $u0
-    local.get $v0
-    i64.mul
-    local.set $l
-    local.get $u1
-    local.get $v0
-    i64.mul
-    local.get $l
-    i64.const 32
-    i64.shr_u
-    i64.add
-    local.set $t
-    local.get $u0
-    local.get $v1
-    i64.mul
-    local.get $t
-    i64.const 4294967295
-    i64.and
-    i64.add
-    local.set $w
-    local.get $w
-    i64.const 2147483647
-    i64.add
-    local.set $w
-    local.get $t
-    i64.const 32
-    i64.shr_u
-    local.set $t
-    local.get $w
-    i64.const 32
-    i64.shr_u
-    local.set $w
-    local.get $u1
-    local.get $v1
-    i64.mul
-    local.get $t
-    i64.add
-    local.get $w
-    i64.add
-    br $~lib/util/number/umul64f|inlined.0
-   end
-   local.set $w_frc
-   block $~lib/util/number/umul64e|inlined.0 (result i32)
-    local.get $exp
-    local.set $e1
-    local.get $exp_pow
-    local.set $e2
-    local.get $e1
-    local.get $e2
-    i32.add
-    i32.const 64
-    i32.add
-    br $~lib/util/number/umul64e|inlined.0
-   end
-   local.set $w_exp
-   block $~lib/util/number/umul64f|inlined.1 (result i64)
-    global.get $~lib/util/number/_frc_plus
-    local.set $u|41
-    local.get $frc_pow
-    local.set $v|42
-    local.get $u|41
-    i64.const 4294967295
-    i64.and
-    local.set $u0|43
-    local.get $v|42
-    i64.const 4294967295
-    i64.and
-    local.set $v0|44
-    local.get $u|41
-    i64.const 32
-    i64.shr_u
-    local.set $u1|45
-    local.get $v|42
-    i64.const 32
-    i64.shr_u
-    local.set $v1|46
-    local.get $u0|43
-    local.get $v0|44
-    i64.mul
-    local.set $l|47
-    local.get $u1|45
-    local.get $v0|44
-    i64.mul
-    local.get $l|47
-    i64.const 32
-    i64.shr_u
-    i64.add
-    local.set $t|48
-    local.get $u0|43
-    local.get $v1|46
-    i64.mul
-    local.get $t|48
-    i64.const 4294967295
-    i64.and
-    i64.add
-    local.set $w|49
-    local.get $w|49
-    i64.const 2147483647
-    i64.add
-    local.set $w|49
-    local.get $t|48
-    i64.const 32
-    i64.shr_u
-    local.set $t|48
-    local.get $w|49
-    i64.const 32
-    i64.shr_u
-    local.set $w|49
-    local.get $u1|45
-    local.get $v1|46
-    i64.mul
-    local.get $t|48
-    i64.add
-    local.get $w|49
-    i64.add
-    br $~lib/util/number/umul64f|inlined.1
-   end
-   i64.const 1
-   i64.sub
-   local.set $wp_frc
-   block $~lib/util/number/umul64e|inlined.1 (result i32)
-    global.get $~lib/util/number/_exp
-    local.set $e1|51
-    local.get $exp_pow
-    local.set $e2|52
-    local.get $e1|51
-    local.get $e2|52
-    i32.add
-    i32.const 64
-    i32.add
-    br $~lib/util/number/umul64e|inlined.1
-   end
-   local.set $wp_exp
-   block $~lib/util/number/umul64f|inlined.2 (result i64)
-    global.get $~lib/util/number/_frc_minus
-    local.set $u|54
-    local.get $frc_pow
-    local.set $v|55
-    local.get $u|54
-    i64.const 4294967295
-    i64.and
-    local.set $u0|56
-    local.get $v|55
-    i64.const 4294967295
-    i64.and
-    local.set $v0|57
-    local.get $u|54
-    i64.const 32
-    i64.shr_u
-    local.set $u1|58
-    local.get $v|55
-    i64.const 32
-    i64.shr_u
-    local.set $v1|59
-    local.get $u0|56
-    local.get $v0|57
-    i64.mul
-    local.set $l|60
-    local.get $u1|58
-    local.get $v0|57
-    i64.mul
-    local.get $l|60
-    i64.const 32
-    i64.shr_u
-    i64.add
-    local.set $t|61
-    local.get $u0|56
-    local.get $v1|59
-    i64.mul
-    local.get $t|61
-    i64.const 4294967295
-    i64.and
-    i64.add
-    local.set $w|62
-    local.get $w|62
-    i64.const 2147483647
-    i64.add
-    local.set $w|62
-    local.get $t|61
-    i64.const 32
-    i64.shr_u
-    local.set $t|61
-    local.get $w|62
-    i64.const 32
-    i64.shr_u
-    local.set $w|62
-    local.get $u1|58
-    local.get $v1|59
-    i64.mul
-    local.get $t|61
-    i64.add
-    local.get $w|62
-    i64.add
-    br $~lib/util/number/umul64f|inlined.2
-   end
-   i64.const 1
-   i64.add
-   local.set $wm_frc
-   local.get $wp_frc
-   local.get $wm_frc
-   i64.sub
-   local.set $delta
-   local.get $buffer|5
-   local.get $w_frc
-   local.get $w_exp
-   local.get $wp_frc
-   local.get $wp_exp
-   local.get $delta
-   local.get $sign|6
-   call $~lib/util/number/genDigits
-   br $~lib/util/number/grisu2|inlined.0
-  end
-  local.set $len
-  local.get $buffer
-  local.get $sign
-  i32.const 1
-  i32.shl
-  i32.add
-  local.get $len
-  local.get $sign
-  i32.sub
-  global.get $~lib/util/number/_K
-  call $~lib/util/number/prettify
-  local.set $len
-  local.get $len
-  local.get $sign
-  i32.add
-  return
  )
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $this i32) (param $nextWithColor i32)
   local.get $this
@@ -1707,7 +215,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1632
+     i32.const 256
      i32.const 160
      i32.const 16
      call $~lib/builtins/abort
@@ -1777,7 +285,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1632
+    i32.const 256
     i32.const 128
     i32.const 18
     call $~lib/builtins/abort
@@ -1794,7 +302,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1632
+   i32.const 256
    i32.const 132
    i32.const 16
    call $~lib/builtins/abort
@@ -1824,8 +332,8 @@
   i32.load
   i32.gt_u
   if
-   i32.const 1760
-   i32.const 1824
+   i32.const 384
+   i32.const 448
    i32.const 21
    i32.const 28
    call $~lib/builtins/abort
@@ -1893,7 +401,7 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 1632
+    i32.const 256
     i32.const 148
     i32.const 30
     call $~lib/builtins/abort
@@ -2045,7 +553,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 268
    i32.const 14
    call $~lib/builtins/abort
@@ -2065,7 +573,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 270
    i32.const 14
    call $~lib/builtins/abort
@@ -2128,7 +636,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 284
    i32.const 14
    call $~lib/builtins/abort
@@ -2281,7 +789,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 201
    i32.const 14
    call $~lib/builtins/abort
@@ -2298,7 +806,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 203
    i32.const 14
    call $~lib/builtins/abort
@@ -2387,7 +895,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1904
+    i32.const 528
     i32.const 221
     i32.const 16
     call $~lib/builtins/abort
@@ -2430,7 +938,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 233
    i32.const 14
    call $~lib/builtins/abort
@@ -2448,7 +956,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 234
    i32.const 14
    call $~lib/builtins/abort
@@ -2516,7 +1024,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 251
    i32.const 14
    call $~lib/builtins/abort
@@ -2633,7 +1141,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 382
    i32.const 14
    call $~lib/builtins/abort
@@ -2679,7 +1187,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1904
+    i32.const 528
     i32.const 389
     i32.const 16
     call $~lib/builtins/abort
@@ -2711,7 +1219,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1904
+    i32.const 528
     i32.const 402
     i32.const 5
     call $~lib/builtins/abort
@@ -2955,7 +1463,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 562
    i32.const 3
    call $~lib/builtins/abort
@@ -3175,7 +1683,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1632
+     i32.const 256
      i32.const 229
      i32.const 20
      call $~lib/builtins/abort
@@ -3286,8 +1794,8 @@
   i32.const 1073741820
   i32.gt_u
   if
-   i32.const 1568
-   i32.const 1904
+   i32.const 192
+   i32.const 528
    i32.const 461
    i32.const 29
    call $~lib/builtins/abort
@@ -3389,7 +1897,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 334
    i32.const 14
    call $~lib/builtins/abort
@@ -3460,7 +1968,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1904
+     i32.const 528
      i32.const 347
      i32.const 18
      call $~lib/builtins/abort
@@ -3617,7 +2125,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 361
    i32.const 14
    call $~lib/builtins/abort
@@ -3732,7 +2240,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1904
+    i32.const 528
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -3752,7 +2260,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1904
+   i32.const 528
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -3800,8 +2308,8 @@
   i32.const 1073741804
   i32.ge_u
   if
-   i32.const 1568
-   i32.const 1632
+   i32.const 192
+   i32.const 256
    i32.const 261
    i32.const 31
    call $~lib/builtins/abort
@@ -3844,6 +2352,2741 @@
   local.get $size
   memory.fill
   local.get $ptr
+  return
+ )
+ (func $~lib/util/number/utoa32_dec_lut (param $buffer i32) (param $num i32) (param $offset i32)
+  (local $t i32)
+  (local $r i32)
+  (local $d1 i32)
+  (local $d2 i32)
+  (local $digits1 i64)
+  (local $digits2 i64)
+  (local $t|9 i32)
+  (local $d1|10 i32)
+  (local $digits i32)
+  (local $digits|12 i32)
+  (local $digit i32)
+  loop $while-continue|0
+   local.get $num
+   i32.const 10000
+   i32.ge_u
+   if
+    local.get $num
+    i32.const 10000
+    i32.div_u
+    local.set $t
+    local.get $num
+    i32.const 10000
+    i32.rem_u
+    local.set $r
+    local.get $t
+    local.set $num
+    local.get $r
+    i32.const 100
+    i32.div_u
+    local.set $d1
+    local.get $r
+    i32.const 100
+    i32.rem_u
+    local.set $d2
+    i32.const 572
+    local.get $d1
+    i32.const 2
+    i32.shl
+    i32.add
+    i64.load32_u
+    local.set $digits1
+    i32.const 572
+    local.get $d2
+    i32.const 2
+    i32.shl
+    i32.add
+    i64.load32_u
+    local.set $digits2
+    local.get $offset
+    i32.const 4
+    i32.sub
+    local.set $offset
+    local.get $buffer
+    local.get $offset
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $digits1
+    local.get $digits2
+    i64.const 32
+    i64.shl
+    i64.or
+    i64.store
+    br $while-continue|0
+   end
+  end
+  local.get $num
+  i32.const 100
+  i32.ge_u
+  if
+   local.get $num
+   i32.const 100
+   i32.div_u
+   local.set $t|9
+   local.get $num
+   i32.const 100
+   i32.rem_u
+   local.set $d1|10
+   local.get $t|9
+   local.set $num
+   local.get $offset
+   i32.const 2
+   i32.sub
+   local.set $offset
+   i32.const 572
+   local.get $d1|10
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load
+   local.set $digits
+   local.get $buffer
+   local.get $offset
+   i32.const 1
+   i32.shl
+   i32.add
+   local.get $digits
+   i32.store
+  end
+  local.get $num
+  i32.const 10
+  i32.ge_u
+  if
+   local.get $offset
+   i32.const 2
+   i32.sub
+   local.set $offset
+   i32.const 572
+   local.get $num
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load
+   local.set $digits|12
+   local.get $buffer
+   local.get $offset
+   i32.const 1
+   i32.shl
+   i32.add
+   local.get $digits|12
+   i32.store
+  else
+   local.get $offset
+   i32.const 1
+   i32.sub
+   local.set $offset
+   i32.const 48
+   local.get $num
+   i32.add
+   local.set $digit
+   local.get $buffer
+   local.get $offset
+   i32.const 1
+   i32.shl
+   i32.add
+   local.get $digit
+   i32.store16
+  end
+ )
+ (func $~lib/util/dtoa/computePow10Compact (param $i i32) (result i64)
+  (local $j i32)
+  (local $major i32)
+  (local $minor i32)
+  (local $m i64)
+  (local $hoff i32)
+  (local $hHi i64)
+  (local $hLo i64)
+  (local $a i64)
+  (local $b i64)
+  (local $a0 i64)
+  (local $a1 i64)
+  (local $b0 i64)
+  (local $b1 i64)
+  (local $w0 i64)
+  (local $t i64)
+  (local $w1 i64)
+  (local $w2 i64)
+  (local $h1 i64)
+  (local $c0 i64)
+  (local $c1 i64)
+  (local $a|21 i64)
+  (local $b|22 i64)
+  (local $a0|23 i64)
+  (local $a1|24 i64)
+  (local $b0|25 i64)
+  (local $b1|26 i64)
+  (local $w0|27 i64)
+  (local $t|28 i64)
+  (local $w1|29 i64)
+  (local $w2|30 i64)
+  (local $c2 i64)
+  (local $hi i64)
+  (local $lo i64)
+  local.get $i
+  i32.const 10
+  i32.add
+  local.set $j
+  local.get $j
+  i32.const 293
+  i32.mul
+  i32.const 13
+  i32.shr_u
+  local.set $major
+  local.get $j
+  local.get $major
+  i32.const 28
+  i32.mul
+  i32.sub
+  local.set $minor
+  i32.const 1104
+  i32.const 27
+  local.get $minor
+  i32.sub
+  i32.const 3
+  i32.shl
+  i32.add
+  i64.load
+  local.set $m
+  i32.const 1528
+  local.get $major
+  i32.const 4
+  i32.shl
+  i32.add
+  local.set $hoff
+  local.get $hoff
+  i64.load
+  local.set $hHi
+  local.get $hoff
+  i64.load offset=8
+  local.set $hLo
+  block $~lib/util/dtoa/umul64hi|inlined.0 (result i64)
+   local.get $hLo
+   local.set $a
+   local.get $m
+   local.set $b
+   local.get $a
+   i64.const 4294967295
+   i64.and
+   local.set $a0
+   local.get $a
+   i64.const 32
+   i64.shr_u
+   local.set $a1
+   local.get $b
+   i64.const 4294967295
+   i64.and
+   local.set $b0
+   local.get $b
+   i64.const 32
+   i64.shr_u
+   local.set $b1
+   local.get $a0
+   local.get $b0
+   i64.mul
+   local.set $w0
+   local.get $a1
+   local.get $b0
+   i64.mul
+   local.get $w0
+   i64.const 32
+   i64.shr_u
+   i64.add
+   local.set $t
+   local.get $t
+   i64.const 4294967295
+   i64.and
+   local.set $w1
+   local.get $t
+   i64.const 32
+   i64.shr_u
+   local.set $w2
+   local.get $a0
+   local.get $b1
+   i64.mul
+   local.get $w1
+   i64.add
+   local.set $w1
+   local.get $a1
+   local.get $b1
+   i64.mul
+   local.get $w2
+   i64.add
+   local.get $w1
+   i64.const 32
+   i64.shr_u
+   i64.add
+   br $~lib/util/dtoa/umul64hi|inlined.0
+  end
+  local.set $h1
+  local.get $hLo
+  local.get $m
+  i64.mul
+  local.set $c0
+  local.get $h1
+  local.get $hHi
+  local.get $m
+  i64.mul
+  i64.add
+  local.set $c1
+  local.get $c1
+  local.get $h1
+  i64.lt_u
+  i64.extend_i32_u
+  block $~lib/util/dtoa/umul64hi|inlined.1 (result i64)
+   local.get $hHi
+   local.set $a|21
+   local.get $m
+   local.set $b|22
+   local.get $a|21
+   i64.const 4294967295
+   i64.and
+   local.set $a0|23
+   local.get $a|21
+   i64.const 32
+   i64.shr_u
+   local.set $a1|24
+   local.get $b|22
+   i64.const 4294967295
+   i64.and
+   local.set $b0|25
+   local.get $b|22
+   i64.const 32
+   i64.shr_u
+   local.set $b1|26
+   local.get $a0|23
+   local.get $b0|25
+   i64.mul
+   local.set $w0|27
+   local.get $a1|24
+   local.get $b0|25
+   i64.mul
+   local.get $w0|27
+   i64.const 32
+   i64.shr_u
+   i64.add
+   local.set $t|28
+   local.get $t|28
+   i64.const 4294967295
+   i64.and
+   local.set $w1|29
+   local.get $t|28
+   i64.const 32
+   i64.shr_u
+   local.set $w2|30
+   local.get $a0|23
+   local.get $b1|26
+   i64.mul
+   local.get $w1|29
+   i64.add
+   local.set $w1|29
+   local.get $a1|24
+   local.get $b1|26
+   i64.mul
+   local.get $w2|30
+   i64.add
+   local.get $w1|29
+   i64.const 32
+   i64.shr_u
+   i64.add
+   br $~lib/util/dtoa/umul64hi|inlined.1
+  end
+  i64.add
+  local.set $c2
+  local.get $c2
+  i64.const 63
+  i64.shr_u
+  i64.const 0
+  i64.ne
+  if
+   local.get $c1
+   local.set $lo
+   local.get $c2
+   local.set $hi
+  else
+   local.get $c1
+   i64.const 1
+   i64.shl
+   local.get $c0
+   i64.const 63
+   i64.shr_u
+   i64.or
+   local.set $lo
+   local.get $c2
+   i64.const 1
+   i64.shl
+   local.get $c1
+   i64.const 63
+   i64.shr_u
+   i64.or
+   local.set $hi
+  end
+  local.get $lo
+  i32.const 1896
+  local.get $i
+  i32.const 5
+  i32.shr_s
+  i32.const 2
+  i32.shl
+  i32.add
+  i64.load32_u
+  local.get $i
+  i32.const 31
+  i32.and
+  i64.extend_i32_s
+  i64.shr_u
+  i64.const 1
+  i64.and
+  i64.sub
+  local.set $lo
+  local.get $hi
+  global.set $~lib/util/dtoa/gPow10Hi
+  local.get $lo
+  return
+ )
+ (func $~lib/polyfills/bswap<u64> (param $value i64) (result i64)
+  (local $a i64)
+  (local $b i64)
+  (local $v i64)
+  i32.const 1
+  drop
+  i32.const 8
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $value
+  i64.const 8
+  i64.shr_u
+  i64.const 71777214294589695
+  i64.and
+  local.set $a
+  local.get $value
+  i64.const 71777214294589695
+  i64.and
+  i64.const 8
+  i64.shl
+  local.set $b
+  local.get $a
+  local.get $b
+  i64.or
+  local.set $v
+  local.get $v
+  i64.const 16
+  i64.shr_u
+  i64.const 281470681808895
+  i64.and
+  local.set $a
+  local.get $v
+  i64.const 281470681808895
+  i64.and
+  i64.const 16
+  i64.shl
+  local.set $b
+  local.get $a
+  local.get $b
+  i64.or
+  i64.const 32
+  i64.rotr
+  return
+ )
+ (func $~lib/util/dtoa/toBcd8 (param $value i64) (result i32)
+  (local $value|1 i64)
+  (local $quads i64)
+  (local $pairs i64)
+  (local $singles i64)
+  (local $singles|5 i64)
+  block $~lib/util/dtoa/toBcd8Digits|inlined.0 (result i64)
+   local.get $value
+   local.set $value|1
+   local.get $value|1
+   i64.const 4294957296
+   local.get $value|1
+   global.get $~lib/util/dtoa/DIV10K_SIG
+   i64.mul
+   i32.const 40
+   i64.extend_i32_s
+   i64.shr_u
+   i64.mul
+   i64.add
+   local.set $quads
+   local.get $quads
+   i64.const 65436
+   local.get $quads
+   global.get $~lib/util/dtoa/DIV100_SIG
+   i64.mul
+   i32.const 19
+   i64.extend_i32_s
+   i64.shr_u
+   i64.const 545460846719
+   i64.and
+   i64.mul
+   i64.add
+   local.set $pairs
+   local.get $pairs
+   i64.const 246
+   local.get $pairs
+   global.get $~lib/util/dtoa/DIV10_SIG
+   i64.mul
+   i32.const 10
+   i64.extend_i32_s
+   i64.shr_u
+   i64.const 4222189076152335
+   i64.and
+   i64.mul
+   i64.add
+   local.set $singles
+   local.get $singles
+   call $~lib/polyfills/bswap<u64>
+   global.set $~lib/util/dtoa/gBcdValue
+   local.get $singles
+   br $~lib/util/dtoa/toBcd8Digits|inlined.0
+  end
+  local.set $singles|5
+  i32.const 70
+  i64.extend_i32_s
+  local.get $singles|5
+  i64.const 1
+  i64.shl
+  i64.const 1
+  i64.or
+  i64.clz
+  i64.sub
+  i64.const 8
+  i64.div_u
+  i32.wrap_i64
+  return
+ )
+ (func $~lib/util/dtoa/ftoa_buffered (param $buffer i32) (param $value f32) (result i32)
+  (local $bits i32)
+  (local $binExp i32)
+  (local $binSig i64)
+  (local $buf i32)
+  (local $bits|6 i32)
+  (local $binExp|7 i32)
+  (local $binSig|8 i64)
+  (local $dotZero i32)
+  (local $neg i32)
+  (local $isNormal i32)
+  (local $buf|12 i32)
+  (local $buf|13 i32)
+  (local $neg|14 i32)
+  (local $p i32)
+  (local $ascii i64)
+  (local $off i32)
+  (local $base i32)
+  (local $lo i64)
+  (local $hi i64)
+  (local $end i32)
+  (local $dotZero|22 i32)
+  (local $binSig|23 i64)
+  (local $rawExp i32)
+  (local $regular i32)
+  (local $expBin i32)
+  (local $k i32)
+  (local $h i32)
+  (local $pow10Hi i64)
+  (local $lo|30 i64)
+  (local $t0 i64)
+  (local $t1 i64)
+  (local $mid i64)
+  (local $hi64 i64)
+  (local $halfUlp i64)
+  (local $dotOne i64)
+  (local $mUp i64)
+  (local $one i32)
+  (local $upDown i32)
+  (local $decSig i64)
+  (local $decExp i32)
+  (local $q i64)
+  (local $last i32)
+  (local $q|44 i32)
+  (local $c i64)
+  (local $intValue i64)
+  (local $shift i32)
+  (local $mask i64)
+  (local $buf|49 i32)
+  (local $value|50 i64)
+  (local $v i64)
+  (local $v|52 i64)
+  (local $len i32)
+  (local $p|54 i32)
+  (local $v|55 i64)
+  (local $q|56 i64)
+  (local $q|57 i64)
+  (local $q|58 i64)
+  (local $q|59 i64)
+  (local $q|60 i64)
+  (local $q|61 i64)
+  (local $q|62 i64)
+  (local $end|63 i32)
+  (local $dotZero|64 i32)
+  (local $binSig|65 i64)
+  (local $rawExp|66 i32)
+  (local $regular|67 i32)
+  (local $expBin|68 i32)
+  (local $k|69 i32)
+  (local $h|70 i32)
+  (local $pow10Hi|71 i64)
+  (local $lo|72 i64)
+  (local $t0|73 i64)
+  (local $t1|74 i64)
+  (local $mid|75 i64)
+  (local $hi64|76 i64)
+  (local $halfUlp|77 i64)
+  (local $dotOne|78 i64)
+  (local $mUp|79 i64)
+  (local $one|80 i32)
+  (local $upDown|81 i32)
+  (local $hasLastDigit i32)
+  (local $hasExtraDigit i32)
+  (local $decExp|84 i32)
+  (local $start i32)
+  (local $value|86 i64)
+  (local $length i32)
+  (local $buf|88 i32)
+  (local $start|89 i32)
+  (local $decExp|90 i32)
+  (local $hasLastDigit|91 i32)
+  (local $hasExtraDigit|92 i32)
+  (local $dotZero|93 i32)
+  (local $p|94 i32)
+  (local $ascii|95 i64)
+  (local $off|96 i32)
+  (local $base|97 i32)
+  (local $lo|98 i64)
+  (local $hi|99 i64)
+  (local $lastDigitChar i64)
+  (local $numDigits i32)
+  (local $dHi i64)
+  (local $p|103 i32)
+  (local $ascii|104 i64)
+  (local $off|105 i32)
+  (local $base|106 i32)
+  (local $lo|107 i64)
+  (local $hi|108 i64)
+  (local $sig i32)
+  (local $endByte i32)
+  (local $z i32)
+  (local $p|112 i32)
+  (local $ascii|113 i64)
+  (local $off|114 i32)
+  (local $base|115 i32)
+  (local $lo|116 i64)
+  (local $hi|117 i64)
+  (local $end|118 i32)
+  (local $dotZero|119 i32)
+  (local $n i32)
+  (local $endPos i32)
+  (local $startPos i32)
+  (local $p|123 i32)
+  (local $ascii|124 i64)
+  (local $off|125 i32)
+  (local $base|126 i32)
+  (local $lo|127 i64)
+  (local $hi|128 i64)
+  (local $k|129 i32)
+  (local $d16 i64)
+  (local $s i32)
+  (local $fHi i64)
+  (local $p|133 i32)
+  (local $ascii|134 i64)
+  (local $off|135 i32)
+  (local $base|136 i32)
+  (local $lo|137 i64)
+  (local $hi|138 i64)
+  (local $end|139 i32)
+  (local $end|140 i32)
+  (local $dotZero|141 i32)
+  (local $buf|142 i32)
+  (local $start|143 i32)
+  (local $decExp|144 i32)
+  (local $hasLastDigit|145 i32)
+  (local $hasExtraDigit|146 i32)
+  (local $p|147 i32)
+  (local $ascii|148 i64)
+  (local $off|149 i32)
+  (local $base|150 i32)
+  (local $lo|151 i64)
+  (local $hi|152 i64)
+  (local $lead i32)
+  (local $buf|154 i32)
+  (local $decExp|155 i32)
+  (local $m i32)
+  (local $e i32)
+  (local $d i32)
+  local.get $value
+  i32.reinterpret_f32
+  local.set $bits
+  local.get $bits
+  i32.const 1
+  i32.shl
+  i32.const 24
+  i32.shr_u
+  local.set $binExp
+  local.get $bits
+  global.get $~lib/util/dtoa/FLOAT_SIGNIFICAND_MASK
+  i32.and
+  i64.extend_i32_u
+  local.set $binSig
+  block $~lib/util/dtoa/formatDecodedFloat|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buf
+   local.get $bits
+   local.set $bits|6
+   local.get $binExp
+   local.set $binExp|7
+   local.get $binSig
+   local.set $binSig|8
+   i32.const 1
+   local.set $dotZero
+   local.get $bits|6
+   i32.const 31
+   i32.shr_u
+   i32.const 0
+   i32.ne
+   local.set $neg
+   local.get $binExp|7
+   i32.const 1
+   i32.sub
+   i32.const 254
+   i32.lt_u
+   local.set $isNormal
+   local.get $isNormal
+   i32.eqz
+   if
+    local.get $binExp|7
+    i32.const 0
+    i32.ne
+    if
+     local.get $binSig|8
+     i64.const 0
+     i64.ne
+     if
+      block $~lib/util/dtoa/writeNaN|inlined.0 (result i32)
+       local.get $buf
+       local.set $buf|12
+       local.get $buf|12
+       i32.const 78
+       i32.store16
+       local.get $buf|12
+       i32.const 97
+       i32.store16 offset=2
+       local.get $buf|12
+       i32.const 78
+       i32.store16 offset=4
+       local.get $buf|12
+       i32.const 6
+       i32.add
+       br $~lib/util/dtoa/writeNaN|inlined.0
+      end
+      br $~lib/util/dtoa/formatDecodedFloat|inlined.0
+     end
+     block $~lib/util/dtoa/writeInfinity|inlined.0 (result i32)
+      local.get $buf
+      local.set $buf|13
+      local.get $neg
+      local.set $neg|14
+      local.get $neg|14
+      if
+       local.get $buf|13
+       i32.const 45
+       i32.store16
+       local.get $buf|13
+       i32.const 2
+       i32.add
+       local.set $buf|13
+      end
+      local.get $buf|13
+      local.set $p
+      i64.const 8751735898823355977
+      local.set $ascii
+      i32.const 0
+      local.set $off
+      local.get $p
+      local.get $off
+      i32.add
+      local.set $base
+      i32.const 0
+      drop
+      local.get $ascii
+      i64.const 4294967295
+      i64.and
+      local.set $lo
+      local.get $ascii
+      i64.const 32
+      i64.shr_u
+      local.set $hi
+      local.get $lo
+      local.get $lo
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $lo
+      local.get $hi
+      local.get $hi
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $hi
+      local.get $lo
+      local.get $lo
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $lo
+      local.get $hi
+      local.get $hi
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $hi
+      local.get $base
+      local.get $lo
+      i64.store
+      local.get $base
+      local.get $hi
+      i64.store offset=8
+      local.get $buf|13
+      i32.const 16
+      i32.add
+      br $~lib/util/dtoa/writeInfinity|inlined.0
+     end
+     br $~lib/util/dtoa/formatDecodedFloat|inlined.0
+    end
+    local.get $binSig|8
+    i64.const 0
+    i64.eq
+    if
+     local.get $buf
+     i32.const 48
+     i32.store16
+     block $~lib/util/dtoa/finishInteger|inlined.0 (result i32)
+      local.get $buf
+      i32.const 2
+      i32.add
+      local.set $end
+      local.get $dotZero
+      local.set $dotZero|22
+      local.get $dotZero|22
+      if
+       local.get $end
+       i32.const 46
+       i32.store16
+       local.get $end
+       i32.const 48
+       i32.store16 offset=2
+       local.get $end
+       i32.const 4
+       i32.add
+       local.set $end
+      end
+      local.get $end
+      br $~lib/util/dtoa/finishInteger|inlined.0
+     end
+     br $~lib/util/dtoa/formatDecodedFloat|inlined.0
+    end
+    local.get $neg
+    if
+     local.get $buf
+     i32.const 45
+     i32.store16
+     local.get $buf
+     i32.const 2
+     i32.add
+     local.set $buf
+    end
+    local.get $binSig|8
+    local.set $binSig|23
+    i32.const 1
+    local.set $rawExp
+    i32.const 1
+    local.set $regular
+    local.get $rawExp
+    i32.const 150
+    i32.sub
+    local.set $expBin
+    local.get $regular
+    if
+     local.get $expBin
+     i32.const 1233
+     i32.mul
+     i32.const 12
+     i32.shr_s
+     local.set $k
+     i32.const 37
+     local.get $expBin
+     i32.add
+     i32.const 0
+     local.get $k
+     i32.sub
+     i32.const 1
+     i32.sub
+     i32.const 1701
+     i32.mul
+     i32.const 9
+     i32.shr_s
+     i32.add
+     local.set $h
+    else
+     local.get $expBin
+     i32.const 1233
+     i32.mul
+     i32.const 512
+     i32.sub
+     i32.const 12
+     i32.shr_s
+     local.set $k
+     i32.const 37
+     local.get $expBin
+     i32.add
+     local.get $k
+     i32.const -1701
+     i32.mul
+     i32.const -1701
+     i32.add
+     i32.const 9
+     i32.shr_s
+     i32.add
+     local.set $h
+    end
+    local.get $k
+    i32.const -28
+    i32.ge_s
+    if (result i32)
+     local.get $k
+     i32.const 16
+     i32.le_s
+    else
+     i32.const 0
+    end
+    if
+     i32.const 1104
+     i32.const 28
+     local.get $k
+     i32.add
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load
+     local.set $pow10Hi
+    else
+     i32.const 292
+     local.get $k
+     i32.sub
+     call $~lib/util/dtoa/computePow10Compact
+     local.set $lo|30
+     global.get $~lib/util/dtoa/gPow10Hi
+     local.get $lo|30
+     i64.const 0
+     i64.ne
+     i64.extend_i32_u
+     i64.add
+     local.set $pow10Hi
+    end
+    local.get $pow10Hi
+    i64.const 4294967295
+    i64.and
+    local.get $binSig|23
+    i64.mul
+    local.set $t0
+    local.get $pow10Hi
+    i64.const 32
+    i64.shr_u
+    local.get $binSig|23
+    i64.mul
+    local.get $t0
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $t1
+    local.get $t1
+    i64.const 8
+    i64.shl
+    local.get $t0
+    i64.const 4294967295
+    i64.and
+    i64.const 24
+    i64.shr_u
+    i64.or
+    local.set $mid
+    local.get $mid
+    i64.const 40
+    local.get $h
+    i64.extend_i32_s
+    i64.sub
+    i64.shr_u
+    local.set $hi64
+    local.get $pow10Hi
+    i64.const 65
+    local.get $h
+    i64.extend_i32_s
+    i64.sub
+    i64.shr_u
+    i64.const 1
+    local.get $binSig|23
+    i64.const 1
+    i64.and
+    i64.sub
+    i64.add
+    local.set $halfUlp
+    local.get $hi64
+    i64.const 1
+    i32.const 36
+    i64.extend_i32_s
+    i64.shl
+    i64.const 1
+    i64.sub
+    i64.and
+    local.set $dotOne
+    local.get $hi64
+    local.get $halfUlp
+    i64.add
+    i32.const 36
+    i64.extend_i32_s
+    i64.shr_u
+    local.set $mUp
+    local.get $dotOne
+    i64.const 5
+    i64.mul
+    i64.const 17179869177
+    i64.add
+    local.get $dotOne
+    i64.const 32
+    i64.shr_u
+    i64.add
+    i32.const 36
+    i32.const 1
+    i32.sub
+    i64.extend_i32_s
+    i64.shr_u
+    i32.wrap_i64
+    local.set $one
+    local.get $regular
+    if
+     local.get $mUp
+     local.get $hi64
+     local.get $halfUlp
+     i64.sub
+     i32.const 36
+     i64.extend_i32_s
+     i64.shr_u
+     i64.gt_u
+     local.set $upDown
+    else
+     local.get $expBin
+     i32.const -119
+     i32.eq
+     if (result i32)
+      i32.const 1
+     else
+      local.get $expBin
+      i32.const 64
+      i32.eq
+     end
+     if (result i32)
+      i32.const 1
+     else
+      local.get $expBin
+      i32.const 67
+      i32.eq
+     end
+     if
+      local.get $one
+      i32.const 1
+      i32.add
+      local.set $one
+     end
+     local.get $mUp
+     local.get $hi64
+     local.get $halfUlp
+     i64.const 1
+     i64.shr_u
+     i64.sub
+     i32.const 36
+     i64.extend_i32_s
+     i64.shr_u
+     i64.gt_u
+     local.set $upDown
+    end
+    local.get $mUp
+    global.set $~lib/util/dtoa/gSig
+    local.get $k
+    global.set $~lib/util/dtoa/gExp
+    local.get $one
+    global.set $~lib/util/dtoa/gLastDigit
+    local.get $upDown
+    i32.eqz
+    global.set $~lib/util/dtoa/gHasLastDigit
+    global.get $~lib/util/dtoa/gSig
+    i64.const 10
+    i64.mul
+    global.get $~lib/util/dtoa/gHasLastDigit
+    if (result i64)
+     global.get $~lib/util/dtoa/gLastDigit
+     i64.extend_i32_s
+    else
+     i64.const 0
+    end
+    i64.add
+    local.set $decSig
+    global.get $~lib/util/dtoa/gExp
+    local.set $decExp
+    local.get $decSig
+    i64.const 10000
+    i64.lt_u
+    if
+     local.get $decSig
+     i64.const 10000
+     i64.mul
+     local.set $decSig
+     local.get $decExp
+     i32.const 4
+     i32.sub
+     local.set $decExp
+    end
+    local.get $decSig
+    i64.const 1000000
+    i64.lt_u
+    if
+     local.get $decSig
+     i64.const 100
+     i64.mul
+     local.set $decSig
+     local.get $decExp
+     i32.const 2
+     i32.sub
+     local.set $decExp
+    end
+    local.get $decSig
+    i64.const 10000000
+    i64.lt_u
+    if
+     local.get $decSig
+     i64.const 10
+     i64.mul
+     local.set $decSig
+     local.get $decExp
+     i32.const 1
+     i32.sub
+     local.set $decExp
+    end
+    local.get $decSig
+    i64.const 10
+    i64.div_u
+    local.set $q
+    local.get $decSig
+    local.get $q
+    i64.const 10
+    i64.mul
+    i64.sub
+    i32.wrap_i64
+    local.set $last
+    local.get $q
+    global.set $~lib/util/dtoa/gSig
+    local.get $decExp
+    global.set $~lib/util/dtoa/gExp
+    local.get $last
+    global.set $~lib/util/dtoa/gLastDigit
+    local.get $last
+    i32.const 0
+    i32.ne
+    global.set $~lib/util/dtoa/gHasLastDigit
+   else
+    local.get $neg
+    if
+     local.get $buf
+     i32.const 45
+     i32.store16
+     local.get $buf
+     i32.const 2
+     i32.add
+     local.set $buf
+    end
+    local.get $binExp|7
+    i32.const 150
+    i32.sub
+    local.set $q|44
+    local.get $q|44
+    i32.const 0
+    global.get $~lib/util/dtoa/FLOAT_SIGNIFICAND_SIZE
+    i32.sub
+    i32.ge_s
+    if (result i32)
+     local.get $q|44
+     i32.const 24
+     i32.lt_s
+    else
+     i32.const 0
+    end
+    if
+     local.get $binSig|8
+     i64.const 8388608
+     i64.or
+     local.set $c
+     i64.const 0
+     local.set $intValue
+     local.get $q|44
+     i32.const 0
+     i32.lt_s
+     if
+      i32.const 0
+      local.get $q|44
+      i32.sub
+      local.set $shift
+      i64.const 1
+      local.get $shift
+      i64.extend_i32_s
+      i64.shl
+      i64.const 1
+      i64.sub
+      local.set $mask
+      local.get $c
+      local.get $mask
+      i64.and
+      i64.const 0
+      i64.eq
+      if
+       local.get $c
+       local.get $shift
+       i64.extend_i32_s
+       i64.shr_u
+       local.set $intValue
+      end
+     else
+      local.get $c
+      local.get $q|44
+      i64.extend_i32_s
+      i64.shl
+      local.set $intValue
+      local.get $intValue
+      i64.const 16777216
+      i64.gt_u
+      if
+       i64.const 0
+       local.set $intValue
+      end
+     end
+     local.get $intValue
+     i64.const 0
+     i64.ne
+     if
+      block $~lib/util/dtoa/finishInteger|inlined.1 (result i32)
+       block $~lib/util/dtoa/writeUInt16|inlined.0 (result i32)
+        local.get $buf
+        local.set $buf|49
+        local.get $intValue
+        local.set $value|50
+        block $~lib/util/dtoa/decimalLen16|inlined.0 (result i32)
+         local.get $value|50
+         local.set $v
+         local.get $v
+         i64.const 1000000000000000
+         i64.lt_u
+         if (result i32)
+          block $~lib/util/dtoa/decimalLen15|inlined.0 (result i32)
+           local.get $v
+           local.set $v|52
+           local.get $v|52
+           i64.const 100000000
+           i64.lt_u
+           if
+            local.get $v|52
+            i64.const 10000
+            i64.lt_u
+            if
+             local.get $v|52
+             i64.const 100
+             i64.lt_u
+             if
+              i32.const 1
+              local.get $v|52
+              i64.const 10
+              i64.ge_u
+              i32.add
+              br $~lib/util/dtoa/decimalLen15|inlined.0
+             end
+             i32.const 3
+             local.get $v|52
+             i64.const 1000
+             i64.ge_u
+             i32.add
+             br $~lib/util/dtoa/decimalLen15|inlined.0
+            end
+            local.get $v|52
+            i64.const 1000000
+            i64.lt_u
+            if
+             i32.const 5
+             local.get $v|52
+             i64.const 100000
+             i64.ge_u
+             i32.add
+             br $~lib/util/dtoa/decimalLen15|inlined.0
+            end
+            i32.const 7
+            local.get $v|52
+            i64.const 10000000
+            i64.ge_u
+            i32.add
+            br $~lib/util/dtoa/decimalLen15|inlined.0
+           end
+           local.get $v|52
+           i64.const 1000000000000
+           i64.lt_u
+           if
+            local.get $v|52
+            i64.const 10000000000
+            i64.lt_u
+            if
+             i32.const 9
+             local.get $v|52
+             i64.const 1000000000
+             i64.ge_u
+             i32.add
+             br $~lib/util/dtoa/decimalLen15|inlined.0
+            end
+            i32.const 11
+            local.get $v|52
+            i64.const 100000000000
+            i64.ge_u
+            i32.add
+            br $~lib/util/dtoa/decimalLen15|inlined.0
+           end
+           local.get $v|52
+           i64.const 100000000000000
+           i64.lt_u
+           if
+            i32.const 13
+            local.get $v|52
+            i64.const 10000000000000
+            i64.ge_u
+            i32.add
+            br $~lib/util/dtoa/decimalLen15|inlined.0
+           end
+           i32.const 15
+           br $~lib/util/dtoa/decimalLen15|inlined.0
+          end
+         else
+          i32.const 16
+         end
+         br $~lib/util/dtoa/decimalLen16|inlined.0
+        end
+        local.set $len
+        i32.const 0
+        drop
+        local.get $buf|49
+        local.get $len
+        i32.const 1
+        i32.shl
+        i32.add
+        local.set $p|54
+        local.get $value|50
+        local.set $v|55
+        local.get $v|55
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|55
+         i64.const 100
+         i64.div_u
+         local.set $q|56
+         local.get $p|54
+         i32.const 4
+         i32.sub
+         local.set $p|54
+         local.get $p|54
+         i32.const 572
+         local.get $v|55
+         local.get $q|56
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|56
+         local.set $v|55
+        end
+        local.get $v|55
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|55
+         i64.const 100
+         i64.div_u
+         local.set $q|57
+         local.get $p|54
+         i32.const 4
+         i32.sub
+         local.set $p|54
+         local.get $p|54
+         i32.const 572
+         local.get $v|55
+         local.get $q|57
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|57
+         local.set $v|55
+        end
+        local.get $v|55
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|55
+         i64.const 100
+         i64.div_u
+         local.set $q|58
+         local.get $p|54
+         i32.const 4
+         i32.sub
+         local.set $p|54
+         local.get $p|54
+         i32.const 572
+         local.get $v|55
+         local.get $q|58
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|58
+         local.set $v|55
+        end
+        local.get $v|55
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|55
+         i64.const 100
+         i64.div_u
+         local.set $q|59
+         local.get $p|54
+         i32.const 4
+         i32.sub
+         local.set $p|54
+         local.get $p|54
+         i32.const 572
+         local.get $v|55
+         local.get $q|59
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|59
+         local.set $v|55
+        end
+        local.get $v|55
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|55
+         i64.const 100
+         i64.div_u
+         local.set $q|60
+         local.get $p|54
+         i32.const 4
+         i32.sub
+         local.set $p|54
+         local.get $p|54
+         i32.const 572
+         local.get $v|55
+         local.get $q|60
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|60
+         local.set $v|55
+        end
+        local.get $v|55
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|55
+         i64.const 100
+         i64.div_u
+         local.set $q|61
+         local.get $p|54
+         i32.const 4
+         i32.sub
+         local.set $p|54
+         local.get $p|54
+         i32.const 572
+         local.get $v|55
+         local.get $q|61
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|61
+         local.set $v|55
+        end
+        local.get $v|55
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|55
+         i64.const 100
+         i64.div_u
+         local.set $q|62
+         local.get $p|54
+         i32.const 4
+         i32.sub
+         local.set $p|54
+         local.get $p|54
+         i32.const 572
+         local.get $v|55
+         local.get $q|62
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|62
+         local.set $v|55
+        end
+        local.get $v|55
+        i64.const 10
+        i64.ge_u
+        if
+         local.get $buf|49
+         i32.const 572
+         local.get $v|55
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+        else
+         local.get $buf|49
+         i32.const 48
+         local.get $v|55
+         i32.wrap_i64
+         i32.add
+         i32.store16
+        end
+        local.get $buf|49
+        local.get $len
+        i32.const 1
+        i32.shl
+        i32.add
+        br $~lib/util/dtoa/writeUInt16|inlined.0
+       end
+       local.set $end|63
+       local.get $dotZero
+       local.set $dotZero|64
+       local.get $dotZero|64
+       if
+        local.get $end|63
+        i32.const 46
+        i32.store16
+        local.get $end|63
+        i32.const 48
+        i32.store16 offset=2
+        local.get $end|63
+        i32.const 4
+        i32.add
+        local.set $end|63
+       end
+       local.get $end|63
+       br $~lib/util/dtoa/finishInteger|inlined.1
+      end
+      br $~lib/util/dtoa/formatDecodedFloat|inlined.0
+     end
+    end
+    local.get $binSig|8
+    i64.const 8388608
+    i64.or
+    local.set $binSig|65
+    local.get $binExp|7
+    local.set $rawExp|66
+    local.get $binSig|8
+    i64.const 0
+    i64.ne
+    local.set $regular|67
+    local.get $rawExp|66
+    i32.const 150
+    i32.sub
+    local.set $expBin|68
+    local.get $regular|67
+    if
+     local.get $expBin|68
+     i32.const 1233
+     i32.mul
+     i32.const 12
+     i32.shr_s
+     local.set $k|69
+     i32.const 37
+     local.get $expBin|68
+     i32.add
+     i32.const 0
+     local.get $k|69
+     i32.sub
+     i32.const 1
+     i32.sub
+     i32.const 1701
+     i32.mul
+     i32.const 9
+     i32.shr_s
+     i32.add
+     local.set $h|70
+    else
+     local.get $expBin|68
+     i32.const 1233
+     i32.mul
+     i32.const 512
+     i32.sub
+     i32.const 12
+     i32.shr_s
+     local.set $k|69
+     i32.const 37
+     local.get $expBin|68
+     i32.add
+     local.get $k|69
+     i32.const -1701
+     i32.mul
+     i32.const -1701
+     i32.add
+     i32.const 9
+     i32.shr_s
+     i32.add
+     local.set $h|70
+    end
+    local.get $k|69
+    i32.const -28
+    i32.ge_s
+    if (result i32)
+     local.get $k|69
+     i32.const 16
+     i32.le_s
+    else
+     i32.const 0
+    end
+    if
+     i32.const 1104
+     i32.const 28
+     local.get $k|69
+     i32.add
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load
+     local.set $pow10Hi|71
+    else
+     i32.const 292
+     local.get $k|69
+     i32.sub
+     call $~lib/util/dtoa/computePow10Compact
+     local.set $lo|72
+     global.get $~lib/util/dtoa/gPow10Hi
+     local.get $lo|72
+     i64.const 0
+     i64.ne
+     i64.extend_i32_u
+     i64.add
+     local.set $pow10Hi|71
+    end
+    local.get $pow10Hi|71
+    i64.const 4294967295
+    i64.and
+    local.get $binSig|65
+    i64.mul
+    local.set $t0|73
+    local.get $pow10Hi|71
+    i64.const 32
+    i64.shr_u
+    local.get $binSig|65
+    i64.mul
+    local.get $t0|73
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $t1|74
+    local.get $t1|74
+    i64.const 8
+    i64.shl
+    local.get $t0|73
+    i64.const 4294967295
+    i64.and
+    i64.const 24
+    i64.shr_u
+    i64.or
+    local.set $mid|75
+    local.get $mid|75
+    i64.const 40
+    local.get $h|70
+    i64.extend_i32_s
+    i64.sub
+    i64.shr_u
+    local.set $hi64|76
+    local.get $pow10Hi|71
+    i64.const 65
+    local.get $h|70
+    i64.extend_i32_s
+    i64.sub
+    i64.shr_u
+    i64.const 1
+    local.get $binSig|65
+    i64.const 1
+    i64.and
+    i64.sub
+    i64.add
+    local.set $halfUlp|77
+    local.get $hi64|76
+    i64.const 1
+    i32.const 36
+    i64.extend_i32_s
+    i64.shl
+    i64.const 1
+    i64.sub
+    i64.and
+    local.set $dotOne|78
+    local.get $hi64|76
+    local.get $halfUlp|77
+    i64.add
+    i32.const 36
+    i64.extend_i32_s
+    i64.shr_u
+    local.set $mUp|79
+    local.get $dotOne|78
+    i64.const 5
+    i64.mul
+    i64.const 17179869177
+    i64.add
+    local.get $dotOne|78
+    i64.const 32
+    i64.shr_u
+    i64.add
+    i32.const 36
+    i32.const 1
+    i32.sub
+    i64.extend_i32_s
+    i64.shr_u
+    i32.wrap_i64
+    local.set $one|80
+    local.get $regular|67
+    if
+     local.get $mUp|79
+     local.get $hi64|76
+     local.get $halfUlp|77
+     i64.sub
+     i32.const 36
+     i64.extend_i32_s
+     i64.shr_u
+     i64.gt_u
+     local.set $upDown|81
+    else
+     local.get $expBin|68
+     i32.const -119
+     i32.eq
+     if (result i32)
+      i32.const 1
+     else
+      local.get $expBin|68
+      i32.const 64
+      i32.eq
+     end
+     if (result i32)
+      i32.const 1
+     else
+      local.get $expBin|68
+      i32.const 67
+      i32.eq
+     end
+     if
+      local.get $one|80
+      i32.const 1
+      i32.add
+      local.set $one|80
+     end
+     local.get $mUp|79
+     local.get $hi64|76
+     local.get $halfUlp|77
+     i64.const 1
+     i64.shr_u
+     i64.sub
+     i32.const 36
+     i64.extend_i32_s
+     i64.shr_u
+     i64.gt_u
+     local.set $upDown|81
+    end
+    local.get $mUp|79
+    global.set $~lib/util/dtoa/gSig
+    local.get $k|69
+    global.set $~lib/util/dtoa/gExp
+    local.get $one|80
+    global.set $~lib/util/dtoa/gLastDigit
+    local.get $upDown|81
+    i32.eqz
+    global.set $~lib/util/dtoa/gHasLastDigit
+   end
+   global.get $~lib/util/dtoa/gHasLastDigit
+   local.set $hasLastDigit
+   global.get $~lib/util/dtoa/gSig
+   i64.const 10000000
+   i64.ge_u
+   local.set $hasExtraDigit
+   global.get $~lib/util/dtoa/gExp
+   i32.const 9
+   i32.add
+   i32.const 2
+   i32.sub
+   local.get $hasExtraDigit
+   i32.add
+   local.set $decExp|84
+   global.get $~lib/util/dtoa/gSig
+   i64.const 1000000
+   i64.lt_u
+   if
+    i64.const 10
+    global.get $~lib/util/dtoa/gSig
+    i64.mul
+    local.get $hasLastDigit
+    if (result i64)
+     global.get $~lib/util/dtoa/gLastDigit
+     i64.extend_i32_s
+    else
+     i64.const 0
+    end
+    i64.add
+    global.set $~lib/util/dtoa/gSig
+    i32.const 0
+    local.set $hasLastDigit
+    local.get $decExp|84
+    i32.const 1
+    i32.sub
+    local.set $decExp|84
+   end
+   local.get $buf
+   local.set $start
+   global.get $~lib/util/dtoa/gSig
+   local.set $value|86
+   i32.const 0
+   drop
+   local.get $value|86
+   call $~lib/util/dtoa/toBcd8
+   local.set $length
+   global.get $~lib/util/dtoa/gBcdValue
+   i64.const 3472328296227680304
+   i64.add
+   global.set $~lib/util/dtoa/gDigHi
+   local.get $length
+   global.set $~lib/util/dtoa/gDigits
+   local.get $decExp|84
+   i32.const -6
+   i32.ge_s
+   if (result i32)
+    local.get $decExp|84
+    global.get $~lib/util/dtoa/MAX_FIXED_DEC_EXP
+    i32.le_s
+   else
+    i32.const 0
+   end
+   if
+    block $~lib/util/dtoa/writeFixedFloat|inlined.0 (result i32)
+     local.get $buf
+     local.set $buf|88
+     local.get $start
+     local.set $start|89
+     local.get $decExp|84
+     local.set $decExp|90
+     local.get $hasLastDigit
+     local.set $hasLastDigit|91
+     local.get $hasExtraDigit
+     local.set $hasExtraDigit|92
+     local.get $dotZero
+     local.set $dotZero|93
+     local.get $decExp|90
+     i32.const 0
+     i32.lt_s
+     if
+      local.get $start|89
+      local.set $p|94
+      i64.const 3472328296227680304
+      local.set $ascii|95
+      i32.const 0
+      local.set $off|96
+      local.get $p|94
+      local.get $off|96
+      i32.add
+      local.set $base|97
+      i32.const 0
+      drop
+      local.get $ascii|95
+      i64.const 4294967295
+      i64.and
+      local.set $lo|98
+      local.get $ascii|95
+      i64.const 32
+      i64.shr_u
+      local.set $hi|99
+      local.get $lo|98
+      local.get $lo|98
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $lo|98
+      local.get $hi|99
+      local.get $hi|99
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $hi|99
+      local.get $lo|98
+      local.get $lo|98
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $lo|98
+      local.get $hi|99
+      local.get $hi|99
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $hi|99
+      local.get $base|97
+      local.get $lo|98
+      i64.store
+      local.get $base|97
+      local.get $hi|99
+      i64.store offset=8
+     end
+     i32.const 48
+     local.get $hasLastDigit|91
+     if (result i32)
+      global.get $~lib/util/dtoa/gLastDigit
+     else
+      i32.const 0
+     end
+     i32.add
+     i64.extend_i32_s
+     local.set $lastDigitChar
+     local.get $hasLastDigit|91
+     if (result i32)
+      i32.const 8
+     else
+      global.get $~lib/util/dtoa/gDigits
+      local.get $hasExtraDigit|92
+      i32.sub
+     end
+     local.set $numDigits
+     global.get $~lib/util/dtoa/gDigHi
+     local.set $dHi
+     local.get $hasExtraDigit|92
+     i32.eqz
+     if
+      local.get $dHi
+      i64.const 8
+      i64.shr_u
+      local.get $lastDigitChar
+      i64.const 56
+      i64.shl
+      i64.or
+      local.set $dHi
+     end
+     local.get $decExp|90
+     i32.const 8
+     i32.ge_s
+     if
+      local.get $buf|88
+      local.set $p|103
+      local.get $dHi
+      local.set $ascii|104
+      i32.const 0
+      local.set $off|105
+      local.get $p|103
+      local.get $off|105
+      i32.add
+      local.set $base|106
+      i32.const 0
+      drop
+      local.get $ascii|104
+      i64.const 4294967295
+      i64.and
+      local.set $lo|107
+      local.get $ascii|104
+      i64.const 32
+      i64.shr_u
+      local.set $hi|108
+      local.get $lo|107
+      local.get $lo|107
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $lo|107
+      local.get $hi|108
+      local.get $hi|108
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $hi|108
+      local.get $lo|107
+      local.get $lo|107
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $lo|107
+      local.get $hi|108
+      local.get $hi|108
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $hi|108
+      local.get $base|106
+      local.get $lo|107
+      i64.store
+      local.get $base|106
+      local.get $hi|108
+      i64.store offset=8
+      local.get $hasExtraDigit|92
+      if
+       local.get $buf|88
+       i32.const 16
+       i32.add
+       local.get $lastDigitChar
+       i32.wrap_i64
+       i32.store16
+      end
+      i32.const 8
+      local.get $hasExtraDigit|92
+      i32.add
+      local.set $sig
+      local.get $buf|88
+      local.get $decExp|90
+      i32.const 1
+      i32.add
+      i32.const 1
+      i32.shl
+      i32.add
+      local.set $endByte
+      local.get $buf|88
+      local.get $sig
+      i32.const 1
+      i32.shl
+      i32.add
+      local.set $z
+      loop $for-loop|0
+       local.get $z
+       local.get $endByte
+       i32.lt_u
+       if
+        local.get $z
+        local.set $p|112
+        i64.const 3472328296227680304
+        local.set $ascii|113
+        i32.const 0
+        local.set $off|114
+        local.get $p|112
+        local.get $off|114
+        i32.add
+        local.set $base|115
+        i32.const 0
+        drop
+        local.get $ascii|113
+        i64.const 4294967295
+        i64.and
+        local.set $lo|116
+        local.get $ascii|113
+        i64.const 32
+        i64.shr_u
+        local.set $hi|117
+        local.get $lo|116
+        local.get $lo|116
+        i64.const 16
+        i64.shl
+        i64.or
+        i64.const 281470681808895
+        i64.and
+        local.set $lo|116
+        local.get $hi|117
+        local.get $hi|117
+        i64.const 16
+        i64.shl
+        i64.or
+        i64.const 281470681808895
+        i64.and
+        local.set $hi|117
+        local.get $lo|116
+        local.get $lo|116
+        i64.const 8
+        i64.shl
+        i64.or
+        i64.const 71777214294589695
+        i64.and
+        local.set $lo|116
+        local.get $hi|117
+        local.get $hi|117
+        i64.const 8
+        i64.shl
+        i64.or
+        i64.const 71777214294589695
+        i64.and
+        local.set $hi|117
+        local.get $base|115
+        local.get $lo|116
+        i64.store
+        local.get $base|115
+        local.get $hi|117
+        i64.store offset=8
+        local.get $z
+        i32.const 16
+        i32.add
+        local.set $z
+        br $for-loop|0
+       end
+      end
+      block $~lib/util/dtoa/finishInteger|inlined.2 (result i32)
+       local.get $endByte
+       local.set $end|118
+       local.get $dotZero|93
+       local.set $dotZero|119
+       local.get $dotZero|119
+       if
+        local.get $end|118
+        i32.const 46
+        i32.store16
+        local.get $end|118
+        i32.const 48
+        i32.store16 offset=2
+        local.get $end|118
+        i32.const 4
+        i32.add
+        local.set $end|118
+       end
+       local.get $end|118
+       br $~lib/util/dtoa/finishInteger|inlined.2
+      end
+      br $~lib/util/dtoa/writeFixedFloat|inlined.0
+     end
+     local.get $numDigits
+     local.get $hasExtraDigit|92
+     i32.add
+     local.set $n
+     local.get $n
+     local.set $endPos
+     local.get $decExp|90
+     i32.const 0
+     i32.ge_s
+     if
+      local.get $n
+      local.get $decExp|90
+      i32.const 1
+      i32.add
+      i32.gt_s
+      if (result i32)
+       local.get $n
+       i32.const 1
+       i32.add
+      else
+       local.get $decExp|90
+       i32.const 1
+       i32.add
+      end
+      local.set $endPos
+     end
+     i32.const 1
+     local.get $decExp|90
+     i32.sub
+     local.get $decExp|90
+     i32.const 31
+     i32.shr_s
+     i32.and
+     local.set $startPos
+     local.get $buf|88
+     local.get $startPos
+     i32.const 1
+     i32.shl
+     i32.add
+     local.set $buf|88
+     local.get $buf|88
+     local.set $p|123
+     local.get $dHi
+     local.set $ascii|124
+     i32.const 0
+     local.set $off|125
+     local.get $p|123
+     local.get $off|125
+     i32.add
+     local.set $base|126
+     i32.const 0
+     drop
+     local.get $ascii|124
+     i64.const 4294967295
+     i64.and
+     local.set $lo|127
+     local.get $ascii|124
+     i64.const 32
+     i64.shr_u
+     local.set $hi|128
+     local.get $lo|127
+     local.get $lo|127
+     i64.const 16
+     i64.shl
+     i64.or
+     i64.const 281470681808895
+     i64.and
+     local.set $lo|127
+     local.get $hi|128
+     local.get $hi|128
+     i64.const 16
+     i64.shl
+     i64.or
+     i64.const 281470681808895
+     i64.and
+     local.set $hi|128
+     local.get $lo|127
+     local.get $lo|127
+     i64.const 8
+     i64.shl
+     i64.or
+     i64.const 71777214294589695
+     i64.and
+     local.set $lo|127
+     local.get $hi|128
+     local.get $hi|128
+     i64.const 8
+     i64.shl
+     i64.or
+     i64.const 71777214294589695
+     i64.and
+     local.set $hi|128
+     local.get $base|126
+     local.get $lo|127
+     i64.store
+     local.get $base|126
+     local.get $hi|128
+     i64.store offset=8
+     local.get $hasExtraDigit|92
+     if
+      local.get $buf|88
+      i32.const 16
+      i32.add
+      local.get $lastDigitChar
+      i32.wrap_i64
+      i32.store16
+     end
+     local.get $decExp|90
+     i32.const 0
+     i32.ge_s
+     if
+      local.get $decExp|90
+      i32.const 1
+      i32.add
+      local.set $k|129
+      local.get $hasExtraDigit|92
+      if (result i64)
+       local.get $lastDigitChar
+      else
+       i64.const 0
+      end
+      local.set $d16
+      local.get $k|129
+      i32.const 3
+      i32.shl
+      local.set $s
+      local.get $s
+      i32.const 64
+      i32.lt_s
+      if (result i64)
+       local.get $dHi
+       local.get $s
+       i64.extend_i32_s
+       i64.shr_u
+       local.get $d16
+       i64.const 64
+       local.get $s
+       i64.extend_i32_s
+       i64.sub
+       i64.shl
+       i64.or
+      else
+       local.get $d16
+      end
+      local.set $fHi
+      local.get $buf|88
+      local.get $k|129
+      i32.const 1
+      i32.add
+      i32.const 1
+      i32.shl
+      i32.add
+      local.set $p|133
+      local.get $fHi
+      local.set $ascii|134
+      i32.const 0
+      local.set $off|135
+      local.get $p|133
+      local.get $off|135
+      i32.add
+      local.set $base|136
+      i32.const 0
+      drop
+      local.get $ascii|134
+      i64.const 4294967295
+      i64.and
+      local.set $lo|137
+      local.get $ascii|134
+      i64.const 32
+      i64.shr_u
+      local.set $hi|138
+      local.get $lo|137
+      local.get $lo|137
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $lo|137
+      local.get $hi|138
+      local.get $hi|138
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $hi|138
+      local.get $lo|137
+      local.get $lo|137
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $lo|137
+      local.get $hi|138
+      local.get $hi|138
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $hi|138
+      local.get $base|136
+      local.get $lo|137
+      i64.store
+      local.get $base|136
+      local.get $hi|138
+      i64.store offset=8
+      local.get $buf|88
+      local.get $k|129
+      i32.const 1
+      i32.shl
+      i32.add
+      i32.const 46
+      i32.store16
+     else
+      local.get $start|89
+      i32.const 46
+      i32.store16 offset=2
+     end
+     local.get $buf|88
+     local.get $endPos
+     i32.const 1
+     i32.shl
+     i32.add
+     local.set $end|139
+     local.get $decExp|90
+     i32.const 0
+     i32.ge_s
+     if (result i32)
+      local.get $endPos
+      local.get $decExp|90
+      i32.const 1
+      i32.add
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      block $~lib/util/dtoa/finishInteger|inlined.3 (result i32)
+       local.get $end|139
+       local.set $end|140
+       local.get $dotZero|93
+       local.set $dotZero|141
+       local.get $dotZero|141
+       if
+        local.get $end|140
+        i32.const 46
+        i32.store16
+        local.get $end|140
+        i32.const 48
+        i32.store16 offset=2
+        local.get $end|140
+        i32.const 4
+        i32.add
+        local.set $end|140
+       end
+       local.get $end|140
+       br $~lib/util/dtoa/finishInteger|inlined.3
+      end
+      br $~lib/util/dtoa/writeFixedFloat|inlined.0
+     end
+     loop $while-continue|1
+      local.get $end|139
+      local.get $start|89
+      i32.const 2
+      i32.add
+      i32.gt_u
+      if (result i32)
+       local.get $end|139
+       i32.const 2
+       i32.sub
+       i32.load16_u
+       i32.const 48
+       i32.eq
+      else
+       i32.const 0
+      end
+      if
+       local.get $end|139
+       i32.const 2
+       i32.sub
+       local.set $end|139
+       br $while-continue|1
+      end
+     end
+     local.get $end|139
+     i32.const 2
+     i32.sub
+     i32.load16_u
+     i32.const 46
+     i32.eq
+     if
+      local.get $dotZero|93
+      if
+       local.get $end|139
+       i32.const 48
+       i32.store16
+       local.get $end|139
+       i32.const 2
+       i32.add
+       local.set $end|139
+      else
+       local.get $end|139
+       i32.const 2
+       i32.sub
+       local.set $end|139
+      end
+     end
+     local.get $end|139
+     br $~lib/util/dtoa/writeFixedFloat|inlined.0
+    end
+    br $~lib/util/dtoa/formatDecodedFloat|inlined.0
+   end
+   block $~lib/util/dtoa/writeExpNotationFloat|inlined.0 (result i32)
+    local.get $buf
+    local.set $buf|142
+    local.get $start
+    local.set $start|143
+    local.get $decExp|84
+    local.set $decExp|144
+    local.get $hasLastDigit
+    local.set $hasLastDigit|145
+    local.get $hasExtraDigit
+    local.set $hasExtraDigit|146
+    local.get $buf|142
+    local.get $hasExtraDigit|146
+    i32.const 1
+    i32.shl
+    i32.add
+    local.set $buf|142
+    local.get $buf|142
+    local.set $p|147
+    global.get $~lib/util/dtoa/gDigHi
+    local.set $ascii|148
+    i32.const 0
+    local.set $off|149
+    local.get $p|147
+    local.get $off|149
+    i32.add
+    local.set $base|150
+    i32.const 0
+    drop
+    local.get $ascii|148
+    i64.const 4294967295
+    i64.and
+    local.set $lo|151
+    local.get $ascii|148
+    i64.const 32
+    i64.shr_u
+    local.set $hi|152
+    local.get $lo|151
+    local.get $lo|151
+    i64.const 16
+    i64.shl
+    i64.or
+    i64.const 281470681808895
+    i64.and
+    local.set $lo|151
+    local.get $hi|152
+    local.get $hi|152
+    i64.const 16
+    i64.shl
+    i64.or
+    i64.const 281470681808895
+    i64.and
+    local.set $hi|152
+    local.get $lo|151
+    local.get $lo|151
+    i64.const 8
+    i64.shl
+    i64.or
+    i64.const 71777214294589695
+    i64.and
+    local.set $lo|151
+    local.get $hi|152
+    local.get $hi|152
+    i64.const 8
+    i64.shl
+    i64.or
+    i64.const 71777214294589695
+    i64.and
+    local.set $hi|152
+    local.get $base|150
+    local.get $lo|151
+    i64.store
+    local.get $base|150
+    local.get $hi|152
+    i64.store offset=8
+    local.get $buf|142
+    i32.const 16
+    i32.add
+    i32.const 48
+    global.get $~lib/util/dtoa/gLastDigit
+    i32.add
+    i32.store16
+    local.get $buf|142
+    local.get $hasLastDigit|145
+    if (result i32)
+     i32.const 9
+    else
+     global.get $~lib/util/dtoa/gDigits
+     local.get $hasExtraDigit|146
+     i32.eqz
+     i32.add
+    end
+    i32.const 1
+    i32.shl
+    i32.add
+    local.set $buf|142
+    loop $while-continue|2
+     local.get $buf|142
+     local.get $start|143
+     i32.const 4
+     i32.add
+     i32.gt_u
+     if (result i32)
+      local.get $buf|142
+      i32.const 2
+      i32.sub
+      i32.load16_u
+      i32.const 48
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $buf|142
+      i32.const 2
+      i32.sub
+      local.set $buf|142
+      br $while-continue|2
+     end
+    end
+    local.get $start|143
+    i32.load16_u offset=2
+    local.set $lead
+    local.get $start|143
+    local.get $lead
+    i32.store16
+    local.get $start|143
+    i32.const 46
+    i32.store16 offset=2
+    local.get $buf|142
+    local.get $buf|142
+    i32.const 2
+    i32.sub
+    local.get $start|143
+    i32.const 2
+    i32.add
+    i32.eq
+    i32.const 1
+    i32.shl
+    i32.sub
+    local.set $buf|142
+    block $~lib/util/dtoa/writeExponent|inlined.0 (result i32)
+     local.get $buf|142
+     local.set $buf|154
+     local.get $decExp|144
+     local.set $decExp|155
+     local.get $decExp|155
+     i32.const 31
+     i32.shr_s
+     local.set $m
+     local.get $buf|154
+     i32.const 101
+     i32.store16
+     local.get $buf|154
+     i32.const 43
+     local.get $m
+     i32.const 2
+     i32.and
+     i32.add
+     i32.store16 offset=2
+     local.get $buf|154
+     i32.const 4
+     i32.add
+     local.set $buf|154
+     local.get $decExp|155
+     local.get $m
+     i32.xor
+     local.get $m
+     i32.sub
+     local.set $e
+     local.get $e
+     i32.const 100
+     i32.ge_s
+     if
+      local.get $e
+      global.get $~lib/util/dtoa/DIV100_SIG
+      i32.wrap_i64
+      i32.mul
+      i32.const 19
+      i32.shr_u
+      local.set $d
+      local.get $buf|154
+      i32.const 48
+      local.get $d
+      i32.add
+      i32.store16
+      local.get $buf|154
+      i32.const 572
+      local.get $e
+      local.get $d
+      i32.const 100
+      i32.mul
+      i32.sub
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.load
+      i32.store offset=2
+      local.get $buf|154
+      i32.const 6
+      i32.add
+      br $~lib/util/dtoa/writeExponent|inlined.0
+     end
+     local.get $e
+     i32.const 10
+     i32.ge_s
+     if
+      local.get $buf|154
+      i32.const 572
+      local.get $e
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.load
+      i32.store
+      local.get $buf|154
+      i32.const 4
+      i32.add
+      br $~lib/util/dtoa/writeExponent|inlined.0
+     end
+     local.get $buf|154
+     i32.const 48
+     local.get $e
+     i32.add
+     i32.store16
+     local.get $buf|154
+     i32.const 2
+     i32.add
+     br $~lib/util/dtoa/writeExponent|inlined.0
+    end
+    br $~lib/util/dtoa/writeExpNotationFloat|inlined.0
+   end
+   br $~lib/util/dtoa/formatDecodedFloat|inlined.0
+  end
+  local.get $buffer
+  i32.sub
+  i32.const 1
+  i32.shr_u
   return
  )
  (func $~lib/number/F32#toString (param $this f32) (param $radix i32) (result i32)
@@ -3968,6 +5211,4238 @@
   i32.const 0
   return
  )
+ (func $~lib/util/dtoa/dtoa_buffered (param $buffer i32) (param $value f64) (result i32)
+  (local $buf i32)
+  (local $value|3 f64)
+  (local $dotZero i32)
+  (local $bits i64)
+  (local $binExp i32)
+  (local $binSig i64)
+  (local $buf|8 i32)
+  (local $bits|9 i64)
+  (local $binExp|10 i32)
+  (local $binSig|11 i64)
+  (local $dotZero|12 i32)
+  (local $neg i32)
+  (local $threshold i64)
+  (local $isNormal i32)
+  (local $buf|16 i32)
+  (local $buf|17 i32)
+  (local $neg|18 i32)
+  (local $p i32)
+  (local $ascii i64)
+  (local $off i32)
+  (local $base i32)
+  (local $lo i64)
+  (local $hi i64)
+  (local $end i32)
+  (local $dotZero|26 i32)
+  (local $q i32)
+  (local $c i64)
+  (local $intValue i64)
+  (local $shift i32)
+  (local $mask i64)
+  (local $buf|32 i32)
+  (local $value|33 i64)
+  (local $v i64)
+  (local $v|35 i64)
+  (local $len i32)
+  (local $p|37 i32)
+  (local $v|38 i64)
+  (local $q|39 i64)
+  (local $q|40 i64)
+  (local $q|41 i64)
+  (local $q|42 i64)
+  (local $q|43 i64)
+  (local $q|44 i64)
+  (local $q|45 i64)
+  (local $end|46 i32)
+  (local $dotZero|47 i32)
+  (local $binSig|48 i64)
+  (local $rawExp i32)
+  (local $regular i32)
+  (local $c|51 i64)
+  (local $q|52 i32)
+  (local $decExp i32)
+  (local $powExp i32)
+  (local $h i32)
+  (local $i i32)
+  (local $t i32)
+  (local $hi|58 i64)
+  (local $lo|59 i64)
+  (local $pow10Hi i64)
+  (local $integral i64)
+  (local $halfUlp i64)
+  (local $dotOne i64)
+  (local $one i64)
+  (local $integral|65 i64)
+  (local $one|66 i64)
+  (local $decExp|67 i32)
+  (local $decExp|68 i32)
+  (local $powExp|69 i32)
+  (local $h|70 i32)
+  (local $shift|71 i32)
+  (local $i|72 i32)
+  (local $t|73 i32)
+  (local $hi|74 i64)
+  (local $lo|75 i64)
+  (local $pLo i64)
+  (local $pHi i64)
+  (local $y i64)
+  (local $a i64)
+  (local $b i64)
+  (local $a0 i64)
+  (local $a1 i64)
+  (local $b0 i64)
+  (local $b1 i64)
+  (local $w0 i64)
+  (local $t|86 i64)
+  (local $w1 i64)
+  (local $w2 i64)
+  (local $a|89 i64)
+  (local $pLo64 i64)
+  (local $a|91 i64)
+  (local $b|92 i64)
+  (local $a0|93 i64)
+  (local $a1|94 i64)
+  (local $b0|95 i64)
+  (local $b1|96 i64)
+  (local $w0|97 i64)
+  (local $t|98 i64)
+  (local $w1|99 i64)
+  (local $w2|100 i64)
+  (local $lo|101 i64)
+  (local $pHi64 i64)
+  (local $integral|103 i64)
+  (local $dotOne|104 i64)
+  (local $halfUlp|105 i64)
+  (local $a|106 i64)
+  (local $b|107 i64)
+  (local $carry i64)
+  (local $lo|109 i64)
+  (local $a|110 i64)
+  (local $b|111 i64)
+  (local $a0|112 i64)
+  (local $a1|113 i64)
+  (local $b0|114 i64)
+  (local $b1|115 i64)
+  (local $w0|116 i64)
+  (local $t|117 i64)
+  (local $w1|118 i64)
+  (local $w2|119 i64)
+  (local $hi|120 i64)
+  (local $one|121 i64)
+  (local $integral|122 i64)
+  (local $one|123 i64)
+  (local $decExp|124 i32)
+  (local $binSig|125 i64)
+  (local $rawExp|126 i32)
+  (local $regular|127 i32)
+  (local $binSig|128 i64)
+  (local $rawExp|129 i32)
+  (local $regular|130 i32)
+  (local $c|131 i64)
+  (local $q|132 i32)
+  (local $decExp|133 i32)
+  (local $powExp|134 i32)
+  (local $h|135 i32)
+  (local $i|136 i32)
+  (local $t|137 i32)
+  (local $hi|138 i64)
+  (local $lo|139 i64)
+  (local $pow10Hi|140 i64)
+  (local $integral|141 i64)
+  (local $halfUlp|142 i64)
+  (local $dotOne|143 i64)
+  (local $one|144 i64)
+  (local $integral|145 i64)
+  (local $one|146 i64)
+  (local $decExp|147 i32)
+  (local $decExp|148 i32)
+  (local $powExp|149 i32)
+  (local $h|150 i32)
+  (local $shift|151 i32)
+  (local $i|152 i32)
+  (local $t|153 i32)
+  (local $hi|154 i64)
+  (local $lo|155 i64)
+  (local $pLo|156 i64)
+  (local $pHi|157 i64)
+  (local $y|158 i64)
+  (local $a|159 i64)
+  (local $b|160 i64)
+  (local $a0|161 i64)
+  (local $a1|162 i64)
+  (local $b0|163 i64)
+  (local $b1|164 i64)
+  (local $w0|165 i64)
+  (local $t|166 i64)
+  (local $w1|167 i64)
+  (local $w2|168 i64)
+  (local $a|169 i64)
+  (local $pLo64|170 i64)
+  (local $a|171 i64)
+  (local $b|172 i64)
+  (local $a0|173 i64)
+  (local $a1|174 i64)
+  (local $b0|175 i64)
+  (local $b1|176 i64)
+  (local $w0|177 i64)
+  (local $t|178 i64)
+  (local $w1|179 i64)
+  (local $w2|180 i64)
+  (local $lo|181 i64)
+  (local $pHi64|182 i64)
+  (local $integral|183 i64)
+  (local $dotOne|184 i64)
+  (local $halfUlp|185 i64)
+  (local $a|186 i64)
+  (local $b|187 i64)
+  (local $carry|188 i64)
+  (local $lo|189 i64)
+  (local $a|190 i64)
+  (local $b|191 i64)
+  (local $a0|192 i64)
+  (local $a1|193 i64)
+  (local $b0|194 i64)
+  (local $b1|195 i64)
+  (local $w0|196 i64)
+  (local $t|197 i64)
+  (local $w1|198 i64)
+  (local $w2|199 i64)
+  (local $hi|200 i64)
+  (local $one|201 i64)
+  (local $integral|202 i64)
+  (local $one|203 i64)
+  (local $decExp|204 i32)
+  (local $binExp|205 i32)
+  (local $decExp|206 i32)
+  (local $binExp|207 i32)
+  (local $decExp|208 i32)
+  (local $pow10BinExp i32)
+  (local $shift|210 i32)
+  (local $powExp|211 i32)
+  (local $i|212 i32)
+  (local $t|213 i32)
+  (local $hi|214 i64)
+  (local $lo|215 i64)
+  (local $pLo|216 i64)
+  (local $pHi|217 i64)
+  (local $y|218 i64)
+  (local $a|219 i64)
+  (local $b|220 i64)
+  (local $a0|221 i64)
+  (local $a1|222 i64)
+  (local $b0|223 i64)
+  (local $b1|224 i64)
+  (local $w0|225 i64)
+  (local $t|226 i64)
+  (local $w1|227 i64)
+  (local $w2|228 i64)
+  (local $a|229 i64)
+  (local $pLo64|230 i64)
+  (local $a|231 i64)
+  (local $b|232 i64)
+  (local $a0|233 i64)
+  (local $a1|234 i64)
+  (local $b0|235 i64)
+  (local $b1|236 i64)
+  (local $w0|237 i64)
+  (local $t|238 i64)
+  (local $w1|239 i64)
+  (local $w2|240 i64)
+  (local $lo|241 i64)
+  (local $pHi64|242 i64)
+  (local $integral|243 i64)
+  (local $dotOne|244 i64)
+  (local $halfUlp|245 i64)
+  (local $a|246 i64)
+  (local $b|247 i64)
+  (local $carry|248 i64)
+  (local $lo|249 i64)
+  (local $a|250 i64)
+  (local $b|251 i64)
+  (local $a0|252 i64)
+  (local $a1|253 i64)
+  (local $b0|254 i64)
+  (local $b1|255 i64)
+  (local $w0|256 i64)
+  (local $t|257 i64)
+  (local $w1|258 i64)
+  (local $w2|259 i64)
+  (local $hi|260 i64)
+  (local $one|261 i64)
+  (local $integral|262 i64)
+  (local $one|263 i64)
+  (local $decExp|264 i32)
+  (local $full i64)
+  (local $v|266 i64)
+  (local $scale i32)
+  (local $mul i64)
+  (local $hasLastDigit i32)
+  (local $decExp|270 i32)
+  (local $start i32)
+  (local $value|272 i64)
+  (local $value|273 i64)
+  (local $fixed16 i32)
+  (local $hi|275 i64)
+  (local $lo|276 i64)
+  (local $value|277 i64)
+  (local $quads i64)
+  (local $pairs i64)
+  (local $singles i64)
+  (local $hiBcd i64)
+  (local $value|282 i64)
+  (local $quads|283 i64)
+  (local $pairs|284 i64)
+  (local $singles|285 i64)
+  (local $hiLen i32)
+  (local $hiBcd|287 i64)
+  (local $loLen i32)
+  (local $buf|289 i32)
+  (local $start|290 i32)
+  (local $decExp|291 i32)
+  (local $hasLastDigit|292 i32)
+  (local $dotZero|293 i32)
+  (local $p|294 i32)
+  (local $ascii|295 i64)
+  (local $off|296 i32)
+  (local $base|297 i32)
+  (local $lo|298 i64)
+  (local $hi|299 i64)
+  (local $lastDigitChar i64)
+  (local $numDigits i32)
+  (local $dHi i64)
+  (local $dLo i64)
+  (local $p|304 i32)
+  (local $ascii|305 i64)
+  (local $off|306 i32)
+  (local $base|307 i32)
+  (local $lo|308 i64)
+  (local $hi|309 i64)
+  (local $p|310 i32)
+  (local $ascii|311 i64)
+  (local $off|312 i32)
+  (local $base|313 i32)
+  (local $lo|314 i64)
+  (local $hi|315 i64)
+  (local $endByte i32)
+  (local $z i32)
+  (local $p|318 i32)
+  (local $ascii|319 i64)
+  (local $off|320 i32)
+  (local $base|321 i32)
+  (local $lo|322 i64)
+  (local $hi|323 i64)
+  (local $end|324 i32)
+  (local $dotZero|325 i32)
+  (local $n i32)
+  (local $endPos i32)
+  (local $startPos i32)
+  (local $p|329 i32)
+  (local $ascii|330 i64)
+  (local $off|331 i32)
+  (local $base|332 i32)
+  (local $lo|333 i64)
+  (local $hi|334 i64)
+  (local $p|335 i32)
+  (local $ascii|336 i64)
+  (local $off|337 i32)
+  (local $base|338 i32)
+  (local $lo|339 i64)
+  (local $hi|340 i64)
+  (local $k i32)
+  (local $d16 i64)
+  (local $s i32)
+  (local $fHi i64)
+  (local $fLo i64)
+  (local $s2 i32)
+  (local $p|347 i32)
+  (local $ascii|348 i64)
+  (local $off|349 i32)
+  (local $base|350 i32)
+  (local $lo|351 i64)
+  (local $hi|352 i64)
+  (local $p|353 i32)
+  (local $ascii|354 i64)
+  (local $off|355 i32)
+  (local $base|356 i32)
+  (local $lo|357 i64)
+  (local $hi|358 i64)
+  (local $end|359 i32)
+  (local $end|360 i32)
+  (local $dotZero|361 i32)
+  (local $high i64)
+  (local $low i64)
+  (local $count i32)
+  (local $buf|365 i32)
+  (local $start|366 i32)
+  (local $decExp|367 i32)
+  (local $hasLastDigit|368 i32)
+  (local $hasExtraDigit i32)
+  (local $bcdSize i32)
+  (local $p|371 i32)
+  (local $ascii|372 i64)
+  (local $off|373 i32)
+  (local $base|374 i32)
+  (local $lo|375 i64)
+  (local $hi|376 i64)
+  (local $p|377 i32)
+  (local $ascii|378 i64)
+  (local $off|379 i32)
+  (local $base|380 i32)
+  (local $lo|381 i64)
+  (local $hi|382 i64)
+  (local $high|383 i64)
+  (local $low|384 i64)
+  (local $count|385 i32)
+  (local $lead i32)
+  (local $buf|387 i32)
+  (local $decExp|388 i32)
+  (local $m i32)
+  (local $e i32)
+  (local $d i32)
+  block $~lib/util/dtoa/formatDouble|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buf
+   local.get $value
+   local.set $value|3
+   i32.const 1
+   local.set $dotZero
+   local.get $value|3
+   i64.reinterpret_f64
+   local.set $bits
+   local.get $bits
+   i64.const 1
+   i64.shl
+   i64.const 53
+   i64.shr_u
+   i32.wrap_i64
+   local.set $binExp
+   local.get $bits
+   global.get $~lib/util/dtoa/DOUBLE_SIGNIFICAND_MASK
+   i64.and
+   local.set $binSig
+   block $~lib/util/dtoa/formatDecodedDouble|inlined.0 (result i32)
+    local.get $buf
+    local.set $buf|8
+    local.get $bits
+    local.set $bits|9
+    local.get $binExp
+    local.set $binExp|10
+    local.get $binSig
+    local.set $binSig|11
+    local.get $dotZero
+    local.set $dotZero|12
+    local.get $bits|9
+    i64.const 63
+    i64.shr_u
+    i64.const 0
+    i64.ne
+    local.set $neg
+    i64.const 1000000000000000
+    local.set $threshold
+    local.get $binExp|10
+    i32.const 1
+    i32.sub
+    i32.const 2046
+    i32.lt_u
+    local.set $isNormal
+    local.get $isNormal
+    i32.eqz
+    if
+     local.get $binExp|10
+     i32.const 0
+     i32.ne
+     if
+      local.get $binSig|11
+      i64.const 0
+      i64.ne
+      if
+       block $~lib/util/dtoa/writeNaN|inlined.1 (result i32)
+        local.get $buf|8
+        local.set $buf|16
+        local.get $buf|16
+        i32.const 78
+        i32.store16
+        local.get $buf|16
+        i32.const 97
+        i32.store16 offset=2
+        local.get $buf|16
+        i32.const 78
+        i32.store16 offset=4
+        local.get $buf|16
+        i32.const 6
+        i32.add
+        br $~lib/util/dtoa/writeNaN|inlined.1
+       end
+       br $~lib/util/dtoa/formatDecodedDouble|inlined.0
+      end
+      block $~lib/util/dtoa/writeInfinity|inlined.1 (result i32)
+       local.get $buf|8
+       local.set $buf|17
+       local.get $neg
+       local.set $neg|18
+       local.get $neg|18
+       if
+        local.get $buf|17
+        i32.const 45
+        i32.store16
+        local.get $buf|17
+        i32.const 2
+        i32.add
+        local.set $buf|17
+       end
+       local.get $buf|17
+       local.set $p
+       i64.const 8751735898823355977
+       local.set $ascii
+       i32.const 0
+       local.set $off
+       local.get $p
+       local.get $off
+       i32.add
+       local.set $base
+       i32.const 0
+       drop
+       local.get $ascii
+       i64.const 4294967295
+       i64.and
+       local.set $lo
+       local.get $ascii
+       i64.const 32
+       i64.shr_u
+       local.set $hi
+       local.get $lo
+       local.get $lo
+       i64.const 16
+       i64.shl
+       i64.or
+       i64.const 281470681808895
+       i64.and
+       local.set $lo
+       local.get $hi
+       local.get $hi
+       i64.const 16
+       i64.shl
+       i64.or
+       i64.const 281470681808895
+       i64.and
+       local.set $hi
+       local.get $lo
+       local.get $lo
+       i64.const 8
+       i64.shl
+       i64.or
+       i64.const 71777214294589695
+       i64.and
+       local.set $lo
+       local.get $hi
+       local.get $hi
+       i64.const 8
+       i64.shl
+       i64.or
+       i64.const 71777214294589695
+       i64.and
+       local.set $hi
+       local.get $base
+       local.get $lo
+       i64.store
+       local.get $base
+       local.get $hi
+       i64.store offset=8
+       local.get $buf|17
+       i32.const 16
+       i32.add
+       br $~lib/util/dtoa/writeInfinity|inlined.1
+      end
+      br $~lib/util/dtoa/formatDecodedDouble|inlined.0
+     end
+     local.get $binSig|11
+     i64.const 0
+     i64.eq
+     if
+      local.get $buf|8
+      i32.const 48
+      i32.store16
+      block $~lib/util/dtoa/finishInteger|inlined.4 (result i32)
+       local.get $buf|8
+       i32.const 2
+       i32.add
+       local.set $end
+       local.get $dotZero|12
+       local.set $dotZero|26
+       local.get $dotZero|26
+       if
+        local.get $end
+        i32.const 46
+        i32.store16
+        local.get $end
+        i32.const 48
+        i32.store16 offset=2
+        local.get $end
+        i32.const 4
+        i32.add
+        local.set $end
+       end
+       local.get $end
+       br $~lib/util/dtoa/finishInteger|inlined.4
+      end
+      br $~lib/util/dtoa/formatDecodedDouble|inlined.0
+     end
+    end
+    local.get $neg
+    if
+     local.get $buf|8
+     i32.const 45
+     i32.store16
+     local.get $buf|8
+     i32.const 2
+     i32.add
+     local.set $buf|8
+    end
+    local.get $isNormal
+    if
+     local.get $binExp|10
+     i32.const 1075
+     i32.sub
+     local.set $q
+     local.get $binSig|11
+     i64.const 4503599627370496
+     i64.or
+     local.set $c
+     i64.const 0
+     local.set $intValue
+     local.get $q
+     i32.const 0
+     i32.lt_s
+     if
+      i32.const 0
+      local.get $q
+      i32.sub
+      local.set $shift
+      local.get $shift
+      i32.const 52
+      i32.le_s
+      if
+       i64.const 1
+       local.get $shift
+       i64.extend_i32_s
+       i64.shl
+       i64.const 1
+       i64.sub
+       local.set $mask
+       local.get $c
+       local.get $mask
+       i64.and
+       i64.const 0
+       i64.eq
+       if
+        local.get $c
+        local.get $shift
+        i64.extend_i32_s
+        i64.shr_u
+        local.set $intValue
+       end
+      end
+     else
+      local.get $q
+      i32.const 11
+      i32.lt_s
+      if
+       local.get $c
+       local.get $q
+       i64.extend_i32_s
+       i64.shl
+       local.set $intValue
+       local.get $intValue
+       i64.const 10000000000000000
+       i64.ge_u
+       if
+        i64.const 0
+        local.set $intValue
+       end
+      end
+     end
+     local.get $intValue
+     i64.const 0
+     i64.ne
+     if
+      block $~lib/util/dtoa/finishInteger|inlined.5 (result i32)
+       block $~lib/util/dtoa/writeUInt16|inlined.1 (result i32)
+        local.get $buf|8
+        local.set $buf|32
+        local.get $intValue
+        local.set $value|33
+        block $~lib/util/dtoa/decimalLen16|inlined.1 (result i32)
+         local.get $value|33
+         local.set $v
+         local.get $v
+         i64.const 1000000000000000
+         i64.lt_u
+         if (result i32)
+          block $~lib/util/dtoa/decimalLen15|inlined.1 (result i32)
+           local.get $v
+           local.set $v|35
+           local.get $v|35
+           i64.const 100000000
+           i64.lt_u
+           if
+            local.get $v|35
+            i64.const 10000
+            i64.lt_u
+            if
+             local.get $v|35
+             i64.const 100
+             i64.lt_u
+             if
+              i32.const 1
+              local.get $v|35
+              i64.const 10
+              i64.ge_u
+              i32.add
+              br $~lib/util/dtoa/decimalLen15|inlined.1
+             end
+             i32.const 3
+             local.get $v|35
+             i64.const 1000
+             i64.ge_u
+             i32.add
+             br $~lib/util/dtoa/decimalLen15|inlined.1
+            end
+            local.get $v|35
+            i64.const 1000000
+            i64.lt_u
+            if
+             i32.const 5
+             local.get $v|35
+             i64.const 100000
+             i64.ge_u
+             i32.add
+             br $~lib/util/dtoa/decimalLen15|inlined.1
+            end
+            i32.const 7
+            local.get $v|35
+            i64.const 10000000
+            i64.ge_u
+            i32.add
+            br $~lib/util/dtoa/decimalLen15|inlined.1
+           end
+           local.get $v|35
+           i64.const 1000000000000
+           i64.lt_u
+           if
+            local.get $v|35
+            i64.const 10000000000
+            i64.lt_u
+            if
+             i32.const 9
+             local.get $v|35
+             i64.const 1000000000
+             i64.ge_u
+             i32.add
+             br $~lib/util/dtoa/decimalLen15|inlined.1
+            end
+            i32.const 11
+            local.get $v|35
+            i64.const 100000000000
+            i64.ge_u
+            i32.add
+            br $~lib/util/dtoa/decimalLen15|inlined.1
+           end
+           local.get $v|35
+           i64.const 100000000000000
+           i64.lt_u
+           if
+            i32.const 13
+            local.get $v|35
+            i64.const 10000000000000
+            i64.ge_u
+            i32.add
+            br $~lib/util/dtoa/decimalLen15|inlined.1
+           end
+           i32.const 15
+           br $~lib/util/dtoa/decimalLen15|inlined.1
+          end
+         else
+          i32.const 16
+         end
+         br $~lib/util/dtoa/decimalLen16|inlined.1
+        end
+        local.set $len
+        i32.const 0
+        drop
+        local.get $buf|32
+        local.get $len
+        i32.const 1
+        i32.shl
+        i32.add
+        local.set $p|37
+        local.get $value|33
+        local.set $v|38
+        local.get $v|38
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|38
+         i64.const 100
+         i64.div_u
+         local.set $q|39
+         local.get $p|37
+         i32.const 4
+         i32.sub
+         local.set $p|37
+         local.get $p|37
+         i32.const 572
+         local.get $v|38
+         local.get $q|39
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|39
+         local.set $v|38
+        end
+        local.get $v|38
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|38
+         i64.const 100
+         i64.div_u
+         local.set $q|40
+         local.get $p|37
+         i32.const 4
+         i32.sub
+         local.set $p|37
+         local.get $p|37
+         i32.const 572
+         local.get $v|38
+         local.get $q|40
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|40
+         local.set $v|38
+        end
+        local.get $v|38
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|38
+         i64.const 100
+         i64.div_u
+         local.set $q|41
+         local.get $p|37
+         i32.const 4
+         i32.sub
+         local.set $p|37
+         local.get $p|37
+         i32.const 572
+         local.get $v|38
+         local.get $q|41
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|41
+         local.set $v|38
+        end
+        local.get $v|38
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|38
+         i64.const 100
+         i64.div_u
+         local.set $q|42
+         local.get $p|37
+         i32.const 4
+         i32.sub
+         local.set $p|37
+         local.get $p|37
+         i32.const 572
+         local.get $v|38
+         local.get $q|42
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|42
+         local.set $v|38
+        end
+        local.get $v|38
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|38
+         i64.const 100
+         i64.div_u
+         local.set $q|43
+         local.get $p|37
+         i32.const 4
+         i32.sub
+         local.set $p|37
+         local.get $p|37
+         i32.const 572
+         local.get $v|38
+         local.get $q|43
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|43
+         local.set $v|38
+        end
+        local.get $v|38
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|38
+         i64.const 100
+         i64.div_u
+         local.set $q|44
+         local.get $p|37
+         i32.const 4
+         i32.sub
+         local.set $p|37
+         local.get $p|37
+         i32.const 572
+         local.get $v|38
+         local.get $q|44
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|44
+         local.set $v|38
+        end
+        local.get $v|38
+        i64.const 100
+        i64.ge_u
+        if
+         local.get $v|38
+         i64.const 100
+         i64.div_u
+         local.set $q|45
+         local.get $p|37
+         i32.const 4
+         i32.sub
+         local.set $p|37
+         local.get $p|37
+         i32.const 572
+         local.get $v|38
+         local.get $q|45
+         i64.const 100
+         i64.mul
+         i64.sub
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+         local.get $q|45
+         local.set $v|38
+        end
+        local.get $v|38
+        i64.const 10
+        i64.ge_u
+        if
+         local.get $buf|32
+         i32.const 572
+         local.get $v|38
+         i32.wrap_i64
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         i32.store
+        else
+         local.get $buf|32
+         i32.const 48
+         local.get $v|38
+         i32.wrap_i64
+         i32.add
+         i32.store16
+        end
+        local.get $buf|32
+        local.get $len
+        i32.const 1
+        i32.shl
+        i32.add
+        br $~lib/util/dtoa/writeUInt16|inlined.1
+       end
+       local.set $end|46
+       local.get $dotZero|12
+       local.set $dotZero|47
+       local.get $dotZero|47
+       if
+        local.get $end|46
+        i32.const 46
+        i32.store16
+        local.get $end|46
+        i32.const 48
+        i32.store16 offset=2
+        local.get $end|46
+        i32.const 4
+        i32.add
+        local.set $end|46
+       end
+       local.get $end|46
+       br $~lib/util/dtoa/finishInteger|inlined.5
+      end
+      br $~lib/util/dtoa/formatDecodedDouble|inlined.0
+     end
+    end
+    local.get $isNormal
+    if
+     block $~lib/util/dtoa/toDecimalDoubleNormal|inlined.0
+      local.get $binSig|11
+      local.set $binSig|48
+      local.get $binExp|10
+      local.set $rawExp
+      local.get $binSig|11
+      i64.const 0
+      i64.ne
+      local.set $regular
+      local.get $binSig|48
+      i64.const 4503599627370496
+      i64.or
+      local.set $c|51
+      local.get $rawExp
+      i32.const 1075
+      i32.sub
+      local.set $q|52
+      local.get $regular
+      i32.eqz
+      if
+       local.get $q|52
+       i32.const 315653
+       i32.mul
+       i32.const 131072
+       i32.sub
+       global.get $~lib/util/dtoa/LOG10_2_EXP
+       i32.shr_s
+       local.set $decExp
+       i32.const 0
+       local.get $decExp
+       i32.sub
+       i32.const 1
+       i32.sub
+       local.set $powExp
+       local.get $q|52
+       local.get $powExp
+       i32.const 217707
+       i32.mul
+       global.get $~lib/util/dtoa/LOG2_POW10_EXP
+       i32.shr_s
+       i32.add
+       local.set $h
+       block $~lib/util/dtoa/computePow10|inlined.0 (result i64)
+        local.get $powExp
+        i32.const 293
+        i32.add
+        local.set $i
+        local.get $i
+        i32.const 285
+        i32.ge_s
+        if (result i32)
+         local.get $i
+         i32.const 320
+         i32.le_s
+        else
+         i32.const 0
+        end
+        if
+         i32.const 337
+         local.get $i
+         i32.sub
+         local.set $t
+         i32.const 1104
+         local.get $t
+         i32.const 17
+         i32.sub
+         i32.const 3
+         i32.shl
+         i32.add
+         i64.load
+         local.set $hi|58
+         local.get $t
+         i32.const 44
+         i32.le_s
+         if
+          local.get $hi|58
+          global.set $~lib/util/dtoa/gPow10Hi
+          i64.const 0
+          br $~lib/util/dtoa/computePow10|inlined.0
+         end
+         i32.const 1104
+         local.get $t
+         i32.const 3
+         i32.shl
+         i32.add
+         i64.load
+         local.set $lo|59
+         local.get $hi|58
+         i64.const 1
+         i64.sub
+         global.set $~lib/util/dtoa/gPow10Hi
+         local.get $lo|59
+         br $~lib/util/dtoa/computePow10|inlined.0
+        end
+        local.get $i
+        call $~lib/util/dtoa/computePow10Compact
+        br $~lib/util/dtoa/computePow10|inlined.0
+       end
+       drop
+       global.get $~lib/util/dtoa/gPow10Hi
+       local.set $pow10Hi
+       local.get $pow10Hi
+       i64.const 11
+       local.get $h
+       i64.extend_i32_s
+       i64.sub
+       i64.shr_u
+       local.set $integral
+       local.get $pow10Hi
+       i32.const 0
+       local.get $h
+       i32.sub
+       i64.extend_i32_s
+       i64.shr_u
+       local.set $halfUlp
+       local.get $pow10Hi
+       i64.const 53
+       local.get $h
+       i64.extend_i32_s
+       i64.add
+       i64.shl
+       local.set $dotOne
+       local.get $dotOne
+       i64.const 53
+       local.get $h
+       i64.extend_i32_s
+       i64.add
+       i64.shr_u
+       i64.const 5
+       i64.mul
+       i64.const 1
+       i64.const 9
+       local.get $h
+       i64.extend_i32_s
+       i64.sub
+       i64.shl
+       i64.add
+       i64.const 10
+       local.get $h
+       i64.extend_i32_s
+       i64.sub
+       i64.shr_u
+       local.set $one
+       local.get $dotOne
+       i64.const 54
+       i64.shr_u
+       i64.const 5
+       i64.mul
+       i64.const 511
+       i64.and
+       local.get $halfUlp
+       i64.const 55
+       i64.shr_u
+       i64.const 5
+       i64.mul
+       i64.gt_u
+       if (result i64)
+        local.get $dotOne
+        i64.const 54
+        i64.shr_u
+        i64.const 5
+        i64.mul
+        i64.const 9
+        i64.shr_u
+        i64.const 1
+        i64.add
+       else
+        local.get $one
+       end
+       local.set $one
+       local.get $dotOne
+       i64.const 1
+       i64.const 62
+       i64.shl
+       i64.eq
+       if (result i64)
+        i64.const 2
+       else
+        local.get $one
+       end
+       local.set $one
+       local.get $halfUlp
+       i64.const 1
+       i64.shr_u
+       local.get $dotOne
+       i64.gt_u
+       if (result i64)
+        i64.const 0
+       else
+        local.get $one
+       end
+       local.set $one
+       local.get $halfUlp
+       global.get $~lib/builtins/u64.MAX_VALUE
+       local.get $dotOne
+       i64.sub
+       i64.gt_u
+       if (result i64)
+        i64.const 10
+       else
+        local.get $one
+       end
+       local.set $one
+       local.get $integral
+       local.set $integral|65
+       local.get $one
+       local.set $one|66
+       local.get $decExp
+       local.set $decExp|67
+       local.get $one|66
+       i64.const 10
+       i64.eq
+       if
+        local.get $integral|65
+        i64.const 1
+        i64.add
+        global.set $~lib/util/dtoa/gSig
+        i32.const 0
+        global.set $~lib/util/dtoa/gLastDigit
+        i32.const 0
+        global.set $~lib/util/dtoa/gHasLastDigit
+       else
+        local.get $one|66
+        i64.const 0
+        i64.eq
+        if
+         local.get $integral|65
+         global.set $~lib/util/dtoa/gSig
+         i32.const 0
+         global.set $~lib/util/dtoa/gLastDigit
+         i32.const 0
+         global.set $~lib/util/dtoa/gHasLastDigit
+        else
+         local.get $integral|65
+         global.set $~lib/util/dtoa/gSig
+         local.get $one|66
+         i32.wrap_i64
+         global.set $~lib/util/dtoa/gLastDigit
+         i32.const 1
+         global.set $~lib/util/dtoa/gHasLastDigit
+        end
+       end
+       local.get $decExp|67
+       global.set $~lib/util/dtoa/gExp
+       br $~lib/util/dtoa/toDecimalDoubleNormal|inlined.0
+      end
+      local.get $rawExp
+      i32.const 1075
+      i32.sub
+      i32.const 78913
+      i32.mul
+      i32.const 18
+      i32.shr_s
+      local.set $decExp|68
+      i32.const 0
+      local.get $decExp|68
+      i32.sub
+      i32.const 1
+      i32.sub
+      local.set $powExp|69
+      local.get $q|52
+      local.get $powExp|69
+      i32.const 217707
+      i32.mul
+      global.get $~lib/util/dtoa/LOG2_POW10_EXP
+      i32.shr_s
+      i32.add
+      local.set $h|70
+      local.get $h|70
+      i32.const 1
+      i32.add
+      i32.const 6
+      i32.add
+      local.set $shift|71
+      block $~lib/util/dtoa/computePow10|inlined.1 (result i64)
+       local.get $powExp|69
+       i32.const 293
+       i32.add
+       local.set $i|72
+       local.get $i|72
+       i32.const 285
+       i32.ge_s
+       if (result i32)
+        local.get $i|72
+        i32.const 320
+        i32.le_s
+       else
+        i32.const 0
+       end
+       if
+        i32.const 337
+        local.get $i|72
+        i32.sub
+        local.set $t|73
+        i32.const 1104
+        local.get $t|73
+        i32.const 17
+        i32.sub
+        i32.const 3
+        i32.shl
+        i32.add
+        i64.load
+        local.set $hi|74
+        local.get $t|73
+        i32.const 44
+        i32.le_s
+        if
+         local.get $hi|74
+         global.set $~lib/util/dtoa/gPow10Hi
+         i64.const 0
+         br $~lib/util/dtoa/computePow10|inlined.1
+        end
+        i32.const 1104
+        local.get $t|73
+        i32.const 3
+        i32.shl
+        i32.add
+        i64.load
+        local.set $lo|75
+        local.get $hi|74
+        i64.const 1
+        i64.sub
+        global.set $~lib/util/dtoa/gPow10Hi
+        local.get $lo|75
+        br $~lib/util/dtoa/computePow10|inlined.1
+       end
+       local.get $i|72
+       call $~lib/util/dtoa/computePow10Compact
+       br $~lib/util/dtoa/computePow10|inlined.1
+      end
+      local.get $powExp|69
+      i32.const 0
+      i32.lt_s
+      i64.extend_i32_u
+      i64.add
+      local.set $pLo
+      global.get $~lib/util/dtoa/gPow10Hi
+      local.set $pHi
+      local.get $c|51
+      local.get $shift|71
+      i64.extend_i32_s
+      i64.shl
+      local.set $y
+      block $~lib/util/dtoa/umul64hi|inlined.2 (result i64)
+       local.get $pHi
+       local.set $a
+       local.get $y
+       local.set $b
+       local.get $a
+       i64.const 4294967295
+       i64.and
+       local.set $a0
+       local.get $a
+       i64.const 32
+       i64.shr_u
+       local.set $a1
+       local.get $b
+       i64.const 4294967295
+       i64.and
+       local.set $b0
+       local.get $b
+       i64.const 32
+       i64.shr_u
+       local.set $b1
+       local.get $a0
+       local.get $b0
+       i64.mul
+       local.set $w0
+       local.get $a1
+       local.get $b0
+       i64.mul
+       local.get $w0
+       i64.const 32
+       i64.shr_u
+       i64.add
+       local.set $t|86
+       local.get $t|86
+       i64.const 4294967295
+       i64.and
+       local.set $w1
+       local.get $t|86
+       i64.const 32
+       i64.shr_u
+       local.set $w2
+       local.get $a0
+       local.get $b1
+       i64.mul
+       local.get $w1
+       i64.add
+       local.set $w1
+       local.get $a1
+       local.get $b1
+       i64.mul
+       local.get $w2
+       i64.add
+       local.get $w1
+       i64.const 32
+       i64.shr_u
+       i64.add
+       br $~lib/util/dtoa/umul64hi|inlined.2
+      end
+      local.set $a|89
+      local.get $pHi
+      local.get $y
+      i64.mul
+      local.set $pLo64
+      local.get $pLo64
+      block $~lib/util/dtoa/umul64hi|inlined.3 (result i64)
+       local.get $pLo
+       local.set $a|91
+       local.get $y
+       local.set $b|92
+       local.get $a|91
+       i64.const 4294967295
+       i64.and
+       local.set $a0|93
+       local.get $a|91
+       i64.const 32
+       i64.shr_u
+       local.set $a1|94
+       local.get $b|92
+       i64.const 4294967295
+       i64.and
+       local.set $b0|95
+       local.get $b|92
+       i64.const 32
+       i64.shr_u
+       local.set $b1|96
+       local.get $a0|93
+       local.get $b0|95
+       i64.mul
+       local.set $w0|97
+       local.get $a1|94
+       local.get $b0|95
+       i64.mul
+       local.get $w0|97
+       i64.const 32
+       i64.shr_u
+       i64.add
+       local.set $t|98
+       local.get $t|98
+       i64.const 4294967295
+       i64.and
+       local.set $w1|99
+       local.get $t|98
+       i64.const 32
+       i64.shr_u
+       local.set $w2|100
+       local.get $a0|93
+       local.get $b1|96
+       i64.mul
+       local.get $w1|99
+       i64.add
+       local.set $w1|99
+       local.get $a1|94
+       local.get $b1|96
+       i64.mul
+       local.get $w2|100
+       i64.add
+       local.get $w1|99
+       i64.const 32
+       i64.shr_u
+       i64.add
+       br $~lib/util/dtoa/umul64hi|inlined.3
+      end
+      i64.add
+      local.set $lo|101
+      local.get $a|89
+      local.get $lo|101
+      local.get $pLo64
+      i64.lt_u
+      i64.extend_i32_u
+      i64.add
+      local.set $pHi64
+      local.get $pHi64
+      i32.const 6
+      i64.extend_i32_s
+      i64.shr_u
+      local.set $integral|103
+      local.get $pHi64
+      i64.const 64
+      i32.const 6
+      i64.extend_i32_s
+      i64.sub
+      i64.shl
+      local.get $lo|101
+      i32.const 6
+      i64.extend_i32_s
+      i64.shr_u
+      i64.or
+      local.set $dotOne|104
+      local.get $pHi
+      i32.const 0
+      local.get $h|70
+      i32.sub
+      i64.extend_i32_s
+      i64.shr_u
+      i64.const 1
+      local.get $c|51
+      i64.const 1
+      i64.and
+      i64.sub
+      i64.add
+      local.set $halfUlp|105
+      block $~lib/util/dtoa/umul64hiCarry|inlined.0 (result i64)
+       local.get $dotOne|104
+       local.set $a|106
+       i64.const 10
+       local.set $b|107
+       local.get $dotOne|104
+       i64.const 1
+       i64.const 62
+       i64.shl
+       i64.eq
+       if (result i64)
+        i64.const 0
+       else
+        global.get $~lib/util/dtoa/BIASED_HALF
+       end
+       local.set $carry
+       local.get $a|106
+       local.get $b|107
+       i64.mul
+       local.set $lo|109
+       block $~lib/util/dtoa/umul64hi|inlined.4 (result i64)
+        local.get $a|106
+        local.set $a|110
+        local.get $b|107
+        local.set $b|111
+        local.get $a|110
+        i64.const 4294967295
+        i64.and
+        local.set $a0|112
+        local.get $a|110
+        i64.const 32
+        i64.shr_u
+        local.set $a1|113
+        local.get $b|111
+        i64.const 4294967295
+        i64.and
+        local.set $b0|114
+        local.get $b|111
+        i64.const 32
+        i64.shr_u
+        local.set $b1|115
+        local.get $a0|112
+        local.get $b0|114
+        i64.mul
+        local.set $w0|116
+        local.get $a1|113
+        local.get $b0|114
+        i64.mul
+        local.get $w0|116
+        i64.const 32
+        i64.shr_u
+        i64.add
+        local.set $t|117
+        local.get $t|117
+        i64.const 4294967295
+        i64.and
+        local.set $w1|118
+        local.get $t|117
+        i64.const 32
+        i64.shr_u
+        local.set $w2|119
+        local.get $a0|112
+        local.get $b1|115
+        i64.mul
+        local.get $w1|118
+        i64.add
+        local.set $w1|118
+        local.get $a1|113
+        local.get $b1|115
+        i64.mul
+        local.get $w2|119
+        i64.add
+        local.get $w1|118
+        i64.const 32
+        i64.shr_u
+        i64.add
+        br $~lib/util/dtoa/umul64hi|inlined.4
+       end
+       local.set $hi|120
+       local.get $hi|120
+       local.get $lo|109
+       local.get $carry
+       i64.add
+       local.get $lo|109
+       i64.lt_u
+       i64.extend_i32_u
+       i64.add
+       br $~lib/util/dtoa/umul64hiCarry|inlined.0
+      end
+      local.set $one|121
+      local.get $dotOne|104
+      local.get $halfUlp|105
+      i64.lt_u
+      if (result i64)
+       i64.const 0
+      else
+       local.get $one|121
+      end
+      local.set $one|121
+      global.get $~lib/builtins/u64.MAX_VALUE
+      local.get $dotOne|104
+      i64.sub
+      local.get $halfUlp|105
+      i64.lt_u
+      if (result i64)
+       i64.const 10
+      else
+       local.get $one|121
+      end
+      local.set $one|121
+      local.get $integral|103
+      local.set $integral|122
+      local.get $one|121
+      local.set $one|123
+      local.get $decExp|68
+      local.set $decExp|124
+      local.get $one|123
+      i64.const 10
+      i64.eq
+      if
+       local.get $integral|122
+       i64.const 1
+       i64.add
+       global.set $~lib/util/dtoa/gSig
+       i32.const 0
+       global.set $~lib/util/dtoa/gLastDigit
+       i32.const 0
+       global.set $~lib/util/dtoa/gHasLastDigit
+      else
+       local.get $one|123
+       i64.const 0
+       i64.eq
+       if
+        local.get $integral|122
+        global.set $~lib/util/dtoa/gSig
+        i32.const 0
+        global.set $~lib/util/dtoa/gLastDigit
+        i32.const 0
+        global.set $~lib/util/dtoa/gHasLastDigit
+       else
+        local.get $integral|122
+        global.set $~lib/util/dtoa/gSig
+        local.get $one|123
+        i32.wrap_i64
+        global.set $~lib/util/dtoa/gLastDigit
+        i32.const 1
+        global.set $~lib/util/dtoa/gHasLastDigit
+       end
+      end
+      local.get $decExp|124
+      global.set $~lib/util/dtoa/gExp
+     end
+    else
+     block $~lib/util/dtoa/toDecimalDouble|inlined.0
+      local.get $binSig|11
+      local.set $binSig|125
+      i32.const 0
+      local.set $rawExp|126
+      i32.const 1
+      local.set $regular|127
+      local.get $rawExp|126
+      i32.const 0
+      i32.ne
+      if
+       block $~lib/util/dtoa/toDecimalDoubleNormal|inlined.1
+        local.get $binSig|125
+        local.set $binSig|128
+        local.get $rawExp|126
+        local.set $rawExp|129
+        local.get $regular|127
+        local.set $regular|130
+        local.get $binSig|128
+        i64.const 4503599627370496
+        i64.or
+        local.set $c|131
+        local.get $rawExp|129
+        i32.const 1075
+        i32.sub
+        local.set $q|132
+        local.get $regular|130
+        i32.eqz
+        if
+         local.get $q|132
+         i32.const 315653
+         i32.mul
+         i32.const 131072
+         i32.sub
+         global.get $~lib/util/dtoa/LOG10_2_EXP
+         i32.shr_s
+         local.set $decExp|133
+         i32.const 0
+         local.get $decExp|133
+         i32.sub
+         i32.const 1
+         i32.sub
+         local.set $powExp|134
+         local.get $q|132
+         local.get $powExp|134
+         i32.const 217707
+         i32.mul
+         global.get $~lib/util/dtoa/LOG2_POW10_EXP
+         i32.shr_s
+         i32.add
+         local.set $h|135
+         block $~lib/util/dtoa/computePow10|inlined.2 (result i64)
+          local.get $powExp|134
+          i32.const 293
+          i32.add
+          local.set $i|136
+          local.get $i|136
+          i32.const 285
+          i32.ge_s
+          if (result i32)
+           local.get $i|136
+           i32.const 320
+           i32.le_s
+          else
+           i32.const 0
+          end
+          if
+           i32.const 337
+           local.get $i|136
+           i32.sub
+           local.set $t|137
+           i32.const 1104
+           local.get $t|137
+           i32.const 17
+           i32.sub
+           i32.const 3
+           i32.shl
+           i32.add
+           i64.load
+           local.set $hi|138
+           local.get $t|137
+           i32.const 44
+           i32.le_s
+           if
+            local.get $hi|138
+            global.set $~lib/util/dtoa/gPow10Hi
+            i64.const 0
+            br $~lib/util/dtoa/computePow10|inlined.2
+           end
+           i32.const 1104
+           local.get $t|137
+           i32.const 3
+           i32.shl
+           i32.add
+           i64.load
+           local.set $lo|139
+           local.get $hi|138
+           i64.const 1
+           i64.sub
+           global.set $~lib/util/dtoa/gPow10Hi
+           local.get $lo|139
+           br $~lib/util/dtoa/computePow10|inlined.2
+          end
+          local.get $i|136
+          call $~lib/util/dtoa/computePow10Compact
+          br $~lib/util/dtoa/computePow10|inlined.2
+         end
+         drop
+         global.get $~lib/util/dtoa/gPow10Hi
+         local.set $pow10Hi|140
+         local.get $pow10Hi|140
+         i64.const 11
+         local.get $h|135
+         i64.extend_i32_s
+         i64.sub
+         i64.shr_u
+         local.set $integral|141
+         local.get $pow10Hi|140
+         i32.const 0
+         local.get $h|135
+         i32.sub
+         i64.extend_i32_s
+         i64.shr_u
+         local.set $halfUlp|142
+         local.get $pow10Hi|140
+         i64.const 53
+         local.get $h|135
+         i64.extend_i32_s
+         i64.add
+         i64.shl
+         local.set $dotOne|143
+         local.get $dotOne|143
+         i64.const 53
+         local.get $h|135
+         i64.extend_i32_s
+         i64.add
+         i64.shr_u
+         i64.const 5
+         i64.mul
+         i64.const 1
+         i64.const 9
+         local.get $h|135
+         i64.extend_i32_s
+         i64.sub
+         i64.shl
+         i64.add
+         i64.const 10
+         local.get $h|135
+         i64.extend_i32_s
+         i64.sub
+         i64.shr_u
+         local.set $one|144
+         local.get $dotOne|143
+         i64.const 54
+         i64.shr_u
+         i64.const 5
+         i64.mul
+         i64.const 511
+         i64.and
+         local.get $halfUlp|142
+         i64.const 55
+         i64.shr_u
+         i64.const 5
+         i64.mul
+         i64.gt_u
+         if (result i64)
+          local.get $dotOne|143
+          i64.const 54
+          i64.shr_u
+          i64.const 5
+          i64.mul
+          i64.const 9
+          i64.shr_u
+          i64.const 1
+          i64.add
+         else
+          local.get $one|144
+         end
+         local.set $one|144
+         local.get $dotOne|143
+         i64.const 1
+         i64.const 62
+         i64.shl
+         i64.eq
+         if (result i64)
+          i64.const 2
+         else
+          local.get $one|144
+         end
+         local.set $one|144
+         local.get $halfUlp|142
+         i64.const 1
+         i64.shr_u
+         local.get $dotOne|143
+         i64.gt_u
+         if (result i64)
+          i64.const 0
+         else
+          local.get $one|144
+         end
+         local.set $one|144
+         local.get $halfUlp|142
+         global.get $~lib/builtins/u64.MAX_VALUE
+         local.get $dotOne|143
+         i64.sub
+         i64.gt_u
+         if (result i64)
+          i64.const 10
+         else
+          local.get $one|144
+         end
+         local.set $one|144
+         local.get $integral|141
+         local.set $integral|145
+         local.get $one|144
+         local.set $one|146
+         local.get $decExp|133
+         local.set $decExp|147
+         local.get $one|146
+         i64.const 10
+         i64.eq
+         if
+          local.get $integral|145
+          i64.const 1
+          i64.add
+          global.set $~lib/util/dtoa/gSig
+          i32.const 0
+          global.set $~lib/util/dtoa/gLastDigit
+          i32.const 0
+          global.set $~lib/util/dtoa/gHasLastDigit
+         else
+          local.get $one|146
+          i64.const 0
+          i64.eq
+          if
+           local.get $integral|145
+           global.set $~lib/util/dtoa/gSig
+           i32.const 0
+           global.set $~lib/util/dtoa/gLastDigit
+           i32.const 0
+           global.set $~lib/util/dtoa/gHasLastDigit
+          else
+           local.get $integral|145
+           global.set $~lib/util/dtoa/gSig
+           local.get $one|146
+           i32.wrap_i64
+           global.set $~lib/util/dtoa/gLastDigit
+           i32.const 1
+           global.set $~lib/util/dtoa/gHasLastDigit
+          end
+         end
+         local.get $decExp|147
+         global.set $~lib/util/dtoa/gExp
+         br $~lib/util/dtoa/toDecimalDoubleNormal|inlined.1
+        end
+        local.get $rawExp|129
+        i32.const 1075
+        i32.sub
+        i32.const 78913
+        i32.mul
+        i32.const 18
+        i32.shr_s
+        local.set $decExp|148
+        i32.const 0
+        local.get $decExp|148
+        i32.sub
+        i32.const 1
+        i32.sub
+        local.set $powExp|149
+        local.get $q|132
+        local.get $powExp|149
+        i32.const 217707
+        i32.mul
+        global.get $~lib/util/dtoa/LOG2_POW10_EXP
+        i32.shr_s
+        i32.add
+        local.set $h|150
+        local.get $h|150
+        i32.const 1
+        i32.add
+        i32.const 6
+        i32.add
+        local.set $shift|151
+        block $~lib/util/dtoa/computePow10|inlined.3 (result i64)
+         local.get $powExp|149
+         i32.const 293
+         i32.add
+         local.set $i|152
+         local.get $i|152
+         i32.const 285
+         i32.ge_s
+         if (result i32)
+          local.get $i|152
+          i32.const 320
+          i32.le_s
+         else
+          i32.const 0
+         end
+         if
+          i32.const 337
+          local.get $i|152
+          i32.sub
+          local.set $t|153
+          i32.const 1104
+          local.get $t|153
+          i32.const 17
+          i32.sub
+          i32.const 3
+          i32.shl
+          i32.add
+          i64.load
+          local.set $hi|154
+          local.get $t|153
+          i32.const 44
+          i32.le_s
+          if
+           local.get $hi|154
+           global.set $~lib/util/dtoa/gPow10Hi
+           i64.const 0
+           br $~lib/util/dtoa/computePow10|inlined.3
+          end
+          i32.const 1104
+          local.get $t|153
+          i32.const 3
+          i32.shl
+          i32.add
+          i64.load
+          local.set $lo|155
+          local.get $hi|154
+          i64.const 1
+          i64.sub
+          global.set $~lib/util/dtoa/gPow10Hi
+          local.get $lo|155
+          br $~lib/util/dtoa/computePow10|inlined.3
+         end
+         local.get $i|152
+         call $~lib/util/dtoa/computePow10Compact
+         br $~lib/util/dtoa/computePow10|inlined.3
+        end
+        local.get $powExp|149
+        i32.const 0
+        i32.lt_s
+        i64.extend_i32_u
+        i64.add
+        local.set $pLo|156
+        global.get $~lib/util/dtoa/gPow10Hi
+        local.set $pHi|157
+        local.get $c|131
+        local.get $shift|151
+        i64.extend_i32_s
+        i64.shl
+        local.set $y|158
+        block $~lib/util/dtoa/umul64hi|inlined.5 (result i64)
+         local.get $pHi|157
+         local.set $a|159
+         local.get $y|158
+         local.set $b|160
+         local.get $a|159
+         i64.const 4294967295
+         i64.and
+         local.set $a0|161
+         local.get $a|159
+         i64.const 32
+         i64.shr_u
+         local.set $a1|162
+         local.get $b|160
+         i64.const 4294967295
+         i64.and
+         local.set $b0|163
+         local.get $b|160
+         i64.const 32
+         i64.shr_u
+         local.set $b1|164
+         local.get $a0|161
+         local.get $b0|163
+         i64.mul
+         local.set $w0|165
+         local.get $a1|162
+         local.get $b0|163
+         i64.mul
+         local.get $w0|165
+         i64.const 32
+         i64.shr_u
+         i64.add
+         local.set $t|166
+         local.get $t|166
+         i64.const 4294967295
+         i64.and
+         local.set $w1|167
+         local.get $t|166
+         i64.const 32
+         i64.shr_u
+         local.set $w2|168
+         local.get $a0|161
+         local.get $b1|164
+         i64.mul
+         local.get $w1|167
+         i64.add
+         local.set $w1|167
+         local.get $a1|162
+         local.get $b1|164
+         i64.mul
+         local.get $w2|168
+         i64.add
+         local.get $w1|167
+         i64.const 32
+         i64.shr_u
+         i64.add
+         br $~lib/util/dtoa/umul64hi|inlined.5
+        end
+        local.set $a|169
+        local.get $pHi|157
+        local.get $y|158
+        i64.mul
+        local.set $pLo64|170
+        local.get $pLo64|170
+        block $~lib/util/dtoa/umul64hi|inlined.6 (result i64)
+         local.get $pLo|156
+         local.set $a|171
+         local.get $y|158
+         local.set $b|172
+         local.get $a|171
+         i64.const 4294967295
+         i64.and
+         local.set $a0|173
+         local.get $a|171
+         i64.const 32
+         i64.shr_u
+         local.set $a1|174
+         local.get $b|172
+         i64.const 4294967295
+         i64.and
+         local.set $b0|175
+         local.get $b|172
+         i64.const 32
+         i64.shr_u
+         local.set $b1|176
+         local.get $a0|173
+         local.get $b0|175
+         i64.mul
+         local.set $w0|177
+         local.get $a1|174
+         local.get $b0|175
+         i64.mul
+         local.get $w0|177
+         i64.const 32
+         i64.shr_u
+         i64.add
+         local.set $t|178
+         local.get $t|178
+         i64.const 4294967295
+         i64.and
+         local.set $w1|179
+         local.get $t|178
+         i64.const 32
+         i64.shr_u
+         local.set $w2|180
+         local.get $a0|173
+         local.get $b1|176
+         i64.mul
+         local.get $w1|179
+         i64.add
+         local.set $w1|179
+         local.get $a1|174
+         local.get $b1|176
+         i64.mul
+         local.get $w2|180
+         i64.add
+         local.get $w1|179
+         i64.const 32
+         i64.shr_u
+         i64.add
+         br $~lib/util/dtoa/umul64hi|inlined.6
+        end
+        i64.add
+        local.set $lo|181
+        local.get $a|169
+        local.get $lo|181
+        local.get $pLo64|170
+        i64.lt_u
+        i64.extend_i32_u
+        i64.add
+        local.set $pHi64|182
+        local.get $pHi64|182
+        i32.const 6
+        i64.extend_i32_s
+        i64.shr_u
+        local.set $integral|183
+        local.get $pHi64|182
+        i64.const 64
+        i32.const 6
+        i64.extend_i32_s
+        i64.sub
+        i64.shl
+        local.get $lo|181
+        i32.const 6
+        i64.extend_i32_s
+        i64.shr_u
+        i64.or
+        local.set $dotOne|184
+        local.get $pHi|157
+        i32.const 0
+        local.get $h|150
+        i32.sub
+        i64.extend_i32_s
+        i64.shr_u
+        i64.const 1
+        local.get $c|131
+        i64.const 1
+        i64.and
+        i64.sub
+        i64.add
+        local.set $halfUlp|185
+        block $~lib/util/dtoa/umul64hiCarry|inlined.1 (result i64)
+         local.get $dotOne|184
+         local.set $a|186
+         i64.const 10
+         local.set $b|187
+         local.get $dotOne|184
+         i64.const 1
+         i64.const 62
+         i64.shl
+         i64.eq
+         if (result i64)
+          i64.const 0
+         else
+          global.get $~lib/util/dtoa/BIASED_HALF
+         end
+         local.set $carry|188
+         local.get $a|186
+         local.get $b|187
+         i64.mul
+         local.set $lo|189
+         block $~lib/util/dtoa/umul64hi|inlined.7 (result i64)
+          local.get $a|186
+          local.set $a|190
+          local.get $b|187
+          local.set $b|191
+          local.get $a|190
+          i64.const 4294967295
+          i64.and
+          local.set $a0|192
+          local.get $a|190
+          i64.const 32
+          i64.shr_u
+          local.set $a1|193
+          local.get $b|191
+          i64.const 4294967295
+          i64.and
+          local.set $b0|194
+          local.get $b|191
+          i64.const 32
+          i64.shr_u
+          local.set $b1|195
+          local.get $a0|192
+          local.get $b0|194
+          i64.mul
+          local.set $w0|196
+          local.get $a1|193
+          local.get $b0|194
+          i64.mul
+          local.get $w0|196
+          i64.const 32
+          i64.shr_u
+          i64.add
+          local.set $t|197
+          local.get $t|197
+          i64.const 4294967295
+          i64.and
+          local.set $w1|198
+          local.get $t|197
+          i64.const 32
+          i64.shr_u
+          local.set $w2|199
+          local.get $a0|192
+          local.get $b1|195
+          i64.mul
+          local.get $w1|198
+          i64.add
+          local.set $w1|198
+          local.get $a1|193
+          local.get $b1|195
+          i64.mul
+          local.get $w2|199
+          i64.add
+          local.get $w1|198
+          i64.const 32
+          i64.shr_u
+          i64.add
+          br $~lib/util/dtoa/umul64hi|inlined.7
+         end
+         local.set $hi|200
+         local.get $hi|200
+         local.get $lo|189
+         local.get $carry|188
+         i64.add
+         local.get $lo|189
+         i64.lt_u
+         i64.extend_i32_u
+         i64.add
+         br $~lib/util/dtoa/umul64hiCarry|inlined.1
+        end
+        local.set $one|201
+        local.get $dotOne|184
+        local.get $halfUlp|185
+        i64.lt_u
+        if (result i64)
+         i64.const 0
+        else
+         local.get $one|201
+        end
+        local.set $one|201
+        global.get $~lib/builtins/u64.MAX_VALUE
+        local.get $dotOne|184
+        i64.sub
+        local.get $halfUlp|185
+        i64.lt_u
+        if (result i64)
+         i64.const 10
+        else
+         local.get $one|201
+        end
+        local.set $one|201
+        local.get $integral|183
+        local.set $integral|202
+        local.get $one|201
+        local.set $one|203
+        local.get $decExp|148
+        local.set $decExp|204
+        local.get $one|203
+        i64.const 10
+        i64.eq
+        if
+         local.get $integral|202
+         i64.const 1
+         i64.add
+         global.set $~lib/util/dtoa/gSig
+         i32.const 0
+         global.set $~lib/util/dtoa/gLastDigit
+         i32.const 0
+         global.set $~lib/util/dtoa/gHasLastDigit
+        else
+         local.get $one|203
+         i64.const 0
+         i64.eq
+         if
+          local.get $integral|202
+          global.set $~lib/util/dtoa/gSig
+          i32.const 0
+          global.set $~lib/util/dtoa/gLastDigit
+          i32.const 0
+          global.set $~lib/util/dtoa/gHasLastDigit
+         else
+          local.get $integral|202
+          global.set $~lib/util/dtoa/gSig
+          local.get $one|203
+          i32.wrap_i64
+          global.set $~lib/util/dtoa/gLastDigit
+          i32.const 1
+          global.set $~lib/util/dtoa/gHasLastDigit
+         end
+        end
+        local.get $decExp|204
+        global.set $~lib/util/dtoa/gExp
+       end
+       br $~lib/util/dtoa/toDecimalDouble|inlined.0
+      end
+      block $~lib/util/dtoa/toDecExponent|inlined.0 (result i32)
+       i32.const -1074
+       local.set $binExp|205
+       local.get $binExp|205
+       i32.const 315653
+       i32.mul
+       global.get $~lib/util/dtoa/LOG10_2_EXP
+       i32.shr_s
+       br $~lib/util/dtoa/toDecExponent|inlined.0
+      end
+      local.set $decExp|206
+      block $~lib/util/dtoa/exponentShift|inlined.0 (result i32)
+       i32.const -1074
+       local.set $binExp|207
+       local.get $decExp|206
+       i32.const 1
+       i32.add
+       local.set $decExp|208
+       i32.const 0
+       local.get $decExp|208
+       i32.sub
+       i32.const 217707
+       i32.mul
+       global.get $~lib/util/dtoa/LOG2_POW10_EXP
+       i32.shr_s
+       local.set $pow10BinExp
+       local.get $binExp|207
+       local.get $pow10BinExp
+       i32.add
+       i32.const 1
+       i32.add
+       br $~lib/util/dtoa/exponentShift|inlined.0
+      end
+      i32.const 6
+      i32.add
+      local.set $shift|210
+      i32.const 0
+      local.get $decExp|206
+      i32.sub
+      i32.const 1
+      i32.sub
+      local.set $powExp|211
+      block $~lib/util/dtoa/computePow10|inlined.4 (result i64)
+       local.get $powExp|211
+       i32.const 293
+       i32.add
+       local.set $i|212
+       local.get $i|212
+       i32.const 285
+       i32.ge_s
+       if (result i32)
+        local.get $i|212
+        i32.const 320
+        i32.le_s
+       else
+        i32.const 0
+       end
+       if
+        i32.const 337
+        local.get $i|212
+        i32.sub
+        local.set $t|213
+        i32.const 1104
+        local.get $t|213
+        i32.const 17
+        i32.sub
+        i32.const 3
+        i32.shl
+        i32.add
+        i64.load
+        local.set $hi|214
+        local.get $t|213
+        i32.const 44
+        i32.le_s
+        if
+         local.get $hi|214
+         global.set $~lib/util/dtoa/gPow10Hi
+         i64.const 0
+         br $~lib/util/dtoa/computePow10|inlined.4
+        end
+        i32.const 1104
+        local.get $t|213
+        i32.const 3
+        i32.shl
+        i32.add
+        i64.load
+        local.set $lo|215
+        local.get $hi|214
+        i64.const 1
+        i64.sub
+        global.set $~lib/util/dtoa/gPow10Hi
+        local.get $lo|215
+        br $~lib/util/dtoa/computePow10|inlined.4
+       end
+       local.get $i|212
+       call $~lib/util/dtoa/computePow10Compact
+       br $~lib/util/dtoa/computePow10|inlined.4
+      end
+      local.get $powExp|211
+      i32.const 0
+      i32.lt_s
+      i64.extend_i32_u
+      i64.add
+      local.set $pLo|216
+      global.get $~lib/util/dtoa/gPow10Hi
+      local.set $pHi|217
+      local.get $binSig|125
+      local.get $shift|210
+      i64.extend_i32_s
+      i64.shl
+      local.set $y|218
+      block $~lib/util/dtoa/umul64hi|inlined.8 (result i64)
+       local.get $pHi|217
+       local.set $a|219
+       local.get $y|218
+       local.set $b|220
+       local.get $a|219
+       i64.const 4294967295
+       i64.and
+       local.set $a0|221
+       local.get $a|219
+       i64.const 32
+       i64.shr_u
+       local.set $a1|222
+       local.get $b|220
+       i64.const 4294967295
+       i64.and
+       local.set $b0|223
+       local.get $b|220
+       i64.const 32
+       i64.shr_u
+       local.set $b1|224
+       local.get $a0|221
+       local.get $b0|223
+       i64.mul
+       local.set $w0|225
+       local.get $a1|222
+       local.get $b0|223
+       i64.mul
+       local.get $w0|225
+       i64.const 32
+       i64.shr_u
+       i64.add
+       local.set $t|226
+       local.get $t|226
+       i64.const 4294967295
+       i64.and
+       local.set $w1|227
+       local.get $t|226
+       i64.const 32
+       i64.shr_u
+       local.set $w2|228
+       local.get $a0|221
+       local.get $b1|224
+       i64.mul
+       local.get $w1|227
+       i64.add
+       local.set $w1|227
+       local.get $a1|222
+       local.get $b1|224
+       i64.mul
+       local.get $w2|228
+       i64.add
+       local.get $w1|227
+       i64.const 32
+       i64.shr_u
+       i64.add
+       br $~lib/util/dtoa/umul64hi|inlined.8
+      end
+      local.set $a|229
+      local.get $pHi|217
+      local.get $y|218
+      i64.mul
+      local.set $pLo64|230
+      local.get $pLo64|230
+      block $~lib/util/dtoa/umul64hi|inlined.9 (result i64)
+       local.get $pLo|216
+       local.set $a|231
+       local.get $y|218
+       local.set $b|232
+       local.get $a|231
+       i64.const 4294967295
+       i64.and
+       local.set $a0|233
+       local.get $a|231
+       i64.const 32
+       i64.shr_u
+       local.set $a1|234
+       local.get $b|232
+       i64.const 4294967295
+       i64.and
+       local.set $b0|235
+       local.get $b|232
+       i64.const 32
+       i64.shr_u
+       local.set $b1|236
+       local.get $a0|233
+       local.get $b0|235
+       i64.mul
+       local.set $w0|237
+       local.get $a1|234
+       local.get $b0|235
+       i64.mul
+       local.get $w0|237
+       i64.const 32
+       i64.shr_u
+       i64.add
+       local.set $t|238
+       local.get $t|238
+       i64.const 4294967295
+       i64.and
+       local.set $w1|239
+       local.get $t|238
+       i64.const 32
+       i64.shr_u
+       local.set $w2|240
+       local.get $a0|233
+       local.get $b1|236
+       i64.mul
+       local.get $w1|239
+       i64.add
+       local.set $w1|239
+       local.get $a1|234
+       local.get $b1|236
+       i64.mul
+       local.get $w2|240
+       i64.add
+       local.get $w1|239
+       i64.const 32
+       i64.shr_u
+       i64.add
+       br $~lib/util/dtoa/umul64hi|inlined.9
+      end
+      i64.add
+      local.set $lo|241
+      local.get $a|229
+      local.get $lo|241
+      local.get $pLo64|230
+      i64.lt_u
+      i64.extend_i32_u
+      i64.add
+      local.set $pHi64|242
+      local.get $pHi64|242
+      i32.const 6
+      i64.extend_i32_s
+      i64.shr_u
+      local.set $integral|243
+      local.get $pHi64|242
+      i64.const 64
+      i32.const 6
+      i64.extend_i32_s
+      i64.sub
+      i64.shl
+      local.get $lo|241
+      i32.const 6
+      i64.extend_i32_s
+      i64.shr_u
+      i64.or
+      local.set $dotOne|244
+      local.get $pHi|217
+      i32.const 6
+      i32.const 1
+      i32.add
+      local.get $shift|210
+      i32.sub
+      i64.extend_i32_s
+      i64.shr_u
+      i64.const 1
+      local.get $binSig|125
+      i64.const 1
+      i64.and
+      i64.sub
+      i64.add
+      local.set $halfUlp|245
+      block $~lib/util/dtoa/umul64hiCarry|inlined.2 (result i64)
+       local.get $dotOne|244
+       local.set $a|246
+       i64.const 10
+       local.set $b|247
+       global.get $~lib/util/dtoa/BIASED_HALF
+       local.set $carry|248
+       local.get $a|246
+       local.get $b|247
+       i64.mul
+       local.set $lo|249
+       block $~lib/util/dtoa/umul64hi|inlined.10 (result i64)
+        local.get $a|246
+        local.set $a|250
+        local.get $b|247
+        local.set $b|251
+        local.get $a|250
+        i64.const 4294967295
+        i64.and
+        local.set $a0|252
+        local.get $a|250
+        i64.const 32
+        i64.shr_u
+        local.set $a1|253
+        local.get $b|251
+        i64.const 4294967295
+        i64.and
+        local.set $b0|254
+        local.get $b|251
+        i64.const 32
+        i64.shr_u
+        local.set $b1|255
+        local.get $a0|252
+        local.get $b0|254
+        i64.mul
+        local.set $w0|256
+        local.get $a1|253
+        local.get $b0|254
+        i64.mul
+        local.get $w0|256
+        i64.const 32
+        i64.shr_u
+        i64.add
+        local.set $t|257
+        local.get $t|257
+        i64.const 4294967295
+        i64.and
+        local.set $w1|258
+        local.get $t|257
+        i64.const 32
+        i64.shr_u
+        local.set $w2|259
+        local.get $a0|252
+        local.get $b1|255
+        i64.mul
+        local.get $w1|258
+        i64.add
+        local.set $w1|258
+        local.get $a1|253
+        local.get $b1|255
+        i64.mul
+        local.get $w2|259
+        i64.add
+        local.get $w1|258
+        i64.const 32
+        i64.shr_u
+        i64.add
+        br $~lib/util/dtoa/umul64hi|inlined.10
+       end
+       local.set $hi|260
+       local.get $hi|260
+       local.get $lo|249
+       local.get $carry|248
+       i64.add
+       local.get $lo|249
+       i64.lt_u
+       i64.extend_i32_u
+       i64.add
+       br $~lib/util/dtoa/umul64hiCarry|inlined.2
+      end
+      local.set $one|261
+      local.get $dotOne|244
+      local.get $halfUlp|245
+      i64.lt_u
+      if (result i64)
+       i64.const 0
+      else
+       local.get $one|261
+      end
+      local.set $one|261
+      global.get $~lib/builtins/u64.MAX_VALUE
+      local.get $dotOne|244
+      i64.sub
+      local.get $halfUlp|245
+      i64.lt_u
+      if (result i64)
+       i64.const 10
+      else
+       local.get $one|261
+      end
+      local.set $one|261
+      local.get $integral|243
+      local.set $integral|262
+      local.get $one|261
+      local.set $one|263
+      local.get $decExp|206
+      local.set $decExp|264
+      local.get $one|263
+      i64.const 10
+      i64.eq
+      if
+       local.get $integral|262
+       i64.const 1
+       i64.add
+       global.set $~lib/util/dtoa/gSig
+       i32.const 0
+       global.set $~lib/util/dtoa/gLastDigit
+       i32.const 0
+       global.set $~lib/util/dtoa/gHasLastDigit
+      else
+       local.get $one|263
+       i64.const 0
+       i64.eq
+       if
+        local.get $integral|262
+        global.set $~lib/util/dtoa/gSig
+        i32.const 0
+        global.set $~lib/util/dtoa/gLastDigit
+        i32.const 0
+        global.set $~lib/util/dtoa/gHasLastDigit
+       else
+        local.get $integral|262
+        global.set $~lib/util/dtoa/gSig
+        local.get $one|263
+        i32.wrap_i64
+        global.set $~lib/util/dtoa/gLastDigit
+        i32.const 1
+        global.set $~lib/util/dtoa/gHasLastDigit
+       end
+      end
+      local.get $decExp|264
+      global.set $~lib/util/dtoa/gExp
+     end
+    end
+    global.get $~lib/util/dtoa/gSig
+    local.get $threshold
+    i64.lt_u
+    if
+     block $~lib/util/dtoa/normalizeDoubleShortest|inlined.0
+      global.get $~lib/util/dtoa/gSig
+      i64.const 10
+      i64.mul
+      global.get $~lib/util/dtoa/gHasLastDigit
+      if (result i64)
+       global.get $~lib/util/dtoa/gLastDigit
+       i64.extend_i32_s
+      else
+       i64.const 0
+      end
+      i64.add
+      local.set $full
+      local.get $full
+      i64.const 1000000000000000
+      i64.ge_u
+      if
+       local.get $full
+       global.set $~lib/util/dtoa/gSig
+       global.get $~lib/util/dtoa/gExp
+       i32.const 1
+       i32.sub
+       global.set $~lib/util/dtoa/gExp
+       i32.const 0
+       global.set $~lib/util/dtoa/gLastDigit
+       i32.const 0
+       global.set $~lib/util/dtoa/gHasLastDigit
+       br $~lib/util/dtoa/normalizeDoubleShortest|inlined.0
+      end
+      i32.const 16
+      block $~lib/util/dtoa/decimalLen15|inlined.2 (result i32)
+       local.get $full
+       local.set $v|266
+       local.get $v|266
+       i64.const 100000000
+       i64.lt_u
+       if
+        local.get $v|266
+        i64.const 10000
+        i64.lt_u
+        if
+         local.get $v|266
+         i64.const 100
+         i64.lt_u
+         if
+          i32.const 1
+          local.get $v|266
+          i64.const 10
+          i64.ge_u
+          i32.add
+          br $~lib/util/dtoa/decimalLen15|inlined.2
+         end
+         i32.const 3
+         local.get $v|266
+         i64.const 1000
+         i64.ge_u
+         i32.add
+         br $~lib/util/dtoa/decimalLen15|inlined.2
+        end
+        local.get $v|266
+        i64.const 1000000
+        i64.lt_u
+        if
+         i32.const 5
+         local.get $v|266
+         i64.const 100000
+         i64.ge_u
+         i32.add
+         br $~lib/util/dtoa/decimalLen15|inlined.2
+        end
+        i32.const 7
+        local.get $v|266
+        i64.const 10000000
+        i64.ge_u
+        i32.add
+        br $~lib/util/dtoa/decimalLen15|inlined.2
+       end
+       local.get $v|266
+       i64.const 1000000000000
+       i64.lt_u
+       if
+        local.get $v|266
+        i64.const 10000000000
+        i64.lt_u
+        if
+         i32.const 9
+         local.get $v|266
+         i64.const 1000000000
+         i64.ge_u
+         i32.add
+         br $~lib/util/dtoa/decimalLen15|inlined.2
+        end
+        i32.const 11
+        local.get $v|266
+        i64.const 100000000000
+        i64.ge_u
+        i32.add
+        br $~lib/util/dtoa/decimalLen15|inlined.2
+       end
+       local.get $v|266
+       i64.const 100000000000000
+       i64.lt_u
+       if
+        i32.const 13
+        local.get $v|266
+        i64.const 10000000000000
+        i64.ge_u
+        i32.add
+        br $~lib/util/dtoa/decimalLen15|inlined.2
+       end
+       i32.const 15
+       br $~lib/util/dtoa/decimalLen15|inlined.2
+      end
+      i32.sub
+      local.set $scale
+      i32.const 2064
+      local.get $scale
+      i32.const 3
+      i32.shl
+      i32.add
+      f64.load
+      i64.trunc_sat_f64_u
+      local.set $mul
+      local.get $full
+      local.get $mul
+      i64.mul
+      global.set $~lib/util/dtoa/gSig
+      global.get $~lib/util/dtoa/gExp
+      local.get $scale
+      i32.const 1
+      i32.add
+      i32.sub
+      global.set $~lib/util/dtoa/gExp
+      i32.const 0
+      global.set $~lib/util/dtoa/gLastDigit
+      i32.const 0
+      global.set $~lib/util/dtoa/gHasLastDigit
+     end
+    end
+    global.get $~lib/util/dtoa/gHasLastDigit
+    local.set $hasLastDigit
+    global.get $~lib/util/dtoa/gExp
+    i32.const 16
+    i32.add
+    local.set $decExp|270
+    local.get $buf|8
+    local.set $start
+    global.get $~lib/util/dtoa/gSig
+    local.set $value|272
+    i32.const 0
+    drop
+    block $~lib/util/dtoa/toDigits64Swar|inlined.0
+     local.get $value|272
+     local.set $value|273
+     i32.const 1
+     local.set $fixed16
+     local.get $value|273
+     i64.const 100000000
+     i64.div_u
+     local.set $hi|275
+     local.get $value|273
+     local.get $hi|275
+     i64.const 100000000
+     i64.mul
+     i64.sub
+     local.set $lo|276
+     local.get $fixed16
+     if
+      block $~lib/util/dtoa/toBcd8Digits|inlined.1 (result i64)
+       local.get $hi|275
+       local.set $value|277
+       local.get $value|277
+       i64.const 4294957296
+       local.get $value|277
+       global.get $~lib/util/dtoa/DIV10K_SIG
+       i64.mul
+       i32.const 40
+       i64.extend_i32_s
+       i64.shr_u
+       i64.mul
+       i64.add
+       local.set $quads
+       local.get $quads
+       i64.const 65436
+       local.get $quads
+       global.get $~lib/util/dtoa/DIV100_SIG
+       i64.mul
+       i32.const 19
+       i64.extend_i32_s
+       i64.shr_u
+       i64.const 545460846719
+       i64.and
+       i64.mul
+       i64.add
+       local.set $pairs
+       local.get $pairs
+       i64.const 246
+       local.get $pairs
+       global.get $~lib/util/dtoa/DIV10_SIG
+       i64.mul
+       i32.const 10
+       i64.extend_i32_s
+       i64.shr_u
+       i64.const 4222189076152335
+       i64.and
+       i64.mul
+       i64.add
+       local.set $singles
+       local.get $singles
+       call $~lib/polyfills/bswap<u64>
+       global.set $~lib/util/dtoa/gBcdValue
+       local.get $singles
+       br $~lib/util/dtoa/toBcd8Digits|inlined.1
+      end
+      drop
+      global.get $~lib/util/dtoa/gBcdValue
+      local.set $hiBcd
+      block $~lib/util/dtoa/toBcd8Digits|inlined.2 (result i64)
+       local.get $lo|276
+       local.set $value|282
+       local.get $value|282
+       i64.const 4294957296
+       local.get $value|282
+       global.get $~lib/util/dtoa/DIV10K_SIG
+       i64.mul
+       i32.const 40
+       i64.extend_i32_s
+       i64.shr_u
+       i64.mul
+       i64.add
+       local.set $quads|283
+       local.get $quads|283
+       i64.const 65436
+       local.get $quads|283
+       global.get $~lib/util/dtoa/DIV100_SIG
+       i64.mul
+       i32.const 19
+       i64.extend_i32_s
+       i64.shr_u
+       i64.const 545460846719
+       i64.and
+       i64.mul
+       i64.add
+       local.set $pairs|284
+       local.get $pairs|284
+       i64.const 246
+       local.get $pairs|284
+       global.get $~lib/util/dtoa/DIV10_SIG
+       i64.mul
+       i32.const 10
+       i64.extend_i32_s
+       i64.shr_u
+       i64.const 4222189076152335
+       i64.and
+       i64.mul
+       i64.add
+       local.set $singles|285
+       local.get $singles|285
+       call $~lib/polyfills/bswap<u64>
+       global.set $~lib/util/dtoa/gBcdValue
+       local.get $singles|285
+       br $~lib/util/dtoa/toBcd8Digits|inlined.2
+      end
+      drop
+      local.get $hiBcd
+      i64.const 3472328296227680304
+      i64.add
+      global.set $~lib/util/dtoa/gDigHi
+      global.get $~lib/util/dtoa/gBcdValue
+      i64.const 3472328296227680304
+      i64.add
+      global.set $~lib/util/dtoa/gDigLo
+      br $~lib/util/dtoa/toDigits64Swar|inlined.0
+     end
+     local.get $hi|275
+     call $~lib/util/dtoa/toBcd8
+     local.set $hiLen
+     global.get $~lib/util/dtoa/gBcdValue
+     local.set $hiBcd|287
+     local.get $lo|276
+     i64.const 0
+     i64.eq
+     if
+      local.get $hiBcd|287
+      i64.const 3472328296227680304
+      i64.add
+      global.set $~lib/util/dtoa/gDigHi
+      i64.const 3472328296227680304
+      global.set $~lib/util/dtoa/gDigLo
+      local.get $hiLen
+      i32.const 8
+      i32.add
+      global.set $~lib/util/dtoa/gDigits
+      br $~lib/util/dtoa/toDigits64Swar|inlined.0
+     end
+     local.get $lo|276
+     call $~lib/util/dtoa/toBcd8
+     local.set $loLen
+     local.get $hiBcd|287
+     i64.const 3472328296227680304
+     i64.add
+     global.set $~lib/util/dtoa/gDigHi
+     global.get $~lib/util/dtoa/gBcdValue
+     i64.const 3472328296227680304
+     i64.add
+     global.set $~lib/util/dtoa/gDigLo
+     local.get $hi|275
+     i64.const 0
+     i64.eq
+     if (result i32)
+      local.get $loLen
+     else
+      local.get $hiLen
+      i32.const 8
+      i32.add
+     end
+     global.set $~lib/util/dtoa/gDigits
+    end
+    local.get $decExp|270
+    i32.const -6
+    i32.ge_s
+    if (result i32)
+     local.get $decExp|270
+     global.get $~lib/util/dtoa/MAX_FIXED_DEC_EXP
+     i32.le_s
+    else
+     i32.const 0
+    end
+    if
+     block $~lib/util/dtoa/writeFixed|inlined.0 (result i32)
+      local.get $buf|8
+      local.set $buf|289
+      local.get $start
+      local.set $start|290
+      local.get $decExp|270
+      local.set $decExp|291
+      local.get $hasLastDigit
+      local.set $hasLastDigit|292
+      local.get $dotZero|12
+      local.set $dotZero|293
+      local.get $decExp|291
+      i32.const 0
+      i32.lt_s
+      if
+       local.get $start|290
+       local.set $p|294
+       i64.const 3472328296227680304
+       local.set $ascii|295
+       i32.const 0
+       local.set $off|296
+       local.get $p|294
+       local.get $off|296
+       i32.add
+       local.set $base|297
+       i32.const 0
+       drop
+       local.get $ascii|295
+       i64.const 4294967295
+       i64.and
+       local.set $lo|298
+       local.get $ascii|295
+       i64.const 32
+       i64.shr_u
+       local.set $hi|299
+       local.get $lo|298
+       local.get $lo|298
+       i64.const 16
+       i64.shl
+       i64.or
+       i64.const 281470681808895
+       i64.and
+       local.set $lo|298
+       local.get $hi|299
+       local.get $hi|299
+       i64.const 16
+       i64.shl
+       i64.or
+       i64.const 281470681808895
+       i64.and
+       local.set $hi|299
+       local.get $lo|298
+       local.get $lo|298
+       i64.const 8
+       i64.shl
+       i64.or
+       i64.const 71777214294589695
+       i64.and
+       local.set $lo|298
+       local.get $hi|299
+       local.get $hi|299
+       i64.const 8
+       i64.shl
+       i64.or
+       i64.const 71777214294589695
+       i64.and
+       local.set $hi|299
+       local.get $base|297
+       local.get $lo|298
+       i64.store
+       local.get $base|297
+       local.get $hi|299
+       i64.store offset=8
+      end
+      i32.const 48
+      local.get $hasLastDigit|292
+      if (result i32)
+       global.get $~lib/util/dtoa/gLastDigit
+      else
+       i32.const 0
+      end
+      i32.add
+      i64.extend_i32_s
+      local.set $lastDigitChar
+      local.get $hasLastDigit|292
+      if (result i32)
+       i32.const 16
+      else
+       i32.const 15
+      end
+      local.set $numDigits
+      global.get $~lib/util/dtoa/gDigHi
+      local.set $dHi
+      global.get $~lib/util/dtoa/gDigLo
+      local.set $dLo
+      local.get $decExp|291
+      i32.const 16
+      i32.ge_s
+      if
+       local.get $buf|289
+       local.set $p|304
+       local.get $dHi
+       local.set $ascii|305
+       i32.const 0
+       local.set $off|306
+       local.get $p|304
+       local.get $off|306
+       i32.add
+       local.set $base|307
+       i32.const 0
+       drop
+       local.get $ascii|305
+       i64.const 4294967295
+       i64.and
+       local.set $lo|308
+       local.get $ascii|305
+       i64.const 32
+       i64.shr_u
+       local.set $hi|309
+       local.get $lo|308
+       local.get $lo|308
+       i64.const 16
+       i64.shl
+       i64.or
+       i64.const 281470681808895
+       i64.and
+       local.set $lo|308
+       local.get $hi|309
+       local.get $hi|309
+       i64.const 16
+       i64.shl
+       i64.or
+       i64.const 281470681808895
+       i64.and
+       local.set $hi|309
+       local.get $lo|308
+       local.get $lo|308
+       i64.const 8
+       i64.shl
+       i64.or
+       i64.const 71777214294589695
+       i64.and
+       local.set $lo|308
+       local.get $hi|309
+       local.get $hi|309
+       i64.const 8
+       i64.shl
+       i64.or
+       i64.const 71777214294589695
+       i64.and
+       local.set $hi|309
+       local.get $base|307
+       local.get $lo|308
+       i64.store
+       local.get $base|307
+       local.get $hi|309
+       i64.store offset=8
+       local.get $buf|289
+       local.set $p|310
+       local.get $dLo
+       local.set $ascii|311
+       i32.const 16
+       local.set $off|312
+       local.get $p|310
+       local.get $off|312
+       i32.add
+       local.set $base|313
+       i32.const 0
+       drop
+       local.get $ascii|311
+       i64.const 4294967295
+       i64.and
+       local.set $lo|314
+       local.get $ascii|311
+       i64.const 32
+       i64.shr_u
+       local.set $hi|315
+       local.get $lo|314
+       local.get $lo|314
+       i64.const 16
+       i64.shl
+       i64.or
+       i64.const 281470681808895
+       i64.and
+       local.set $lo|314
+       local.get $hi|315
+       local.get $hi|315
+       i64.const 16
+       i64.shl
+       i64.or
+       i64.const 281470681808895
+       i64.and
+       local.set $hi|315
+       local.get $lo|314
+       local.get $lo|314
+       i64.const 8
+       i64.shl
+       i64.or
+       i64.const 71777214294589695
+       i64.and
+       local.set $lo|314
+       local.get $hi|315
+       local.get $hi|315
+       i64.const 8
+       i64.shl
+       i64.or
+       i64.const 71777214294589695
+       i64.and
+       local.set $hi|315
+       local.get $base|313
+       local.get $lo|314
+       i64.store
+       local.get $base|313
+       local.get $hi|315
+       i64.store offset=8
+       local.get $buf|289
+       i32.const 32
+       i32.add
+       local.get $lastDigitChar
+       i32.wrap_i64
+       i32.store16
+       local.get $buf|289
+       local.get $decExp|291
+       i32.const 1
+       i32.add
+       i32.const 1
+       i32.shl
+       i32.add
+       local.set $endByte
+       local.get $buf|289
+       i32.const 17
+       i32.const 1
+       i32.shl
+       i32.add
+       local.set $z
+       loop $for-loop|0
+        local.get $z
+        local.get $endByte
+        i32.lt_u
+        if
+         local.get $z
+         local.set $p|318
+         i64.const 3472328296227680304
+         local.set $ascii|319
+         i32.const 0
+         local.set $off|320
+         local.get $p|318
+         local.get $off|320
+         i32.add
+         local.set $base|321
+         i32.const 0
+         drop
+         local.get $ascii|319
+         i64.const 4294967295
+         i64.and
+         local.set $lo|322
+         local.get $ascii|319
+         i64.const 32
+         i64.shr_u
+         local.set $hi|323
+         local.get $lo|322
+         local.get $lo|322
+         i64.const 16
+         i64.shl
+         i64.or
+         i64.const 281470681808895
+         i64.and
+         local.set $lo|322
+         local.get $hi|323
+         local.get $hi|323
+         i64.const 16
+         i64.shl
+         i64.or
+         i64.const 281470681808895
+         i64.and
+         local.set $hi|323
+         local.get $lo|322
+         local.get $lo|322
+         i64.const 8
+         i64.shl
+         i64.or
+         i64.const 71777214294589695
+         i64.and
+         local.set $lo|322
+         local.get $hi|323
+         local.get $hi|323
+         i64.const 8
+         i64.shl
+         i64.or
+         i64.const 71777214294589695
+         i64.and
+         local.set $hi|323
+         local.get $base|321
+         local.get $lo|322
+         i64.store
+         local.get $base|321
+         local.get $hi|323
+         i64.store offset=8
+         local.get $z
+         i32.const 16
+         i32.add
+         local.set $z
+         br $for-loop|0
+        end
+       end
+       block $~lib/util/dtoa/finishInteger|inlined.6 (result i32)
+        local.get $endByte
+        local.set $end|324
+        local.get $dotZero|293
+        local.set $dotZero|325
+        local.get $dotZero|325
+        if
+         local.get $end|324
+         i32.const 46
+         i32.store16
+         local.get $end|324
+         i32.const 48
+         i32.store16 offset=2
+         local.get $end|324
+         i32.const 4
+         i32.add
+         local.set $end|324
+        end
+        local.get $end|324
+        br $~lib/util/dtoa/finishInteger|inlined.6
+       end
+       br $~lib/util/dtoa/writeFixed|inlined.0
+      end
+      local.get $numDigits
+      i32.const 1
+      i32.add
+      local.set $n
+      local.get $decExp|291
+      i32.const 0
+      i32.ge_s
+      if (result i32)
+       local.get $n
+       i32.const 1
+       i32.add
+      else
+       local.get $n
+      end
+      local.set $endPos
+      i32.const 1
+      local.get $decExp|291
+      i32.sub
+      local.get $decExp|291
+      i32.const 31
+      i32.shr_s
+      i32.and
+      local.set $startPos
+      local.get $buf|289
+      local.get $startPos
+      i32.const 1
+      i32.shl
+      i32.add
+      local.set $buf|289
+      local.get $buf|289
+      local.set $p|329
+      local.get $dHi
+      local.set $ascii|330
+      i32.const 0
+      local.set $off|331
+      local.get $p|329
+      local.get $off|331
+      i32.add
+      local.set $base|332
+      i32.const 0
+      drop
+      local.get $ascii|330
+      i64.const 4294967295
+      i64.and
+      local.set $lo|333
+      local.get $ascii|330
+      i64.const 32
+      i64.shr_u
+      local.set $hi|334
+      local.get $lo|333
+      local.get $lo|333
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $lo|333
+      local.get $hi|334
+      local.get $hi|334
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $hi|334
+      local.get $lo|333
+      local.get $lo|333
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $lo|333
+      local.get $hi|334
+      local.get $hi|334
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $hi|334
+      local.get $base|332
+      local.get $lo|333
+      i64.store
+      local.get $base|332
+      local.get $hi|334
+      i64.store offset=8
+      local.get $buf|289
+      local.set $p|335
+      local.get $dLo
+      local.set $ascii|336
+      i32.const 16
+      local.set $off|337
+      local.get $p|335
+      local.get $off|337
+      i32.add
+      local.set $base|338
+      i32.const 0
+      drop
+      local.get $ascii|336
+      i64.const 4294967295
+      i64.and
+      local.set $lo|339
+      local.get $ascii|336
+      i64.const 32
+      i64.shr_u
+      local.set $hi|340
+      local.get $lo|339
+      local.get $lo|339
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $lo|339
+      local.get $hi|340
+      local.get $hi|340
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $hi|340
+      local.get $lo|339
+      local.get $lo|339
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $lo|339
+      local.get $hi|340
+      local.get $hi|340
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $hi|340
+      local.get $base|338
+      local.get $lo|339
+      i64.store
+      local.get $base|338
+      local.get $hi|340
+      i64.store offset=8
+      local.get $buf|289
+      i32.const 32
+      i32.add
+      local.get $lastDigitChar
+      i32.wrap_i64
+      i32.store16
+      local.get $decExp|291
+      i32.const 0
+      i32.ge_s
+      if
+       local.get $decExp|291
+       i32.const 1
+       i32.add
+       local.set $k
+       local.get $lastDigitChar
+       local.set $d16
+       local.get $k
+       i32.const 3
+       i32.shl
+       local.set $s
+       local.get $s
+       i32.const 64
+       i32.lt_s
+       if
+        local.get $dHi
+        local.get $s
+        i64.extend_i32_s
+        i64.shr_u
+        local.get $dLo
+        i64.const 64
+        local.get $s
+        i64.extend_i32_s
+        i64.sub
+        i64.shl
+        i64.or
+        local.set $fHi
+        local.get $dLo
+        local.get $s
+        i64.extend_i32_s
+        i64.shr_u
+        local.get $d16
+        i64.const 64
+        local.get $s
+        i64.extend_i32_s
+        i64.sub
+        i64.shl
+        i64.or
+        local.set $fLo
+       else
+        local.get $s
+        i32.const 64
+        i32.eq
+        if
+         local.get $dLo
+         local.set $fHi
+         local.get $d16
+         local.set $fLo
+        else
+         local.get $s
+         i32.const 128
+         i32.lt_s
+         if
+          local.get $s
+          i32.const 64
+          i32.sub
+          local.set $s2
+          local.get $dLo
+          local.get $s2
+          i64.extend_i32_s
+          i64.shr_u
+          local.get $d16
+          i64.const 64
+          local.get $s2
+          i64.extend_i32_s
+          i64.sub
+          i64.shl
+          i64.or
+          local.set $fHi
+          local.get $d16
+          local.get $s2
+          i64.extend_i32_s
+          i64.shr_u
+          local.set $fLo
+         else
+          local.get $d16
+          local.set $fHi
+          i64.const 0
+          local.set $fLo
+         end
+        end
+       end
+       local.get $buf|289
+       local.get $k
+       i32.const 1
+       i32.add
+       i32.const 1
+       i32.shl
+       i32.add
+       local.set $p|347
+       local.get $fHi
+       local.set $ascii|348
+       i32.const 0
+       local.set $off|349
+       local.get $p|347
+       local.get $off|349
+       i32.add
+       local.set $base|350
+       i32.const 0
+       drop
+       local.get $ascii|348
+       i64.const 4294967295
+       i64.and
+       local.set $lo|351
+       local.get $ascii|348
+       i64.const 32
+       i64.shr_u
+       local.set $hi|352
+       local.get $lo|351
+       local.get $lo|351
+       i64.const 16
+       i64.shl
+       i64.or
+       i64.const 281470681808895
+       i64.and
+       local.set $lo|351
+       local.get $hi|352
+       local.get $hi|352
+       i64.const 16
+       i64.shl
+       i64.or
+       i64.const 281470681808895
+       i64.and
+       local.set $hi|352
+       local.get $lo|351
+       local.get $lo|351
+       i64.const 8
+       i64.shl
+       i64.or
+       i64.const 71777214294589695
+       i64.and
+       local.set $lo|351
+       local.get $hi|352
+       local.get $hi|352
+       i64.const 8
+       i64.shl
+       i64.or
+       i64.const 71777214294589695
+       i64.and
+       local.set $hi|352
+       local.get $base|350
+       local.get $lo|351
+       i64.store
+       local.get $base|350
+       local.get $hi|352
+       i64.store offset=8
+       local.get $endPos
+       local.get $k
+       i32.const 9
+       i32.add
+       i32.gt_s
+       if
+        local.get $buf|289
+        local.get $k
+        i32.const 9
+        i32.add
+        i32.const 1
+        i32.shl
+        i32.add
+        local.set $p|353
+        local.get $fLo
+        local.set $ascii|354
+        i32.const 0
+        local.set $off|355
+        local.get $p|353
+        local.get $off|355
+        i32.add
+        local.set $base|356
+        i32.const 0
+        drop
+        local.get $ascii|354
+        i64.const 4294967295
+        i64.and
+        local.set $lo|357
+        local.get $ascii|354
+        i64.const 32
+        i64.shr_u
+        local.set $hi|358
+        local.get $lo|357
+        local.get $lo|357
+        i64.const 16
+        i64.shl
+        i64.or
+        i64.const 281470681808895
+        i64.and
+        local.set $lo|357
+        local.get $hi|358
+        local.get $hi|358
+        i64.const 16
+        i64.shl
+        i64.or
+        i64.const 281470681808895
+        i64.and
+        local.set $hi|358
+        local.get $lo|357
+        local.get $lo|357
+        i64.const 8
+        i64.shl
+        i64.or
+        i64.const 71777214294589695
+        i64.and
+        local.set $lo|357
+        local.get $hi|358
+        local.get $hi|358
+        i64.const 8
+        i64.shl
+        i64.or
+        i64.const 71777214294589695
+        i64.and
+        local.set $hi|358
+        local.get $base|356
+        local.get $lo|357
+        i64.store
+        local.get $base|356
+        local.get $hi|358
+        i64.store offset=8
+       end
+       local.get $buf|289
+       local.get $k
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.const 46
+       i32.store16
+      else
+       local.get $start|290
+       i32.const 46
+       i32.store16 offset=2
+      end
+      local.get $buf|289
+      local.get $endPos
+      i32.const 1
+      i32.shl
+      i32.add
+      local.set $end|359
+      local.get $decExp|291
+      i32.const 0
+      i32.ge_s
+      if (result i32)
+       local.get $endPos
+       local.get $decExp|291
+       i32.const 1
+       i32.add
+       i32.eq
+      else
+       i32.const 0
+      end
+      if
+       block $~lib/util/dtoa/finishInteger|inlined.7 (result i32)
+        local.get $end|359
+        local.set $end|360
+        local.get $dotZero|293
+        local.set $dotZero|361
+        local.get $dotZero|361
+        if
+         local.get $end|360
+         i32.const 46
+         i32.store16
+         local.get $end|360
+         i32.const 48
+         i32.store16 offset=2
+         local.get $end|360
+         i32.const 4
+         i32.add
+         local.set $end|360
+        end
+        local.get $end|360
+        br $~lib/util/dtoa/finishInteger|inlined.7
+       end
+       br $~lib/util/dtoa/writeFixed|inlined.0
+      end
+      local.get $hasLastDigit|292
+      i32.eqz
+      if
+       local.get $end|359
+       block $~lib/util/dtoa/packedTrailingZeros16|inlined.0 (result i32)
+        local.get $dHi
+        local.set $high
+        local.get $dLo
+        local.set $low
+        local.get $low
+        i64.const 3472328296227680304
+        i64.xor
+        i64.clz
+        i64.const 3
+        i64.shr_u
+        i32.wrap_i64
+        local.set $count
+        local.get $count
+        i32.const 8
+        i32.eq
+        if
+         local.get $count
+         local.get $high
+         i64.const 3472328296227680304
+         i64.xor
+         i64.clz
+         i64.const 3
+         i64.shr_u
+         i32.wrap_i64
+         i32.add
+         local.set $count
+        end
+        local.get $count
+        br $~lib/util/dtoa/packedTrailingZeros16|inlined.0
+       end
+       i32.const 1
+       i32.shl
+       i32.sub
+       local.set $end|359
+      end
+      local.get $end|359
+      i32.const 2
+      i32.sub
+      i32.load16_u
+      i32.const 46
+      i32.eq
+      if
+       local.get $dotZero|293
+       if
+        local.get $end|359
+        i32.const 48
+        i32.store16
+        local.get $end|359
+        i32.const 2
+        i32.add
+        local.set $end|359
+       else
+        local.get $end|359
+        i32.const 2
+        i32.sub
+        local.set $end|359
+       end
+      end
+      local.get $end|359
+      br $~lib/util/dtoa/writeFixed|inlined.0
+     end
+     br $~lib/util/dtoa/formatDecodedDouble|inlined.0
+    end
+    block $~lib/util/dtoa/writeExpNotation|inlined.0 (result i32)
+     local.get $buf|8
+     local.set $buf|365
+     local.get $start
+     local.set $start|366
+     local.get $decExp|270
+     local.set $decExp|367
+     local.get $hasLastDigit
+     local.set $hasLastDigit|368
+     i32.const 1
+     local.set $hasExtraDigit
+     i32.const 16
+     local.set $bcdSize
+     local.get $buf|365
+     local.get $hasExtraDigit
+     i32.const 1
+     i32.shl
+     i32.add
+     local.set $buf|365
+     local.get $buf|365
+     local.set $p|371
+     global.get $~lib/util/dtoa/gDigHi
+     local.set $ascii|372
+     i32.const 0
+     local.set $off|373
+     local.get $p|371
+     local.get $off|373
+     i32.add
+     local.set $base|374
+     i32.const 0
+     drop
+     local.get $ascii|372
+     i64.const 4294967295
+     i64.and
+     local.set $lo|375
+     local.get $ascii|372
+     i64.const 32
+     i64.shr_u
+     local.set $hi|376
+     local.get $lo|375
+     local.get $lo|375
+     i64.const 16
+     i64.shl
+     i64.or
+     i64.const 281470681808895
+     i64.and
+     local.set $lo|375
+     local.get $hi|376
+     local.get $hi|376
+     i64.const 16
+     i64.shl
+     i64.or
+     i64.const 281470681808895
+     i64.and
+     local.set $hi|376
+     local.get $lo|375
+     local.get $lo|375
+     i64.const 8
+     i64.shl
+     i64.or
+     i64.const 71777214294589695
+     i64.and
+     local.set $lo|375
+     local.get $hi|376
+     local.get $hi|376
+     i64.const 8
+     i64.shl
+     i64.or
+     i64.const 71777214294589695
+     i64.and
+     local.set $hi|376
+     local.get $base|374
+     local.get $lo|375
+     i64.store
+     local.get $base|374
+     local.get $hi|376
+     i64.store offset=8
+     local.get $bcdSize
+     i32.const 16
+     i32.eq
+     if
+      local.get $buf|365
+      local.set $p|377
+      global.get $~lib/util/dtoa/gDigLo
+      local.set $ascii|378
+      i32.const 16
+      local.set $off|379
+      local.get $p|377
+      local.get $off|379
+      i32.add
+      local.set $base|380
+      i32.const 0
+      drop
+      local.get $ascii|378
+      i64.const 4294967295
+      i64.and
+      local.set $lo|381
+      local.get $ascii|378
+      i64.const 32
+      i64.shr_u
+      local.set $hi|382
+      local.get $lo|381
+      local.get $lo|381
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $lo|381
+      local.get $hi|382
+      local.get $hi|382
+      i64.const 16
+      i64.shl
+      i64.or
+      i64.const 281470681808895
+      i64.and
+      local.set $hi|382
+      local.get $lo|381
+      local.get $lo|381
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $lo|381
+      local.get $hi|382
+      local.get $hi|382
+      i64.const 8
+      i64.shl
+      i64.or
+      i64.const 71777214294589695
+      i64.and
+      local.set $hi|382
+      local.get $base|380
+      local.get $lo|381
+      i64.store
+      local.get $base|380
+      local.get $hi|382
+      i64.store offset=8
+     end
+     local.get $buf|365
+     local.get $bcdSize
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.const 48
+     global.get $~lib/util/dtoa/gLastDigit
+     i32.add
+     i32.store16
+     local.get $buf|365
+     local.get $bcdSize
+     local.get $hasLastDigit|368
+     i32.add
+     i32.const 1
+     i32.shl
+     i32.add
+     local.set $buf|365
+     local.get $hasLastDigit|368
+     i32.eqz
+     if
+      local.get $buf|365
+      block $~lib/util/dtoa/packedTrailingZeros16|inlined.1 (result i32)
+       global.get $~lib/util/dtoa/gDigHi
+       local.set $high|383
+       global.get $~lib/util/dtoa/gDigLo
+       local.set $low|384
+       local.get $low|384
+       i64.const 3472328296227680304
+       i64.xor
+       i64.clz
+       i64.const 3
+       i64.shr_u
+       i32.wrap_i64
+       local.set $count|385
+       local.get $count|385
+       i32.const 8
+       i32.eq
+       if
+        local.get $count|385
+        local.get $high|383
+        i64.const 3472328296227680304
+        i64.xor
+        i64.clz
+        i64.const 3
+        i64.shr_u
+        i32.wrap_i64
+        i32.add
+        local.set $count|385
+       end
+       local.get $count|385
+       br $~lib/util/dtoa/packedTrailingZeros16|inlined.1
+      end
+      i32.const 1
+      i32.shl
+      i32.sub
+      local.set $buf|365
+     end
+     local.get $start|366
+     i32.load16_u offset=2
+     local.set $lead
+     local.get $start|366
+     local.get $lead
+     i32.store16
+     local.get $start|366
+     i32.const 46
+     i32.store16 offset=2
+     local.get $buf|365
+     local.get $buf|365
+     i32.const 2
+     i32.sub
+     local.get $start|366
+     i32.const 2
+     i32.add
+     i32.eq
+     i32.const 1
+     i32.shl
+     i32.sub
+     local.set $buf|365
+     block $~lib/util/dtoa/writeExponent|inlined.1 (result i32)
+      local.get $buf|365
+      local.set $buf|387
+      local.get $decExp|367
+      local.set $decExp|388
+      local.get $decExp|388
+      i32.const 31
+      i32.shr_s
+      local.set $m
+      local.get $buf|387
+      i32.const 101
+      i32.store16
+      local.get $buf|387
+      i32.const 43
+      local.get $m
+      i32.const 2
+      i32.and
+      i32.add
+      i32.store16 offset=2
+      local.get $buf|387
+      i32.const 4
+      i32.add
+      local.set $buf|387
+      local.get $decExp|388
+      local.get $m
+      i32.xor
+      local.get $m
+      i32.sub
+      local.set $e
+      local.get $e
+      i32.const 100
+      i32.ge_s
+      if
+       local.get $e
+       global.get $~lib/util/dtoa/DIV100_SIG
+       i32.wrap_i64
+       i32.mul
+       i32.const 19
+       i32.shr_u
+       local.set $d
+       local.get $buf|387
+       i32.const 48
+       local.get $d
+       i32.add
+       i32.store16
+       local.get $buf|387
+       i32.const 572
+       local.get $e
+       local.get $d
+       i32.const 100
+       i32.mul
+       i32.sub
+       i32.const 2
+       i32.shl
+       i32.add
+       i32.load
+       i32.store offset=2
+       local.get $buf|387
+       i32.const 6
+       i32.add
+       br $~lib/util/dtoa/writeExponent|inlined.1
+      end
+      local.get $e
+      i32.const 10
+      i32.ge_s
+      if
+       local.get $buf|387
+       i32.const 572
+       local.get $e
+       i32.const 2
+       i32.shl
+       i32.add
+       i32.load
+       i32.store
+       local.get $buf|387
+       i32.const 4
+       i32.add
+       br $~lib/util/dtoa/writeExponent|inlined.1
+      end
+      local.get $buf|387
+      i32.const 48
+      local.get $e
+      i32.add
+      i32.store16
+      local.get $buf|387
+      i32.const 2
+      i32.add
+      br $~lib/util/dtoa/writeExponent|inlined.1
+     end
+     br $~lib/util/dtoa/writeExpNotation|inlined.0
+    end
+    br $~lib/util/dtoa/formatDecodedDouble|inlined.0
+   end
+   br $~lib/util/dtoa/formatDouble|inlined.0
+  end
+  local.get $buffer
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  return
+ )
  (func $~lib/number/F64#toString (param $this f64) (param $radix i32) (result i32)
   local.get $this
   call $~lib/util/number/dtoa<f64>
@@ -3982,90 +9457,16 @@
   i32.load offset=12
  )
  (func $~lib/util/number/dtoa_buffered<f32> (param $buffer i32) (param $value f32) (result i32)
-  (local $buffer|2 i32)
-  (local $value|3 f64)
-  (local $isSingle i32)
-  (local $sign i32)
-  block $~lib/util/number/dtoa_buffered_impl|inlined.0 (result i32)
-   local.get $buffer
-   local.set $buffer|2
-   local.get $value
-   f64.promote_f32
-   local.set $value|3
-   i32.const 1
-   local.set $isSingle
-   local.get $value|3
-   f64.const 0
-   f64.eq
-   if
-    local.get $buffer|2
-    i32.const 48
-    i32.store16
-    local.get $buffer|2
-    i32.const 46
-    i32.store16 offset=2
-    local.get $buffer|2
-    i32.const 48
-    i32.store16 offset=4
-    i32.const 3
-    br $~lib/util/number/dtoa_buffered_impl|inlined.0
-   end
-   local.get $value|3
-   local.get $value|3
-   f64.sub
-   f64.const 0
-   f64.eq
-   i32.eqz
-   if
-    local.get $value|3
-    local.get $value|3
-    f64.ne
-    if
-     local.get $buffer|2
-     i32.const 78
-     i32.store16
-     local.get $buffer|2
-     i32.const 97
-     i32.store16 offset=2
-     local.get $buffer|2
-     i32.const 78
-     i32.store16 offset=4
-     i32.const 3
-     br $~lib/util/number/dtoa_buffered_impl|inlined.0
-    else
-     local.get $value|3
-     f64.const 0
-     f64.lt
-     local.set $sign
-     local.get $sign
-     if
-      local.get $buffer|2
-      i32.const 45
-      i32.store16
-      local.get $buffer|2
-      i32.const 2
-      i32.add
-      local.set $buffer|2
-     end
-     local.get $buffer|2
-     i64.const 29555310648492105
-     i64.store
-     local.get $buffer|2
-     i64.const 34058970405077102
-     i64.store offset=8
-     i32.const 8
-     local.get $sign
-     i32.add
-     br $~lib/util/number/dtoa_buffered_impl|inlined.0
-    end
-    unreachable
-   end
-   local.get $buffer|2
-   local.get $value|3
-   local.get $isSingle
-   call $~lib/util/number/dtoa_core
-   br $~lib/util/number/dtoa_buffered_impl|inlined.0
-  end
+  (local $len i32)
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  local.get $buffer
+  local.get $value
+  call $~lib/util/dtoa/ftoa_buffered
+  local.set $len
+  local.get $len
   return
  )
  (func $~lib/array/Array<f64>#get:dataStart (param $this i32) (result i32)
@@ -4077,89 +9478,16 @@
   i32.load offset=12
  )
  (func $~lib/util/number/dtoa_buffered<f64> (param $buffer i32) (param $value f64) (result i32)
-  (local $buffer|2 i32)
-  (local $value|3 f64)
-  (local $isSingle i32)
-  (local $sign i32)
-  block $~lib/util/number/dtoa_buffered_impl|inlined.1 (result i32)
-   local.get $buffer
-   local.set $buffer|2
-   local.get $value
-   local.set $value|3
-   i32.const 0
-   local.set $isSingle
-   local.get $value|3
-   f64.const 0
-   f64.eq
-   if
-    local.get $buffer|2
-    i32.const 48
-    i32.store16
-    local.get $buffer|2
-    i32.const 46
-    i32.store16 offset=2
-    local.get $buffer|2
-    i32.const 48
-    i32.store16 offset=4
-    i32.const 3
-    br $~lib/util/number/dtoa_buffered_impl|inlined.1
-   end
-   local.get $value|3
-   local.get $value|3
-   f64.sub
-   f64.const 0
-   f64.eq
-   i32.eqz
-   if
-    local.get $value|3
-    local.get $value|3
-    f64.ne
-    if
-     local.get $buffer|2
-     i32.const 78
-     i32.store16
-     local.get $buffer|2
-     i32.const 97
-     i32.store16 offset=2
-     local.get $buffer|2
-     i32.const 78
-     i32.store16 offset=4
-     i32.const 3
-     br $~lib/util/number/dtoa_buffered_impl|inlined.1
-    else
-     local.get $value|3
-     f64.const 0
-     f64.lt
-     local.set $sign
-     local.get $sign
-     if
-      local.get $buffer|2
-      i32.const 45
-      i32.store16
-      local.get $buffer|2
-      i32.const 2
-      i32.add
-      local.set $buffer|2
-     end
-     local.get $buffer|2
-     i64.const 29555310648492105
-     i64.store
-     local.get $buffer|2
-     i64.const 34058970405077102
-     i64.store offset=8
-     i32.const 8
-     local.get $sign
-     i32.add
-     br $~lib/util/number/dtoa_buffered_impl|inlined.1
-    end
-    unreachable
-   end
-   local.get $buffer|2
-   local.get $value|3
-   local.get $isSingle
-   call $~lib/util/number/dtoa_core
-   br $~lib/util/number/dtoa_buffered_impl|inlined.1
-  end
+  (local $len i32)
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  local.get $buffer
+  local.get $value
+  call $~lib/util/dtoa/dtoa_buffered
+  local.set $len
+  local.get $len
   return
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
@@ -4178,10 +9506,10 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
-  i32.const 1760
+  i32.const 384
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 1568
+  i32.const 192
   local.get $0
   call $~lib/rt/itcms/__visit
  )
@@ -4266,8 +9594,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 35136
-   i32.const 35184
+   i32.const 35360
+   i32.const 35408
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -4468,7 +9796,7 @@
   local.get $size
   i32.eqz
   if
-   i32.const 2128
+   i32.const 2352
    local.set $22
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -4544,7 +9872,7 @@
   i32.const 0
   i32.lt_s
   if
-   i32.const 2128
+   i32.const 2352
    local.set $10
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -4575,12 +9903,12 @@
   local.get $10
   call $~lib/string/String#get:length
   local.set $sepLen
-  i32.const 28
+  i32.const 32
   local.get $sepLen
   i32.add
   local.get $lastIndex
   i32.mul
-  i32.const 28
+  i32.const 32
   i32.add
   local.set $estLen
   global.get $~lib/memory/__stack_pointer
@@ -4764,7 +10092,7 @@
   i32.const 0
   i32.lt_s
   if
-   i32.const 2128
+   i32.const 2352
    local.set $10
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -4795,12 +10123,12 @@
   local.get $10
   call $~lib/string/String#get:length
   local.set $sepLen
-  i32.const 28
+  i32.const 32
   local.get $sepLen
   i32.add
   local.get $lastIndex
   i32.mul
-  i32.const 28
+  i32.const 32
   i32.add
   local.set $estLen
   global.get $~lib/memory/__stack_pointer
@@ -4979,13 +10307,13 @@
   i32.const 1
   i32.shr_u
   global.set $~lib/rt/itcms/threshold
-  i32.const 1680
+  i32.const 304
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
-  i32.const 1712
+  i32.const 336
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/toSpace
-  i32.const 1856
+  i32.const 480
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   f32.const 1.100000023841858
@@ -4996,12 +10324,12 @@
   local.get $2
   i32.store
   local.get $2
-  i32.const 1968
+  i32.const 2000
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2000
+   i32.const 2032
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -5015,12 +10343,12 @@
   local.get $2
   i32.store
   local.get $2
-  i32.const 1968
+  i32.const 2000
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2000
+   i32.const 2032
    i32.const 2
    i32.const 1
    call $~lib/builtins/abort
@@ -5032,19 +10360,19 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 2160
+  i32.const 2384
   call $~lib/array/Array<f32>#join
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
   i32.store
   local.get $2
-  i32.const 2192
+  i32.const 2416
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2000
+   i32.const 2032
    i32.const 5
    i32.const 1
    call $~lib/builtins/abort
@@ -5056,19 +10384,19 @@
   local.get $2
   i32.store offset=4
   local.get $2
-  i32.const 2160
+  i32.const 2384
   call $~lib/array/Array<f64>#join
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
   i32.store
   local.get $2
-  i32.const 2192
+  i32.const 2416
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 2000
+   i32.const 2032
    i32.const 8
    i32.const 1
    call $~lib/builtins/abort
@@ -5132,156 +10460,589 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/util/number/dtoa<f32> (param $value f32) (result i32)
-  (local $value|1 f64)
-  (local $isSingle i32)
-  (local $size i32)
+  (local $exactIntegerRange i32)
+  (local $bits i32)
+  (local $integer i32)
+  (local $negative i32)
+  (local $magnitude i32)
+  (local $digits i32)
   (local $result i32)
-  (local $5 i32)
+  (local $out i32)
+  (local $high i32)
+  (local $low i32)
+  (local $buffer i32)
+  (local $num i32)
+  (local $offset i32)
+  (local $len i32)
+  (local $size i32)
+  (local $result|16 i32)
+  (local $17 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  block $~lib/util/number/dtoa_impl|inlined.0 (result i32)
-   local.get $value
-   f64.promote_f32
-   local.set $value|1
-   i32.const 1
-   local.set $isSingle
-   local.get $value|1
-   f64.const 0
-   f64.eq
-   if
-    i32.const 32
-    br $~lib/util/number/dtoa_impl|inlined.0
-   end
-   local.get $value|1
-   local.get $value|1
-   f64.sub
-   f64.const 0
-   f64.eq
-   i32.eqz
-   if
-    local.get $value|1
-    local.get $value|1
-    f64.ne
-    if
-     i32.const 64
-     br $~lib/util/number/dtoa_impl|inlined.0
-    end
-    i32.const 96
-    i32.const 144
-    local.get $value|1
-    f64.const 0
-    f64.lt
-    select
-    br $~lib/util/number/dtoa_impl|inlined.0
-   end
-   i32.const 176
-   local.get $value|1
-   local.get $isSingle
-   call $~lib/util/number/dtoa_core
-   i32.const 1
-   i32.shl
-   local.set $size
+  i64.const 0
+  i64.store
+  local.get $value
+  f32.const 0
+  f32.eq
+  if
+   i32.const 32
+   local.set $17
    global.get $~lib/memory/__stack_pointer
-   local.get $size
-   i32.const 2
-   call $~lib/rt/itcms/__new
-   local.tee $result
-   i32.store
-   local.get $result
-   i32.const 176
-   local.get $size
-   memory.copy
-   local.get $result
-   br $~lib/util/number/dtoa_impl|inlined.0
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $17
+   return
   end
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
+  local.get $value
+  local.get $value
+  f32.sub
+  f32.const 0
+  f32.eq
+  i32.eqz
+  if
+   local.get $value
+   local.get $value
+   f32.ne
+   if
+    i32.const 64
+    local.set $17
+    global.get $~lib/memory/__stack_pointer
+    i32.const 8
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $17
+    return
+   end
+   i32.const 96
+   i32.const 144
+   local.get $value
+   f32.const 0
+   f32.lt
+   select
+   local.set $17
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $17
+   return
+  end
+  i32.const 0
+  local.set $exactIntegerRange
+  i32.const 1
+  drop
   i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  local.get $value
+  i32.reinterpret_f32
+  i32.const 2147483647
+  i32.and
+  local.set $bits
+  local.get $bits
+  i32.const 1065353216
+  i32.ge_u
+  if (result i32)
+   local.get $bits
+   i32.const 1266679808
+   i32.le_u
+  else
+   i32.const 0
+  end
+  local.set $exactIntegerRange
+  local.get $exactIntegerRange
+  if
+   local.get $value
+   i32.trunc_sat_f32_s
+   local.set $integer
+   local.get $value
+   local.get $integer
+   f32.convert_i32_s
+   f32.eq
+   if
+    local.get $integer
+    i32.const 0
+    i32.lt_s
+    local.set $negative
+    local.get $negative
+    if (result i32)
+     i32.const 0
+     local.get $integer
+     i32.sub
+    else
+     local.get $integer
+    end
+    local.set $magnitude
+    local.get $magnitude
+    call $~lib/util/number/decimalCount32
+    local.set $digits
+    global.get $~lib/memory/__stack_pointer
+    local.get $digits
+    local.get $negative
+    i32.add
+    i32.const 2
+    i32.add
+    i32.const 1
+    i32.shl
+    i32.const 2
+    call $~lib/rt/itcms/__new
+    local.tee $result
+    i32.store
+    local.get $result
+    local.set $out
+    local.get $negative
+    if
+     local.get $out
+     i32.const 45
+     i32.store16
+     local.get $out
+     i32.const 2
+     i32.add
+     local.set $out
+    end
+    local.get $magnitude
+    i32.const 10
+    i32.lt_u
+    if
+     local.get $out
+     i32.const 48
+     local.get $magnitude
+     i32.add
+     i32.store16
+    else
+     local.get $magnitude
+     i32.const 100
+     i32.lt_u
+     if
+      local.get $out
+      i32.const 572
+      local.get $magnitude
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.load
+      i32.store
+     else
+      local.get $magnitude
+      i32.const 10000
+      i32.lt_u
+      if
+       local.get $magnitude
+       i32.const 100
+       i32.div_u
+       local.set $high
+       local.get $magnitude
+       local.get $high
+       i32.const 100
+       i32.mul
+       i32.sub
+       local.set $low
+       local.get $magnitude
+       i32.const 1000
+       i32.lt_u
+       if
+        local.get $out
+        i32.const 48
+        local.get $high
+        i32.add
+        i32.store16
+        local.get $out
+        i32.const 2
+        i32.add
+        i32.const 572
+        local.get $low
+        i32.const 2
+        i32.shl
+        i32.add
+        i32.load
+        i32.store
+       else
+        local.get $out
+        i32.const 572
+        local.get $high
+        i32.const 2
+        i32.shl
+        i32.add
+        i32.load
+        i32.store
+        local.get $out
+        i32.const 4
+        i32.add
+        i32.const 572
+        local.get $low
+        i32.const 2
+        i32.shl
+        i32.add
+        i32.load
+        i32.store
+       end
+      else
+       local.get $out
+       local.set $buffer
+       local.get $magnitude
+       local.set $num
+       local.get $digits
+       local.set $offset
+       i32.const 0
+       i32.const 1
+       i32.ge_s
+       drop
+       local.get $buffer
+       local.get $num
+       local.get $offset
+       call $~lib/util/number/utoa32_dec_lut
+      end
+     end
+    end
+    local.get $out
+    local.get $digits
+    i32.const 1
+    i32.shl
+    i32.add
+    i32.const 46
+    i32.const 48
+    i32.const 16
+    i32.shl
+    i32.or
+    i32.store
+    local.get $result
+    local.set $17
+    global.get $~lib/memory/__stack_pointer
+    i32.const 8
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $17
+    return
+   end
+  end
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 976
+  local.get $value
+  call $~lib/util/dtoa/ftoa_buffered
+  local.set $len
+  local.get $len
+  i32.const 1
+  i32.shl
+  local.set $size
+  global.get $~lib/memory/__stack_pointer
+  local.get $size
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $result|16
+  i32.store offset=4
+  local.get $result|16
+  i32.const 976
+  local.get $size
+  memory.copy
+  local.get $result|16
+  local.set $17
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $17
   return
  )
  (func $~lib/util/number/dtoa<f64> (param $value f64) (result i32)
-  (local $value|1 f64)
-  (local $isSingle i32)
-  (local $size i32)
+  (local $exactIntegerRange i32)
+  (local $bits i64)
+  (local $integer i32)
+  (local $negative i32)
+  (local $magnitude i32)
+  (local $digits i32)
   (local $result i32)
-  (local $5 i32)
+  (local $out i32)
+  (local $high i32)
+  (local $low i32)
+  (local $buffer i32)
+  (local $num i32)
+  (local $offset i32)
+  (local $len i32)
+  (local $size i32)
+  (local $result|16 i32)
+  (local $17 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  block $~lib/util/number/dtoa_impl|inlined.1 (result i32)
-   local.get $value
-   local.set $value|1
-   i32.const 0
-   local.set $isSingle
-   local.get $value|1
-   f64.const 0
-   f64.eq
-   if
-    i32.const 32
-    br $~lib/util/number/dtoa_impl|inlined.1
-   end
-   local.get $value|1
-   local.get $value|1
-   f64.sub
-   f64.const 0
-   f64.eq
-   i32.eqz
-   if
-    local.get $value|1
-    local.get $value|1
-    f64.ne
-    if
-     i32.const 64
-     br $~lib/util/number/dtoa_impl|inlined.1
-    end
-    i32.const 96
-    i32.const 144
-    local.get $value|1
-    f64.const 0
-    f64.lt
-    select
-    br $~lib/util/number/dtoa_impl|inlined.1
-   end
-   i32.const 176
-   local.get $value|1
-   local.get $isSingle
-   call $~lib/util/number/dtoa_core
-   i32.const 1
-   i32.shl
-   local.set $size
+  i64.const 0
+  i64.store
+  local.get $value
+  f64.const 0
+  f64.eq
+  if
+   i32.const 32
+   local.set $17
    global.get $~lib/memory/__stack_pointer
-   local.get $size
-   i32.const 2
-   call $~lib/rt/itcms/__new
-   local.tee $result
-   i32.store
-   local.get $result
-   i32.const 176
-   local.get $size
-   memory.copy
-   local.get $result
-   br $~lib/util/number/dtoa_impl|inlined.1
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $17
+   return
   end
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
+  local.get $value
+  local.get $value
+  f64.sub
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   local.get $value
+   local.get $value
+   f64.ne
+   if
+    i32.const 64
+    local.set $17
+    global.get $~lib/memory/__stack_pointer
+    i32.const 8
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $17
+    return
+   end
+   i32.const 96
+   i32.const 144
+   local.get $value
+   f64.const 0
+   f64.lt
+   select
+   local.set $17
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $17
+   return
+  end
+  i32.const 0
+  local.set $exactIntegerRange
+  i32.const 1
+  drop
+  i32.const 8
   i32.const 4
+  i32.eq
+  drop
+  local.get $value
+  i64.reinterpret_f64
+  i64.const 9223372036854775807
+  i64.and
+  local.set $bits
+  local.get $bits
+  i64.const 4607182418800017408
+  i64.ge_u
+  if (result i32)
+   local.get $bits
+   i64.const 4741671816366391296
+   i64.le_u
+  else
+   i32.const 0
+  end
+  local.set $exactIntegerRange
+  local.get $exactIntegerRange
+  if
+   local.get $value
+   i32.trunc_sat_f64_s
+   local.set $integer
+   local.get $value
+   local.get $integer
+   f64.convert_i32_s
+   f64.eq
+   if
+    local.get $integer
+    i32.const 0
+    i32.lt_s
+    local.set $negative
+    local.get $negative
+    if (result i32)
+     i32.const 0
+     local.get $integer
+     i32.sub
+    else
+     local.get $integer
+    end
+    local.set $magnitude
+    local.get $magnitude
+    call $~lib/util/number/decimalCount32
+    local.set $digits
+    global.get $~lib/memory/__stack_pointer
+    local.get $digits
+    local.get $negative
+    i32.add
+    i32.const 2
+    i32.add
+    i32.const 1
+    i32.shl
+    i32.const 2
+    call $~lib/rt/itcms/__new
+    local.tee $result
+    i32.store
+    local.get $result
+    local.set $out
+    local.get $negative
+    if
+     local.get $out
+     i32.const 45
+     i32.store16
+     local.get $out
+     i32.const 2
+     i32.add
+     local.set $out
+    end
+    local.get $magnitude
+    i32.const 10
+    i32.lt_u
+    if
+     local.get $out
+     i32.const 48
+     local.get $magnitude
+     i32.add
+     i32.store16
+    else
+     local.get $magnitude
+     i32.const 100
+     i32.lt_u
+     if
+      local.get $out
+      i32.const 572
+      local.get $magnitude
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.load
+      i32.store
+     else
+      local.get $magnitude
+      i32.const 10000
+      i32.lt_u
+      if
+       local.get $magnitude
+       i32.const 100
+       i32.div_u
+       local.set $high
+       local.get $magnitude
+       local.get $high
+       i32.const 100
+       i32.mul
+       i32.sub
+       local.set $low
+       local.get $magnitude
+       i32.const 1000
+       i32.lt_u
+       if
+        local.get $out
+        i32.const 48
+        local.get $high
+        i32.add
+        i32.store16
+        local.get $out
+        i32.const 2
+        i32.add
+        i32.const 572
+        local.get $low
+        i32.const 2
+        i32.shl
+        i32.add
+        i32.load
+        i32.store
+       else
+        local.get $out
+        i32.const 572
+        local.get $high
+        i32.const 2
+        i32.shl
+        i32.add
+        i32.load
+        i32.store
+        local.get $out
+        i32.const 4
+        i32.add
+        i32.const 572
+        local.get $low
+        i32.const 2
+        i32.shl
+        i32.add
+        i32.load
+        i32.store
+       end
+      else
+       local.get $out
+       local.set $buffer
+       local.get $magnitude
+       local.set $num
+       local.get $digits
+       local.set $offset
+       i32.const 0
+       i32.const 1
+       i32.ge_s
+       drop
+       local.get $buffer
+       local.get $num
+       local.get $offset
+       call $~lib/util/number/utoa32_dec_lut
+      end
+     end
+    end
+    local.get $out
+    local.get $digits
+    i32.const 1
+    i32.shl
+    i32.add
+    i32.const 46
+    i32.const 48
+    i32.const 16
+    i32.shl
+    i32.or
+    i32.store
+    local.get $result
+    local.set $17
+    global.get $~lib/memory/__stack_pointer
+    i32.const 8
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $17
+    return
+   end
+  end
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 976
+  local.get $value
+  call $~lib/util/dtoa/dtoa_buffered
+  local.set $len
+  local.get $len
+  i32.const 1
+  i32.shl
+  local.set $size
+  global.get $~lib/memory/__stack_pointer
+  local.get $size
+  i32.const 2
+  call $~lib/rt/itcms/__new
+  local.tee $result|16
+  i32.store offset=4
+  local.get $result|16
+  i32.const 976
+  local.get $size
+  memory.copy
+  local.get $result|16
+  local.set $17
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $17
   return
  )
 )
