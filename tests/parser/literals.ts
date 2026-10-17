@@ -112,7 +112,7 @@ tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision
 0o2000000000000000000000;
 0b10000000000000000000000000000000000000000000000000000000000000000;
 
-// technically invalid, but not handled by AS yet, TS1005: ';' expected
+// technically invalid; retained to test parser recovery
 3 4;
 5 c;
 6.7 d;

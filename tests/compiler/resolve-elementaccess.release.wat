@@ -33,6 +33,7 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $resolve-elementaccess/buf (mut i32) (i32.const 0))
+ (global $resolve-elementaccess/voidIndex (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 37600))
  (memory $0 1)
  (data $0 (i32.const 1036) ",")
@@ -113,6 +114,53 @@
    i32.add
    global.set $~lib/rt/itcms/visitCount
   end
+ )
+ (func $~lib/typedarray/Uint8Array#__get (param $0 i32) (param $1 i32) (result i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4832
+  i32.lt_s
+  if
+   i32.const 37632
+   i32.const 37680
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.ge_u
+  if
+   i32.const 1360
+   i32.const 1568
+   i32.const 167
+   i32.const 45
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $1
+  local.get $0
+  i32.load offset=4
+  i32.add
+  i32.load8_u
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/rt/itcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -427,53 +475,6 @@
   local.get $0
   memory.fill
   local.get $1
- )
- (func $~lib/typedarray/Uint8Array#__get (param $0 i32) (param $1 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4832
-  i32.lt_s
-  if
-   i32.const 37632
-   i32.const 37680
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $1
-  local.get $0
-  i32.load offset=8
-  i32.ge_u
-  if
-   i32.const 1360
-   i32.const 1568
-   i32.const 167
-   i32.const 45
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $1
-  local.get $0
-  i32.load offset=4
-  i32.add
-  i32.load8_u
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/typedarray/Float32Array#__get (param $0 i32) (param $1 i32) (result f32)
   (local $2 f32)
@@ -3829,6 +3830,30 @@
     i32.const 0
     i32.const 3200
     i32.const 44
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   global.get $resolve-elementaccess/buf
+   local.tee $0
+   i32.store
+   global.get $resolve-elementaccess/voidIndex
+   local.tee $1
+   i32.const 1
+   i32.add
+   global.set $resolve-elementaccess/voidIndex
+   local.get $0
+   local.get $1
+   call $~lib/typedarray/Uint8Array#__get
+   drop
+   global.get $resolve-elementaccess/voidIndex
+   i32.const 1
+   i32.ne
+   if
+    i32.const 0
+    i32.const 3200
+    i32.const 49
     i32.const 1
     call $~lib/builtins/abort
     unreachable
