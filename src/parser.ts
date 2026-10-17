@@ -649,7 +649,7 @@ export class Parser extends DiagnosticEmitter {
       let parameters: TypeNode[] | null = null;
 
       // Name<T>
-      if (tn.skip(Token.LessThan)) {
+      if (!tn.peekOnNewLine() && tn.skip(Token.LessThan)) {
         do {
           let parameter = this.parseType(tn, true, suppressErrors);
           if (!parameter) return null;
@@ -703,7 +703,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     // ... [][]
-    while (tn.skip(Token.OpenBracket)) {
+    while (!tn.peekOnNewLine() && tn.skip(Token.OpenBracket)) {
       let bracketStart = tn.tokenPos;
       if (!tn.skip(Token.CloseBracket)) {
         if (!suppressErrors) {
@@ -991,7 +991,8 @@ export class Parser extends DiagnosticEmitter {
     } while (tn.skip(Token.Comma));
 
     let ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
-    if (!tn.skip(Token.Semicolon) && !isFor) this.checkASI(tn);
+    if (isFor) tn.skip(Token.Semicolon);
+    else this.parseSemicolon(tn);
     return ret;
   }
 
@@ -1019,7 +1020,8 @@ export class Parser extends DiagnosticEmitter {
       );
     }
     let flags = parentFlags;
-    if (tn.skip(Token.Exclamation)) {
+    if (tn.peek() == Token.Exclamation && !tn.peekOnNewLine()) {
+      tn.next();
       flags |= CommonFlags.DefinitelyAssigned;
     }
 
@@ -1175,7 +1177,7 @@ export class Parser extends DiagnosticEmitter {
     }
 
     let ret = Node.createReturnStatement(expr, tn.range(startPos, tn.pos));
-    if (!tn.skip(Token.Semicolon)) this.checkASI(tn);
+    this.parseSemicolon(tn);
     return ret;
   }
 
@@ -1601,7 +1603,8 @@ export class Parser extends DiagnosticEmitter {
       tn.range(startPos, tn.pos)
     );
     ret.overriddenModuleName = this.currentModuleName;
-    tn.skip(Token.Semicolon);
+    if (body) tn.skip(Token.Semicolon);
+    else this.parseSemicolon(tn);
     return ret;
   }
 
@@ -1669,6 +1672,13 @@ export class Parser extends DiagnosticEmitter {
     }
 
     if (arrowKind) {
+      if (tn.peek() == Token.Equals_GreaterThan && tn.peekOnNewLine()) {
+        this.error(
+          DiagnosticCode.Unexpected_token,
+          tn.range(tn.nextTokenPos)
+        );
+        return null;
+      }
       if (!tn.skip(Token.Equals_GreaterThan)) {
         this.error(
           DiagnosticCode._0_expected,
@@ -2203,7 +2213,7 @@ export class Parser extends DiagnosticEmitter {
           }
           return null;
         }
-        tn.skip(Token.Semicolon);
+        this.parseSemicolon(tn);
         return retIndex;
       }
       if (!tn.skipIdentifier(IdentifierHandling.Always)) {
@@ -2367,8 +2377,10 @@ export class Parser extends DiagnosticEmitter {
         body,
         tn.range(startPos, tn.pos)
       );
-      if (!(isInterface && tn.skip(Token.Comma))) {
-        tn.skip(Token.Semicolon);
+      let hasComma = isInterface && tn.skip(Token.Comma);
+      if (!hasComma) {
+        if (body) tn.skip(Token.Semicolon);
+        else this.parseSemicolon(tn);
       }
       return retMethod;
 
@@ -2421,7 +2433,8 @@ export class Parser extends DiagnosticEmitter {
           tn.range(startPos, tn.pos)
         );
       }
-      if (tn.skip(Token.Exclamation)) {
+      if (tn.peek() == Token.Exclamation && !tn.peekOnNewLine()) {
+        tn.next();
         flags |= CommonFlags.DefinitelyAssigned;
       }
       if (tn.skip(Token.Colon)) {
@@ -2465,9 +2478,7 @@ export class Parser extends DiagnosticEmitter {
         initializer,
         range
       );
-      if (!(isInterface && tn.skip(Token.Comma))) {
-        tn.skip(Token.Semicolon);
-      }
+      if (!(isInterface && tn.skip(Token.Comma))) this.parseSemicolon(tn);
       return retField;
     }
     return null;
@@ -2656,7 +2667,7 @@ export class Parser extends DiagnosticEmitter {
           this.seenlog.add(internalPath);
         }
       }
-      tn.skip(Token.Semicolon);
+      this.parseSemicolon(tn);
       return ret;
     } else if (tn.skip(Token.Asterisk)) {
       if (tn.skip(Token.From)) {
@@ -2672,7 +2683,7 @@ export class Parser extends DiagnosticEmitter {
             this.dependees.set(internalPath, new Dependee(currentSource, path));
             this.backlog.push(internalPath);
           }
-          tn.skip(Token.Semicolon);
+          this.parseSemicolon(tn);
           return ret;
         } else {
           this.error(
@@ -2754,7 +2765,7 @@ export class Parser extends DiagnosticEmitter {
         range
       )
     ], null, false, tn.range(startPos, tn.pos));
-    tn.skip(Token.Semicolon);
+    this.parseSemicolon(tn);
     return ret;
   }
 
@@ -2844,7 +2855,7 @@ export class Parser extends DiagnosticEmitter {
           this.dependees.set(internalPath, new Dependee(assert(this.currentSource), path));
           this.backlog.push(internalPath);
         }
-        tn.skip(Token.Semicolon);
+        this.parseSemicolon(tn);
         return ret;
       } else {
         this.error(
@@ -2915,7 +2926,7 @@ export class Parser extends DiagnosticEmitter {
         if (tn.skipIdentifier()) {
           let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
           let ret = Node.createExportImportStatement(identifier, asIdentifier, tn.range(startPos, tn.pos));
-          tn.skip(Token.Semicolon);
+          this.parseSemicolon(tn);
           return ret;
         } else {
           this.error(
@@ -3078,7 +3089,7 @@ export class Parser extends DiagnosticEmitter {
       identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
     let ret = Node.createBreakStatement(identifier, tn.range());
-    tn.skip(Token.Semicolon);
+    this.parseSemicolon(tn);
     return ret;
   }
 
@@ -3094,7 +3105,7 @@ export class Parser extends DiagnosticEmitter {
       identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
     let ret = Node.createContinueStatement(identifier, tn.range());
-    tn.skip(Token.Semicolon);
+    this.parseSemicolon(tn);
     return ret;
   }
 
@@ -3140,7 +3151,8 @@ export class Parser extends DiagnosticEmitter {
   }
 
   parseExpressionStatement(
-    tn: Tokenizer
+    tn: Tokenizer,
+    isFor: bool = false
   ): ExpressionStatement | null {
 
     // at previous token
@@ -3149,7 +3161,8 @@ export class Parser extends DiagnosticEmitter {
     if (!expr) return null;
 
     let ret = Node.createExpressionStatement(expr);
-    tn.skip(Token.Semicolon);
+    if (isFor) tn.skip(Token.Semicolon);
+    else this.parseSemicolon(tn);
     return ret;
   }
 
@@ -3172,7 +3185,7 @@ export class Parser extends DiagnosticEmitter {
         initializer = this.parseVariable(tn, CommonFlags.None, null, tn.tokenPos, true);
 
       } else if (!tn.skip(Token.Semicolon)) {
-        initializer = this.parseExpressionStatement(tn);
+        initializer = this.parseExpressionStatement(tn, true);
         if (!initializer) return null;
       }
 
@@ -3234,7 +3247,7 @@ export class Parser extends DiagnosticEmitter {
       if (tn.token == Token.Semicolon) {
         let condition: ExpressionStatement | null = null;
         if (!tn.skip(Token.Semicolon)) {
-          condition = this.parseExpressionStatement(tn);
+          condition = this.parseExpressionStatement(tn, true);
           if (!condition) return null;
         }
 
@@ -3375,7 +3388,6 @@ export class Parser extends DiagnosticEmitter {
             switchCases.push(switchCase);
           }
           let ret = Node.createSwitchStatement(condition, switchCases, tn.range(startPos, tn.pos));
-          tn.skip(Token.Semicolon);
           return ret;
         } else {
           this.error(
@@ -3467,10 +3479,17 @@ export class Parser extends DiagnosticEmitter {
     // at 'throw': Expression ';'?
 
     let startPos = tn.tokenPos;
+    if (tn.peekOnNewLine()) {
+      this.error(
+        DiagnosticCode.Unexpected_token,
+        tn.range(tn.nextTokenPos)
+      );
+      return null;
+    }
     let expression = this.parseExpression(tn);
     if (!expression) return null;
     let ret = Node.createThrowStatement(expression, tn.range(startPos, tn.pos));
-    if (!tn.skip(Token.Semicolon)) this.checkASI(tn);
+    this.parseSemicolon(tn);
     return ret;
   }
 
@@ -3561,7 +3580,6 @@ export class Parser extends DiagnosticEmitter {
         finallyStatements,
         tn.range(startPos, tn.pos)
       );
-      tn.skip(Token.Semicolon);
       return ret;
     } else {
       this.error(
@@ -3608,7 +3626,7 @@ export class Parser extends DiagnosticEmitter {
           type,
           tn.range(startPos, tn.pos)
         );
-        tn.skip(Token.Semicolon);
+        this.parseSemicolon(tn);
         ret.overriddenModuleName = this.currentModuleName;
         return ret;
       } else {
@@ -3638,7 +3656,7 @@ export class Parser extends DiagnosticEmitter {
     let moduleName = tn.readString();
     let ret = Node.createModuleDeclaration(moduleName, flags, tn.range(startPos, tn.pos));
     this.currentModuleName = moduleName;
-    tn.skip(Token.Semicolon);
+    this.parseSemicolon(tn);
     return ret;
   }
 
@@ -3649,10 +3667,10 @@ export class Parser extends DiagnosticEmitter {
     // at 'void': Expression ';'?
 
     let startPos = tn.tokenPos;
-    let expression = this.parseExpression(tn, Precedence.Grouping);
+    let expression = this.parseExpression(tn, Precedence.UnaryPrefix);
     if (!expression) return null;
     let ret = Node.createVoidStatement(expression, tn.range(startPos, tn.pos));
-    tn.skip(Token.Semicolon);
+    this.parseSemicolon(tn);
     return ret;
   }
 
@@ -3670,7 +3688,6 @@ export class Parser extends DiagnosticEmitter {
         let statement = this.parseStatement(tn);
         if (!statement) return null;
         let ret = Node.createWhileStatement(expression, statement, tn.range(startPos, tn.pos));
-        tn.skip(Token.Semicolon);
         return ret;
       } else {
         this.error(
@@ -4131,6 +4148,15 @@ export class Parser extends DiagnosticEmitter {
     while (
       (nextPrecedence = determinePrecedence(tn.peek())) >= precedence
     ) {
+      let nextToken = tn.peek();
+      if (
+        (
+          nextToken == Token.Plus_Plus ||
+          nextToken == Token.Minus_Minus ||
+          nextToken == Token.As ||
+          nextToken == Token.Exclamation
+        ) && tn.peekOnNewLine()
+      ) break;
       let token = tn.next();
       switch (token) {
 
@@ -4428,6 +4454,12 @@ export class Parser extends DiagnosticEmitter {
       DiagnosticCode.Unexpected_token,
       tn.range(tn.nextTokenPos)
     );
+  }
+
+  private parseSemicolon(
+    tn: Tokenizer
+  ): void {
+    if (!tn.skip(Token.Semicolon)) this.checkASI(tn);
   }
 
   /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */
