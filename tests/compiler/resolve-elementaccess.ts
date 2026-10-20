@@ -42,3 +42,8 @@ assert(
 );
 buf[0] += 10; // void context
 assert(buf[0] == 21);
+
+let voidIndex: i32 = 0;
+void buf
+[voidIndex++];
+assert(voidIndex == 1);

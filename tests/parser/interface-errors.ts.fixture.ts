@@ -18,6 +18,7 @@ interface Foo {
   constructor();
 }
 // ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in interface-errors.ts(1,1+8)
+// ERROR 1012: "Unexpected token." in interface-errors.ts(1,10+0)
 // ERROR 1176: "Interface declaration cannot have 'implements' clause." in interface-errors.ts(8,15+10)
 // ERROR 1042: "'abstract' modifier cannot be used here." in interface-errors.ts(15,3+8)
 // ERROR 1042: "'private' modifier cannot be used here." in interface-errors.ts(16,3+7)
