@@ -219,11 +219,13 @@ import {
 } from "./passes/shadowstack";
 
 import {
+  TailCallPass
+} from "./passes/tailcall";
+
+import {
   liftRequiresExportRuntime,
   lowerRequiresExportRuntime
 } from "./bindings/js";
-
-import * as binaryen from "./glue/binaryen";
 
 /** Features enabled by default. */
 export const defaultFeatures = Feature.MutableGlobals
@@ -327,8 +329,10 @@ export class Options {
   /** Sets whether a feature is enabled. */
   setFeature(feature: Feature, on: bool = true): void {
     if (on) {
+      // Enabling Shared Everything also enables Threads and GC
+      if (feature & Feature.SharedEverything) feature |= Feature.Threads | Feature.GC;
       // Enabling Stringref also enables GC
-      if (feature & Feature.Stringref) feature |= Feature.GC;
+      if (feature & Feature.Strings) feature |= Feature.GC;
       // Enabling GC also enables Reference Types
       if (feature & Feature.GC) feature |= Feature.ReferenceTypes;
       // Enabling Relaxed SIMD also enables SIMD
@@ -338,9 +342,11 @@ export class Options {
       // Disabling Reference Types also disables GC
       if (feature & Feature.ReferenceTypes) feature |= Feature.GC;
       // Disabling GC also disables Stringref
-      if (feature & Feature.GC) feature |= Feature.Stringref;
+      if (feature & Feature.GC) feature |= Feature.Strings;
       // Disabling SIMD also disables Relaxed SIMD
       if (feature & Feature.Simd) feature |= Feature.RelaxedSimd;
+      // Disabling Threads or GC also disables Shared Everything
+      if (feature & (Feature.Threads | Feature.GC)) feature |= Feature.SharedEverything;
       this.features &= ~feature;
     }
   }
@@ -377,9 +383,7 @@ export const enum Constraints {
   /** Indicates that static data is preferred. */
   PreferStatic = 1 << 4,
   /** Indicates that the value will become `this` of a property access or instance call. */
-  IsThis = 1 << 5,
-  /** Indicates that the expression is compiled for an immediate return position. */
-  WillReturn = 1 << 6
+  IsThis = 1 << 5
 }
 
 /** Runtime features to be activated by the compiler. */
@@ -519,7 +523,8 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.Memory64)) featureFlags |= FeatureFlags.Memory64;
     if (options.hasFeature(Feature.RelaxedSimd)) featureFlags |= FeatureFlags.RelaxedSIMD;
     if (options.hasFeature(Feature.ExtendedConst)) featureFlags |= FeatureFlags.ExtendedConst;
-    if (options.hasFeature(Feature.Stringref)) featureFlags |= FeatureFlags.Stringref;
+    if (options.hasFeature(Feature.Strings)) featureFlags |= FeatureFlags.Strings;
+    if (options.hasFeature(Feature.SharedEverything)) featureFlags |= FeatureFlags.SharedEverything;
     module.setFeatures(featureFlags);
 
     // set up the main start function
@@ -538,9 +543,15 @@ export class Compiler extends DiagnosticEmitter {
     let resolver = this.resolver;
     let hasShadowStack = options.stackSize > 0; // implies runtime=incremental
 
+    // Register a dummy memory so Binaryen's EffectAnalyzer can read
+    // memory.shared on loads/stores emitted during compilation. The real
+    // memory is installed by `initDefaultMemory` below, which can't run
+    // here: it needs `memoryOffset` (known only after data layout) and
+    // emits diagnostics / exports that must happen exactly once.
+    this.initDummyMemory();
+
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize();
-
 
     // Binaryen treats all function references as being leaked to the outside world when
     // the module isn't marked as closed-world (see WebAssembly/binaryen#7135). Therefore,
@@ -763,7 +774,24 @@ export class Compiler extends DiagnosticEmitter {
       new RtraceMemory(this).walkModule();
     }
 
+    if (options.hasFeature(Feature.TailCalls)) {
+      new TailCallPass(module).walkFunctions();
+    }
+
     return module;
+  }
+
+  private initDummyMemory(): void {
+    let options = this.options;
+    this.module.setMemory(
+      0,
+      Module.UNLIMITED_MEMORY,
+      [],
+      options.target,
+      null,
+      CommonNames.DefaultMemory,
+      options.sharedMemory
+    );
   }
 
   private initDefaultMemory(memoryOffset: i64): void {
@@ -861,7 +889,8 @@ export class Compiler extends DiagnosticEmitter {
     let options = this.options;
     let module = this.module;
 
-    // import and/or export table if requested (default table is named '0' by Binaryen)
+    // import and/or export table if requested (default table is named '0' by Binaryen).
+    // non-imported tables are declared lazily on first indirect call, see ensureFunctionTable
     if (options.importTable) {
       module.addTableImport(
         CommonNames.DefaultTable,
@@ -1528,7 +1557,7 @@ export class Compiler extends DiagnosticEmitter {
 
   private ensureEnumToString(enumElement: Enum, reportNode: Node): string | null {
     if (enumElement.toStringFunctionName) return enumElement.toStringFunctionName;
-    
+
     if (!this.compileEnum(enumElement)) return null;
     if (enumElement.is(CommonFlags.Const)) {
       this.errorRelated(
@@ -2132,7 +2161,11 @@ export class Compiler extends DiagnosticEmitter {
     let memorySegment = instance.memorySegment;
     if (!memorySegment) {
 
-      // Add to the function table
+      // Add to the function table, declaring it on first use so effect analysis works
+      if (!this.options.importTable) {
+        this.module.ensureFunctionTable(CommonNames.DefaultTable);
+      }
+
       let functionTable = this.functionTable;
       let tableBase = this.options.tableBase;
       if (!tableBase) tableBase = 1; // leave first elem blank
@@ -2587,7 +2620,7 @@ export class Compiler extends DiagnosticEmitter {
     //    (then                 │ │ (body)                       │
     //     (?block $continue    │ │ if loops: (incrementor) ─────┘
     //      (body)              │ │           recompile body?
-    //     )                    ├◄┘    
+    //     )                    ├◄┘
     //     (incrementor)      ┌◄┘
     //     (br $loop)
     //    )
@@ -2829,7 +2862,6 @@ export class Compiler extends DiagnosticEmitter {
     if (valueExpression) {
       let constraints = Constraints.ConvImplicit;
       if (flow.sourceFunction.is(CommonFlags.ModuleExport)) constraints |= Constraints.MustWrap;
-      if (!flow.isInline && this.options.hasFeature(Feature.TailCalls)) constraints |= Constraints.WillReturn;
 
       expr = this.compileExpression(valueExpression, returnType, constraints);
       if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.ReturnsWrapped);
@@ -2859,8 +2891,6 @@ export class Compiler extends DiagnosticEmitter {
         : module.br(inlineReturnLabel);
     }
 
-    if (expr && this.options.hasFeature(Feature.TailCalls) && this.isTailReturnCallExpression(expr)) return expr;
-
     // Otherwise emit a normal return
     return expr
       ? this.currentType == Type.void
@@ -2879,17 +2909,17 @@ export class Compiler extends DiagnosticEmitter {
     // Compile the condition (always executes)
     let condExpr = this.compileExpression(statement.condition, Type.auto);
     let condType = this.currentType;
-    
+
     // Shortcut if there are no cases
     if (!numCases) return module.drop(condExpr);
-    
+
     // Assign the condition to a temporary local as we compare it multiple times
     let outerFlow = this.currentFlow;
     let tempLocal = outerFlow.getTempLocal(condType);
     let tempLocalIndex = tempLocal.index;
     let breaks = new Array<ExpressionRef>(1 + numCases);
     breaks[0] = module.local_set(tempLocalIndex, condExpr, condType.isManaged);
-    
+
     // Make one br_if per labeled case and leave it to Binaryen to optimize the
     // sequence of br_ifs to a br_table according to optimization levels
     let breakIndex = 1;
@@ -2901,7 +2931,7 @@ export class Compiler extends DiagnosticEmitter {
         defaultIndex = i;
         continue;
       }
-      
+
       // Compile the equality expression for this case
       const left = statement.condition;
       const leftExpr = module.local_get(tempLocalIndex, condType.toRef());
@@ -2916,7 +2946,7 @@ export class Compiler extends DiagnosticEmitter {
         condType,
         statement
       );
-      
+
       // Add it to the list of breaks
       breaks[breakIndex++] = module.br(`case${i}|${label}`, equalityExpr);
     }
@@ -3870,7 +3900,7 @@ export class Compiler extends DiagnosticEmitter {
     expression: BinaryExpression,
     contextualType: Type,
   ): ExpressionRef {
-    
+
     const left = expression.left;
     const leftExpr = this.compileExpression(left, contextualType);
     const leftType = this.currentType;
@@ -3888,9 +3918,9 @@ export class Compiler extends DiagnosticEmitter {
     );
   }
 
-  /** 
+  /**
    * compile `==` `===` `!=` `!==` BinaryExpression, from previously compiled left and right expressions.
-   * 
+   *
    * This is split from `compileCommutativeCompareBinaryExpression` so that the logic can be reused
    * for switch cases in `compileSwitchStatement`, where the left expression only should be compiled once.
    */
@@ -3908,7 +3938,7 @@ export class Compiler extends DiagnosticEmitter {
 
     let module = this.module;
     let operatorString = operatorTokenToString(operator);
-    
+
     // check operator overload
     const operatorKind = OperatorKind.fromBinaryToken(operator);
     const leftOverload = leftType.lookupOverload(operatorKind, this.program);
@@ -3916,7 +3946,7 @@ export class Compiler extends DiagnosticEmitter {
     if (leftOverload && rightOverload && leftOverload != rightOverload) {
       this.error(
         DiagnosticCode.Ambiguous_operator_overload_0_conflicting_overloads_1_and_2,
-        reportNode.range, 
+        reportNode.range,
         operatorString,
         leftOverload.internalName,
         rightOverload.internalName
@@ -4006,7 +4036,7 @@ export class Compiler extends DiagnosticEmitter {
 
     leftExpr = this.compileExpression(left, contextualType);
     leftType = this.currentType;
-    
+
     // check operator overload
     const operatorKind = OperatorKind.fromBinaryToken(operator);
     const leftOverload = leftType.lookupOverload(operatorKind, this.program);
@@ -4077,7 +4107,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.compileNonCommutativeCompareBinaryExpression(expression, contextualType);
       }
       case Token.Equals_Equals_Equals:
-      case Token.Equals_Equals: 
+      case Token.Equals_Equals:
       case Token.Exclamation_Equals_Equals:
       case Token.Exclamation_Equals: {
         return this.compileCommutativeCompareBinaryExpression(expression, contextualType);
@@ -6152,7 +6182,6 @@ export class Compiler extends DiagnosticEmitter {
             Constraints.ConvImplicit | Constraints.IsThis
           );
         }
-        if (!this.canTailReturn(constraints, contextualType, functionInstance.signature.returnType))  constraints &= ~Constraints.WillReturn;
         return this.compileCallDirect(
           functionInstance,
           expression.args,
@@ -6167,15 +6196,13 @@ export class Compiler extends DiagnosticEmitter {
     let functionArg = this.compileExpression(expression.expression, Type.auto);
     let signature = this.currentType.getSignature();
     if (signature) {
-      if (!this.canTailReturn(constraints, contextualType, signature.returnType)) constraints &= ~Constraints.WillReturn;
       return this.compileCallIndirect(
         signature,
         functionArg,
         expression.args,
         expression,
         0,
-        contextualType == Type.void,
-        constraints
+        contextualType == Type.void
       );
     }
     this.error(
@@ -6192,38 +6219,6 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     return module.unreachable();
-  }
-
-  private canTailReturn(constraints: Constraints, contextType: Type, returnType: Type): bool {
-    if ((constraints & Constraints.WillReturn) == 0) return false;
-    // Tail calls are only valid as long as no result conversions are needed.
-    // `compileExpression` skips conversion for:
-    // 1. `currentType == nonnull<contextType>`, and
-    // 2. nullable reference identity (`T | null` -> `T | null`) where conversion is a no-op.
-    let sameWithoutNullable = returnType.equals(contextType.nonNullableType);
-    let sameNullableRef = returnType.isReference && returnType.equals(contextType);
-    if (!sameWithoutNullable && !sameNullableRef) return false;
-    if ((constraints & Constraints.MustWrap) == 0) return true;
-    switch (returnType.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.U8:
-      case TypeKind.U16:
-        return false;
-      default:
-        return true;
-    }
-  }
-
-  private isTailReturnCallExpression(expr: ExpressionRef): bool {
-    switch (getExpressionId(expr)) {
-      case ExpressionId.Call:
-        return binaryen._BinaryenCallIsReturn(expr);
-      case ExpressionId.CallIndirect:
-        return binaryen._BinaryenCallIndirectIsReturn(expr);
-      default:
-        return false;
-    }
   }
 
   /** Compiles the given arguments like a call expression according to the specified context. */
@@ -6394,13 +6389,13 @@ export class Compiler extends DiagnosticEmitter {
     if (numArguments < numParams) {
       return argumentExpressions;
     }
-      
+
     // make an array literal expression from the rest args
     let elements = argumentExpressions.slice(numParams - 1);
     let range = new Range(elements[0].range.start, elements[elements.length - 1].range.end);
     range.source = reportNode.range.source;
     let arrExpr = new ArrayLiteralExpression(elements, range);
-    
+
     // return the original args, but replace the rest args with the array
     const exprs = argumentExpressions.slice(0, numParams - 1);
     exprs.push(arrExpr);
@@ -6481,7 +6476,7 @@ export class Compiler extends DiagnosticEmitter {
       operands[index] = paramExpr;
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallDirect(instance, operands, reportNode, (constraints & Constraints.WillDrop) != 0, (constraints & Constraints.WillReturn) != 0);
+    return this.makeCallDirect(instance, operands, reportNode, (constraints & Constraints.WillDrop) != 0);
   }
 
   makeCallInline(
@@ -6664,9 +6659,9 @@ export class Compiler extends DiagnosticEmitter {
       let initializer = declaration.initializer;
       let initExpr: ExpressionRef;
       if (declaration.parameterKind === ParameterKind.Rest) {
-        const arrExpr = new ArrayLiteralExpression([], declaration.range.atEnd);       
+        const arrExpr = new ArrayLiteralExpression([], declaration.range.atEnd);
         initExpr = this.compileArrayLiteral(arrExpr, type, Constraints.ConvExplicit);
-        initExpr = module.local_set(operandIndex, initExpr, type.isManaged);        
+        initExpr = module.local_set(operandIndex, initExpr, type.isManaged);
       } else if (initializer) {
         initExpr = this.compileExpression(
           initializer,
@@ -6925,8 +6920,7 @@ export class Compiler extends DiagnosticEmitter {
     instance: Function,
     operands: ExpressionRef[] | null,
     reportNode: Node,
-    immediatelyDropped: bool = false,
-    isReturn: bool = false
+    immediatelyDropped: bool = false
   ): ExpressionRef {
     if (instance.hasDecorator(DecoratorFlags.Inline)) {
       if (!instance.is(CommonFlags.Overridden)) {
@@ -7025,10 +7019,8 @@ export class Compiler extends DiagnosticEmitter {
           lastOperand
         ], lastOperandType.toRef());
         this.operandsTostack(instance.signature, operands);
-        let expr = isReturn
-          ? module.return_call(instance.internalName, operands, returnTypeRef)
-          : module.call(instance.internalName, operands, returnTypeRef);
-        if (!isReturn && returnType != Type.void && immediatelyDropped) {
+        let expr = module.call(instance.internalName, operands, returnTypeRef);
+        if (returnType != Type.void && immediatelyDropped) {
           expr = module.drop(expr);
           this.currentType = Type.void;
         } else {
@@ -7044,9 +7036,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (operands) this.operandsTostack(instance.signature, operands);
-    let expr = isReturn
-      ? module.return_call(instance.internalName, operands, returnType.toRef())
-      : module.call(instance.internalName, operands, returnType.toRef());
+    let expr = module.call(instance.internalName, operands, returnType.toRef());
     this.currentType = returnType;
     return expr;
   }
@@ -7058,8 +7048,7 @@ export class Compiler extends DiagnosticEmitter {
     argumentExpressions: Expression[],
     reportNode: Node,
     thisArg: ExpressionRef = 0,
-    immediatelyDropped: bool = false,
-    constraints: Constraints = Constraints.None
+    immediatelyDropped: bool = false
   ): ExpressionRef {
     let numArguments = argumentExpressions.length;
 
@@ -7089,7 +7078,7 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallIndirect(signature, functionArg, reportNode, operands, immediatelyDropped, (constraints & Constraints.WillReturn) != 0);
+    return this.makeCallIndirect(signature, functionArg, reportNode, operands, immediatelyDropped);
   }
 
   /** Creates an indirect call to a first-class function. */
@@ -7099,7 +7088,6 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node,
     operands: ExpressionRef[] | null = null,
     immediatelyDropped: bool = false,
-    isReturn: bool = false,
   ): ExpressionRef {
     let module = this.module;
     let numOperands = operands ? operands.length : 0;
@@ -7129,44 +7117,46 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    let allTrivial = (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) == 0;
+    if (operands && allTrivial) {
+      for (let i = 0; i < numOperands; ++i) {
+        if (!module.isTrivialExpression(operands[i])) {
+          allTrivial = false;
+          break;
+        }
+      }
+    }
+
+    let stmts = new Array<ExpressionRef>();
+    let sizeTypeRef = this.options.sizeTypeRef;
+
+    if (!allTrivial) {
+      let functionArgLocal = this.currentFlow.getTempLocal(this.options.usizeType);
+      let functionArgSetExpr = module.local_set(functionArgLocal.index, functionArg, true);
+      stmts.push(functionArgSetExpr);
+      functionArg = module.local_get(functionArgLocal.index, sizeTypeRef);
+    }
+
     // We might be calling a varargs stub here, even if all operands have been
     // provided, so we must set `argumentsLength` in any case. Inject setting it
     // into the index argument, which becomes executed last after any operands.
     let argumentsLength = this.ensureArgumentsLength();
-    let sizeTypeRef = this.options.sizeTypeRef;
-    if (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) {
-      let flow = this.currentFlow;
-      let temp = flow.getTempLocal(this.options.usizeType);
-      let tempIndex = temp.index;
-      functionArg = module.block(null, [
-        module.local_set(tempIndex, functionArg, true), // Function
-        module.global_set(argumentsLength, module.i32(numArguments)),
-        module.local_get(tempIndex, sizeTypeRef)
-      ], sizeTypeRef);
-    } else { // simplify
-      functionArg = module.block(null, [
-        module.global_set(argumentsLength, module.i32(numArguments)),
-        functionArg
-      ], sizeTypeRef);
-    }
+    let functionArgWithVararg = module.block(null, [
+      module.global_set(argumentsLength, module.i32(numArguments)),
+      functionArg
+    ], sizeTypeRef);
+
     if (operands) this.operandsTostack(signature, operands);
-    let expr = isReturn
-      ? module.return_call_indirect(
-          null,
-          module.load(4, false, functionArg, TypeRef.I32),
-          operands,
-          signature.paramRefs,
-          signature.resultRefs
-        )
-      : module.call_indirect(
-          null,
-          module.load(4, false, functionArg, TypeRef.I32),
-          operands,
-          signature.paramRefs,
-          signature.resultRefs
-        );
+    let expr = module.call_indirect(
+      null, // TODO: handle multiple tables
+      module.load(4, false, functionArgWithVararg, TypeRef.I32), // ._index
+      operands,
+      signature.paramRefs,
+      signature.resultRefs
+    );
     this.currentType = returnType;
-    return expr;
+    stmts.push(expr);
+    return module.flatten(stmts, returnType.toRef());
   }
 
   private compileCommaExpression(
@@ -7926,7 +7916,7 @@ export class Compiler extends DiagnosticEmitter {
     stmts.length = 1;
     stmts.push(
       module.i32(1)
-    ); 
+    );
     module.removeFunction(name);
     module.addFunction(name, sizeType, TypeRef.I32, [ TypeRef.I32 ], module.block(null, stmts, TypeRef.I32));
   }

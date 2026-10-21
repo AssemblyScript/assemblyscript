@@ -319,9 +319,11 @@ const prefix = "types:assemblyscript";
 
 export function generateSrc() {
   const stdout = [];
+  const pathToSources = pathUtil.resolve(__dirname, "..", "src");
 
   generate({
-    project: pathUtil.resolve(__dirname, "..", "src"),
+    project: pathToSources,
+    baseDir: pathToSources,
     prefix,
     exclude: [
       "glue/**",

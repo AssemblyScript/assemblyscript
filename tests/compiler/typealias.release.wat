@@ -1,8 +1,8 @@
 (module
  (type $0 (func))
  (type $1 (func (param i32 i32 i32 i32)))
- (type $2 (func (param i32) (result i32)))
- (type $3 (func (param i32 i32) (result i32)))
+ (type $2 (func (param i32 i32) (result i32)))
+ (type $3 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33948))
  (memory $0 1)
@@ -19,65 +19,6 @@
  (export "alias" (func $typealias/alias))
  (export "memory" (memory $0))
  (start $~start)
- (func $typealias/outer_function~inner_function
-  i32.const 1136
-  i32.const 1136
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1088
-   i32.const 17
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $typealias/alias (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~start
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1180
-  i32.lt_s
-  if
-   i32.const 33968
-   i32.const 34016
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const 1056
-  i32.const 1056
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1088
-   i32.const 13
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1168
-  i32.store
-  i32.const 1168
-  i32.load
-  call_indirect (type $0)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -239,5 +180,64 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   i32.const 0
+ )
+ (func $~start
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1180
+  i32.lt_s
+  if
+   i32.const 33968
+   i32.const 34016
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 1056
+  i32.const 1056
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 13
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1168
+  i32.store
+  i32.const 1168
+  i32.load
+  call_indirect (type $0)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $typealias/outer_function~inner_function
+  i32.const 1136
+  i32.const 1136
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 17
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $typealias/alias (param $0 i32) (result i32)
+  local.get $0
  )
 )

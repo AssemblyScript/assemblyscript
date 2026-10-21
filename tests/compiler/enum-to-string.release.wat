@@ -21,9 +21,6 @@
  (data $6.1 (i32.const 1272) "\02\00\00\00\06\00\00\00C\00E\000")
  (export "memory" (memory $0))
  (start $~start)
- (func $~start
-  call $start:enum-to-string
- )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -185,6 +182,9 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   i32.const 0
+ )
+ (func $~start
+  call $start:enum-to-string
  )
  (func $start:enum-to-string
   global.get $~lib/memory/__stack_pointer

@@ -1,7 +1,7 @@
 (module
  (type $0 (func (result i32)))
- (type $1 (func (param i32 i32 i32 i32)))
- (type $2 (func))
+ (type $1 (func))
+ (type $2 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33916))
  (memory $0 1)
@@ -13,9 +13,6 @@
  (elem $0 (i32.const 1) $class-static-function/Example.staticFunc)
  (export "memory" (memory $0))
  (start $~start)
- (func $class-static-function/Example.staticFunc (result i32)
-  i32.const 42
- )
  (func $~start
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -46,5 +43,8 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $class-static-function/Example.staticFunc (result i32)
+  i32.const 42
  )
 )

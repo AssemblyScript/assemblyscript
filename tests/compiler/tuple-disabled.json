@@ -1,0 +1,9 @@
+{
+  "asc_flags": [
+    "--disable", "multi-value"
+  ],
+  "stderr": [
+    "TS1110: Type expected.",
+    "3 parse error(s)"
+  ]
+}

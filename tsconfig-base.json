@@ -8,7 +8,6 @@
     "noEmitOnError": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "preserveConstEnums": false,
-    "downlevelIteration": true
+    "preserveConstEnums": false
   }
 }

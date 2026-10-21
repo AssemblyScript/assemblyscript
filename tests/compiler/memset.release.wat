@@ -1,6 +1,6 @@
 (module
- (type $0 (func (param i32 i32 i32)))
- (type $1 (func (param i32 i32 i32 i32)))
+ (type $0 (func (param i32 i32 i32 i32)))
+ (type $1 (func (param i32 i32 i32)))
  (type $2 (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memset/dest (mut i32) (i32.const 0))
@@ -206,7 +206,7 @@
   i32.const 1
   i32.const 16
   call $memset/memset
-  global.get $memset/dest
+  i32.const 33852
   i32.load8_u
   i32.const 1
   i32.ne

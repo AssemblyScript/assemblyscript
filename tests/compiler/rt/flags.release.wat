@@ -1,7 +1,7 @@
 (module
  (type $0 (func))
- (type $1 (func (param i32 i32 i32 i32)))
- (type $2 (func (param i32) (result i32)))
+ (type $1 (func (param i32) (result i32)))
+ (type $2 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data $0 (i32.const 1036) "<")
@@ -32,6 +32,9 @@
   i32.const 1204
   i32.add
   i32.load
+ )
+ (func $~start
+  call $start:rt/flags
  )
  (func $start:rt/flags
   block $folding-inner0
@@ -283,8 +286,5 @@
   i32.const 3
   call $~lib/builtins/abort
   unreachable
- )
- (func $~start
-  call $start:rt/flags
  )
 )

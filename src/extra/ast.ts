@@ -15,6 +15,7 @@ import {
   TypeNode,
   NamedTypeNode,
   FunctionTypeNode,
+  TupleTypeNode,
   TypeName,
   TypeParameterNode,
 
@@ -132,6 +133,10 @@ export class ASTBuilder {
       }
       case NodeKind.FunctionType: {
         this.visitFunctionTypeNode(<FunctionTypeNode>node);
+        break;
+      }
+      case NodeKind.TupleType: {
+        this.visitTupleTypeNode(<TupleTypeNode>node);
         break;
       }
       case NodeKind.TypeParameter: {
@@ -387,6 +392,10 @@ export class ASTBuilder {
         this.visitFunctionTypeNode(<FunctionTypeNode>node);
         break;
       }
+      case NodeKind.TupleType: {
+        this.visitTupleTypeNode(<TupleTypeNode>node);
+        break;
+      }
       default: assert(false);
     }
   }
@@ -448,6 +457,33 @@ export class ASTBuilder {
       sb.push(") => void");
     }
     if (isNullable) sb.push(") | null");
+  }
+
+  visitTupleTypeNode(node: TupleTypeNode): void {
+    let sb = this.sb;
+    sb.push("[");
+    let elements = node.elements;
+    let elementNames = node.elementNames;
+    let numElements = elements.length;
+    if (numElements) {
+      let name = elementNames ? elementNames[0] : null;
+      if (name) {
+        this.visitIdentifierExpression(name);
+        sb.push(": ");
+      }
+      this.visitTypeNode(elements[0]);
+      for (let i = 1; i < numElements; ++i) {
+        sb.push(", ");
+        name = elementNames ? elementNames[i] : null;
+        if (name) {
+          this.visitIdentifierExpression(name);
+          sb.push(": ");
+        }
+        this.visitTypeNode(elements[i]);
+      }
+    }
+    sb.push("]");
+    if (node.isNullable) sb.push(" | null");
   }
 
   visitTypeParameter(node: TypeParameterNode): void {

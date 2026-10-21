@@ -6,11 +6,11 @@
  (export "testI32" (func $many-locals/testI32))
  (export "testI8" (func $many-locals/testI8))
  (export "memory" (memory $0))
- (func $many-locals/testI32 (param $0 i32) (result i32)
-  local.get $0
- )
  (func $many-locals/testI8 (param $0 i32) (result i32)
   local.get $0
   i32.extend8_s
+ )
+ (func $many-locals/testI32 (param $0 i32) (result i32)
+  local.get $0
  )
 )

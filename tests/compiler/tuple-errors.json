@@ -1,0 +1,37 @@
+{
+  "asc_flags": [
+    "--enable", "multi-value"
+  ],
+  "stderr": [
+    "in tuple-errors.ts(1,13)",
+    "in tuple-errors.ts(2,13)",
+    "in tuple-errors.ts(3,13)",
+    "in tuple-errors.ts(4,13)",
+    "in tuple-errors.ts(5,13)",
+    "in tuple-errors.ts(6,13)",
+    "in tuple-errors.ts(7,13)",
+    "in tuple-errors.ts(8,13)",
+    "AS100: Not implemented: Tuple types",
+    "in tuple-errors.ts(10,45)",
+    "in tuple-errors.ts(11,45)",
+    "in tuple-errors.ts(12,51)",
+    "in tuple-errors.ts(1,39)",
+    "in tuple-errors.ts(14,45)",
+    "in tuple-errors.ts(15,53)",
+    "in tuple-errors.ts(16,45)",
+    "in tuple-errors.ts(17,45)",
+    "in tuple-errors.ts(19,46)",
+    "in tuple-errors.ts(22,46)",
+    "in tuple-errors.ts(25,52)",
+    "in tuple-errors.ts(31,46)",
+    "in tuple-errors.ts(34,54)",
+    "in tuple-errors.ts(37,46)",
+    "in tuple-errors.ts(40,46)",
+    "in tuple-errors.ts(44,15)",
+    "in tuple-errors.ts(49,17)",
+    "in tuple-errors.ts(53,35)",
+    "in tuple-errors.ts(56,35)",
+    "in tuple-errors.ts(60,39)",
+    "in tuple-errors.ts(63,39)"
+  ]
+}

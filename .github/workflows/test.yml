@@ -81,9 +81,9 @@ jobs:
       run: npm run build
     - name: Test experimental features
       env:
-        ASC_FEATURES: threads,reference-types,gc,exception-handling
+        ASC_FEATURES: threads,reference-types,gc,exception-handling,tail-calls
       run: |
-        npm run test:compiler features/threads features/reference-types features/gc features/exception-handling bindings/esm bindings/raw
+        npm run test:compiler features/threads features/reference-types features/gc features/exception-handling features/tail-calls bindings/esm bindings/raw
   runtimes:
     name: "Runtimes"
     runs-on: ubuntu-latest

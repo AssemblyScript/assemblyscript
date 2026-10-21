@@ -8,8 +8,6 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $~start
-  (local $0 i32)
-  (local $1 i64)
   global.get $unary/i
   i32.const 1
   i32.add

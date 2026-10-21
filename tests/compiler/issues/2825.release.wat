@@ -8,12 +8,6 @@
  (export "init" (func $issues/2825/init))
  (export "memory" (memory $0))
  (start $~start)
- (func $issues/2825/init
-  loop $for-loop|0
-   br $for-loop|0
-  end
-  unreachable
- )
  (func $~start
   (local $0 i32)
   loop $for-loop|0
@@ -39,5 +33,11 @@
     br $for-loop|0
    end
   end
+ )
+ (func $issues/2825/init
+  loop $for-loop|0
+   br $for-loop|0
+  end
+  unreachable
  )
 )

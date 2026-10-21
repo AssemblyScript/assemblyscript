@@ -1,16 +1,22 @@
 (module
  (type $0 (func (param i32) (result i32)))
  (type $1 (func (param i32 i32)))
- (type $2 (func (param i32)))
+ (type $2 (func (param i32 i32) (result i32)))
  (type $3 (func))
- (type $4 (func (param i32 i32) (result i32)))
- (type $5 (func (param i32) (result i64)))
- (type $6 (func (param i32 i32 i32)))
- (type $7 (func (param i32 i32) (result i64)))
- (type $8 (func (param i32 i32 i32 i32)))
- (type $9 (func (param i32 i32 i64) (result i32)))
- (type $10 (func (result i32)))
+ (type $4 (func (result i32)))
+ (type $5 (func (param i32)))
+ (type $6 (func (param i32) (result i64)))
+ (type $7 (func (param i32 i32 i32)))
+ (type $8 (func (param i32 i32) (result i64)))
+ (type $9 (func (param i32 i32 i32 i32)))
+ (type $10 (func (param i32 i32 i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "tailHost" (func $features/tail-calls/host (param i32) (result i32)))
+ (global $features/tail-calls/effects (mut i32) (i32.const 0))
+ (global $features/tail-calls/indirectFunction (mut i32) (i32.const 32))
+ (global $features/tail-calls/order (mut i32) (i32.const 0))
+ (global $features/tail-calls/arrow i32 (i32.const 64))
+ (global $features/tail-calls/indirectIndex (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -26,24 +32,30 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 480))
- (global $~lib/memory/__data_end i32 (i32.const 512))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33280))
- (global $~lib/memory/__heap_base i32 (i32.const 33280))
+ (global $~lib/rt/__rtti_base i32 (i32.const 800))
+ (global $~lib/memory/__data_end i32 (i32.const 848))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33616))
+ (global $~lib/memory/__heap_base i32 (i32.const 33616))
  (memory $0 1)
  (data $0 (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data $1 (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data $2 (i32.const 108) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $3 (i32.const 176) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $1 (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
+ (data $2 (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data $3 (i32.const 140) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data $4 (i32.const 208) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $5 (i32.const 236) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
- (data $6 (i32.const 300) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data $7 (i32.const 352) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $8 (i32.const 380) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $9 (i32.const 444) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
- (data $10 (i32.const 480) "\07\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
- (table $0 3 3 funcref)
- (elem $0 (i32.const 1) $features/tail-calls/inc $features/tail-calls/maybeBox)
+ (data $5 (i32.const 240) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $6 (i32.const 268) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
+ (data $7 (i32.const 332) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data $8 (i32.const 384) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $9 (i32.const 412) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $10 (i32.const 476) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
+ (data $11 (i32.const 508) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00")
+ (data $12 (i32.const 540) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00\00\00\00\00")
+ (data $13 (i32.const 572) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00^\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00\'\00n\00u\00l\00l\00\'\00 \00(\00n\00o\00t\00 \00a\00s\00s\00i\00g\00n\00e\00d\00 \00o\00r\00 \00f\00a\00i\00l\00e\00d\00 \00c\00a\00s\00t\00)\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $14 (i32.const 700) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00,\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00t\00a\00i\00l\00-\00c\00a\00l\00l\00s\00.\00t\00s\00")
+ (data $15 (i32.const 764) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00")
+ (data $16 (i32.const 800) "\0b\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00")
+ (table $0 7 7 funcref)
+ (elem $0 (i32.const 1) $features/tail-calls/inc $start:features/tail-calls~anonymous|0 $features/tail-calls/maybeBox $features/tail-calls/indirectStep $features/tail-calls/optional@varargs $features/tail-calls/rawStep)
  (export "direct" (func $features/tail-calls/direct))
  (export "directVoid" (func $features/tail-calls/directVoid))
  (export "indirect" (func $features/tail-calls/indirect))
@@ -51,13 +63,49 @@
  (export "convertedIndirect" (func $features/tail-calls/convertedIndirect))
  (export "nullable" (func $features/tail-calls/nullable))
  (export "nullableIndirect" (func $features/tail-calls/nullableIndirect))
+ (export "recursive" (func $features/tail-calls/recursive))
+ (export "mutualA" (func $features/tail-calls/mutualA))
+ (export "ternary" (func $features/tail-calls/ternary))
+ (export "temporary" (func $features/tail-calls/temporary))
+ (export "comma" (func $features/tail-calls/comma))
+ (export "switchCall" (func $features/tail-calls/switchCall))
+ (export "bothCalls" (func $features/tail-calls/bothCalls))
+ (export "nestedArguments" (func $features/tail-calls/nestedArguments))
+ (export "branches" (func $features/tail-calls/branches))
+ (export "deepIndirect" (func $features/tail-calls/deepIndirect))
+ (export "callTemporaryIndirect" (func $features/tail-calls/callTemporaryIndirect))
+ (export "indirectOrder" (func $features/tail-calls/indirectOrder))
+ (export "getOrder" (func $features/tail-calls/getOrder))
+ (export "optionalDirect" (func $features/tail-calls/optionalDirect))
+ (export "optionalIndirect" (func $features/tail-calls/optionalIndirect))
+ (export "inlineCaller" (func $features/tail-calls/inlineCaller))
+ (export "narrowed" (func $features/tail-calls/narrowed))
+ (export "wrapped" (func $features/tail-calls/wrapped))
+ (export "discarded" (func $features/tail-calls/discarded))
+ (export "afterCall" (func $features/tail-calls/afterCall))
+ (export "nonTail" (func $features/tail-calls/nonTail))
+ (export "nonNull" (func $features/tail-calls/nonNull))
+ (export "voidCall" (func $features/tail-calls/voidCall))
+ (export "voidImplicit" (func $features/tail-calls/voidImplicit))
+ (export "managed" (func $features/tail-calls/managed))
+ (export "stackPointer" (func $features/tail-calls/stackPointer))
+ (export "callArrow" (func $features/tail-calls/callArrow))
+ (export "virtual" (func $features/tail-calls/virtual))
+ (export "deepRaw" (func $features/tail-calls/deepRaw))
+ (export "imported" (func $features/tail-calls/imported))
  (export "memory" (memory $0))
+ (export "recursiveIndirect" (func $export:features/tail-calls/recursiveIndirect))
+ (export "temporaryIndirect" (func $export:features/tail-calls/temporaryIndirect))
  (start $~start)
  (func $features/tail-calls/inc (param $x i32) (result i32)
   local.get $x
   i32.const 1
   i32.add
   return
+ )
+ (func $start:features/tail-calls~anonymous|0 (param $x i32) (result i32)
+  local.get $x
+  return_call $features/tail-calls/inc
  )
  (func $features/tail-calls/direct (param $x i32) (result i32)
   local.get $x
@@ -156,7 +204,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 160
      i32.const 160
      i32.const 16
      call $~lib/builtins/abort
@@ -184,7 +232,7 @@
   i32.and
   local.get $color
   i32.or
-  call $~lib/rt/itcms/Object#set:nextWithColor
+  return_call $~lib/rt/itcms/Object#set:nextWithColor
  )
  (func $~lib/rt/itcms/Object#get:prev (param $this i32) (result i32)
   local.get $this
@@ -198,7 +246,7 @@
   i32.const 3
   i32.and
   i32.or
-  call $~lib/rt/itcms/Object#set:nextWithColor
+  return_call $~lib/rt/itcms/Object#set:nextWithColor
  )
  (func $~lib/rt/itcms/Object#unlink (param $this i32)
   (local $next i32)
@@ -226,7 +274,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 128
+    i32.const 160
     i32.const 128
     i32.const 18
     call $~lib/builtins/abort
@@ -243,7 +291,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 128
+   i32.const 160
    i32.const 132
    i32.const 16
    call $~lib/builtins/abort
@@ -254,7 +302,7 @@
   call $~lib/rt/itcms/Object#set:prev
   local.get $prev
   local.get $next
-  call $~lib/rt/itcms/Object#set:next
+  return_call $~lib/rt/itcms/Object#set:next
  )
  (func $~lib/rt/itcms/Object#get:rtId (param $this i32) (result i32)
   local.get $this
@@ -273,8 +321,8 @@
   i32.load
   i32.gt_u
   if
-   i32.const 256
-   i32.const 320
+   i32.const 288
+   i32.const 352
    i32.const 21
    i32.const 28
    call $~lib/builtins/abort
@@ -287,8 +335,7 @@
   i32.const 4
   i32.mul
   i32.add
-  call $~lib/shared/typeinfo/Typeinfo#get:flags
-  return
+  return_call $~lib/shared/typeinfo/Typeinfo#get:flags
  )
  (func $~lib/rt/itcms/Object#get:isPointerfree (param $this i32) (result i32)
   (local $rtId i32)
@@ -328,7 +375,7 @@
   call $~lib/rt/itcms/Object#set:next
   local.get $list
   local.get $this
-  call $~lib/rt/itcms/Object#set:prev
+  return_call $~lib/rt/itcms/Object#set:prev
  )
  (func $~lib/rt/itcms/Object#makeGray (param $this i32)
   (local $1 i32)
@@ -342,7 +389,7 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 128
+    i32.const 160
     i32.const 148
     i32.const 30
     call $~lib/builtins/abort
@@ -364,7 +411,7 @@
   else
    i32.const 2
   end
-  call $~lib/rt/itcms/Object#linkTo
+  return_call $~lib/rt/itcms/Object#linkTo
  )
  (func $~lib/rt/itcms/__visit (param $ptr i32) (param $cookie i32)
   (local $obj i32)
@@ -494,7 +541,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 268
    i32.const 14
    call $~lib/builtins/abort
@@ -514,7 +561,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 270
    i32.const 14
    call $~lib/builtins/abort
@@ -577,7 +624,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 284
    i32.const 14
    call $~lib/builtins/abort
@@ -691,7 +738,7 @@
      i32.const -1
      i32.xor
      i32.and
-     call $~lib/rt/tlsf/Root#set:flMap
+     return_call $~lib/rt/tlsf/Root#set:flMap
     end
    end
   end
@@ -730,7 +777,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 201
    i32.const 14
    call $~lib/builtins/abort
@@ -747,7 +794,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 203
    i32.const 14
    call $~lib/builtins/abort
@@ -836,7 +883,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 400
+    i32.const 432
     i32.const 221
     i32.const 16
     call $~lib/builtins/abort
@@ -879,7 +926,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 233
    i32.const 14
    call $~lib/builtins/abort
@@ -897,7 +944,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 234
    i32.const 14
    call $~lib/builtins/abort
@@ -965,7 +1012,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 251
    i32.const 14
    call $~lib/builtins/abort
@@ -1082,7 +1129,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 382
    i32.const 14
    call $~lib/builtins/abort
@@ -1128,7 +1175,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 400
+    i32.const 432
     i32.const 389
     i32.const 16
     call $~lib/builtins/abort
@@ -1160,7 +1207,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 400
+    i32.const 432
     i32.const 402
     i32.const 5
     call $~lib/builtins/abort
@@ -1404,7 +1451,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 562
    i32.const 3
    call $~lib/builtins/abort
@@ -1424,7 +1471,7 @@
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $root
   local.get $block
-  call $~lib/rt/tlsf/insertBlock
+  return_call $~lib/rt/tlsf/insertBlock
  )
  (func $~lib/rt/tlsf/__free (param $ptr i32)
   local.get $ptr
@@ -1441,7 +1488,7 @@
   global.get $~lib/rt/tlsf/ROOT
   local.get $ptr
   call $~lib/rt/tlsf/checkUsedBlock
-  call $~lib/rt/tlsf/freeBlock
+  return_call $~lib/rt/tlsf/freeBlock
  )
  (func $~lib/rt/itcms/free (param $obj i32)
   local.get $obj
@@ -1453,7 +1500,7 @@
    call $~lib/rt/itcms/Object#set:nextWithColor
    local.get $obj
    i32.const 0
-   call $~lib/rt/itcms/Object#set:prev
+   return_call $~lib/rt/itcms/Object#set:prev
   else
    global.get $~lib/rt/itcms/total
    local.get $obj
@@ -1465,8 +1512,9 @@
    local.get $obj
    i32.const 4
    i32.add
-   call $~lib/rt/tlsf/__free
+   return_call $~lib/rt/tlsf/__free
   end
+  unreachable
  )
  (func $~lib/rt/itcms/step (result i32)
   (local $obj i32)
@@ -1624,7 +1672,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 160
      i32.const 229
      i32.const 20
      call $~lib/builtins/abort
@@ -1735,8 +1783,8 @@
   i32.const 1073741820
   i32.gt_u
   if
-   i32.const 64
-   i32.const 400
+   i32.const 96
+   i32.const 432
    i32.const 461
    i32.const 29
    call $~lib/builtins/abort
@@ -1837,7 +1885,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 334
    i32.const 14
    call $~lib/builtins/abort
@@ -1908,7 +1956,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 400
+     i32.const 432
      i32.const 347
      i32.const 18
      call $~lib/builtins/abort
@@ -2065,7 +2113,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 361
    i32.const 14
    call $~lib/builtins/abort
@@ -2107,7 +2155,7 @@
    call $~lib/rt/common/BLOCK#set:mmInfo
    local.get $root
    local.get $spare
-   call $~lib/rt/tlsf/insertBlock
+   return_call $~lib/rt/tlsf/insertBlock
   else
    local.get $block
    local.get $blockInfo
@@ -2151,8 +2199,9 @@
    i32.const -1
    i32.xor
    i32.and
-   call $~lib/rt/common/BLOCK#set:mmInfo
+   return_call $~lib/rt/common/BLOCK#set:mmInfo
   end
+  unreachable
  )
  (func $~lib/rt/tlsf/allocateBlock (param $root i32) (param $size i32) (result i32)
   (local $payloadSize i32)
@@ -2180,7 +2229,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 400
+    i32.const 432
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -2200,7 +2249,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 432
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -2248,8 +2297,8 @@
   i32.const 1073741804
   i32.ge_u
   if
-   i32.const 64
-   i32.const 128
+   i32.const 96
+   i32.const 160
    i32.const 261
    i32.const 31
    call $~lib/builtins/abort
@@ -2298,7 +2347,7 @@
   local.get $x
   if (result i32)
    i32.const 0
-   call $features/tail-calls/Box#constructor
+   return_call $features/tail-calls/Box#constructor
   else
    i32.const 0
   end
@@ -2316,14 +2365,450 @@
   i32.load
   return_call_indirect (type $0)
  )
+ (func $features/tail-calls/recursive (param $n i32) (result i32)
+  local.get $n
+  i32.const 0
+  i32.eq
+  if
+   i32.const 42
+   return
+  end
+  local.get $n
+  i32.const 1
+  i32.sub
+  return_call $features/tail-calls/recursive
+ )
+ (func $features/tail-calls/mutualB (param $n i32) (result i32)
+  local.get $n
+  i32.const 0
+  i32.eq
+  if
+   i32.const 42
+   return
+  end
+  local.get $n
+  i32.const 1
+  i32.sub
+  return_call $features/tail-calls/mutualA
+ )
+ (func $features/tail-calls/mutualA (param $n i32) (result i32)
+  local.get $n
+  i32.const 0
+  i32.eq
+  if
+   i32.const 42
+   return
+  end
+  local.get $n
+  i32.const 1
+  i32.sub
+  return_call $features/tail-calls/mutualB
+ )
+ (func $features/tail-calls/ternary (param $n i32) (result i32)
+  local.get $n
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 42
+  else
+   local.get $n
+   i32.const 1
+   i32.sub
+   return_call $features/tail-calls/ternary
+  end
+  return
+ )
+ (func $features/tail-calls/temporary (param $n i32) (result i32)
+  (local $result i32)
+  local.get $n
+  i32.const 0
+  i32.eq
+  if
+   i32.const 42
+   return
+  end
+  local.get $n
+  i32.const 1
+  i32.sub
+  return_call $features/tail-calls/temporary
+ )
+ (func $features/tail-calls/comma (param $n i32) (result i32)
+  local.get $n
+  i32.const 0
+  i32.eq
+  if
+   global.get $features/tail-calls/effects
+   return
+  end
+  global.get $features/tail-calls/effects
+  i32.const 1
+  i32.add
+  global.set $features/tail-calls/effects
+  local.get $n
+  i32.const 1
+  i32.sub
+  return_call $features/tail-calls/comma
+ )
+ (func $features/tail-calls/switchCall (param $n i32) (result i32)
+  (local $1 i32)
+  block $case2|0
+   block $case1|0
+    block $case0|0
+     local.get $n
+     local.set $1
+     local.get $1
+     i32.const 0
+     i32.eq
+     br_if $case0|0
+     local.get $1
+     i32.const 1
+     i32.eq
+     br_if $case1|0
+     br $case2|0
+    end
+    local.get $n
+    return_call $features/tail-calls/inc
+   end
+   local.get $n
+   i32.const 1
+   i32.add
+   return_call $features/tail-calls/inc
+  end
+  local.get $n
+  i32.const 2
+  i32.add
+  return_call $features/tail-calls/inc
+ )
+ (func $features/tail-calls/bothCalls (param $n i32) (result i32)
+  local.get $n
+  if
+   local.get $n
+   return_call $features/tail-calls/inc
+  else
+   i32.const 0
+   return_call $features/tail-calls/inc
+  end
+  unreachable
+ )
+ (func $features/tail-calls/nestedArguments (param $n i32) (result i32)
+  local.get $n
+  call $features/tail-calls/inc
+  return_call $features/tail-calls/inc
+ )
+ (func $features/tail-calls/branches (param $n i32) (result i32)
+  local.get $n
+  if
+   local.get $n
+   return_call $features/tail-calls/inc
+  else
+   i32.const 0
+   return_call $features/tail-calls/inc
+  end
+  unreachable
+ )
+ (func $features/tail-calls/recursiveIndirect (param $fn i32) (param $n i32) (result i32)
+  local.get $n
+  i32.const 1
+  global.set $~argumentsLength
+  local.get $fn
+  i32.load
+  return_call_indirect (type $0)
+ )
+ (func $features/tail-calls/indirectStep (param $n i32) (result i32)
+  local.get $n
+  i32.const 0
+  i32.eq
+  if
+   i32.const 42
+   return
+  end
+  local.get $n
+  i32.const 1
+  i32.sub
+  local.set $n
+  local.get $n
+  i32.const 1
+  global.set $~argumentsLength
+  global.get $features/tail-calls/indirectFunction
+  i32.load
+  return_call_indirect (type $0)
+ )
+ (func $features/tail-calls/temporaryIndirect (param $fn i32) (param $n i32) (result i32)
+  (local $result i32)
+  local.get $n
+  i32.const 1
+  global.set $~argumentsLength
+  local.get $fn
+  i32.load
+  return_call_indirect (type $0)
+ )
+ (func $features/tail-calls/choose (result i32)
+  global.get $features/tail-calls/order
+  i32.const 10
+  i32.mul
+  i32.const 1
+  i32.add
+  global.set $features/tail-calls/order
+  i32.const 32
+  return
+ )
+ (func $features/tail-calls/argument (result i32)
+  global.get $features/tail-calls/order
+  i32.const 10
+  i32.mul
+  i32.const 2
+  i32.add
+  global.set $features/tail-calls/order
+  i32.const 40
+  return
+ )
+ (func $features/tail-calls/getOrder (result i32)
+  global.get $features/tail-calls/order
+  return
+ )
+ (func $features/tail-calls/optional (param $x i32) (param $y i32) (result i32)
+  local.get $x
+  local.get $y
+  i32.add
+  return
+ )
+ (func $features/tail-calls/optionalDirect (param $x i32) (result i32)
+  local.get $x
+  i32.const 7
+  return_call $features/tail-calls/optional
+ )
+ (func $features/tail-calls/optionalIndirect (param $x i32) (result i32)
+  local.get $x
+  i32.const 0
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 560
+  i32.load
+  return_call_indirect (type $2)
+ )
+ (func $features/tail-calls/inlineCaller (param $x i32) (result i32)
+  (local $x|1 i32)
+  block $features/tail-calls/inlined|inlined.0 (result i32)
+   local.get $x
+   local.set $x|1
+   local.get $x|1
+   call $features/tail-calls/inc
+   br $features/tail-calls/inlined|inlined.0
+  end
+  i32.const 1
+  i32.add
+  return
+ )
+ (func $features/tail-calls/wide (result i32)
+  i32.const 511
+  return
+ )
+ (func $features/tail-calls/narrowed (result i32)
+  call $features/tail-calls/wide
+  i32.const 255
+  i32.and
+  return
+ )
+ (func $features/tail-calls/small (param $x i32) (result i32)
+  local.get $x
+  return
+ )
+ (func $features/tail-calls/wrapped (param $x i32) (result i32)
+  local.get $x
+  call $features/tail-calls/small
+  i32.const 255
+  i32.and
+  return
+ )
+ (func $features/tail-calls/discarded (param $x i32)
+  local.get $x
+  call $features/tail-calls/inc
+  drop
+  return
+ )
+ (func $features/tail-calls/afterCall (param $x i32) (result i32)
+  (local $result i32)
+  local.get $x
+  call $features/tail-calls/inc
+  local.set $result
+  global.get $features/tail-calls/effects
+  i32.const 1
+  i32.add
+  global.set $features/tail-calls/effects
+  local.get $result
+  return
+ )
+ (func $features/tail-calls/nonTail (param $n i32) (result i32)
+  local.get $n
+  i32.const 0
+  i32.eq
+  if
+   i32.const 0
+   return
+  end
+  local.get $n
+  i32.const 1
+  i32.sub
+  call $features/tail-calls/nonTail
+  i32.const 1
+  i32.add
+  return
+ )
+ (func $features/tail-calls/voidCall
+  return_call $features/tail-calls/noop
+ )
+ (func $features/tail-calls/voidImplicit
+  return_call $features/tail-calls/noop
+ )
+ (func $features/tail-calls/Value#set:value (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
+  i32.store
+ )
+ (func $~lib/rt/itcms/__collect
+  i32.const 0
+  drop
+  global.get $~lib/rt/itcms/state
+  i32.const 0
+  i32.gt_s
+  if
+   loop $while-continue|0
+    global.get $~lib/rt/itcms/state
+    i32.const 0
+    i32.ne
+    if
+     call $~lib/rt/itcms/step
+     drop
+     br $while-continue|0
+    end
+   end
+  end
+  call $~lib/rt/itcms/step
+  drop
+  loop $while-continue|1
+   global.get $~lib/rt/itcms/state
+   i32.const 0
+   i32.ne
+   if
+    call $~lib/rt/itcms/step
+    drop
+    br $while-continue|1
+   end
+  end
+  global.get $~lib/rt/itcms/total
+  i64.extend_i32_u
+  i32.const 200
+  i64.extend_i32_u
+  i64.mul
+  i64.const 100
+  i64.div_u
+  i32.wrap_i64
+  i32.const 1024
+  i32.add
+  global.set $~lib/rt/itcms/threshold
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+ )
+ (func $features/tail-calls/Value#get:value (param $this i32) (result i32)
+  local.get $this
+  i32.load
+ )
+ (func $features/tail-calls/stackPointer (result i32)
+  global.get $~lib/memory/__stack_pointer
+  return
+ )
+ (func $features/tail-calls/callArrow (param $x i32) (result i32)
+  local.get $x
+  i32.const 1
+  global.set $~argumentsLength
+  global.get $features/tail-calls/arrow
+  i32.load
+  return_call_indirect (type $0)
+ )
+ (func $features/tail-calls/Base#value (param $this i32) (param $x i32) (result i32)
+  local.get $x
+  return_call $features/tail-calls/inc
+ )
+ (func $features/tail-calls/rawStep (param $n i32) (result i32)
+  local.get $n
+  i32.const 0
+  i32.eq
+  if
+   i32.const 42
+   return
+  end
+  local.get $n
+  i32.const 1
+  i32.sub
+  global.get $features/tail-calls/indirectIndex
+  return_call_indirect (type $0)
+ )
+ (func $~lib/function/Function<%28i32%29=>i32>#get:index (param $this i32) (result i32)
+  local.get $this
+  i32.load
+  return
+ )
+ (func $features/tail-calls/imported (param $x i32) (result i32)
+  local.get $x
+  return_call $features/tail-calls/host
+ )
+ (func $features/tail-calls/optional@varargs (param $x i32) (param $y i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 7
+   local.set $y
+  end
+  local.get $x
+  local.get $y
+  return_call $features/tail-calls/optional
+ )
+ (func $features/tail-calls/Derived#value (param $this i32) (param $x i32) (result i32)
+  local.get $x
+  i32.const 1
+  i32.add
+  return_call $features/tail-calls/inc
+ )
+ (func $features/tail-calls/Base#value@override (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  block $default
+   block $case0
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    local.set $2
+    local.get $2
+    i32.const 10
+    i32.eq
+    br_if $case0
+    br $default
+   end
+   local.get $0
+   local.get $1
+   return_call $features/tail-calls/Derived#value
+  end
+  local.get $0
+  local.get $1
+  return_call $features/tail-calls/Base#value
+ )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
-  i32.const 256
+  i32.const 288
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 64
+  i32.const 96
   local.get $0
-  call $~lib/rt/itcms/__visit
+  return_call $~lib/rt/itcms/__visit
  )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2333,7 +2818,7 @@
   local.get $0
   i32.load
   local.get $1
-  call $~lib/rt/itcms/__visit
+  return_call $~lib/rt/itcms/__visit
  )
  (func $~lib/object/Object~visit (param $0 i32) (param $1 i32)
  )
@@ -2347,7 +2832,7 @@
   call $~lib/object/Object~visit
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%29=>i32>#__visit
+  return_call $~lib/function/Function<%28i32%29=>i32>#__visit
  )
  (func $~lib/function/Function<%28i32%29=>features/tail-calls/Box|null>#get:_env (param $this i32) (result i32)
   local.get $this
@@ -2359,44 +2844,67 @@
   call $~lib/object/Object~visit
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%29=>features/tail-calls/Box|null>#__visit
+  return_call $~lib/function/Function<%28i32%29=>features/tail-calls/Box|null>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32?%29=>i32>#get:_env (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/function/Function<%28i32%2Ci32?%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  return_call $~lib/function/Function<%28i32%2Ci32?%29=>i32>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $~lib/function/Function<%28i32%29=>features/tail-calls/Box|null>
-    block $features/tail-calls/Box
-     block $~lib/function/Function<%28i32%29=>i32>
-      block $~lib/arraybuffer/ArrayBufferView
-       block $~lib/string/String
-        block $~lib/arraybuffer/ArrayBuffer
-         block $~lib/object/Object
+   block $features/tail-calls/Derived
+    block $features/tail-calls/Base
+     block $features/tail-calls/Value
+      block $~lib/function/Function<%28i32%2Ci32?%29=>i32>
+       block $~lib/function/Function<%28i32%29=>features/tail-calls/Box|null>
+        block $features/tail-calls/Box
+         block $~lib/function/Function<%28i32%29=>i32>
+          block $~lib/arraybuffer/ArrayBufferView
+           block $~lib/string/String
+            block $~lib/arraybuffer/ArrayBuffer
+             block $~lib/object/Object
+              local.get $0
+              i32.const 8
+              i32.sub
+              i32.load
+              br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28i32%29=>i32> $features/tail-calls/Box $~lib/function/Function<%28i32%29=>features/tail-calls/Box|null> $~lib/function/Function<%28i32%2Ci32?%29=>i32> $features/tail-calls/Value $features/tail-calls/Base $features/tail-calls/Derived $invalid
+             end
+             return
+            end
+            return
+           end
+           return
+          end
           local.get $0
-          i32.const 8
-          i32.sub
-          i32.load
-          br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28i32%29=>i32> $features/tail-calls/Box $~lib/function/Function<%28i32%29=>features/tail-calls/Box|null> $invalid
+          local.get $1
+          return_call $~lib/arraybuffer/ArrayBufferView~visit
          end
-         return
+         local.get $0
+         local.get $1
+         return_call $~lib/function/Function<%28i32%29=>i32>~visit
         end
         return
        end
-       return
+       local.get $0
+       local.get $1
+       return_call $~lib/function/Function<%28i32%29=>features/tail-calls/Box|null>~visit
       end
       local.get $0
       local.get $1
-      call $~lib/arraybuffer/ArrayBufferView~visit
-      return
+      return_call $~lib/function/Function<%28i32%2Ci32?%29=>i32>~visit
      end
-     local.get $0
-     local.get $1
-     call $~lib/function/Function<%28i32%29=>i32>~visit
      return
     end
     return
    end
-   local.get $0
-   local.get $1
-   call $~lib/function/Function<%28i32%29=>features/tail-calls/Box|null>~visit
    return
   end
   unreachable
@@ -2410,13 +2918,13 @@
   i32.const 1
   i32.shr_u
   global.set $~lib/rt/itcms/threshold
-  i32.const 176
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/pinSpace
   i32.const 208
   call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/pinSpace
+  i32.const 240
+  call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/toSpace
-  i32.const 352
+  i32.const 384
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
  )
@@ -2425,8 +2933,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 33312
-   i32.const 33360
+   i32.const 33648
+   i32.const 33696
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -2450,10 +2958,18 @@
   i32.store
   local.get $1
   local.get $x
-  return_call $features/tail-calls/invoke
+  call $features/tail-calls/invoke
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
  )
  (func $features/tail-calls/convertedIndirect (param $x i32) (result i64)
   (local $1 i32)
+  (local $2 i64)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2469,7 +2985,14 @@
   i32.store
   local.get $1
   local.get $x
-  return_call $features/tail-calls/widenInvoke
+  call $features/tail-calls/widenInvoke
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
  )
  (func $features/tail-calls/Box#constructor (param $this i32) (result i32)
   (local $1 i32)
@@ -2519,14 +3042,335 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 464
+  i32.const 496
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store
   local.get $1
   local.get $x
-  return_call $features/tail-calls/maybeInvoke
+  call $features/tail-calls/maybeInvoke
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $features/tail-calls/deepIndirect (param $n i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 528
+  global.set $features/tail-calls/indirectFunction
+  i32.const 528
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  local.get $n
+  call $features/tail-calls/recursiveIndirect
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $features/tail-calls/callTemporaryIndirect (param $n i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 32
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  local.get $n
+  call $features/tail-calls/temporaryIndirect
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $features/tail-calls/Value#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.const 8
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  i32.const 42
+  call $features/tail-calls/Value#set:value
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $features/tail-calls/readValue (param $value i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  call $~lib/rt/itcms/__collect
+  local.get $value
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $features/tail-calls/Value#get:value
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $features/tail-calls/managed (result i32)
+  (local $value i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $features/tail-calls/Value#constructor
+  local.tee $value
+  i32.store
+  local.get $value
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $features/tail-calls/readValue
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $features/tail-calls/Base#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 9
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $features/tail-calls/Derived#constructor (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 10
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $features/tail-calls/Base#constructor
+  local.tee $this
+  i32.store
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $features/tail-calls/dispatch (param $value i32) (param $x i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $value
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  local.get $x
+  call $features/tail-calls/Base#value@override
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $features/tail-calls/virtual (param $x i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 0
+  call $features/tail-calls/Derived#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  local.get $x
+  call $features/tail-calls/dispatch
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $features/tail-calls/deepRaw (param $n i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 784
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/function/Function<%28i32%29=>i32>#get:index
+  global.set $features/tail-calls/indirectIndex
+  local.get $n
+  call $features/tail-calls/rawStep
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
  )
  (func $~lib/function/Function<%28i32%29=>i32>#__visit (param $this i32) (param $cookie i32)
   (local $2 i32)
@@ -2576,6 +3420,30 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $~lib/function/Function<%28i32%2Ci32?%29=>i32>#__visit (param $this i32) (param $cookie i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  call $~lib/function/Function<%28i32%2Ci32?%29=>i32>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/object/Object#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2603,5 +3471,111 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $features/tail-calls/indirectOrder (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 0
+  global.set $features/tail-calls/order
+  global.get $~lib/memory/__stack_pointer
+  call $features/tail-calls/choose
+  local.tee $0
+  i32.store
+  call $features/tail-calls/argument
+  i32.const 1
+  global.set $~argumentsLength
+  local.get $0
+  i32.load
+  call_indirect (type $0)
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $features/tail-calls/nonNull (param $x i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $x
+  call $features/tail-calls/maybeBox
+  local.tee $1
+  i32.store
+  local.get $1
+  if (result i32)
+   local.get $1
+  else
+   i32.const 592
+   i32.const 720
+   i32.const 178
+   i32.const 47
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+  return
+ )
+ (func $export:features/tail-calls/recursiveIndirect (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  local.get $1
+  call $features/tail-calls/recursiveIndirect
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
+ (func $export:features/tail-calls/temporaryIndirect (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  local.get $1
+  call $features/tail-calls/temporaryIndirect
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
  )
 )
