@@ -177,7 +177,7 @@
   assert(date.getTime() == 314240591274);
 }
 
-// Date#setUTCDay //////////////////////////////////////////////////////////////////////////////////
+// Date#getUTCDay //////////////////////////////////////////////////////////////////////////////////
 {
   // tests from test262
   const july6: i64 = 1467763200000;
@@ -193,6 +193,12 @@
   assert(new Date(july9 - 1).getUTCDay() == 5);
   assert(new Date(july9 + dayMs - 1).getUTCDay() == 6);
   assert(new Date(july9 + dayMs    ).getUTCDay() == 0);
+
+  assert(new Date(-8640000000000000).getUTCDay() == 2); // -271821-04-20
+  assert(new Date(-62183116800000).getUTCDay() == 4);   // -000001-07-01
+  assert(new Date(0).getUTCDay() == 4);                 // 1970-01-01
+  assert(new Date(1709164800000).getUTCDay() == 4);     // 2024-02-29
+  assert(new Date(8640000000000000).getUTCDay() == 6);  // +275760-09-13
 }
 
 // Date#setUTCMonth ////////////////////////////////////////////////////////////////////////////////

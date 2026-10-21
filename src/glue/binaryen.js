@@ -223,6 +223,9 @@ export const {
   _BinaryenUnaryGetValue,
   _BinaryenUnarySetValue,
 
+  _BinaryenWideIntAddSub,
+  _BinaryenWideIntMul,
+
   _BinaryenBinary,
   _BinaryenBinaryGetOp,
   _BinaryenBinarySetOp,

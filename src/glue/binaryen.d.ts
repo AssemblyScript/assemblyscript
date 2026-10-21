@@ -267,6 +267,9 @@ export declare function _BinaryenUnarySetOp(expr: ExpressionRef, op: Op): void;
 export declare function _BinaryenUnaryGetValue(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenUnarySetValue(expr: ExpressionRef, valueExpr: ExpressionRef): void;
 
+export declare function _BinaryenWideIntAddSub(module: ModuleRef, op: Op, leftLowExpr: ExpressionRef, leftHighExpr: ExpressionRef, rightLowExpr: ExpressionRef, rightHighExpr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenWideIntMul(module: ModuleRef, op: Op, leftExpr: ExpressionRef, rightExpr: ExpressionRef): ExpressionRef;
+
 export declare function _BinaryenBinary(module: ModuleRef, op: Op, leftExpr: ExpressionRef, rightExpr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenBinaryGetOp(expr: ExpressionRef): Op;
 export declare function _BinaryenBinarySetOp(expr: ExpressionRef, op: Op): void;

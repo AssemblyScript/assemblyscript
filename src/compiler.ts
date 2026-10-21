@@ -914,7 +914,8 @@ export class Compiler extends DiagnosticEmitter {
     let options = this.options;
     let module = this.module;
 
-    // import and/or export table if requested (default table is named '0' by Binaryen)
+    // import and/or export table if requested (default table is named '0' by Binaryen).
+    // non-imported tables are declared lazily on first indirect call, see ensureFunctionTable
     if (options.importTable) {
       module.addTableImport(
         CommonNames.DefaultTable,
@@ -2224,7 +2225,11 @@ export class Compiler extends DiagnosticEmitter {
     let memorySegment = instance.memorySegment;
     if (!memorySegment) {
 
-      // Add to the function table
+      // Add to the function table, declaring it on first use so effect analysis works
+      if (!this.options.importTable) {
+        this.module.ensureFunctionTable(CommonNames.DefaultTable);
+      }
+
       let functionTable = this.functionTable;
       let tableBase = this.options.tableBase;
       if (!tableBase) tableBase = 1; // leave first elem blank
@@ -7285,37 +7290,47 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    let allTrivial = (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) == 0;
+    if (operands && allTrivial) {
+      for (let i = 0; i < numOperands; ++i) {
+        if (!module.isTrivialExpression(operands[i])) {
+          allTrivial = false;
+          break;
+        }
+      }
+    }
+
+    let stmts = new Array<ExpressionRef>();
+    let sizeTypeRef = this.options.sizeTypeRef;
+
+    if (!allTrivial) {
+      let functionArgLocal = this.currentFlow.getTempLocal(this.options.usizeType);
+      let functionArgSetExpr = module.local_set(functionArgLocal.index, functionArg, true);
+      stmts.push(functionArgSetExpr);
+      functionArg = module.local_get(functionArgLocal.index, sizeTypeRef);
+    }
+
     // We might be calling a varargs stub here, even if all operands have been
     // provided, so we must set `argumentsLength` in any case. Inject setting it
     // into the index argument, which becomes executed last after any operands.
     let argumentsLength = this.ensureArgumentsLength();
-    let sizeTypeRef = this.options.sizeTypeRef;
-    if (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) {
-      let flow = this.currentFlow;
-      let temp = flow.getTempLocal(this.options.usizeType);
-      let tempIndex = temp.index;
-      functionArg = module.block(null, [
-        module.local_set(tempIndex, functionArg, true), // Function
-        module.global_set(argumentsLength, module.i32(numArguments)),
-        module.local_get(tempIndex, sizeTypeRef)
-      ], sizeTypeRef);
-    } else { // simplify
-      functionArg = module.block(null, [
-        module.global_set(argumentsLength, module.i32(numArguments)),
-        functionArg
-      ], sizeTypeRef);
-    }
+    let functionArgWithVararg = module.block(null, [
+      module.global_set(argumentsLength, module.i32(numArguments)),
+      functionArg
+    ], sizeTypeRef);
+
     if (operands) this.operandsTostack(signature, operands);
     let expr = module.call_indirect(
       null, // TODO: handle multiple tables
-      module.load(4, false, functionArg, TypeRef.I32), // ._index
+      module.load(4, false, functionArgWithVararg, TypeRef.I32), // ._index
       operands,
       signature.paramRefs,
       signature.resultRefs
     );
     this.currentType = returnType;
     this.currentReturnTypes = signature.returnTypes;
-    return expr;
+    stmts.push(expr);
+    return module.flatten(stmts, signature.resultRefs);
   }
 
   private compileCommaExpression(

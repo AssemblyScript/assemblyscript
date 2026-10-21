@@ -1,7 +1,6 @@
 (module
  (type $0 (func (param i32) (result i32)))
- (type $1 (func (result i32)))
- (type $2 (func (param i32 i32 i32 i32)))
+ (type $1 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34236))
  (memory $0 1)
@@ -15,7 +14,6 @@
  (data $3.1 (i32.const 1304) "\02\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data $4 (i32.const 1340) "|")
  (data $4.1 (i32.const 1352) "\02\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
- (table $0 1 1 funcref)
  (export "memory" (memory $0))
  (export "testVar" (func $export:assert-nonnull/testVar))
  (export "testObj" (func $export:assert-nonnull/testObj))
@@ -165,7 +163,6 @@
     br_if $folding-inner1
     local.get $0
     i32.load
-    call_indirect (type $1)
     unreachable
    end
    i32.const 34256
@@ -283,7 +280,6 @@
     br_if $folding-inner1
     local.get $0
     i32.load
-    call_indirect (type $1)
     unreachable
    end
    i32.const 34256
@@ -344,7 +340,6 @@
    end
    local.get $0
    i32.load
-   call_indirect (type $1)
    unreachable
   end
   i32.const 34256
@@ -456,7 +451,6 @@
    i32.store offset=4
    local.get $0
    i32.load
-   call_indirect (type $1)
    unreachable
   end
   i32.const 34256
@@ -505,7 +499,6 @@
    end
    local.get $0
    i32.load
-   call_indirect (type $1)
    unreachable
   end
   i32.const 34256
