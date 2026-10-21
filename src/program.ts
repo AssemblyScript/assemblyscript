@@ -2022,9 +2022,19 @@ export class Program extends DiagnosticEmitter {
             return false;
           }
         }
-        let returnType = signatureReference.returnType;
-        if (!this.checkTypeSupported(returnType, reportNode)) {
-          return false;
+        let returnTypes = signatureReference.returnTypes;
+        if (returnTypes) {
+          if (!this.checkFeatureEnabled(Feature.MultiValue, reportNode)) return false;
+          for (let i = 0, k = returnTypes.length; i < k; ++i) {
+            if (!this.checkTypeSupported(returnTypes[i], reportNode)) {
+              return false;
+            }
+          }
+        } else {
+          let returnType = signatureReference.returnType;
+          if (!this.checkTypeSupported(returnType, reportNode)) {
+            return false;
+          }
         }
       }
     }

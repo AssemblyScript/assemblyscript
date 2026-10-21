@@ -461,6 +461,7 @@ export class ASTBuilder {
 
   visitTupleTypeNode(node: TupleTypeNode): void {
     let sb = this.sb;
+    if (node.isReadonly) sb.push("readonly ");
     sb.push("[");
     let elements = node.elements;
     let elementNames = node.elementNames;

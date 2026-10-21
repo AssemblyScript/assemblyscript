@@ -435,6 +435,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     let returnTypeNode = node.returnType;
     let returnType: Type | null;
+    let returnTypes: Type[] | null = null;
     if (isTypeOmitted(returnTypeNode)) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -444,17 +445,84 @@ export class Resolver extends DiagnosticEmitter {
       }
       returnType = Type.void;
     } else {
-      returnType = this.resolveType(
-        returnTypeNode,
+      if (returnTypeNode.kind == NodeKind.TupleType && (<TupleTypeNode>returnTypeNode).isReadonly) {
+        returnType = Type.void;
+        returnTypes = this.resolveMultiValueReturnTypes(<TupleTypeNode>returnTypeNode, flow, ctxElement, ctxTypes, reportMode);
+        if (!returnTypes) return null;
+      } else {
+        returnType = this.resolveType(returnTypeNode, flow, ctxElement, ctxTypes, reportMode);
+      }
+      if (!returnType) return null;
+    }
+    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest, returnTypes);
+    return node.isNullable ? signature.type.asNullable() : signature.type;
+  }
+
+  /** Resolves a readonly tuple return annotation to multiple return types. */
+  private resolveMultiValueReturnTypes(
+    /** The readonly tuple return type to resolve. */
+    node: TupleTypeNode,
+    /** The flow */
+    flow: Flow | null,
+    /** Contextual element. */
+    ctxElement: Element,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> | null = null,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.Report
+  ): Type[] | null {
+    if (node.isNullable) {
+      if (reportMode == ReportMode.Report) {
+        this.error(
+          DiagnosticCode.Not_implemented_0,
+          node.range, "Nullable multi-value returns"
+        );
+      }
+      return null;
+    }
+    let elements = node.elements;
+    let numElements = elements.length;
+    if (numElements < 2) {
+      if (reportMode == ReportMode.Report) {
+        this.error(
+          DiagnosticCode.Not_implemented_0,
+          node.range, "Multi-value returns with fewer than two values"
+        );
+      }
+      return null;
+    }
+    let types = new Array<Type>(numElements);
+    for (let i = 0; i < numElements; ++i) {
+      let elementNode = elements[i];
+      if (elementNode.kind == NodeKind.TupleType) {
+        if (reportMode == ReportMode.Report) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            elementNode.range, "Nested tuple types"
+          );
+        }
+        return null;
+      }
+      let elementType = this.resolveType(
+        elementNode,
         flow,
         ctxElement,
         ctxTypes,
         reportMode
       );
-      if (!returnType) return null;
+      if (!elementType) return null;
+      if (elementType == Type.void) {
+        if (reportMode == ReportMode.Report) {
+          this.error(
+            DiagnosticCode.Type_0_is_illegal_in_this_context,
+            elementNode.range, elementType.toString()
+          );
+        }
+        return null;
+      }
+      types[i] = elementType;
     }
-    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest);
-    return node.isNullable ? signature.type.asNullable() : signature.type;
+    return types;
   }
 
   /** Resolves a {@link TupleTypeNode}. */
@@ -2892,6 +2960,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // resolve return type
     let returnType: Type;
+    let returnTypes: Type[] | null = null;
     if (prototype.is(CommonFlags.Set)) {
       returnType = Type.void; // not annotated
     } else if (prototype.is(CommonFlags.Constructor)) {
@@ -2907,18 +2976,18 @@ export class Resolver extends DiagnosticEmitter {
         }
         return null;
       }
-      let type = this.resolveType(
-        typeNode,
-        null,
-        prototype.parent, // relative to function
-        ctxTypes,
-        reportMode
-      );
-      if (!type) return null;
-      returnType = type;
+      if (typeNode.kind == NodeKind.TupleType && (<TupleTypeNode>typeNode).isReadonly) {
+        returnType = Type.void;
+        returnTypes = this.resolveMultiValueReturnTypes(<TupleTypeNode>typeNode, null, prototype.parent, ctxTypes, reportMode);
+        if (!returnTypes) return null;
+      } else {
+        let type = this.resolveType(typeNode, null, prototype.parent, ctxTypes, reportMode);
+        if (!type) return null;
+        returnType = type;
+      }
     }
 
-    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest);
+    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest, returnTypes);
 
     let nameInclTypeParameters = prototype.name;
     if (instanceKey.length) nameInclTypeParameters += `<${instanceKey}>`;

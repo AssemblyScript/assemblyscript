@@ -572,6 +572,7 @@ export class Parser extends DiagnosticEmitter {
     } else if (token == Token.Readonly) {
       let innerType = this.parseType(tn, acceptParenthesized, suppressErrors);
       if (!innerType) return null;
+      if (innerType.kind == NodeKind.TupleType) (<TupleTypeNode>innerType).isReadonly = true;
       type = innerType;
       type.range.start = startPos;
 
@@ -609,7 +610,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      type = Node.createTupleType(elements, hasElementNames ? elementNames : null, false, tn.range(startPos, tn.pos));
+      type = Node.createTupleType(elements, hasElementNames ? elementNames : null, false, tn.range(startPos, tn.pos), false);
 
     // 'void'
     } else if (token == Token.Void) {

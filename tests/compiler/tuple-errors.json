@@ -32,6 +32,17 @@
     "in tuple-errors.ts(53,35)",
     "in tuple-errors.ts(56,35)",
     "in tuple-errors.ts(60,39)",
-    "in tuple-errors.ts(63,39)"
+    "in tuple-errors.ts(63,39)",
+    "in tuple-errors.ts(67,13)",
+    "AS100: Not implemented: Tuple types",
+    "in tuple-errors.ts(69,52)",
+    "AS100: Not implemented: Multi-value returns with fewer than two values",
+    "in tuple-errors.ts(71,46)",
+    "AS100: Not implemented: Multi-value returns with fewer than two values",
+    "in tuple-errors.ts(74,46)",
+    "AS100: Not implemented: Nested tuple types",
+    "in tuple-errors.ts(77,58)",
+    "AS100: Not implemented: Nullable multi-value returns",
+    "in tuple-errors.ts(80,45)"
   ]
 }

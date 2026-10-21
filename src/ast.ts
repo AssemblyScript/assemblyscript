@@ -166,9 +166,10 @@ export abstract class Node {
     elements: TypeNode[],
     elementNames: (IdentifierExpression | null)[] | null,
     isNullable: bool,
-    range: Range
+    range: Range,
+    isReadonly: bool = false
   ): TupleTypeNode {
-    return new TupleTypeNode(elements, elementNames, isNullable, range);
+    return new TupleTypeNode(elements, elementNames, isNullable, range, isReadonly);
   }
 
   static createOmittedType(
@@ -954,7 +955,9 @@ export class TupleTypeNode extends TypeNode {
     /** Whether nullable or not. */
     isNullable: bool,
     /** Source range. */
-    range: Range
+    range: Range,
+    /** Whether this is a readonly tuple. */
+    public isReadonly: bool = false
   ) {
     super(NodeKind.TupleType, isNullable, range);
   }

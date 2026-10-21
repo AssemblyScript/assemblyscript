@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+    "--enable", "multi-value",
+    "--bindings", "raw"
+  ],
+  "stderr": [
+    "AS100: Not implemented: Exported multi-value functions are not yet supported with --bindings",
+    "in tuple-bindings.ts(1,17)"
+  ]
+}

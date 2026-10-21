@@ -946,6 +946,8 @@ export class Signature {
     requiredParameters: i32 = parameterTypes ? parameterTypes.length : 0,
     /** Whether the last parameter is a rest parameter. */
     hasRest: bool = false,
+    /** Return types, if this signature returns multiple values. */
+    returnTypes: Type[] | null = null,
   ): Signature {
     // get the usize type, and the type of the signature
     let usizeType = program.options.usizeType;
@@ -960,7 +962,7 @@ export class Signature {
     let nextId = program.nextSignatureId;
     
     // construct the signature and calculate it's unique key
-    let signature = new Signature(program, parameterTypes, returnType, thisType, requiredParameters, hasRest, nextId, type);
+    let signature = new Signature(program, parameterTypes, returnType, thisType, requiredParameters, hasRest, nextId, type, returnTypes );
     let uniqueKey = signature.toString();
 
     // check if it exists, and return it
@@ -995,6 +997,8 @@ export class Signature {
     public readonly id: u32,
     /** Respective function type. */
     public readonly type: Type,
+    /** Return types, if this signature returns multiple values. */
+    public readonly returnTypes: Type[] | null = null,
   ) {}
 
   get paramRefs(): TypeRef {
@@ -1016,6 +1020,8 @@ export class Signature {
   }
 
   get resultRefs(): TypeRef {
+    let returnTypes = this.returnTypes;
+    if (returnTypes) return createType(typesToRefs(returnTypes));
     return this.returnType.toRef();
   }
 
@@ -1035,7 +1041,7 @@ export class Signature {
     if (this.hasRest != other.hasRest) return false;
 
     // check return type
-    if (!this.returnType.equals(other.returnType)) return false;
+    if (!signatureReturnTypesEqual(this, other)) return false;
 
     // check parameter types
     let selfParameterTypes = this.parameterTypes;
@@ -1069,11 +1075,7 @@ export class Signature {
     if (this.hasRest != target.hasRest) return false; // TODO
 
     // check return type (covariant)
-    let thisReturnType = this.returnType;
-    let targetReturnType = target.returnType;
-    if (!(thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType))) {
-      return false;
-    }
+    if (!signatureReturnTypesAssignableTo(this, target)) return false;
     // check parameter types (invariant)
     let thisParameterTypes = this.parameterTypes;
     let targetParameterTypes = target.parameterTypes;
@@ -1176,7 +1178,17 @@ export class Signature {
       }
     }
     sb.push(validWat ? "%29=>" : ") => ");
-    sb.push(this.returnType.toString(validWat));
+    let returnTypes = this.returnTypes;
+    if (returnTypes) {
+      sb.push("readonly [");
+      for (let i = 0, k = returnTypes.length; i < k; ++i) {
+        if (i) sb.push(validWat ? "," : ", ");
+        sb.push(returnTypes[i].toString(validWat));
+      }
+      sb.push("]");
+    } else {
+      sb.push(this.returnType.toString(validWat));
+    }
     return sb.join("");
   }
 
@@ -1194,7 +1206,47 @@ export class Signature {
       this.returnType,
       this.thisType,
       requiredParameters,
-      hasRest
+      hasRest,
+      this.returnTypes
     );
   }
+}
+
+function signatureReturnTypesEqual(left: Signature, right: Signature): bool {
+  let leftReturnTypes = left.returnTypes;
+  let rightReturnTypes = right.returnTypes;
+  if (leftReturnTypes) {
+    return rightReturnTypes != null && typesEqual(leftReturnTypes, rightReturnTypes);
+  }
+  return !rightReturnTypes && left.returnType.equals(right.returnType);
+}
+
+function signatureReturnTypesAssignableTo(left: Signature, right: Signature): bool {
+  let leftReturnTypes = left.returnTypes;
+  let rightReturnTypes = right.returnTypes;
+  if (leftReturnTypes) {
+    return rightReturnTypes != null && typesAssignableTo(leftReturnTypes, rightReturnTypes);
+  }
+  if (rightReturnTypes) return false;
+  let leftReturnType = left.returnType;
+  let rightReturnType = right.returnType;
+  return leftReturnType == rightReturnType || leftReturnType.isAssignableTo(rightReturnType);
+}
+
+function typesEqual(left: Type[], right: Type[]): bool {
+  let numTypes = left.length;
+  if (numTypes != right.length) return false;
+  for (let i = 0; i < numTypes; ++i) {
+    if (!left[i].equals(right[i])) return false;
+  }
+  return true;
+}
+
+function typesAssignableTo(left: Type[], right: Type[]): bool {
+  let numTypes = left.length;
+  if (numTypes != right.length) return false;
+  for (let i = 0; i < numTypes; ++i) {
+    if (!left[i].isAssignableTo(right[i])) return false;
+  }
+  return true;
 }

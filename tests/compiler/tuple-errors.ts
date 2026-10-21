@@ -63,3 +63,20 @@ export function TupleTypeMismatch1(x: [i32, f32]): [f32, i32] {
 export function TupleTypeMismatch2(x: [f64, f32]): [f32, f64] {
   return x;
 }
+
+export type ReadonlyTupleAliasUnimplemented = readonly [i32, i32];
+
+export function ReadonlyTupleParamUnimplemented(x: readonly [i32, i32]): void {}
+
+export function MultiValueReturnTooShort1(): readonly [] {
+  return [];
+}
+export function MultiValueReturnTooShort2(): readonly [i32] {
+  return [0];
+}
+export function MultiValueReturnNested(): readonly [i32, readonly [i32, i32]] {
+  return [0, [1, 2]];
+}
+export function MultiValueReturnNullable(): readonly [i32, i32] | null {
+  return [0, 1];
+}
