@@ -61,6 +61,7 @@ import {
   LiteralKind,
   ParenthesizedExpression,
   AssertionExpression,
+  CompiledExpression,
   Expression,
   IntegerLiteralExpression,
   UnaryPrefixExpression,
@@ -1083,6 +1084,9 @@ export class Resolver extends DiagnosticEmitter {
       node = (<ParenthesizedExpression>node).expression;
     }
     switch (node.kind) {
+      case NodeKind.Compiled: {
+        return (<CompiledExpression>node).type;
+      }
       case NodeKind.Assertion: {
         return this.resolveAssertionExpression(
           <AssertionExpression>node,

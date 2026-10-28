@@ -4079,6 +4079,13 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let module = this.module;
     let left = expression.left;
+    let assignmentTarget = left;
+    let preparedAssignment: {
+      readExpression: Expression;
+      writeExpression: Expression;
+      targetLocal: Local;
+      indexLocal: Local;
+    } | null = null;
     let right = expression.right;
 
     let leftExpr: ExpressionRef;
@@ -4091,6 +4098,29 @@ export class Compiler extends DiagnosticEmitter {
     let compound = false;
 
     let operator = expression.operator;
+    switch (operator) {
+      case Token.Plus_Equals:
+      case Token.Minus_Equals:
+      case Token.Asterisk_Equals:
+      case Token.Asterisk_Asterisk_Equals:
+      case Token.Slash_Equals:
+      case Token.Percent_Equals:
+      case Token.LessThan_LessThan_Equals:
+      case Token.GreaterThan_GreaterThan_Equals:
+      case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
+      case Token.Ampersand_Equals:
+      case Token.Bar_Equals:
+      case Token.Caret_Equals: {
+        compound = true;
+        let prepared = this.prepareCompoundElementAccess(left);
+        if (prepared) {
+          preparedAssignment = prepared;
+          left = prepared.readExpression;
+          assignmentTarget = prepared.writeExpression;
+        }
+        break;
+      }
+    }
     switch (operator) {
       case Token.LessThan:
       case Token.GreaterThan:
@@ -4798,7 +4828,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (!compound) return expr;
     let resolver = this.resolver;
-    let target = resolver.lookupExpression(left, this.currentFlow);
+    let target = resolver.lookupExpression(assignmentTarget, this.currentFlow);
     if (!target) return module.unreachable();
     let targetType = resolver.getTypeOfElement(target);
     if (!targetType) targetType = Type.void;
@@ -4809,15 +4839,112 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.unreachable();
     }
+    if (preparedAssignment && target.kind == ElementKind.IndexSignature) {
+      let indexSignature = <IndexSignature>target;
+      let parent = indexSignature.parent;
+      assert(parent.kind == ElementKind.Class);
+      let classInstance = <Class>parent;
+      let isUnchecked = this.currentFlow.is(FlowFlags.UncheckedContext);
+      let getterInstance = classInstance.lookupOverload(OperatorKind.IndexedGet, isUnchecked);
+      let setterInstance = classInstance.lookupOverload(OperatorKind.IndexedSet, isUnchecked);
+      if (
+        getterInstance && setterInstance &&
+        getterInstance.signature.parameterTypes[0].equals(setterInstance.signature.parameterTypes[0])
+      ) {
+        let valueType = this.currentType;
+        let valueLocal = this.currentFlow.getTempLocal(valueType);
+        let targetExpr = module.local_get(preparedAssignment.targetLocal.index, classInstance.type.toRef());
+        let indexExpr = module.local_get(
+          preparedAssignment.indexLocal.index,
+          setterInstance.signature.parameterTypes[0].toRef()
+        );
+        let setExpression = this.makeCallDirect(setterInstance, [
+          targetExpr,
+          indexExpr,
+          module.local_get(valueLocal.index, valueType.toRef())
+        ], right);
+        let expressions = [
+          module.local_set(valueLocal.index, expr, valueType.isManaged),
+          setExpression
+        ];
+        if (contextualType == Type.void) {
+          this.currentType = Type.void;
+          return module.block(null, expressions, Type.void.toRef());
+        }
+        let returnType = getterInstance.signature.returnType;
+        expressions.push(this.makeCallDirect(getterInstance, [
+          module.local_get(preparedAssignment.targetLocal.index, classInstance.type.toRef()),
+          module.local_get(preparedAssignment.indexLocal.index, getterInstance.signature.parameterTypes[0].toRef())
+        ], right));
+        this.currentType = returnType;
+        return module.block(null, expressions, returnType.toRef());
+      }
+    }
+    let thisExpression = resolver.currentThisExpression;
+    let elementExpression = resolver.currentElementExpression;
+    if (preparedAssignment) {
+      let writeAccess = <ElementAccessExpression>preparedAssignment.writeExpression;
+      thisExpression = writeAccess.expression;
+      elementExpression = writeAccess.elementExpression;
+    }
     return this.makeAssignment(
       target,
       expr,
       this.currentType,
       right,
-      resolver.currentThisExpression,
-      resolver.currentElementExpression,
-      contextualType != Type.void
+      thisExpression,
+      elementExpression,
+      contextualType != Type.void,
+      preparedAssignment ? preparedAssignment.targetLocal : null,
+      preparedAssignment ? preparedAssignment.indexLocal : null
     );
+  }
+
+  private prepareCompoundElementAccess(expression: Expression): {
+    readExpression: Expression;
+    writeExpression: Expression;
+    targetLocal: Local;
+    indexLocal: Local;
+  } | null {
+    if (expression.kind != NodeKind.ElementAccess) return null;
+
+    let elementAccess = <ElementAccessExpression>expression;
+    let flow = this.currentFlow;
+    let resolver = this.resolver;
+    let targetType = resolver.resolveExpression(elementAccess.expression, flow);
+    if (!targetType) return null;
+    let classReference = targetType.getClassOrWrapper(this.program);
+    if (!classReference) return null;
+    let isUnchecked = flow.is(FlowFlags.UncheckedContext);
+    let indexedGet = classReference.lookupOverload(OperatorKind.IndexedGet, isUnchecked);
+    if (!indexedGet) return null;
+
+    let module = this.module;
+    let thisType = assert(indexedGet.signature.thisType);
+    let indexType = indexedGet.signature.parameterTypes[0];
+    let targetExpr = this.compileExpression(elementAccess.expression, thisType, Constraints.ConvImplicit);
+    let targetLocal = flow.getTempLocal(thisType);
+    if (!flow.canOverflow(targetExpr, thisType)) flow.setLocalFlag(targetLocal.index, LocalFlags.Wrapped);
+    if (flow.isNonnull(targetExpr, thisType)) flow.setLocalFlag(targetLocal.index, LocalFlags.NonNull);
+    let targetTee = module.local_tee(targetLocal.index, targetExpr, thisType.isManaged);
+
+    let indexExpr = this.compileExpression(elementAccess.elementExpression, indexType, Constraints.ConvImplicit);
+    let indexLocal = flow.getTempLocal(indexType);
+    if (!flow.canOverflow(indexExpr, indexType)) flow.setLocalFlag(indexLocal.index, LocalFlags.Wrapped);
+    if (flow.isNonnull(indexExpr, indexType)) flow.setLocalFlag(indexLocal.index, LocalFlags.NonNull);
+    let indexTee = module.local_tee(indexLocal.index, indexExpr, indexType.isManaged);
+
+    let readExpression = new ElementAccessExpression(
+      new CompiledExpression(targetTee, thisType, elementAccess.expression.range),
+      new CompiledExpression(indexTee, indexType, elementAccess.elementExpression.range),
+      elementAccess.range
+    );
+    let writeExpression = new ElementAccessExpression(
+      new CompiledExpression(module.local_get(targetLocal.index, thisType.toRef()), thisType, elementAccess.expression.range),
+      new CompiledExpression(module.local_get(indexLocal.index, indexType.toRef()), indexType, elementAccess.elementExpression.range),
+      elementAccess.range
+    );
+    return { readExpression, writeExpression, targetLocal, indexLocal };
   }
 
   makeLt(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
@@ -5833,7 +5960,11 @@ export class Compiler extends DiagnosticEmitter {
     /** Index expression reference if an indexed set. */
     indexExpression: Expression | null,
     /** Whether to tee the value. */
-    tee: bool
+    tee: bool,
+    /** Cached receiver for compound indexed assignments. */
+    cachedTarget: Local | null = null,
+    /** Cached index for compound indexed assignments. */
+    cachedIndex: Local | null = null
   ): ExpressionRef {
     let module = this.module;
     let flow = this.currentFlow;
@@ -5963,11 +6094,13 @@ export class Compiler extends DiagnosticEmitter {
         }
         assert(setterInstance.signature.parameterTypes.length == 2);
         let thisType = classInstance.type;
-        let thisExpr = this.compileExpression(
-          assert(thisExpression),
-          thisType,
-          Constraints.ConvImplicit | Constraints.IsThis
-        );
+        let thisExpr = cachedTarget
+          ? module.local_get(cachedTarget.index, thisType.toRef())
+          : this.compileExpression(
+            assert(thisExpression),
+            thisType,
+            Constraints.ConvImplicit | Constraints.IsThis
+          );
         let setterIndexType = setterInstance.signature.parameterTypes[0];
         let getterIndexType = getterInstance.signature.parameterTypes[0];
         if (!setterIndexType.equals(getterIndexType)) {
@@ -5980,8 +6113,10 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = tee ? getterInstance.signature.returnType : Type.void;
           return module.unreachable();
         }
-        let elementExpr = this.compileExpression(assert(indexExpression), setterIndexType, Constraints.ConvImplicit);
-        let elementType = this.currentType;
+        let elementExpr = cachedIndex
+          ? module.local_get(cachedIndex.index, setterIndexType.toRef())
+          : this.compileExpression(assert(indexExpression), setterIndexType, Constraints.ConvImplicit);
+        let elementType = cachedIndex ? setterIndexType : this.currentType;
         if (tee) {
           let tempTarget = flow.getTempLocal(thisType);
           let tempElement = flow.getTempLocal(elementType);
@@ -7176,7 +7311,9 @@ export class Compiler extends DiagnosticEmitter {
     let module = this.module;
     let targetExpression = expression.expression;
     let resolver = this.resolver;
-    let targetElement = resolver.lookupExpression(targetExpression, this.currentFlow, Type.auto, ReportMode.Swallow);
+    let targetElement = targetExpression.kind == NodeKind.Compiled
+      ? null
+      : resolver.lookupExpression(targetExpression, this.currentFlow, Type.auto, ReportMode.Swallow);
     if (targetElement && targetElement.kind == ElementKind.Enum) {
       const elementExpr = this.compileExpression(expression.elementExpression, Type.i32, Constraints.ConvImplicit);
       const toStringFunctionName = this.ensureEnumToString(<Enum>targetElement, expression);
