@@ -4926,17 +4926,25 @@
  (func $start:resolve-elementaccess
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
+  (local $2 f32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 f32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 20
+  i32.const 24
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.const 20
+  i32.const 24
   memory.fill
   memory.size
   i32.const 16
@@ -4960,38 +4968,38 @@
   call $~lib/typedarray/Float32Array#constructor
   global.set $resolve-elementaccess/arr
   global.get $resolve-elementaccess/arr
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 0
   f32.const 1
   call $~lib/typedarray/Float32Array#__set
   global.get $resolve-elementaccess/arr
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 1
   f32.const 2
   call $~lib/typedarray/Float32Array#__set
   global.get $resolve-elementaccess/arr
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store offset=4
-  local.get $4
+  local.get $12
   i32.const 0
   call $~lib/typedarray/Float32Array#__get
   i32.const 0
   call $~lib/number/F32#toString
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 2144
   call $~lib/string/String.__eq
   i32.eqz
@@ -5004,20 +5012,20 @@
    unreachable
   end
   global.get $resolve-elementaccess/arr
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store offset=4
-  local.get $4
+  local.get $12
   i32.const 1
   call $~lib/typedarray/Float32Array#__get
   i32.const 0
   call $~lib/number/F32#toString
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 2256
   call $~lib/string/String.__eq
   i32.eqz
@@ -5034,39 +5042,41 @@
   local.tee $0
   i32.store offset=8
   local.get $0
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store offset=4
-  local.get $4
+  local.get $12
   i32.const 0
   local.tee $1
-  global.get $resolve-elementaccess/arr
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store offset=12
-  local.get $4
-  i32.const 0
   call $~lib/typedarray/Float32Array#__get
   f32.const 10
   f32.add
+  local.set $2
+  local.get $0
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store offset=4
+  local.get $12
+  local.get $1
+  local.get $2
   call $~lib/typedarray/Float32Array#__set
   local.get $0
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store offset=4
-  local.get $4
+  local.get $12
   local.get $1
   call $~lib/typedarray/Float32Array#__get
   i32.const 0
   call $~lib/number/F32#toString
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 2288
   call $~lib/string/String.__eq
   i32.eqz
@@ -5078,30 +5088,37 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-elementaccess/arr
-  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  global.get $resolve-elementaccess/arr
+  local.tee $3
+  i32.store offset=12
+  local.get $3
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 0
-  global.get $resolve-elementaccess/arr
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store offset=4
-  local.get $4
-  i32.const 0
+  local.tee $4
   call $~lib/typedarray/Float32Array#__get
   f32.const 10
   f32.add
+  local.set $5
+  local.get $3
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store
+  local.get $12
+  local.get $4
+  local.get $5
   call $~lib/typedarray/Float32Array#__set
   global.get $resolve-elementaccess/arr
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 0
   call $~lib/typedarray/Float32Array#__get
   f32.const 21
@@ -5120,38 +5137,38 @@
   call $resolve-elementaccess/Buffer#constructor
   global.set $resolve-elementaccess/buf
   global.get $resolve-elementaccess/buf
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 0
   i32.const 1
   call $~lib/typedarray/Uint8Array#__set
   global.get $resolve-elementaccess/buf
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 1
   i32.const 2
   call $~lib/typedarray/Uint8Array#__set
   global.get $resolve-elementaccess/buf
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store offset=4
-  local.get $4
+  local.get $12
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
   i32.const 10
   call $~lib/number/U8#toString
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 3696
   call $~lib/string/String.__eq
   i32.eqz
@@ -5164,20 +5181,20 @@
    unreachable
   end
   global.get $resolve-elementaccess/buf
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store offset=4
-  local.get $4
+  local.get $12
   i32.const 1
   call $~lib/typedarray/Uint8Array#__get
   i32.const 10
   call $~lib/number/U8#toString
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 3728
   call $~lib/string/String.__eq
   i32.eqz
@@ -5191,42 +5208,44 @@
   end
   global.get $~lib/memory/__stack_pointer
   global.get $resolve-elementaccess/buf
-  local.tee $2
+  local.tee $6
   i32.store offset=16
-  local.get $2
-  local.set $4
+  local.get $6
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store offset=4
-  local.get $4
+  local.get $12
   i32.const 0
-  local.tee $3
-  global.get $resolve-elementaccess/buf
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store offset=12
-  local.get $4
-  i32.const 0
+  local.tee $7
   call $~lib/typedarray/Uint8Array#__get
   i32.const 10
   i32.add
-  call $~lib/typedarray/Uint8Array#__set
-  local.get $2
-  local.set $4
+  local.set $8
+  local.get $6
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store offset=4
-  local.get $4
-  local.get $3
+  local.get $12
+  local.get $7
+  local.get $8
+  call $~lib/typedarray/Uint8Array#__set
+  local.get $6
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store offset=4
+  local.get $12
+  local.get $7
   call $~lib/typedarray/Uint8Array#__get
   i32.const 10
   call $~lib/number/U8#toString
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 3760
   call $~lib/string/String.__eq
   i32.eqz
@@ -5238,30 +5257,37 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-elementaccess/buf
-  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  global.get $resolve-elementaccess/buf
+  local.tee $9
+  i32.store offset=20
+  local.get $9
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 0
-  global.get $resolve-elementaccess/buf
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store offset=4
-  local.get $4
-  i32.const 0
+  local.tee $10
   call $~lib/typedarray/Uint8Array#__get
   i32.const 10
   i32.add
+  local.set $11
+  local.get $9
+  local.set $12
+  global.get $~lib/memory/__stack_pointer
+  local.get $12
+  i32.store
+  local.get $12
+  local.get $10
+  local.get $11
   call $~lib/typedarray/Uint8Array#__set
   global.get $resolve-elementaccess/buf
-  local.set $4
+  local.set $12
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $12
   i32.store
-  local.get $4
+  local.get $12
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
   i32.const 21
@@ -5276,7 +5302,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 20
+  i32.const 24
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
