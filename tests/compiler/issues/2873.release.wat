@@ -6238,11 +6238,11 @@
      i32.const 1
      i32.shr_u
      local.tee $4
-     i32.const 32
+     i32.const 28
      i32.add
      local.get $3
      i32.mul
-     i32.const 32
+     i32.const 28
      i32.add
      local.tee $5
      i32.const 1
@@ -6432,11 +6432,11 @@
      i32.const 1
      i32.shr_u
      local.tee $4
-     i32.const 32
+     i32.const 28
      i32.add
      local.get $3
      i32.mul
-     i32.const 32
+     i32.const 28
      i32.add
      local.tee $5
      i32.const 1

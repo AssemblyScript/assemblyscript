@@ -29756,11 +29756,11 @@
      i32.const 1
      i32.shr_u
      local.tee $10
-     i32.const 32
+     i32.const 28
      i32.add
      local.get $9
      i32.mul
-     i32.const 32
+     i32.const 28
      i32.add
      local.tee $11
      i32.const 1

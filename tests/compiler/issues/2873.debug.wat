@@ -9903,12 +9903,12 @@
   local.get $10
   call $~lib/string/String#get:length
   local.set $sepLen
-  i32.const 32
+  i32.const 28
   local.get $sepLen
   i32.add
   local.get $lastIndex
   i32.mul
-  i32.const 32
+  i32.const 28
   i32.add
   local.set $estLen
   global.get $~lib/memory/__stack_pointer
@@ -10123,12 +10123,12 @@
   local.get $10
   call $~lib/string/String#get:length
   local.set $sepLen
-  i32.const 32
+  i32.const 28
   local.get $sepLen
   i32.add
   local.get $lastIndex
   i32.mul
-  i32.const 32
+  i32.const 28
   i32.add
   local.set $estLen
   global.get $~lib/memory/__stack_pointer

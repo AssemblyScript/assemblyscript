@@ -4,10 +4,11 @@ import {
 import { dtoa as numberDtoa, dtoa_buffered as numberBuffered } from "util/number";
 
 // The allocator can grow into host-grown memory during the string sweep.
-const output = memory.data(64);
+// 28 UTF-16 code units with a canary on each side, checked by the host.
+const output = memory.data(60);
 
 export function outputBuffer(): usize {
-  return output;
+  return output + 2;
 }
 
 // Called by the JS differential harness with exact input bit patterns.
@@ -73,30 +74,30 @@ for (let lane = 0; lane < 4; ++lane) {
 }
 
 // Writers may store complete digit blocks beyond the logical end. Keep the
-// canary after the documented 32-code-unit capacity.
-const guarded = memory.data(68);
+// canary after the documented 28-code-unit capacity.
+const guarded = memory.data(60);
 
 function check64(value: f64, expected: string, normalized: bool = false): void {
   store<u16>(guarded, 0x5a5a);
-  store<u16>(guarded + 66, 0x6b6b);
+  store<u16>(guarded + 58, 0x6b6b);
   let count = numberBuffered<f64>(guarded + 2, value);
   assert(count == expected.length);
   for (let i: u32 = 0; i < count; ++i)
     assert(load<u16>(guarded + 2 + (<usize>i << 1)) == expected.charCodeAt(i));
   assert(load<u16>(guarded) == 0x5a5a);
-  assert(load<u16>(guarded + 66) == 0x6b6b);
+  assert(load<u16>(guarded + 58) == 0x6b6b);
   if (normalized) assert(gSig >= 1000000000000000 && gSig < 10000000000000000);
 }
 
 function check32(value: f32, expected: string): void {
   store<u16>(guarded, 0x5a5a);
-  store<u16>(guarded + 66, 0x6b6b);
+  store<u16>(guarded + 58, 0x6b6b);
   let count = numberBuffered<f32>(guarded + 2, value);
   assert(count == expected.length);
   for (let i: u32 = 0; i < count; ++i)
     assert(load<u16>(guarded + 2 + (<usize>i << 1)) == expected.charCodeAt(i));
   assert(load<u16>(guarded) == 0x5a5a);
-  assert(load<u16>(guarded + 66) == 0x6b6b);
+  assert(load<u16>(guarded + 58) == 0x6b6b);
 }
 
 check64(0.1 + 0.2, "0.30000000000000004", true);
@@ -138,3 +139,15 @@ assert(changetype<usize>(numberDtoa<f64>(-Infinity)) == changetype<usize>("-Infi
 assert(changetype<usize>(numberDtoa<f32>(<f32>NaN)) == changetype<usize>("NaN"));
 assert(changetype<usize>(numberDtoa<f32>(<f32>Infinity)) == changetype<usize>("Infinity"));
 assert(changetype<usize>(numberDtoa<f32>(<f32>-Infinity)) == changetype<usize>("-Infinity"));
+
+// Allocation regression: keep the shared float-join estimate at 28 code units.
+// The stub allocator retains the temporary and final strings, so sentinel
+// addresses measure the full span without relying on private allocator state.
+export function joinAllocation(): usize {
+  const values = new Float64Array(1000);
+  const before = new ArrayBuffer(0);
+  const joined = values.join("");
+  assert(joined.length == 3000);
+  const after = new ArrayBuffer(0);
+  return changetype<usize>(after) - changetype<usize>(before);
+}

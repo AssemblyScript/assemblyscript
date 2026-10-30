@@ -4,10 +4,10 @@ import { idof } from "../builtins";
 import { CharCode } from "./string";
 import * as floatFormat from "./dtoa";
 
-// >= 32 code units (64 bytes) per value
+// 28 code units (56 bytes) per value, including full digit-block stores.
 // @ts-ignore: decorator
 @inline
-export const MAX_DOUBLE_LENGTH = 32;
+export const MAX_DOUBLE_LENGTH = 28;
 
 /*
   Lookup table for pairwise char codes in range [0-99]

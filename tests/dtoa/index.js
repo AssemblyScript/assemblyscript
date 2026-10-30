@@ -1,4 +1,5 @@
 import asc from "../../dist/asc.js";
+import "./oracle.test.js";
 import { shortestFloat32, withAssemblyScriptDotZero } from "./oracle.js";
 import { verifyPowers } from "./powers.js";
 
@@ -78,6 +79,7 @@ function makeCases32() {
   for (const value of [10000, 99999, 1234567, 16777215, 16777216, 16777218]) {
     addSigned(bits32(value));
   }
+  for (const bits of [0x15ae43fd, 0x15ae43fe]) addSigned(bits);
   for (let i = 0; i < 2048; ++i) patterns.add(random32());
   return [...patterns].map(bits => [bits, withAssemblyScriptDotZero(shortestFloat32(bits))]);
 }
@@ -88,21 +90,39 @@ const cases32 = makeCases32();
 function compareExactOutput(exports, mode) {
   const { memory, format64Bits, format32Bits, string64Bits, string32Bits } = exports;
   const buffer = exports.outputBuffer();
+  function resetCanaries() {
+    const view = new DataView(memory.buffer);
+    view.setUint16(buffer - 2, 0x5a5a, true);
+    view.setUint16(buffer + 56, 0x6b6b, true);
+  }
+  function checkCanaries() {
+    const view = new DataView(memory.buffer);
+    if (view.getUint16(buffer - 2, true) !== 0x5a5a || view.getUint16(buffer + 56, true) !== 0x6b6b) {
+      throw new Error(`${mode}: formatter wrote outside the 28-code-unit buffer`);
+    }
+  }
+  if (exports.joinAllocation() >= 64000) {
+    throw new Error(`${mode}: float-array join exceeded the 28-code-unit allocation budget`);
+  }
   for (const [label, format64, format32] of [
     ["buffered", format64Bits, format32Bits],
     ["string", string64Bits, string32Bits],
   ]) {
     for (const [bits, expected] of cases64) {
+      resetCanaries();
       const length = format64(bits, buffer);
-      if (length > 32) throw new Error(`${mode} ${label} f64 length ${length} exceeds buffer capacity`);
+      checkCanaries();
+      if (length > 28) throw new Error(`${mode} ${label} f64 length ${length} exceeds buffer capacity`);
       const actual = String.fromCharCode(...new Uint16Array(memory.buffer, buffer, length));
       if (actual !== expected) {
         throw new Error(`${mode} ${label} f64 0x${bits.toString(16)}: ${JSON.stringify(actual)} != ${JSON.stringify(expected)}`);
       }
     }
     for (const [bits, expected] of cases32) {
+      resetCanaries();
       const length = format32(bits, buffer);
-      if (length > 32) throw new Error(`${mode} ${label} f32 length ${length} exceeds buffer capacity`);
+      checkCanaries();
+      if (length > 28) throw new Error(`${mode} ${label} f32 length ${length} exceeds buffer capacity`);
       const actual = String.fromCharCode(...new Uint16Array(memory.buffer, buffer, length));
       if (actual !== expected) {
         throw new Error(`${mode} ${label} f32 0x${bits.toString(16)}: ${JSON.stringify(actual)} != ${JSON.stringify(expected)}`);
