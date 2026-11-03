@@ -410,7 +410,7 @@ export function itoa64(value: i64, radix: i32): String {
 
 
 // @ts-ignore: decorator
-@lazy @inline const dtoa_buf = memory.data(128);
+@lazy @inline const dtoa_buf = memory.data(MAX_DOUBLE_LENGTH << 1);
 
 export function dtoa<T extends number>(value: T): String {
   if (value == 0) return "0.0";

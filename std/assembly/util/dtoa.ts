@@ -1,5 +1,5 @@
 import { CharCode, POWERS10 } from "./string";
-import { DIGITS, MAX_DOUBLE_LENGTH } from "./number";
+import { DIGITS } from "./number";
 
 // Fixed-point log significands shared by the dec-exp / binary-exp estimates below.
 @lazy @inline const LOG10_2_SIGNIFICAND = 0x4D105; // ~(log10(2) * 2**20)
