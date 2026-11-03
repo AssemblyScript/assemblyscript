@@ -792,27 +792,17 @@ assert(dtoa(1.1e+128) == "1.1e+128");
 assert(dtoa(1.1e-64) == "1.1e-64");
 assert(dtoa(0.000035689) == "0.000035689");
 
-// FIXME: The following are imprecise rounding issues for Grisu algorithm. Need workaround.
+assert(dtoa(1.2345e+21) == "1.2345e+21");
+assert(dtoa(2.98023223876953125e-8) == "2.9802322387695312e-8");
+assert(dtoa(-2.109808898695963e+16) == "-21098088986959630.0");
+assert(dtoa(-0.0000010471975511965976) == "-0.0000010471975511965976");
+assert(dtoa(0.1 + 0.2) == "0.30000000000000004");
 
-// Expected: 1.2345e+21
-// Actual:   1.2344999999999999e+21
-// assert(dtoa(1.2345e+21) == "1.2345e+21");
-
-// Expected: 2.98023223876953125e-8
-// Actual:   2.9802322387695315e-8
-// assert(dtoa(2.98023223876953125e-8) == "2.9802322387695312e-8");
-
-// Expected: -2.109808898695963e+16
-// Actual:   -21098088986959633.0
-// assert(dtoa(-2.109808898695963e+16) == "-21098088986959630.0");
-
-// Expected: -0.0000010471975511965976
-// Actual:   -0.0000010471975511965977
-// assert(dtoa(-0.0000010471975511965976) == "-0.0000010471975511965976");
-
-// Expected: 0.30000000000000004
-// Actual:   0.30000000000000007
-// assert(dtoa(0.1 + 0.2)   == "0.30000000000000004");
+// f32 significands with a leading zero in the eight-digit formatter block.
+assert(dtoa(reinterpret<f32>(0xb874bd31)) == "-0.00005835033");
+assert(dtoa(reinterpret<f32>(0x6d594b6b)) == "4.203089e+27");
+assert(dtoa(reinterpret<f32>(0xc2b52751)) == "-90.57679");
+assert(dtoa(reinterpret<f32>(0x4c8d5cd0)) == "74114690.0");
 
 
 // concat
