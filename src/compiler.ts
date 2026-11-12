@@ -3802,8 +3802,8 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         // small i32 to ...
         if (fromType.isShortIntegerValue) {
-          // small i32 to larger i32
-          if (fromType.size < toType.size) {
+          // small i32 to larger i32, or to bool, which tests all 32 bits
+          if (fromType.size < toType.size || toType.isBooleanValue) {
             expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
           }
         // same size

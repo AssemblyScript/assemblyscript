@@ -71,3 +71,27 @@ assert(<bool>F13 == false);
 
 var uu = <u8>2;
 assert(<bool>uu == true);
+
+// small integers are wrapped before testing them, so a value that overflowed to 0 is false
+function u8PlusOne(a: u8): bool {
+  let c: u8 = a + 1;
+  return <bool>c;
+}
+assert(u8PlusOne(255) == false);
+assert(u8PlusOne(0) == true);
+function i8PlusOne(a: i8): bool {
+  let c: i8 = a + 1;
+  return c as bool;
+}
+assert(i8PlusOne(-1) == false);
+assert(i8PlusOne(127) == true);
+function u16PlusOne(a: u16): bool {
+  let c: u16 = a + 1;
+  return bool(c);
+}
+assert(u16PlusOne(65535) == false);
+function i16PlusOne(a: i16): bool {
+  let c: i16 = a + 1;
+  return <bool>c;
+}
+assert(i16PlusOne(-1) == false);
