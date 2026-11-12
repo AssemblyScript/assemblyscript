@@ -1,6 +1,7 @@
 (module
- (type $0 (func))
- (type $1 (func (param i32 i32 i32 i32)))
+ (type $0 (func (param i32) (result i32)))
+ (type $1 (func))
+ (type $2 (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $bool/i (mut i32) (i32.const 2))
  (global $bool/I (mut i64) (i64.const 2))
@@ -50,6 +51,48 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
+ (func $bool/u8PlusOne (param $a i32) (result i32)
+  (local $c i32)
+  local.get $a
+  i32.const 1
+  i32.add
+  local.set $c
+  local.get $c
+  i32.const 255
+  i32.and
+  return
+ )
+ (func $bool/i8PlusOne (param $a i32) (result i32)
+  (local $c i32)
+  local.get $a
+  i32.const 1
+  i32.add
+  local.set $c
+  local.get $c
+  i32.extend8_s
+  return
+ )
+ (func $bool/u16PlusOne (param $a i32) (result i32)
+  (local $c i32)
+  local.get $a
+  i32.const 1
+  i32.add
+  local.set $c
+  local.get $c
+  i32.const 65535
+  i32.and
+  return
+ )
+ (func $bool/i16PlusOne (param $a i32) (result i32)
+  (local $c i32)
+  local.get $a
+  i32.const 1
+  i32.add
+  local.set $c
+  local.get $c
+  i32.extend16_s
+  return
+ )
  (func $start:bool
   global.get $bool/i
   i32.const 0
@@ -755,6 +798,96 @@
    i32.const 0
    i32.const 32
    i32.const 73
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 255
+  call $bool/u8PlusOne
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 80
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $bool/u8PlusOne
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 81
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const -1
+  call $bool/i8PlusOne
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 86
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 127
+  call $bool/i8PlusOne
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 87
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 65535
+  call $bool/u16PlusOne
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 92
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const -1
+  call $bool/i16PlusOne
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 97
    i32.const 1
    call $~lib/builtins/abort
    unreachable

@@ -79,6 +79,7 @@
  (func $"cast/test<i8,bool>" (param $x i32) (result i32)
   (local $y i32)
   local.get $x
+  i32.extend8_s
   local.set $y
   local.get $y
   return
@@ -156,6 +157,8 @@
  (func $"cast/test<u8,bool>" (param $x i32) (result i32)
   (local $y i32)
   local.get $x
+  i32.const 255
+  i32.and
   local.set $y
   local.get $y
   return
@@ -225,6 +228,7 @@
  (func $"cast/test<i16,bool>" (param $x i32) (result i32)
   (local $y i32)
   local.get $x
+  i32.extend16_s
   local.set $y
   local.get $y
   return
@@ -298,6 +302,8 @@
  (func $"cast/test<u16,bool>" (param $x i32) (result i32)
   (local $y i32)
   local.get $x
+  i32.const 65535
+  i32.and
   local.set $y
   local.get $y
   return
